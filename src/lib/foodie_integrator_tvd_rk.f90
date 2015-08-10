@@ -1,7 +1,7 @@
-!< FOODiE integrator: provide an explicit Euler scheme, it being 1st order accurate.
-module foodie_integrator_euler_explicit
+!< FOODiE integrator: provide an explicit TVD Runge-Kutta class of schemes, for 1st to 4th order accutate.
+module foodie_integrator_tvd_rk
 !-----------------------------------------------------------------------------------------------------------------------------------
-!< FOODiE integrator: provide an explicit Euler scheme, it being 1st order accurate.
+!< FOODiE integrator: provide an explicit TVD Runge-Kutta class of schemes, for 1st to 4th order accutate.
 !-----------------------------------------------------------------------------------------------------------------------------------
 
 !-----------------------------------------------------------------------------------------------------------------------------------
@@ -12,12 +12,12 @@ use type_integrand, only : integrand
 !-----------------------------------------------------------------------------------------------------------------------------------
 implicit none
 private
-public :: euler_explicit
+public :: tvd_rk
 !-----------------------------------------------------------------------------------------------------------------------------------
 contains
-  subroutine euler_explicit(field, dt)
+  subroutine tvd_rk(field, dt)
   !---------------------------------------------------------------------------------------------------------------------------------
-  !< Integrate field with explicit Euler scheme, 1st order.
+  !< Integrate field with explicit TVD Runge-Kutta scheme.
   !---------------------------------------------------------------------------------------------------------------------------------
   class(integrand), intent(INOUT) :: field !< Field to be integrated.
   real(R_P),        intent(in)    :: dt    !< Time step.
@@ -27,5 +27,5 @@ contains
   field = field + field%t()*dt
   return
   !---------------------------------------------------------------------------------------------------------------------------------
-  endsubroutine euler_explicit
-endmodule foodie_integrator_euler_explicit
+  endsubroutine tvd_rk
+endmodule foodie_integrator_tvd_rk
