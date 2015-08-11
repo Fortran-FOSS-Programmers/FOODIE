@@ -84,7 +84,9 @@ Go to [Top](#top)
 
 ## Status
 
-FOODiE project is just started. Nothing has been done. We are searching for Fortraners enthusiast joining our team.
+FOODiE project is just started. A small bunch of integrators have been implemented using the Rouson's Abstract Data Type Pattern, but the library API is not stable.
+
+We are searching for Fortraners enthusiast joining our team.
 
 ## Copyrights
 
