@@ -10,6 +10,8 @@
 [![License](https://img.shields.io/badge/license-MIT-red.svg)]()
 
 [![Status](https://img.shields.io/badge/status-alpha-orange.svg)]()
+[![Build Status](https://travis-ci.org/Fortran-FOSS-Programmers/FOODiE.svg?branch=master)](https://travis-ci.org/Fortran-FOSS-Programmers/FOODiE)
+[![Coverage Status](https://img.shields.io/codecov/c/github/Fortran-FOSS-Programmers/FOODiE.svg)](http://codecov.io/github/Fortran-FOSS-Programmers/FOODiE?branch=master)
 [![GitHub issues](https://img.shields.io/github/issues/Fortran-FOSS-Programmers/FOODiE.svg)]()
 
 ### FOODiE, Fortran Object oriented Ordinary Differential Equations integration library
@@ -37,28 +39,46 @@ Go to [Top](#top)
 
 FOODiE is aimed to be a KISS-pure-Fortran library for integrating Ordinary Differential Equations (ODE), it being:
 
-+ [ ] Pure Fortran implementation;
-+ [ ] KISS and user-friendly:
-  + [ ] simple API;
-  + [ ] easy building and porting on heterogeneous architectures;
++ [x] Pure Fortran implementation;
++ [x] KISS and user-friendly:
+    + [x] simple API;
+    + [ ] easy building and porting on heterogeneous architectures;
 + [ ] comprehensive:
-  + [ ] Runge-Kutta schemes:
-  + [ ] predictor-corrector schemes;
-  + [ ] explicit;
-  + [ ] implicit;
+    + [x] explicit Euler scheme, 1st order accurate;
+    + [ ] explicit Runge-Kutta schemes:
+        + [ ] TVD or SSP schemes, see [1]:
+            + [x] 1 stage, namely the forward explicit Euler scheme, 1st order accurate;
+            + [x] 2 stages, 2nd order accurate;
+            + [x] 3 stages, 3rd order accurate;
+            + [ ] 4 stages;
+            + [x] 5 stages, 4th order accurate;
+    + [ ] implicit Runge-Kutta schemes;
+    + [ ] low-storage explicit schemes, see [1,2,3];
+    + [ ] Leapfrog, 2nd order accurate:
+        + [ ] Robert-Asselin filter, for stability and leapfrog, 1st order accurate;
+        + [ ] Robert-Asselin-Williams filter, for stability and leapfrog, 3rd order accurate;
+    + [ ] Adams-Bashforth variants of 2nd and 3rd order accurate;
 + [ ] efficient:
-  + [ ] high scalability on parallel architectures:
-    + [ ] support for shared memory multi/many cores architecture;
-    + [ ] support for distributed memory cluster;
-    + [ ] support for GPGPU/accelerators device;
+    + [ ] high scalability on parallel architectures:
+        + [ ] support for shared memory multi/many cores architecture;
+        + [ ] support for distributed memory cluster;
+        + [ ] support for GPGPU/accelerators device;
 + [ ] well documented:
-  + [ ] clear documentation of schemes implementations;
-  + [ ] complete API reference;
-  + [ ] comprehensive wiki:
-+ [ ] collaborative developed;
-+ [ ] FOSS licensed;
+    + [ ] clear documentation of schemes implementations;
+    + [x] complete API reference;
+    + [ ] comprehensive wiki:
++ [x] collaborative developed;
++ [x] FOSS licensed;
 
 Any feature request is welcome.
+
+#### Bibliography
+
+[1] *High Order Strong Stability Preserving Time Discretizations*, Gottlieb, S., Ketcheson, D. I., Shu, C.W., Journal of Scientific Computing, vol. 38, N. 3, 2009, pp. 251-289.
+
+[2] *Low-Storage Runge-Kutta Schemes*, J. H. Williamson, Journal of Computational Physics, vol. 35, 1980, pp. 48--56.
+
+[3] *Fourth-Order 2N-Storage Runge-Kutta Schemes*, Mark H. Carpenter, Christopher A. Kennedy, NASA Technical Memorandum 109112, June 1994.
 
 Go to [Top](#top)
 
