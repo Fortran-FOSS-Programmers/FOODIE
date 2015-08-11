@@ -41,19 +41,19 @@ FOODiE is aimed to be a KISS-pure-Fortran library for integrating Ordinary Diffe
 
 + [x] Pure Fortran implementation;
 + [x] KISS and user-friendly:
-    + [x] simple API;
+    + [x] simple API, presently based on the Rouson's Abstract Data Type Pattern [1];
     + [ ] easy building and porting on heterogeneous architectures;
 + [ ] comprehensive:
     + [x] explicit Euler scheme, 1st order accurate;
     + [ ] explicit Runge-Kutta schemes:
-        + [ ] TVD or SSP schemes, see [1]:
+        + [ ] TVD or SSP schemes, see [2]:
             + [x] 1 stage, namely the forward explicit Euler scheme, 1st order accurate;
             + [x] 2 stages, 2nd order accurate;
             + [x] 3 stages, 3rd order accurate;
             + [ ] 4 stages;
             + [x] 5 stages, 4th order accurate;
     + [ ] implicit Runge-Kutta schemes;
-    + [ ] low-storage explicit schemes, see [1,2,3];
+    + [ ] low-storage explicit schemes, see [2,3,3];
     + [ ] Leapfrog, 2nd order accurate:
         + [ ] Robert-Asselin filter, for stability and leapfrog, 1st order accurate;
         + [ ] Robert-Asselin-Williams filter, for stability and leapfrog, 3rd order accurate;
@@ -74,11 +74,13 @@ Any feature request is welcome.
 
 #### Bibliography
 
-[1] *High Order Strong Stability Preserving Time Discretizations*, Gottlieb, S., Ketcheson, D. I., Shu, C.W., Journal of Scientific Computing, vol. 38, N. 3, 2009, pp. 251-289.
+[1] *Scientific Software Design: The Object-Oriented Way*, Rouson, Damian and Xia, Jim and Xu, Xiaofeng, 2011, ISBN 9780521888134, Cambridge University Press, New York, NY, USA.
 
-[2] *Low-Storage Runge-Kutta Schemes*, J. H. Williamson, Journal of Computational Physics, vol. 35, 1980, pp. 48--56.
+[2] *High Order Strong Stability Preserving Time Discretizations*, Gottlieb, S., Ketcheson, D. I., Shu, C.W., Journal of Scientific Computing, vol. 38, N. 3, 2009, pp. 251-289.
 
-[3] *Fourth-Order 2N-Storage Runge-Kutta Schemes*, Mark H. Carpenter, Christopher A. Kennedy, NASA Technical Memorandum 109112, June 1994.
+[3] *Low-Storage Runge-Kutta Schemes*, J. H. Williamson, Journal of Computational Physics, vol. 35, 1980, pp. 48--56.
+
+[4] *Fourth-Order 2N-Storage Runge-Kutta Schemes*, Mark H. Carpenter, Christopher A. Kennedy, NASA Technical Memorandum 109112, June 1994.
 
 Go to [Top](#top)
 
