@@ -17,34 +17,45 @@ public :: lorenz
 
 !-----------------------------------------------------------------------------------------------------------------------------------
 type, extends(integrand) :: lorenz
+  !< Lorenz equations field.
+  !<
+  !< It is a FOODiE integrand class.
   private
-  real(R_P), dimension(:), allocatable :: state            !< Solution vector.
-  real(R_P)                            :: sigma, rho, beta !< Lorenz parameters.
-contains
-   procedure, pass(self), public :: t        => dLorenz_dt
-   procedure, pass(lhs),  public :: add      => add_lorenz
-   procedure, pass(lhs),  public :: multiply => multiply_lorenz
-   procedure, pass(lhs),  public :: assign   => assign_lorenz
-   procedure, pass(self), public :: output
-end type
+  real(R_P), dimension(:), allocatable :: state        !< Solution vector.
+  real(R_P)                            :: sigma=0._R_P !< Lorenz \(\sigma\).
+  real(R_P)                            :: rho=0._R_P   !< Lorenz \(\rho\).
+  real(R_P)                            :: beta=0._R_P  !< Lorenz \(\beta\).
+  contains
+    procedure, pass(self), public :: output                                          !< Extract Lorenz field.
+    procedure, pass(self), public :: t => dLorenz_dt                                 !< Time derivate, resiuduals function.
+    procedure, pass(lhs),  public :: integrand_multiply_real => lorenz_multiply_real !< lorenz * real operator.
+    procedure, pass(rhs),  public :: real_multiply_integrand => real_multiply_lorenz !< Real * Lorenz operator.
+    procedure, pass(lhs),  public :: add => add_lorenz                               !< Lorenz + Lorenz oprator.
+    procedure, pass(lhs),  public :: assign_integrand => lorenz_assign_lorenz        !< Lorenz = Lorenz.
+    procedure, pass(lhs),  public :: assign_real => lorenz_assign_real               !< Lorenz = real.
+endtype lorenz
 interface lorenz
+  !< Overload lorenz name adding the constructor function.
   module procedure constructor_lorenz
 endinterface
 !-----------------------------------------------------------------------------------------------------------------------------------
 contains
-  type(lorenz) function constructor_lorenz(initial_state, sigma, rho, beta)
+  function constructor_lorenz(initial_state, sigma, rho, beta) result(concrete)
   !---------------------------------------------------------------------------------------------------------------------------------
   !< Construct an initialized Lorenz field.
   !---------------------------------------------------------------------------------------------------------------------------------
-  real(R_P), dimension(:), intent(in)  :: initial_state    !< Intial state of Lorenz field vector.
-  real(R_P),               intent(in)  :: sigma, rho, beta !< Lorenz parameters.
+  real(R_P), dimension(:), intent(IN)  :: initial_state !< Intial state of Lorenz field vector.
+  real(R_P),               intent(IN)  :: sigma         !< Lorenz  \(\sigma\).
+  real(R_P),               intent(IN)  :: rho           !< Lorenz  \(\rho\).
+  real(R_P),               intent(IN)  :: beta          !< Lorenz  \(\beta\).
+  type(lorenz)                         :: concrete      !< Concrete instance of Lorenz field.
   !---------------------------------------------------------------------------------------------------------------------------------
 
   !---------------------------------------------------------------------------------------------------------------------------------
-  constructor_lorenz%state = initial_state
-  constructor_lorenz%sigma = sigma
-  constructor_lorenz%rho = rho
-  constructor_lorenz%beta = beta
+  concrete%state = initial_state
+  concrete%sigma = sigma
+  concrete%rho = rho
+  concrete%beta = beta
   return
   !---------------------------------------------------------------------------------------------------------------------------------
   endfunction constructor_lorenz
@@ -53,7 +64,7 @@ contains
   !---------------------------------------------------------------------------------------------------------------------------------
   !< Output the Lorenz field state.
   !---------------------------------------------------------------------------------------------------------------------------------
-  class(lorenz), intent(in)            :: self  !< Lorenz field.
+  class(lorenz), intent(IN)            :: self  !< Lorenz field.
   real(R_P), dimension(:), allocatable :: state !< Lorenz state vector.
   !---------------------------------------------------------------------------------------------------------------------------------
 
@@ -63,11 +74,11 @@ contains
   !---------------------------------------------------------------------------------------------------------------------------------
   endfunction output
 
-  function dLorenz_dt(self) result(dState_dt)
+  pure function dLorenz_dt(self) result(dState_dt)
   !---------------------------------------------------------------------------------------------------------------------------------
   !< Time derivative of Lorenz field.
   !---------------------------------------------------------------------------------------------------------------------------------
-  class(lorenz), intent(in)     :: self      !< Lorenz field.
+  class(lorenz), intent(IN)     :: self      !< Lorenz field.
   class(integrand), allocatable :: dState_dt !< Lorenz field time derivative.
   type(lorenz),     allocatable :: delta     !< Delta state used as temporary variables.
   !---------------------------------------------------------------------------------------------------------------------------------
@@ -89,14 +100,56 @@ contains
   !---------------------------------------------------------------------------------------------------------------------------------
   endfunction dLorenz_dt
 
-  function add_Lorenz(lhs, rhs) result(sum)
+  pure function lorenz_multiply_real(lhs, rhs) result(product)
+  !---------------------------------------------------------------------------------------------------------------------------------
+  !< Multiply a Lorenz field by a real scalar.
+  !---------------------------------------------------------------------------------------------------------------------------------
+  class(lorenz), intent(IN)     :: lhs           !< Left hand side.
+  real(R_P),     intent(IN)     :: rhs           !< Right hand side.
+  class(integrand), allocatable :: product       !< Product.
+  type(lorenz),     allocatable :: local_product !< Temporary produtc.
+  !---------------------------------------------------------------------------------------------------------------------------------
+
+  !---------------------------------------------------------------------------------------------------------------------------------
+  allocate(local_product)
+  local_product%state = lhs%state * rhs
+  local_product%sigma = lhs%sigma * rhs
+  local_product%rho   = lhs%rho   * rhs
+  local_product%beta  = lhs%beta  * rhs
+  call move_alloc(local_product, product)
+  return
+  !---------------------------------------------------------------------------------------------------------------------------------
+  endfunction lorenz_multiply_real
+
+  pure function real_multiply_lorenz(lhs, rhs) result(product)
+  !---------------------------------------------------------------------------------------------------------------------------------
+  !< Multiply a real scalar by a Lorenz field.
+  !---------------------------------------------------------------------------------------------------------------------------------
+  real(R_P),     intent(IN)     :: lhs           !< Left hand side.
+  class(lorenz), intent(IN)     :: rhs           !< Right hand side.
+  class(integrand), allocatable :: product       !< Product.
+  type(lorenz),     allocatable :: local_product !< Temporary produtc.
+  !---------------------------------------------------------------------------------------------------------------------------------
+
+  !---------------------------------------------------------------------------------------------------------------------------------
+  allocate(local_product)
+  local_product%state = rhs%state * lhs
+  local_product%sigma = rhs%sigma * lhs
+  local_product%rho   = rhs%rho   * lhs
+  local_product%beta  = rhs%beta  * lhs
+  call move_alloc(local_product, product)
+  return
+  !---------------------------------------------------------------------------------------------------------------------------------
+  endfunction real_multiply_lorenz
+
+  pure function add_lorenz(lhs, rhs) result(sum)
   !---------------------------------------------------------------------------------------------------------------------------------
   !< Add two Lorenz fields.
   !---------------------------------------------------------------------------------------------------------------------------------
-  class(lorenz),    intent(in)  :: lhs
-  class(integrand), intent(in)  :: rhs
-  class(integrand), allocatable :: sum
-  type(lorenz),     allocatable :: local_sum
+  class(lorenz),    intent(IN)  :: lhs       !< Left hand side.
+  class(integrand), intent(IN)  :: rhs       !< Right hand side.
+  class(integrand), allocatable :: sum       !< Sum.
+  type(lorenz),     allocatable :: local_sum !< Temporary sum.
   !---------------------------------------------------------------------------------------------------------------------------------
 
   !---------------------------------------------------------------------------------------------------------------------------------
@@ -108,53 +161,47 @@ contains
       local_sum%rho   = lhs%rho   + rhs%rho
       local_sum%beta  = lhs%beta  + rhs%beta
     class default
-      stop 'add_Lorenz: rhs argument type not supported'
+      ! stop 'add_Lorenz: rhs argument type not supported'
   endselect
   call move_alloc(local_sum, sum)
   return
   !---------------------------------------------------------------------------------------------------------------------------------
   endfunction add_Lorenz
 
-  function multiply_Lorenz(lhs,rhs) result(product)
-  !---------------------------------------------------------------------------------------------------------------------------------
-  !< Multiply a Lorenz field by a real scalar
-  !---------------------------------------------------------------------------------------------------------------------------------
-  class(lorenz), intent(in)     :: lhs
-  real(R_P),     intent(in)     :: rhs
-  class(integrand), allocatable :: product
-  type(lorenz),     allocatable :: local_product
-  !---------------------------------------------------------------------------------------------------------------------------------
-
-  !---------------------------------------------------------------------------------------------------------------------------------
-  allocate (local_product)
-  local_product%state = lhs%state * rhs
-  local_product%sigma = lhs%sigma * rhs
-  local_product%rho   = lhs%rho   * rhs
-  local_product%beta  = lhs%beta  * rhs
-  call move_alloc(local_product, product)
-  return
-  !---------------------------------------------------------------------------------------------------------------------------------
-  endfunction multiply_Lorenz
-
-  subroutine assign_lorenz(lhs,rhs)
+  pure subroutine lorenz_assign_lorenz(lhs, rhs)
   !---------------------------------------------------------------------------------------------------------------------------------
   !< Assign one Lorenz field to another.
   !---------------------------------------------------------------------------------------------------------------------------------
-  class(lorenz),    intent(inout) :: lhs
-  class(integrand), intent(in)    :: rhs
+  class(lorenz),    intent(INOUT) :: lhs !< Left hand side.
+  class(integrand), intent(IN)    :: rhs !< Right hand side.
   !---------------------------------------------------------------------------------------------------------------------------------
 
   !---------------------------------------------------------------------------------------------------------------------------------
   select type(rhs)
     class is (lorenz)
-      lhs%state = rhs%state
+      if (allocated(rhs%state)) lhs%state = rhs%state
       lhs%sigma = rhs%sigma
-      lhs%rho   = rhs%rho
-      lhs%beta  = rhs%beta
-    class default
-      stop 'assign_lorenz: rhs argument type not supported'
+      lhs%rho = rhs%rho
+      lhs%beta = rhs%beta
   endselect
   return
   !---------------------------------------------------------------------------------------------------------------------------------
-  endsubroutine
+  endsubroutine lorenz_assign_lorenz
+
+  pure subroutine lorenz_assign_real(lhs, rhs)
+  !---------------------------------------------------------------------------------------------------------------------------------
+  !< Assign one real to a Lorenz field.
+  !---------------------------------------------------------------------------------------------------------------------------------
+  class(lorenz), intent(INOUT) :: lhs !< Left hand side.
+  real(R_P),     intent(IN)    :: rhs !< Right hand side.
+  !---------------------------------------------------------------------------------------------------------------------------------
+
+  !---------------------------------------------------------------------------------------------------------------------------------
+  if (allocated(lhs%state)) lhs%state = rhs
+  lhs%sigma = rhs
+  lhs%rho = rhs
+  lhs%beta = rhs
+  return
+  !---------------------------------------------------------------------------------------------------------------------------------
+  endsubroutine lorenz_assign_real
 endmodule type_lorenz

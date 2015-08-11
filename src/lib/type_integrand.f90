@@ -18,56 +18,83 @@ public :: integrand
 type, abstract :: integrand
   !< Abstract type for building FOODiE ODE integrators.
   contains
-    procedure(time_derivative     ), pass(self), deferred :: t
-    procedure(asymmetric_operator ), pass(lhs),  deferred :: multiply
-    procedure(symmetric_operator  ), pass(lhs),  deferred :: add
-    procedure(symmetric_assignment), pass(lhs),  deferred :: assign
-    generic :: operator(+) => add
-    generic :: operator(*) => multiply
-    generic :: assignment(=) => assign
+    ! public deferred procedures that concrete interpolators must implement
+    procedure(time_derivative),      pass(self), deferred, public :: t                       !< Time derivative, residuals function.
+    procedure(integrand_op_real),    pass(lhs),  deferred, public :: integrand_multiply_real !< Integrand * real operator.
+    procedure(real_op_integrand),    pass(rhs),  deferred, public :: real_multiply_integrand !< Real * integrand operator.
+    procedure(symmetric_operator),   pass(lhs),  deferred, public :: add                     !< Integrand + integrand oprator.
+    procedure(assignment_integrand), pass(lhs),  deferred, public :: assign_integrand        !< Integrand = integrand.
+    procedure(assignment_real),      pass(lhs),  deferred, public :: assign_real             !< Integrand = real.
+    ! operators overloading
+    generic, public :: operator(+) => add                                              !< Overloading + operator.
+    generic, public :: operator(*) => real_multiply_integrand, integrand_multiply_real !< Overloading * operator.
+    generic, public :: assignment(=) => assign_integrand, assign_real                  !< Overloading = assignament.
 endtype integrand
 
 abstract interface
-  function time_derivative(self) result(dState_dt)
+  !< Abstract type bound procedures necessary for implementing the class(integrand).
+  pure function time_derivative(self) result(dState_dt)
   !---------------------------------------------------------------------------------------------------------------------------------
   !< Time derivative function of integrand class, i.e. the residuals function.
   !---------------------------------------------------------------------------------------------------------------------------------
   import :: integrand
-  class(integrand), intent(in)  :: self
-  class(integrand), allocatable :: dState_dt
+  class(integrand), intent(IN)  :: self      !< Integrand field.
+  class(integrand), allocatable :: dState_dt !< Result of the time derivative function of integrand field.
   !---------------------------------------------------------------------------------------------------------------------------------
   endfunction time_derivative
 
-  function asymmetric_operator(lhs, rhs) result(operator_result)
+  pure function integrand_op_real(lhs, rhs) result(operator_result)
   !---------------------------------------------------------------------------------------------------------------------------------
   !< Asymmetric type operator integrand.op.real.
   !---------------------------------------------------------------------------------------------------------------------------------
   import :: integrand, R_P
-  class(integrand), intent(in)  :: lhs
-  real(R_P),        intent(in)  :: rhs
-  class(integrand), allocatable :: operator_result
+  class(integrand), intent(IN)  :: lhs              !< Left hand side.
+  real(R_P),        intent(IN)  :: rhs              !< Right hand side.
+  class(integrand), allocatable :: operator_result  !< Operator result.
   !---------------------------------------------------------------------------------------------------------------------------------
-  endfunction asymmetric_operator
+  endfunction integrand_op_real
 
-  function symmetric_operator(lhs, rhs) result(operator_result)
+  pure function real_op_integrand(lhs, rhs) result(operator_result)
+  !---------------------------------------------------------------------------------------------------------------------------------
+  !< Asymmetric type operator real.op.integrand.
+  !---------------------------------------------------------------------------------------------------------------------------------
+  import :: integrand, R_P
+  real(R_P),        intent(IN)  :: lhs             !< Left hand side.
+  class(integrand), intent(IN)  :: rhs             !< Right hand side.
+  class(integrand), allocatable :: operator_result !< Operator result.
+  !---------------------------------------------------------------------------------------------------------------------------------
+  endfunction real_op_integrand
+
+  pure function symmetric_operator(lhs, rhs) result(operator_result)
   !---------------------------------------------------------------------------------------------------------------------------------
   !< Symmetric type operator integrand.op.integrand.
   !---------------------------------------------------------------------------------------------------------------------------------
   import :: integrand
-  class(integrand), intent(in)  :: lhs, rhs
-  class(integrand), allocatable :: operator_result
+  class(integrand), intent(IN)  :: lhs             !< Left hand side.
+  class(integrand), intent(IN)  :: rhs             !< Right hand side.
+  class(integrand), allocatable :: operator_result !< Operator result.
   !---------------------------------------------------------------------------------------------------------------------------------
   endfunction symmetric_operator
 
-  subroutine symmetric_assignment(lhs, rhs)
+  pure subroutine assignment_integrand(lhs, rhs)
   !---------------------------------------------------------------------------------------------------------------------------------
-  !< Symmetric assignamente integrand = integrand.
+  !< Symmetric assignment integrand = integrand.
   !---------------------------------------------------------------------------------------------------------------------------------
   import :: integrand
-  class(integrand) ,intent(inout) :: lhs
-  class(integrand) ,intent(in)    :: rhs
+  class(integrand), intent(INOUT) :: lhs !< Left hand side.
+  class(integrand), intent(IN)    :: rhs !< Right hand side.
   !---------------------------------------------------------------------------------------------------------------------------------
-  endsubroutine symmetric_assignment
+  endsubroutine assignment_integrand
+
+  pure subroutine assignment_real(lhs, rhs)
+  !---------------------------------------------------------------------------------------------------------------------------------
+  !< Asymmetric assignment integrand = real.
+  !---------------------------------------------------------------------------------------------------------------------------------
+  import :: integrand, R_P
+  class(integrand), intent(INOUT) :: lhs !< Left hand side.
+  real(R_P),        intent(IN)    :: rhs !< Right hand side.
+  !---------------------------------------------------------------------------------------------------------------------------------
+  endsubroutine assignment_real
 endinterface
 !-----------------------------------------------------------------------------------------------------------------------------------
 endmodule type_integrand
