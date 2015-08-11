@@ -72,6 +72,13 @@ rule_1 = rm -rf doc/html/*
 rule_2 = ford doc/main_page.md
 rule_3 = cp -r doc/html/publish/* doc/html/
 
+[rule-makecoverage]
+help   = Rule for performing coverage analysis
+rule_1 = FoBiS.py clean -mode tests-gnu
+rule_2 = FoBiS.py build -mode tests-gnu -coverage
+rule_3 = ./tests/lorenz
+rule_4 = gcov -o tests/obj/ src/lib/foodie*.f90
+
 [rule-deldoc]
 help = Rule for deleting documentation
 rule = rm -rf doc/html/*

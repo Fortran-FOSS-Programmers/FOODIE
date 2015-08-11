@@ -5,7 +5,7 @@ program integrate_lorenz
 !-----------------------------------------------------------------------------------------------------------------------------------
 
 !-----------------------------------------------------------------------------------------------------------------------------------
-use IR_Precision, only : R_P
+use IR_Precision, only : R_P, I_P, str
 use type_lorenz, only : lorenz
 use foodie, only : euler_explicit_integrator, tvd_runge_kutta_integrator
 use pyplot_module, only :  pyplot
@@ -15,7 +15,7 @@ use pyplot_module, only :  pyplot
 implicit none
 type(euler_explicit_integrator)  :: euler_integrator                                !< Euler integrator.
 type(tvd_runge_kutta_integrator) :: rk_integrator                                   !< Runge-Kutta integrator.
-integer, parameter               :: rk_stages=3                                     !< Runge-Kutta stages number.
+integer, parameter               :: rk_stages=5                                     !< Runge-Kutta stages number.
 type(lorenz)                     :: rk_stage(1:rk_stages)                           !< Runge-Kutta stages.
 type(lorenz)                     :: attractor                                       !< Lorenz field.
 integer                          :: step                                            !< Time steps counter.
@@ -28,6 +28,7 @@ real(R_P), parameter             :: dt=0.01_R_P                                 
 real(R_P), parameter             :: initial_state(1:space_dimension)=[1., 1., 1.]   !< Initial state.
 real(R_P)                        :: solution(0:space_dimension, 0:num_steps)        !< Solution at each time step.
 type(pyplot)                     :: plt                                             !< Plot file handler.
+integer(I_P)                     :: s                                               !< RK stages counter.
 !-----------------------------------------------------------------------------------------------------------------------------------
 
 !-----------------------------------------------------------------------------------------------------------------------------------
@@ -49,26 +50,29 @@ call plt%add_plot(x=solution(0, :), y=solution(2, :), label='rho', linestyle='b-
 call plt%add_plot(x=solution(0, :), y=solution(2, :), label='beta', linestyle='r-o', linewidth=1, markersize=4)
 call plt%savefig('lorenz_integration-euler.png')
 
-! solve Lorenz equations by means of the SSPRK(3,3) scheme
-! initialize the RK integrator accordingly to the number of stages used
-rk_integrator = tvd_runge_kutta_integrator(stages=rk_stages)
-! initialize field
-attractor = lorenz(initial_state=initial_state, sigma=sigma, rho=rho, beta=beta)
-solution(0, 0) = 0.
-solution(1:3, 0) = attractor%output()
-! integrate field
-do step = 1, num_steps
-  call rk_integrator%integrate(field=attractor, stage=rk_stage, dt=dt)
-  solution(0,   step) = step * dt
-  solution(1:3, step) = attractor%output()
+! solve Lorenz equations by means of the TVD/SSP RK schemes (testing all available schemes)
+do s=1, rk_stages
+  if (s==4) cycle ! 4 stages not yet implemented
+  ! initialize the RK integrator accordingly to the number of stages used
+  rk_integrator = tvd_runge_kutta_integrator(stages=s)
+  ! initialize field
+  attractor = lorenz(initial_state=initial_state, sigma=sigma, rho=rho, beta=beta)
+  solution(0, 0) = 0.
+  solution(1:3, 0) = attractor%output()
+  ! integrate field
+  do step = 1, num_steps
+    call rk_integrator%integrate(field=attractor, stage=rk_stage(1:s), dt=dt)
+    solution(0,   step) = step * dt
+    solution(1:3, step) = attractor%output()
+  enddo
+  ! save plot of results
+  call plt%initialize(grid=.true., xlabel='time', title='FOODiE test: Lorenz equation integration, explicit Runge-Kutta '//&
+                      trim(str(.true., s))//' stages', legend=.true.)
+  call plt%add_plot(x=solution(0, :), y=solution(1, :), label='sigma', linestyle='g-', linewidth=1, markersize=4)
+  call plt%add_plot(x=solution(0, :), y=solution(2, :), label='rho', linestyle='b-x', linewidth=1, markersize=4)
+  call plt%add_plot(x=solution(0, :), y=solution(2, :), label='beta', linestyle='r-o', linewidth=1, markersize=4)
+  call plt%savefig('lorenz_integration-rk-'//trim(str(.true., s))//'.png')
 enddo
-! save plot of results
-call plt%initialize(grid=.true., xlabel='time', title='FOODiE test: Lorenz equation integration, explicit Runge-Kutta 1', &
-                    legend=.true.)
-call plt%add_plot(x=solution(0, :), y=solution(1, :), label='sigma', linestyle='g-', linewidth=1, markersize=4)
-call plt%add_plot(x=solution(0, :), y=solution(2, :), label='rho', linestyle='b-x', linewidth=1, markersize=4)
-call plt%add_plot(x=solution(0, :), y=solution(2, :), label='beta', linestyle='r-o', linewidth=1, markersize=4)
-call plt%savefig('lorenz_integration-rk-3.png')
 stop
 !-----------------------------------------------------------------------------------------------------------------------------------
 endprogram integrate_lorenz
