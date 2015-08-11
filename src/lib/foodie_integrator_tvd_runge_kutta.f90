@@ -56,7 +56,7 @@ module foodie_integrator_tvd_runge_kutta
 
 !<##### 2 stages, SSP, 2nd order
 !< This scheme is an optmial SSP(2, 2) without low-storage algorithm. See *High Order Strong Stability Preserving Time
-!< Discretizations*, Gottlieb, S., Ketcheson, D. I., Ketcheson, D., Journal of Scientific Computing, vol. 38, N. 3, 2009,
+!< Discretizations*, Gottlieb, S., Ketcheson, D. I., Shu, C.W., Journal of Scientific Computing, vol. 38, N. 3, 2009,
 !< pp. 251-289.
 !< $$\beta = \left[ {\begin{array}{*{20}{c}} \frac{1}{2}&\frac{1}{2} \end{array}} \right]$$
 !< $$\alpha = \left[ {\begin{array}{*{20}{c}} 0&0\\ 1&0 \end{array}} \right]$$
@@ -64,7 +64,7 @@ module foodie_integrator_tvd_runge_kutta
 
 !<##### 3 stages, SSP, 3rd order
 !< This scheme is an optmial SSP(3, 3) without low-storage algorithm. See *High Order Strong Stability Preserving Time
-!< Discretizations*, Gottlieb, S., Ketcheson, D. I., Ketcheson, D., Journal of Scientific Computing, vol. 38, N. 3, 2009,
+!< Discretizations*, Gottlieb, S., Ketcheson, D. I., Shu, C.W., Journal of Scientific Computing, vol. 38, N. 3, 2009,
 !< pp. 251-289.
 !< $$\beta = \left[ {\begin{array}{*{20}{c}} \frac{1}{6}&\frac{1}{6}&\frac{1}{3}  \end{array}} \right]$$
 !< $$\alpha = \left[ {\begin{array}{*{20}{c}} 0&0&0\\ 1&0&0\\ \frac{1}{4}&\frac{1}{4}&0 \end{array}} \right]$$
@@ -72,7 +72,7 @@ module foodie_integrator_tvd_runge_kutta
 
 !<##### 5 stages, SSP, 4th order
 !< This scheme is an optmial SSP(5, 4) without low-storage algorithm. See *High Order Strong Stability Preserving Time
-!< Discretizations*, Gottlieb, S., Ketcheson, D. I., Ketcheson, D., Journal of Scientific Computing, vol. 38, N. 3, 2009,
+!< Discretizations*, Gottlieb, S., Ketcheson, D. I., Shu, C.W., Journal of Scientific Computing, vol. 38, N. 3, 2009,
 !< pp. 251-289.
 !< $$\beta = \left[ {\begin{array}{*{20}{c}} 0.14681187618661&0.24848290924556&0.10425883036650&0.27443890091960&
 !< 0.22600748319395 \end{array}} \right]$$
