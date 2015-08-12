@@ -30,17 +30,14 @@ type, extends(integrand) :: burgers
     procedure, pass(self), public :: output                                                   !< Extract Burgers field.
     procedure, pass(self), public :: dt => compute_dt                                         !< Compute the current time step.
     procedure, pass(self), public :: t => dBurgers_dt                                         !< Time derivate, residuals function.
-    procedure, pass(lhs),  public :: integrand_multiply_integrand => burgers_multiply_burgers !< burgers * burgers operator.
-    procedure, pass(lhs),  public :: integrand_multiply_real => burgers_multiply_real         !< burgers * real operator.
+    procedure, pass(lhs),  public :: integrand_multiply_integrand => burgers_multiply_burgers !< Burgers * burgers operator.
+    procedure, pass(lhs),  public :: integrand_multiply_real => burgers_multiply_real         !< Burgers * real operator.
     procedure, pass(rhs),  public :: real_multiply_integrand => real_multiply_burgers         !< Real * Burgers operator.
     procedure, pass(lhs),  public :: add => add_burgers                                       !< Burgers + Burgers oprator.
     procedure, pass(lhs),  public :: sub => sub_burgers                                       !< Burgers - Burgers oprator.
     procedure, pass(lhs),  public :: assign_integrand => burgers_assign_burgers               !< Burgers = Burgers.
     procedure, pass(lhs),  public :: assign_real => burgers_assign_real                       !< Burgers = real.
     ! operators overloading
-    generic, public :: operator(*) => integrand_multiply_integrand, &
-                                      integrand_multiply_real, &
-                                      real_multiply_integrand
     generic, public :: operator(-) => sub
     ! private methods
     procedure, pass(self), private :: x  => dBurgers_dx   !< 1st derivative.
@@ -112,7 +109,7 @@ endfunction constructor_burgers
 
   !---------------------------------------------------------------------------------------------------------------------------------
   ! preparing temporary variables
-  allocate(delta, source=self)
+  allocate(burgers :: delta)
   ! Burgers residuals
   delta = self%xx() * self%nu
   delta = delta - self * self%x()
@@ -126,17 +123,21 @@ endfunction constructor_burgers
   !< Multiply a Burgers field by another one.
   !---------------------------------------------------------------------------------------------------------------------------------
   class(burgers), intent(IN)    :: lhs           !< Left hand side.
-  type(burgers),  intent(IN)    :: rhs           !< Right hand side.
+  class(integrand), intent(IN)  :: rhs           !< Right hand side.
   class(integrand), allocatable :: product       !< Product.
   type(burgers),    allocatable :: local_product !< Temporary produtc.
   !---------------------------------------------------------------------------------------------------------------------------------
 
   !---------------------------------------------------------------------------------------------------------------------------------
-  allocate(local_product, source=lhs)
-  ! local_product%Ni = lhs%Ni
-  ! local_product%h = lhs%h
-  ! local_product%nu = lhs%nu
-  local_product%state = lhs%state * rhs%state
+  allocate(burgers :: local_product)
+  local_product%Ni = lhs%Ni
+  local_product%h = lhs%h
+  local_product%nu = lhs%nu
+  allocate(local_product%state(1:lhs%Ni))
+  select type(rhs)
+  class is (burgers)
+    local_product%state = lhs%state * rhs%state
+  endselect
   call move_alloc(local_product, product)
   return
   !---------------------------------------------------------------------------------------------------------------------------------
@@ -153,7 +154,11 @@ endfunction constructor_burgers
   !---------------------------------------------------------------------------------------------------------------------------------
 
   !---------------------------------------------------------------------------------------------------------------------------------
-  allocate(local_product, source=lhs)
+  allocate(burgers :: local_product)
+  local_product%Ni = lhs%Ni
+  local_product%h = lhs%h
+  local_product%nu = lhs%nu
+  allocate(local_product%state(1:lhs%Ni))
   local_product%state = lhs%state * rhs
   call move_alloc(local_product, product)
   return
@@ -171,7 +176,11 @@ endfunction constructor_burgers
   !---------------------------------------------------------------------------------------------------------------------------------
 
   !---------------------------------------------------------------------------------------------------------------------------------
-  allocate(local_product, source=rhs)
+  allocate(burgers :: local_product)
+  local_product%Ni = rhs%Ni
+  local_product%h = rhs%h
+  local_product%nu = rhs%nu
+  allocate(local_product%state(1:rhs%Ni))
   local_product%state = rhs%state * lhs
   call move_alloc(local_product, product)
   return
@@ -189,7 +198,11 @@ endfunction constructor_burgers
   !---------------------------------------------------------------------------------------------------------------------------------
 
   !---------------------------------------------------------------------------------------------------------------------------------
-  allocate (local_sum, source=lhs)
+  allocate(burgers :: local_sum)
+  local_sum%Ni = lhs%Ni
+  local_sum%h = lhs%h
+  local_sum%nu = lhs%nu
+  allocate(local_sum%state(1:lhs%Ni))
   select type(rhs)
     class is (burgers)
       local_sum%state = lhs%state + rhs%state
@@ -210,7 +223,11 @@ endfunction constructor_burgers
   !---------------------------------------------------------------------------------------------------------------------------------
 
   !---------------------------------------------------------------------------------------------------------------------------------
-  allocate (local_sub, source=lhs)
+  allocate(burgers :: local_sub)
+  local_sub%Ni = lhs%Ni
+  local_sub%h = lhs%h
+  local_sub%nu = lhs%nu
+  allocate(local_sub%state(1:lhs%Ni))
   select type(rhs)
     class is (burgers)
       local_sub%state = lhs%state - rhs%state
@@ -265,7 +282,11 @@ endfunction constructor_burgers
   !---------------------------------------------------------------------------------------------------------------------------------
 
   !---------------------------------------------------------------------------------------------------------------------------------
-  allocate(derivative, source=self)
+  allocate(derivative)
+  derivative%Ni = self%Ni
+  derivative%h = self%h
+  derivative%nu = self%nu
+  allocate(derivative%state(1:self%Ni))
   do i=2, self%Ni - 1
     derivative%state(i) = (self%state(i+1) - self%state(i-1))/(2._R_P * self%h)
   enddo
@@ -285,7 +306,11 @@ endfunction constructor_burgers
   !---------------------------------------------------------------------------------------------------------------------------------
 
   !---------------------------------------------------------------------------------------------------------------------------------
-  allocate(derivative, source=self)
+  allocate(derivative)
+  derivative%Ni = self%Ni
+  derivative%h = self%h
+  derivative%nu = self%nu
+  allocate(derivative%state(1:self%Ni))
   do i=2, self%Ni - 1
     derivative%state(i) = (self%state(i+1) - 2._R_P * self%state(i) + self%state(i-1))/(self%h**2)
   enddo

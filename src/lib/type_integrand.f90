@@ -19,16 +19,19 @@ type, abstract :: integrand
   !< Abstract type for building FOODiE ODE integrators.
   contains
     ! public deferred procedures that concrete interpolators must implement
-    procedure(time_derivative),      pass(self), deferred, public :: t                       !< Time derivative, residuals function.
-    procedure(integrand_op_real),    pass(lhs),  deferred, public :: integrand_multiply_real !< Integrand * real operator.
-    procedure(real_op_integrand),    pass(rhs),  deferred, public :: real_multiply_integrand !< Real * integrand operator.
-    procedure(symmetric_operator),   pass(lhs),  deferred, public :: add                     !< Integrand + integrand oprator.
-    procedure(assignment_integrand), pass(lhs),  deferred, public :: assign_integrand        !< Integrand = integrand.
-    procedure(assignment_real),      pass(lhs),  deferred, public :: assign_real             !< Integrand = real.
+    procedure(time_derivative),      pass(self), deferred, public :: t                            !< Time derivative, residuals.
+    procedure(symmetric_operator),   pass(lhs),  deferred, public :: integrand_multiply_integrand !< Integrand * integrand operator.
+    procedure(integrand_op_real),    pass(lhs),  deferred, public :: integrand_multiply_real      !< Integrand * real operator.
+    procedure(real_op_integrand),    pass(rhs),  deferred, public :: real_multiply_integrand      !< Real * integrand operator.
+    procedure(symmetric_operator),   pass(lhs),  deferred, public :: add                          !< Integrand + integrand oprator.
+    procedure(assignment_integrand), pass(lhs),  deferred, public :: assign_integrand             !< Integrand = integrand.
+    procedure(assignment_real),      pass(lhs),  deferred, public :: assign_real                  !< Integrand = real.
     ! operators overloading
-    generic, public :: operator(+) => add                                              !< Overloading + operator.
-    generic, public :: operator(*) => real_multiply_integrand, integrand_multiply_real !< Overloading * operator.
-    generic, public :: assignment(=) => assign_integrand, assign_real                  !< Overloading = assignament.
+    generic, public :: operator(+) => add                              !< Overloading + operator.
+    generic, public :: operator(*) => integrand_multiply_integrand, &
+                                      real_multiply_integrand, &
+                                      integrand_multiply_real          !< Overloading * operator.
+    generic, public :: assignment(=) => assign_integrand, assign_real  !< Overloading = assignament.
 endtype integrand
 
 abstract interface

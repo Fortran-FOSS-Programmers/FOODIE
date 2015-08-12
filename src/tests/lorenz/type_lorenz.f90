@@ -26,13 +26,14 @@ type, extends(integrand) :: lorenz
   real(R_P)                            :: rho=0._R_P   !< Lorenz \(\rho\).
   real(R_P)                            :: beta=0._R_P  !< Lorenz \(\beta\).
   contains
-    procedure, pass(self), public :: output                                          !< Extract Lorenz field.
-    procedure, pass(self), public :: t => dLorenz_dt                                 !< Time derivate, resiuduals function.
-    procedure, pass(lhs),  public :: integrand_multiply_real => lorenz_multiply_real !< lorenz * real operator.
-    procedure, pass(rhs),  public :: real_multiply_integrand => real_multiply_lorenz !< Real * Lorenz operator.
-    procedure, pass(lhs),  public :: add => add_lorenz                               !< Lorenz + Lorenz oprator.
-    procedure, pass(lhs),  public :: assign_integrand => lorenz_assign_lorenz        !< Lorenz = Lorenz.
-    procedure, pass(lhs),  public :: assign_real => lorenz_assign_real               !< Lorenz = real.
+    procedure, pass(self), public :: output                                                 !< Extract Lorenz field.
+    procedure, pass(self), public :: t => dLorenz_dt                                        !< Time derivate, resiuduals function.
+    procedure, pass(lhs),  public :: integrand_multiply_integrand => lorenz_multiply_lorenz !< Lorenz * lorenz operator.
+    procedure, pass(lhs),  public :: integrand_multiply_real => lorenz_multiply_real        !< Lorenz * real operator.
+    procedure, pass(rhs),  public :: real_multiply_integrand => real_multiply_lorenz        !< Real * Lorenz operator.
+    procedure, pass(lhs),  public :: add => add_lorenz                                      !< Lorenz + Lorenz oprator.
+    procedure, pass(lhs),  public :: assign_integrand => lorenz_assign_lorenz               !< Lorenz = Lorenz.
+    procedure, pass(lhs),  public :: assign_real => lorenz_assign_real                      !< Lorenz = real.
 endtype lorenz
 interface lorenz
   !< Overload lorenz name adding the constructor function.
@@ -100,6 +101,30 @@ contains
   !---------------------------------------------------------------------------------------------------------------------------------
   endfunction dLorenz_dt
 
+  pure function lorenz_multiply_lorenz(lhs, rhs) result(product)
+  !---------------------------------------------------------------------------------------------------------------------------------
+  !< Multiply a lorenz field by another one.
+  !---------------------------------------------------------------------------------------------------------------------------------
+  class(lorenz),    intent(IN)  :: lhs           !< Left hand side.
+  class(integrand), intent(IN)  :: rhs           !< Right hand side.
+  class(integrand), allocatable :: product       !< Product.
+  type(lorenz),     allocatable :: local_product !< Temporary produtc.
+  !---------------------------------------------------------------------------------------------------------------------------------
+
+  !---------------------------------------------------------------------------------------------------------------------------------
+  allocate(local_product)
+  select type(rhs)
+  class is (lorenz)
+    local_product%state = lhs%state * rhs%state
+    local_product%sigma = lhs%sigma * rhs%sigma
+    local_product%rho   = lhs%rho   * rhs%rho
+    local_product%beta  = lhs%beta  * rhs%beta
+  endselect
+  call move_alloc(local_product, product)
+  return
+  !---------------------------------------------------------------------------------------------------------------------------------
+  endfunction lorenz_multiply_lorenz
+
   pure function lorenz_multiply_real(lhs, rhs) result(product)
   !---------------------------------------------------------------------------------------------------------------------------------
   !< Multiply a Lorenz field by a real scalar.
@@ -155,13 +180,11 @@ contains
   !---------------------------------------------------------------------------------------------------------------------------------
   allocate (lorenz :: local_sum)
   select type(rhs)
-    class is (lorenz)
-      local_sum%state = lhs%state + rhs%state
-      local_sum%sigma = lhs%sigma + rhs%sigma
-      local_sum%rho   = lhs%rho   + rhs%rho
-      local_sum%beta  = lhs%beta  + rhs%beta
-    class default
-      ! stop 'add_Lorenz: rhs argument type not supported'
+  class is (lorenz)
+    local_sum%state = lhs%state + rhs%state
+    local_sum%sigma = lhs%sigma + rhs%sigma
+    local_sum%rho   = lhs%rho   + rhs%rho
+    local_sum%beta  = lhs%beta  + rhs%beta
   endselect
   call move_alloc(local_sum, sum)
   return
@@ -178,11 +201,11 @@ contains
 
   !---------------------------------------------------------------------------------------------------------------------------------
   select type(rhs)
-    class is (lorenz)
-      if (allocated(rhs%state)) lhs%state = rhs%state
-      lhs%sigma = rhs%sigma
-      lhs%rho = rhs%rho
-      lhs%beta = rhs%beta
+  class is (lorenz)
+    if (allocated(rhs%state)) lhs%state = rhs%state
+    lhs%sigma = rhs%sigma
+    lhs%rho = rhs%rho
+    lhs%beta = rhs%beta
   endselect
   return
   !---------------------------------------------------------------------------------------------------------------------------------

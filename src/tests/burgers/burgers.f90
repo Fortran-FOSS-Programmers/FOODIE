@@ -61,7 +61,7 @@ do s=1, rk_stages
   ! initialize field
   domain = burgers(initial_state=initial_state, Ni=Ni, h=h, nu=nu)
   ! integrate field
-  dt = domain%dt(CFL=0.01_R_P)
+  dt = domain%dt(CFL=0.1_R_P)
   do while(t<t_final)
     call rk_integrator%integrate(field=domain, stage=rk_stage(1:s), dt=dt)
     t = t + dt
