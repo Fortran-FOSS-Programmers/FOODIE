@@ -21,8 +21,8 @@ type, extends(integrand) :: oscillation
   !<
   !< It is a FOODiE integrand class.
   private
-  real(R_P), dimension(:), allocatable :: state     !< Solution vector.
-  real(R_P)                            :: f = 0_R_P !< Oscillation frequency (Hz).
+  real(R_P), dimension(:), allocatable :: state      !< Solution vector.
+  real(R_P)                            :: f = 0._R_P !< Oscillation frequency (Hz).
   contains
     procedure, pass(self), public :: output                                                           !< Extract Oscillation field.
     procedure, pass(self), public :: t => dOscillation_dt                                             !< Time derivative, residuals function.
