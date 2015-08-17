@@ -13,27 +13,27 @@ use pyplot_module, only :  pyplot
 
 !-----------------------------------------------------------------------------------------------------------------------------------
 implicit none
-type(euler_explicit_integrator)  :: euler_integrator                            !< Euler integrator.
-type(tvd_runge_kutta_integrator) :: rk_integrator                               !< Runge-Kutta integrator.
-integer, parameter               :: rk_stages = 5                               !< Runge-Kutta stages number.
-type(oscillation)                :: rk_stage(1:rk_stages)                       !< Runge-Kutta stages.
-type(oscillation)                :: attractor                                   !< Oscillation field.
-integer                          :: step                                        !< Time steps counter.
-integer,   parameter             :: num_steps = 1e4                             !< Maximum time steps.
-integer,   parameter             :: space_dimension = 2                         !< Space dimensions.
-real(R_P), parameter             :: f = 1e-4_R_P                                !< Frequency.
-real(R_P), parameter             :: dt = 100_R_P                                !< Time step.
-real(R_P), parameter             :: initial_state(1:space_dimension) = [0., 1.] !< Initial state.
-real(R_P)                        :: solution(0:space_dimension, 0:num_steps)    !< Solution at each time step.
-type(pyplot)                     :: plt                                         !< Plot file handler.
-integer(I_P)                     :: s                                           !< RK stages counter.
+type(euler_explicit_integrator)  :: euler_integrator                                    !< Euler integrator.
+type(tvd_runge_kutta_integrator) :: rk_integrator                                       !< Runge-Kutta integrator.
+integer, parameter               :: rk_stages = 5                                       !< Runge-Kutta stages number.
+type(oscillation)                :: rk_stage(1:rk_stages)                               !< Runge-Kutta stages.
+type(oscillation)                :: attractor                                           !< Oscillation field.
+integer                          :: step                                                !< Time steps counter.
+integer,   parameter             :: num_steps = 1e4                                     !< Maximum time steps.
+integer,   parameter             :: space_dimension = 2                                 !< Space dimensions.
+real(R_P), parameter             :: f = 1._R_Pe-4._R_P                                  !< Frequency.
+real(R_P), parameter             :: dt = 100._R_P                                       !< Time step.
+real(R_P), parameter             :: initial_state(1:space_dimension) = [0._R_P, 1._R_P] !< Initial state.
+real(R_P)                        :: solution(0:space_dimension, 0:num_steps)            !< Solution at each time step.
+type(pyplot)                     :: plt                                                 !< Plot file handler.
+integer(I_P)                     :: s                                                   !< RK stages counter.
 !-----------------------------------------------------------------------------------------------------------------------------------
 
 !-----------------------------------------------------------------------------------------------------------------------------------
 ! solve Oscillation equations by means of the Forward Explicit Euler scheme
 ! initialize field
 attractor = oscillation(initial_state=initial_state, f=f)
-solution(0, 0) = 0.
+solution(0, 0) = 0._R_P
 solution(1:2, 0) = attractor%output()
 ! integrate field
 do step = 1, num_steps
@@ -55,7 +55,7 @@ do s=1, rk_stages
   rk_integrator = tvd_runge_kutta_integrator(stages=s)
   ! initialize field
   attractor = oscillation(initial_state=initial_state, f=f)
-  solution(0, 0) = 0.
+  solution(0, 0) = 0._R_P
   solution(1:2, 0) = attractor%output()
   ! integrate field
   do step = 1, num_steps
