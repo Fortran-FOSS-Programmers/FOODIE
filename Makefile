@@ -38,4 +38,5 @@ clean:
 	rm -vf lorenz oscillation burgers
 	$(MAKE) --directory=src/lib clean
 	$(MAKE) --directory=src/tests/lorenz clean
+	$(MAKE) --directory=src/tests/oscillation clean
 	$(MAKE) --directory=src/tests/burgers clean
