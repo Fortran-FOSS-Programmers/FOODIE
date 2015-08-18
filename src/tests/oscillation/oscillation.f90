@@ -21,7 +21,7 @@ type(oscillation)                :: attractor                                   
 integer                          :: step                                                !< Time steps counter.
 integer,   parameter             :: num_steps = 1e4                                     !< Maximum time steps.
 integer,   parameter             :: space_dimension = 2                                 !< Space dimensions.
-real(R_P), parameter             :: f = 1._R_Pe-4._R_P                                  !< Frequency.
+real(R_P), parameter             :: f = 1e-4_R_P                                        !< Frequency.
 real(R_P), parameter             :: dt = 100._R_P                                       !< Time step.
 real(R_P), parameter             :: initial_state(1:space_dimension) = [0._R_P, 1._R_P] !< Initial state.
 real(R_P)                        :: solution(0:space_dimension, 0:num_steps)            !< Solution at each time step.
