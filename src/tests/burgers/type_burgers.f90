@@ -98,11 +98,12 @@ endfunction constructor_burgers
   !---------------------------------------------------------------------------------------------------------------------------------
   endfunction compute_dt
 
-  pure function dBurgers_dt(self) result(dState_dt)
+  pure function dBurgers_dt(self, n) result(dState_dt)
   !---------------------------------------------------------------------------------------------------------------------------------
   !< Time derivative of Burgers field, residuals function.
   !---------------------------------------------------------------------------------------------------------------------------------
-  class(burgers), intent(IN)    :: self      !< Burgers field.
+  class(burgers),    intent(IN) :: self      !< Burgers field.
+  integer, optional, intent(IN) :: n         !< Time level.
   class(integrand), allocatable :: dState_dt !< Burgers field time derivative.
   type(burgers),    allocatable :: delta     !< Delta state used as temporary variables.
   !---------------------------------------------------------------------------------------------------------------------------------

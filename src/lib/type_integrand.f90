@@ -36,12 +36,13 @@ endtype integrand
 
 abstract interface
   !< Abstract type bound procedures necessary for implementing the class(integrand).
-  pure function time_derivative(self) result(dState_dt)
+  pure function time_derivative(self, n) result(dState_dt)
   !---------------------------------------------------------------------------------------------------------------------------------
   !< Time derivative function of integrand class, i.e. the residuals function.
   !---------------------------------------------------------------------------------------------------------------------------------
   import :: integrand
-  class(integrand), intent(IN)  :: self      !< Integrand field.
+  class(integrand),  intent(IN) :: self      !< Integrand field.
+  integer, optional, intent(IN) :: n         !< Time level.
   class(integrand), allocatable :: dState_dt !< Result of the time derivative function of integrand field.
   !---------------------------------------------------------------------------------------------------------------------------------
   endfunction time_derivative

@@ -75,11 +75,12 @@ contains
   !---------------------------------------------------------------------------------------------------------------------------------
   endfunction output
 
-  pure function dLorenz_dt(self) result(dState_dt)
+  pure function dLorenz_dt(self, n) result(dState_dt)
   !---------------------------------------------------------------------------------------------------------------------------------
   !< Time derivative of Lorenz field.
   !---------------------------------------------------------------------------------------------------------------------------------
-  class(lorenz), intent(IN)     :: self      !< Lorenz field.
+  class(lorenz),     intent(IN) :: self      !< Lorenz field.
+  integer, optional, intent(IN) :: n         !< Time level.
   class(integrand), allocatable :: dState_dt !< Lorenz field time derivative.
   type(lorenz),     allocatable :: delta     !< Delta state used as temporary variables.
   !---------------------------------------------------------------------------------------------------------------------------------

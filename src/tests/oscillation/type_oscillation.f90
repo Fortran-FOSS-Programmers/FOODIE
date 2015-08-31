@@ -69,11 +69,12 @@ contains
   !---------------------------------------------------------------------------------------------------------------------------------
   endfunction output
 
-  pure function dOscillation_dt(self) result(dState_dt)
+  pure function dOscillation_dt(self, n) result(dState_dt)
   !---------------------------------------------------------------------------------------------------------------------------------
   !< Time derivative of Oscillation field.
   !---------------------------------------------------------------------------------------------------------------------------------
   class(oscillation), intent(IN) :: self      !< Oscillation field.
+  integer, optional,  intent(IN) :: n         !< Time level.
   class(integrand),  allocatable :: dState_dt !< Oscillation field time derivative.
   type(oscillation), allocatable :: delta     !< Delta state used as temporary variables.
   !---------------------------------------------------------------------------------------------------------------------------------
@@ -167,7 +168,7 @@ contains
   select type(rhs)
   class is (oscillation)
     local_sum%state = lhs%state + rhs%state
-    local_sum%f = lhs%f + rhs%f  
+    local_sum%f = lhs%f + rhs%f
   endselect
   call move_alloc(local_sum, sum)
   return
@@ -186,7 +187,7 @@ contains
   select type(rhs)
   class is (oscillation)
     if (allocated(rhs%state)) lhs%state = rhs%state
-    lhs%f = rhs%f  
+    lhs%f = rhs%f
   endselect
   return
   !---------------------------------------------------------------------------------------------------------------------------------
