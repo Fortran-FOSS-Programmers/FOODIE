@@ -20,17 +20,27 @@ module foodie_integrator_adams_bashforth
 !< Currently the following schemes are available:
 !<##### 1 step, Explicit Forward Euler, 1st order
 !< This scheme is TVD and reverts to Explicit Forward Euler, it being 1st order.
+!< The *b* coefficient is:
 !< $$b = \left[1\right]$$
+!< The scheme is:
+!< $$ U^{n+1} = U^n + \Delta t R(t^n,U^n) $$
 !<
 !<##### 2 steps
 !< This scheme is 2nd order.
+!< The *b* coefficients are:
 !< $$b = \left[ {\begin{array}{*{20}{c}} b_1 & b_2 \end{array}} \right] =
 !<       \left[ {\begin{array}{*{20}{c}} -\frac{1}{2} & \frac{3}{2} \end{array}} \right]$$
+!< The scheme is:
+!< $$ U^{n+2} = U^{n+1} +\Delta t \left[ \frac{3}{2} R(t^{n+1}, U^{n+1})-\frac{1}{2} R(t^{n}, U^{n})  \right] $$
 !<
 !<##### 3 steps
 !< This scheme is 3rd order.
+!< The *b* coefficients are:
 !< $$b = \left[ {\begin{array}{*{20}{c}} b_1 & b_2 & b_3 \end{array}} \right] =
 !<       \left[ {\begin{array}{*{20}{c}} \frac{5}{12} & -\frac{4}{3} & \frac{23}{12} \end{array}} \right]$$
+!< The scheme is:
+!< $$ U^{n+3} = U^{n+2} +\Delta t \left[ \frac{23}{12}R(t^{n+2}, U^{n+2}) - \frac{4}{3}R(t^{n+1}, U^{n+1})
+!< +\frac{5}{12} R(t^{n}, U^{n})  \right] $$
 !-----------------------------------------------------------------------------------------------------------------------------------
 
 !-----------------------------------------------------------------------------------------------------------------------------------
@@ -49,6 +59,7 @@ type :: adams_bashforth_integrator
   !< FOODiE integrator: provide an explicit class of Adams-Bashforth multi-step schemes, from 1st to 3rd order accutate.
   !<
   !< @note The integrator must be created or initialized (initialize the *b* coeficients) before used.
+  private
   real(R_P), allocatable:: b(:)   !< \(b\) coefficients.
   contains
     procedure, pass(self), public :: destroy   !< Destroy the integrator.
