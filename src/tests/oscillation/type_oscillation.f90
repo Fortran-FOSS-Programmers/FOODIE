@@ -21,15 +21,16 @@ type, extends(integrand) :: oscillation
   !<
   !< It is a FOODiE integrand class.
   private
-  real(R_P), dimension(:), allocatable :: state      !< Solution vector.
-  real(R_P)                            :: f = 0._R_P !< Oscillation frequency (Hz).
+  real(R_P), dimension(:,:), allocatable :: state      !< Solution vector, [1:state_dims,1:time_steps_stored].
+  real(R_P)                              :: f = 0._R_P !< Oscillation frequency (Hz).
   contains
     procedure, pass(self), public :: output                                                           !< Extract Oscillation field.
-    procedure, pass(self), public :: t => dOscillation_dt                                             !< Time derivative, residuals function.
-    procedure, pass(lhs),  public :: integrand_multiply_integrand => oscillation_multiply_oscillation !< Oscillation * oscillation operator.
-    procedure, pass(lhs),  public :: integrand_multiply_real => oscillation_multiply_real             !< Oscillation * real operator.
-    procedure, pass(rhs),  public :: real_multiply_integrand => real_multiply_oscillation             !< Real * Oscillation operator.
-    procedure, pass(lhs),  public :: add => add_oscillation                                           !< Oscillation + Oscillation oprator.
+    procedure, pass(self), public :: update_previous_steps                                            !< Update previous time steps.
+    procedure, pass(self), public :: t => dOscillation_dt                                             !< Time derivative, residuals.
+    procedure, pass(lhs),  public :: integrand_multiply_integrand => oscillation_multiply_oscillation !< Oscillation * oscillation.
+    procedure, pass(lhs),  public :: integrand_multiply_real => oscillation_multiply_real             !< Oscillation * real.
+    procedure, pass(rhs),  public :: real_multiply_integrand => real_multiply_oscillation             !< Real * Oscillation.
+    procedure, pass(lhs),  public :: add => add_oscillation                                           !< Oscillation + Oscillation.
     procedure, pass(lhs),  public :: assign_integrand => oscillation_assign_oscillation               !< Oscillation = Oscillation.
     procedure, pass(lhs),  public :: assign_real => oscillation_assign_real                           !< Oscillation = real.
 endtype oscillation
@@ -39,17 +40,24 @@ interface oscillation
 endinterface
 !-----------------------------------------------------------------------------------------------------------------------------------
 contains
-  function constructor_oscillation(initial_state, f) result(concrete)
+  function constructor_oscillation(initial_state, f, steps) result(concrete)
   !---------------------------------------------------------------------------------------------------------------------------------
   !< Construct an initialized Oscillation field.
   !---------------------------------------------------------------------------------------------------------------------------------
   real(R_P), dimension(:), intent(IN) :: initial_state !< Intial state of the Oscillation field vector.
   real(R_P),               intent(IN) :: f             !< Frequency.
+  integer, optional,       intent(IN) :: steps         !< Time steps stored.
   type(oscillation)                   :: concrete      !< Concrete instance of the Oscillation field.
+  integer                             :: dsteps        !< Time steps stored, dummy variable.
+  integer                             :: s             !< Time steps counter.
   !---------------------------------------------------------------------------------------------------------------------------------
 
   !---------------------------------------------------------------------------------------------------------------------------------
-  concrete%state = initial_state
+  dsteps = 1 ; if (present(steps)) dsteps = steps
+  allocate(concrete%state(1:size(initial_state), 1:dsteps))
+  do s=1, dsteps
+    concrete%state(:, s) = initial_state
+  enddo
   concrete%f = f
   return
   !---------------------------------------------------------------------------------------------------------------------------------
@@ -64,10 +72,26 @@ contains
   !---------------------------------------------------------------------------------------------------------------------------------
 
   !---------------------------------------------------------------------------------------------------------------------------------
-  state = self%state
+  state = self%state(:, ubound(self%state, dim=2))
   return
   !---------------------------------------------------------------------------------------------------------------------------------
   endfunction output
+
+  elemental subroutine update_previous_steps(self)
+  !---------------------------------------------------------------------------------------------------------------------------------
+  !< Update previous time steps.
+  !---------------------------------------------------------------------------------------------------------------------------------
+  class(oscillation), intent(INOUT) :: self !< Lorenz field.
+  integer                           :: s    !< Time steps counter.
+  !---------------------------------------------------------------------------------------------------------------------------------
+
+  !---------------------------------------------------------------------------------------------------------------------------------
+  do s=1, ubound(self%state, dim=2) - 1
+    self%state(:, s) = self%state(:, s + 1)
+  enddo
+  return
+  !---------------------------------------------------------------------------------------------------------------------------------
+  endsubroutine update_previous_steps
 
   pure function dOscillation_dt(self, n) result(dState_dt)
   !---------------------------------------------------------------------------------------------------------------------------------
@@ -77,15 +101,17 @@ contains
   integer, optional,  intent(IN) :: n         !< Time level.
   class(integrand),  allocatable :: dState_dt !< Oscillation field time derivative.
   type(oscillation), allocatable :: delta     !< Delta state used as temporary variables.
+  integer                        :: dn        !< Time level, dummy variable.
   !---------------------------------------------------------------------------------------------------------------------------------
 
   !---------------------------------------------------------------------------------------------------------------------------------
   ! preparing temporary delta
   allocate(delta)
-  allocate(delta%state(size(self%state)))
+  allocate(delta%state(1:size(self%state, dim=1), 1:size(self%state, dim=2)))
   ! Oscillation equations
-  delta%state(1) = -self%f * self%state(2)
-  delta%state(2) =  self%f * self%state(1)
+  dn = size(self%state, dim=2) ; if (present(n)) dn = n
+  delta%state(1, dn) = -self%f * self%state(2, dn)
+  delta%state(2, dn) =  self%f * self%state(1, dn)
   ! hold Oscillation parameters constant over time
   delta%f = 0.
   call move_alloc (delta, dState_dt)
