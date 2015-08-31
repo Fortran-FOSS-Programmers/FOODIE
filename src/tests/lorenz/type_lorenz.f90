@@ -21,12 +21,13 @@ type, extends(integrand) :: lorenz
   !<
   !< It is a FOODiE integrand class.
   private
-  real(R_P), dimension(:), allocatable :: state        !< Solution vector.
-  real(R_P)                            :: sigma=0._R_P !< Lorenz \(\sigma\).
-  real(R_P)                            :: rho=0._R_P   !< Lorenz \(\rho\).
-  real(R_P)                            :: beta=0._R_P  !< Lorenz \(\beta\).
+  real(R_P), dimension(:,:), allocatable :: state        !< Solution vector, [1:state_dims,1:time_steps_stored].
+  real(R_P)                              :: sigma=0._R_P !< Lorenz \(\sigma\).
+  real(R_P)                              :: rho=0._R_P   !< Lorenz \(\rho\).
+  real(R_P)                              :: beta=0._R_P  !< Lorenz \(\beta\).
   contains
     procedure, pass(self), public :: output                                                 !< Extract Lorenz field.
+    procedure, pass(self), public :: update_previous_steps                                  !< Update previous time steps.
     procedure, pass(self), public :: t => dLorenz_dt                                        !< Time derivate, resiuduals function.
     procedure, pass(lhs),  public :: integrand_multiply_integrand => lorenz_multiply_lorenz !< Lorenz * lorenz operator.
     procedure, pass(lhs),  public :: integrand_multiply_real => lorenz_multiply_real        !< Lorenz * real operator.
@@ -41,7 +42,7 @@ interface lorenz
 endinterface
 !-----------------------------------------------------------------------------------------------------------------------------------
 contains
-  function constructor_lorenz(initial_state, sigma, rho, beta) result(concrete)
+  function constructor_lorenz(initial_state, sigma, rho, beta, steps) result(concrete)
   !---------------------------------------------------------------------------------------------------------------------------------
   !< Construct an initialized Lorenz field.
   !---------------------------------------------------------------------------------------------------------------------------------
@@ -49,11 +50,18 @@ contains
   real(R_P),               intent(IN)  :: sigma         !< Lorenz  \(\sigma\).
   real(R_P),               intent(IN)  :: rho           !< Lorenz  \(\rho\).
   real(R_P),               intent(IN)  :: beta          !< Lorenz  \(\beta\).
+  integer, optional,       intent(IN)  :: steps         !< Time steps stored.
   type(lorenz)                         :: concrete      !< Concrete instance of Lorenz field.
+  integer                              :: dsteps        !< Time steps stored, dummy variable.
+  integer                              :: s             !< Time steps counter.
   !---------------------------------------------------------------------------------------------------------------------------------
 
   !---------------------------------------------------------------------------------------------------------------------------------
-  concrete%state = initial_state
+  dsteps = 1 ; if (present(steps)) dsteps = steps
+  allocate(concrete%state(1:size(initial_state), 1:dsteps))
+  do s=1, dsteps
+    concrete%state(:, s) = initial_state
+  enddo
   concrete%sigma = sigma
   concrete%rho = rho
   concrete%beta = beta
@@ -70,28 +78,47 @@ contains
   !---------------------------------------------------------------------------------------------------------------------------------
 
   !---------------------------------------------------------------------------------------------------------------------------------
-  state = self%state
+  state = self%state(:, ubound(self%state, dim=2))
   return
   !---------------------------------------------------------------------------------------------------------------------------------
   endfunction output
 
-  pure function dLorenz_dt(self) result(dState_dt)
+  elemental subroutine update_previous_steps(self)
+  !---------------------------------------------------------------------------------------------------------------------------------
+  !< Update previous time steps.
+  !---------------------------------------------------------------------------------------------------------------------------------
+  class(lorenz), intent(INOUT) :: self !< Lorenz field.
+  integer                      :: s    !< Time steps counter.
+  !---------------------------------------------------------------------------------------------------------------------------------
+
+  !---------------------------------------------------------------------------------------------------------------------------------
+  do s=1, ubound(self%state, dim=2) - 1
+    self%state(:, s) = self%state(:, s + 1)
+  enddo
+  return
+  !---------------------------------------------------------------------------------------------------------------------------------
+  endsubroutine update_previous_steps
+
+  pure function dLorenz_dt(self, n) result(dState_dt)
   !---------------------------------------------------------------------------------------------------------------------------------
   !< Time derivative of Lorenz field.
   !---------------------------------------------------------------------------------------------------------------------------------
-  class(lorenz), intent(IN)     :: self      !< Lorenz field.
+  class(lorenz),     intent(IN) :: self      !< Lorenz field.
+  integer, optional, intent(IN) :: n         !< Time level.
   class(integrand), allocatable :: dState_dt !< Lorenz field time derivative.
   type(lorenz),     allocatable :: delta     !< Delta state used as temporary variables.
+  integer                       :: dn        !< Time level, dummy variable.
   !---------------------------------------------------------------------------------------------------------------------------------
 
   !---------------------------------------------------------------------------------------------------------------------------------
   ! preparing temporary delta
   allocate(delta)
-  allocate(delta%state(size(self%state)))
+  allocate(delta%state(1:size(self%state, dim=1), 1:size(self%state, dim=2)))
   ! Lorenz equations
-  delta%state(1) = self%sigma * (self%state(2) - self%state(1))
-  delta%state(2) = self%state(1) * (self%rho - self%state(3)) - self%state(2)
-  delta%state(3) = self%state(1) * self%state(2) - self%beta * self%state(3)
+  dn = size(self%state, dim=2) ; if (present(n)) dn = n
+  delta%state(1, dn) = self%sigma * (self%state(2, dn) - self%state(1, dn))
+  delta%state(2, dn) = self%state(1, dn) * (self%rho - self%state(3, dn)) - self%state(2, dn)
+  delta%state(3, dn) = self%state(1, dn) * self%state(2, dn) - self%beta * self%state(3, dn)
   ! hold Lorenz parameters constant over time
   delta%sigma = 0.
   delta%rho = 0.

@@ -21,13 +21,14 @@ type, extends(integrand) :: burgers
   !<
   !< It is a FOODiE integrand class.
   private
-  integer(I_P)                         :: Ni=0      !< Number of grid nodes.
-  real(R_P)                            :: h=0._R_P  !< Space step discretization.
-  real(R_P)                            :: nu=0._R_P !< Viscosity.
-  real(R_P), dimension(:), allocatable :: state     !< Solution vector, whole physical domain, [1:Ni].
+  integer(I_P)                           :: Ni=0      !< Number of grid nodes.
+  real(R_P)                              :: h=0._R_P  !< Space step discretization.
+  real(R_P)                              :: nu=0._R_P !< Viscosity.
+  real(R_P), dimension(:,:), allocatable :: state     !< Solution vector, whole physical domain, [1:Ni,1:time_steps_stored].
   contains
     ! public methods
     procedure, pass(self), public :: output                                                   !< Extract Burgers field.
+    procedure, pass(self), public :: update_previous_steps                                    !< Update previous time steps.
     procedure, pass(self), public :: dt => compute_dt                                         !< Compute the current time step.
     procedure, pass(self), public :: t => dBurgers_dt                                         !< Time derivate, residuals function.
     procedure, pass(lhs),  public :: integrand_multiply_integrand => burgers_multiply_burgers !< Burgers * burgers operator.
@@ -49,25 +50,32 @@ interface burgers
 endinterface
 !-----------------------------------------------------------------------------------------------------------------------------------
 contains
-function constructor_burgers(initial_state, Ni, h, nu) result(concrete)
-!---------------------------------------------------------------------------------------------------------------------------------
-!< Construct an initialized Burgers field.
-!---------------------------------------------------------------------------------------------------------------------------------
-real(R_P), dimension(:), intent(IN)  :: initial_state !< Intial state of Burgers field domain.
-integer(I_P),            intent(IN)  :: Ni            !< Number of grid nodes.
-real(R_P),               intent(IN)  :: h             !< Space step discretization.
-real(R_P),               intent(IN)  :: nu            !< Viscosity.
-type(burgers)                        :: concrete      !< Concrete instance of Burgers field.
-!---------------------------------------------------------------------------------------------------------------------------------
+  function constructor_burgers(initial_state, Ni, h, nu, steps) result(concrete)
+  !---------------------------------------------------------------------------------------------------------------------------------
+  !< Construct an initialized Burgers field.
+  !---------------------------------------------------------------------------------------------------------------------------------
+  real(R_P), dimension(:), intent(IN) :: initial_state !< Intial state of Burgers field domain.
+  integer(I_P),            intent(IN) :: Ni            !< Number of grid nodes.
+  real(R_P),               intent(IN) :: h             !< Space step discretization.
+  real(R_P),               intent(IN) :: nu            !< Viscosity.
+  integer, optional,       intent(IN) :: steps         !< Time steps stored.
+  type(burgers)                       :: concrete      !< Concrete instance of Burgers field.
+  integer                             :: dsteps        !< Time steps stored, dummy variable.
+  integer                             :: s             !< Time steps counter.
+  !---------------------------------------------------------------------------------------------------------------------------------
 
-!---------------------------------------------------------------------------------------------------------------------------------
-concrete%state = initial_state
-concrete%Ni = Ni
-concrete%h = h
-concrete%nu = nu
-return
-!---------------------------------------------------------------------------------------------------------------------------------
-endfunction constructor_burgers
+  !---------------------------------------------------------------------------------------------------------------------------------
+  dsteps = 1 ; if (present(steps)) dsteps = steps
+  allocate(concrete%state(1:size(initial_state), 1:dsteps))
+  do s=1, dsteps
+    concrete%state(:, s) = initial_state
+  enddo
+  concrete%Ni = Ni
+  concrete%h = h
+  concrete%nu = nu
+  return
+  !---------------------------------------------------------------------------------------------------------------------------------
+  endfunction constructor_burgers
 
   function output(self) result(state)
   !---------------------------------------------------------------------------------------------------------------------------------
@@ -78,10 +86,26 @@ endfunction constructor_burgers
   !---------------------------------------------------------------------------------------------------------------------------------
 
   !---------------------------------------------------------------------------------------------------------------------------------
-  state = self%state
+  state = self%state(:, ubound(self%state, dim=2))
   return
   !---------------------------------------------------------------------------------------------------------------------------------
   endfunction output
+
+  elemental subroutine update_previous_steps(self)
+  !---------------------------------------------------------------------------------------------------------------------------------
+  !< Update previous time steps.
+  !---------------------------------------------------------------------------------------------------------------------------------
+  class(burgers), intent(INOUT) :: self !< Burgers field.
+  integer                       :: s    !< Time steps counter.
+  !---------------------------------------------------------------------------------------------------------------------------------
+
+  !---------------------------------------------------------------------------------------------------------------------------------
+  do s=1, ubound(self%state, dim=2) - 1
+    self%state(:, s) = self%state(:, s + 1)
+  enddo
+  return
+  !---------------------------------------------------------------------------------------------------------------------------------
+  endsubroutine update_previous_steps
 
   pure function compute_dt(self, CFL) result(dt)
   !---------------------------------------------------------------------------------------------------------------------------------
@@ -98,11 +122,12 @@ endfunction constructor_burgers
   !---------------------------------------------------------------------------------------------------------------------------------
   endfunction compute_dt
 
-  pure function dBurgers_dt(self) result(dState_dt)
+  pure function dBurgers_dt(self, n) result(dState_dt)
   !---------------------------------------------------------------------------------------------------------------------------------
   !< Time derivative of Burgers field, residuals function.
   !---------------------------------------------------------------------------------------------------------------------------------
-  class(burgers), intent(IN)    :: self      !< Burgers field.
+  class(burgers),    intent(IN) :: self      !< Burgers field.
+  integer, optional, intent(IN) :: n         !< Time level.
   class(integrand), allocatable :: dState_dt !< Burgers field time derivative.
   type(burgers),    allocatable :: delta     !< Delta state used as temporary variables.
   !---------------------------------------------------------------------------------------------------------------------------------
@@ -110,9 +135,10 @@ endfunction constructor_burgers
   !---------------------------------------------------------------------------------------------------------------------------------
   ! preparing temporary variables
   allocate(burgers :: delta)
+  allocate(delta%state(1:size(self%state, dim=1), 1:size(self%state, dim=2)))
   ! Burgers residuals
-  delta = self%xx() * self%nu
-  delta = delta - self * self%x()
+  delta = self%xx(n=n) * self%nu
+  delta = delta - self * self%x(n=n)
   call move_alloc (delta, dState_dt)
   return
   !---------------------------------------------------------------------------------------------------------------------------------
@@ -133,7 +159,7 @@ endfunction constructor_burgers
   local_product%Ni = lhs%Ni
   local_product%h = lhs%h
   local_product%nu = lhs%nu
-  allocate(local_product%state(1:lhs%Ni))
+  allocate(local_product%state(1:size(lhs%state, dim=1), 1:size(lhs%state, dim=2)))
   select type(rhs)
   class is (burgers)
     local_product%state = lhs%state * rhs%state
@@ -158,7 +184,7 @@ endfunction constructor_burgers
   local_product%Ni = lhs%Ni
   local_product%h = lhs%h
   local_product%nu = lhs%nu
-  allocate(local_product%state(1:lhs%Ni))
+  allocate(local_product%state(1:size(lhs%state, dim=1), 1:size(lhs%state, dim=2)))
   local_product%state = lhs%state * rhs
   call move_alloc(local_product, product)
   return
@@ -180,7 +206,7 @@ endfunction constructor_burgers
   local_product%Ni = rhs%Ni
   local_product%h = rhs%h
   local_product%nu = rhs%nu
-  allocate(local_product%state(1:rhs%Ni))
+  allocate(local_product%state(1:size(rhs%state, dim=1), 1:size(rhs%state, dim=2)))
   local_product%state = rhs%state * lhs
   call move_alloc(local_product, product)
   return
@@ -202,7 +228,7 @@ endfunction constructor_burgers
   local_sum%Ni = lhs%Ni
   local_sum%h = lhs%h
   local_sum%nu = lhs%nu
-  allocate(local_sum%state(1:lhs%Ni))
+  allocate(local_sum%state(1:size(lhs%state, dim=1), 1:size(lhs%state, dim=2)))
   select type(rhs)
     class is (burgers)
       local_sum%state = lhs%state + rhs%state
@@ -227,7 +253,7 @@ endfunction constructor_burgers
   local_sub%Ni = lhs%Ni
   local_sub%h = lhs%h
   local_sub%nu = lhs%nu
-  allocate(local_sub%state(1:lhs%Ni))
+  allocate(local_sub%state(1:size(lhs%state, dim=1), 1:size(lhs%state, dim=2)))
   select type(rhs)
     class is (burgers)
       local_sub%state = lhs%state - rhs%state
@@ -272,13 +298,15 @@ endfunction constructor_burgers
   endsubroutine burgers_assign_real
 
   ! private methods
-  pure function dBurgers_dx(self) result(derivative)
+  pure function dBurgers_dx(self, n) result(derivative)
   !---------------------------------------------------------------------------------------------------------------------------------
   !< Compute the first order spatial derivative of Burgers field.
   !---------------------------------------------------------------------------------------------------------------------------------
-  class(burgers), intent(IN) :: self       !< Burgers field.
-  type(burgers), allocatable :: derivative !< Burgers field derivative.
-  integer(I_P)               :: i          !< Counter.
+  class(burgers),    intent(IN) :: self       !< Burgers field.
+  integer, optional, intent(IN) :: n          !< Time level.
+  type(burgers), allocatable    :: derivative !< Burgers field derivative.
+  integer(I_P)                  :: i          !< Counter.
+  integer                       :: dn         !< Time level, dummy variable.
   !---------------------------------------------------------------------------------------------------------------------------------
 
   !---------------------------------------------------------------------------------------------------------------------------------
@@ -286,23 +314,26 @@ endfunction constructor_burgers
   derivative%Ni = self%Ni
   derivative%h = self%h
   derivative%nu = self%nu
-  allocate(derivative%state(1:self%Ni))
+  allocate(derivative%state(1:size(self%state, dim=1), 1:size(self%state, dim=2)))
+  dn = size(self%state, dim=2) ; if (present(n)) dn = n
   do i=2, self%Ni - 1
-    derivative%state(i) = (self%state(i+1) - self%state(i-1))/(2._R_P * self%h)
+    derivative%state(i, dn) = (self%state(i+1, dn) - self%state(i-1, dn))/(2._R_P * self%h)
   enddo
-  derivative%state(1) = (self%state(2) - self%state(self%Ni))/(2._R_P * self%h)
-  derivative%state(self%Ni) = (self%state(1) - self%state(self%Ni-1))/(2._R_P * self%h)
+  derivative%state(1, dn) = (self%state(2, dn) - self%state(self%Ni, dn))/(2._R_P * self%h)
+  derivative%state(self%Ni, dn) = (self%state(1, dn) - self%state(self%Ni-1, dn))/(2._R_P * self%h)
   return
   !---------------------------------------------------------------------------------------------------------------------------------
   endfunction
 
-  pure function d2Burgers_dx2(self) result(derivative)
+  pure function d2Burgers_dx2(self, n) result(derivative)
   !---------------------------------------------------------------------------------------------------------------------------------
   !< Compute the second order spatial derivative of Burgers field.
   !---------------------------------------------------------------------------------------------------------------------------------
-  class(burgers), intent(IN) :: self       !< Burgers field.
-  type(burgers), allocatable :: derivative !< Burgers field derivative.
-  integer(I_P)               :: i          !< Counter.
+  class(burgers),    intent(IN) :: self       !< Burgers field.
+  integer, optional, intent(IN) :: n          !< Time level.
+  type(burgers), allocatable    :: derivative !< Burgers field derivative.
+  integer(I_P)                  :: i          !< Counter.
+  integer                       :: dn         !< Time level, dummy variable.
   !---------------------------------------------------------------------------------------------------------------------------------
 
   !---------------------------------------------------------------------------------------------------------------------------------
@@ -310,12 +341,13 @@ endfunction constructor_burgers
   derivative%Ni = self%Ni
   derivative%h = self%h
   derivative%nu = self%nu
-  allocate(derivative%state(1:self%Ni))
+  allocate(derivative%state(1:size(self%state, dim=1), 1:size(self%state, dim=2)))
+  dn = size(self%state, dim=2) ; if (present(n)) dn = n
   do i=2, self%Ni - 1
-    derivative%state(i) = (self%state(i+1) - 2._R_P * self%state(i) + self%state(i-1))/(self%h**2)
+    derivative%state(i, dn) = (self%state(i+1, dn) - 2._R_P * self%state(i, dn) + self%state(i-1, dn))/(self%h**2)
   enddo
-  derivative%state(1) = (self%state(2) - 2._R_P * self%state(1) + self%state(self%Ni))/(self%h**2)
-  derivative%state(self%Ni) = (self%state(1) - 2._R_P * self%state(self%Ni) + self%state(self%Ni-1))/(self%h**2)
+  derivative%state(1, dn) = (self%state(2, dn) - 2._R_P * self%state(1, dn) + self%state(self%Ni, dn))/(self%h**2)
+  derivative%state(self%Ni, dn) = (self%state(1, dn) - 2._R_P * self%state(self%Ni, dn) + self%state(self%Ni-1, dn))/(self%h**2)
   return
   !---------------------------------------------------------------------------------------------------------------------------------
   endfunction

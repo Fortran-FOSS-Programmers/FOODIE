@@ -53,7 +53,7 @@ module foodie_integrator_tvd_runge_kutta
 !< $$\beta = \left[1\right]$$
 !< $$\alpha = \left[ {\begin{array}{*{20}{c}} 0&0 \end{array}} \right]$$
 !< $$\gamma = \left[0\right]$$
-
+!<
 !<##### 2 stages, SSP, 2nd order
 !< This scheme is an optmial SSP(2, 2) without low-storage algorithm. See *High Order Strong Stability Preserving Time
 !< Discretizations*, Gottlieb, S., Ketcheson, D. I., Shu, C.W., Journal of Scientific Computing, vol. 38, N. 3, 2009,
@@ -61,7 +61,7 @@ module foodie_integrator_tvd_runge_kutta
 !< $$\beta = \left[ {\begin{array}{*{20}{c}} \frac{1}{2}&\frac{1}{2} \end{array}} \right]$$
 !< $$\alpha = \left[ {\begin{array}{*{20}{c}} 0&0\\ 1&0 \end{array}} \right]$$
 !< $$\gamma = \left[ {\begin{array}{*{20}{c}} 0 \\ 1 \end{array}} \right]$$
-
+!<
 !<##### 3 stages, SSP, 3rd order
 !< This scheme is an optmial SSP(3, 3) without low-storage algorithm. See *High Order Strong Stability Preserving Time
 !< Discretizations*, Gottlieb, S., Ketcheson, D. I., Shu, C.W., Journal of Scientific Computing, vol. 38, N. 3, 2009,
@@ -69,7 +69,7 @@ module foodie_integrator_tvd_runge_kutta
 !< $$\beta = \left[ {\begin{array}{*{20}{c}} \frac{1}{6}&\frac{1}{6}&\frac{1}{3}  \end{array}} \right]$$
 !< $$\alpha = \left[ {\begin{array}{*{20}{c}} 0&0&0\\ 1&0&0\\ \frac{1}{4}&\frac{1}{4}&0 \end{array}} \right]$$
 !< $$\gamma = \left[ {\begin{array}{*{20}{c}} 0 \\ 1 \\ \frac{1}{2} \end{array}} \right]$$
-
+!<
 !<##### 5 stages, SSP, 4th order
 !< This scheme is an optmial SSP(5, 4) without low-storage algorithm. See *High Order Strong Stability Preserving Time
 !< Discretizations*, Gottlieb, S., Ketcheson, D. I., Shu, C.W., Journal of Scientific Computing, vol. 38, N. 3, 2009,
@@ -117,7 +117,7 @@ endinterface tvd_runge_kutta_integrator
 contains
   elemental function create(stages) result(rk)
   !---------------------------------------------------------------------------------------------------------------------------------
-  !< Create the actual RK integrators: initialize the Butcher' table coefficients.
+  !< Create the actual RK integrator: initialize the Butcher' table coefficients.
   !---------------------------------------------------------------------------------------------------------------------------------
   integer(I_P), intent(IN)         :: stages !< Number of stages used.
   type(tvd_runge_kutta_integrator) :: rk     !< Actual RK integrator.
@@ -132,7 +132,7 @@ contains
   ! public methods
   elemental subroutine init(self, stages)
   !---------------------------------------------------------------------------------------------------------------------------------
-  !< Create the actual RK integrators: initialize the Butcher' table coefficients.
+  !< Create the actual RK integrator: initialize the Butcher' table coefficients.
   !---------------------------------------------------------------------------------------------------------------------------------
   class(tvd_runge_kutta_integrator), intent(INOUT) :: self   !< RK integrator.
   integer(I_P),                      intent(IN)    :: stages !< Number of stages used.
