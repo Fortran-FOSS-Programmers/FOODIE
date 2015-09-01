@@ -45,7 +45,7 @@ enddo
 
 ! solve Burgers equations by means of the Forward Explicit Euler scheme
 ! initialize field
-domain = burgers(initial_state=initial_state, Ni=Ni, h=h, nu=nu)
+call domain%init(initial_state=initial_state, Ni=Ni, h=h, nu=nu)
 ! integrate field
 dt = domain%dt(CFL=0.1_R_P)
 do while(t<t_final)
@@ -64,7 +64,7 @@ do s=1, rk_stages
   ! initialize the RK integrator accordingly to the number of stages used
   rk_integrator = tvd_runge_kutta_integrator(stages=s)
   ! initialize field
-  domain = burgers(initial_state=initial_state, Ni=Ni, h=h, nu=nu)
+  call domain%init(initial_state=initial_state, Ni=Ni, h=h, nu=nu)
   ! integrate field
   dt = domain%dt(CFL=0.1_R_P)
   do while(t<t_final)
@@ -82,9 +82,9 @@ enddo
 ! solve Burgers equations by means of the Adams-Bashforth schemes (testing all available schemes)
 do s=1, ab_steps
   ! initialize the AB integrator accordingly to the number of time steps used
-  ab_integrator = adams_bashforth_integrator(steps=s)
+  call ab_integrator%init(steps=s)
   ! initialize field
-  domain = burgers(initial_state=initial_state, Ni=Ni, h=h, nu=nu, steps=s)
+  call domain%init(initial_state=initial_state, Ni=Ni, h=h, nu=nu, steps=s)
   ! integrate field
   dt = domain%dt(CFL=0.1_R_P)
   step = 1
