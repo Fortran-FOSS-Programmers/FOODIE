@@ -5,7 +5,7 @@ module type_lorenz
 !-----------------------------------------------------------------------------------------------------------------------------------
 
 !-----------------------------------------------------------------------------------------------------------------------------------
-use IR_Precision, only : R_P
+use IR_Precision, only : R_P, I_P
 use foodie, only : integrand
 !-----------------------------------------------------------------------------------------------------------------------------------
 
@@ -26,6 +26,7 @@ type, extends(integrand) :: lorenz
   real(R_P)                              :: rho=0._R_P   !< Lorenz \(\rho\).
   real(R_P)                              :: beta=0._R_P  !< Lorenz \(\beta\).
   contains
+    procedure, pass(self), public :: init                                                   !< Init field.
     procedure, pass(self), public :: output                                                 !< Extract Lorenz field.
     procedure, pass(self), public :: update_previous_steps                                  !< Update previous time steps.
     procedure, pass(self), public :: t => dLorenz_dt                                        !< Time derivate, resiuduals function.
@@ -36,38 +37,34 @@ type, extends(integrand) :: lorenz
     procedure, pass(lhs),  public :: assign_integrand => lorenz_assign_lorenz               !< Lorenz = Lorenz.
     procedure, pass(lhs),  public :: assign_real => lorenz_assign_real                      !< Lorenz = real.
 endtype lorenz
-interface lorenz
-  !< Overload lorenz name adding the constructor function.
-  module procedure constructor_lorenz
-endinterface
 !-----------------------------------------------------------------------------------------------------------------------------------
 contains
-  function constructor_lorenz(initial_state, sigma, rho, beta, steps) result(concrete)
+  subroutine init(self, initial_state, sigma, rho, beta, steps)
   !---------------------------------------------------------------------------------------------------------------------------------
   !< Construct an initialized Lorenz field.
   !---------------------------------------------------------------------------------------------------------------------------------
-  real(R_P), dimension(:), intent(IN)  :: initial_state !< Intial state of Lorenz field vector.
-  real(R_P),               intent(IN)  :: sigma         !< Lorenz  \(\sigma\).
-  real(R_P),               intent(IN)  :: rho           !< Lorenz  \(\rho\).
-  real(R_P),               intent(IN)  :: beta          !< Lorenz  \(\beta\).
-  integer, optional,       intent(IN)  :: steps         !< Time steps stored.
-  type(lorenz)                         :: concrete      !< Concrete instance of Lorenz field.
-  integer                              :: dsteps        !< Time steps stored, dummy variable.
-  integer                              :: s             !< Time steps counter.
+  class(lorenz),           intent(INOUT) :: self          !< Lorenz field.
+  real(R_P), dimension(:), intent(IN)    :: initial_state !< Intial state of Lorenz field vector.
+  real(R_P),               intent(IN)    :: sigma         !< Lorenz  \(\sigma\).
+  real(R_P),               intent(IN)    :: rho           !< Lorenz  \(\rho\).
+  real(R_P),               intent(IN)    :: beta          !< Lorenz  \(\beta\).
+  integer, optional,       intent(IN)    :: steps         !< Time steps stored.
+  integer                                :: dsteps        !< Time steps stored, dummy variable.
+  integer                                :: s             !< Time steps counter.
   !---------------------------------------------------------------------------------------------------------------------------------
 
   !---------------------------------------------------------------------------------------------------------------------------------
   dsteps = 1 ; if (present(steps)) dsteps = steps
-  allocate(concrete%state(1:size(initial_state), 1:dsteps))
+  if (allocated(self%state)) deallocate(self%state) ; allocate(self%state(1:size(initial_state), 1:dsteps))
   do s=1, dsteps
-    concrete%state(:, s) = initial_state
+    self%state(:, s) = initial_state
   enddo
-  concrete%sigma = sigma
-  concrete%rho = rho
-  concrete%beta = beta
+  self%sigma = sigma
+  self%rho = rho
+  self%beta = beta
   return
   !---------------------------------------------------------------------------------------------------------------------------------
-  endfunction constructor_lorenz
+  endsubroutine init
 
   function output(self) result(state)
   !---------------------------------------------------------------------------------------------------------------------------------
@@ -103,11 +100,11 @@ contains
   !---------------------------------------------------------------------------------------------------------------------------------
   !< Time derivative of Lorenz field.
   !---------------------------------------------------------------------------------------------------------------------------------
-  class(lorenz),     intent(IN) :: self      !< Lorenz field.
-  integer, optional, intent(IN) :: n         !< Time level.
-  class(integrand), allocatable :: dState_dt !< Lorenz field time derivative.
-  type(lorenz),     allocatable :: delta     !< Delta state used as temporary variables.
-  integer                       :: dn        !< Time level, dummy variable.
+  class(lorenz),          intent(IN) :: self      !< Lorenz field.
+  integer(I_P), optional, intent(IN) :: n         !< Time level.
+  class(integrand), allocatable      :: dState_dt !< Lorenz field time derivative.
+  type(lorenz),     allocatable      :: delta     !< Delta state used as temporary variables.
+  integer                            :: dn        !< Time level, dummy variable.
   !---------------------------------------------------------------------------------------------------------------------------------
 
   !---------------------------------------------------------------------------------------------------------------------------------

@@ -67,26 +67,8 @@ type :: adams_bashforth_integrator
     procedure, pass(self), public :: integrate !< Integrate integrand field.
     final                         :: finalize  !< Finalize object.
 endtype adams_bashforth_integrator
-interface adams_bashforth_integrator
-  !< Overload adams_bashforth_integrator name with the constructor function *create*.
-  module procedure create
-endinterface adams_bashforth_integrator
 !-----------------------------------------------------------------------------------------------------------------------------------
 contains
-  elemental function create(steps) result(ab)
-  !---------------------------------------------------------------------------------------------------------------------------------
-  !< Create the actual Adams-Bashforth integrator: initialize the *b* coefficients.
-  !---------------------------------------------------------------------------------------------------------------------------------
-  integer(I_P), intent(IN)         :: steps !< Number of time steps used.
-  type(adams_bashforth_integrator) :: ab    !< Actual AB integrator.
-  !---------------------------------------------------------------------------------------------------------------------------------
-
-  !---------------------------------------------------------------------------------------------------------------------------------
-  call ab%init(steps=steps)
-  return
-  !---------------------------------------------------------------------------------------------------------------------------------
-  endfunction create
-
   ! public methods
   elemental subroutine init(self, steps)
   !---------------------------------------------------------------------------------------------------------------------------------
@@ -142,7 +124,7 @@ contains
 
   !---------------------------------------------------------------------------------------------------------------------------------
   do s=1, steps
-    field = field +  field%t(n=s) * (dt * self%b(s))
+    field = field + field%t(n=s) * (dt * self%b(s))
   enddo
   return
   !---------------------------------------------------------------------------------------------------------------------------------
