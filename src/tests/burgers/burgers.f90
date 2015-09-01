@@ -97,7 +97,6 @@ do s=1, ab_steps
     endif
     t = t + dt
     step = step + 1
-    call domain%update_previous_steps()
   enddo
   final_state = domain%output()
   ! save plot of results

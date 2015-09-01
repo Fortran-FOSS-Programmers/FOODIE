@@ -18,8 +18,10 @@ public :: integrand
 type, abstract :: integrand
   !< Abstract type for building FOODiE ODE integrators.
   contains
-    ! public deferred procedures that concrete interpolators must implement
-    procedure(time_derivative),      pass(self), deferred, public :: t                            !< Time derivative, residuals.
+    ! public deferred procedures that concrete integrand-field must implement
+    procedure(time_derivative),       pass(self), deferred, public :: t                     !< Time derivative, residuals.
+    procedure(update_previous_steps), pass(self), deferred, public :: update_previous_steps !< Time derivative, residuals.
+    ! operators
     procedure(symmetric_operator),   pass(lhs),  deferred, public :: integrand_multiply_integrand !< Integrand * integrand operator.
     procedure(integrand_op_real),    pass(lhs),  deferred, public :: integrand_multiply_real      !< Integrand * real operator.
     procedure(real_op_integrand),    pass(rhs),  deferred, public :: real_multiply_integrand      !< Real * integrand operator.
@@ -35,7 +37,7 @@ type, abstract :: integrand
 endtype integrand
 
 abstract interface
-  !< Abstract type bound procedures necessary for implementing the class(integrand).
+  !< Abstract type bound procedures necessary for implementing a concrete extension of the class(integrand).
   pure function time_derivative(self, n) result(dState_dt)
   !---------------------------------------------------------------------------------------------------------------------------------
   !< Time derivative function of integrand class, i.e. the residuals function.
@@ -46,6 +48,15 @@ abstract interface
   class(integrand), allocatable      :: dState_dt !< Result of the time derivative function of integrand field.
   !---------------------------------------------------------------------------------------------------------------------------------
   endfunction time_derivative
+
+  pure subroutine update_previous_steps(self)
+  !---------------------------------------------------------------------------------------------------------------------------------
+  !< Update the previous time steps (of integrand field) for multi-step(level) ODE solvers.
+  !---------------------------------------------------------------------------------------------------------------------------------
+  import :: integrand
+  class(integrand), intent(INOUT) :: self      !< Integrand field.
+  !---------------------------------------------------------------------------------------------------------------------------------
+  endsubroutine update_previous_steps
 
   pure function integrand_op_real(lhs, rhs) result(operator_result)
   !---------------------------------------------------------------------------------------------------------------------------------

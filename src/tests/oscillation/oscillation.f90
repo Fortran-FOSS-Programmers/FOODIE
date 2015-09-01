@@ -91,7 +91,6 @@ do s=1, ab_steps
     endif
     solution(0, step) = step * dt
     solution(1:space_dimension, step) = attractor%output()
-    call attractor%update_previous_steps()
   enddo
   ! save plot of results
   call plt%initialize(grid=.true., xlabel='time', title='FOODiE test: Oscillation equation integration, explicit '//&

@@ -128,6 +128,7 @@ contains
   do s=1, self%steps
     field = field + field%t(n=s) * (dt * self%b(s))
   enddo
+  call field%update_previous_steps
   return
   !---------------------------------------------------------------------------------------------------------------------------------
   endsubroutine integrate
