@@ -87,7 +87,7 @@ do s=1, ab_steps
       ! the time steps from 1 to s - 1 must be computed with other scheme...
       call euler_integrator%integrate(field=attractor, dt=dt)
     else
-      call ab_integrator%integrate(field=attractor, steps=s, dt=dt)
+      call ab_integrator%integrate(field=attractor, dt=dt)
     endif
     solution(0, step) = step * dt
     solution(1:space_dimension, step) = attractor%output()

@@ -60,7 +60,8 @@ type :: adams_bashforth_integrator
   !<
   !< @note The integrator must be created or initialized (initialize the *b* coeficients) before used.
   private
-  real(R_P), allocatable:: b(:)   !< \(b\) coefficients.
+  integer(I_P)           :: steps=0 !< Number of time steps.
+  real(R_P), allocatable :: b(:)    !< \(b\) coefficients.
   contains
     procedure, pass(self), public :: destroy   !< Destroy the integrator.
     procedure, pass(self), public :: init      !< Initialize (create) the integrator.
@@ -79,6 +80,7 @@ contains
   !---------------------------------------------------------------------------------------------------------------------------------
 
   !---------------------------------------------------------------------------------------------------------------------------------
+  self%steps = steps
   if (allocated(self%b)) deallocate(self%b) ; allocate(self%b(1:steps)) ; self%b = 0._R_P
   select case(steps)
   case(1)
@@ -106,24 +108,24 @@ contains
   !---------------------------------------------------------------------------------------------------------------------------------
 
   !---------------------------------------------------------------------------------------------------------------------------------
+  self%steps = 0
   if (allocated(self%b)) deallocate(self%b)
   return
   !---------------------------------------------------------------------------------------------------------------------------------
   endsubroutine destroy
 
-  subroutine integrate(self, field, steps, dt)
+  subroutine integrate(self, field, dt)
   !---------------------------------------------------------------------------------------------------------------------------------
   !< Integrate field with Adams-Bashforth class scheme.
   !---------------------------------------------------------------------------------------------------------------------------------
   class(adams_bashforth_integrator), intent(IN)    :: self  !< Actual AB integrator.
   class(integrand),                  intent(INOUT) :: field !< Field to be integrated.
-  integer(I_P),                      intent(IN)    :: steps !< Number of time steps used.
   real(R_P),                         intent(in)    :: dt    !< Time step.
   integer(I_P)                                     :: s     !< Steps counter.
   !---------------------------------------------------------------------------------------------------------------------------------
 
   !---------------------------------------------------------------------------------------------------------------------------------
-  do s=1, steps
+  do s=1, self%steps
     field = field + field%t(n=s) * (dt * self%b(s))
   enddo
   return
