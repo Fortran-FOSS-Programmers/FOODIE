@@ -34,7 +34,7 @@ integer(I_P)                     :: s                                           
 !-----------------------------------------------------------------------------------------------------------------------------------
 ! solve Oscillation equations by means of the Forward Explicit Euler scheme
 ! initialize field
-attractor = oscillation(initial_state=initial_state, f=f)
+call attractor%init(initial_state=initial_state, f=f)
 solution(0, 0) = 0._R_P
 solution(1:space_dimension, 0) = attractor%output()
 ! integrate field
@@ -56,7 +56,7 @@ do s=1, rk_stages
   ! initialize the RK integrator accordingly to the number of stages used
   rk_integrator = tvd_runge_kutta_integrator(stages=s)
   ! initialize field
-  attractor = oscillation(initial_state=initial_state, f=f)
+  call attractor%init(initial_state=initial_state, f=f)
   solution(0, 0) = 0._R_P
   solution(1:space_dimension, 0) = attractor%output()
   ! integrate field
@@ -76,9 +76,9 @@ enddo
 ! solve Oscillation equations by means of the Adams-Bashforth schemes (testing all available schemes)
 do s=1, ab_steps
   ! initialize the AB integrator accordingly to the number of time steps used
-  ab_integrator = adams_bashforth_integrator(steps=s)
+  call ab_integrator%init(steps=s)
   ! initialize field
-  attractor = oscillation(initial_state=initial_state, f=f, steps=s)
+  call attractor%init(initial_state=initial_state, f=f, steps=s)
   solution(0, 0) = 0._R_P
   solution(1:space_dimension, 0) = attractor%output()
   ! integrate field

@@ -5,7 +5,7 @@ module type_integrand
 !-----------------------------------------------------------------------------------------------------------------------------------
 
 !-----------------------------------------------------------------------------------------------------------------------------------
-use IR_Precision, only : R_P
+use IR_Precision, only : R_P, I_P
 !-----------------------------------------------------------------------------------------------------------------------------------
 
 !-----------------------------------------------------------------------------------------------------------------------------------
@@ -40,10 +40,10 @@ abstract interface
   !---------------------------------------------------------------------------------------------------------------------------------
   !< Time derivative function of integrand class, i.e. the residuals function.
   !---------------------------------------------------------------------------------------------------------------------------------
-  import :: integrand
-  class(integrand),  intent(IN) :: self      !< Integrand field.
-  integer, optional, intent(IN) :: n         !< Time level.
-  class(integrand), allocatable :: dState_dt !< Result of the time derivative function of integrand field.
+  import :: integrand, I_P
+  class(integrand),       intent(IN) :: self      !< Integrand field.
+  integer(I_P), optional, intent(IN) :: n         !< Time level.
+  class(integrand), allocatable      :: dState_dt !< Result of the time derivative function of integrand field.
   !---------------------------------------------------------------------------------------------------------------------------------
   endfunction time_derivative
 

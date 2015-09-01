@@ -27,6 +27,7 @@ type, extends(integrand) :: burgers
   real(R_P), dimension(:,:), allocatable :: state     !< Solution vector, whole physical domain, [1:Ni,1:time_steps_stored].
   contains
     ! public methods
+    procedure, pass(self), public :: init                                                     !< Init field.
     procedure, pass(self), public :: output                                                   !< Extract Burgers field.
     procedure, pass(self), public :: update_previous_steps                                    !< Update previous time steps.
     procedure, pass(self), public :: dt => compute_dt                                         !< Compute the current time step.
@@ -44,38 +45,35 @@ type, extends(integrand) :: burgers
     procedure, pass(self), private :: x  => dBurgers_dx   !< 1st derivative.
     procedure, pass(self), private :: xx => d2Burgers_dx2 !< 2nd derivative.
 endtype burgers
-interface burgers
-  !< Overload burgers name adding the constructor function.
-  module procedure constructor_burgers
-endinterface
 !-----------------------------------------------------------------------------------------------------------------------------------
 contains
-  function constructor_burgers(initial_state, Ni, h, nu, steps) result(concrete)
+  ! public methods
+  subroutine init(self, initial_state, Ni, h, nu, steps)
   !---------------------------------------------------------------------------------------------------------------------------------
   !< Construct an initialized Burgers field.
   !---------------------------------------------------------------------------------------------------------------------------------
-  real(R_P), dimension(:), intent(IN) :: initial_state !< Intial state of Burgers field domain.
-  integer(I_P),            intent(IN) :: Ni            !< Number of grid nodes.
-  real(R_P),               intent(IN) :: h             !< Space step discretization.
-  real(R_P),               intent(IN) :: nu            !< Viscosity.
-  integer, optional,       intent(IN) :: steps         !< Time steps stored.
-  type(burgers)                       :: concrete      !< Concrete instance of Burgers field.
-  integer                             :: dsteps        !< Time steps stored, dummy variable.
-  integer                             :: s             !< Time steps counter.
+  class(burgers),          intent(INOUT) :: self          !< Burgers field.
+  real(R_P), dimension(:), intent(IN)    :: initial_state !< Intial state of Burgers field domain.
+  integer(I_P),            intent(IN)    :: Ni            !< Number of grid nodes.
+  real(R_P),               intent(IN)    :: h             !< Space step discretization.
+  real(R_P),               intent(IN)    :: nu            !< Viscosity.
+  integer, optional,       intent(IN)    :: steps         !< Time steps stored.
+  integer                                :: dsteps        !< Time steps stored, dummy variable.
+  integer                                :: s             !< Time steps counter.
   !---------------------------------------------------------------------------------------------------------------------------------
 
   !---------------------------------------------------------------------------------------------------------------------------------
   dsteps = 1 ; if (present(steps)) dsteps = steps
-  allocate(concrete%state(1:size(initial_state), 1:dsteps))
+  if (allocated(self%state)) deallocate(self%state) ; allocate(self%state(1:size(initial_state), 1:dsteps))
   do s=1, dsteps
-    concrete%state(:, s) = initial_state
+    self%state(:, s) = initial_state
   enddo
-  concrete%Ni = Ni
-  concrete%h = h
-  concrete%nu = nu
+  self%Ni = Ni
+  self%h = h
+  self%nu = nu
   return
   !---------------------------------------------------------------------------------------------------------------------------------
-  endfunction constructor_burgers
+  endsubroutine init
 
   function output(self) result(state)
   !---------------------------------------------------------------------------------------------------------------------------------
@@ -126,10 +124,10 @@ contains
   !---------------------------------------------------------------------------------------------------------------------------------
   !< Time derivative of Burgers field, residuals function.
   !---------------------------------------------------------------------------------------------------------------------------------
-  class(burgers),    intent(IN) :: self      !< Burgers field.
-  integer, optional, intent(IN) :: n         !< Time level.
-  class(integrand), allocatable :: dState_dt !< Burgers field time derivative.
-  type(burgers),    allocatable :: delta     !< Delta state used as temporary variables.
+  class(burgers),         intent(IN) :: self      !< Burgers field.
+  integer(I_P), optional, intent(IN) :: n         !< Time level.
+  class(integrand), allocatable      :: dState_dt !< Burgers field time derivative.
+  type(burgers),    allocatable      :: delta     !< Delta state used as temporary variables.
   !---------------------------------------------------------------------------------------------------------------------------------
 
   !---------------------------------------------------------------------------------------------------------------------------------
