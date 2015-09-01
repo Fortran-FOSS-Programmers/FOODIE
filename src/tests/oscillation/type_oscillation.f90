@@ -24,10 +24,12 @@ type, extends(integrand) :: oscillation
   real(R_P), dimension(:,:), allocatable :: state      !< Solution vector, [1:state_dims,1:time_steps_stored].
   real(R_P)                              :: f = 0._R_P !< Oscillation frequency (Hz).
   contains
-    procedure, pass(self), public :: init                                                             !< Init field.
-    procedure, pass(self), public :: output                                                           !< Extract Oscillation field.
-    procedure, pass(self), public :: update_previous_steps                                            !< Update previous time steps.
+    ! auxiliary methods
+    procedure, pass(self), public :: init   !< Init field.
+    procedure, pass(self), public :: output !< Extract Oscillation field.
+    ! type_integrand deferred methods
     procedure, pass(self), public :: t => dOscillation_dt                                             !< Time derivative, residuals.
+    procedure, pass(self), public :: update_previous_steps                                            !< Update previous time steps.
     procedure, pass(lhs),  public :: integrand_multiply_integrand => oscillation_multiply_oscillation !< Oscillation * oscillation.
     procedure, pass(lhs),  public :: integrand_multiply_real => oscillation_multiply_real             !< Oscillation * real.
     procedure, pass(rhs),  public :: real_multiply_integrand => real_multiply_oscillation             !< Real * Oscillation.
@@ -74,22 +76,6 @@ contains
   !---------------------------------------------------------------------------------------------------------------------------------
   endfunction output
 
-  pure subroutine update_previous_steps(self)
-  !---------------------------------------------------------------------------------------------------------------------------------
-  !< Update previous time steps.
-  !---------------------------------------------------------------------------------------------------------------------------------
-  class(oscillation), intent(INOUT) :: self !< Oscillation field.
-  integer                           :: s    !< Time steps counter.
-  !---------------------------------------------------------------------------------------------------------------------------------
-
-  !---------------------------------------------------------------------------------------------------------------------------------
-  do s=1, ubound(self%state, dim=2) - 1
-    self%state(:, s) = self%state(:, s + 1)
-  enddo
-  return
-  !---------------------------------------------------------------------------------------------------------------------------------
-  endsubroutine update_previous_steps
-
   pure function dOscillation_dt(self, n) result(dState_dt)
   !---------------------------------------------------------------------------------------------------------------------------------
   !< Time derivative of Oscillation field.
@@ -115,6 +101,22 @@ contains
   return
   !---------------------------------------------------------------------------------------------------------------------------------
   endfunction dOscillation_dt
+
+  pure subroutine update_previous_steps(self)
+  !---------------------------------------------------------------------------------------------------------------------------------
+  !< Update previous time steps.
+  !---------------------------------------------------------------------------------------------------------------------------------
+  class(oscillation), intent(INOUT) :: self !< Oscillation field.
+  integer                           :: s    !< Time steps counter.
+  !---------------------------------------------------------------------------------------------------------------------------------
+
+  !---------------------------------------------------------------------------------------------------------------------------------
+  do s=1, ubound(self%state, dim=2) - 1
+    self%state(:, s) = self%state(:, s + 1)
+  enddo
+  return
+  !---------------------------------------------------------------------------------------------------------------------------------
+  endsubroutine update_previous_steps
 
   pure function oscillation_multiply_oscillation(lhs, rhs) result(product)
   !---------------------------------------------------------------------------------------------------------------------------------

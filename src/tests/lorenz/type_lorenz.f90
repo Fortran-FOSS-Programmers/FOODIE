@@ -26,10 +26,12 @@ type, extends(integrand) :: lorenz
   real(R_P)                              :: rho=0._R_P   !< Lorenz \(\rho\).
   real(R_P)                              :: beta=0._R_P  !< Lorenz \(\beta\).
   contains
-    procedure, pass(self), public :: init                                                   !< Init field.
-    procedure, pass(self), public :: output                                                 !< Extract Lorenz field.
-    procedure, pass(self), public :: update_previous_steps                                  !< Update previous time steps.
+    ! auxiliary methods
+    procedure, pass(self), public :: init   !< Init field.
+    procedure, pass(self), public :: output !< Extract Lorenz field.
+    ! type_integrand deferred methods
     procedure, pass(self), public :: t => dLorenz_dt                                        !< Time derivate, resiuduals function.
+    procedure, pass(self), public :: update_previous_steps                                  !< Update previous time steps.
     procedure, pass(lhs),  public :: integrand_multiply_integrand => lorenz_multiply_lorenz !< Lorenz * lorenz operator.
     procedure, pass(lhs),  public :: integrand_multiply_real => lorenz_multiply_real        !< Lorenz * real operator.
     procedure, pass(rhs),  public :: real_multiply_integrand => real_multiply_lorenz        !< Real * Lorenz operator.
@@ -80,22 +82,6 @@ contains
   !---------------------------------------------------------------------------------------------------------------------------------
   endfunction output
 
-  pure subroutine update_previous_steps(self)
-  !---------------------------------------------------------------------------------------------------------------------------------
-  !< Update previous time steps.
-  !---------------------------------------------------------------------------------------------------------------------------------
-  class(lorenz), intent(INOUT) :: self !< Lorenz field.
-  integer                      :: s    !< Time steps counter.
-  !---------------------------------------------------------------------------------------------------------------------------------
-
-  !---------------------------------------------------------------------------------------------------------------------------------
-  do s=1, ubound(self%state, dim=2) - 1
-    self%state(:, s) = self%state(:, s + 1)
-  enddo
-  return
-  !---------------------------------------------------------------------------------------------------------------------------------
-  endsubroutine update_previous_steps
-
   pure function dLorenz_dt(self, n) result(dState_dt)
   !---------------------------------------------------------------------------------------------------------------------------------
   !< Time derivative of Lorenz field.
@@ -124,6 +110,22 @@ contains
   return
   !---------------------------------------------------------------------------------------------------------------------------------
   endfunction dLorenz_dt
+
+  pure subroutine update_previous_steps(self)
+  !---------------------------------------------------------------------------------------------------------------------------------
+  !< Update previous time steps.
+  !---------------------------------------------------------------------------------------------------------------------------------
+  class(lorenz), intent(INOUT) :: self !< Lorenz field.
+  integer                      :: s    !< Time steps counter.
+  !---------------------------------------------------------------------------------------------------------------------------------
+
+  !---------------------------------------------------------------------------------------------------------------------------------
+  do s=1, ubound(self%state, dim=2) - 1
+    self%state(:, s) = self%state(:, s + 1)
+  enddo
+  return
+  !---------------------------------------------------------------------------------------------------------------------------------
+  endsubroutine update_previous_steps
 
   pure function lorenz_multiply_lorenz(lhs, rhs) result(product)
   !---------------------------------------------------------------------------------------------------------------------------------

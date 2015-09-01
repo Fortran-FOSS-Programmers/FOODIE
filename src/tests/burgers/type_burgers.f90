@@ -27,11 +27,13 @@ type, extends(integrand) :: burgers
   real(R_P), dimension(:,:), allocatable :: state     !< Solution vector, whole physical domain, [1:Ni,1:time_steps_stored].
   contains
     ! public methods
-    procedure, pass(self), public :: init                                                     !< Init field.
-    procedure, pass(self), public :: output                                                   !< Extract Burgers field.
-    procedure, pass(self), public :: update_previous_steps                                    !< Update previous time steps.
-    procedure, pass(self), public :: dt => compute_dt                                         !< Compute the current time step.
+    ! auxiliary methods
+    procedure, pass(self), public :: init             !< Init field.
+    procedure, pass(self), public :: output           !< Extract Burgers field.
+    procedure, pass(self), public :: dt => compute_dt !< Compute the current time step, by means of CFL condition.
+    ! type_integrand deferred methods
     procedure, pass(self), public :: t => dBurgers_dt                                         !< Time derivate, residuals function.
+    procedure, pass(self), public :: update_previous_steps                                    !< Update previous time steps.
     procedure, pass(lhs),  public :: integrand_multiply_integrand => burgers_multiply_burgers !< Burgers * burgers operator.
     procedure, pass(lhs),  public :: integrand_multiply_real => burgers_multiply_real         !< Burgers * real operator.
     procedure, pass(rhs),  public :: real_multiply_integrand => real_multiply_burgers         !< Real * Burgers operator.
@@ -89,25 +91,9 @@ contains
   !---------------------------------------------------------------------------------------------------------------------------------
   endfunction output
 
-  pure subroutine update_previous_steps(self)
-  !---------------------------------------------------------------------------------------------------------------------------------
-  !< Update previous time steps.
-  !---------------------------------------------------------------------------------------------------------------------------------
-  class(burgers), intent(INOUT) :: self !< Burgers field.
-  integer                       :: s    !< Time steps counter.
-  !---------------------------------------------------------------------------------------------------------------------------------
-
-  !---------------------------------------------------------------------------------------------------------------------------------
-  do s=1, ubound(self%state, dim=2) - 1
-    self%state(:, s) = self%state(:, s + 1)
-  enddo
-  return
-  !---------------------------------------------------------------------------------------------------------------------------------
-  endsubroutine update_previous_steps
-
   pure function compute_dt(self, CFL) result(dt)
   !---------------------------------------------------------------------------------------------------------------------------------
-  !< Compute the current time step.
+  !< Compute the current time step, by means of CFL condition.
   !---------------------------------------------------------------------------------------------------------------------------------
   class(burgers), intent(IN) :: self !< Burgers field.
   real(R_P),      intent(IN) :: CFL  !< Courant-Friedricks-Lewi stability coefficient.
@@ -141,6 +127,22 @@ contains
   return
   !---------------------------------------------------------------------------------------------------------------------------------
   endfunction dBurgers_dt
+
+  pure subroutine update_previous_steps(self)
+  !---------------------------------------------------------------------------------------------------------------------------------
+  !< Update previous time steps.
+  !---------------------------------------------------------------------------------------------------------------------------------
+  class(burgers), intent(INOUT) :: self !< Burgers field.
+  integer                       :: s    !< Time steps counter.
+  !---------------------------------------------------------------------------------------------------------------------------------
+
+  !---------------------------------------------------------------------------------------------------------------------------------
+  do s=1, ubound(self%state, dim=2) - 1
+    self%state(:, s) = self%state(:, s + 1)
+  enddo
+  return
+  !---------------------------------------------------------------------------------------------------------------------------------
+  endsubroutine update_previous_steps
 
   pure function burgers_multiply_burgers(lhs, rhs) result(product)
   !---------------------------------------------------------------------------------------------------------------------------------
