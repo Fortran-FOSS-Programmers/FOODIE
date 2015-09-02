@@ -21,7 +21,9 @@ type, extends(integrand) :: oscillation
   !<
   !< It is a FOODiE integrand class.
   private
-  real(R_P), dimension(:,:), allocatable :: state      !< Solution vector, [1:state_dims,1:time_steps_stored].
+  integer(I_P)                           :: dims=0     !< Space dimensions.
+  integer(I_P)                           :: steps=0    !< Number of time steps stored.
+  real(R_P), dimension(:,:), allocatable :: state      !< Solution vector, [1:dims,1:steps].
   real(R_P)                              :: f = 0._R_P !< Oscillation frequency (Hz).
   contains
     ! auxiliary methods
@@ -46,15 +48,15 @@ contains
   class(oscillation),      intent(INOUT) :: self          !< Oscillation field.
   real(R_P), dimension(:), intent(IN)    :: initial_state !< Intial state of the Oscillation field vector.
   real(R_P),               intent(IN)    :: f             !< Frequency.
-  integer, optional,       intent(IN)    :: steps         !< Time steps stored.
-  integer                                :: dsteps        !< Time steps stored, dummy variable.
-  integer                                :: s             !< Time steps counter.
+  integer(I_P), optional,  intent(IN)    :: steps         !< Time steps stored.
+  integer(I_P)                           :: s             !< Time steps counter.
   !---------------------------------------------------------------------------------------------------------------------------------
 
   !---------------------------------------------------------------------------------------------------------------------------------
-  dsteps = 1 ; if (present(steps)) dsteps = steps
-  if (allocated(self%state)) deallocate(self%state) ; allocate(self%state(1:size(initial_state), 1:dsteps))
-  do s=1, dsteps
+  self%dims = size(initial_state)
+  self%steps = 1 ; if (present(steps)) self%steps = steps
+  if (allocated(self%state)) deallocate(self%state) ; allocate(self%state(1:self%dims, 1:self%steps))
+  do s=1, self%steps
     self%state(:, s) = initial_state
   enddo
   self%f = f
@@ -71,7 +73,7 @@ contains
   !---------------------------------------------------------------------------------------------------------------------------------
 
   !---------------------------------------------------------------------------------------------------------------------------------
-  state = self%state(:, ubound(self%state, dim=2))
+  state = self%state(:, self%steps)
   return
   !---------------------------------------------------------------------------------------------------------------------------------
   endfunction output
@@ -90,14 +92,14 @@ contains
   !---------------------------------------------------------------------------------------------------------------------------------
   ! preparing temporary delta
   allocate(delta)
-  allocate(delta%state(1:size(self%state, dim=1), 1:size(self%state, dim=2)))
+  delta%dims = self%dims
+  delta%steps = self%steps
+  allocate(delta%state(1:self%dims, 1:self%steps))
   ! Oscillation equations
-  dn = size(self%state, dim=2) ; if (present(n)) dn = n
+  dn = self%steps ; if (present(n)) dn = n
   delta%state(1, dn) = -self%f * self%state(2, dn)
   delta%state(2, dn) =  self%f * self%state(1, dn)
-  ! hold Oscillation parameters constant over time
-  delta%f = 0.
-  call move_alloc (delta, dState_dt)
+  call move_alloc(delta, dState_dt)
   return
   !---------------------------------------------------------------------------------------------------------------------------------
   endfunction dOscillation_dt
@@ -111,7 +113,7 @@ contains
   !---------------------------------------------------------------------------------------------------------------------------------
 
   !---------------------------------------------------------------------------------------------------------------------------------
-  do s=1, ubound(self%state, dim=2) - 1
+  do s=1, self%steps - 1
     self%state(:, s) = self%state(:, s + 1)
   enddo
   return
@@ -132,8 +134,10 @@ contains
   allocate(local_product)
   select type(rhs)
   class is (oscillation)
+    local_product%dims = lhs%dims
+    local_product%steps = lhs%steps
     local_product%state = lhs%state * rhs%state
-    local_product%f = lhs%f * rhs%f
+    local_product%f = lhs%f
   endselect
   call move_alloc(local_product, product)
   return
@@ -152,8 +156,10 @@ contains
 
   !---------------------------------------------------------------------------------------------------------------------------------
   allocate(local_product)
+  local_product%dims = lhs%dims
+  local_product%steps = lhs%steps
   local_product%state = lhs%state * rhs
-  local_product%f = lhs%f * rhs
+  local_product%f = lhs%f
   call move_alloc(local_product, product)
   return
   !---------------------------------------------------------------------------------------------------------------------------------
@@ -171,8 +177,10 @@ contains
 
   !---------------------------------------------------------------------------------------------------------------------------------
   allocate(local_product)
+  local_product%dims = rhs%dims
+  local_product%steps = rhs%steps
   local_product%state = rhs%state * lhs
-  local_product%f     = rhs%f * lhs
+  local_product%f     = rhs%f
   call move_alloc(local_product, product)
   return
   !---------------------------------------------------------------------------------------------------------------------------------
@@ -192,8 +200,10 @@ contains
   allocate (oscillation :: local_sum)
   select type(rhs)
   class is (oscillation)
+    local_sum%dims = lhs%dims
+    local_sum%steps = lhs%steps
     local_sum%state = lhs%state + rhs%state
-    local_sum%f = lhs%f + rhs%f
+    local_sum%f = lhs%f
   endselect
   call move_alloc(local_sum, sum)
   return
@@ -211,6 +221,8 @@ contains
   !---------------------------------------------------------------------------------------------------------------------------------
   select type(rhs)
   class is (oscillation)
+    lhs%dims = rhs%dims
+    lhs%steps = rhs%steps
     if (allocated(rhs%state)) lhs%state = rhs%state
     lhs%f = rhs%f
   endselect
@@ -228,7 +240,6 @@ contains
 
   !---------------------------------------------------------------------------------------------------------------------------------
   if (allocated(lhs%state)) lhs%state = rhs
-  lhs%f = rhs
   return
   !---------------------------------------------------------------------------------------------------------------------------------
   endsubroutine oscillation_assign_real

@@ -21,7 +21,9 @@ type, extends(integrand) :: lorenz
   !<
   !< It is a FOODiE integrand class.
   private
-  real(R_P), dimension(:,:), allocatable :: state        !< Solution vector, [1:state_dims,1:time_steps_stored].
+  integer(I_P)                           :: dims=0       !< Space dimensions.
+  integer(I_P)                           :: steps=0      !< Number of time steps stored.
+  real(R_P), dimension(:,:), allocatable :: state        !< Solution vector, [1:dims,1:steps].
   real(R_P)                              :: sigma=0._R_P !< Lorenz \(\sigma\).
   real(R_P)                              :: rho=0._R_P   !< Lorenz \(\rho\).
   real(R_P)                              :: beta=0._R_P  !< Lorenz \(\beta\).
@@ -50,15 +52,15 @@ contains
   real(R_P),               intent(IN)    :: sigma         !< Lorenz  \(\sigma\).
   real(R_P),               intent(IN)    :: rho           !< Lorenz  \(\rho\).
   real(R_P),               intent(IN)    :: beta          !< Lorenz  \(\beta\).
-  integer, optional,       intent(IN)    :: steps         !< Time steps stored.
-  integer                                :: dsteps        !< Time steps stored, dummy variable.
-  integer                                :: s             !< Time steps counter.
+  integer(I_P), optional,  intent(IN)    :: steps         !< Time steps stored.
+  integer(I_P)                           :: s             !< Time steps counter.
   !---------------------------------------------------------------------------------------------------------------------------------
 
   !---------------------------------------------------------------------------------------------------------------------------------
-  dsteps = 1 ; if (present(steps)) dsteps = steps
-  if (allocated(self%state)) deallocate(self%state) ; allocate(self%state(1:size(initial_state), 1:dsteps))
-  do s=1, dsteps
+  self%dims = size(initial_state)
+  self%steps = 1 ; if (present(steps)) self%steps = steps
+  if (allocated(self%state)) deallocate(self%state) ; allocate(self%state(1:self%dims, 1:self%steps))
+  do s=1, self%steps
     self%state(:, s) = initial_state
   enddo
   self%sigma = sigma
@@ -77,7 +79,7 @@ contains
   !---------------------------------------------------------------------------------------------------------------------------------
 
   !---------------------------------------------------------------------------------------------------------------------------------
-  state = self%state(:, ubound(self%state, dim=2))
+  state = self%state(:, self%steps)
   return
   !---------------------------------------------------------------------------------------------------------------------------------
   endfunction output
@@ -96,17 +98,18 @@ contains
   !---------------------------------------------------------------------------------------------------------------------------------
   ! preparing temporary delta
   allocate(delta)
-  allocate(delta%state(1:size(self%state, dim=1), 1:size(self%state, dim=2)))
+  delta%dims = self%dims
+  delta%steps = self%steps
+  allocate(delta%state(1:self%dims, 1:self%steps))
+  delta%sigma = self%sigma
+  delta%rho = self%rho
+  delta%beta = self%beta
   ! Lorenz equations
-  dn = size(self%state, dim=2) ; if (present(n)) dn = n
+  dn = self%steps ; if (present(n)) dn = n
   delta%state(1, dn) = self%sigma * (self%state(2, dn) - self%state(1, dn))
   delta%state(2, dn) = self%state(1, dn) * (self%rho - self%state(3, dn)) - self%state(2, dn)
   delta%state(3, dn) = self%state(1, dn) * self%state(2, dn) - self%beta * self%state(3, dn)
-  ! hold Lorenz parameters constant over time
-  delta%sigma = 0.
-  delta%rho = 0.
-  delta%beta = 0.
-  call move_alloc (delta, dState_dt)
+  call move_alloc(delta, dState_dt)
   return
   !---------------------------------------------------------------------------------------------------------------------------------
   endfunction dLorenz_dt
@@ -120,7 +123,7 @@ contains
   !---------------------------------------------------------------------------------------------------------------------------------
 
   !---------------------------------------------------------------------------------------------------------------------------------
-  do s=1, ubound(self%state, dim=2) - 1
+  do s=1, self%steps - 1
     self%state(:, s) = self%state(:, s + 1)
   enddo
   return
@@ -141,10 +144,12 @@ contains
   allocate(local_product)
   select type(rhs)
   class is (lorenz)
+    local_product%dims = lhs%dims
+    local_product%steps = lhs%steps
     local_product%state = lhs%state * rhs%state
-    local_product%sigma = lhs%sigma * rhs%sigma
-    local_product%rho   = lhs%rho   * rhs%rho
-    local_product%beta  = lhs%beta  * rhs%beta
+    local_product%sigma = lhs%sigma
+    local_product%rho = lhs%rho
+    local_product%beta = lhs%beta
   endselect
   call move_alloc(local_product, product)
   return
@@ -163,10 +168,12 @@ contains
 
   !---------------------------------------------------------------------------------------------------------------------------------
   allocate(local_product)
+  local_product%dims = lhs%dims
+  local_product%steps = lhs%steps
   local_product%state = lhs%state * rhs
-  local_product%sigma = lhs%sigma * rhs
-  local_product%rho   = lhs%rho   * rhs
-  local_product%beta  = lhs%beta  * rhs
+  local_product%sigma = lhs%sigma
+  local_product%rho   = lhs%rho
+  local_product%beta  = lhs%beta
   call move_alloc(local_product, product)
   return
   !---------------------------------------------------------------------------------------------------------------------------------
@@ -184,10 +191,12 @@ contains
 
   !---------------------------------------------------------------------------------------------------------------------------------
   allocate(local_product)
+  local_product%dims = rhs%dims
+  local_product%steps = rhs%steps
   local_product%state = rhs%state * lhs
-  local_product%sigma = rhs%sigma * lhs
-  local_product%rho   = rhs%rho   * lhs
-  local_product%beta  = rhs%beta  * lhs
+  local_product%sigma = rhs%sigma
+  local_product%rho = rhs%rho
+  local_product%beta = rhs%beta
   call move_alloc(local_product, product)
   return
   !---------------------------------------------------------------------------------------------------------------------------------
@@ -207,10 +216,12 @@ contains
   allocate (lorenz :: local_sum)
   select type(rhs)
   class is (lorenz)
+    local_sum%dims = lhs%dims
+    local_sum%steps = lhs%steps
     local_sum%state = lhs%state + rhs%state
-    local_sum%sigma = lhs%sigma + rhs%sigma
-    local_sum%rho   = lhs%rho   + rhs%rho
-    local_sum%beta  = lhs%beta  + rhs%beta
+    local_sum%sigma = lhs%sigma
+    local_sum%rho = lhs%rho
+    local_sum%beta = lhs%beta
   endselect
   call move_alloc(local_sum, sum)
   return
@@ -228,6 +239,8 @@ contains
   !---------------------------------------------------------------------------------------------------------------------------------
   select type(rhs)
   class is (lorenz)
+    lhs%dims = rhs%dims
+    lhs%steps = rhs%steps
     if (allocated(rhs%state)) lhs%state = rhs%state
     lhs%sigma = rhs%sigma
     lhs%rho = rhs%rho
@@ -247,9 +260,6 @@ contains
 
   !---------------------------------------------------------------------------------------------------------------------------------
   if (allocated(lhs%state)) lhs%state = rhs
-  lhs%sigma = rhs
-  lhs%rho = rhs
-  lhs%beta = rhs
   return
   !---------------------------------------------------------------------------------------------------------------------------------
   endsubroutine lorenz_assign_real

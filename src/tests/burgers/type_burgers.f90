@@ -22,9 +22,10 @@ type, extends(integrand) :: burgers
   !< It is a FOODiE integrand class.
   private
   integer(I_P)                           :: Ni=0      !< Number of grid nodes.
+  integer(I_P)                           :: steps=0   !< Number of time steps stored.
   real(R_P)                              :: h=0._R_P  !< Space step discretization.
   real(R_P)                              :: nu=0._R_P !< Viscosity.
-  real(R_P), dimension(:,:), allocatable :: state     !< Solution vector, whole physical domain, [1:Ni,1:time_steps_stored].
+  real(R_P), dimension(:,:), allocatable :: state     !< Solution vector, whole physical domain, [1:Ni,1:steps].
   contains
     ! public methods
     ! auxiliary methods
@@ -54,20 +55,19 @@ contains
   !---------------------------------------------------------------------------------------------------------------------------------
   !< Construct an initialized Burgers field.
   !---------------------------------------------------------------------------------------------------------------------------------
-  class(burgers),          intent(INOUT) :: self          !< Burgers field.
-  real(R_P), dimension(:), intent(IN)    :: initial_state !< Intial state of Burgers field domain.
-  integer(I_P),            intent(IN)    :: Ni            !< Number of grid nodes.
-  real(R_P),               intent(IN)    :: h             !< Space step discretization.
-  real(R_P),               intent(IN)    :: nu            !< Viscosity.
-  integer, optional,       intent(IN)    :: steps         !< Time steps stored.
-  integer                                :: dsteps        !< Time steps stored, dummy variable.
-  integer                                :: s             !< Time steps counter.
+  class(burgers),             intent(INOUT) :: self          !< Burgers field.
+  integer(I_P),               intent(IN)    :: Ni            !< Number of grid nodes.
+  real(R_P), dimension(1:Ni), intent(IN)    :: initial_state !< Initial state of Burgers field domain.
+  real(R_P),                  intent(IN)    :: h             !< Space step discretization.
+  real(R_P),                  intent(IN)    :: nu            !< Viscosity.
+  integer(I_P), optional,     intent(IN)    :: steps         !< Time steps stored.
+  integer(I_P)                              :: s             !< Time steps counter.
   !---------------------------------------------------------------------------------------------------------------------------------
 
   !---------------------------------------------------------------------------------------------------------------------------------
-  dsteps = 1 ; if (present(steps)) dsteps = steps
-  if (allocated(self%state)) deallocate(self%state) ; allocate(self%state(1:size(initial_state), 1:dsteps))
-  do s=1, dsteps
+  self%steps = 1 ; if (present(steps)) self%steps = steps
+  if (allocated(self%state)) deallocate(self%state) ; allocate(self%state(1:Ni, 1:self%steps))
+  do s=1, self%steps
     self%state(:, s) = initial_state
   enddo
   self%Ni = Ni
@@ -82,11 +82,11 @@ contains
   !< Output the Burgers field state.
   !---------------------------------------------------------------------------------------------------------------------------------
   class(burgers), intent(IN)           :: self  !< Burgers field.
-  real(R_P), dimension(:), allocatable :: state !< Burgers state vector.
+  real(R_P), dimension(:), allocatable :: state !< Burgers state variable.
   !---------------------------------------------------------------------------------------------------------------------------------
 
   !---------------------------------------------------------------------------------------------------------------------------------
-  state = self%state(:, ubound(self%state, dim=2))
+  state = self%state(:, self%steps)
   return
   !---------------------------------------------------------------------------------------------------------------------------------
   endfunction output
@@ -119,11 +119,15 @@ contains
   !---------------------------------------------------------------------------------------------------------------------------------
   ! preparing temporary variables
   allocate(burgers :: delta)
-  allocate(delta%state(1:size(self%state, dim=1), 1:size(self%state, dim=2)))
+  delta%Ni = self%Ni
+  delta%steps = self%steps
+  delta%h = self%h
+  delta%nu = self%nu
+  allocate(delta%state(1:self%Ni, 1:self%steps))
   ! Burgers residuals
   delta = self%xx(n=n) * self%nu
   delta = delta - self * self%x(n=n)
-  call move_alloc (delta, dState_dt)
+  call move_alloc(delta, dState_dt)
   return
   !---------------------------------------------------------------------------------------------------------------------------------
   endfunction dBurgers_dt
@@ -133,22 +137,23 @@ contains
   !< Update previous time steps.
   !---------------------------------------------------------------------------------------------------------------------------------
   class(burgers), intent(INOUT) :: self !< Burgers field.
-  integer                       :: s    !< Time steps counter.
+  integer(I_P)                  :: s    !< Time steps counter.
   !---------------------------------------------------------------------------------------------------------------------------------
 
   !---------------------------------------------------------------------------------------------------------------------------------
-  do s=1, ubound(self%state, dim=2) - 1
+  do s=1, self%steps - 1
     self%state(:, s) = self%state(:, s + 1)
   enddo
   return
   !---------------------------------------------------------------------------------------------------------------------------------
   endsubroutine update_previous_steps
 
+  ! operators overloading
   pure function burgers_multiply_burgers(lhs, rhs) result(product)
   !---------------------------------------------------------------------------------------------------------------------------------
   !< Multiply a Burgers field by another one.
   !---------------------------------------------------------------------------------------------------------------------------------
-  class(burgers), intent(IN)    :: lhs           !< Left hand side.
+  class(burgers),   intent(IN)  :: lhs           !< Left hand side.
   class(integrand), intent(IN)  :: rhs           !< Right hand side.
   class(integrand), allocatable :: product       !< Product.
   type(burgers),    allocatable :: local_product !< Temporary produtc.
@@ -157,9 +162,10 @@ contains
   !---------------------------------------------------------------------------------------------------------------------------------
   allocate(burgers :: local_product)
   local_product%Ni = lhs%Ni
+  local_product%steps = lhs%steps
   local_product%h = lhs%h
   local_product%nu = lhs%nu
-  allocate(local_product%state(1:size(lhs%state, dim=1), 1:size(lhs%state, dim=2)))
+  allocate(local_product%state(1:lhs%Ni, 1:lhs%steps))
   select type(rhs)
   class is (burgers)
     local_product%state = lhs%state * rhs%state
@@ -182,9 +188,10 @@ contains
   !---------------------------------------------------------------------------------------------------------------------------------
   allocate(burgers :: local_product)
   local_product%Ni = lhs%Ni
+  local_product%steps = lhs%steps
   local_product%h = lhs%h
   local_product%nu = lhs%nu
-  allocate(local_product%state(1:size(lhs%state, dim=1), 1:size(lhs%state, dim=2)))
+  allocate(local_product%state(1:lhs%Ni, 1:lhs%steps))
   local_product%state = lhs%state * rhs
   call move_alloc(local_product, product)
   return
@@ -204,9 +211,10 @@ contains
   !---------------------------------------------------------------------------------------------------------------------------------
   allocate(burgers :: local_product)
   local_product%Ni = rhs%Ni
+  local_product%steps = rhs%steps
   local_product%h = rhs%h
   local_product%nu = rhs%nu
-  allocate(local_product%state(1:size(rhs%state, dim=1), 1:size(rhs%state, dim=2)))
+  allocate(local_product%state(1:rhs%Ni, 1:rhs%steps))
   local_product%state = rhs%state * lhs
   call move_alloc(local_product, product)
   return
@@ -226,9 +234,10 @@ contains
   !---------------------------------------------------------------------------------------------------------------------------------
   allocate(burgers :: local_sum)
   local_sum%Ni = lhs%Ni
+  local_sum%steps = lhs%steps
   local_sum%h = lhs%h
   local_sum%nu = lhs%nu
-  allocate(local_sum%state(1:size(lhs%state, dim=1), 1:size(lhs%state, dim=2)))
+  allocate(local_sum%state(1:lhs%Ni, 1:lhs%steps))
   select type(rhs)
     class is (burgers)
       local_sum%state = lhs%state + rhs%state
@@ -251,9 +260,10 @@ contains
   !---------------------------------------------------------------------------------------------------------------------------------
   allocate(burgers :: local_sub)
   local_sub%Ni = lhs%Ni
+  local_sub%steps = lhs%steps
   local_sub%h = lhs%h
   local_sub%nu = lhs%nu
-  allocate(local_sub%state(1:size(lhs%state, dim=1), 1:size(lhs%state, dim=2)))
+  allocate(local_sub%state(1:lhs%Ni, 1:lhs%steps))
   select type(rhs)
     class is (burgers)
       local_sub%state = lhs%state - rhs%state
@@ -275,6 +285,7 @@ contains
   select type(rhs)
     class is (burgers)
       lhs%Ni = rhs%Ni
+      lhs%steps = rhs%steps
       lhs%h = rhs%h
       lhs%nu = rhs%nu
       if (allocated(rhs%state)) lhs%state = rhs%state
@@ -312,10 +323,12 @@ contains
   !---------------------------------------------------------------------------------------------------------------------------------
   allocate(derivative)
   derivative%Ni = self%Ni
+  derivative%steps = self%steps
   derivative%h = self%h
   derivative%nu = self%nu
-  allocate(derivative%state(1:size(self%state, dim=1), 1:size(self%state, dim=2)))
-  dn = size(self%state, dim=2) ; if (present(n)) dn = n
+  allocate(derivative%state(1:self%Ni, 1:self%steps))
+  derivative%state = 0._R_P
+  dn = self%steps ; if (present(n)) dn = n
   do i=2, self%Ni - 1
     derivative%state(i, dn) = (self%state(i+1, dn) - self%state(i-1, dn))/(2._R_P * self%h)
   enddo
@@ -339,10 +352,12 @@ contains
   !---------------------------------------------------------------------------------------------------------------------------------
   allocate(derivative)
   derivative%Ni = self%Ni
+  derivative%steps = self%steps
   derivative%h = self%h
   derivative%nu = self%nu
-  allocate(derivative%state(1:size(self%state, dim=1), 1:size(self%state, dim=2)))
-  dn = size(self%state, dim=2) ; if (present(n)) dn = n
+  allocate(derivative%state(1:self%Ni, 1:self%steps))
+  derivative%state = 0._R_P
+  dn = self%steps ; if (present(n)) dn = n
   do i=2, self%Ni - 1
     derivative%state(i, dn) = (self%state(i+1, dn) - 2._R_P * self%state(i, dn) + self%state(i-1, dn))/(self%h**2)
   enddo
