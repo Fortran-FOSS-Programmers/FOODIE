@@ -77,6 +77,10 @@ contains
   call plt%add_plot(x=solution(0, :), y=solution(1, :), label='u', linestyle='r-', linewidth=1)
   call plt%add_plot(x=solution(0, :), y=solution(2, :), label='v', linestyle='b-', linewidth=1)
   call plt%savefig(filename)
+
+  call plt%initialize(grid=.true., xlabel='v1', ylabel='v2', title=title//'-path', legend=.true.)
+  call plt%add_plot(x=solution(1, :), y=solution(2, :), label='path', linestyle='r-', linewidth=1)
+  call plt%savefig('path-'//filename)
   return
   !---------------------------------------------------------------------------------------------------------------------------------
   endsubroutine save_plots
