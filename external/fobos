@@ -1,0 +1,124 @@
+[modes]
+modes = flap-static-gnu flap-static-gnu-debug
+        flap-static-intel flap-static-intel-debug
+        pyplot-fortran-static-gnu pyplot-fortran-static-gnu-debug
+        pyplot-fortran-static-intel pyplot-fortran-static-intel-debug
+
+[common-variables]
+$CSTATIC_GNU = -cpp -c -frealloc-lhs
+$CSTATIC_INT = -cpp -c -assume realloc_lhs
+$DEBUG_GNU   = -O0 -g3 -Warray-bounds -Wcharacter-truncation -Wline-truncation -Wimplicit-interface -Wimplicit-procedure -Wunderflow -fcheck=all -fmodule-private -ffree-line-length-132 -fimplicit-none -fbacktrace -fdump-core -finit-real=nan -std=f2008 -fall-intrinsics
+$DEBUG_INT   = -O0 -debug all -check all -warn all -extend-source 132 -traceback -gen-interfaces#-fpe-all=0 -fp-stack-check -fstack-protector-all -ftrapuv -no-ftz -std08
+$OPTIMIZE    = -O2
+
+# main modes
+# FLAP
+[flap-static-gnu]
+template  = template-static-gnu
+src       = ./FLAP/src/
+build_dir = ./lib/flap/
+target    = Data_Type_Command_Line_Interface.F90
+output    = libflap.a
+
+[flap-static-gnu-debug]
+template  = template-static-gnu-debug
+src       = ./FLAP/src/
+build_dir = ./lib/flap/
+target    = Data_Type_Command_Line_Interface.F90
+output    = libflap.a
+
+[flap-static-intel]
+template  = template-static-intel
+src       = ./FLAP/src/
+build_dir = ./lib/flap/
+target    = Data_Type_Command_Line_Interface.F90
+output    = libflap.a
+
+[flap-static-intel-debug]
+template  = template-static-intel-debug
+src       = ./FLAP/src/
+build_dir = ./lib/flap/
+target    = Data_Type_Command_Line_Interface.F90
+output    = libflap.a
+
+# pyplot-fortran
+[pyplot-fortran-static-gnu]
+template  = template-static-gnu
+src       = ./pyplot-fortran/src/
+build_dir = ./lib/pyplot-fortran/
+target    = pyplot_module.f90
+output    = libpyplot.a
+
+[pyplot-fortran-static-gnu-debug]
+template  = template-static-gnu-debug
+src       = ./pyplot-fortran/src/
+build_dir = ./lib/pyplot-fortran/
+target    = pyplot_module.f90
+output    = libpyplot.a
+
+[pyplot-fortran-static-intel]
+template  = template-static-intel
+src       = ./pyplot-fortran/src/
+build_dir = ./lib/pyplot-fortran/
+target    = pyplot_module.f90
+output    = libpyplot.a
+
+[pyplot-fortran-static-intel-debug]
+template  = template-static-intel-debug
+src       = ./pyplot-fortran/src/
+build_dir = ./lib/pyplot-fortran/
+target    = pyplot_module.f90
+output    = libpyplot.a
+
+# templates
+[template-static-gnu]
+description     = Build with GNU gfortran with optmized-static flags
+compiler        = gnu
+cflags          = $CSTATIC_GNU $OPTIMIZE
+cflags_heritage = True
+mod_dir         = ./mod/
+obj_dir         = ./obj/
+colors          = True
+quiet           = False
+log             = False
+jobs            = 10
+mklib           = static
+
+[template-static-gnu-debug]
+description     = Build with GNU gfortran with debug-static flags
+compiler        = gnu
+cflags          = $CSTATIC_GNU $DEBUG_GNU
+cflags_heritage = True
+mod_dir         = ./mod/
+obj_dir         = ./obj/
+colors          = True
+quiet           = False
+log             = False
+jobs            = 10
+mklib           = static
+
+[template-static-intel]
+description     = Build with Intel Fortran with optmized-static flags
+compiler        = intel
+cflags          = $CSTATIC_INT $OPTIMIZE
+cflags_heritage = True
+mod_dir         = ./mod/
+obj_dir         = ./obj/
+colors          = True
+quiet           = False
+log             = False
+jobs            = 10
+mklib           = static
+
+[template-static-intel-debug]
+description     = Build with Intel Fortran with debug-static flags
+compiler        = intel
+cflags          = $CSTATIC_INT $DEBUG_INT
+cflags_heritage = True
+mod_dir         = ./mod/
+obj_dir         = ./obj/
+colors          = True
+quiet           = False
+log             = False
+jobs            = 10
+mklib           = static

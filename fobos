@@ -25,6 +25,8 @@ colors    = True
 quiet     = False
 log       = True
 jobs      = 2
+dependon  = ./external/fobos:flap-static-gnu
+            ./external/fobos:pyplot-fortran-static-gnu
 
 [tests-intel]
 compiler  = intel
@@ -38,6 +40,8 @@ colors    = True
 quiet     = False
 log       = True
 jobs      = 2
+dependon  = ./external/fobos:flap-static-intel
+            ./external/fobos:pyplot-fortran-static-intel
 
 [tests-gnu-debug]
 compiler  = gnu
@@ -51,6 +55,8 @@ colors    = True
 quiet     = False
 log       = True
 jobs      = 2
+dependon  = ./external/fobos:flap-static-gnu-debug
+            ./external/fobos:pyplot-fortran-static-gnu-debug
 
 [tests-intel-debug]
 compiler  = intel
@@ -64,6 +70,8 @@ colors    = True
 quiet     = False
 log       = True
 jobs      = 2
+dependon  = ./external/fobos:flap-static-intel-debug
+            ./external/fobos:pyplot-fortran-static-intel-debug
 
 # rules
 [rule-makedoc]
