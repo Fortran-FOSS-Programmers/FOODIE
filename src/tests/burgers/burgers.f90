@@ -23,7 +23,7 @@ integer(I_P), parameter           :: Ni=100              !< Number of grid nodes
 real(R_P)                         :: h                   !< Space step discretization.
 real(R_P)                         :: initial_state(1:Ni) !< Initial state.
 real(R_P)                         :: x(1:Ni)             !< Nodes values.
-  real(R_P), allocatable          :: final_state(:)      !< Final state.
+real(R_P), allocatable            :: final_state(:)      !< Final state.
 integer(I_P)                      :: error               !< Error handler.
 character(99)                     :: solver              !< Solver used.
 !-----------------------------------------------------------------------------------------------------------------------------------
