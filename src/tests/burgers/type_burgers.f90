@@ -124,6 +124,7 @@ contains
   delta%h = self%h
   delta%nu = self%nu
   allocate(delta%state(1:self%Ni, 1:self%steps))
+  delta%state = 0_R_P
   ! Burgers residuals
   delta = self%xx(n=n) * self%nu
   delta = delta - self * self%x(n=n)

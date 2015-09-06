@@ -101,6 +101,7 @@ contains
   delta%dims = self%dims
   delta%steps = self%steps
   allocate(delta%state(1:self%dims, 1:self%steps))
+  delta%state = 0_R_P
   delta%sigma = self%sigma
   delta%rho = self%rho
   delta%beta = self%beta
