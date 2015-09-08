@@ -26,6 +26,9 @@ env:
   global:
     - SCRIPT="FoBiS.py rule -ex makecoverage"
 
+before_install:
+  - git submodule update --init --recursive
+
 install:
   - |
     if [[ ! -d "$HOME/.local/bin" ]]; then
@@ -41,6 +44,7 @@ install:
   - pip install --upgrade FoBiS.py
   - pip install --upgrade markdown-checklist 
   - pip install --upgrade ford
+  - pip install --upgrade matplotlib
 
 script:
   - $SCRIPT
