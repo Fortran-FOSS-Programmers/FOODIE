@@ -75,10 +75,17 @@ contains
   !---------------------------------------------------------------------------------------------------------------------------------
 
   !---------------------------------------------------------------------------------------------------------------------------------
-  call plt%initialize(grid=.true., title=title, legend=.true.)
-  call plt%add_plot(x=solution(1, :), y=solution(2, :), label='x-y path', linestyle='r-', linewidth=1)
-  call plt%add_plot(x=solution(2, :), y=solution(3, :), label='y-z path', linestyle='b-', linewidth=1)
+  call plt%initialize(grid=.true., xlabel='time', title=title, legend=.true.)
+  call plt%add_plot(x=solution(0, :), y=solution(1, :), label='x', linestyle='r-', linewidth=1)
+  call plt%add_plot(x=solution(0, :), y=solution(2, :), label='y', linestyle='b-', linewidth=1)
+  call plt%add_plot(x=solution(0, :), y=solution(3, :), label='z', linestyle='g-', linewidth=1)
   call plt%savefig(filename)
+
+  call plt%initialize(grid=.true., title=title//'-path', legend=.true.)
+  call plt%add_plot(x=solution(1, :), y=solution(2, :), label='x-y path', linestyle='r-', linewidth=1)
+  call plt%add_plot(x=solution(1, :), y=solution(3, :), label='x-z path', linestyle='g-', linewidth=1)
+  call plt%add_plot(x=solution(2, :), y=solution(3, :), label='y-z path', linestyle='b-', linewidth=1)
+  call plt%savefig('path-'//filename)
   return
   !---------------------------------------------------------------------------------------------------------------------------------
   endsubroutine save_plots
@@ -150,11 +157,13 @@ contains
   !---------------------------------------------------------------------------------------------------------------------------------
   !< Test explicit Adams-Bashforth class of ODE solvers.
   !---------------------------------------------------------------------------------------------------------------------------------
-  type(euler_explicit_integrator)  :: euler_integrator !< Euler integrator.
-  type(adams_bashforth_integrator) :: ab_integrator    !< Adams-Bashforth integrator.
-  integer, parameter               :: ab_steps=3       !< Adams-Bashforth steps number.
-  integer(I_P)                     :: s                !< AB steps counter.
-  integer                          :: step             !< Time steps counter.
+  type(tvd_runge_kutta_integrator) :: rk_integrator         !< Runge-Kutta integrator.
+  integer, parameter               :: rk_stages=5           !< Runge-Kutta stages number.
+  type(lorenz)                     :: rk_stage(1:rk_stages) !< Runge-Kutta stages.
+  type(adams_bashforth_integrator) :: ab_integrator         !< Adams-Bashforth integrator.
+  integer, parameter               :: ab_steps=3            !< Adams-Bashforth steps number.
+  integer(I_P)                     :: s                     !< AB steps counter.
+  integer                          :: step                  !< Time steps counter.
   !---------------------------------------------------------------------------------------------------------------------------------
 
   !---------------------------------------------------------------------------------------------------------------------------------
@@ -163,6 +172,8 @@ contains
     print "(A)", ' AB-'//trim(str(.true.,s))
     ! initialize the AB integrator accordingly to the number of time steps used
     call ab_integrator%init(steps=s)
+    ! initialize the RK integrator used for initial steps of AB integration
+    rk_integrator = tvd_runge_kutta_integrator(stages=s)
     ! initialize field
     call attractor%init(initial_state=initial_state, sigma=sigma, rho=rho, beta=beta, steps=s)
     solution(0, 0) = 0._R_P
@@ -171,7 +182,7 @@ contains
     do step = 1, num_steps
       if (s>step) then
         ! the time steps from 1 to s - 1 must be computed with other scheme...
-        call euler_integrator%integrate(field=attractor, dt=dt)
+        call rk_integrator%integrate(field=attractor, stage=rk_stage(1:s), dt=dt)
       else
         call ab_integrator%integrate(field=attractor, dt=dt)
       endif

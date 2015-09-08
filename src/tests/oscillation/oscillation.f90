@@ -152,11 +152,13 @@ contains
   !---------------------------------------------------------------------------------------------------------------------------------
   !< Test explicit Adams-Bashforth class of ODE solvers.
   !---------------------------------------------------------------------------------------------------------------------------------
-  type(euler_explicit_integrator)  :: euler_integrator !< Euler integrator.
-  type(adams_bashforth_integrator) :: ab_integrator    !< Adams-Bashforth integrator.
-  integer, parameter               :: ab_steps=3       !< Adams-Bashforth steps number.
-  integer(I_P)                     :: s                !< AB steps counter.
-  integer                          :: step             !< Time steps counter.
+  type(tvd_runge_kutta_integrator) :: rk_integrator         !< Runge-Kutta integrator.
+  integer, parameter               :: rk_stages=3           !< Runge-Kutta stages number.
+  type(oscillation)                :: rk_stage(1:rk_stages) !< Runge-Kutta stages.
+  type(adams_bashforth_integrator) :: ab_integrator         !< Adams-Bashforth integrator.
+  integer, parameter               :: ab_steps=3            !< Adams-Bashforth steps number.
+  integer(I_P)                     :: s                     !< AB steps counter.
+  integer                          :: step                  !< Time steps counter.
   !---------------------------------------------------------------------------------------------------------------------------------
 
   !---------------------------------------------------------------------------------------------------------------------------------
@@ -165,6 +167,8 @@ contains
     print "(A)", ' AB-'//trim(str(.true.,s))
     ! initialize the AB integrator accordingly to the number of time steps used
     call ab_integrator%init(steps=s)
+    ! initialize the RK integrator used for initial steps of AB integration
+    rk_integrator = tvd_runge_kutta_integrator(stages=s)
     ! initialize field
     call attractor%init(initial_state=initial_state, f=f, steps=s)
     solution(0, 0) = 0._R_P
@@ -173,7 +177,7 @@ contains
     do step = 1, num_steps
       if (s>step) then
         ! the time steps from 1 to s - 1 must be computed with other scheme...
-        call euler_integrator%integrate(field=attractor, dt=dt)
+        call rk_integrator%integrate(field=attractor, stage=rk_stage(1:s), dt=dt)
       else
         call ab_integrator%integrate(field=attractor, dt=dt)
       endif
