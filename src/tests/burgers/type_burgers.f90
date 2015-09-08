@@ -25,7 +25,8 @@ type, extends(integrand) :: burgers
   integer(I_P)                           :: steps=0   !< Number of time steps stored.
   real(R_P)                              :: h=0._R_P  !< Space step discretization.
   real(R_P)                              :: nu=0._R_P !< Viscosity.
-  real(R_P), dimension(:,:), allocatable :: state     !< Solution vector, whole physical domain, [1:Ni,1:steps].
+  real(R_P), dimension(:),   allocatable :: state     !< Solution vector, whole physical domain, [1:Ni].
+  real(R_P), dimension(:,:), allocatable :: previous  !< Previous steps solution vector, [1:Ni,1:steps].
   contains
     ! public methods
     ! auxiliary methods
@@ -65,11 +66,17 @@ contains
   !---------------------------------------------------------------------------------------------------------------------------------
 
   !---------------------------------------------------------------------------------------------------------------------------------
-  self%steps = 1 ; if (present(steps)) self%steps = steps
-  if (allocated(self%state)) deallocate(self%state) ; allocate(self%state(1:Ni, 1:self%steps))
-  do s=1, self%steps
-    self%state(:, s) = initial_state
-  enddo
+  self%steps = 0 ; if (present(steps)) self%steps = steps
+  if (allocated(self%state)) deallocate(self%state) ; allocate(self%state(1:Ni))
+  if (self%steps>0) then
+    if (allocated(self%previous)) deallocate(self%previous) ; allocate(self%previous(1:Ni, 1:self%steps))
+  endif
+  self%state = initial_state
+  if (self%steps>0) then
+    do s=1, self%steps
+      self%previous(:, s) = initial_state
+    enddo
+  endif
   self%Ni = Ni
   self%h = h
   self%nu = nu
@@ -86,7 +93,7 @@ contains
   !---------------------------------------------------------------------------------------------------------------------------------
 
   !---------------------------------------------------------------------------------------------------------------------------------
-  state = self%state(:, self%steps)
+  state = self%state
   return
   !---------------------------------------------------------------------------------------------------------------------------------
   endfunction output
@@ -123,8 +130,8 @@ contains
   delta%steps = self%steps
   delta%h = self%h
   delta%nu = self%nu
-  allocate(delta%state(1:self%Ni, 1:self%steps))
-  delta%state = 0_R_P
+  delta%state = self%state
+  if (allocated(self%previous)) delta%previous = self%previous
   ! Burgers residuals
   delta = self%xx(n=n) * self%nu
   delta = delta - self * self%x(n=n)
@@ -142,9 +149,12 @@ contains
   !---------------------------------------------------------------------------------------------------------------------------------
 
   !---------------------------------------------------------------------------------------------------------------------------------
-  do s=1, self%steps - 1
-    self%state(:, s) = self%state(:, s + 1)
-  enddo
+  if (self%steps>0) then
+    do s=1, self%steps - 1
+      self%previous(:, s) = self%previous(:, s + 1)
+    enddo
+    self%previous(:, self%steps) = self%state
+  endif
   return
   !---------------------------------------------------------------------------------------------------------------------------------
   endsubroutine update_previous_steps
@@ -161,15 +171,15 @@ contains
   !---------------------------------------------------------------------------------------------------------------------------------
 
   !---------------------------------------------------------------------------------------------------------------------------------
-  allocate(burgers :: local_product)
-  local_product%Ni = lhs%Ni
-  local_product%steps = lhs%steps
-  local_product%h = lhs%h
-  local_product%nu = lhs%nu
-  allocate(local_product%state(1:lhs%Ni, 1:lhs%steps))
+  allocate(local_product)
   select type(rhs)
   class is (burgers)
+    local_product%Ni = lhs%Ni
+    local_product%steps = lhs%steps
+    local_product%h = lhs%h
+    local_product%nu = lhs%nu
     local_product%state = lhs%state * rhs%state
+    if (allocated(lhs%previous)) local_product%previous = lhs%previous
   endselect
   call move_alloc(local_product, product)
   return
@@ -187,13 +197,13 @@ contains
   !---------------------------------------------------------------------------------------------------------------------------------
 
   !---------------------------------------------------------------------------------------------------------------------------------
-  allocate(burgers :: local_product)
+  allocate(local_product)
   local_product%Ni = lhs%Ni
   local_product%steps = lhs%steps
   local_product%h = lhs%h
   local_product%nu = lhs%nu
-  allocate(local_product%state(1:lhs%Ni, 1:lhs%steps))
   local_product%state = lhs%state * rhs
+  if (allocated(lhs%previous)) local_product%previous = lhs%previous
   call move_alloc(local_product, product)
   return
   !---------------------------------------------------------------------------------------------------------------------------------
@@ -210,13 +220,13 @@ contains
   !---------------------------------------------------------------------------------------------------------------------------------
 
   !---------------------------------------------------------------------------------------------------------------------------------
-  allocate(burgers :: local_product)
+  allocate(local_product)
   local_product%Ni = rhs%Ni
   local_product%steps = rhs%steps
   local_product%h = rhs%h
   local_product%nu = rhs%nu
-  allocate(local_product%state(1:rhs%Ni, 1:rhs%steps))
   local_product%state = rhs%state * lhs
+  if (allocated(rhs%previous)) local_product%previous = rhs%previous
   call move_alloc(local_product, product)
   return
   !---------------------------------------------------------------------------------------------------------------------------------
@@ -233,15 +243,15 @@ contains
   !---------------------------------------------------------------------------------------------------------------------------------
 
   !---------------------------------------------------------------------------------------------------------------------------------
-  allocate(burgers :: local_sum)
-  local_sum%Ni = lhs%Ni
-  local_sum%steps = lhs%steps
-  local_sum%h = lhs%h
-  local_sum%nu = lhs%nu
-  allocate(local_sum%state(1:lhs%Ni, 1:lhs%steps))
+  allocate(local_sum)
   select type(rhs)
-    class is (burgers)
-      local_sum%state = lhs%state + rhs%state
+  class is (burgers)
+    local_sum%Ni = lhs%Ni
+    local_sum%steps = lhs%steps
+    local_sum%h = lhs%h
+    local_sum%nu = lhs%nu
+    local_sum%state = lhs%state + rhs%state
+    if (allocated(lhs%previous)) local_sum%previous = lhs%previous
   endselect
   call move_alloc(local_sum, sum)
   return
@@ -259,15 +269,15 @@ contains
   !---------------------------------------------------------------------------------------------------------------------------------
 
   !---------------------------------------------------------------------------------------------------------------------------------
-  allocate(burgers :: local_sub)
-  local_sub%Ni = lhs%Ni
-  local_sub%steps = lhs%steps
-  local_sub%h = lhs%h
-  local_sub%nu = lhs%nu
-  allocate(local_sub%state(1:lhs%Ni, 1:lhs%steps))
+  allocate(local_sub)
   select type(rhs)
-    class is (burgers)
-      local_sub%state = lhs%state - rhs%state
+  class is (burgers)
+    local_sub%Ni = lhs%Ni
+    local_sub%steps = lhs%steps
+    local_sub%h = lhs%h
+    local_sub%nu = lhs%nu
+    local_sub%state = lhs%state - rhs%state
+    if (allocated(lhs%previous)) local_sub%previous = lhs%previous
   endselect
   call move_alloc(local_sub, sub)
   return
@@ -284,12 +294,13 @@ contains
 
   !---------------------------------------------------------------------------------------------------------------------------------
   select type(rhs)
-    class is (burgers)
-      lhs%Ni = rhs%Ni
-      lhs%steps = rhs%steps
-      lhs%h = rhs%h
-      lhs%nu = rhs%nu
-      if (allocated(rhs%state)) lhs%state = rhs%state
+  class is (burgers)
+    lhs%Ni = rhs%Ni
+    lhs%steps = rhs%steps
+    lhs%h = rhs%h
+    lhs%nu = rhs%nu
+    if (allocated(rhs%state)) lhs%state = rhs%state
+    if (allocated(rhs%previous)) lhs%previous = rhs%previous
   endselect
   return
   !---------------------------------------------------------------------------------------------------------------------------------
@@ -305,6 +316,7 @@ contains
 
   !---------------------------------------------------------------------------------------------------------------------------------
   if (allocated(lhs%state)) lhs%state = rhs
+  if (allocated(lhs%previous)) lhs%previous = rhs
   return
   !---------------------------------------------------------------------------------------------------------------------------------
   endsubroutine burgers_assign_real
@@ -327,14 +339,22 @@ contains
   derivative%steps = self%steps
   derivative%h = self%h
   derivative%nu = self%nu
-  allocate(derivative%state(1:self%Ni, 1:self%steps))
-  derivative%state = 0._R_P
-  dn = self%steps ; if (present(n)) dn = n
-  do i=2, self%Ni - 1
-    derivative%state(i, dn) = (self%state(i+1, dn) - self%state(i-1, dn))/(2._R_P * self%h)
-  enddo
-  derivative%state(1, dn) = (self%state(2, dn) - self%state(self%Ni, dn))/(2._R_P * self%h)
-  derivative%state(self%Ni, dn) = (self%state(1, dn) - self%state(self%Ni-1, dn))/(2._R_P * self%h)
+  derivative%state = self%state
+  if (allocated(self%previous)) derivative%previous = self%previous
+  if (self%steps>=2) then ! self%previous should be used
+    dn = self%steps ; if (present(n)) dn = n
+    do i=2, self%Ni - 1
+      derivative%state(i) = (self%previous(i+1, dn) - self%previous(i-1, dn))/(2._R_P * self%h)
+    enddo
+    derivative%state(1) = (self%previous(2, dn) - self%previous(self%Ni, dn))/(2._R_P * self%h)
+    derivative%state(self%Ni) = (self%previous(1, dn) - self%previous(self%Ni-1, dn))/(2._R_P * self%h)
+  else ! self%previous should not be used, use directly self%state
+    do i=2, self%Ni - 1
+      derivative%state(i) = (self%state(i+1) - self%state(i-1))/(2._R_P * self%h)
+    enddo
+    derivative%state(1) = (self%state(2) - self%state(self%Ni))/(2._R_P * self%h)
+    derivative%state(self%Ni) = (self%state(1) - self%state(self%Ni-1))/(2._R_P * self%h)
+  endif
   return
   !---------------------------------------------------------------------------------------------------------------------------------
   endfunction
@@ -356,14 +376,23 @@ contains
   derivative%steps = self%steps
   derivative%h = self%h
   derivative%nu = self%nu
-  allocate(derivative%state(1:self%Ni, 1:self%steps))
-  derivative%state = 0._R_P
-  dn = self%steps ; if (present(n)) dn = n
-  do i=2, self%Ni - 1
-    derivative%state(i, dn) = (self%state(i+1, dn) - 2._R_P * self%state(i, dn) + self%state(i-1, dn))/(self%h**2)
-  enddo
-  derivative%state(1, dn) = (self%state(2, dn) - 2._R_P * self%state(1, dn) + self%state(self%Ni, dn))/(self%h**2)
-  derivative%state(self%Ni, dn) = (self%state(1, dn) - 2._R_P * self%state(self%Ni, dn) + self%state(self%Ni-1, dn))/(self%h**2)
+  derivative%state = self%state
+  if (allocated(self%previous)) derivative%previous = self%previous
+  if (self%steps>=2) then ! self%previous should be used
+    dn = self%steps ; if (present(n)) dn = n
+    do i=2, self%Ni - 1
+      derivative%state(i) = (self%previous(i+1, dn) - 2._R_P * self%previous(i, dn) + self%previous(i-1, dn))/(self%h**2)
+    enddo
+    derivative%state(1) = (self%previous(2, dn) - 2._R_P * self%previous(1, dn) + self%previous(self%Ni, dn))/(self%h**2)
+    derivative%state(self%Ni) = (self%previous(1, dn) - 2._R_P * self%previous(self%Ni, dn) + self%previous(self%Ni-1, dn))/&
+                                (self%h**2)
+  else ! self%previous should not be used, use directly self%state
+    do i=2, self%Ni - 1
+      derivative%state(i) = (self%state(i+1) - 2._R_P * self%state(i) + self%state(i-1))/(self%h**2)
+    enddo
+    derivative%state(1) = (self%state(2) - 2._R_P * self%state(1) + self%state(self%Ni))/(self%h**2)
+    derivative%state(self%Ni) = (self%state(1) - 2._R_P * self%state(self%Ni) + self%state(self%Ni-1))/(self%h**2)
+  endif
   return
   !---------------------------------------------------------------------------------------------------------------------------------
   endfunction

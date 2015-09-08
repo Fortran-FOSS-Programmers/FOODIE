@@ -25,6 +25,8 @@ colors    = True
 quiet     = False
 log       = True
 jobs      = 2
+dependon  = ./external/fobos:flap-static-gnu
+            ./external/fobos:pyplot-fortran-static-gnu
 
 [tests-intel]
 compiler  = intel
@@ -38,6 +40,8 @@ colors    = True
 quiet     = False
 log       = True
 jobs      = 2
+dependon  = ./external/fobos:flap-static-intel
+            ./external/fobos:pyplot-fortran-static-intel
 
 [tests-gnu-debug]
 compiler  = gnu
@@ -51,6 +55,8 @@ colors    = True
 quiet     = False
 log       = True
 jobs      = 2
+dependon  = ./external/fobos:flap-static-gnu-debug
+            ./external/fobos:pyplot-fortran-static-gnu-debug
 
 [tests-intel-debug]
 compiler  = intel
@@ -64,6 +70,8 @@ colors    = True
 quiet     = False
 log       = True
 jobs      = 2
+dependon  = ./external/fobos:flap-static-intel-debug
+            ./external/fobos:pyplot-fortran-static-intel-debug
 
 # rules
 [rule-makedoc]
@@ -76,8 +84,10 @@ rule_3 = cp -r doc/html/publish/* doc/html/
 help   = Rule for performing coverage analysis
 rule_1 = FoBiS.py clean -mode tests-gnu
 rule_2 = FoBiS.py build -mode tests-gnu -coverage
-rule_3 = ./tests/lorenz
-rule_4 = gcov -o tests/obj/ src/lib/foodie*.f90
+rule_3 = ./tests/burgers -s all
+rule_4 = ./tests/lorenz -s all
+rule_5 = ./tests/oscillation -s all
+rule_6 = gcov -o tests/obj/ src/lib/foodie*.f90
 
 [rule-deldoc]
 help = Rule for deleting documentation
