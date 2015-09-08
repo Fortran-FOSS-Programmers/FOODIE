@@ -26,6 +26,9 @@ env:
   global:
     - SCRIPT="FoBiS.py rule -ex makecoverage"
 
+before_install:
+  - git submodule update --init --recursive
+
 install:
   - |
     if [[ ! -d "$HOME/.local/bin" ]]; then
