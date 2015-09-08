@@ -84,8 +84,10 @@ rule_3 = cp -r doc/html/publish/* doc/html/
 help   = Rule for performing coverage analysis
 rule_1 = FoBiS.py clean -mode tests-gnu
 rule_2 = FoBiS.py build -mode tests-gnu -coverage
-rule_3 = ./tests/lorenz
-rule_4 = gcov -o tests/obj/ src/lib/foodie*.f90
+rule_3 = ./tests/burgers -s all
+rule_4 = ./tests/lorenz -s all
+rule_5 = ./tests/oscillation -s all
+rule_6 = gcov -o tests/obj/ src/lib/foodie*.f90
 
 [rule-deldoc]
 help = Rule for deleting documentation
