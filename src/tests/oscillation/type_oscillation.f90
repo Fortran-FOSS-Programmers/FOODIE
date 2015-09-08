@@ -95,6 +95,7 @@ contains
   delta%dims = self%dims
   delta%steps = self%steps
   allocate(delta%state(1:self%dims, 1:self%steps))
+  delta%state = 0_R_P
   ! Oscillation equations
   dn = self%steps ; if (present(n)) dn = n
   delta%state(1, dn) = -self%f * self%state(2, dn)
