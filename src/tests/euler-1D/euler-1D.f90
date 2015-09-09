@@ -5,7 +5,7 @@ program integrate_euler_1D
 !-----------------------------------------------------------------------------------------------------------------------------------
 
 !-----------------------------------------------------------------------------------------------------------------------------------
-use IR_Precision, only : R_P, I_P, str
+use IR_Precision, only : R_P, I_P, FR_P, str
 use type_euler_1D, only : euler_1D
 use Data_Type_Command_Line_Interface, only : Type_Command_Line_Interface
 use foodie, only : euler_explicit_integrator, tvd_runge_kutta_integrator, adams_bashforth_integrator
@@ -16,7 +16,7 @@ use pyplot_module, only :  pyplot
 implicit none
 type(Type_Command_Line_Interface) :: cli                      !< Command line interface handler.
 type(euler_1D)                    :: domain                   !< Domain of Euler equations.
-real(R_P),    parameter           :: CFL=0.7_R_P              !< CFL value.
+real(R_P),    parameter           :: CFL=0.1_R_P              !< CFL value.
 real(R_P),    parameter           :: t_final=0.15_R_P         !< Final time.
 integer(I_P), parameter           :: Ni=100                   !< Number of grid cells.
 integer(I_P), parameter           :: Ng=3                     !< Number of ghost cells.
@@ -33,6 +33,8 @@ real(R_P)                         :: x(1:Ni)                  !< Cell center x-a
 real(R_P), allocatable            :: final_state(:,:)         !< Final state.
 integer(I_P)                      :: error                    !< Error handler.
 character(99)                     :: solver                   !< Solver used.
+logical                           :: plots               !< Flag for activating plots saving.
+logical                           :: results             !< Flag for activating results saving.
 !-----------------------------------------------------------------------------------------------------------------------------------
 
 !-----------------------------------------------------------------------------------------------------------------------------------
@@ -41,14 +43,20 @@ call cli%init(progname    = 'euler-1D',                                         
               authors     = 'Fortran-FOSS-Programmers',                              &
               license     = 'GNU GPLv3',                                             &
               description = 'Test FOODiE library on 1D Euler equations integration', &
-              examples    = ["euler-1D --solver euler          ",                    &
-                             "euler-1D --solver runge-kutta    ",                    &
+              examples    = ["euler-1D --solver euler --results",                    &
+                             "euler-1D --solver runge-kutta -r ",                    &
                              "euler-1D --solver adams-bashforth",                    &
-                             "euler-1D --solver all            "])
+                             "euler-1D --solver all --plots -r "])
 call cli%add(switch='--solver', switch_ab='-s', help='ODE solver used', required=.true., act='store', error=error)
+call cli%add(switch='--results', switch_ab='-r', help='Save results', required=.false., act='store_true', def='.false.', &
+             error=error)
+call cli%add(switch='--plots', switch_ab='-p', help='Save plots of results', required=.false., act='store_true', def='.false.', &
+             error=error)
 ! parsing Command Line Interface
 call cli%parse(error=error)
 call cli%get(switch='-s', val=solver, error=error) ; if (error/=0) stop
+call cli%get(switch='-r', val=results, error=error) ; if (error/=0) stop
+call cli%get(switch='-p', val=plots, error=error) ; if (error/=0) stop
 ! create Euler field initial state
 call init()
 ! integrate Euler equation
@@ -88,15 +96,15 @@ contains
   cp0(1) = 1040._R_P
   cv0(1) = 743._R_P
   do i=1, Ni/2
-    x(i) = 0.5_R_P * Dx * i
-    initial_state(:, i) = [1._R_P, &                  ! rho(s)
-                           0._R_P, &                  ! u
-                           1._R_P, &                  ! p
-                           1._R_P, &                  ! sum(rho(s))
+    x(i) = Dx * i - 0.5_R_P * Dx
+    initial_state(:, i) = [1._R_P, & ! rho(s)
+                           0._R_P, & ! u
+                           1._R_P, & ! p
+                           1._R_P, & ! sum(rho(s))
                            cp0/cv0]  ! gamma = cp/cv
   enddo
   do i=Ni/2 + 1, Ni
-    x(i) = 0.5_R_P * Dx * i
+    x(i) = Dx * i - 0.5_R_P * Dx
     initial_state(:, i) = [0.125_R_P, & ! rho(s)
                            0._R_P,    & ! u
                            0.1_R_P,   & ! p
@@ -107,22 +115,42 @@ contains
   !---------------------------------------------------------------------------------------------------------------------------------
   endsubroutine init
 
-  subroutine save_plots(title, filename)
+  subroutine save_results(title, filename)
   !---------------------------------------------------------------------------------------------------------------------------------
-  !< Save plots of results.
+  !< Save results.
   !---------------------------------------------------------------------------------------------------------------------------------
   character(*), intent(IN) :: title    !< Plot title.
   character(*), intent(IN) :: filename !< Output filename.
+  integer(I_P)             :: rawfile  !< Raw file unit for saving results.
   type(pyplot)             :: plt      !< Plot file handler.
+  integer(I_P)             :: i        !< Counter.
+  integer(I_P)             :: v        !< Counter.
   !---------------------------------------------------------------------------------------------------------------------------------
 
   !---------------------------------------------------------------------------------------------------------------------------------
-  call plt%initialize(grid=.true., xlabel='x', title=title)
-  call plt%add_plot(x=x, y=final_state(Ns+1, :), label='U', linestyle='b-', linewidth=1)
-  call plt%savefig(filename)
+  if (results) then
+    open(newunit=rawfile, file=filename//'.dat')
+    write(rawfile, '(A)')'# '//title
+    write(rawfile, '(A)')'# VARIABLES: "x" "rho(1)" "rho(2)"... "rho(Ns)" "u" "p" "rho" "gamma"'
+    do i=1, Ni
+      write(rawfile, '('//trim(str(.true.,Np+1))//'('//FR_P//',1X))')x(i), (final_state(v, i), v=1, Np)
+    enddo
+    close(rawfile)
+  endif
+  if (plots) then
+    call plt%initialize(grid=.true., xlabel='x', title=title)
+    do v=1, Ns
+      call plt%add_plot(x=x, y=final_state(v, :), label='rho('//trim(str(.true.,v))//')', linestyle='b-', linewidth=1)
+    enddo
+    call plt%add_plot(x=x, y=final_state(Ns+1, :), label='u', linestyle='r-', linewidth=1)
+    call plt%add_plot(x=x, y=final_state(Ns+2, :), label='p', linestyle='g-', linewidth=1)
+    call plt%add_plot(x=x, y=final_state(Ns+3, :), label='rho', linestyle='o-', linewidth=1)
+    call plt%add_plot(x=x, y=final_state(Ns+4, :), label='gamma', linestyle='c-', linewidth=1)
+    call plt%savefig(filename//'.png')
+  endif
   return
   !---------------------------------------------------------------------------------------------------------------------------------
-  endsubroutine save_plots
+  endsubroutine save_results
 
   subroutine test_euler()
   !---------------------------------------------------------------------------------------------------------------------------------
@@ -131,6 +159,7 @@ contains
   type(euler_explicit_integrator) :: euler_integrator !< Euler integrator.
   real(R_P)                       :: dt               !< Time step.
   real(R_P)                       :: t                !< Time.
+  integer(I_P)                    :: s                !< Time steps counter.
   !---------------------------------------------------------------------------------------------------------------------------------
 
   !---------------------------------------------------------------------------------------------------------------------------------
@@ -139,14 +168,20 @@ contains
   call domain%init(Ni=Ni, Ng=Ng, Ns=Ns, Dx=Dx, BC_L=BC_L, BC_R=BC_R, initial_state=initial_state, cp0=cp0, cv0=cv0)
   ! integrate field
   t = 0._R_P
+  s = 0
   do while(t<t_final)
+    print*, s
     dt = domain%dt(Nmax=0, Tmax=t_final, t=t, CFL=CFL)
     call euler_integrator%integrate(field=domain, dt=dt)
+    final_state = domain%output()
+    call save_results(title='FOODiE test: 1D Euler equations integration at t=0.6, explicit Euler', &
+                      filename='euler_integration-euler')
     t = t + dt
+    s = s + 1
   enddo
   final_state = domain%output()
-  call save_plots(title='FOODiE test: Burgers equation integration at t=0.6, explicit Euler', &
-                  filename='burgers_integration-euler.png')
+  call save_results(title='FOODiE test: 1D Euler equations integration at t=0.6, explicit Euler', &
+                    filename='euler_integration-euler')
   print "(A)", 'Finish!'
   return
   !---------------------------------------------------------------------------------------------------------------------------------
