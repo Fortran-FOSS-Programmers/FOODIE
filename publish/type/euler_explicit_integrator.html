@@ -38,7 +38,7 @@
   <body>
 
     <!-- Fixed navbar -->
-    <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+    <nav class="navbar navbar-inverse navbar-fixed-top">
       <div class="container">
         <div class="navbar-header">
           <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
@@ -67,7 +67,7 @@
             <li><a href="../lists/types.html">Derived Types</a></li>
 				
 				
-            <li><a href="../program/integrate_lorenz.html">Program</a></li>
+            <li><a href="../lists/programs.html">Programs</a></li>
 				
           </ul>
         
@@ -114,7 +114,8 @@
   
      <li class="active">euler_explicit_integrator</li>
   </ol>
-  </div>
+</div>
+</div>
 </div>
     
   </div>
@@ -135,11 +136,15 @@
   
   
   
+  
+  
+  
+  
   <div class="panel panel-primary">
     <div class="panel-heading text-left"><h3 class="panel-title">Type-Bound Procedures</h3></div>
     <div class="list-group">
       
-      <a class="list-group-item" href="../type/euler_explicit_integrator.html#bp-integrate">integrate</a>
+      <a class="list-group-item" href="../type/euler_explicit_integrator.html#boundprocedure-integrate%7E2">integrate</a>
       
     </div>
   </div>
@@ -160,13 +165,19 @@
     <div class="panel-heading text-left"><h3 class="panel-title">All Derived Types</h3></div>
     <div class="list-group">
       
+      <a class="list-group-item" href="../type/adams_bashforth_integrator.html">adams_bashforth_integrator</a>
+      
+      <a class="list-group-item" href="../type/burgers.html">burgers</a>
+      
+      <a class="list-group-item" href="../type/euler_1d.html">euler_1D</a>
+      
       <a class="list-group-item" href="../type/euler_explicit_integrator.html">euler_explicit_integrator</a>
       
       <a class="list-group-item" href="../type/integrand.html">integrand</a>
       
       <a class="list-group-item" href="../type/lorenz.html">lorenz</a>
       
-      <a class="list-group-item" href="../type/pyplot.html">pyplot</a>
+      <a class="list-group-item" href="../type/oscillation.html">oscillation</a>
       
       <a class="list-group-item" href="../type/tvd_runge_kutta_integrator.html">tvd_runge_kutta_integrator</a>
       
@@ -177,9 +188,12 @@
     </div>
     
     <div class="col-lg-9" id='text'>
+    <h2>type, public :: euler_explicit_integrator</h2>
+    
     <p>FOODiE integrator: provide an explicit Euler scheme, it being 1st order accurate.</p>
-<p><div class="alert alert-info" role="alert"><h4>Note</h4>The integrator can be used directly without any initialization.</div></p>
+<p></p><div class="alert alert-info" role="alert"><h4>Note</h4>The integrator can be used directly without any initialization.</div>
     <br>
+    
     
     
     
@@ -192,9 +206,9 @@
     
 	   
 <div class="panel panel-default">
-  <div class="panel-heading codesum"><a class="anchor" name="bp-integrate"></a><h3>procedure, public, nopass :: <strong>integrate</strong>  
+  <div class="panel-heading codesum"><span class="anchor" id="boundprocedure-integrate%7E2"></span><h3>procedure, public, nopass :: <strong>integrate</strong>  
     
-  <h3></div>
+  </h3></div>
   
   <div class="panel-body">
     
@@ -207,9 +221,13 @@
     
       <li class="list-group-item">
       
+         
     
     <h3>
-private  subroutine <a href='../proc/integrate.html'>integrate</a>(field, dt)
+private subroutine <a href='../proc/integrate%7E2.html'>integrate</a>(field, dt)
+    
+    
+    
 </h3>
     
     <h4>Arguments</h4>
@@ -231,7 +249,7 @@ private  subroutine <a href='../proc/integrate.html'>integrate</a>(field, dt)
   
 <tr>
   
-  <td><a class="anchor" name="var-field"></a>class(<a href='../type/integrand.html'>integrand</a>),</td>
+  <td><span class="anchor" ></span>class(<a href='../type/integrand.html'>integrand</a>),</td>
   <td>intent(inout)</td>
   <td></td>
   
@@ -246,7 +264,7 @@ private  subroutine <a href='../proc/integrate.html'>integrate</a>(field, dt)
   
 <tr>
   
-  <td><a class="anchor" name="var-dt"></a>real(kind=R_P),</td>
+  <td><span class="anchor" ></span>real(kind=R_P),</td>
   <td>intent(in)</td>
   <td></td>
   
@@ -264,9 +282,14 @@ private  subroutine <a href='../proc/integrate.html'>integrate</a>(field, dt)
     
     <h4>Description</h4>
        
+       
+
+
+       
        <p>Integrate field with explicit Euler scheme, 1st order.</p>
         
 
+      
       </li>
     
   </ul>
@@ -278,7 +301,7 @@ private  subroutine <a href='../proc/integrate.html'>integrate</a>(field, dt)
     
     
     <section>
-    <h2><a class="anchor" name="src"></a>Source Code</h2>
+    <h2><span class="anchor" id="src"></span>Source Code</h2>
     <div class="highlight"><pre><span class="k">type</span> <span class="kd">::</span> <span class="n">euler_explicit_integrator</span>
   <span class="c">!&lt; FOODiE integrator: provide an explicit Euler scheme, it being 1st order accurate.</span>
   <span class="c">!&lt;</span>

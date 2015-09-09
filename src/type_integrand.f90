@@ -5,7 +5,7 @@ module type_integrand
 !-----------------------------------------------------------------------------------------------------------------------------------
 
 !-----------------------------------------------------------------------------------------------------------------------------------
-use IR_Precision, only : R_P
+use IR_Precision, only : R_P, I_P
 !-----------------------------------------------------------------------------------------------------------------------------------
 
 !-----------------------------------------------------------------------------------------------------------------------------------
@@ -18,30 +18,45 @@ public :: integrand
 type, abstract :: integrand
   !< Abstract type for building FOODiE ODE integrators.
   contains
-    ! public deferred procedures that concrete interpolators must implement
-    procedure(time_derivative),      pass(self), deferred, public :: t                       !< Time derivative, residuals function.
-    procedure(integrand_op_real),    pass(lhs),  deferred, public :: integrand_multiply_real !< Integrand * real operator.
-    procedure(real_op_integrand),    pass(rhs),  deferred, public :: real_multiply_integrand !< Real * integrand operator.
-    procedure(symmetric_operator),   pass(lhs),  deferred, public :: add                     !< Integrand + integrand oprator.
-    procedure(assignment_integrand), pass(lhs),  deferred, public :: assign_integrand        !< Integrand = integrand.
-    procedure(assignment_real),      pass(lhs),  deferred, public :: assign_real             !< Integrand = real.
+    ! public deferred procedures that concrete integrand-field must implement
+    procedure(time_derivative),       pass(self), deferred, public :: t                     !< Time derivative, residuals.
+    procedure(update_previous_steps), pass(self), deferred, public :: update_previous_steps !< Time derivative, residuals.
+    ! operators
+    procedure(symmetric_operator),   pass(lhs),  deferred, public :: integrand_multiply_integrand !< Integrand * integrand operator.
+    procedure(integrand_op_real),    pass(lhs),  deferred, public :: integrand_multiply_real      !< Integrand * real operator.
+    procedure(real_op_integrand),    pass(rhs),  deferred, public :: real_multiply_integrand      !< Real * integrand operator.
+    procedure(symmetric_operator),   pass(lhs),  deferred, public :: add                          !< Integrand + integrand oprator.
+    procedure(assignment_integrand), pass(lhs),  deferred, public :: assign_integrand             !< Integrand = integrand.
+    procedure(assignment_real),      pass(lhs),  deferred, public :: assign_real                  !< Integrand = real.
     ! operators overloading
-    generic, public :: operator(+) => add                                              !< Overloading + operator.
-    generic, public :: operator(*) => real_multiply_integrand, integrand_multiply_real !< Overloading * operator.
-    generic, public :: assignment(=) => assign_integrand, assign_real                  !< Overloading = assignament.
+    generic, public :: operator(+) => add                              !< Overloading + operator.
+    generic, public :: operator(*) => integrand_multiply_integrand, &
+                                      real_multiply_integrand, &
+                                      integrand_multiply_real          !< Overloading * operator.
+    generic, public :: assignment(=) => assign_integrand, assign_real  !< Overloading = assignament.
 endtype integrand
 
 abstract interface
-  !< Abstract type bound procedures necessary for implementing the class(integrand).
-  pure function time_derivative(self) result(dState_dt)
+  !< Abstract type bound procedures necessary for implementing a concrete extension of the class(integrand).
+  pure function time_derivative(self, n) result(dState_dt)
   !---------------------------------------------------------------------------------------------------------------------------------
   !< Time derivative function of integrand class, i.e. the residuals function.
   !---------------------------------------------------------------------------------------------------------------------------------
-  import :: integrand
-  class(integrand), intent(IN)  :: self      !< Integrand field.
-  class(integrand), allocatable :: dState_dt !< Result of the time derivative function of integrand field.
+  import :: integrand, I_P
+  class(integrand),       intent(IN) :: self      !< Integrand field.
+  integer(I_P), optional, intent(IN) :: n         !< Time level.
+  class(integrand), allocatable      :: dState_dt !< Result of the time derivative function of integrand field.
   !---------------------------------------------------------------------------------------------------------------------------------
   endfunction time_derivative
+
+  pure subroutine update_previous_steps(self)
+  !---------------------------------------------------------------------------------------------------------------------------------
+  !< Update the previous time steps (of integrand field) for multi-step(level) ODE solvers.
+  !---------------------------------------------------------------------------------------------------------------------------------
+  import :: integrand
+  class(integrand), intent(INOUT) :: self      !< Integrand field.
+  !---------------------------------------------------------------------------------------------------------------------------------
+  endsubroutine update_previous_steps
 
   pure function integrand_op_real(lhs, rhs) result(operator_result)
   !---------------------------------------------------------------------------------------------------------------------------------

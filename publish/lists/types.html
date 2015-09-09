@@ -40,7 +40,7 @@ All Types &ndash; FOODiE
   <body>
 
     <!-- Fixed navbar -->
-    <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+    <nav class="navbar navbar-inverse navbar-fixed-top">
       <div class="container">
         <div class="navbar-header">
           <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
@@ -69,7 +69,7 @@ All Types &ndash; FOODiE
             <li><a href="../lists/types.html">Derived Types</a></li>
 				
 				
-            <li><a href="../program/integrate_lorenz.html">Program</a></li>
+            <li><a href="../lists/programs.html">Programs</a></li>
 				
           </ul>
         
@@ -96,17 +96,126 @@ All Types &ndash; FOODiE
 			 <tr><th>Type</th><th>Location</th><th>Extends</th><th>Description</th></tr>
 			 </thead><tbody>
 			 
+			   <tr><td><a href='../type/adams_bashforth_integrator.html'>adams_bashforth_integrator</a></td><td><a href='../module/foodie_integrator_adams_bashforth.html'>foodie_integrator_adams_bashforth</a></td><td>None</td><td><p>FOODiE integrator: provide an explicit class of Adams-Bashforth multi-step schemes, from 1st to 3rd order accutate.</p></td></tr>
+			 
+			   <tr><td><a href='../type/burgers.html'>burgers</a></td><td><a href='../module/type_burgers.html'>type_burgers</a></td><td>integrand</td><td><p>Burgers equations field.</p></td></tr>
+			 
+			   <tr><td><a href='../type/euler_1d.html'>euler_1D</a></td><td><a href='../module/type_euler_1d.html'>type_euler_1D</a></td><td>integrand</td><td><p>Euler 1D PDEs system field.</p></td></tr>
+			 
 			   <tr><td><a href='../type/euler_explicit_integrator.html'>euler_explicit_integrator</a></td><td><a href='../module/foodie_integrator_euler_explicit.html'>foodie_integrator_euler_explicit</a></td><td>None</td><td><p>FOODiE integrator: provide an explicit Euler scheme, it being 1st order accurate.</p></td></tr>
 			 
 			   <tr><td><a href='../type/integrand.html'>integrand</a></td><td><a href='../module/type_integrand.html'>type_integrand</a></td><td>None</td><td><p>Abstract type for building FOODiE ODE integrators.</p></td></tr>
 			 
-			   <tr><td><a href='../type/lorenz.html'>lorenz</a></td><td><a href='../module/type_lorenz.html'>type_lorenz</a></td><td><a href='../type/integrand.html'>integrand</a></td><td><p>Lorenz equations field.</p></td></tr>
+			   <tr><td><a href='../type/lorenz.html'>lorenz</a></td><td><a href='../module/type_lorenz.html'>type_lorenz</a></td><td>integrand</td><td><p>Lorenz equations field.</p></td></tr>
 			 
-			   <tr><td><a href='../type/pyplot.html'>pyplot</a></td><td><a href='../module/pyplot_module.html'>pyplot_module</a></td><td>None</td><td></td></tr>
+			   <tr><td><a href='../type/oscillation.html'>oscillation</a></td><td><a href='../module/type_oscillation.html'>type_oscillation</a></td><td>integrand</td><td><p>Oscillation equations field.</p></td></tr>
 			 
 			   <tr><td><a href='../type/tvd_runge_kutta_integrator.html'>tvd_runge_kutta_integrator</a></td><td><a href='../module/foodie_integrator_tvd_runge_kutta.html'>foodie_integrator_tvd_runge_kutta</a></td><td>None</td><td><p>FOODiE integrator: provide an explicit class of TVD or SSP Runge-Kutta schemes, from 1st to 4th order accutate.</p></td></tr>
 			 
 			 </tbody></table>
+             
+            <img class="depgraph" alt="dependency graph" src=../graphs/type%7E%7Egraph%7E%7ETypeGraph.svg usemap="#type~~graph~~TypeGraph">
+            <map id="type~~graph~~TypeGraph" name="type~~graph~~TypeGraph">
+<area shape="rect" id="node1" href="../type/euler_1d.html" title="euler_1D" alt="" coords="253,145,327,177"/>
+<area shape="rect" id="node2" href="../type/integrand.html" title="integrand" alt="" coords="65,173,143,205"/>
+<area shape="rect" id="node3" href="../type/euler_explicit_integrator.html" title="euler_explicit_integrator" alt="" coords="19,117,189,149"/>
+<area shape="rect" id="node4" href="../type/oscillation.html" title="oscillation" alt="" coords="251,201,329,233"/>
+<area shape="rect" id="node5" href="../type/burgers.html" title="burgers" alt="" coords="254,257,326,289"/>
+<area shape="rect" id="node6" href="../type/lorenz.html" title="lorenz" alt="" coords="254,313,326,345"/>
+<area shape="rect" id="node7" href="../type/adams_bashforth_integrator.html" title="adams_bashforth_integrator" alt="" coords="5,61,203,93"/>
+<area shape="rect" id="node8" href="../type/tvd_runge_kutta_integrator.html" title="tvd_runge_kutta_integrator" alt="" coords="9,5,199,37"/>
+</map>
+
+            <div><a type="button" class="graph-help" data-toggle="modal" href="#graph-help-text">Help</a></div>
+            <div class="modal fade" id="graph-help-text" tabindex="-1" role="dialog">
+              <div class="modal-dialog modal-lg" role="document">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="-graph-help-label">Graph Key</h4>
+                  </div>
+                  <div class="modal-body">
+                    
+Nodes of different colours represent the following:
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.38.0 (20140413.2041)
+ -->
+<!-- Title: Graph Key Pages: 1 -->
+<svg width="641pt" height="26pt"
+ viewBox="0.00 0.00 641.00 25.98" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="graph0" class="graph" transform="scale(0.811906 0.811906) rotate(0) translate(4 28)">
+<title>Graph Key</title>
+<polygon fill="white" stroke="none" points="-4,4 -4,-28 785.5,-28 785.5,4 -4,4"/>
+<!-- Module -->
+<g id="node1" class="node"><title>Module</title>
+<polygon fill="#337ab7" stroke="#337ab7" points="54,-24 0,-24 0,-0 54,-0 54,-24"/>
+<text text-anchor="middle" x="27" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Module</text>
+</g>
+<!-- Submodule -->
+<g id="node2" class="node"><title>Submodule</title>
+<polygon fill="#5bc0de" stroke="#5bc0de" points="139.5,-24 72.5,-24 72.5,-0 139.5,-0 139.5,-24"/>
+<text text-anchor="middle" x="106" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Submodule</text>
+</g>
+<!-- Type -->
+<g id="node3" class="node"><title>Type</title>
+<polygon fill="#5cb85c" stroke="#5cb85c" points="212,-24 158,-24 158,-0 212,-0 212,-24"/>
+<text text-anchor="middle" x="185" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Type</text>
+</g>
+<!-- Subroutine -->
+<g id="node4" class="node"><title>Subroutine</title>
+<polygon fill="#d9534f" stroke="#d9534f" points="294,-24 230,-24 230,-0 294,-0 294,-24"/>
+<text text-anchor="middle" x="262" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Subroutine</text>
+</g>
+<!-- Function -->
+<g id="node5" class="node"><title>Function</title>
+<polygon fill="#d94e8f" stroke="#d94e8f" points="366,-24 312,-24 312,-0 366,-0 366,-24"/>
+<text text-anchor="middle" x="339" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Function</text>
+</g>
+<!-- Interface -->
+<g id="node6" class="node"><title>Interface</title>
+<polygon fill="#a7506f" stroke="#a7506f" points="439.5,-24 384.5,-24 384.5,-0 439.5,-0 439.5,-24"/>
+<text text-anchor="middle" x="412" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Interface</text>
+</g>
+<!-- Unknown Procedure Type -->
+<g id="node7" class="node"><title>Unknown Procedure Type</title>
+<polygon fill="#777777" stroke="#777777" points="594,-24 458,-24 458,-0 594,-0 594,-24"/>
+<text text-anchor="middle" x="526" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Unknown Procedure Type</text>
+</g>
+<!-- Program -->
+<g id="node8" class="node"><title>Program</title>
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="666,-24 612,-24 612,-0 666,-0 666,-24"/>
+<text text-anchor="middle" x="639" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Program</text>
+</g>
+<!-- This Page&#39;s Entity -->
+<g id="node9" class="node"><title>This Page&#39;s Entity</title>
+<polygon fill="none" stroke="black" points="781.5,-24 684.5,-24 684.5,-0 781.5,-0 781.5,-24"/>
+<text text-anchor="middle" x="733" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50">This Page&#39;s Entity</text>
+</g>
+</g>
+</svg>
+
+<h5>Module Graph</h5>
+<p>Solid arrows point from a parent (sub)module to the submodule which is
+descended from it. Dashed arrows point from a module being used to the
+module using it.</p>
+<h5>Type Graph</h5>
+<p>Solid arrows point from one derived type to another which extends
+(inherits from) it. Dashed arrows point from a derived type to another
+type containing it as a components, with a label listing the name(s) of
+said component(s).</p>
+<h5>Call Graph</h5>
+<p>Solid arrows point from a procedure to one which it calls. Dashed 
+arrows point from an interface to procedures which implement that interface.
+This could include the module procedures in a generic interface or the
+implementation in a submodule of an interface in a parent module.</p>
+
+                  </div>
+                </div>
+              </div>
+            </div>
+            
         </div>
       </div>
 

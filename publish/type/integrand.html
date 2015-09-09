@@ -38,7 +38,7 @@
   <body>
 
     <!-- Fixed navbar -->
-    <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+    <nav class="navbar navbar-inverse navbar-fixed-top">
       <div class="container">
         <div class="navbar-header">
           <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
@@ -67,7 +67,7 @@
             <li><a href="../lists/types.html">Derived Types</a></li>
 				
 				
-            <li><a href="../program/integrate_lorenz.html">Program</a></li>
+            <li><a href="../lists/programs.html">Programs</a></li>
 				
           </ul>
         
@@ -114,7 +114,8 @@
   
      <li class="active">integrand</li>
   </ol>
-  </div>
+</div>
+</div>
 </div>
     
   </div>
@@ -135,27 +136,35 @@
   
   
   
+  
+  
+  
+  
   <div class="panel panel-primary">
     <div class="panel-heading text-left"><h3 class="panel-title">Type-Bound Procedures</h3></div>
     <div class="list-group">
       
-      <a class="list-group-item" href="../type/integrand.html#bp-t">t</a>
+      <a class="list-group-item" href="../type/integrand.html#boundprocedure-t">t</a>
       
-      <a class="list-group-item" href="../type/integrand.html#bp-integrand_multiply_real">integrand_multiply_real</a>
+      <a class="list-group-item" href="../type/integrand.html#boundprocedure-update_previous_steps">update_previous_steps</a>
       
-      <a class="list-group-item" href="../type/integrand.html#bp-real_multiply_integrand">real_multiply_integrand</a>
+      <a class="list-group-item" href="../type/integrand.html#boundprocedure-integrand_multiply_integrand">integrand_multiply_integrand</a>
       
-      <a class="list-group-item" href="../type/integrand.html#bp-add">add</a>
+      <a class="list-group-item" href="../type/integrand.html#boundprocedure-integrand_multiply_real">integrand_multiply_real</a>
       
-      <a class="list-group-item" href="../type/integrand.html#bp-assign_integrand">assign_integrand</a>
+      <a class="list-group-item" href="../type/integrand.html#boundprocedure-real_multiply_integrand">real_multiply_integrand</a>
       
-      <a class="list-group-item" href="../type/integrand.html#bp-assign_real">assign_real</a>
+      <a class="list-group-item" href="../type/integrand.html#boundprocedure-add">add</a>
       
-      <a class="list-group-item" href="../type/integrand.html#bp-operator(+)">operator(+)</a>
+      <a class="list-group-item" href="../type/integrand.html#boundprocedure-assign_integrand">assign_integrand</a>
       
-      <a class="list-group-item" href="../type/integrand.html#bp-operator(*)">operator(*)</a>
+      <a class="list-group-item" href="../type/integrand.html#boundprocedure-assign_real">assign_real</a>
       
-      <a class="list-group-item" href="../type/integrand.html#bp-assignment(=)">assignment(=)</a>
+      <a class="list-group-item" href="../type/integrand.html#boundprocedure-operator%28%2B%29">operator(+)</a>
+      
+      <a class="list-group-item" href="../type/integrand.html#boundprocedure-operator%28%2A%29">operator(*)</a>
+      
+      <a class="list-group-item" href="../type/integrand.html#boundprocedure-assignment%28%3D%29">assignment(=)</a>
       
     </div>
   </div>
@@ -176,13 +185,19 @@
     <div class="panel-heading text-left"><h3 class="panel-title">All Derived Types</h3></div>
     <div class="list-group">
       
+      <a class="list-group-item" href="../type/adams_bashforth_integrator.html">adams_bashforth_integrator</a>
+      
+      <a class="list-group-item" href="../type/burgers.html">burgers</a>
+      
+      <a class="list-group-item" href="../type/euler_1d.html">euler_1D</a>
+      
       <a class="list-group-item" href="../type/euler_explicit_integrator.html">euler_explicit_integrator</a>
       
       <a class="list-group-item" href="../type/integrand.html">integrand</a>
       
       <a class="list-group-item" href="../type/lorenz.html">lorenz</a>
       
-      <a class="list-group-item" href="../type/pyplot.html">pyplot</a>
+      <a class="list-group-item" href="../type/oscillation.html">oscillation</a>
       
       <a class="list-group-item" href="../type/tvd_runge_kutta_integrator.html">tvd_runge_kutta_integrator</a>
       
@@ -193,8 +208,11 @@
     </div>
     
     <div class="col-lg-9" id='text'>
+    <h2>type, public, abstract :: integrand</h2>
+    
     <p>Abstract type for building FOODiE ODE integrators.</p>
     <br>
+    
     
     
     
@@ -207,33 +225,101 @@
     
 	   
 <div class="panel panel-default">
-  <div class="panel-heading codesum"><a class="anchor" name="bp-t"></a><h3>procedure, public, pass(self), deferred :: <strong>t</strong>  => t 
+  <div class="panel-heading codesum"><span class="anchor" id="boundprocedure-t"></span><h3>procedure(<a href='../interface/time_derivative.html'>time_derivative</a>), public, pass(self), deferred :: <strong>t</strong>  
     
-  <h3></div>
+  </h3></div>
   
   <div class="panel-body">
     
 
 
-    <p>Time derivative, residuals function.</p>
+    <p>Time derivative, residuals.</p>
   </div>
   
   <ul class="list-group">
     
       <li class="list-group-item">
       
+         
+            
     
     <h3>
-  t()
-</h3>
+purefunction <a href='../interface/time_derivative.html'>time_derivative</a>(self, n) result(dState_dt)
+    
+    
+    
+<small>Prototype</small></h3>
     
     <h4>Arguments</h4>
     
-      <em>None</em>
+      
+      
+<table class="table table-striped varlist">
+<thead><tr><th>Type</th>
+<th>Intent</th><th>Optional</th>
+<th>Attributes</th><th></th><th>Name</th><th></th></thead>
+
+
+
+<tbody>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>class(<a href='../type/integrand.html'>integrand</a>),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>self</strong></td><td><p>Integrand field.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>integer(kind=I_P),</td>
+  <td>intent(in),</td>
+  <td>optional</td>
+  
+  <td></td><td>::</td>
+  <td><strong>n</strong></td><td><p>Time level.</p></td>
+  
+</tr>
+
+</tbody>
+</table>
+
+      
     
     
+
+  
+  
+  
+  
+     <h4>Return Value <small>class(<a href='../type/integrand.html'>integrand</a>),
+  allocatable</small></h4>
+  <p>Result of the time derivative function of integrand field.</p>
+    
+    
+    <h4>Description</h4>
+       
+       
+
+
+       
+       <p>Time derivative function of integrand class, i.e. the residuals function.</p>
         
 
+         
+      
       </li>
     
   </ul>
@@ -242,9 +328,191 @@
     
 	   
 <div class="panel panel-default">
-  <div class="panel-heading codesum"><a class="anchor" name="bp-integrand_multiply_real"></a><h3>procedure, public, pass(lhs), deferred :: <strong>integrand_multiply_real</strong>  => integrand_multiply_real 
+  <div class="panel-heading codesum"><span class="anchor" id="boundprocedure-update_previous_steps"></span><h3>procedure(<a href='../interface/update_previous_steps.html'>update_previous_steps</a>), public, pass(self), deferred :: <strong>update_previous_steps</strong>  
     
-  <h3></div>
+  </h3></div>
+  
+  <div class="panel-body">
+    
+
+
+    <p>Time derivative, residuals.</p>
+  </div>
+  
+  <ul class="list-group">
+    
+      <li class="list-group-item">
+      
+         
+            
+    
+    <h3>
+puresubroutine <a href='../interface/update_previous_steps.html'>update_previous_steps</a>(self)
+    
+    
+    
+<small>Prototype</small></h3>
+    
+    <h4>Arguments</h4>
+    
+      
+      
+<table class="table table-striped varlist">
+<thead><tr><th>Type</th>
+<th>Intent</th><th>Optional</th>
+<th>Attributes</th><th></th><th>Name</th><th></th></thead>
+
+
+
+<tbody>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>class(<a href='../type/integrand.html'>integrand</a>),</td>
+  <td>intent(inout)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>self</strong></td><td><p>Integrand field.</p></td>
+  
+</tr>
+
+</tbody>
+</table>
+
+      
+    
+    
+    
+    <h4>Description</h4>
+       
+       
+
+
+       
+       <p>Update the previous time steps (of integrand field) for multi-step(level) ODE solvers.</p>
+        
+
+         
+      
+      </li>
+    
+  </ul>
+</div>
+
+    
+	   
+<div class="panel panel-default">
+  <div class="panel-heading codesum"><span class="anchor" id="boundprocedure-integrand_multiply_integrand"></span><h3>procedure(<a href='../interface/symmetric_operator.html'>symmetric_operator</a>), public, pass(lhs), deferred :: <strong>integrand_multiply_integrand</strong>  
+    
+  </h3></div>
+  
+  <div class="panel-body">
+    
+
+
+    <p>Integrand * integrand operator.</p>
+  </div>
+  
+  <ul class="list-group">
+    
+      <li class="list-group-item">
+      
+         
+            
+    
+    <h3>
+purefunction <a href='../interface/symmetric_operator.html'>symmetric_operator</a>(lhs, rhs) result(operator_result)
+    
+    
+    
+<small>Prototype</small></h3>
+    
+    <h4>Arguments</h4>
+    
+      
+      
+<table class="table table-striped varlist">
+<thead><tr><th>Type</th>
+<th>Intent</th><th>Optional</th>
+<th>Attributes</th><th></th><th>Name</th><th></th></thead>
+
+
+
+<tbody>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>class(<a href='../type/integrand.html'>integrand</a>),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>lhs</strong></td><td><p>Left hand side.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>class(<a href='../type/integrand.html'>integrand</a>),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>rhs</strong></td><td><p>Right hand side.</p></td>
+  
+</tr>
+
+</tbody>
+</table>
+
+      
+    
+    
+
+  
+  
+  
+  
+     <h4>Return Value <small>class(<a href='../type/integrand.html'>integrand</a>),
+  allocatable</small></h4>
+  <p>Operator result.</p>
+    
+    
+    <h4>Description</h4>
+       
+       
+
+
+       
+       <p>Symmetric type operator integrand.op.integrand.</p>
+        
+
+         
+      
+      </li>
+    
+  </ul>
+</div>
+
+    
+	   
+<div class="panel panel-default">
+  <div class="panel-heading codesum"><span class="anchor" id="boundprocedure-integrand_multiply_real"></span><h3>procedure(<a href='../interface/integrand_op_real.html'>integrand_op_real</a>), public, pass(lhs), deferred :: <strong>integrand_multiply_real</strong>  
+    
+  </h3></div>
   
   <div class="panel-body">
     
@@ -257,18 +525,86 @@
     
       <li class="list-group-item">
       
+         
+            
     
     <h3>
-  integrand_multiply_real()
-</h3>
+purefunction <a href='../interface/integrand_op_real.html'>integrand_op_real</a>(lhs, rhs) result(operator_result)
+    
+    
+    
+<small>Prototype</small></h3>
     
     <h4>Arguments</h4>
     
-      <em>None</em>
+      
+      
+<table class="table table-striped varlist">
+<thead><tr><th>Type</th>
+<th>Intent</th><th>Optional</th>
+<th>Attributes</th><th></th><th>Name</th><th></th></thead>
+
+
+
+<tbody>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>class(<a href='../type/integrand.html'>integrand</a>),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>lhs</strong></td><td><p>Left hand side.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>real(kind=R_P),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>rhs</strong></td><td><p>Right hand side.</p></td>
+  
+</tr>
+
+</tbody>
+</table>
+
+      
     
     
+
+  
+  
+  
+  
+     <h4>Return Value <small>class(<a href='../type/integrand.html'>integrand</a>),
+  allocatable</small></h4>
+  <p>Operator result.</p>
+    
+    
+    <h4>Description</h4>
+       
+       
+
+
+       
+       <p>Asymmetric type operator integrand.op.real.</p>
         
 
+         
+      
       </li>
     
   </ul>
@@ -277,9 +613,9 @@
     
 	   
 <div class="panel panel-default">
-  <div class="panel-heading codesum"><a class="anchor" name="bp-real_multiply_integrand"></a><h3>procedure, public, pass(rhs), deferred :: <strong>real_multiply_integrand</strong>  => real_multiply_integrand 
+  <div class="panel-heading codesum"><span class="anchor" id="boundprocedure-real_multiply_integrand"></span><h3>procedure(<a href='../interface/real_op_integrand.html'>real_op_integrand</a>), public, pass(rhs), deferred :: <strong>real_multiply_integrand</strong>  
     
-  <h3></div>
+  </h3></div>
   
   <div class="panel-body">
     
@@ -292,18 +628,86 @@
     
       <li class="list-group-item">
       
+         
+            
     
     <h3>
-  real_multiply_integrand()
-</h3>
+purefunction <a href='../interface/real_op_integrand.html'>real_op_integrand</a>(lhs, rhs) result(operator_result)
+    
+    
+    
+<small>Prototype</small></h3>
     
     <h4>Arguments</h4>
     
-      <em>None</em>
+      
+      
+<table class="table table-striped varlist">
+<thead><tr><th>Type</th>
+<th>Intent</th><th>Optional</th>
+<th>Attributes</th><th></th><th>Name</th><th></th></thead>
+
+
+
+<tbody>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>real(kind=R_P),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>lhs</strong></td><td><p>Left hand side.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>class(<a href='../type/integrand.html'>integrand</a>),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>rhs</strong></td><td><p>Right hand side.</p></td>
+  
+</tr>
+
+</tbody>
+</table>
+
+      
     
     
+
+  
+  
+  
+  
+     <h4>Return Value <small>class(<a href='../type/integrand.html'>integrand</a>),
+  allocatable</small></h4>
+  <p>Operator result.</p>
+    
+    
+    <h4>Description</h4>
+       
+       
+
+
+       
+       <p>Asymmetric type operator real.op.integrand.</p>
         
 
+         
+      
       </li>
     
   </ul>
@@ -312,9 +716,9 @@
     
 	   
 <div class="panel panel-default">
-  <div class="panel-heading codesum"><a class="anchor" name="bp-add"></a><h3>procedure, public, pass(lhs), deferred :: <strong>add</strong>  => add 
+  <div class="panel-heading codesum"><span class="anchor" id="boundprocedure-add"></span><h3>procedure(<a href='../interface/symmetric_operator.html'>symmetric_operator</a>), public, pass(lhs), deferred :: <strong>add</strong>  
     
-  <h3></div>
+  </h3></div>
   
   <div class="panel-body">
     
@@ -327,18 +731,86 @@
     
       <li class="list-group-item">
       
+         
+            
     
     <h3>
-  add()
-</h3>
+purefunction <a href='../interface/symmetric_operator.html'>symmetric_operator</a>(lhs, rhs) result(operator_result)
+    
+    
+    
+<small>Prototype</small></h3>
     
     <h4>Arguments</h4>
     
-      <em>None</em>
+      
+      
+<table class="table table-striped varlist">
+<thead><tr><th>Type</th>
+<th>Intent</th><th>Optional</th>
+<th>Attributes</th><th></th><th>Name</th><th></th></thead>
+
+
+
+<tbody>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>class(<a href='../type/integrand.html'>integrand</a>),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>lhs</strong></td><td><p>Left hand side.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>class(<a href='../type/integrand.html'>integrand</a>),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>rhs</strong></td><td><p>Right hand side.</p></td>
+  
+</tr>
+
+</tbody>
+</table>
+
+      
     
     
+
+  
+  
+  
+  
+     <h4>Return Value <small>class(<a href='../type/integrand.html'>integrand</a>),
+  allocatable</small></h4>
+  <p>Operator result.</p>
+    
+    
+    <h4>Description</h4>
+       
+       
+
+
+       
+       <p>Symmetric type operator integrand.op.integrand.</p>
         
 
+         
+      
       </li>
     
   </ul>
@@ -347,9 +819,9 @@
     
 	   
 <div class="panel panel-default">
-  <div class="panel-heading codesum"><a class="anchor" name="bp-assign_integrand"></a><h3>procedure, public, pass(lhs), deferred :: <strong>assign_integrand</strong>  => assign_integrand 
+  <div class="panel-heading codesum"><span class="anchor" id="boundprocedure-assign_integrand"></span><h3>procedure(<a href='../interface/assignment_integrand.html'>assignment_integrand</a>), public, pass(lhs), deferred :: <strong>assign_integrand</strong>  
     
-  <h3></div>
+  </h3></div>
   
   <div class="panel-body">
     
@@ -362,18 +834,77 @@
     
       <li class="list-group-item">
       
+         
+            
     
     <h3>
-  assign_integrand()
-</h3>
+puresubroutine <a href='../interface/assignment_integrand.html'>assignment_integrand</a>(lhs, rhs)
+    
+    
+    
+<small>Prototype</small></h3>
     
     <h4>Arguments</h4>
     
-      <em>None</em>
+      
+      
+<table class="table table-striped varlist">
+<thead><tr><th>Type</th>
+<th>Intent</th><th>Optional</th>
+<th>Attributes</th><th></th><th>Name</th><th></th></thead>
+
+
+
+<tbody>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>class(<a href='../type/integrand.html'>integrand</a>),</td>
+  <td>intent(inout)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>lhs</strong></td><td><p>Left hand side.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>class(<a href='../type/integrand.html'>integrand</a>),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>rhs</strong></td><td><p>Right hand side.</p></td>
+  
+</tr>
+
+</tbody>
+</table>
+
+      
     
     
+    
+    <h4>Description</h4>
+       
+       
+
+
+       
+       <p>Symmetric assignment integrand = integrand.</p>
         
 
+         
+      
       </li>
     
   </ul>
@@ -382,9 +913,9 @@
     
 	   
 <div class="panel panel-default">
-  <div class="panel-heading codesum"><a class="anchor" name="bp-assign_real"></a><h3>procedure, public, pass(lhs), deferred :: <strong>assign_real</strong>  => assign_real 
+  <div class="panel-heading codesum"><span class="anchor" id="boundprocedure-assign_real"></span><h3>procedure(<a href='../interface/assignment_real.html'>assignment_real</a>), public, pass(lhs), deferred :: <strong>assign_real</strong>  
     
-  <h3></div>
+  </h3></div>
   
   <div class="panel-body">
     
@@ -397,18 +928,77 @@
     
       <li class="list-group-item">
       
+         
+            
     
     <h3>
-  assign_real()
-</h3>
+puresubroutine <a href='../interface/assignment_real.html'>assignment_real</a>(lhs, rhs)
+    
+    
+    
+<small>Prototype</small></h3>
     
     <h4>Arguments</h4>
     
-      <em>None</em>
+      
+      
+<table class="table table-striped varlist">
+<thead><tr><th>Type</th>
+<th>Intent</th><th>Optional</th>
+<th>Attributes</th><th></th><th>Name</th><th></th></thead>
+
+
+
+<tbody>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>class(<a href='../type/integrand.html'>integrand</a>),</td>
+  <td>intent(inout)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>lhs</strong></td><td><p>Left hand side.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>real(kind=R_P),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>rhs</strong></td><td><p>Right hand side.</p></td>
+  
+</tr>
+
+</tbody>
+</table>
+
+      
     
     
+    
+    <h4>Description</h4>
+       
+       
+
+
+       
+       <p>Asymmetric assignment integrand = real.</p>
         
 
+         
+      
       </li>
     
   </ul>
@@ -417,9 +1007,9 @@
     
 	   
 <div class="panel panel-default">
-  <div class="panel-heading codesum"><a class="anchor" name="bp-operator(+)"></a><h3>generic, public :: <strong>operator(+)</strong>  => add 
+  <div class="panel-heading codesum"><span class="anchor" id="boundprocedure-operator%28%2B%29"></span><h3>generic, public :: <strong>operator(+)</strong>  => <a href='../type/integrand.html#boundprocedure-add'>add</a> 
     
-  <h3></div>
+  </h3></div>
   
   <div class="panel-body">
     
@@ -432,9 +1022,13 @@
     
       <li class="list-group-item">
       
+         
     
     <h3>
-  add()
+pass(lhs) deferred <a href='../type/integrand.html#boundprocedure-add'>add</a>()
+    
+    
+    
 </h3>
     
     <h4>Arguments</h4>
@@ -442,8 +1036,17 @@
       <em>None</em>
     
     
+    
+    <h4>Description</h4>
+       
+       
+
+
+       
+       <p>Integrand + integrand oprator.</p>
         
 
+      
       </li>
     
   </ul>
@@ -452,9 +1055,9 @@
     
 	   
 <div class="panel panel-default">
-  <div class="panel-heading codesum"><a class="anchor" name="bp-operator(*)"></a><h3>generic, public :: <strong>operator(*)</strong>  => real_multiply_integrand, integrand_multiply_real 
+  <div class="panel-heading codesum"><span class="anchor" id="boundprocedure-operator%28%2A%29"></span><h3>generic, public :: <strong>operator(*)</strong>  => <a href='../type/integrand.html#boundprocedure-integrand_multiply_integrand'>integrand_multiply_integrand</a>, <a href='../type/integrand.html#boundprocedure-real_multiply_integrand'>real_multiply_integrand</a>, <a href='../type/integrand.html#boundprocedure-integrand_multiply_real'>integrand_multiply_real</a> 
     
-  <h3></div>
+  </h3></div>
   
   <div class="panel-body">
     
@@ -467,9 +1070,13 @@
     
       <li class="list-group-item">
       
+         
     
     <h3>
-  real_multiply_integrand()
+pass(lhs) deferred <a href='../type/integrand.html#boundprocedure-integrand_multiply_integrand'>integrand_multiply_integrand</a>()
+    
+    
+    
 </h3>
     
     <h4>Arguments</h4>
@@ -477,15 +1084,28 @@
       <em>None</em>
     
     
+    
+    <h4>Description</h4>
+       
+       
+
+
+       
+       <p>Integrand * integrand operator.</p>
         
 
+      
       </li>
     
       <li class="list-group-item">
       
+         
     
     <h3>
-  integrand_multiply_real()
+pass(rhs) deferred <a href='../type/integrand.html#boundprocedure-real_multiply_integrand'>real_multiply_integrand</a>()
+    
+    
+    
 </h3>
     
     <h4>Arguments</h4>
@@ -493,8 +1113,46 @@
       <em>None</em>
     
     
+    
+    <h4>Description</h4>
+       
+       
+
+
+       
+       <p>Real * integrand operator.</p>
         
 
+      
+      </li>
+    
+      <li class="list-group-item">
+      
+         
+    
+    <h3>
+pass(lhs) deferred <a href='../type/integrand.html#boundprocedure-integrand_multiply_real'>integrand_multiply_real</a>()
+    
+    
+    
+</h3>
+    
+    <h4>Arguments</h4>
+    
+      <em>None</em>
+    
+    
+    
+    <h4>Description</h4>
+       
+       
+
+
+       
+       <p>Integrand * real operator.</p>
+        
+
+      
       </li>
     
   </ul>
@@ -503,9 +1161,9 @@
     
 	   
 <div class="panel panel-default">
-  <div class="panel-heading codesum"><a class="anchor" name="bp-assignment(=)"></a><h3>generic, public :: <strong>assignment(=)</strong>  => assign_integrand, assign_real 
+  <div class="panel-heading codesum"><span class="anchor" id="boundprocedure-assignment%28%3D%29"></span><h3>generic, public :: <strong>assignment(=)</strong>  => <a href='../type/integrand.html#boundprocedure-assign_integrand'>assign_integrand</a>, <a href='../type/integrand.html#boundprocedure-assign_real'>assign_real</a> 
     
-  <h3></div>
+  </h3></div>
   
   <div class="panel-body">
     
@@ -518,9 +1176,13 @@
     
       <li class="list-group-item">
       
+         
     
     <h3>
-  assign_integrand()
+pass(lhs) deferred <a href='../type/integrand.html#boundprocedure-assign_integrand'>assign_integrand</a>()
+    
+    
+    
 </h3>
     
     <h4>Arguments</h4>
@@ -528,15 +1190,28 @@
       <em>None</em>
     
     
+    
+    <h4>Description</h4>
+       
+       
+
+
+       
+       <p>Integrand = integrand.</p>
         
 
+      
       </li>
     
       <li class="list-group-item">
       
+         
     
     <h3>
-  assign_real()
+pass(lhs) deferred <a href='../type/integrand.html#boundprocedure-assign_real'>assign_real</a>()
+    
+    
+    
 </h3>
     
     <h4>Arguments</h4>
@@ -544,8 +1219,17 @@
       <em>None</em>
     
     
+    
+    <h4>Description</h4>
+       
+       
+
+
+       
+       <p>Integrand = real.</p>
         
 
+      
       </li>
     
   </ul>
@@ -557,21 +1241,26 @@
     
     
     <section>
-    <h2><a class="anchor" name="src"></a>Source Code</h2>
+    <h2><span class="anchor" id="src"></span>Source Code</h2>
     <div class="highlight"><pre><span class="k">type</span><span class="p">,</span> <span class="k">abstract</span> <span class="kd">::</span> <span class="n">integrand</span>
   <span class="c">!&lt; Abstract type for building FOODiE ODE integrators.</span>
   <span class="k">contains</span>
-    <span class="c">! public deferred procedures that concrete interpolators must implement</span>
-    <span class="k">procedure</span><span class="p">(</span><span class="n">time_derivative</span><span class="p">),</span>      <span class="k">pass</span><span class="p">(</span><span class="n">self</span><span class="p">),</span> <span class="k">deferred</span><span class="p">,</span> <span class="k">public</span> <span class="kd">::</span> <span class="n">t</span>                       <span class="c">!&lt; Time derivative, residuals function.</span>
-    <span class="k">procedure</span><span class="p">(</span><span class="n">integrand_op_real</span><span class="p">),</span>    <span class="k">pass</span><span class="p">(</span><span class="n">lhs</span><span class="p">),</span>  <span class="k">deferred</span><span class="p">,</span> <span class="k">public</span> <span class="kd">::</span> <span class="n">integrand_multiply_real</span> <span class="c">!&lt; Integrand * real operator.</span>
-    <span class="k">procedure</span><span class="p">(</span><span class="n">real_op_integrand</span><span class="p">),</span>    <span class="k">pass</span><span class="p">(</span><span class="n">rhs</span><span class="p">),</span>  <span class="k">deferred</span><span class="p">,</span> <span class="k">public</span> <span class="kd">::</span> <span class="n">real_multiply_integrand</span> <span class="c">!&lt; Real * integrand operator.</span>
-    <span class="k">procedure</span><span class="p">(</span><span class="n">symmetric_operator</span><span class="p">),</span>   <span class="k">pass</span><span class="p">(</span><span class="n">lhs</span><span class="p">),</span>  <span class="k">deferred</span><span class="p">,</span> <span class="k">public</span> <span class="kd">::</span> <span class="n">add</span>                     <span class="c">!&lt; Integrand + integrand oprator.</span>
-    <span class="k">procedure</span><span class="p">(</span><span class="n">assignment_integrand</span><span class="p">),</span> <span class="k">pass</span><span class="p">(</span><span class="n">lhs</span><span class="p">),</span>  <span class="k">deferred</span><span class="p">,</span> <span class="k">public</span> <span class="kd">::</span> <span class="n">assign_integrand</span>        <span class="c">!&lt; Integrand = integrand.</span>
-    <span class="k">procedure</span><span class="p">(</span><span class="n">assignment_real</span><span class="p">),</span>      <span class="k">pass</span><span class="p">(</span><span class="n">lhs</span><span class="p">),</span>  <span class="k">deferred</span><span class="p">,</span> <span class="k">public</span> <span class="kd">::</span> <span class="n">assign_real</span>             <span class="c">!&lt; Integrand = real.</span>
+    <span class="c">! public deferred procedures that concrete integrand-field must implement</span>
+    <span class="k">procedure</span><span class="p">(</span><span class="n">time_derivative</span><span class="p">),</span>       <span class="k">pass</span><span class="p">(</span><span class="n">self</span><span class="p">),</span> <span class="k">deferred</span><span class="p">,</span> <span class="k">public</span> <span class="kd">::</span> <span class="n">t</span>                     <span class="c">!&lt; Time derivative, residuals.</span>
+    <span class="k">procedure</span><span class="p">(</span><span class="n">update_previous_steps</span><span class="p">),</span> <span class="k">pass</span><span class="p">(</span><span class="n">self</span><span class="p">),</span> <span class="k">deferred</span><span class="p">,</span> <span class="k">public</span> <span class="kd">::</span> <span class="n">update_previous_steps</span> <span class="c">!&lt; Time derivative, residuals.</span>
+    <span class="c">! operators</span>
+    <span class="k">procedure</span><span class="p">(</span><span class="n">symmetric_operator</span><span class="p">),</span>   <span class="k">pass</span><span class="p">(</span><span class="n">lhs</span><span class="p">),</span>  <span class="k">deferred</span><span class="p">,</span> <span class="k">public</span> <span class="kd">::</span> <span class="n">integrand_multiply_integrand</span> <span class="c">!&lt; Integrand * integrand operator.</span>
+    <span class="k">procedure</span><span class="p">(</span><span class="n">integrand_op_real</span><span class="p">),</span>    <span class="k">pass</span><span class="p">(</span><span class="n">lhs</span><span class="p">),</span>  <span class="k">deferred</span><span class="p">,</span> <span class="k">public</span> <span class="kd">::</span> <span class="n">integrand_multiply_real</span>      <span class="c">!&lt; Integrand * real operator.</span>
+    <span class="k">procedure</span><span class="p">(</span><span class="n">real_op_integrand</span><span class="p">),</span>    <span class="k">pass</span><span class="p">(</span><span class="n">rhs</span><span class="p">),</span>  <span class="k">deferred</span><span class="p">,</span> <span class="k">public</span> <span class="kd">::</span> <span class="n">real_multiply_integrand</span>      <span class="c">!&lt; Real * integrand operator.</span>
+    <span class="k">procedure</span><span class="p">(</span><span class="n">symmetric_operator</span><span class="p">),</span>   <span class="k">pass</span><span class="p">(</span><span class="n">lhs</span><span class="p">),</span>  <span class="k">deferred</span><span class="p">,</span> <span class="k">public</span> <span class="kd">::</span> <span class="n">add</span>                          <span class="c">!&lt; Integrand + integrand oprator.</span>
+    <span class="k">procedure</span><span class="p">(</span><span class="n">assignment_integrand</span><span class="p">),</span> <span class="k">pass</span><span class="p">(</span><span class="n">lhs</span><span class="p">),</span>  <span class="k">deferred</span><span class="p">,</span> <span class="k">public</span> <span class="kd">::</span> <span class="n">assign_integrand</span>             <span class="c">!&lt; Integrand = integrand.</span>
+    <span class="k">procedure</span><span class="p">(</span><span class="n">assignment_real</span><span class="p">),</span>      <span class="k">pass</span><span class="p">(</span><span class="n">lhs</span><span class="p">),</span>  <span class="k">deferred</span><span class="p">,</span> <span class="k">public</span> <span class="kd">::</span> <span class="n">assign_real</span>                  <span class="c">!&lt; Integrand = real.</span>
     <span class="c">! operators overloading</span>
-    <span class="k">generic</span><span class="p">,</span> <span class="k">public</span> <span class="kd">::</span> <span class="n">operator</span><span class="p">(</span><span class="o">+</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="n">add</span>                                              <span class="c">!&lt; Overloading + operator.</span>
-    <span class="k">generic</span><span class="p">,</span> <span class="k">public</span> <span class="kd">::</span> <span class="n">operator</span><span class="p">(</span><span class="o">*</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="n">real_multiply_integrand</span><span class="p">,</span> <span class="n">integrand_multiply_real</span> <span class="c">!&lt; Overloading * operator.</span>
-    <span class="k">generic</span><span class="p">,</span> <span class="k">public</span> <span class="kd">::</span> <span class="n">assignment</span><span class="p">(</span><span class="o">=</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="n">assign_integrand</span><span class="p">,</span> <span class="n">assign_real</span>                  <span class="c">!&lt; Overloading = assignament.</span>
+    <span class="k">generic</span><span class="p">,</span> <span class="k">public</span> <span class="kd">::</span> <span class="n">operator</span><span class="p">(</span><span class="o">+</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="n">add</span>                              <span class="c">!&lt; Overloading + operator.</span>
+    <span class="k">generic</span><span class="p">,</span> <span class="k">public</span> <span class="kd">::</span> <span class="n">operator</span><span class="p">(</span><span class="o">*</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="n">integrand_multiply_integrand</span><span class="p">,</span> <span class="p">&amp;</span>
+                                      <span class="n">real_multiply_integrand</span><span class="p">,</span> <span class="p">&amp;</span>
+                                      <span class="n">integrand_multiply_real</span>          <span class="c">!&lt; Overloading * operator.</span>
+    <span class="k">generic</span><span class="p">,</span> <span class="k">public</span> <span class="kd">::</span> <span class="n">assignment</span><span class="p">(</span><span class="o">=</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="n">assign_integrand</span><span class="p">,</span> <span class="n">assign_real</span>  <span class="c">!&lt; Overloading = assignament.</span>
 <span class="n">endtype</span> <span class="n">integrand</span>
 </pre></div>
 

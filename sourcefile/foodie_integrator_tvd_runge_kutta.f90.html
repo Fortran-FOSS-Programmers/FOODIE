@@ -38,7 +38,7 @@
   <body>
 
     <!-- Fixed navbar -->
-    <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+    <nav class="navbar navbar-inverse navbar-fixed-top">
       <div class="container">
         <div class="navbar-header">
           <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
@@ -67,7 +67,7 @@
             <li><a href="../lists/types.html">Derived Types</a></li>
 				
 				
-            <li><a href="../program/integrate_lorenz.html">Program</a></li>
+            <li><a href="../lists/programs.html">Programs</a></li>
 				
           </ul>
         
@@ -110,7 +110,8 @@
   
      <li class="active">foodie_integrator_tvd_runge_kutta.f90</li>
   </ol>
-  </div>
+</div>
+</div>
 </div>
     
   </div>
@@ -142,6 +143,10 @@
   
   
   
+  
+  
+  
+  
   <div class="panel panel-primary">
     <div class="panel-heading text-left"><h3 class="panel-title">Source Code</h3></div>
     <div class="list-group">
@@ -155,21 +160,31 @@
     <div class="panel-heading text-left"><h3 class="panel-title">All Source Files</h3></div>
     <div class="list-group">
       
+      <a class="list-group-item" href="../sourcefile/burgers.f90.html">burgers.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/euler-1d.f90.html">euler-1D.f90</a>
+      
       <a class="list-group-item" href="../sourcefile/foodie.f90.html">foodie.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/foodie_integrator_adams_bashforth.f90.html">foodie_integrator_adams_bashforth.f90</a>
       
       <a class="list-group-item" href="../sourcefile/foodie_integrator_euler_explicit.f90.html">foodie_integrator_euler_explicit.f90</a>
       
       <a class="list-group-item" href="../sourcefile/foodie_integrator_tvd_runge_kutta.f90.html">foodie_integrator_tvd_runge_kutta.f90</a>
       
-      <a class="list-group-item" href="../sourcefile/ir_precision.f90.html">IR_Precision.f90</a>
-      
       <a class="list-group-item" href="../sourcefile/lorenz.f90.html">lorenz.f90</a>
       
-      <a class="list-group-item" href="../sourcefile/pyplot_module.f90.html">pyplot_module.f90</a>
+      <a class="list-group-item" href="../sourcefile/oscillation.f90.html">oscillation.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/type_burgers.f90.html">type_burgers.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/type_euler-1d.f90.html">type_euler-1D.f90</a>
       
       <a class="list-group-item" href="../sourcefile/type_integrand.f90.html">type_integrand.f90</a>
       
       <a class="list-group-item" href="../sourcefile/type_lorenz.f90.html">type_lorenz.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/type_oscillation.f90.html">type_oscillation.f90</a>
       
     </div>
   </div>
@@ -180,7 +195,7 @@
     <p>FOODiE integrator: provide an explicit class of TVD or SSP Runge-Kutta schemes, from 1st to 4th order accutate.</p>
     <br>
     <section>
-    <h2><a class="anchor" name="src"></a>Source Code</h2>
+    <h2><span class="anchor" id="src"></span>Source Code</h2>
     <div class="highlight"><pre><span class="c">!&lt; FOODiE integrator: provide an explicit class of TVD or SSP Runge-Kutta schemes, from 1st to 4th order accutate.</span>
 <span class="k">module </span><span class="n">foodie_integrator_tvd_runge_kutta</span>
 <span class="c">!-----------------------------------------------------------------------------------------------------------------------------------</span>
@@ -236,7 +251,7 @@
 <span class="c">!&lt; $$\beta = \left[1\right]$$</span>
 <span class="c">!&lt; $$\alpha = \left[ {\begin{array}{*{20}{c}} 0&amp;0 \end{array}} \right]$$</span>
 <span class="c">!&lt; $$\gamma = \left[0\right]$$</span>
-
+<span class="c">!&lt;</span>
 <span class="c">!&lt;##### 2 stages, SSP, 2nd order</span>
 <span class="c">!&lt; This scheme is an optmial SSP(2, 2) without low-storage algorithm. See *High Order Strong Stability Preserving Time</span>
 <span class="c">!&lt; Discretizations*, Gottlieb, S., Ketcheson, D. I., Shu, C.W., Journal of Scientific Computing, vol. 38, N. 3, 2009,</span>
@@ -244,7 +259,7 @@
 <span class="c">!&lt; $$\beta = \left[ {\begin{array}{*{20}{c}} \frac{1}{2}&amp;\frac{1}{2} \end{array}} \right]$$</span>
 <span class="c">!&lt; $$\alpha = \left[ {\begin{array}{*{20}{c}} 0&amp;0\\ 1&amp;0 \end{array}} \right]$$</span>
 <span class="c">!&lt; $$\gamma = \left[ {\begin{array}{*{20}{c}} 0 \\ 1 \end{array}} \right]$$</span>
-
+<span class="c">!&lt;</span>
 <span class="c">!&lt;##### 3 stages, SSP, 3rd order</span>
 <span class="c">!&lt; This scheme is an optmial SSP(3, 3) without low-storage algorithm. See *High Order Strong Stability Preserving Time</span>
 <span class="c">!&lt; Discretizations*, Gottlieb, S., Ketcheson, D. I., Shu, C.W., Journal of Scientific Computing, vol. 38, N. 3, 2009,</span>
@@ -252,7 +267,7 @@
 <span class="c">!&lt; $$\beta = \left[ {\begin{array}{*{20}{c}} \frac{1}{6}&amp;\frac{1}{6}&amp;\frac{1}{3}  \end{array}} \right]$$</span>
 <span class="c">!&lt; $$\alpha = \left[ {\begin{array}{*{20}{c}} 0&amp;0&amp;0\\ 1&amp;0&amp;0\\ \frac{1}{4}&amp;\frac{1}{4}&amp;0 \end{array}} \right]$$</span>
 <span class="c">!&lt; $$\gamma = \left[ {\begin{array}{*{20}{c}} 0 \\ 1 \\ \frac{1}{2} \end{array}} \right]$$</span>
-
+<span class="c">!&lt;</span>
 <span class="c">!&lt;##### 5 stages, SSP, 4th order</span>
 <span class="c">!&lt; This scheme is an optmial SSP(5, 4) without low-storage algorithm. See *High Order Strong Stability Preserving Time</span>
 <span class="c">!&lt; Discretizations*, Gottlieb, S., Ketcheson, D. I., Shu, C.W., Journal of Scientific Computing, vol. 38, N. 3, 2009,</span>
@@ -300,7 +315,7 @@
 <span class="k">contains</span>
 <span class="k">  elemental function </span><span class="n">create</span><span class="p">(</span><span class="n">stages</span><span class="p">)</span> <span class="k">result</span><span class="p">(</span><span class="n">rk</span><span class="p">)</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
-  <span class="c">!&lt; Create the actual RK integrators: initialize the Butcher&#39; table coefficients.</span>
+  <span class="c">!&lt; Create the actual RK integrator: initialize the Butcher&#39; table coefficients.</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
   <span class="kt">integer</span><span class="p">(</span><span class="n">I_P</span><span class="p">),</span> <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span>         <span class="kd">::</span> <span class="n">stages</span> <span class="c">!&lt; Number of stages used.</span>
   <span class="k">type</span><span class="p">(</span><span class="n">tvd_runge_kutta_integrator</span><span class="p">)</span> <span class="kd">::</span> <span class="n">rk</span>     <span class="c">!&lt; Actual RK integrator.</span>
@@ -315,7 +330,7 @@
   <span class="c">! public methods</span>
   <span class="k">elemental subroutine </span><span class="n">init</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">stages</span><span class="p">)</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
-  <span class="c">!&lt; Create the actual RK integrators: initialize the Butcher&#39; table coefficients.</span>
+  <span class="c">!&lt; Create the actual RK integrator: initialize the Butcher&#39; table coefficients.</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
   <span class="k">class</span><span class="p">(</span><span class="n">tvd_runge_kutta_integrator</span><span class="p">),</span> <span class="k">intent</span><span class="p">(</span><span class="n">INOUT</span><span class="p">)</span> <span class="kd">::</span> <span class="n">self</span>   <span class="c">!&lt; RK integrator.</span>
   <span class="kt">integer</span><span class="p">(</span><span class="n">I_P</span><span class="p">),</span>                      <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span>    <span class="kd">::</span> <span class="n">stages</span> <span class="c">!&lt; Number of stages used.</span>

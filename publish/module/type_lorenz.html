@@ -38,7 +38,7 @@
   <body>
 
     <!-- Fixed navbar -->
-    <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+    <nav class="navbar navbar-inverse navbar-fixed-top">
       <div class="container">
         <div class="navbar-header">
           <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
@@ -67,7 +67,7 @@
             <li><a href="../lists/types.html">Derived Types</a></li>
 				
 				
-            <li><a href="../program/integrate_lorenz.html">Program</a></li>
+            <li><a href="../lists/programs.html">Programs</a></li>
 				
           </ul>
         
@@ -112,7 +112,8 @@
   
      <li class="active">type_lorenz</li>
   </ol>
-  </div>
+</div>
+</div>
 </div>
     
   </div>
@@ -126,15 +127,6 @@
   
   
   
-  
-  <div class="panel panel-primary">
-    <div class="panel-heading text-left"><h3 class="panel-title">Interfaces</h3></div>
-    <div class="list-group">
-      
-      <a class="list-group-item" href="../module/type_lorenz.html#intr-lorenz">lorenz</a>
-      
-    </div>
-  </div>
   
   
   
@@ -154,11 +146,11 @@
     <div class="panel-heading text-left"><h3 class="panel-title">Functions</h3></div>
     <div class="list-group">
       
-      <a class="list-group-item" href="../module/type_lorenz.html#proc-constructor_lorenz">constructor_lorenz</a>
+      <a class="list-group-item" href="../module/type_lorenz.html#proc-output%7E2">output</a>
       
-      <a class="list-group-item" href="../module/type_lorenz.html#proc-output">output</a>
+      <a class="list-group-item" href="../module/type_lorenz.html#proc-dlorenz_dt">dLorenz_dt</a>
       
-      <a class="list-group-item" href="../module/type_lorenz.html#proc-dLorenz_dt">dLorenz_dt</a>
+      <a class="list-group-item" href="../module/type_lorenz.html#proc-lorenz_multiply_lorenz">lorenz_multiply_lorenz</a>
       
       <a class="list-group-item" href="../module/type_lorenz.html#proc-lorenz_multiply_real">lorenz_multiply_real</a>
       
@@ -175,12 +167,19 @@
     <div class="panel-heading text-left"><h3 class="panel-title">Subroutines</h3></div>
     <div class="list-group">
       
+      <a class="list-group-item" href="../module/type_lorenz.html#proc-init%7E4">init</a>
+      
+      <a class="list-group-item" href="../module/type_lorenz.html#proc-update_previous_steps%7E2">update_previous_steps</a>
+      
       <a class="list-group-item" href="../module/type_lorenz.html#proc-lorenz_assign_lorenz">lorenz_assign_lorenz</a>
       
       <a class="list-group-item" href="../module/type_lorenz.html#proc-lorenz_assign_real">lorenz_assign_real</a>
       
     </div>
   </div>
+  
+  
+  
   
   
   
@@ -194,17 +193,21 @@
       
       <a class="list-group-item" href="../module/foodie.html">foodie</a>
       
+      <a class="list-group-item" href="../module/foodie_integrator_adams_bashforth.html">foodie_integrator_adams_bashforth</a>
+      
       <a class="list-group-item" href="../module/foodie_integrator_euler_explicit.html">foodie_integrator_euler_explicit</a>
       
       <a class="list-group-item" href="../module/foodie_integrator_tvd_runge_kutta.html">foodie_integrator_tvd_runge_kutta</a>
       
-      <a class="list-group-item" href="../module/ir_precision.html">IR_Precision</a>
+      <a class="list-group-item" href="../module/type_burgers.html">type_burgers</a>
       
-      <a class="list-group-item" href="../module/pyplot_module.html">pyplot_module</a>
+      <a class="list-group-item" href="../module/type_euler_1d.html">type_euler_1D</a>
       
       <a class="list-group-item" href="../module/type_integrand.html">type_integrand</a>
       
       <a class="list-group-item" href="../module/type_lorenz.html">type_lorenz</a>
+      
+      <a class="list-group-item" href="../module/type_oscillation.html">type_oscillation</a>
       
     </div>
   </div>
@@ -214,160 +217,235 @@
     
     <div class="col-lg-9" id='text'>
     
+    
   
     <ul class="list-inline">
       <li><h4>Uses:</h4></li>
       
-      <li><a href='../module/ir_precision.html'>IR_Precision</a></li>
+      <li>IR_Precision</li>
       
       <li><a href='../module/foodie.html'>foodie</a></li>
       
     </ul>
   
 
+    
+            <img class="depgraph" alt="dependency graph" src=../graphs/module%7E%7Etype_lorenz%7E%7EUsesGraph.svg usemap="#module~~type_lorenz~~UsesGraph">
+            <map id="module~~type_lorenz~~UsesGraph" name="module~~type_lorenz~~UsesGraph">
+<area shape="rect" id="node4" href="../module/foodie_integrator_adams_bashforth.html" title="foodie_integrator_adams_bashforth" alt="" coords="311,61,555,93"/>
+<area shape="rect" id="node5" href="../module/foodie_integrator_tvd_runge_kutta.html" title="foodie_integrator_tvd_runge_kutta" alt="" coords="315,117,551,149"/>
+<area shape="rect" id="node6" href="../module/type_integrand.html" title="type_integrand" alt="" coords="151,143,263,175"/>
+<area shape="rect" id="node7" href="../module/foodie_integrator_euler_explicit.html" title="foodie_integrator_euler_explicit" alt="" coords="325,223,541,255"/>
+<area shape="rect" id="node3" href="../module/foodie.html" title="foodie" alt="" coords="603,117,675,149"/>
+</map>
+
+            <div><a type="button" class="graph-help" data-toggle="modal" href="#graph-help-text">Help</a></div>
+            <div class="modal fade" id="graph-help-text" tabindex="-1" role="dialog">
+              <div class="modal-dialog modal-lg" role="document">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="-graph-help-label">Graph Key</h4>
+                  </div>
+                  <div class="modal-body">
+                    
+Nodes of different colours represent the following:
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.38.0 (20140413.2041)
+ -->
+<!-- Title: Graph Key Pages: 1 -->
+<svg width="641pt" height="26pt"
+ viewBox="0.00 0.00 641.00 25.98" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="graph0" class="graph" transform="scale(0.811906 0.811906) rotate(0) translate(4 28)">
+<title>Graph Key</title>
+<polygon fill="white" stroke="none" points="-4,4 -4,-28 785.5,-28 785.5,4 -4,4"/>
+<!-- Module -->
+<g id="node1" class="node"><title>Module</title>
+<polygon fill="#337ab7" stroke="#337ab7" points="54,-24 0,-24 0,-0 54,-0 54,-24"/>
+<text text-anchor="middle" x="27" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Module</text>
+</g>
+<!-- Submodule -->
+<g id="node2" class="node"><title>Submodule</title>
+<polygon fill="#5bc0de" stroke="#5bc0de" points="139.5,-24 72.5,-24 72.5,-0 139.5,-0 139.5,-24"/>
+<text text-anchor="middle" x="106" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Submodule</text>
+</g>
+<!-- Type -->
+<g id="node3" class="node"><title>Type</title>
+<polygon fill="#5cb85c" stroke="#5cb85c" points="212,-24 158,-24 158,-0 212,-0 212,-24"/>
+<text text-anchor="middle" x="185" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Type</text>
+</g>
+<!-- Subroutine -->
+<g id="node4" class="node"><title>Subroutine</title>
+<polygon fill="#d9534f" stroke="#d9534f" points="294,-24 230,-24 230,-0 294,-0 294,-24"/>
+<text text-anchor="middle" x="262" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Subroutine</text>
+</g>
+<!-- Function -->
+<g id="node5" class="node"><title>Function</title>
+<polygon fill="#d94e8f" stroke="#d94e8f" points="366,-24 312,-24 312,-0 366,-0 366,-24"/>
+<text text-anchor="middle" x="339" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Function</text>
+</g>
+<!-- Interface -->
+<g id="node6" class="node"><title>Interface</title>
+<polygon fill="#a7506f" stroke="#a7506f" points="439.5,-24 384.5,-24 384.5,-0 439.5,-0 439.5,-24"/>
+<text text-anchor="middle" x="412" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Interface</text>
+</g>
+<!-- Unknown Procedure Type -->
+<g id="node7" class="node"><title>Unknown Procedure Type</title>
+<polygon fill="#777777" stroke="#777777" points="594,-24 458,-24 458,-0 594,-0 594,-24"/>
+<text text-anchor="middle" x="526" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Unknown Procedure Type</text>
+</g>
+<!-- Program -->
+<g id="node8" class="node"><title>Program</title>
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="666,-24 612,-24 612,-0 666,-0 666,-24"/>
+<text text-anchor="middle" x="639" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Program</text>
+</g>
+<!-- This Page&#39;s Entity -->
+<g id="node9" class="node"><title>This Page&#39;s Entity</title>
+<polygon fill="none" stroke="black" points="781.5,-24 684.5,-24 684.5,-0 781.5,-0 781.5,-24"/>
+<text text-anchor="middle" x="733" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50">This Page&#39;s Entity</text>
+</g>
+</g>
+</svg>
+
+<h5>Module Graph</h5>
+<p>Solid arrows point from a parent (sub)module to the submodule which is
+descended from it. Dashed arrows point from a module being used to the
+module using it.</p>
+<h5>Type Graph</h5>
+<p>Solid arrows point from one derived type to another which extends
+(inherits from) it. Dashed arrows point from a derived type to another
+type containing it as a components, with a label listing the name(s) of
+said component(s).</p>
+<h5>Call Graph</h5>
+<p>Solid arrows point from a procedure to one which it calls. Dashed 
+arrows point from an interface to procedures which implement that interface.
+This could include the module procedures in a generic interface or the
+implementation in a submodule of an interface in a parent module.</p>
+
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+    
     <p>Define Lorenz field that is a concrete extension of the abstract integrand type.</p>
+    
+    
+    <h3>Used By</h3>
+    
+            <img class="depgraph" alt="dependency graph" src=../graphs/module%7E%7Etype_lorenz%7E%7EUsedByGraph.svg usemap="#module~~type_lorenz~~UsedByGraph">
+            <map id="module~~type_lorenz~~UsedByGraph" name="module~~type_lorenz~~UsedByGraph">
+<area shape="rect" id="node2" href="../program/integrate_lorenz.html" title="integrate_lorenz" alt="" coords="144,5,264,37"/>
+</map>
+
+            <div><a type="button" class="graph-help" data-toggle="modal" href="#graph-help-text">Help</a></div>
+            <div class="modal fade" id="graph-help-text" tabindex="-1" role="dialog">
+              <div class="modal-dialog modal-lg" role="document">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="-graph-help-label">Graph Key</h4>
+                  </div>
+                  <div class="modal-body">
+                    
+Nodes of different colours represent the following:
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.38.0 (20140413.2041)
+ -->
+<!-- Title: Graph Key Pages: 1 -->
+<svg width="641pt" height="26pt"
+ viewBox="0.00 0.00 641.00 25.98" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="graph0" class="graph" transform="scale(0.811906 0.811906) rotate(0) translate(4 28)">
+<title>Graph Key</title>
+<polygon fill="white" stroke="none" points="-4,4 -4,-28 785.5,-28 785.5,4 -4,4"/>
+<!-- Module -->
+<g id="node1" class="node"><title>Module</title>
+<polygon fill="#337ab7" stroke="#337ab7" points="54,-24 0,-24 0,-0 54,-0 54,-24"/>
+<text text-anchor="middle" x="27" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Module</text>
+</g>
+<!-- Submodule -->
+<g id="node2" class="node"><title>Submodule</title>
+<polygon fill="#5bc0de" stroke="#5bc0de" points="139.5,-24 72.5,-24 72.5,-0 139.5,-0 139.5,-24"/>
+<text text-anchor="middle" x="106" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Submodule</text>
+</g>
+<!-- Type -->
+<g id="node3" class="node"><title>Type</title>
+<polygon fill="#5cb85c" stroke="#5cb85c" points="212,-24 158,-24 158,-0 212,-0 212,-24"/>
+<text text-anchor="middle" x="185" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Type</text>
+</g>
+<!-- Subroutine -->
+<g id="node4" class="node"><title>Subroutine</title>
+<polygon fill="#d9534f" stroke="#d9534f" points="294,-24 230,-24 230,-0 294,-0 294,-24"/>
+<text text-anchor="middle" x="262" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Subroutine</text>
+</g>
+<!-- Function -->
+<g id="node5" class="node"><title>Function</title>
+<polygon fill="#d94e8f" stroke="#d94e8f" points="366,-24 312,-24 312,-0 366,-0 366,-24"/>
+<text text-anchor="middle" x="339" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Function</text>
+</g>
+<!-- Interface -->
+<g id="node6" class="node"><title>Interface</title>
+<polygon fill="#a7506f" stroke="#a7506f" points="439.5,-24 384.5,-24 384.5,-0 439.5,-0 439.5,-24"/>
+<text text-anchor="middle" x="412" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Interface</text>
+</g>
+<!-- Unknown Procedure Type -->
+<g id="node7" class="node"><title>Unknown Procedure Type</title>
+<polygon fill="#777777" stroke="#777777" points="594,-24 458,-24 458,-0 594,-0 594,-24"/>
+<text text-anchor="middle" x="526" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Unknown Procedure Type</text>
+</g>
+<!-- Program -->
+<g id="node8" class="node"><title>Program</title>
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="666,-24 612,-24 612,-0 666,-0 666,-24"/>
+<text text-anchor="middle" x="639" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Program</text>
+</g>
+<!-- This Page&#39;s Entity -->
+<g id="node9" class="node"><title>This Page&#39;s Entity</title>
+<polygon fill="none" stroke="black" points="781.5,-24 684.5,-24 684.5,-0 781.5,-0 781.5,-24"/>
+<text text-anchor="middle" x="733" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50">This Page&#39;s Entity</text>
+</g>
+</g>
+</svg>
+
+<h5>Module Graph</h5>
+<p>Solid arrows point from a parent (sub)module to the submodule which is
+descended from it. Dashed arrows point from a module being used to the
+module using it.</p>
+<h5>Type Graph</h5>
+<p>Solid arrows point from one derived type to another which extends
+(inherits from) it. Dashed arrows point from a derived type to another
+type containing it as a components, with a label listing the name(s) of
+said component(s).</p>
+<h5>Call Graph</h5>
+<p>Solid arrows point from a procedure to one which it calls. Dashed 
+arrows point from an interface to procedures which implement that interface.
+This could include the module procedures in a generic interface or the
+implementation in a submodule of an interface in a parent module.</p>
+
+                  </div>
+                </div>
+              </div>
+            </div>
+            
     <br>
+    
 
     
     
     
-	 <h2>Interfaces</h2>
+
+    
+    
+    
+    <section>
+     <h2>Derived Types</h2>
 	 
 	   
 <div class="panel panel-default">
-  <div class="panel-heading codesum"><a class="anchor" name="intr-lorenz"></a><h3>public interface <a href='../interface/lorenz.html'>lorenz</a>
-    
-  </h3></div>
-  
-  <div class="panel-body">
-    
-    <p>Overload lorenz name adding the constructor function.</p>
-  </div>
-  
-  <ul class="list-group">
-  
-  
-  
-    <li class="list-group-item">
-    
-    
-    <h3>
-private  function <a href='../proc/constructor_lorenz.html'>constructor_lorenz</a>(initial_state, sigma, rho, beta)
-</h3>
-    
-    <h4>Arguments</h4>
-    
-      
-      
-<table class="table table-striped varlist">
-<thead><tr><th>Type</th>
-<th>Intent</th><th>Optional</th>
-<th>Attributes</th><th></th><th>Name</th><th></th></thead>
-
-
-
-<tbody>
-
-  
-  
-  
-  
-<tr>
-  
-  <td><a class="anchor" name="var-initial_state"></a>real(kind=R_P),</td>
-  <td>intent(in),</td>
-  <td></td>
-  
-  <td>dimension(:)</td><td>::</td>
-  <td><strong>initial_state</strong></td><td><p>Intial state of Lorenz field vector.</p></td>
-  
-</tr>
-
-  
-  
-  
-  
-<tr>
-  
-  <td><a class="anchor" name="var-sigma"></a>real(kind=R_P),</td>
-  <td>intent(in)</td>
-  <td></td>
-  
-  <td></td><td>::</td>
-  <td><strong>sigma</strong></td><td><p>Lorenz  \(\sigma\).</p></td>
-  
-</tr>
-
-  
-  
-  
-  
-<tr>
-  
-  <td><a class="anchor" name="var-rho"></a>real(kind=R_P),</td>
-  <td>intent(in)</td>
-  <td></td>
-  
-  <td></td><td>::</td>
-  <td><strong>rho</strong></td><td><p>Lorenz  \(\rho\).</p></td>
-  
-</tr>
-
-  
-  
-  
-  
-<tr>
-  
-  <td><a class="anchor" name="var-beta"></a>real(kind=R_P),</td>
-  <td>intent(in)</td>
-  <td></td>
-  
-  <td></td><td>::</td>
-  <td><strong>beta</strong></td><td><p>Lorenz  \(\beta\).</p></td>
-  
-</tr>
-
-</tbody>
-</table>
-
-      
-    
-    
-
-  
-  
-  
-  
-     <h4>Return Value <small><a class="anchor" name="var-concrete"></a>type(<a href='../type/lorenz.html'>lorenz</a>)
-  </small></h4>
-  <p>Concrete instance of Lorenz field.</p>
-    
-    
-    <h4>Description</h4>
-       
-       <p>Construct an initialized Lorenz field.</p>
-        
-
-    </li>
-  
-  
-  </ul>
-</div>
-
-    
-    </section>
-	 <br>
-    
-
-    
-    
-    
-	 <h2>Derived Types</h2>
-	 
-	   
-<div class="panel panel-default">
-  <div class="panel-heading codesum"><a class="anchor" name="type-lorenz"></a><h3>type, public, extends(<a href='../type/integrand.html'>integrand</a>) :: <a href='../type/lorenz.html'>lorenz</a>
+  <div class="panel-heading codesum"><span class="anchor" id="type-lorenz"></span><h3>type, public, extends(integrand) :: <a href='../type/lorenz.html'>lorenz</a>
     
   </h3></div>
   <div class="panel-body">
@@ -389,11 +467,11 @@ private  function <a href='../proc/constructor_lorenz.html'>constructor_lorenz</
   
 <tr>
   
-  <td><a class="anchor" name="var-state"></a>real(kind=R_P),</td>
+  <td><span class="anchor" id="variable-dims%7E2"></span>integer(kind=I_P),</td>
   
-  <td>private,</td>
-  <td>dimension(:), allocatable</td><td>::</td>
-  <td><strong>state</strong></td><td></td><td></td><td><p>Solution vector.</p></td>
+  <td>private</td>
+  <td></td><td>::</td>
+  <td><strong>dims</strong></td><td> =</td><td>0</td><td><p>Space dimensions.</p></td>
   
 </tr>
 
@@ -403,7 +481,49 @@ private  function <a href='../proc/constructor_lorenz.html'>constructor_lorenz</
   
 <tr>
   
-  <td><a class="anchor" name="var-sigma"></a>real(kind=R_P),</td>
+  <td><span class="anchor" id="variable-steps%7E3"></span>integer(kind=I_P),</td>
+  
+  <td>private</td>
+  <td></td><td>::</td>
+  <td><strong>steps</strong></td><td> =</td><td>0</td><td><p>Number of time steps stored.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-state%7E2"></span>real(kind=R_P),</td>
+  
+  <td>private,</td>
+  <td>dimension(:), allocatable</td><td>::</td>
+  <td><strong>state</strong></td><td></td><td></td><td><p>Solution vector, [1:dims].</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-previous%7E2"></span>real(kind=R_P),</td>
+  
+  <td>private,</td>
+  <td>dimension(:,:), allocatable</td><td>::</td>
+  <td><strong>previous</strong></td><td></td><td></td><td><p>Previous steps solution vector, [1:dims,1:steps].</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-sigma"></span>real(kind=R_P),</td>
   
   <td>private</td>
   <td></td><td>::</td>
@@ -417,7 +537,7 @@ private  function <a href='../proc/constructor_lorenz.html'>constructor_lorenz</
   
 <tr>
   
-  <td><a class="anchor" name="var-rho"></a>real(kind=R_P),</td>
+  <td><span class="anchor" id="variable-rho"></span>real(kind=R_P),</td>
   
   <td>private</td>
   <td></td><td>::</td>
@@ -431,7 +551,7 @@ private  function <a href='../proc/constructor_lorenz.html'>constructor_lorenz</
   
 <tr>
   
-  <td><a class="anchor" name="var-beta"></a>real(kind=R_P),</td>
+  <td><span class="anchor" id="variable-beta%7E2"></span>real(kind=R_P),</td>
   
   <td>private</td>
   <td></td><td>::</td>
@@ -444,27 +564,14 @@ private  function <a href='../proc/constructor_lorenz.html'>constructor_lorenz</
 
      
      
-     <h4>Constructor</h4>
-       
-         <p>Overload lorenz name adding the constructor function.</p>
-       
-       <table class="table table-striped varlist">
-      <tbody>
-        
-             
-             
-             
-             <tr><td>private  function <strong><a href='../proc/constructor_lorenz.html'>constructor_lorenz</a></strong>(initial_state, sigma, rho, beta)</td><td><p>Construct an initialized Lorenz field.</p></td></tr>
-             
-        
-       </tbody>
-       </table>
-     
           
      
      <h4>Type-Bound Procedures</h4>
       <table class="table table-striped varlist">
       <tbody>
+      
+       <tr><td>procedure, public, pass(self) :: <strong>init</strong>  </td>
+       <td><p>Init field.</p></td></tr>
       
        <tr><td>procedure, public, pass(self) :: <strong>output</strong>  </td>
        <td><p>Extract Lorenz field.</p></td></tr>
@@ -472,8 +579,14 @@ private  function <a href='../proc/constructor_lorenz.html'>constructor_lorenz</
        <tr><td>procedure, public, pass(self) :: <strong>t</strong>  => dLorenz_dt </td>
        <td><p>Time derivate, resiuduals function.</p></td></tr>
       
+       <tr><td>procedure, public, pass(self) :: <strong>update_previous_steps</strong>  </td>
+       <td><p>Update previous time steps.</p></td></tr>
+      
+       <tr><td>procedure, public, pass(lhs) :: <strong>integrand_multiply_integrand</strong>  => lorenz_multiply_lorenz </td>
+       <td><p>Lorenz * lorenz operator.</p></td></tr>
+      
        <tr><td>procedure, public, pass(lhs) :: <strong>integrand_multiply_real</strong>  => lorenz_multiply_real </td>
-       <td><p>lorenz * real operator.</p></td></tr>
+       <td><p>Lorenz * real operator.</p></td></tr>
       
        <tr><td>procedure, public, pass(rhs) :: <strong>real_multiply_integrand</strong>  => real_multiply_lorenz </td>
        <td><p>Real * Lorenz operator.</p></td></tr>
@@ -498,9 +611,9 @@ private  function <a href='../proc/constructor_lorenz.html'>constructor_lorenz</
   </div>
 </div>
 
-    
+     
     </section>
-	 <br>
+	<br>
     
     
      
@@ -509,8 +622,11 @@ private  function <a href='../proc/constructor_lorenz.html'>constructor_lorenz</
     
     
   <div class="panel panel-default">
-  <div class="panel-heading codesum"><a class="anchor" name="proc-constructor_lorenz"></a><h3>
-private  function <a href='../proc/constructor_lorenz.html'>constructor_lorenz</a>(initial_state, sigma, rho, beta)
+  <div class="panel-heading codesum"><span class="anchor" id="proc-output%7E2"></span><h3>
+private function <a href='../proc/output%7E2.html'>output</a>(self) result(state)
+    
+    
+    
 </h3></div>
   <div class="panel-body">
        
@@ -534,7 +650,513 @@ private  function <a href='../proc/constructor_lorenz.html'>constructor_lorenz</
   
 <tr>
   
-  <td><a class="anchor" name="var-initial_state"></a>real(kind=R_P),</td>
+  <td><span class="anchor" ></span>class(<a href='../type/lorenz.html'>lorenz</a>),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>self</strong></td><td><p>Lorenz field.</p></td>
+  
+</tr>
+
+</tbody>
+</table>
+
+      
+    
+    
+
+  
+  
+  
+  
+     <h4>Return Value <small>real(kind=R_P),
+  dimension(:),allocatable</small></h4>
+  <p>Lorenz state vector.</p>
+    
+    
+    <h4>Description</h4>
+       
+       
+
+
+       
+       <p>Output the Lorenz field state.</p>
+        
+
+  </div>
+  </div>
+
+    
+    
+  <div class="panel panel-default">
+  <div class="panel-heading codesum"><span class="anchor" id="proc-dlorenz_dt"></span><h3>
+private purefunction <a href='../proc/dlorenz_dt.html'>dLorenz_dt</a>(self, n) result(dState_dt)
+    
+    
+    
+</h3></div>
+  <div class="panel-body">
+       
+    
+    <h4>Arguments</h4>
+    
+      
+      
+<table class="table table-striped varlist">
+<thead><tr><th>Type</th>
+<th>Intent</th><th>Optional</th>
+<th>Attributes</th><th></th><th>Name</th><th></th></thead>
+
+
+
+<tbody>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>class(<a href='../type/lorenz.html'>lorenz</a>),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>self</strong></td><td><p>Lorenz field.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>integer(kind=I_P),</td>
+  <td>intent(in),</td>
+  <td>optional</td>
+  
+  <td></td><td>::</td>
+  <td><strong>n</strong></td><td><p>Time level.</p></td>
+  
+</tr>
+
+</tbody>
+</table>
+
+      
+    
+    
+
+  
+  
+  
+  
+     <h4>Return Value <small>class(<a href='../type/integrand.html'>integrand</a>),
+  allocatable</small></h4>
+  <p>Lorenz field time derivative.</p>
+    
+    
+    <h4>Description</h4>
+       
+       
+
+
+       
+       <p>Time derivative of Lorenz field.</p>
+        
+
+  </div>
+  </div>
+
+    
+    
+  <div class="panel panel-default">
+  <div class="panel-heading codesum"><span class="anchor" id="proc-lorenz_multiply_lorenz"></span><h3>
+private purefunction <a href='../proc/lorenz_multiply_lorenz.html'>lorenz_multiply_lorenz</a>(lhs, rhs) result(product)
+    
+    
+    
+</h3></div>
+  <div class="panel-body">
+       
+    
+    <h4>Arguments</h4>
+    
+      
+      
+<table class="table table-striped varlist">
+<thead><tr><th>Type</th>
+<th>Intent</th><th>Optional</th>
+<th>Attributes</th><th></th><th>Name</th><th></th></thead>
+
+
+
+<tbody>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>class(<a href='../type/lorenz.html'>lorenz</a>),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>lhs</strong></td><td><p>Left hand side.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>class(<a href='../type/integrand.html'>integrand</a>),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>rhs</strong></td><td><p>Right hand side.</p></td>
+  
+</tr>
+
+</tbody>
+</table>
+
+      
+    
+    
+
+  
+  
+  
+  
+     <h4>Return Value <small>class(<a href='../type/integrand.html'>integrand</a>),
+  allocatable</small></h4>
+  <p>Product.</p>
+    
+    
+    <h4>Description</h4>
+       
+       
+
+
+       
+       <p>Multiply a lorenz field by another one.</p>
+        
+
+  </div>
+  </div>
+
+    
+    
+  <div class="panel panel-default">
+  <div class="panel-heading codesum"><span class="anchor" id="proc-lorenz_multiply_real"></span><h3>
+private purefunction <a href='../proc/lorenz_multiply_real.html'>lorenz_multiply_real</a>(lhs, rhs) result(product)
+    
+    
+    
+</h3></div>
+  <div class="panel-body">
+       
+    
+    <h4>Arguments</h4>
+    
+      
+      
+<table class="table table-striped varlist">
+<thead><tr><th>Type</th>
+<th>Intent</th><th>Optional</th>
+<th>Attributes</th><th></th><th>Name</th><th></th></thead>
+
+
+
+<tbody>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>class(<a href='../type/lorenz.html'>lorenz</a>),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>lhs</strong></td><td><p>Left hand side.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>real(kind=R_P),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>rhs</strong></td><td><p>Right hand side.</p></td>
+  
+</tr>
+
+</tbody>
+</table>
+
+      
+    
+    
+
+  
+  
+  
+  
+     <h4>Return Value <small>class(<a href='../type/integrand.html'>integrand</a>),
+  allocatable</small></h4>
+  <p>Product.</p>
+    
+    
+    <h4>Description</h4>
+       
+       
+
+
+       
+       <p>Multiply a Lorenz field by a real scalar.</p>
+        
+
+  </div>
+  </div>
+
+    
+    
+  <div class="panel panel-default">
+  <div class="panel-heading codesum"><span class="anchor" id="proc-real_multiply_lorenz"></span><h3>
+private purefunction <a href='../proc/real_multiply_lorenz.html'>real_multiply_lorenz</a>(lhs, rhs) result(product)
+    
+    
+    
+</h3></div>
+  <div class="panel-body">
+       
+    
+    <h4>Arguments</h4>
+    
+      
+      
+<table class="table table-striped varlist">
+<thead><tr><th>Type</th>
+<th>Intent</th><th>Optional</th>
+<th>Attributes</th><th></th><th>Name</th><th></th></thead>
+
+
+
+<tbody>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>real(kind=R_P),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>lhs</strong></td><td><p>Left hand side.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>class(<a href='../type/lorenz.html'>lorenz</a>),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>rhs</strong></td><td><p>Right hand side.</p></td>
+  
+</tr>
+
+</tbody>
+</table>
+
+      
+    
+    
+
+  
+  
+  
+  
+     <h4>Return Value <small>class(<a href='../type/integrand.html'>integrand</a>),
+  allocatable</small></h4>
+  <p>Product.</p>
+    
+    
+    <h4>Description</h4>
+       
+       
+
+
+       
+       <p>Multiply a real scalar by a Lorenz field.</p>
+        
+
+  </div>
+  </div>
+
+    
+    
+  <div class="panel panel-default">
+  <div class="panel-heading codesum"><span class="anchor" id="proc-add_lorenz"></span><h3>
+private purefunction <a href='../proc/add_lorenz.html'>add_lorenz</a>(lhs, rhs) result(sum)
+    
+    
+    
+</h3></div>
+  <div class="panel-body">
+       
+    
+    <h4>Arguments</h4>
+    
+      
+      
+<table class="table table-striped varlist">
+<thead><tr><th>Type</th>
+<th>Intent</th><th>Optional</th>
+<th>Attributes</th><th></th><th>Name</th><th></th></thead>
+
+
+
+<tbody>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>class(<a href='../type/lorenz.html'>lorenz</a>),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>lhs</strong></td><td><p>Left hand side.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>class(<a href='../type/integrand.html'>integrand</a>),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>rhs</strong></td><td><p>Right hand side.</p></td>
+  
+</tr>
+
+</tbody>
+</table>
+
+      
+    
+    
+
+  
+  
+  
+  
+     <h4>Return Value <small>class(<a href='../type/integrand.html'>integrand</a>),
+  allocatable</small></h4>
+  <p>Sum.</p>
+    
+    
+    <h4>Description</h4>
+       
+       
+
+
+       
+       <p>Add two Lorenz fields.</p>
+        
+
+  </div>
+  </div>
+
+    
+    </section>
+    <br>
+    
+
+    
+    <section>
+    <h2>Subroutines</h2>
+    
+    
+  <div class="panel panel-default">
+  <div class="panel-heading codesum"><span class="anchor" id="proc-init%7E4"></span><h3>
+private subroutine <a href='../proc/init%7E4.html'>init</a>(self, initial_state, sigma, rho, beta, steps)
+    
+    
+    
+</h3></div>
+  <div class="panel-body">
+       
+    
+    <h4>Arguments</h4>
+    
+      
+      
+<table class="table table-striped varlist">
+<thead><tr><th>Type</th>
+<th>Intent</th><th>Optional</th>
+<th>Attributes</th><th></th><th>Name</th><th></th></thead>
+
+
+
+<tbody>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>class(<a href='../type/lorenz.html'>lorenz</a>),</td>
+  <td>intent(inout)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>self</strong></td><td><p>Lorenz field.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>real(kind=R_P),</td>
   <td>intent(in),</td>
   <td></td>
   
@@ -549,7 +1171,7 @@ private  function <a href='../proc/constructor_lorenz.html'>constructor_lorenz</
   
 <tr>
   
-  <td><a class="anchor" name="var-sigma"></a>real(kind=R_P),</td>
+  <td><span class="anchor" ></span>real(kind=R_P),</td>
   <td>intent(in)</td>
   <td></td>
   
@@ -564,7 +1186,7 @@ private  function <a href='../proc/constructor_lorenz.html'>constructor_lorenz</
   
 <tr>
   
-  <td><a class="anchor" name="var-rho"></a>real(kind=R_P),</td>
+  <td><span class="anchor" ></span>real(kind=R_P),</td>
   <td>intent(in)</td>
   <td></td>
   
@@ -579,12 +1201,27 @@ private  function <a href='../proc/constructor_lorenz.html'>constructor_lorenz</
   
 <tr>
   
-  <td><a class="anchor" name="var-beta"></a>real(kind=R_P),</td>
+  <td><span class="anchor" ></span>real(kind=R_P),</td>
   <td>intent(in)</td>
   <td></td>
   
   <td></td><td>::</td>
   <td><strong>beta</strong></td><td><p>Lorenz  \(\beta\).</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>integer(kind=I_P),</td>
+  <td>intent(in),</td>
+  <td>optional</td>
+  
+  <td></td><td>::</td>
+  <td><strong>steps</strong></td><td><p>Time steps stored.</p></td>
   
 </tr>
 
@@ -594,17 +1231,12 @@ private  function <a href='../proc/constructor_lorenz.html'>constructor_lorenz</
       
     
     
-
-  
-  
-  
-  
-     <h4>Return Value <small><a class="anchor" name="var-concrete"></a>type(<a href='../type/lorenz.html'>lorenz</a>)
-  </small></h4>
-  <p>Concrete instance of Lorenz field.</p>
-    
     
     <h4>Description</h4>
+       
+       
+
+
        
        <p>Construct an initialized Lorenz field.</p>
         
@@ -615,8 +1247,11 @@ private  function <a href='../proc/constructor_lorenz.html'>constructor_lorenz</
     
     
   <div class="panel panel-default">
-  <div class="panel-heading codesum"><a class="anchor" name="proc-output"></a><h3>
-private  function <a href='../proc/output.html'>output</a>(self)
+  <div class="panel-heading codesum"><span class="anchor" id="proc-update_previous_steps%7E2"></span><h3>
+private puresubroutine <a href='../proc/update_previous_steps%7E2.html'>update_previous_steps</a>(self)
+    
+    
+    
 </h3></div>
   <div class="panel-body">
        
@@ -640,8 +1275,8 @@ private  function <a href='../proc/output.html'>output</a>(self)
   
 <tr>
   
-  <td><a class="anchor" name="var-self"></a>class(<a href='../type/lorenz.html'>lorenz</a>),</td>
-  <td>intent(in)</td>
+  <td><span class="anchor" ></span>class(<a href='../type/lorenz.html'>lorenz</a>),</td>
+  <td>intent(inout)</td>
   <td></td>
   
   <td></td><td>::</td>
@@ -655,19 +1290,14 @@ private  function <a href='../proc/output.html'>output</a>(self)
       
     
     
-
-  
-  
-  
-  
-     <h4>Return Value <small><a class="anchor" name="var-state"></a>real(kind=R_P),
-  dimension(:),allocatable</small></h4>
-  <p>Lorenz state vector.</p>
-    
     
     <h4>Description</h4>
        
-       <p>Output the Lorenz field state.</p>
+       
+
+
+       
+       <p>Update previous time steps.</p>
         
 
   </div>
@@ -676,8 +1306,11 @@ private  function <a href='../proc/output.html'>output</a>(self)
     
     
   <div class="panel panel-default">
-  <div class="panel-heading codesum"><a class="anchor" name="proc-dLorenz_dt"></a><h3>
-private pure function <a href='../proc/dlorenz_dt.html'>dLorenz_dt</a>(self)
+  <div class="panel-heading codesum"><span class="anchor" id="proc-lorenz_assign_lorenz"></span><h3>
+private puresubroutine <a href='../proc/lorenz_assign_lorenz.html'>lorenz_assign_lorenz</a>(lhs, rhs)
+    
+    
+    
 </h3></div>
   <div class="panel-body">
        
@@ -701,305 +1334,7 @@ private pure function <a href='../proc/dlorenz_dt.html'>dLorenz_dt</a>(self)
   
 <tr>
   
-  <td><a class="anchor" name="var-self"></a>class(<a href='../type/lorenz.html'>lorenz</a>),</td>
-  <td>intent(in)</td>
-  <td></td>
-  
-  <td></td><td>::</td>
-  <td><strong>self</strong></td><td><p>Lorenz field.</p></td>
-  
-</tr>
-
-</tbody>
-</table>
-
-      
-    
-    
-
-  
-  
-  
-  
-     <h4>Return Value <small><a class="anchor" name="var-dState_dt"></a>class(<a href='../type/integrand.html'>integrand</a>),
-  allocatable</small></h4>
-  <p>Lorenz field time derivative.</p>
-    
-    
-    <h4>Description</h4>
-       
-       <p>Time derivative of Lorenz field.</p>
-        
-
-  </div>
-  </div>
-
-    
-    
-  <div class="panel panel-default">
-  <div class="panel-heading codesum"><a class="anchor" name="proc-lorenz_multiply_real"></a><h3>
-private pure function <a href='../proc/lorenz_multiply_real.html'>lorenz_multiply_real</a>(lhs, rhs)
-</h3></div>
-  <div class="panel-body">
-       
-    
-    <h4>Arguments</h4>
-    
-      
-      
-<table class="table table-striped varlist">
-<thead><tr><th>Type</th>
-<th>Intent</th><th>Optional</th>
-<th>Attributes</th><th></th><th>Name</th><th></th></thead>
-
-
-
-<tbody>
-
-  
-  
-  
-  
-<tr>
-  
-  <td><a class="anchor" name="var-lhs"></a>class(<a href='../type/lorenz.html'>lorenz</a>),</td>
-  <td>intent(in)</td>
-  <td></td>
-  
-  <td></td><td>::</td>
-  <td><strong>lhs</strong></td><td><p>Left hand side.</p></td>
-  
-</tr>
-
-  
-  
-  
-  
-<tr>
-  
-  <td><a class="anchor" name="var-rhs"></a>real(kind=R_P),</td>
-  <td>intent(in)</td>
-  <td></td>
-  
-  <td></td><td>::</td>
-  <td><strong>rhs</strong></td><td><p>Right hand side.</p></td>
-  
-</tr>
-
-</tbody>
-</table>
-
-      
-    
-    
-
-  
-  
-  
-  
-     <h4>Return Value <small><a class="anchor" name="var-product"></a>class(<a href='../type/integrand.html'>integrand</a>),
-  allocatable</small></h4>
-  <p>Product.</p>
-    
-    
-    <h4>Description</h4>
-       
-       <p>Multiply a Lorenz field by a real scalar.</p>
-        
-
-  </div>
-  </div>
-
-    
-    
-  <div class="panel panel-default">
-  <div class="panel-heading codesum"><a class="anchor" name="proc-real_multiply_lorenz"></a><h3>
-private pure function <a href='../proc/real_multiply_lorenz.html'>real_multiply_lorenz</a>(lhs, rhs)
-</h3></div>
-  <div class="panel-body">
-       
-    
-    <h4>Arguments</h4>
-    
-      
-      
-<table class="table table-striped varlist">
-<thead><tr><th>Type</th>
-<th>Intent</th><th>Optional</th>
-<th>Attributes</th><th></th><th>Name</th><th></th></thead>
-
-
-
-<tbody>
-
-  
-  
-  
-  
-<tr>
-  
-  <td><a class="anchor" name="var-lhs"></a>real(kind=R_P),</td>
-  <td>intent(in)</td>
-  <td></td>
-  
-  <td></td><td>::</td>
-  <td><strong>lhs</strong></td><td><p>Left hand side.</p></td>
-  
-</tr>
-
-  
-  
-  
-  
-<tr>
-  
-  <td><a class="anchor" name="var-rhs"></a>class(<a href='../type/lorenz.html'>lorenz</a>),</td>
-  <td>intent(in)</td>
-  <td></td>
-  
-  <td></td><td>::</td>
-  <td><strong>rhs</strong></td><td><p>Right hand side.</p></td>
-  
-</tr>
-
-</tbody>
-</table>
-
-      
-    
-    
-
-  
-  
-  
-  
-     <h4>Return Value <small><a class="anchor" name="var-product"></a>class(<a href='../type/integrand.html'>integrand</a>),
-  allocatable</small></h4>
-  <p>Product.</p>
-    
-    
-    <h4>Description</h4>
-       
-       <p>Multiply a real scalar by a Lorenz field.</p>
-        
-
-  </div>
-  </div>
-
-    
-    
-  <div class="panel panel-default">
-  <div class="panel-heading codesum"><a class="anchor" name="proc-add_lorenz"></a><h3>
-private pure function <a href='../proc/add_lorenz.html'>add_lorenz</a>(lhs, rhs)
-</h3></div>
-  <div class="panel-body">
-       
-    
-    <h4>Arguments</h4>
-    
-      
-      
-<table class="table table-striped varlist">
-<thead><tr><th>Type</th>
-<th>Intent</th><th>Optional</th>
-<th>Attributes</th><th></th><th>Name</th><th></th></thead>
-
-
-
-<tbody>
-
-  
-  
-  
-  
-<tr>
-  
-  <td><a class="anchor" name="var-lhs"></a>class(<a href='../type/lorenz.html'>lorenz</a>),</td>
-  <td>intent(in)</td>
-  <td></td>
-  
-  <td></td><td>::</td>
-  <td><strong>lhs</strong></td><td><p>Left hand side.</p></td>
-  
-</tr>
-
-  
-  
-  
-  
-<tr>
-  
-  <td><a class="anchor" name="var-rhs"></a>class(<a href='../type/integrand.html'>integrand</a>),</td>
-  <td>intent(in)</td>
-  <td></td>
-  
-  <td></td><td>::</td>
-  <td><strong>rhs</strong></td><td><p>Right hand side.</p></td>
-  
-</tr>
-
-</tbody>
-</table>
-
-      
-    
-    
-
-  
-  
-  
-  
-     <h4>Return Value <small><a class="anchor" name="var-sum"></a>class(<a href='../type/integrand.html'>integrand</a>),
-  allocatable</small></h4>
-  <p>Sum.</p>
-    
-    
-    <h4>Description</h4>
-       
-       <p>Add two Lorenz fields.</p>
-        
-
-  </div>
-  </div>
-
-    
-    </section>
-    <br>
-    
-
-
-    
-    <section>
-    <h2>Subroutines</h2>
-    
-    
-  <div class="panel panel-default">
-  <div class="panel-heading codesum"><a class="anchor" name="proc-lorenz_assign_lorenz"></a><h3>
-private pure subroutine <a href='../proc/lorenz_assign_lorenz.html'>lorenz_assign_lorenz</a>(lhs, rhs)
-</h3></div>
-  <div class="panel-body">
-       
-    
-    <h4>Arguments</h4>
-    
-      
-      
-<table class="table table-striped varlist">
-<thead><tr><th>Type</th>
-<th>Intent</th><th>Optional</th>
-<th>Attributes</th><th></th><th>Name</th><th></th></thead>
-
-
-
-<tbody>
-
-  
-  
-  
-  
-<tr>
-  
-  <td><a class="anchor" name="var-lhs"></a>class(<a href='../type/lorenz.html'>lorenz</a>),</td>
+  <td><span class="anchor" ></span>class(<a href='../type/lorenz.html'>lorenz</a>),</td>
   <td>intent(inout)</td>
   <td></td>
   
@@ -1014,7 +1349,7 @@ private pure subroutine <a href='../proc/lorenz_assign_lorenz.html'>lorenz_assig
   
 <tr>
   
-  <td><a class="anchor" name="var-rhs"></a>class(<a href='../type/integrand.html'>integrand</a>),</td>
+  <td><span class="anchor" ></span>class(<a href='../type/integrand.html'>integrand</a>),</td>
   <td>intent(in)</td>
   <td></td>
   
@@ -1031,6 +1366,10 @@ private pure subroutine <a href='../proc/lorenz_assign_lorenz.html'>lorenz_assig
     
     
     <h4>Description</h4>
+       
+       
+
+
        
        <p>Assign one Lorenz field to another.</p>
         
@@ -1041,8 +1380,11 @@ private pure subroutine <a href='../proc/lorenz_assign_lorenz.html'>lorenz_assig
     
     
   <div class="panel panel-default">
-  <div class="panel-heading codesum"><a class="anchor" name="proc-lorenz_assign_real"></a><h3>
-private pure subroutine <a href='../proc/lorenz_assign_real.html'>lorenz_assign_real</a>(lhs, rhs)
+  <div class="panel-heading codesum"><span class="anchor" id="proc-lorenz_assign_real"></span><h3>
+private puresubroutine <a href='../proc/lorenz_assign_real.html'>lorenz_assign_real</a>(lhs, rhs)
+    
+    
+    
 </h3></div>
   <div class="panel-body">
        
@@ -1066,7 +1408,7 @@ private pure subroutine <a href='../proc/lorenz_assign_real.html'>lorenz_assign_
   
 <tr>
   
-  <td><a class="anchor" name="var-lhs"></a>class(<a href='../type/lorenz.html'>lorenz</a>),</td>
+  <td><span class="anchor" ></span>class(<a href='../type/lorenz.html'>lorenz</a>),</td>
   <td>intent(inout)</td>
   <td></td>
   
@@ -1081,7 +1423,7 @@ private pure subroutine <a href='../proc/lorenz_assign_real.html'>lorenz_assign_
   
 <tr>
   
-  <td><a class="anchor" name="var-rhs"></a>real(kind=R_P),</td>
+  <td><span class="anchor" ></span>real(kind=R_P),</td>
   <td>intent(in)</td>
   <td></td>
   
@@ -1099,6 +1441,10 @@ private pure subroutine <a href='../proc/lorenz_assign_real.html'>lorenz_assign_
     
     <h4>Description</h4>
        
+       
+
+
+       
        <p>Assign one real to a Lorenz field.</p>
         
 
@@ -1107,6 +1453,8 @@ private pure subroutine <a href='../proc/lorenz_assign_real.html'>lorenz_assign_
 
     
     </section>    
+    <br>
+    
     
     
     </div>

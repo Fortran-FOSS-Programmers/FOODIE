@@ -38,7 +38,7 @@
   <body>
 
     <!-- Fixed navbar -->
-    <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+    <nav class="navbar navbar-inverse navbar-fixed-top">
       <div class="container">
         <div class="navbar-header">
           <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
@@ -67,7 +67,7 @@
             <li><a href="../lists/types.html">Derived Types</a></li>
 				
 				
-            <li><a href="../program/integrate_lorenz.html">Program</a></li>
+            <li><a href="../lists/programs.html">Programs</a></li>
 				
           </ul>
         
@@ -114,7 +114,8 @@
   
      <li class="active">tvd_runge_kutta_integrator</li>
   </ol>
-  </div>
+</div>
+</div>
 </div>
     
   </div>
@@ -129,11 +130,11 @@
     <div class="panel-heading text-left"><h3 class="panel-title">Variables</h3></div>
     <div class="list-group">
       
-      <a class="list-group-item" href="../type/tvd_runge_kutta_integrator.html#var-alph">alph</a>
+      <a class="list-group-item" href="../type/tvd_runge_kutta_integrator.html#variable-alph">alph</a>
       
-      <a class="list-group-item" href="../type/tvd_runge_kutta_integrator.html#var-beta">beta</a>
+      <a class="list-group-item" href="../type/tvd_runge_kutta_integrator.html#variable-beta">beta</a>
       
-      <a class="list-group-item" href="../type/tvd_runge_kutta_integrator.html#var-gamm">gamm</a>
+      <a class="list-group-item" href="../type/tvd_runge_kutta_integrator.html#variable-gamm">gamm</a>
       
     </div>
   </div>
@@ -143,10 +144,13 @@
   <div class="panel panel-primary">
     <div class="panel-heading text-left"><h3 class="panel-title">Constructor</h3></div>
     <div class="list-group">
-        
-      <a class="list-group-item" href="../type/tvd_runge_kutta_integrator.html#intr-tvd_runge_kutta_integrator">tvd_runge_kutta_integrator</a>
+      <a class="list-group-item" href="../type/tvd_runge_kutta_integrator.html#interface-tvd_runge_kutta_integrator">tvd_runge_kutta_integrator</a>
     </div>
   </div>
+  
+  
+  
+  
   
   
   
@@ -161,7 +165,7 @@
     <div class="panel-heading text-left"><h3 class="panel-title">Finalization Procedures</h3></div>
     <div class="list-group">
       
-      <a class="list-group-item" href="../type/tvd_runge_kutta_integrator.html#fp-finalize">finalize</a>
+      <a class="list-group-item" href="../type/tvd_runge_kutta_integrator.html#proc-finalize">finalize</a>
       
     </div>
   </div>
@@ -172,11 +176,11 @@
     <div class="panel-heading text-left"><h3 class="panel-title">Type-Bound Procedures</h3></div>
     <div class="list-group">
       
-      <a class="list-group-item" href="../type/tvd_runge_kutta_integrator.html#bp-destroy">destroy</a>
+      <a class="list-group-item" href="../type/tvd_runge_kutta_integrator.html#boundprocedure-destroy">destroy</a>
       
-      <a class="list-group-item" href="../type/tvd_runge_kutta_integrator.html#bp-init">init</a>
+      <a class="list-group-item" href="../type/tvd_runge_kutta_integrator.html#boundprocedure-init">init</a>
       
-      <a class="list-group-item" href="../type/tvd_runge_kutta_integrator.html#bp-integrate">integrate</a>
+      <a class="list-group-item" href="../type/tvd_runge_kutta_integrator.html#boundprocedure-integrate">integrate</a>
       
     </div>
   </div>
@@ -197,13 +201,19 @@
     <div class="panel-heading text-left"><h3 class="panel-title">All Derived Types</h3></div>
     <div class="list-group">
       
+      <a class="list-group-item" href="../type/adams_bashforth_integrator.html">adams_bashforth_integrator</a>
+      
+      <a class="list-group-item" href="../type/burgers.html">burgers</a>
+      
+      <a class="list-group-item" href="../type/euler_1d.html">euler_1D</a>
+      
       <a class="list-group-item" href="../type/euler_explicit_integrator.html">euler_explicit_integrator</a>
       
       <a class="list-group-item" href="../type/integrand.html">integrand</a>
       
       <a class="list-group-item" href="../type/lorenz.html">lorenz</a>
       
-      <a class="list-group-item" href="../type/pyplot.html">pyplot</a>
+      <a class="list-group-item" href="../type/oscillation.html">oscillation</a>
       
       <a class="list-group-item" href="../type/tvd_runge_kutta_integrator.html">tvd_runge_kutta_integrator</a>
       
@@ -214,10 +224,13 @@
     </div>
     
     <div class="col-lg-9" id='text'>
+    <h2>type, public :: tvd_runge_kutta_integrator</h2>
+    
     <p>FOODiE integrator: provide an explicit class of TVD or SSP Runge-Kutta schemes, from 1st to 4th order accutate.</p>
-<p><div class="alert alert-info" role="alert"><h4>Note</h4>The integrator must be created or initialized (initialize the RK coeficients) before used.
- Finalize object.</div></p>
+<p></p><div class="alert alert-info" role="alert"><h4>Note</h4>The integrator must be created or initialized (initialize the RK coeficients) before used.
+ Finalize object.</div>
     <br>
+    
     
     <section>
     <h2>Components</h2>
@@ -237,7 +250,7 @@
   
 <tr>
   
-  <td><a class="anchor" name="var-alph"></a>real(kind=R_P),</td>
+  <td><span class="anchor" id="variable-alph"></span>real(kind=R_P),</td>
   
   <td>public,</td>
   <td>allocatable</td><td>::</td>
@@ -251,7 +264,7 @@
   
 <tr>
   
-  <td><a class="anchor" name="var-beta"></a>real(kind=R_P),</td>
+  <td><span class="anchor" id="variable-beta"></span>real(kind=R_P),</td>
   
   <td>public,</td>
   <td>allocatable</td><td>::</td>
@@ -265,7 +278,7 @@
   
 <tr>
   
-  <td><a class="anchor" name="var-gamm"></a>real(kind=R_P),</td>
+  <td><span class="anchor" id="variable-gamm"></span>real(kind=R_P),</td>
   
   <td>public,</td>
   <td>allocatable</td><td>::</td>
@@ -286,7 +299,7 @@
 	   
 	   
 <div class="panel panel-default">
-  <div class="panel-heading codesum"><a class="anchor" name="intr-tvd_runge_kutta_integrator"></a><h3>public interface <a href='../interface/tvd_runge_kutta_integrator.html'>tvd_runge_kutta_integrator</a>
+  <div class="panel-heading codesum"><span class="anchor" id="interface-tvd_runge_kutta_integrator"></span><h3>public interface <a href='../interface/tvd_runge_kutta_integrator.html'>tvd_runge_kutta_integrator</a>
     
   </h3></div>
   
@@ -303,7 +316,10 @@
     
     
     <h3>
-private elemental function <a href='../proc/create.html'>create</a>(stages)
+private elementalfunction <a href='../proc/create.html'>create</a>(stages) result(rk)
+    
+    
+    
 </h3>
     
     <h4>Arguments</h4>
@@ -325,7 +341,7 @@ private elemental function <a href='../proc/create.html'>create</a>(stages)
   
 <tr>
   
-  <td><a class="anchor" name="var-stages"></a>integer(kind=I_P),</td>
+  <td><span class="anchor" ></span>integer(kind=I_P),</td>
   <td>intent(in)</td>
   <td></td>
   
@@ -345,14 +361,18 @@ private elemental function <a href='../proc/create.html'>create</a>(stages)
   
   
   
-     <h4>Return Value <small><a class="anchor" name="var-rk"></a>type(<a href='../type/tvd_runge_kutta_integrator.html'>tvd_runge_kutta_integrator</a>)
+     <h4>Return Value <small>type(<a href='../type/tvd_runge_kutta_integrator.html'>tvd_runge_kutta_integrator</a>)
   </small></h4>
   <p>Actual RK integrator.</p>
     
     
     <h4>Description</h4>
        
-       <p>Create the actual RK integrators: initialize the Butcher' table coefficients.</p>
+       
+
+
+       
+       <p>Create the actual RK integrator: initialize the Butcher' table coefficients.</p>
         
 
     </li>
@@ -372,12 +392,15 @@ private elemental function <a href='../proc/create.html'>create</a>(stages)
 	   
     
 <div class="panel panel-default">
-  <div class="panel-heading codesum"><a class="anchor" name="fp-finalize"></a><h3>final :: <strong>finalize</strong></h3></div>
+  <div class="panel-heading codesum"><span class="anchor" id="proc-finalize"></span><h3>final :: <strong>finalize</strong></h3></div>
   <div class="panel-body">
      
     
     <h3>
-private elemental subroutine <a href='../proc/finalize.html'>finalize</a>(self)
+private elementalsubroutine <a href='../proc/finalize.html'>finalize</a>(self)
+    
+    
+    
 </h3>
     
     <h4>Arguments</h4>
@@ -399,7 +422,7 @@ private elemental subroutine <a href='../proc/finalize.html'>finalize</a>(self)
   
 <tr>
   
-  <td><a class="anchor" name="var-self"></a>type(<a href='../type/tvd_runge_kutta_integrator.html'>tvd_runge_kutta_integrator</a>),</td>
+  <td><span class="anchor" ></span>type(<a href='../type/tvd_runge_kutta_integrator.html'>tvd_runge_kutta_integrator</a>),</td>
   <td>intent(inout)</td>
   <td></td>
   
@@ -416,6 +439,10 @@ private elemental subroutine <a href='../proc/finalize.html'>finalize</a>(self)
     
     
     <h4>Description</h4>
+       
+       
+
+
        
        <p>Finalize object.</p>
         
@@ -434,9 +461,9 @@ private elemental subroutine <a href='../proc/finalize.html'>finalize</a>(self)
     
 	   
 <div class="panel panel-default">
-  <div class="panel-heading codesum"><a class="anchor" name="bp-destroy"></a><h3>procedure, public, pass(self) :: <strong>destroy</strong>  
+  <div class="panel-heading codesum"><span class="anchor" id="boundprocedure-destroy"></span><h3>procedure, public, pass(self) :: <strong>destroy</strong>  
     
-  <h3></div>
+  </h3></div>
   
   <div class="panel-body">
     
@@ -449,9 +476,13 @@ private elemental subroutine <a href='../proc/finalize.html'>finalize</a>(self)
     
       <li class="list-group-item">
       
+         
     
     <h3>
-private elemental subroutine <a href='../proc/destroy.html'>destroy</a>(self)
+private elementalsubroutine <a href='../proc/destroy.html'>destroy</a>(self)
+    
+    
+    
 </h3>
     
     <h4>Arguments</h4>
@@ -473,7 +504,7 @@ private elemental subroutine <a href='../proc/destroy.html'>destroy</a>(self)
   
 <tr>
   
-  <td><a class="anchor" name="var-self"></a>class(<a href='../type/tvd_runge_kutta_integrator.html'>tvd_runge_kutta_integrator</a>),</td>
+  <td><span class="anchor" ></span>class(<a href='../type/tvd_runge_kutta_integrator.html'>tvd_runge_kutta_integrator</a>),</td>
   <td>intent(inout)</td>
   <td></td>
   
@@ -491,9 +522,14 @@ private elemental subroutine <a href='../proc/destroy.html'>destroy</a>(self)
     
     <h4>Description</h4>
        
+       
+
+
+       
        <p>Destoy the integrator.</p>
         
 
+      
       </li>
     
   </ul>
@@ -502,9 +538,9 @@ private elemental subroutine <a href='../proc/destroy.html'>destroy</a>(self)
     
 	   
 <div class="panel panel-default">
-  <div class="panel-heading codesum"><a class="anchor" name="bp-init"></a><h3>procedure, public, pass(self) :: <strong>init</strong>  
+  <div class="panel-heading codesum"><span class="anchor" id="boundprocedure-init"></span><h3>procedure, public, pass(self) :: <strong>init</strong>  
     
-  <h3></div>
+  </h3></div>
   
   <div class="panel-body">
     
@@ -517,9 +553,13 @@ private elemental subroutine <a href='../proc/destroy.html'>destroy</a>(self)
     
       <li class="list-group-item">
       
+         
     
     <h3>
-private elemental subroutine <a href='../proc/init.html'>init</a>(self, stages)
+private elementalsubroutine <a href='../proc/init.html'>init</a>(self, stages)
+    
+    
+    
 </h3>
     
     <h4>Arguments</h4>
@@ -541,7 +581,7 @@ private elemental subroutine <a href='../proc/init.html'>init</a>(self, stages)
   
 <tr>
   
-  <td><a class="anchor" name="var-self"></a>class(<a href='../type/tvd_runge_kutta_integrator.html'>tvd_runge_kutta_integrator</a>),</td>
+  <td><span class="anchor" ></span>class(<a href='../type/tvd_runge_kutta_integrator.html'>tvd_runge_kutta_integrator</a>),</td>
   <td>intent(inout)</td>
   <td></td>
   
@@ -556,7 +596,7 @@ private elemental subroutine <a href='../proc/init.html'>init</a>(self, stages)
   
 <tr>
   
-  <td><a class="anchor" name="var-stages"></a>integer(kind=I_P),</td>
+  <td><span class="anchor" ></span>integer(kind=I_P),</td>
   <td>intent(in)</td>
   <td></td>
   
@@ -574,9 +614,14 @@ private elemental subroutine <a href='../proc/init.html'>init</a>(self, stages)
     
     <h4>Description</h4>
        
-       <p>Create the actual RK integrators: initialize the Butcher' table coefficients.</p>
+       
+
+
+       
+       <p>Create the actual RK integrator: initialize the Butcher' table coefficients.</p>
         
 
+      
       </li>
     
   </ul>
@@ -585,9 +630,9 @@ private elemental subroutine <a href='../proc/init.html'>init</a>(self, stages)
     
 	   
 <div class="panel panel-default">
-  <div class="panel-heading codesum"><a class="anchor" name="bp-integrate"></a><h3>procedure, public, pass(self) :: <strong>integrate</strong>  
+  <div class="panel-heading codesum"><span class="anchor" id="boundprocedure-integrate"></span><h3>procedure, public, pass(self) :: <strong>integrate</strong>  
     
-  <h3></div>
+  </h3></div>
   
   <div class="panel-body">
     
@@ -600,9 +645,13 @@ private elemental subroutine <a href='../proc/init.html'>init</a>(self, stages)
     
       <li class="list-group-item">
       
+         
     
     <h3>
-private  subroutine <a href='../proc/integrate.html'>integrate</a>(self, field, stage, Dt)
+private subroutine <a href='../proc/integrate.html'>integrate</a>(self, field, stage, Dt)
+    
+    
+    
 </h3>
     
     <h4>Arguments</h4>
@@ -624,7 +673,7 @@ private  subroutine <a href='../proc/integrate.html'>integrate</a>(self, field, 
   
 <tr>
   
-  <td><a class="anchor" name="var-self"></a>class(<a href='../type/tvd_runge_kutta_integrator.html'>tvd_runge_kutta_integrator</a>),</td>
+  <td><span class="anchor" ></span>class(<a href='../type/tvd_runge_kutta_integrator.html'>tvd_runge_kutta_integrator</a>),</td>
   <td>intent(in)</td>
   <td></td>
   
@@ -639,7 +688,7 @@ private  subroutine <a href='../proc/integrate.html'>integrate</a>(self, field, 
   
 <tr>
   
-  <td><a class="anchor" name="var-field"></a>class(<a href='../type/integrand.html'>integrand</a>),</td>
+  <td><span class="anchor" ></span>class(<a href='../type/integrand.html'>integrand</a>),</td>
   <td>intent(inout)</td>
   <td></td>
   
@@ -654,7 +703,7 @@ private  subroutine <a href='../proc/integrate.html'>integrate</a>(self, field, 
   
 <tr>
   
-  <td><a class="anchor" name="var-stage"></a>class(<a href='../type/integrand.html'>integrand</a>),</td>
+  <td><span class="anchor" ></span>class(<a href='../type/integrand.html'>integrand</a>),</td>
   <td>intent(inout)</td>
   <td></td>
   
@@ -669,7 +718,7 @@ private  subroutine <a href='../proc/integrate.html'>integrate</a>(self, field, 
   
 <tr>
   
-  <td><a class="anchor" name="var-Dt"></a>real(kind=R_P),</td>
+  <td><span class="anchor" ></span>real(kind=R_P),</td>
   <td>intent(in)</td>
   <td></td>
   
@@ -687,9 +736,14 @@ private  subroutine <a href='../proc/integrate.html'>integrate</a>(self, field, 
     
     <h4>Description</h4>
        
+       
+
+
+       
        <p>Integrate field with explicit TVD (or SSP) Runge-Kutta scheme.</p>
         
 
+      
       </li>
     
   </ul>
@@ -701,7 +755,7 @@ private  subroutine <a href='../proc/integrate.html'>integrate</a>(self, field, 
     
     
     <section>
-    <h2><a class="anchor" name="src"></a>Source Code</h2>
+    <h2><span class="anchor" id="src"></span>Source Code</h2>
     <div class="highlight"><pre><span class="k">type</span> <span class="kd">::</span> <span class="n">tvd_runge_kutta_integrator</span>
   <span class="c">!&lt; FOODiE integrator: provide an explicit class of TVD or SSP Runge-Kutta schemes, from 1st to 4th order accutate.</span>
   <span class="c">!&lt;</span>

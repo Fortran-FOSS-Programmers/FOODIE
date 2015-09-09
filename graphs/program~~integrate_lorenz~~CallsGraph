@@ -1,0 +1,41 @@
+digraph "program~~integrate_lorenz~~CallsGraph" {
+	graph [concentrate=true rankdir=LR size="8.90625,1000.0"]
+	node [fontname=Helvetica fontsize=10.5 height=0.0 margin=0.08 shape=box]
+	edge [fontname=Helvetica fontsize=9.5]
+		"program~integrate_lorenz" [label=integrate_lorenz]
+		graph [concentrate=false]
+		"proc~test_rk~2" [label=test_rk URL="../proc/test_rk%7E2.html" color="#d9534f" fontcolor=white style=filled]
+		"proc~test_euler~2" [label=test_euler URL="../proc/test_euler%7E2.html" color="#d9534f" fontcolor=white style=filled]
+		"proc~test_ab~2" [label=test_ab URL="../proc/test_ab%7E2.html" color="#d9534f" fontcolor=white style=filled]
+		graph [concentrate=false]
+		"proc~save_plots~2" [label=save_plots URL="../proc/save_plots%7E2.html" color="#d9534f" fontcolor=white style=filled]
+		str [label=str color="#777777" fontcolor=white style=filled]
+		"interface~tvd_runge_kutta_integrator" [label=tvd_runge_kutta_integrator URL="../interface/tvd_runge_kutta_integrator.html" color="#A7506F" fontcolor=white style=filled]
+		graph [concentrate=false]
+		graph [concentrate=false]
+		graph [concentrate=false]
+		graph [concentrate=false]
+		graph [concentrate=false]
+		graph [concentrate=false]
+		"proc~create" [label=create URL="../proc/create.html" color="#d94e8f" fontcolor=white style=filled]
+		graph [concentrate=false]
+		graph [concentrate=false]
+		graph [concentrate=false]
+			"interface~tvd_runge_kutta_integrator" -> "proc~create" [style=dashed]
+			"proc~test_rk~2" -> "proc~save_plots~2"
+			"proc~test_rk~2" -> str
+			"proc~test_rk~2" -> "interface~tvd_runge_kutta_integrator"
+		graph [concentrate=false]
+		graph [concentrate=false]
+			"proc~test_euler~2" -> "proc~save_plots~2"
+		graph [concentrate=false]
+		graph [concentrate=false]
+			"proc~test_ab~2" -> "proc~save_plots~2"
+			"proc~test_ab~2" -> str
+			"proc~test_ab~2" -> "interface~tvd_runge_kutta_integrator"
+		graph [concentrate=false]
+			"program~integrate_lorenz" -> "proc~test_rk~2"
+			"program~integrate_lorenz" -> "proc~test_euler~2"
+			"program~integrate_lorenz" -> "proc~test_ab~2"
+		graph [concentrate=false]
+}

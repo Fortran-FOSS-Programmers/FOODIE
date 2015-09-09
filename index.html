@@ -38,7 +38,7 @@
   <body>
 
     <!-- Fixed navbar -->
-    <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+    <nav class="navbar navbar-inverse navbar-fixed-top">
       <div class="container">
         <div class="navbar-header">
           <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
@@ -67,7 +67,7 @@
             <li><a href="./lists/types.html">Derived Types</a></li>
 				
 				
-            <li><a href="./program/integrate_lorenz.html">Program</a></li>
+            <li><a href="./lists/programs.html">Programs</a></li>
 				
           </ul>
         
@@ -116,6 +116,8 @@
 <a href=""><img alt="License" src="https://img.shields.io/badge/license-BSD3-red.svg"></a>
 <a href=""><img alt="License" src="https://img.shields.io/badge/license-MIT-red.svg"></a></p>
 <p><a href=""><img alt="Status" src="https://img.shields.io/badge/status-alpha-orange.svg"></a>
+<a href="https://travis-ci.org/Fortran-FOSS-Programmers/FOODiE"><img alt="Build Status" src="https://travis-ci.org/Fortran-FOSS-Programmers/FOODiE.svg?branch=master"></a>
+<a href="http://codecov.io/github/Fortran-FOSS-Programmers/FOODiE?branch=master"><img alt="Coverage Status" src="https://img.shields.io/codecov/c/github/Fortran-FOSS-Programmers/FOODiE.svg"></a>
 <a href=""><img alt="GitHub issues" src="https://img.shields.io/github/issues/Fortran-FOSS-Programmers/FOODiE.svg"></a></p>
 <h3 id="foodie-fortran-object-oriented-ordinary-differential-equations-integration-library"><a class="toclink" href="#foodie-fortran-object-oriented-ordinary-differential-equations-integration-library">FOODiE, Fortran Object oriented Ordinary Differential Equations integration library</a></h3>
 <ul>
@@ -138,33 +140,63 @@
 <h2 id="main-features"><a class="toclink" href="#main-features">Main features</a></h2>
 <p>FOODiE is aimed to be a KISS-pure-Fortran library for integrating Ordinary Differential Equations (ODE), it being:</p>
 <ul class="checklist">
-<li><input type="checkbox" disabled> Pure Fortran implementation;</li>
-<li><input type="checkbox" disabled> KISS and user-friendly:</li>
-<li><input type="checkbox" disabled> simple API;</li>
+<li><input type="checkbox" disabled checked> Pure Fortran implementation;</li>
+<li><input type="checkbox" disabled checked> KISS and user-friendly:<ul class="checklist">
+<li><input type="checkbox" disabled checked> simple API, presently based on the Rouson's Abstract Data Type Pattern [1];</li>
 <li><input type="checkbox" disabled> easy building and porting on heterogeneous architectures;</li>
-<li><input type="checkbox" disabled> comprehensive:</li>
-<li><input type="checkbox" disabled> Runge-Kutta schemes:</li>
-<li><input type="checkbox" disabled> predictor-corrector schemes;</li>
-<li><input type="checkbox" disabled> explicit;</li>
-<li><input type="checkbox" disabled> implicit;</li>
-<li><input type="checkbox" disabled> efficient:</li>
+</ul>
+</li>
+<li><input type="checkbox" disabled> comprehensive:<ul class="checklist">
+<li><input type="checkbox" disabled checked> explicit Euler scheme, 1st order accurate;</li>
+<li><input type="checkbox" disabled> explicit Runge-Kutta schemes:<ul class="checklist">
+<li><input type="checkbox" disabled> TVD or SSP schemes, see [2]:<ul class="checklist">
+<li><input type="checkbox" disabled checked> 1 stage, namely the forward explicit Euler scheme, 1st order accurate;</li>
+<li><input type="checkbox" disabled checked> 2 stages, 2nd order accurate;</li>
+<li><input type="checkbox" disabled checked> 3 stages, 3rd order accurate;</li>
+<li><input type="checkbox" disabled> 4 stages;</li>
+<li><input type="checkbox" disabled checked> 5 stages, 4th order accurate;</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><input type="checkbox" disabled> implicit Runge-Kutta schemes;</li>
+<li><input type="checkbox" disabled> low-storage explicit schemes, see [2,3,3];</li>
+<li><input type="checkbox" disabled> Leapfrog, 2nd order accurate:<ul class="checklist">
+<li><input type="checkbox" disabled> Robert-Asselin filter, for stability and leapfrog, 1st order accurate;</li>
+<li><input type="checkbox" disabled> Robert-Asselin-Williams filter, for stability and leapfrog, 3rd order accurate;</li>
+</ul>
+</li>
+<li><input type="checkbox" disabled> Adams-Bashforth variants of 2nd and 3rd order accurate;</li>
+</ul>
+</li>
+<li><input type="checkbox" disabled> efficient:<ul class="checklist">
 <li><input type="checkbox" disabled> high scalability on parallel architectures:<ul class="checklist">
 <li><input type="checkbox" disabled> support for shared memory multi/many cores architecture;</li>
 <li><input type="checkbox" disabled> support for distributed memory cluster;</li>
 <li><input type="checkbox" disabled> support for GPGPU/accelerators device;</li>
 </ul>
 </li>
-<li><input type="checkbox" disabled> well documented:</li>
+</ul>
+</li>
+<li><input type="checkbox" disabled> well documented:<ul class="checklist">
 <li><input type="checkbox" disabled> clear documentation of schemes implementations;</li>
-<li><input type="checkbox" disabled> complete API reference;</li>
+<li><input type="checkbox" disabled checked> complete API reference;</li>
 <li><input type="checkbox" disabled> comprehensive wiki:</li>
-<li><input type="checkbox" disabled> collaborative developed;</li>
-<li><input type="checkbox" disabled> FOSS licensed;</li>
+</ul>
+</li>
+<li><input type="checkbox" disabled checked> collaborative developed;</li>
+<li><input type="checkbox" disabled checked> FOSS licensed;</li>
 </ul>
 <p>Any feature request is welcome.</p>
+<h4 id="bibliography"><a class="toclink" href="#bibliography">Bibliography</a></h4>
+<p>[1] <em>Scientific Software Design: The Object-Oriented Way</em>, Rouson, Damian and Xia, Jim and Xu, Xiaofeng, 2011, ISBN 9780521888134, Cambridge University Press, New York, NY, USA.</p>
+<p>[2] <em>High Order Strong Stability Preserving Time Discretizations</em>, Gottlieb, S., Ketcheson, D. I., Shu, C.W., Journal of Scientific Computing, vol. 38, N. 3, 2009, pp. 251-289.</p>
+<p>[3] <em>Low-Storage Runge-Kutta Schemes</em>, J. H. Williamson, Journal of Computational Physics, vol. 35, 1980, pp. 48&ndash;56.</p>
+<p>[4] <em>Fourth-Order 2N-Storage Runge-Kutta Schemes</em>, Mark H. Carpenter, Christopher A. Kennedy, NASA Technical Memorandum 109112, June 1994.</p>
 <p>Go to <a href="#top">Top</a></p>
 <h2 id="status"><a class="toclink" href="#status">Status</a></h2>
-<p>FOODiE project is just started. Nothing has been done. We are searching for Fortraners enthusiast joining our team.</p>
+<p>FOODiE project is just started. A small bunch of integrators have been implemented using the Rouson's Abstract Data Type Pattern, but the library API is not stable.</p>
+<p>We are searching for Fortraners enthusiast joining our team.</p>
 <h2 id="copyrights"><a class="toclink" href="#copyrights">Copyrights</a></h2>
 <p>FOODiE is an open source project, it is distributed under a multi-licensing system:</p>
 <ul>
@@ -220,7 +252,19 @@
               <ul>
                 
                   
+                    <li><a href='./sourcefile/burgers.f90.html'>burgers.f90</a></li>
+                  
+                
+                  
+                    <li><a href='./sourcefile/euler-1d.f90.html'>euler-1D.f90</a></li>
+                  
+                
+                  
                     <li><a href='./sourcefile/foodie.f90.html'>foodie.f90</a></li>
+                  
+                
+                  
+                    <li><a href='./sourcefile/foodie_integrator_adams_bashforth.f90.html'>foodie_integrator_adams_bashforth.f90</a></li>
                   
                 
                   
@@ -232,23 +276,27 @@
                   
                 
                   
-                    <li><a href='./sourcefile/ir_precision.f90.html'>IR_Precision.f90</a></li>
-                  
-                
-                  
                     <li><a href='./sourcefile/lorenz.f90.html'>lorenz.f90</a></li>
                   
                 
                   
-                    <li><a href='./sourcefile/pyplot_module.f90.html'>pyplot_module.f90</a></li>
+                    <li><a href='./sourcefile/oscillation.f90.html'>oscillation.f90</a></li>
                   
                 
                   
-                    <li><a href='./sourcefile/type_integrand.f90.html'>type_integrand.f90</a></li>
+                    <li><a href='./sourcefile/type_burgers.f90.html'>type_burgers.f90</a></li>
                   
                 
                   
-                    <li><a href='./sourcefile/type_lorenz.f90.html'>type_lorenz.f90</a></li>
+                    <li><a href='./sourcefile/type_euler-1d.f90.html'>type_euler-1D.f90</a></li>
+                  
+                
+                  
+                    <li><a href="./lists/files.html"><em>All source files&hellip;</em></a></li>
+                  
+                
+                  
+                
                   
                 
               </ul>
@@ -263,6 +311,10 @@
                   
                 
                   
+                    <li><a href='./module/foodie_integrator_adams_bashforth.html'>foodie_integrator_adams_bashforth</a></li>
+                  
+                
+                  
                     <li><a href='./module/foodie_integrator_euler_explicit.html'>foodie_integrator_euler_explicit</a></li>
                   
                 
@@ -271,11 +323,11 @@
                   
                 
                   
-                    <li><a href='./module/ir_precision.html'>IR_Precision</a></li>
+                    <li><a href='./module/type_burgers.html'>type_burgers</a></li>
                   
                 
                   
-                    <li><a href='./module/pyplot_module.html'>pyplot_module</a></li>
+                    <li><a href='./module/type_euler_1d.html'>type_euler_1D</a></li>
                   
                 
                   
@@ -284,6 +336,10 @@
                 
                   
                     <li><a href='./module/type_lorenz.html'>type_lorenz</a></li>
+                  
+                
+                  
+                    <li><a href='./module/type_oscillation.html'>type_oscillation</a></li>
                   
                 
               </ul>
@@ -295,7 +351,7 @@
               <ul>
                 
                   
-                    <li><a href='./proc/add_bar.html'>add_bar</a></li>
+                    <li><a href='./proc/add_burgers.html'>add_burgers</a></li>
                   
                 
                   
@@ -303,123 +359,39 @@
                   
                 
                   
-                    <li><a href='./proc/add_plot.html'>add_plot</a></li>
+                    <li><a href='./proc/add_oscillation.html'>add_oscillation</a></li>
                   
                 
                   
-                    <li><a href='./proc/add_str.html'>add_str</a></li>
+                    <li><a href='./proc/burgers_assign_burgers.html'>burgers_assign_burgers</a></li>
                   
                 
                   
-                    <li><a href='./proc/bctoi_i1p.html'>bctoi_I1P</a></li>
+                    <li><a href='./proc/burgers_assign_real.html'>burgers_assign_real</a></li>
                   
                 
                   
-                    <li><a href='./proc/bctoi_i2p.html'>bctoi_I2P</a></li>
+                    <li><a href='./proc/burgers_multiply_burgers.html'>burgers_multiply_burgers</a></li>
                   
                 
                   
-                    <li><a href='./proc/bctoi_i4p.html'>bctoi_I4P</a></li>
+                    <li><a href='./proc/burgers_multiply_real.html'>burgers_multiply_real</a></li>
                   
                 
                   
-                    <li><a href='./proc/bctoi_i8p.html'>bctoi_I8P</a></li>
+                    <li><a href='./proc/compute_dt.html'>compute_dt</a></li>
                   
                 
                   
-                    <li><a href='./interface/bcton.html'>bcton</a></li>
+                    <li><a href='./proc/create.html'>create</a></li>
                   
                 
                   
-                    <li><a href='./proc/bctor_r4p.html'>bctor_R4P</a></li>
+                    <li><a href='./proc/d2burgers_dx2.html'>d2Burgers_dx2</a></li>
                   
                 
                   
                     <li><a href="./lists/procedures.html"><em>All procedures&hellip;</em></a></li>
-                  
-                
-                  
-                
-                  
-                
-                  
-                
-                  
-                
-                  
-                
-                  
-                
-                  
-                
-                  
-                
-                  
-                
-                  
-                
-                  
-                
-                  
-                
-                  
-                
-                  
-                
-                  
-                
-                  
-                
-                  
-                
-                  
-                
-                  
-                
-                  
-                
-                  
-                
-                  
-                
-                  
-                
-                  
-                
-                  
-                
-                  
-                
-                  
-                
-                  
-                
-                  
-                
-                  
-                
-                  
-                
-                  
-                
-                  
-                
-                  
-                
-                  
-                
-                  
-                
-                  
-                
-                  
-                
-                  
-                
-                  
-                
-                  
-                
                   
                 
                   
@@ -525,6 +497,18 @@
               <ul>
                 
                   
+                    <li><a href='./type/adams_bashforth_integrator.html'>adams_bashforth_integrator</a></li>
+                  
+                
+                  
+                    <li><a href='./type/burgers.html'>burgers</a></li>
+                  
+                
+                  
+                    <li><a href='./type/euler_1d.html'>euler_1D</a></li>
+                  
+                
+                  
                     <li><a href='./type/euler_explicit_integrator.html'>euler_explicit_integrator</a></li>
                   
                 
@@ -537,7 +521,7 @@
                   
                 
                   
-                    <li><a href='./type/pyplot.html'>pyplot</a></li>
+                    <li><a href='./type/oscillation.html'>oscillation</a></li>
                   
                 
                   

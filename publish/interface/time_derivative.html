@@ -38,7 +38,7 @@
   <body>
 
     <!-- Fixed navbar -->
-    <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+    <nav class="navbar navbar-inverse navbar-fixed-top">
       <div class="container">
         <div class="navbar-header">
           <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
@@ -67,7 +67,7 @@
             <li><a href="../lists/types.html">Derived Types</a></li>
 				
 				
-            <li><a href="../program/integrate_lorenz.html">Program</a></li>
+            <li><a href="../lists/programs.html">Programs</a></li>
 				
           </ul>
         
@@ -114,7 +114,8 @@
   
      <li class="active">time_derivative</li>
   </ol>
-  </div>
+</div>
+</div>
 </div>
     
   </div>
@@ -122,6 +123,10 @@
   <div class="row">
     <div class="col-lg-3">
     
+  
+  
+  
+  
   
   
   
@@ -154,6 +159,8 @@
       
       <a class="list-group-item" href="../interface/time_derivative.html">time_derivative</a>
       
+      <a class="list-group-item" href="../interface/update_previous_steps.html">update_previous_steps</a>
+      
     </div>
   </div> 
   
@@ -164,9 +171,14 @@
 	
     
     <h2>abstract interface</h2>
-    <p>Abstract type bound procedures necessary for implementing the class(integrand).</p>
+    <p>Abstract type bound procedures necessary for implementing a concrete extension of the class(integrand).</p>
+    
+    
     <h2>
-private pure function time_derivative(self)
+private purefunction time_derivative(self, n) result(dState_dt)
+    
+    
+    
 </h2>
     
 
@@ -192,12 +204,27 @@ private pure function time_derivative(self)
   
 <tr>
   
-  <td><a class="anchor" name="var-self"></a>class(<a href='../type/integrand.html'>integrand</a>),</td>
+  <td><span class="anchor" id="variable-self%7E2"></span>class(<a href='../type/integrand.html'>integrand</a>),</td>
   <td>intent(in)</td>
   <td></td>
   
   <td></td><td>::</td>
   <td><strong>self</strong></td><td><p>Integrand field.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-n"></span>integer(kind=I_P),</td>
+  <td>intent(in),</td>
+  <td>optional</td>
+  
+  <td></td><td>::</td>
+  <td><strong>n</strong></td><td><p>Time level.</p></td>
   
 </tr>
 
@@ -211,8 +238,8 @@ private pure function time_derivative(self)
     
     
     
-	 <h3>Return Value <small><a class="anchor" name="var-dState_dt"></a>class([<ford.sourceform.FortranType object at 0x7f59df703050>, '']),
-    allocatable</small></h3>
+	 <h3>Return Value <span class="anchor" id="variable-dstate_dt"></span><small>class(<a href='../type/integrand.html'>integrand</a>),
+  allocatable</small></h3>
     <p>Result of the time derivative function of integrand field.</p>
     
     

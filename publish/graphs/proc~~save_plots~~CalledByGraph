@@ -1,0 +1,25 @@
+digraph "proc~~save_plots~~CalledByGraph" {
+	graph [concentrate=true rankdir=LR size="8.90625,1000.0"]
+	node [fontname=Helvetica fontsize=10.5 height=0.0 margin=0.08 shape=box]
+	edge [fontname=Helvetica fontsize=9.5]
+		"proc~save_plots" [label=save_plots]
+		graph [concentrate=false]
+		"proc~test_euler" [label=test_euler URL="../proc/test_euler.html" color="#d9534f" fontcolor=white style=filled]
+		"proc~test_rk" [label=test_rk URL="../proc/test_rk.html" color="#d9534f" fontcolor=white style=filled]
+		"proc~test_ab" [label=test_ab URL="../proc/test_ab.html" color="#d9534f" fontcolor=white style=filled]
+		graph [concentrate=false]
+		"program~integrate_oscillation" [label=integrate_oscillation URL="../program/integrate_oscillation.html" color="#f0ad4e" fontcolor=white style=filled]
+		graph [concentrate=false]
+			"program~integrate_oscillation" -> "proc~test_euler"
+		graph [concentrate=false]
+		graph [concentrate=false]
+			"program~integrate_oscillation" -> "proc~test_rk"
+		graph [concentrate=false]
+		graph [concentrate=false]
+			"program~integrate_oscillation" -> "proc~test_ab"
+		graph [concentrate=false]
+			"proc~test_euler" -> "proc~save_plots"
+			"proc~test_rk" -> "proc~save_plots"
+			"proc~test_ab" -> "proc~save_plots"
+		graph [concentrate=false]
+}

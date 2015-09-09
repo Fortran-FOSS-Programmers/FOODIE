@@ -38,7 +38,7 @@
   <body>
 
     <!-- Fixed navbar -->
-    <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+    <nav class="navbar navbar-inverse navbar-fixed-top">
       <div class="container">
         <div class="navbar-header">
           <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
@@ -67,7 +67,7 @@
             <li><a href="../lists/types.html">Derived Types</a></li>
 				
 				
-            <li><a href="../program/integrate_lorenz.html">Program</a></li>
+            <li><a href="../lists/programs.html">Programs</a></li>
 				
           </ul>
         
@@ -110,7 +110,8 @@
   
      <li class="active">type_integrand.f90</li>
   </ol>
-  </div>
+</div>
+</div>
 </div>
     
   </div>
@@ -142,6 +143,10 @@
   
   
   
+  
+  
+  
+  
   <div class="panel panel-primary">
     <div class="panel-heading text-left"><h3 class="panel-title">Source Code</h3></div>
     <div class="list-group">
@@ -155,21 +160,31 @@
     <div class="panel-heading text-left"><h3 class="panel-title">All Source Files</h3></div>
     <div class="list-group">
       
+      <a class="list-group-item" href="../sourcefile/burgers.f90.html">burgers.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/euler-1d.f90.html">euler-1D.f90</a>
+      
       <a class="list-group-item" href="../sourcefile/foodie.f90.html">foodie.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/foodie_integrator_adams_bashforth.f90.html">foodie_integrator_adams_bashforth.f90</a>
       
       <a class="list-group-item" href="../sourcefile/foodie_integrator_euler_explicit.f90.html">foodie_integrator_euler_explicit.f90</a>
       
       <a class="list-group-item" href="../sourcefile/foodie_integrator_tvd_runge_kutta.f90.html">foodie_integrator_tvd_runge_kutta.f90</a>
       
-      <a class="list-group-item" href="../sourcefile/ir_precision.f90.html">IR_Precision.f90</a>
-      
       <a class="list-group-item" href="../sourcefile/lorenz.f90.html">lorenz.f90</a>
       
-      <a class="list-group-item" href="../sourcefile/pyplot_module.f90.html">pyplot_module.f90</a>
+      <a class="list-group-item" href="../sourcefile/oscillation.f90.html">oscillation.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/type_burgers.f90.html">type_burgers.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/type_euler-1d.f90.html">type_euler-1D.f90</a>
       
       <a class="list-group-item" href="../sourcefile/type_integrand.f90.html">type_integrand.f90</a>
       
       <a class="list-group-item" href="../sourcefile/type_lorenz.f90.html">type_lorenz.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/type_oscillation.f90.html">type_oscillation.f90</a>
       
     </div>
   </div>
@@ -180,7 +195,7 @@
     <p>Define the abstract type <em>integrand</em> for building FOODiE ODE integrators.</p>
     <br>
     <section>
-    <h2><a class="anchor" name="src"></a>Source Code</h2>
+    <h2><span class="anchor" id="src"></span>Source Code</h2>
     <div class="highlight"><pre><span class="c">!&lt; Define the abstract type *integrand* for building FOODiE ODE integrators.</span>
 <span class="k">module </span><span class="n">type_integrand</span>
 <span class="c">!-----------------------------------------------------------------------------------------------------------------------------------</span>
@@ -188,7 +203,7 @@
 <span class="c">!-----------------------------------------------------------------------------------------------------------------------------------</span>
 
 <span class="c">!-----------------------------------------------------------------------------------------------------------------------------------</span>
-<span class="k">use </span><span class="n">IR_Precision</span><span class="p">,</span> <span class="n">only</span> <span class="p">:</span> <span class="n">R_P</span>
+<span class="k">use </span><span class="n">IR_Precision</span><span class="p">,</span> <span class="n">only</span> <span class="p">:</span> <span class="n">R_P</span><span class="p">,</span> <span class="n">I_P</span>
 <span class="c">!-----------------------------------------------------------------------------------------------------------------------------------</span>
 
 <span class="c">!-----------------------------------------------------------------------------------------------------------------------------------</span>
@@ -201,30 +216,45 @@
 <span class="k">type</span><span class="p">,</span> <span class="k">abstract</span> <span class="kd">::</span> <span class="n">integrand</span>
   <span class="c">!&lt; Abstract type for building FOODiE ODE integrators.</span>
   <span class="k">contains</span>
-    <span class="c">! public deferred procedures that concrete interpolators must implement</span>
-    <span class="k">procedure</span><span class="p">(</span><span class="n">time_derivative</span><span class="p">),</span>      <span class="k">pass</span><span class="p">(</span><span class="n">self</span><span class="p">),</span> <span class="k">deferred</span><span class="p">,</span> <span class="k">public</span> <span class="kd">::</span> <span class="n">t</span>                       <span class="c">!&lt; Time derivative, residuals function.</span>
-    <span class="k">procedure</span><span class="p">(</span><span class="n">integrand_op_real</span><span class="p">),</span>    <span class="k">pass</span><span class="p">(</span><span class="n">lhs</span><span class="p">),</span>  <span class="k">deferred</span><span class="p">,</span> <span class="k">public</span> <span class="kd">::</span> <span class="n">integrand_multiply_real</span> <span class="c">!&lt; Integrand * real operator.</span>
-    <span class="k">procedure</span><span class="p">(</span><span class="n">real_op_integrand</span><span class="p">),</span>    <span class="k">pass</span><span class="p">(</span><span class="n">rhs</span><span class="p">),</span>  <span class="k">deferred</span><span class="p">,</span> <span class="k">public</span> <span class="kd">::</span> <span class="n">real_multiply_integrand</span> <span class="c">!&lt; Real * integrand operator.</span>
-    <span class="k">procedure</span><span class="p">(</span><span class="n">symmetric_operator</span><span class="p">),</span>   <span class="k">pass</span><span class="p">(</span><span class="n">lhs</span><span class="p">),</span>  <span class="k">deferred</span><span class="p">,</span> <span class="k">public</span> <span class="kd">::</span> <span class="n">add</span>                     <span class="c">!&lt; Integrand + integrand oprator.</span>
-    <span class="k">procedure</span><span class="p">(</span><span class="n">assignment_integrand</span><span class="p">),</span> <span class="k">pass</span><span class="p">(</span><span class="n">lhs</span><span class="p">),</span>  <span class="k">deferred</span><span class="p">,</span> <span class="k">public</span> <span class="kd">::</span> <span class="n">assign_integrand</span>        <span class="c">!&lt; Integrand = integrand.</span>
-    <span class="k">procedure</span><span class="p">(</span><span class="n">assignment_real</span><span class="p">),</span>      <span class="k">pass</span><span class="p">(</span><span class="n">lhs</span><span class="p">),</span>  <span class="k">deferred</span><span class="p">,</span> <span class="k">public</span> <span class="kd">::</span> <span class="n">assign_real</span>             <span class="c">!&lt; Integrand = real.</span>
+    <span class="c">! public deferred procedures that concrete integrand-field must implement</span>
+    <span class="k">procedure</span><span class="p">(</span><span class="n">time_derivative</span><span class="p">),</span>       <span class="k">pass</span><span class="p">(</span><span class="n">self</span><span class="p">),</span> <span class="k">deferred</span><span class="p">,</span> <span class="k">public</span> <span class="kd">::</span> <span class="n">t</span>                     <span class="c">!&lt; Time derivative, residuals.</span>
+    <span class="k">procedure</span><span class="p">(</span><span class="n">update_previous_steps</span><span class="p">),</span> <span class="k">pass</span><span class="p">(</span><span class="n">self</span><span class="p">),</span> <span class="k">deferred</span><span class="p">,</span> <span class="k">public</span> <span class="kd">::</span> <span class="n">update_previous_steps</span> <span class="c">!&lt; Time derivative, residuals.</span>
+    <span class="c">! operators</span>
+    <span class="k">procedure</span><span class="p">(</span><span class="n">symmetric_operator</span><span class="p">),</span>   <span class="k">pass</span><span class="p">(</span><span class="n">lhs</span><span class="p">),</span>  <span class="k">deferred</span><span class="p">,</span> <span class="k">public</span> <span class="kd">::</span> <span class="n">integrand_multiply_integrand</span> <span class="c">!&lt; Integrand * integrand operator.</span>
+    <span class="k">procedure</span><span class="p">(</span><span class="n">integrand_op_real</span><span class="p">),</span>    <span class="k">pass</span><span class="p">(</span><span class="n">lhs</span><span class="p">),</span>  <span class="k">deferred</span><span class="p">,</span> <span class="k">public</span> <span class="kd">::</span> <span class="n">integrand_multiply_real</span>      <span class="c">!&lt; Integrand * real operator.</span>
+    <span class="k">procedure</span><span class="p">(</span><span class="n">real_op_integrand</span><span class="p">),</span>    <span class="k">pass</span><span class="p">(</span><span class="n">rhs</span><span class="p">),</span>  <span class="k">deferred</span><span class="p">,</span> <span class="k">public</span> <span class="kd">::</span> <span class="n">real_multiply_integrand</span>      <span class="c">!&lt; Real * integrand operator.</span>
+    <span class="k">procedure</span><span class="p">(</span><span class="n">symmetric_operator</span><span class="p">),</span>   <span class="k">pass</span><span class="p">(</span><span class="n">lhs</span><span class="p">),</span>  <span class="k">deferred</span><span class="p">,</span> <span class="k">public</span> <span class="kd">::</span> <span class="n">add</span>                          <span class="c">!&lt; Integrand + integrand oprator.</span>
+    <span class="k">procedure</span><span class="p">(</span><span class="n">assignment_integrand</span><span class="p">),</span> <span class="k">pass</span><span class="p">(</span><span class="n">lhs</span><span class="p">),</span>  <span class="k">deferred</span><span class="p">,</span> <span class="k">public</span> <span class="kd">::</span> <span class="n">assign_integrand</span>             <span class="c">!&lt; Integrand = integrand.</span>
+    <span class="k">procedure</span><span class="p">(</span><span class="n">assignment_real</span><span class="p">),</span>      <span class="k">pass</span><span class="p">(</span><span class="n">lhs</span><span class="p">),</span>  <span class="k">deferred</span><span class="p">,</span> <span class="k">public</span> <span class="kd">::</span> <span class="n">assign_real</span>                  <span class="c">!&lt; Integrand = real.</span>
     <span class="c">! operators overloading</span>
-    <span class="k">generic</span><span class="p">,</span> <span class="k">public</span> <span class="kd">::</span> <span class="n">operator</span><span class="p">(</span><span class="o">+</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="n">add</span>                                              <span class="c">!&lt; Overloading + operator.</span>
-    <span class="k">generic</span><span class="p">,</span> <span class="k">public</span> <span class="kd">::</span> <span class="n">operator</span><span class="p">(</span><span class="o">*</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="n">real_multiply_integrand</span><span class="p">,</span> <span class="n">integrand_multiply_real</span> <span class="c">!&lt; Overloading * operator.</span>
-    <span class="k">generic</span><span class="p">,</span> <span class="k">public</span> <span class="kd">::</span> <span class="n">assignment</span><span class="p">(</span><span class="o">=</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="n">assign_integrand</span><span class="p">,</span> <span class="n">assign_real</span>                  <span class="c">!&lt; Overloading = assignament.</span>
+    <span class="k">generic</span><span class="p">,</span> <span class="k">public</span> <span class="kd">::</span> <span class="n">operator</span><span class="p">(</span><span class="o">+</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="n">add</span>                              <span class="c">!&lt; Overloading + operator.</span>
+    <span class="k">generic</span><span class="p">,</span> <span class="k">public</span> <span class="kd">::</span> <span class="n">operator</span><span class="p">(</span><span class="o">*</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="n">integrand_multiply_integrand</span><span class="p">,</span> <span class="p">&amp;</span>
+                                      <span class="n">real_multiply_integrand</span><span class="p">,</span> <span class="p">&amp;</span>
+                                      <span class="n">integrand_multiply_real</span>          <span class="c">!&lt; Overloading * operator.</span>
+    <span class="k">generic</span><span class="p">,</span> <span class="k">public</span> <span class="kd">::</span> <span class="n">assignment</span><span class="p">(</span><span class="o">=</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="n">assign_integrand</span><span class="p">,</span> <span class="n">assign_real</span>  <span class="c">!&lt; Overloading = assignament.</span>
 <span class="n">endtype</span> <span class="n">integrand</span>
 
 <span class="k">abstract interface</span>
-  <span class="c">!&lt; Abstract type bound procedures necessary for implementing the class(integrand).</span>
-  <span class="k">pure function </span><span class="n">time_derivative</span><span class="p">(</span><span class="n">self</span><span class="p">)</span> <span class="k">result</span><span class="p">(</span><span class="n">dState_dt</span><span class="p">)</span>
+  <span class="c">!&lt; Abstract type bound procedures necessary for implementing a concrete extension of the class(integrand).</span>
+  <span class="k">pure function </span><span class="n">time_derivative</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">n</span><span class="p">)</span> <span class="k">result</span><span class="p">(</span><span class="n">dState_dt</span><span class="p">)</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
   <span class="c">!&lt; Time derivative function of integrand class, i.e. the residuals function.</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
-  <span class="k">import</span> <span class="kd">::</span> <span class="n">integrand</span>
-  <span class="k">class</span><span class="p">(</span><span class="n">integrand</span><span class="p">),</span> <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span>  <span class="kd">::</span> <span class="n">self</span>      <span class="c">!&lt; Integrand field.</span>
-  <span class="k">class</span><span class="p">(</span><span class="n">integrand</span><span class="p">),</span> <span class="k">allocatable</span> <span class="kd">::</span> <span class="n">dState_dt</span> <span class="c">!&lt; Result of the time derivative function of integrand field.</span>
+  <span class="k">import</span> <span class="kd">::</span> <span class="n">integrand</span><span class="p">,</span> <span class="n">I_P</span>
+  <span class="k">class</span><span class="p">(</span><span class="n">integrand</span><span class="p">),</span>       <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span> <span class="kd">::</span> <span class="n">self</span>      <span class="c">!&lt; Integrand field.</span>
+  <span class="kt">integer</span><span class="p">(</span><span class="n">I_P</span><span class="p">),</span> <span class="k">optional</span><span class="p">,</span> <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span> <span class="kd">::</span> <span class="n">n</span>         <span class="c">!&lt; Time level.</span>
+  <span class="k">class</span><span class="p">(</span><span class="n">integrand</span><span class="p">),</span> <span class="k">allocatable</span>      <span class="kd">::</span> <span class="n">dState_dt</span> <span class="c">!&lt; Result of the time derivative function of integrand field.</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
   <span class="n">endfunction</span> <span class="n">time_derivative</span>
+
+  <span class="k">pure subroutine </span><span class="n">update_previous_steps</span><span class="p">(</span><span class="n">self</span><span class="p">)</span>
+  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+  <span class="c">!&lt; Update the previous time steps (of integrand field) for multi-step(level) ODE solvers.</span>
+  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+  <span class="k">import</span> <span class="kd">::</span> <span class="n">integrand</span>
+  <span class="k">class</span><span class="p">(</span><span class="n">integrand</span><span class="p">),</span> <span class="k">intent</span><span class="p">(</span><span class="n">INOUT</span><span class="p">)</span> <span class="kd">::</span> <span class="n">self</span>      <span class="c">!&lt; Integrand field.</span>
+  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+  <span class="n">endsubroutine</span> <span class="n">update_previous_steps</span>
 
   <span class="k">pure function </span><span class="n">integrand_op_real</span><span class="p">(</span><span class="n">lhs</span><span class="p">,</span> <span class="n">rhs</span><span class="p">)</span> <span class="k">result</span><span class="p">(</span><span class="n">operator_result</span><span class="p">)</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>

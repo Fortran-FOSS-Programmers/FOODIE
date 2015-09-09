@@ -38,7 +38,7 @@
   <body>
 
     <!-- Fixed navbar -->
-    <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+    <nav class="navbar navbar-inverse navbar-fixed-top">
       <div class="container">
         <div class="navbar-header">
           <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
@@ -67,7 +67,7 @@
             <li><a href="../lists/types.html">Derived Types</a></li>
 				
 				
-            <li><a href="../program/integrate_lorenz.html">Program</a></li>
+            <li><a href="../lists/programs.html">Programs</a></li>
 				
           </ul>
         
@@ -114,7 +114,8 @@
   
      <li class="active">integrand_op_real</li>
   </ol>
-  </div>
+</div>
+</div>
 </div>
     
   </div>
@@ -122,6 +123,10 @@
   <div class="row">
     <div class="col-lg-3">
     
+  
+  
+  
+  
   
   
   
@@ -154,6 +159,8 @@
       
       <a class="list-group-item" href="../interface/time_derivative.html">time_derivative</a>
       
+      <a class="list-group-item" href="../interface/update_previous_steps.html">update_previous_steps</a>
+      
     </div>
   </div> 
   
@@ -164,9 +171,14 @@
 	
     
     <h2>abstract interface</h2>
-    <p>Abstract type bound procedures necessary for implementing the class(integrand).</p>
+    <p>Abstract type bound procedures necessary for implementing a concrete extension of the class(integrand).</p>
+    
+    
     <h2>
-private pure function integrand_op_real(lhs, rhs)
+private purefunction integrand_op_real(lhs, rhs) result(operator_result)
+    
+    
+    
 </h2>
     
 
@@ -192,7 +204,7 @@ private pure function integrand_op_real(lhs, rhs)
   
 <tr>
   
-  <td><a class="anchor" name="var-lhs"></a>class(<a href='../type/integrand.html'>integrand</a>),</td>
+  <td><span class="anchor" id="variable-lhs%7E3"></span>class(<a href='../type/integrand.html'>integrand</a>),</td>
   <td>intent(in)</td>
   <td></td>
   
@@ -207,7 +219,7 @@ private pure function integrand_op_real(lhs, rhs)
   
 <tr>
   
-  <td><a class="anchor" name="var-rhs"></a>real(kind=R_P),</td>
+  <td><span class="anchor" id="variable-rhs%7E3"></span>real(kind=R_P),</td>
   <td>intent(in)</td>
   <td></td>
   
@@ -226,8 +238,8 @@ private pure function integrand_op_real(lhs, rhs)
     
     
     
-	 <h3>Return Value <small><a class="anchor" name="var-operator_result"></a>class([<ford.sourceform.FortranType object at 0x7f59df703050>, '']),
-    allocatable</small></h3>
+	 <h3>Return Value <span class="anchor" id="variable-operator_result"></span><small>class(<a href='../type/integrand.html'>integrand</a>),
+  allocatable</small></h3>
     <p>Operator result.</p>
     
     
