@@ -23,7 +23,8 @@ type, extends(integrand) :: lorenz
   private
   integer(I_P)                           :: dims=0       !< Space dimensions.
   integer(I_P)                           :: steps=0      !< Number of time steps stored.
-  real(R_P), dimension(:,:), allocatable :: state        !< Solution vector, [1:dims,1:steps].
+  real(R_P), dimension(:),   allocatable :: state        !< Solution vector, [1:dims].
+  real(R_P), dimension(:,:), allocatable :: previous     !< Previous steps solution vector, [1:dims,1:steps].
   real(R_P)                              :: sigma=0._R_P !< Lorenz \(\sigma\).
   real(R_P)                              :: rho=0._R_P   !< Lorenz \(\rho\).
   real(R_P)                              :: beta=0._R_P  !< Lorenz \(\beta\).
@@ -58,11 +59,17 @@ contains
 
   !---------------------------------------------------------------------------------------------------------------------------------
   self%dims = size(initial_state)
-  self%steps = 1 ; if (present(steps)) self%steps = steps
-  if (allocated(self%state)) deallocate(self%state) ; allocate(self%state(1:self%dims, 1:self%steps))
-  do s=1, self%steps
-    self%state(:, s) = initial_state
-  enddo
+  self%steps = 0 ; if (present(steps)) self%steps = steps
+  if (allocated(self%state)) deallocate(self%state) ; allocate(self%state(1:self%dims))
+  if (self%steps>0) then
+    if (allocated(self%previous)) deallocate(self%previous) ; allocate(self%previous(1:self%dims, 1:self%steps))
+  endif
+  self%state = initial_state
+  if (self%steps>0) then
+    do s=1, self%steps
+      self%previous(:, s) = initial_state
+    enddo
+  endif
   self%sigma = sigma
   self%rho = rho
   self%beta = beta
@@ -79,7 +86,7 @@ contains
   !---------------------------------------------------------------------------------------------------------------------------------
 
   !---------------------------------------------------------------------------------------------------------------------------------
-  state = self%state(:, self%steps)
+  state = self%state
   return
   !---------------------------------------------------------------------------------------------------------------------------------
   endfunction output
@@ -92,7 +99,7 @@ contains
   integer(I_P), optional, intent(IN) :: n         !< Time level.
   class(integrand), allocatable      :: dState_dt !< Lorenz field time derivative.
   type(lorenz),     allocatable      :: delta     !< Delta state used as temporary variables.
-  integer                            :: dn        !< Time level, dummy variable.
+  integer(I_P)                       :: dn        !< Time level, dummy variable.
   !---------------------------------------------------------------------------------------------------------------------------------
 
   !---------------------------------------------------------------------------------------------------------------------------------
@@ -100,15 +107,22 @@ contains
   allocate(delta)
   delta%dims = self%dims
   delta%steps = self%steps
-  allocate(delta%state(1:self%dims, 1:self%steps))
+  delta%state = self%state
+  if (allocated(self%previous)) delta%previous = self%previous
   delta%sigma = self%sigma
   delta%rho = self%rho
   delta%beta = self%beta
   ! Lorenz equations
-  dn = self%steps ; if (present(n)) dn = n
-  delta%state(1, dn) = self%sigma * (self%state(2, dn) - self%state(1, dn))
-  delta%state(2, dn) = self%state(1, dn) * (self%rho - self%state(3, dn)) - self%state(2, dn)
-  delta%state(3, dn) = self%state(1, dn) * self%state(2, dn) - self%beta * self%state(3, dn)
+  if (self%steps>=2) then ! self%previous should be used
+    dn = self%steps ; if (present(n)) dn = n
+    delta%state(1) = self%sigma * (self%previous(2, dn) - self%previous(1, dn))
+    delta%state(2) = self%previous(1, dn) * (self%rho - self%previous(3, dn)) - self%previous(2, dn)
+    delta%state(3) = self%previous(1, dn) * self%previous(2, dn) - self%beta * self%previous(3, dn)
+  else ! self%previous should not be used, use directly self%state
+    delta%state(1) = self%sigma * (self%state(2) - self%state(1))
+    delta%state(2) = self%state(1) * (self%rho - self%state(3)) - self%state(2)
+    delta%state(3) = self%state(1) * self%state(2) - self%beta * self%state(3)
+  endif
   call move_alloc(delta, dState_dt)
   return
   !---------------------------------------------------------------------------------------------------------------------------------
@@ -123,9 +137,12 @@ contains
   !---------------------------------------------------------------------------------------------------------------------------------
 
   !---------------------------------------------------------------------------------------------------------------------------------
-  do s=1, self%steps - 1
-    self%state(:, s) = self%state(:, s + 1)
-  enddo
+  if (self%steps>0) then
+    do s=1, self%steps - 1
+      self%previous(:, s) = self%previous(:, s + 1)
+    enddo
+    self%previous(:, self%steps) = self%state
+  endif
   return
   !---------------------------------------------------------------------------------------------------------------------------------
   endsubroutine update_previous_steps
@@ -147,6 +164,7 @@ contains
     local_product%dims = lhs%dims
     local_product%steps = lhs%steps
     local_product%state = lhs%state * rhs%state
+    if (allocated(lhs%previous)) local_product%previous = lhs%previous
     local_product%sigma = lhs%sigma
     local_product%rho = lhs%rho
     local_product%beta = lhs%beta
@@ -171,6 +189,7 @@ contains
   local_product%dims = lhs%dims
   local_product%steps = lhs%steps
   local_product%state = lhs%state * rhs
+  if (allocated(lhs%previous)) local_product%previous = lhs%previous
   local_product%sigma = lhs%sigma
   local_product%rho   = lhs%rho
   local_product%beta  = lhs%beta
@@ -194,6 +213,7 @@ contains
   local_product%dims = rhs%dims
   local_product%steps = rhs%steps
   local_product%state = rhs%state * lhs
+  if (allocated(rhs%previous)) local_product%previous = rhs%previous
   local_product%sigma = rhs%sigma
   local_product%rho = rhs%rho
   local_product%beta = rhs%beta
@@ -219,6 +239,7 @@ contains
     local_sum%dims = lhs%dims
     local_sum%steps = lhs%steps
     local_sum%state = lhs%state + rhs%state
+    if (allocated(lhs%previous)) local_sum%previous = lhs%previous
     local_sum%sigma = lhs%sigma
     local_sum%rho = lhs%rho
     local_sum%beta = lhs%beta
@@ -242,6 +263,7 @@ contains
     lhs%dims = rhs%dims
     lhs%steps = rhs%steps
     if (allocated(rhs%state)) lhs%state = rhs%state
+    if (allocated(rhs%previous)) lhs%previous = rhs%previous
     lhs%sigma = rhs%sigma
     lhs%rho = rhs%rho
     lhs%beta = rhs%beta
@@ -260,6 +282,7 @@ contains
 
   !---------------------------------------------------------------------------------------------------------------------------------
   if (allocated(lhs%state)) lhs%state = rhs
+  if (allocated(lhs%previous)) lhs%previous = rhs
   return
   !---------------------------------------------------------------------------------------------------------------------------------
   endsubroutine lorenz_assign_real

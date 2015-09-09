@@ -23,7 +23,8 @@ type, extends(integrand) :: oscillation
   private
   integer(I_P)                           :: dims=0     !< Space dimensions.
   integer(I_P)                           :: steps=0    !< Number of time steps stored.
-  real(R_P), dimension(:,:), allocatable :: state      !< Solution vector, [1:dims,1:steps].
+  real(R_P), dimension(:),   allocatable :: state      !< Solution vector, [1:dims].
+  real(R_P), dimension(:,:), allocatable :: previous   !< Previous steps solution vector, [1:dims,1:steps].
   real(R_P)                              :: f = 0._R_P !< Oscillation frequency (Hz).
   contains
     ! auxiliary methods
@@ -54,11 +55,17 @@ contains
 
   !---------------------------------------------------------------------------------------------------------------------------------
   self%dims = size(initial_state)
-  self%steps = 1 ; if (present(steps)) self%steps = steps
-  if (allocated(self%state)) deallocate(self%state) ; allocate(self%state(1:self%dims, 1:self%steps))
-  do s=1, self%steps
-    self%state(:, s) = initial_state
-  enddo
+  self%steps = 0 ; if (present(steps)) self%steps = steps
+  if (allocated(self%state)) deallocate(self%state) ; allocate(self%state(1:self%dims))
+  if (self%steps>0) then
+    if (allocated(self%previous)) deallocate(self%previous) ; allocate(self%previous(1:self%dims, 1:self%steps))
+  endif
+  self%state = initial_state
+  if (self%steps>0) then
+    do s=1, self%steps
+      self%previous(:, s) = initial_state
+    enddo
+  endif
   self%f = f
   return
   !---------------------------------------------------------------------------------------------------------------------------------
@@ -73,7 +80,7 @@ contains
   !---------------------------------------------------------------------------------------------------------------------------------
 
   !---------------------------------------------------------------------------------------------------------------------------------
-  state = self%state(:, self%steps)
+  state = self%state
   return
   !---------------------------------------------------------------------------------------------------------------------------------
   endfunction output
@@ -86,7 +93,7 @@ contains
   integer(I_P), optional, intent(IN) :: n         !< Time level.
   class(integrand),  allocatable     :: dState_dt !< Oscillation field time derivative.
   type(oscillation), allocatable     :: delta     !< Delta state used as temporary variables.
-  integer                            :: dn        !< Time level, dummy variable.
+  integer(I_P)                       :: dn        !< Time level, dummy variable.
   !---------------------------------------------------------------------------------------------------------------------------------
 
   !---------------------------------------------------------------------------------------------------------------------------------
@@ -94,11 +101,18 @@ contains
   allocate(delta)
   delta%dims = self%dims
   delta%steps = self%steps
-  allocate(delta%state(1:self%dims, 1:self%steps))
+  delta%state = self%state
+  if (allocated(self%previous)) delta%previous = self%previous
+  delta%f = self%f
   ! Oscillation equations
-  dn = self%steps ; if (present(n)) dn = n
-  delta%state(1, dn) = -self%f * self%state(2, dn)
-  delta%state(2, dn) =  self%f * self%state(1, dn)
+  if (self%steps>=2) then ! self%previous should be used
+    dn = self%steps ; if (present(n)) dn = n
+    delta%state(1) = -self%f * self%previous(2, dn)
+    delta%state(2) =  self%f * self%previous(1, dn)
+  else ! self%previous should not be used, use directly self%state
+    delta%state(1) = -self%f * self%state(2)
+    delta%state(2) =  self%f * self%state(1)
+  endif
   call move_alloc(delta, dState_dt)
   return
   !---------------------------------------------------------------------------------------------------------------------------------
@@ -113,9 +127,12 @@ contains
   !---------------------------------------------------------------------------------------------------------------------------------
 
   !---------------------------------------------------------------------------------------------------------------------------------
-  do s=1, self%steps - 1
-    self%state(:, s) = self%state(:, s + 1)
-  enddo
+  if (self%steps>0) then
+    do s=1, self%steps - 1
+      self%previous(:, s) = self%previous(:, s + 1)
+    enddo
+    self%previous(:, self%steps) = self%state
+  endif
   return
   !---------------------------------------------------------------------------------------------------------------------------------
   endsubroutine update_previous_steps
@@ -137,6 +154,7 @@ contains
     local_product%dims = lhs%dims
     local_product%steps = lhs%steps
     local_product%state = lhs%state * rhs%state
+    if (allocated(lhs%previous)) local_product%previous = lhs%previous
     local_product%f = lhs%f
   endselect
   call move_alloc(local_product, product)
@@ -159,6 +177,7 @@ contains
   local_product%dims = lhs%dims
   local_product%steps = lhs%steps
   local_product%state = lhs%state * rhs
+  if (allocated(lhs%previous)) local_product%previous = lhs%previous
   local_product%f = lhs%f
   call move_alloc(local_product, product)
   return
@@ -180,6 +199,7 @@ contains
   local_product%dims = rhs%dims
   local_product%steps = rhs%steps
   local_product%state = rhs%state * lhs
+  if (allocated(rhs%previous)) local_product%previous = rhs%previous
   local_product%f     = rhs%f
   call move_alloc(local_product, product)
   return
@@ -190,10 +210,10 @@ contains
   !---------------------------------------------------------------------------------------------------------------------------------
   !< Add two Oscillation fields.
   !---------------------------------------------------------------------------------------------------------------------------------
-  class(oscillation),    intent(IN)  :: lhs       !< Left hand side.
-  class(integrand), intent(IN)  :: rhs       !< Right hand side.
-  class(integrand), allocatable :: sum       !< Sum.
-  type(oscillation),     allocatable :: local_sum !< Temporary sum.
+  class(oscillation), intent(IN) :: lhs       !< Left hand side.
+  class(integrand),   intent(IN) :: rhs       !< Right hand side.
+  class(integrand),  allocatable :: sum       !< Sum.
+  type(oscillation), allocatable :: local_sum !< Temporary sum.
   !---------------------------------------------------------------------------------------------------------------------------------
 
   !---------------------------------------------------------------------------------------------------------------------------------
@@ -203,6 +223,7 @@ contains
     local_sum%dims = lhs%dims
     local_sum%steps = lhs%steps
     local_sum%state = lhs%state + rhs%state
+    if (allocated(lhs%previous)) local_sum%previous = lhs%previous
     local_sum%f = lhs%f
   endselect
   call move_alloc(local_sum, sum)
@@ -224,6 +245,7 @@ contains
     lhs%dims = rhs%dims
     lhs%steps = rhs%steps
     if (allocated(rhs%state)) lhs%state = rhs%state
+    if (allocated(rhs%previous)) lhs%previous = rhs%previous
     lhs%f = rhs%f
   endselect
   return
@@ -240,6 +262,7 @@ contains
 
   !---------------------------------------------------------------------------------------------------------------------------------
   if (allocated(lhs%state)) lhs%state = rhs
+  if (allocated(lhs%previous)) lhs%previous = rhs
   return
   !---------------------------------------------------------------------------------------------------------------------------------
   endsubroutine oscillation_assign_real
