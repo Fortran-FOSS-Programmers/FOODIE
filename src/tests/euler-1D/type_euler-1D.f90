@@ -142,10 +142,11 @@ type, extends(integrand) :: euler_1D
     procedure, pass(lhs),  public :: assign_integrand => euler_assign_euler               !< Euler = Euler.
     procedure, pass(lhs),  public :: assign_real => euler_assign_real                     !< Euler = real.
     ! private methods
-    procedure, pass(self), private :: primitive2conservative     !< Convert primitive variables to conservative ones.
-    procedure, pass(self), private :: conservative2primitive     !< Convert conservative variables to primitive ones.
-    procedure, pass(self), private :: impose_boundary_conditions !< Impose boundary conditions.
-    procedure, pass(self), private :: riemann_solver             !< Solve the Riemann Problem at cell interfaces.
+    procedure, pass(self), private :: primitive2conservative        !< Convert primitive variables to conservative ones.
+    procedure, pass(self), private :: conservative2primitive        !< Convert conservative variables to primitive ones.
+    procedure, pass(self), private :: impose_boundary_conditions    !< Impose boundary conditions.
+    procedure, pass(self), private :: reconstruct_interfaces_states !< Reconstruct interfaces states.
+    procedure, pass(self), private :: riemann_solver                !< Solve the Riemann Problem at cell interfaces.
     final                          :: finalize                   !< Finalize field.
 endtype euler_1D
 !-----------------------------------------------------------------------------------------------------------------------------------
@@ -286,6 +287,7 @@ contains
   class(integrand), allocatable      :: dState_dt !< Euler field time derivative.
   real(R_P), allocatable             :: F(:,:)    !< Fluxes of conservative variables.
   real(R_P), allocatable             :: P(:,:)    !< Primitive variables.
+  real(R_P), allocatable             :: PR(:,:,:) ! Left (1) and right (2) (reconstructed) interface values of primitive variables.
   integer(I_P)                       :: i         !< Counter.
   !---------------------------------------------------------------------------------------------------------------------------------
 
@@ -294,15 +296,17 @@ contains
     ! allocate temporary arrays
     allocate(F(1:Nc, 0:Ni)) ; F = 0._R_P
     allocate(P(1:Np, 1-Ng:Ni+Ng)) ; P = 0._R_P
+    allocate(PR(1:Np, 1:2, 0:Ni+1)) ; PR = 0._R_P
     ! compute primitive variables
     do i=1, Ni
       P(:, i) = self%conservative2primitive(U(:, i))
     enddo
     call self%impose_boundary_conditions(primitive=P)
+    call self%reconstruct_interfaces_states(primitive=P, r_primitive=PR)
     ! compute fluxes by solving Rimeann Problems at each interface
     do i=0, Ni
-      call self%riemann_solver(p1=P(Ns+2, i  ), r1=P(Ns+3, i  ), u1=P(Ns+1, i  ), g1=P(Ns+4, i  ), &
-                               p4=P(Ns+2, i+1), r4=P(Ns+3, i+1), u4=P(Ns+1, i+1), g4=P(Ns+4, i+1), &
+      call self%riemann_solver(r1=PR(Ns+3, 2, i  ), u1=PR(Ns+1, 2, i  ), p1=PR(Ns+2, 2, i  ), g1=PR(Ns+4, 2, i  ), &
+                               r4=PR(Ns+3, 1, i+1), u4=PR(Ns+1, 1, i+1), p4=PR(Ns+2, 1, i+1), g4=PR(Ns+4, 1, i+1), &
                                F=F(:, i))
     enddo
     ! compute residuals
@@ -601,6 +605,29 @@ contains
   return
   !--------------------------------------------------------------------------------------------------------------------------------
   endsubroutine impose_boundary_conditions
+
+  subroutine reconstruct_interfaces_states(self, primitive, r_primitive)
+  !--------------------------------------------------------------------------------------------------------------------------------
+  !< Reconstruct the interfaces states (into primitive variables formulation) by the requested order of accuracy.
+  !--------------------------------------------------------------------------------------------------------------------------------
+  class(euler_1D), intent(IN)    :: self                                            !< Euler field.
+  real(R_P),       intent(IN)    :: primitive(1:self%Np, 1-self%Ng:self%Ni+self%Ng)  !< Primitive variables.
+  real(R_P),       intent(INOUT) :: r_primitive(1:self%Np, 1:2, 0:self%Ni+1)         !< Reconstructed primitive variables.
+  integer(I_P)                   :: i                                                !< Space counter.
+  !--------------------------------------------------------------------------------------------------------------------------------
+
+  !--------------------------------------------------------------------------------------------------------------------------------
+  select case(self%ord)
+  case(1) ! 1st order piecewise constant reconstruction
+    do i=0, self%Ni+1
+      r_primitive(:, 1, i) = primitive(:, i)
+      r_primitive(:, 2, i) = r_primitive(:, 1, i)
+    enddo
+  case(3, 5, 7) ! 3rd, 5th or 7th order WENO reconstruction
+  endselect
+  return
+  !--------------------------------------------------------------------------------------------------------------------------------
+  endsubroutine reconstruct_interfaces_states
 
   subroutine riemann_solver(self, p1, r1, u1, g1, p4, r4, u4, g4, F)
   !---------------------------------------------------------------------------------------------------------------------------------
