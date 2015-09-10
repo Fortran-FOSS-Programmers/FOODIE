@@ -21,47 +21,109 @@ type, extends(integrand) :: euler_1D
   !<
   !< It is a FOODiE integrand class.
   !<
-  !<### Primitive variables organization
-  !< Primitive variables are organized as an array (of rank 2) of reals which the first index means:
-  !<| first subscript index | phisical meaning |
-  !<|---|---|
-  !<|1    | density of species 1    (r1)        |
-  !<|2    | density of species 2    (r2)        |
-  !<|...  |                                     |
-  !<|s    | density of species s-th (rs)        |
-  !<|...  |                                     |
-  !<|Ns   | density of species Ns   (rNs)       |
-  !<|Ns+1 | velocity                (u)         |
-  !<|Ns+2 | pressure                (p)         |
-  !<|Ns+3 | density                 (r=sum(rs)) |
-  !<|Ns+4 | specific heats ratio    (g)         |
+  !<### 1D Euler PDEs system
+  !< The 1D Euler PDEs system considered is a non linear, hyperbolic (inviscid) system of conservation laws for compressible gas
+  !< dynamics, that reads as
+  !<$$
+  !<\begin{matrix}
+  !<U_t = R(U)  \Leftrightarrow U_t = F(U)_x \\
+  !<U = \begin{bmatrix}
+  !<\rho \\
+  !<\rho u \\
+  !<\rho E
+  !<\end{bmatrix}\;\;\;
+  !<F(U) = \begin{bmatrix}
+  !<\rho u \\
+  !<\rho u^2 + p \\
+  !<\rho u H
+  !<\end{bmatrix}
+  !<\end{matrix}
+  !<$$
+  !< where \(\rho\) is the density, \(u\) is the velocity, \(p\) the pressure, \(E\) the total internal specific energy and \(H\)
+  !< the total specific enthalpy. The PDEs system must completed with the proper initial and boundary conditions. Moreover, an ideal
+  !< (thermally and calorically perfect) gas is considered
+  !<$$
+  !<\begin{matrix}
+  !<R = c_p - c_v \\
+  !<\gamma = \frac{c_p}{c_v}\\
+  !<e = c_v T \\
+  !<h = c_p T
+  !<\end{matrix}
+  !<$$
+  !< where *R* is the gas constant, \(c_p\,c_v\) are the specific heats at constant pressure and volume (respectively), *e* is the
+  !< internal energy, *h* is the internal enthalpy and *T* is the temperature. The following addition equations of state hold:
+  !<$$
+  !<\begin{matrix}
+  !<T = \frac{p}{\rho R} \\
+  !<E = \rho e + \frac{1}{2} \rho u^2 \\
+  !<H = \rho h + \frac{1}{2} \rho u^2 \\
+  !<a = \sqrt{\frac{\gamma p}{\rho}}
+  !<\end{matrix}
+  !<$$
   !<
-  !<### Conservative variables organization
-  !< Conservative  variables are organized as an array (of rank 2) of reals which the first index means:
-  !<| first subscript index | phisical meaning |
-  !<|---|---|
-  !<|1    | mass conservation of species 1    (r1)   |
-  !<|2    | mass conservation of species 2    (r2)   |
-  !<|...  |                                          |
-  !<|s    | mass conservation of species s-th (rs)   |
-  !<|...  |                                          |
-  !<|Ns   | mass conservation of species Ns   (rNs)  |
-  !<|Ns+1 | momentum conservation             (r*u)  |
-  !<|Ns+2 | energy conservation               (r*E)  |
+  !<### Multi-fluid Euler PDEs system
+  !< An extension of the above Euler system is considered allowing the modelling of a multi-fluid mixture of different gas (with
+  !< different physical characteristics). The well known Standard Thermodynamic Model is used to model the gas mixture replacing the
+  !< density with the density fraction of each specie composing the mixture. This led to the following system:
+  !<$$
+  !<\begin{matrix}
+  !<U_t = R(U)  \Leftrightarrow U_t = F(U)_x \\
+  !<U = \begin{bmatrix}
+  !<\rho_s \\
+  !<\rho u \\
+  !<\rho E
+  !<\end{bmatrix}\;\;\;
+  !<F(U) = \begin{bmatrix}
+  !<\rho_s u \\
+  !<\rho u^2 + p \\
+  !<\rho u H
+  !<\end{bmatrix}\;\;\; for\; s=1,2,...N_s \\
+  !<\rho = \sum_{s=1}^{N_s}\rho_s \\
+  !<c_p = \sum_{s=1}^{N_S} \frac{\rho_s}{\rho} c_{p,s} \quad  c_v = \sum_{s=1}^{N_S} \frac{\rho_s}{\rho} c_{v,s}
+  !<\end{matrix}
+  !<$$
+  !< where \(N_s\) is the number of initial species composing the gas mixture.
+  !<
+  !<#### Primitive variables organization
+  !< Primitive variables are organized as an array of reals which the first index means:
+  !<
+  !< + 1    : density of species 1    (r1)
+  !< + 2    : density of species 2    (r2)
+  !< + ...  :
+  !< + s    : density of species s-th (rs)
+  !< + ...  :
+  !< + Ns   : density of species Ns   (rNs)
+  !< + Ns+1 : velocity                (u)
+  !< + Ns+2 : pressure                (p)
+  !< + Ns+3 : density                 (r=sum(rs))
+  !< + Ns+4 : specific heats ratio    (g)
+  !<
+  !<#### Conservative variables organization
+  !< Conservative  variables are organized as an array of reals which the first index means:
+  !<
+  !< + 1    : mass conservation of species 1    (r1)
+  !< + 2    : mass conservation of species 2    (r2)
+  !< + ...  :
+  !< + s    : mass conservation of species s-th (rs)
+  !< + ...  :
+  !< + Ns   : mass conservation of species Ns   (rNs)
+  !< + Ns+1 : momentum conservation             (r*u)
+  !< + Ns+2 : energy conservation               (r*E)
   private
-  integer(I_P)              :: steps=0   !< Number of time steps stored.
-  integer(I_P)              :: ord=0     !< Space accuracy formal order.
-  integer(I_P)              :: Ni=0      !< Space dimension.
-  integer(I_P)              :: Ng=0      !< Number of ghost cells for boundary conditions handling.
-  integer(I_P)              :: Ns=0      !< Number of initial species.
-  integer(I_P)              :: Nc=0      !< Number of conservative variables, Ns+2.
-  integer(I_P)              :: Np=0      !< Number of primitive variables, Ns+4.
-  real(R_P)                 :: Dx=0._R_P !< Space step.
-  real(R_P),    allocatable :: U(:,:)    !< Conservative (state) variables [1:Nc,1-Ng:Ni+Ng].
-  real(R_P),    allocatable :: cp0(:)    !< Specific heat cp of initial species [1:Ns].
-  real(R_P),    allocatable :: cv0(:)    !< Specific heat cv of initial species [1:Ns].
-  character(:), allocatable :: BC_L      !< Left boundary condition type.
-  character(:), allocatable :: BC_R      !< Right boundary condition type.
+  integer(I_P)              :: steps=0         !< Number of time steps stored.
+  integer(I_P)              :: ord=0           !< Space accuracy formal order.
+  integer(I_P)              :: Ni=0            !< Space dimension.
+  integer(I_P)              :: Ng=0            !< Number of ghost cells for boundary conditions handling.
+  integer(I_P)              :: Ns=0            !< Number of initial species.
+  integer(I_P)              :: Nc=0            !< Number of conservative variables, Ns+2.
+  integer(I_P)              :: Np=0            !< Number of primitive variables, Ns+4.
+  real(R_P)                 :: Dx=0._R_P       !< Space step.
+  real(R_P),    allocatable :: U(:,:)          !< Conservative (state) variables [1:Nc,1-Ng:Ni+Ng].
+  real(R_P),    allocatable :: previous(:,:,:) !< Conservative (state) variables of previous time steps [1:Nc,1-Ng:Ni+Ng,1:steps].
+  real(R_P),    allocatable :: cp0(:)          !< Specific heat cp of initial species [1:Ns].
+  real(R_P),    allocatable :: cv0(:)          !< Specific heat cv of initial species [1:Ns].
+  character(:), allocatable :: BC_L            !< Left boundary condition type.
+  character(:), allocatable :: BC_R            !< Right boundary condition type.
   contains
     ! public methods
     ! auxiliary methods
@@ -106,7 +168,7 @@ contains
   integer(I_P), optional, intent(IN)    :: steps              !< Time steps stored.
   integer(I_P), optional, intent(IN)    :: ord                !< Space accuracy formal order.
   integer(I_P)                          :: i                  !< Space counter.
-  ! integer(I_P)                          :: s                  !< Steps counter.
+  integer(I_P)                          :: s                  !< Steps counter.
   !---------------------------------------------------------------------------------------------------------------------------------
 
   !---------------------------------------------------------------------------------------------------------------------------------
@@ -119,6 +181,9 @@ contains
   self%Np = Ns + 4
   self%Dx = Dx
   if (allocated(self%U)) deallocate(self%U) ; allocate(self%U  (1:self%Nc, 1:Ni))
+  if (self%steps>0) then
+    if (allocated(self%previous)) deallocate(self%previous) ; allocate(self%previous(1:self%Nc, 1:Ni, 1:self%steps))
+  endif
   self%cp0 = cp0
   self%cv0 = cv0
   self%BC_L = BC_L
@@ -126,6 +191,13 @@ contains
   do i=1, Ni
     self%U(:, i) = self%primitive2conservative(initial_state(:, i))
   enddo
+  if (self%steps>0) then
+    do s=1, self%steps
+      do i=1, Ni
+        self%previous(:, i, s) = self%primitive2conservative(initial_state(:, i))
+      enddo
+    enddo
+  endif
   return
   !---------------------------------------------------------------------------------------------------------------------------------
   endsubroutine init
@@ -147,6 +219,7 @@ contains
   self%Np = 0
   self%Dx = 0._R_P
   if (allocated(self%U)) deallocate(self%U)
+  if (allocated(self%previous)) deallocate(self%previous)
   if (allocated(self%cp0)) deallocate(self%cp0)
   if (allocated(self%cv0)) deallocate(self%cv0)
   if (allocated(self%BC_L)) deallocate(self%BC_L)
@@ -175,7 +248,7 @@ contains
 
   function compute_dt(self, Nmax, Tmax, t, CFL) result(Dt)
   !--------------------------------------------------------------------------------------------------------------------------------
-  !< Compute the current time step, by means of CFL condition.
+  !< Compute the current time step by means of CFL condition.
   !--------------------------------------------------------------------------------------------------------------------------------
   class(euler_1D), intent(IN) :: self           !< Euler field.
   integer(I_P),    intent(IN) :: Nmax           !< Maximun number of iterates.
@@ -183,20 +256,18 @@ contains
   real(R_P),       intent(IN) :: t              !< Time.
   real(R_P),       intent(IN) :: CFL            !< CFL value.
   real(R_P)                   :: Dt             !< Time step.
-  real(R_P)                   :: vmax           !< Maximum signal speed propagation.
   real(R_P), allocatable      :: P(:)           !< Primitive variables.
-  integer(I_P)                :: i              !< Cell counter.
+  real(R_P)                   :: vmax           !< Maximum propagation speed of signals.
+  integer(I_P)                :: i              !< Counter.
   !--------------------------------------------------------------------------------------------------------------------------------
 
   !--------------------------------------------------------------------------------------------------------------------------------
-  associate(Ni=>self%Ni, Dx=>self%Dx, Ns=>self%Ns, U=>self%U)
-    ! evaluating max speed propagation
-    vmax = 0.0_R_P
+  associate(Ni=>self%Ni, Ns=>self%Ns, Dx=>self%Dx)
+    vmax = 0._R_P
     do i=1, Ni
-      P    = self%conservative2primitive(U(:, i))
-      vmax = max(0.5_R_P * (abs(P(Ns + 1)) + a(p=P(Ns+2), r=P(Ns+3), g=P(Ns+4))), vmax)
+      P    = self%conservative2primitive(self%U(:, i))
+      vmax = max(abs(P(Ns+1)) + a(p=P(Ns+2), r=P(Ns+3), g=P(Ns+4)), vmax)
     enddo
-    ! evaluating time step
     Dt = Dx * CFL / vmax
     if (Nmax<=0) then
       if ((t + Dt) > Tmax) Dt = Tmax - t
@@ -210,12 +281,12 @@ contains
   !---------------------------------------------------------------------------------------------------------------------------------
   !< Time derivative of Euler field, the residuals function.
   !---------------------------------------------------------------------------------------------------------------------------------
-  class(euler_1D),        intent(IN) :: self       !< Euler field.
-  integer(I_P), optional, intent(IN) :: n          !< Time level.
-  class(integrand), allocatable      :: dState_dt  !< Euler field time derivative.
-  real(R_P), allocatable             :: F(:,:)     !< Fluxes of conservative variables.
-  real(R_P), allocatable             :: P(:,:)     !< Primitive variables.
-  integer(I_P)                       :: i          !< Counter.
+  class(euler_1D),        intent(IN) :: self      !< Euler field.
+  integer(I_P), optional, intent(IN) :: n         !< Time level.
+  class(integrand), allocatable      :: dState_dt !< Euler field time derivative.
+  real(R_P), allocatable             :: F(:,:)    !< Fluxes of conservative variables.
+  real(R_P), allocatable             :: P(:,:)    !< Primitive variables.
+  integer(I_P)                       :: i         !< Counter.
   !---------------------------------------------------------------------------------------------------------------------------------
 
   !---------------------------------------------------------------------------------------------------------------------------------
@@ -228,10 +299,11 @@ contains
       P(:, i) = self%conservative2primitive(U(:, i))
     enddo
     call self%impose_boundary_conditions(primitive=P)
-    ! solve Rimeann Problems
+    ! compute fluxes by solving Rimeann Problems at each interface
     do i=0, Ni
-      F(:, i) = self%riemann_solver(p1=P(Ns+2, i  ), r1=P(Ns+3, i  ), u1=P(Ns+1, i  ), g1=P(Ns+4, i  ), &
-                                    p4=P(Ns+2, i+1), r4=P(Ns+3, i+1), u4=P(Ns+1, i+1), g4=P(Ns+4, i+1))
+      call self%riemann_solver(p1=P(Ns+2, i  ), r1=P(Ns+3, i  ), u1=P(Ns+1, i  ), g1=P(Ns+4, i  ), &
+                               p4=P(Ns+2, i+1), r4=P(Ns+3, i+1), u4=P(Ns+1, i+1), g4=P(Ns+4, i+1), &
+                               F=F(:, i))
     enddo
     ! compute residuals
     allocate(euler_1D :: dState_dt)
@@ -252,13 +324,16 @@ contains
   !< Update previous time steps.
   !---------------------------------------------------------------------------------------------------------------------------------
   class(euler_1D), intent(INOUT) :: self !< Euler field.
-  ! integer                        :: s    !< Time steps counter.
+  integer                        :: s    !< Time steps counter.
   !---------------------------------------------------------------------------------------------------------------------------------
 
   !---------------------------------------------------------------------------------------------------------------------------------
-  ! do s=1, self%steps - 1
-  !   self%U(:, :, s) = self%U(:, :, s + 1)
-  ! enddo
+  if (self%steps>0) then
+    do s=1, self%steps - 1
+      self%previous(:, :, s) = self%previous(:, :, s + 1)
+    enddo
+    self%previous(:, :, self%steps) = self%U
+  endif
   return
   !---------------------------------------------------------------------------------------------------------------------------------
   endsubroutine update_previous_steps
@@ -277,21 +352,22 @@ contains
   allocate(euler_1D :: opr)
   select type(opr)
   class is(euler_1D)
+    opr = lhs
     select type(rhs)
     class is (euler_1D)
-      opr%steps = lhs%steps
-      opr%ord   = lhs%ord
-      opr%Ni    = lhs%Ni
-      opr%Ng    = lhs%Ng
-      opr%Ns    = lhs%Ns
-      opr%Nc    = lhs%Nc
-      opr%Np    = lhs%Np
-      opr%Dx    = lhs%Dx
+      ! opr%steps = lhs%steps
+      ! opr%ord   = lhs%ord
+      ! opr%Ni    = lhs%Ni
+      ! opr%Ng    = lhs%Ng
+      ! opr%Ns    = lhs%Ns
+      ! opr%Nc    = lhs%Nc
+      ! opr%Np    = lhs%Np
+      ! opr%Dx    = lhs%Dx
       opr%U     = lhs%U * rhs%U
-      opr%cp0   = lhs%cp0
-      opr%cv0   = lhs%cv0
-      opr%BC_L  = lhs%BC_L
-      opr%BC_R  = lhs%BC_R
+      ! opr%cp0   = lhs%cp0
+      ! opr%cv0   = lhs%cv0
+      ! opr%BC_L  = lhs%BC_L
+      ! opr%BC_R  = lhs%BC_R
     endselect
   endselect
   return
@@ -311,19 +387,20 @@ contains
   allocate(euler_1D :: opr)
   select type(opr)
   class is(euler_1D)
-    opr%steps = lhs%steps
-    opr%ord   = lhs%ord
-    opr%Ni    = lhs%Ni
-    opr%Ng    = lhs%Ng
-    opr%Ns    = lhs%Ns
-    opr%Nc    = lhs%Nc
-    opr%Np    = lhs%Np
-    opr%Dx    = lhs%Dx
+    opr = lhs
+    ! opr%steps = lhs%steps
+    ! opr%ord   = lhs%ord
+    ! opr%Ni    = lhs%Ni
+    ! opr%Ng    = lhs%Ng
+    ! opr%Ns    = lhs%Ns
+    ! opr%Nc    = lhs%Nc
+    ! opr%Np    = lhs%Np
+    ! opr%Dx    = lhs%Dx
     opr%U     = lhs%U * rhs
-    opr%cp0   = lhs%cp0
-    opr%cv0   = lhs%cv0
-    opr%BC_L  = lhs%BC_L
-    opr%BC_R  = lhs%BC_R
+    ! opr%cp0   = lhs%cp0
+    ! opr%cv0   = lhs%cv0
+    ! opr%BC_L  = lhs%BC_L
+    ! opr%BC_R  = lhs%BC_R
   endselect
   return
   !---------------------------------------------------------------------------------------------------------------------------------
@@ -342,19 +419,20 @@ contains
   allocate(euler_1D :: opr)
   select type(opr)
   class is(euler_1D)
-    opr%steps = rhs%steps
-    opr%ord   = rhs%ord
-    opr%Ni    = rhs%Ni
-    opr%Ng    = rhs%Ng
-    opr%Ns    = rhs%Ns
-    opr%Nc    = rhs%Nc
-    opr%Np    = rhs%Np
-    opr%Dx    = rhs%Dx
+    opr = rhs
+    ! opr%steps = rhs%steps
+    ! opr%ord   = rhs%ord
+    ! opr%Ni    = rhs%Ni
+    ! opr%Ng    = rhs%Ng
+    ! opr%Ns    = rhs%Ns
+    ! opr%Nc    = rhs%Nc
+    ! opr%Np    = rhs%Np
+    ! opr%Dx    = rhs%Dx
     opr%U     = rhs%U * lhs
-    opr%cp0   = rhs%cp0
-    opr%cv0   = rhs%cv0
-    opr%BC_L  = rhs%BC_L
-    opr%BC_R  = rhs%BC_R
+    ! opr%cp0   = rhs%cp0
+    ! opr%cv0   = rhs%cv0
+    ! opr%BC_L  = rhs%BC_L
+    ! opr%BC_R  = rhs%BC_R
   endselect
   return
   !---------------------------------------------------------------------------------------------------------------------------------
@@ -373,21 +451,22 @@ contains
   allocate (euler_1D :: opr)
   select type(opr)
   class is(euler_1D)
+    opr = lhs
     select type(rhs)
     class is (euler_1D)
-      opr%steps = lhs%steps
-      opr%ord   = lhs%ord
-      opr%Ni    = lhs%Ni
-      opr%Ng    = lhs%Ng
-      opr%Ns    = lhs%Ns
-      opr%Nc    = lhs%Nc
-      opr%Np    = lhs%Np
-      opr%Dx    = lhs%Dx
+      ! opr%steps = lhs%steps
+      ! opr%ord   = lhs%ord
+      ! opr%Ni    = lhs%Ni
+      ! opr%Ng    = lhs%Ng
+      ! opr%Ns    = lhs%Ns
+      ! opr%Nc    = lhs%Nc
+      ! opr%Np    = lhs%Np
+      ! opr%Dx    = lhs%Dx
       opr%U     = lhs%U + rhs%U
-      opr%cp0   = lhs%cp0
-      opr%cv0   = lhs%cv0
-      opr%BC_L  = lhs%BC_L
-      opr%BC_R  = lhs%BC_R
+      ! opr%cp0   = lhs%cp0
+      ! opr%cv0   = lhs%cv0
+      ! opr%BC_L  = lhs%BC_L
+      ! opr%BC_R  = lhs%BC_R
     endselect
   endselect
   return
@@ -404,20 +483,21 @@ contains
 
   !---------------------------------------------------------------------------------------------------------------------------------
   select type(rhs)
-  class is (euler_1D)
-    lhs%steps = rhs%steps
-    lhs%ord   = rhs%ord
-    lhs%Ni    = rhs%Ni
-    lhs%Ng    = rhs%Ng
-    lhs%Ns    = rhs%Ns
-    lhs%Nc    = rhs%Nc
-    lhs%Np    = rhs%Np
-    lhs%Dx    = rhs%Dx
-    lhs%U     = rhs%U
-    lhs%cp0   = rhs%cp0
-    lhs%cv0   = rhs%cv0
-    lhs%BC_L  = rhs%BC_L
-    lhs%BC_R  = rhs%BC_R
+  class is(euler_1D)
+                                 lhs%steps    = rhs%steps
+                                 lhs%ord      = rhs%ord
+                                 lhs%Ni       = rhs%Ni
+                                 lhs%Ng       = rhs%Ng
+                                 lhs%Ns       = rhs%Ns
+                                 lhs%Nc       = rhs%Nc
+                                 lhs%Np       = rhs%Np
+                                 lhs%Dx       = rhs%Dx
+    if (allocated(rhs%U))        lhs%U        = rhs%U
+    if (allocated(rhs%previous)) lhs%previous = rhs%previous
+    if (allocated(rhs%cp0))      lhs%cp0      = rhs%cp0
+    if (allocated(rhs%cv0))      lhs%cv0      = rhs%cv0
+    if (allocated(rhs%BC_L))     lhs%BC_L     = rhs%BC_L
+    if (allocated(rhs%BC_R))     lhs%BC_R     = rhs%BC_R
   endselect
   return
   !---------------------------------------------------------------------------------------------------------------------------------
@@ -433,6 +513,7 @@ contains
 
   !---------------------------------------------------------------------------------------------------------------------------------
   if (allocated(lhs%U)) lhs%U = rhs
+  if (allocated(lhs%previous)) lhs%previous = rhs
   return
   !---------------------------------------------------------------------------------------------------------------------------------
   endsubroutine euler_assign_real
@@ -521,7 +602,7 @@ contains
   !--------------------------------------------------------------------------------------------------------------------------------
   endsubroutine impose_boundary_conditions
 
-  function riemann_solver(self, p1, r1, u1, g1, p4, r4, u4, g4) result(F)
+  subroutine riemann_solver(self, p1, r1, u1, g1, p4, r4, u4, g4, F)
   !---------------------------------------------------------------------------------------------------------------------------------
   !< Solve the Riemann problem between the state $1$ and $4$ using the (local) Lax Friedrichs (Rusanov) solver.
   !---------------------------------------------------------------------------------------------------------------------------------
@@ -534,7 +615,7 @@ contains
   real(R_P), intent(IN)       :: r4           !< Density of state 4.
   real(R_P), intent(IN)       :: u4           !< Velocity of state 4.
   real(R_P), intent(IN)       :: g4           !< Specific heats ratio of state 4.
-  real(R_P)                   :: F(1:self%Nc) !< Resulting fluxes.
+  real(R_P), intent(OUT)      :: F(1:self%Nc) !< Resulting fluxes.
   real(R_P)                   :: F1(1:3)      !< State 1 fluxes.
   real(R_P)                   :: F4(1:3)      !< State 4 fluxes.
   real(R_P)                   :: u            !< Velocity of the intermediate states.
@@ -577,7 +658,7 @@ contains
     return
     !-------------------------------------------------------------------------------------------------------------------------------
     endfunction fluxes
-  endfunction riemann_solver
+  endsubroutine riemann_solver
 
   subroutine finalize(self)
   !---------------------------------------------------------------------------------------------------------------------------------

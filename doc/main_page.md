@@ -8,6 +8,7 @@ github: http://fortran-foss-programmers.github.io/
 website: http://fortran-foss-programmers.github.io/
 md_extensions: markdown.extensions.toc(anchorlink=True)
                markdown.extensions.smarty(smart_quotes=False)
+               markdown.extensions.extra
                markdown_checklist.extension
 docmark: <
 display: public

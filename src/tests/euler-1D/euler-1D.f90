@@ -16,7 +16,7 @@ use pyplot_module, only :  pyplot
 implicit none
 type(Type_Command_Line_Interface) :: cli                      !< Command line interface handler.
 type(euler_1D)                    :: domain                   !< Domain of Euler equations.
-real(R_P),    parameter           :: CFL=0.1_R_P              !< CFL value.
+real(R_P),    parameter           :: CFL=0.7_R_P              !< CFL value.
 real(R_P),    parameter           :: t_final=0.15_R_P         !< Final time.
 integer(I_P), parameter           :: Ni=100                   !< Number of grid cells.
 integer(I_P), parameter           :: Ng=3                     !< Number of ghost cells.
@@ -33,8 +33,9 @@ real(R_P)                         :: x(1:Ni)                  !< Cell center x-a
 real(R_P), allocatable            :: final_state(:,:)         !< Final state.
 integer(I_P)                      :: error                    !< Error handler.
 character(99)                     :: solver                   !< Solver used.
-logical                           :: plots               !< Flag for activating plots saving.
-logical                           :: results             !< Flag for activating results saving.
+logical                           :: plots                    !< Flag for activating plots saving.
+logical                           :: results                  !< Flag for activating results saving.
+logical                           :: time_serie               !< Flag for activating time serie-results saving.
 !-----------------------------------------------------------------------------------------------------------------------------------
 
 !-----------------------------------------------------------------------------------------------------------------------------------
@@ -52,11 +53,14 @@ call cli%add(switch='--results', switch_ab='-r', help='Save results', required=.
              error=error)
 call cli%add(switch='--plots', switch_ab='-p', help='Save plots of results', required=.false., act='store_true', def='.false.', &
              error=error)
+call cli%add(switch='--tserie', switch_ab='-t', help='Save time-serie-results', required=.false., act='store_true', def='.false.', &
+             error=error)
 ! parsing Command Line Interface
 call cli%parse(error=error)
 call cli%get(switch='-s', val=solver, error=error) ; if (error/=0) stop
 call cli%get(switch='-r', val=results, error=error) ; if (error/=0) stop
 call cli%get(switch='-p', val=plots, error=error) ; if (error/=0) stop
+call cli%get(switch='-t', val=time_serie, error=error) ; if (error/=0) stop
 ! create Euler field initial state
 call init()
 ! integrate Euler equation
@@ -128,6 +132,7 @@ contains
   !---------------------------------------------------------------------------------------------------------------------------------
 
   !---------------------------------------------------------------------------------------------------------------------------------
+  if (results.or.plots) final_state = domain%output()
   if (results) then
     open(newunit=rawfile, file=filename//'.dat')
     write(rawfile, '(A)')'# '//title
@@ -152,6 +157,39 @@ contains
   !---------------------------------------------------------------------------------------------------------------------------------
   endsubroutine save_results
 
+  subroutine save_time_serie(title, filename, finish, t)
+  !---------------------------------------------------------------------------------------------------------------------------------
+  !< Save time-serie results.
+  !---------------------------------------------------------------------------------------------------------------------------------
+  character(*), intent(IN), optional :: title    !< Plot title.
+  character(*), intent(IN), optional :: filename !< Output filename.
+  logical,      intent(IN), optional :: finish   !< Flag for triggering the file closing.
+  real(R_P),    intent(IN)           :: t        !< Current integration time.
+  integer(I_P), save                 :: tsfile   !< File unit for saving time serie results.
+  integer(I_P)                       :: i        !< Counter.
+  integer(I_P)                       :: v        !< Counter.
+  !---------------------------------------------------------------------------------------------------------------------------------
+
+  !---------------------------------------------------------------------------------------------------------------------------------
+  if (time_serie) then
+    final_state = domain%output()
+    if (present(filename).and.present(title)) then
+      open(newunit=tsfile, file=filename)
+      write(tsfile, '(A)')'# '//title
+    endif
+    write(tsfile, '(A)')'# VARIABLES: "x" "rho(1)" "rho(2)"... "rho(Ns)" "u" "p" "rho" "gamma"'
+    write(tsfile, '(A)')'# Time: '//str(n=t)
+    do i=1, Ni
+      write(tsfile, '('//trim(str(.true.,Np+1))//'('//FR_P//',1X))')x(i), (final_state(v, i), v=1, Np)
+    enddo
+    if (present(finish)) then
+      if (finish) close(tsfile)
+    endif
+  endif
+  return
+  !---------------------------------------------------------------------------------------------------------------------------------
+  endsubroutine save_time_serie
+
   subroutine test_euler()
   !---------------------------------------------------------------------------------------------------------------------------------
   !< Test explicit forward Euler ODE solver.
@@ -159,29 +197,25 @@ contains
   type(euler_explicit_integrator) :: euler_integrator !< Euler integrator.
   real(R_P)                       :: dt               !< Time step.
   real(R_P)                       :: t                !< Time.
-  integer(I_P)                    :: s                !< Time steps counter.
   !---------------------------------------------------------------------------------------------------------------------------------
 
   !---------------------------------------------------------------------------------------------------------------------------------
   print "(A)", 'Integrating 1D Euler equations by means of explicit Euler solver'
-  ! initialize field
   call domain%init(Ni=Ni, Ng=Ng, Ns=Ns, Dx=Dx, BC_L=BC_L, BC_R=BC_R, initial_state=initial_state, cp0=cp0, cv0=cv0)
-  ! integrate field
   t = 0._R_P
-  s = 0
+  call save_time_serie(title='FOODiE test: 1D Euler equations integration, explicit Euler, t='//str(n=t_final), &
+                       filename='euler_1D_integration-euler-time_serie.dat', &
+                       t=t)
   do while(t<t_final)
-    print*, s
+    print "(A)", '  Time step: '//str(n=dt)//', Time: '//str(n=t)
     dt = domain%dt(Nmax=0, Tmax=t_final, t=t, CFL=CFL)
     call euler_integrator%integrate(field=domain, dt=dt)
-    final_state = domain%output()
-    call save_results(title='FOODiE test: 1D Euler equations integration at t=0.6, explicit Euler', &
-                      filename='euler_integration-euler')
     t = t + dt
-    s = s + 1
+    call save_time_serie(t=t)
   enddo
-  final_state = domain%output()
-  call save_results(title='FOODiE test: 1D Euler equations integration at t=0.6, explicit Euler', &
-                    filename='euler_integration-euler')
+  call save_time_serie(t=t, finish=.true.)
+  call save_results(title='FOODiE test: 1D Euler equations integration, explicit Euler, t='//str(n=t_final), &
+                    filename='euler_1D_integration-euler')
   print "(A)", 'Finish!'
   return
   !---------------------------------------------------------------------------------------------------------------------------------
