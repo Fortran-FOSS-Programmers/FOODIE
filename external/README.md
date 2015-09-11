@@ -7,9 +7,9 @@ The *external* directory contains external resources (libraries, programs, utili
 The current external resources list contains:
 
 + [FLAP](https://github.com/szaghi/FLAP):  *Fortran command Line Arguments Parser for poor people*; it is integrated into the FOODiE project as a *git submodule* (it being completely independent from FOODiE) thus it can be easily update within FOODiE, see the following paragraph;
-+ [IR_Precision](https://github.com/szaghi/IR_Precision): **; it is integrated into the FOODiE project as a *git submodule* (it being completely independent from FOODiE) thus it can be easily update within FOODiE, see the following paragraph;
-+ [pyplot-fortran](https://github.com/jacobwilliams/pyplot-fortran): **; it is integrated into the FOODiE project as a *git submodule* (it being completely independent from FOODiE) thus it can be easily update within FOODiE, see the following paragraph;
-+ [WenOOF](https://github.com/Fortran-FOSS-Programmers/WenOOF): **; it is integrated into the FOODiE project as ai regular *git clone* of its mainstream (it being **not** completely independent from FOODiE) thus it cannot be easily update within FOODiE: to update it a manual *git pull* is necessary, see the following paragraph;
++ [IR_Precision](https://github.com/szaghi/IR_Precision): *Pure Fortran (2003+) library for ensuring codes portability*; it is integrated into the FOODiE project as a *git submodule* (it being completely independent from FOODiE) thus it can be easily update within FOODiE, see the following paragraph;
++ [pyplot-fortran](https://github.com/jacobwilliams/pyplot-fortran): *For generating plots from Fortran using Python's matplotlib.pyplot*; it is integrated into the FOODiE project as a *git submodule* (it being completely independent from FOODiE) thus it can be easily update within FOODiE, see the following paragraph;
++ [WenOOF](https://github.com/Fortran-FOSS-Programmers/WenOOF): *WENO interpolation Object Oriented Fortran library*; it is integrated into the FOODiE project as ai regular *git clone* of its mainstream (it being **not** completely independent from FOODiE) thus it cannot be easily update within FOODiE: to update it a manual *git pull* is necessary, see the following paragraph;
 
 #### Update the external resources
 
