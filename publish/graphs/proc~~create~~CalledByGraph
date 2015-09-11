@@ -7,40 +7,40 @@ digraph "proc~~create~~CalledByGraph" {
 		graph [concentrate=false]
 		"interface~tvd_runge_kutta_integrator" [label=tvd_runge_kutta_integrator URL="../interface/tvd_runge_kutta_integrator.html" color="#A7506F" fontcolor=white style=filled]
 		graph [concentrate=false]
-		"proc~test_ab" [label=test_ab URL="../proc/test_ab.html" color="#d9534f" fontcolor=white style=filled]
 		"proc~test_rk" [label=test_rk URL="../proc/test_rk.html" color="#d9534f" fontcolor=white style=filled]
 		"proc~test_rk~3" [label=test_rk URL="../proc/test_rk%7E3.html" color="#d9534f" fontcolor=white style=filled]
-		"proc~test_ab~2" [label=test_ab URL="../proc/test_ab%7E2.html" color="#d9534f" fontcolor=white style=filled]
 		"proc~test_rk~2" [label=test_rk URL="../proc/test_rk%7E2.html" color="#d9534f" fontcolor=white style=filled]
 		"proc~test_ab~3" [label=test_ab URL="../proc/test_ab%7E3.html" color="#d9534f" fontcolor=white style=filled]
-		graph [concentrate=false]
-		"program~integrate_oscillation" [label=integrate_oscillation URL="../program/integrate_oscillation.html" color="#f0ad4e" fontcolor=white style=filled]
-		graph [concentrate=false]
-			"program~integrate_oscillation" -> "proc~test_ab"
-		graph [concentrate=false]
-		graph [concentrate=false]
-			"program~integrate_oscillation" -> "proc~test_rk"
+		"proc~test_ab~2" [label=test_ab URL="../proc/test_ab%7E2.html" color="#d9534f" fontcolor=white style=filled]
+		"proc~test_ab" [label=test_ab URL="../proc/test_ab.html" color="#d9534f" fontcolor=white style=filled]
 		graph [concentrate=false]
 		"program~integrate_burgers" [label=integrate_burgers URL="../program/integrate_burgers.html" color="#f0ad4e" fontcolor=white style=filled]
 		graph [concentrate=false]
-			"program~integrate_burgers" -> "proc~test_rk~3"
+			"program~integrate_burgers" -> "proc~test_rk"
+		graph [concentrate=false]
+		"program~integrate_oscillation" [label=integrate_oscillation URL="../program/integrate_oscillation.html" color="#f0ad4e" fontcolor=white style=filled]
+		graph [concentrate=false]
+			"program~integrate_oscillation" -> "proc~test_rk~3"
 		graph [concentrate=false]
 		"program~integrate_lorenz" [label=integrate_lorenz URL="../program/integrate_lorenz.html" color="#f0ad4e" fontcolor=white style=filled]
-		graph [concentrate=false]
-			"program~integrate_lorenz" -> "proc~test_ab~2"
-		graph [concentrate=false]
 		graph [concentrate=false]
 			"program~integrate_lorenz" -> "proc~test_rk~2"
 		graph [concentrate=false]
 		graph [concentrate=false]
-			"program~integrate_burgers" -> "proc~test_ab~3"
+			"program~integrate_oscillation" -> "proc~test_ab~3"
 		graph [concentrate=false]
-			"proc~test_ab" -> "interface~tvd_runge_kutta_integrator"
+		graph [concentrate=false]
+			"program~integrate_lorenz" -> "proc~test_ab~2"
+		graph [concentrate=false]
+		graph [concentrate=false]
+			"program~integrate_burgers" -> "proc~test_ab"
+		graph [concentrate=false]
 			"proc~test_rk" -> "interface~tvd_runge_kutta_integrator"
 			"proc~test_rk~3" -> "interface~tvd_runge_kutta_integrator"
-			"proc~test_ab~2" -> "interface~tvd_runge_kutta_integrator"
 			"proc~test_rk~2" -> "interface~tvd_runge_kutta_integrator"
 			"proc~test_ab~3" -> "interface~tvd_runge_kutta_integrator"
+			"proc~test_ab~2" -> "interface~tvd_runge_kutta_integrator"
+			"proc~test_ab" -> "interface~tvd_runge_kutta_integrator"
 		graph [concentrate=false]
 			"interface~tvd_runge_kutta_integrator" -> "proc~create" [style=dashed]
 }

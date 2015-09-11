@@ -4,7 +4,7 @@ digraph "proc~~test_ab~~CallsGraph" {
 	edge [fontname=Helvetica fontsize=9.5]
 		"proc~test_ab" [label=test_ab]
 		graph [concentrate=false]
-		"proc~save_plots" [label=save_plots URL="../proc/save_plots.html" color="#d9534f" fontcolor=white style=filled]
+		"proc~save_results" [label=save_results URL="../proc/save_results.html" color="#d9534f" fontcolor=white style=filled]
 		str [label=str color="#777777" fontcolor=white style=filled]
 		"interface~tvd_runge_kutta_integrator" [label=tvd_runge_kutta_integrator URL="../interface/tvd_runge_kutta_integrator.html" color="#A7506F" fontcolor=white style=filled]
 		graph [concentrate=false]
@@ -18,7 +18,7 @@ digraph "proc~~test_ab~~CallsGraph" {
 		graph [concentrate=false]
 		graph [concentrate=false]
 			"interface~tvd_runge_kutta_integrator" -> "proc~create" [style=dashed]
-			"proc~test_ab" -> "proc~save_plots"
+			"proc~test_ab" -> "proc~save_results"
 			"proc~test_ab" -> str
 			"proc~test_ab" -> "interface~tvd_runge_kutta_integrator"
 		graph [concentrate=false]

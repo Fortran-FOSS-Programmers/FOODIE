@@ -5,7 +5,7 @@ program integrate_burgers
 !-----------------------------------------------------------------------------------------------------------------------------------
 
 !-----------------------------------------------------------------------------------------------------------------------------------
-use IR_Precision, only : R_P, I_P, str
+use IR_Precision, only : R_P, I_P, FR_P, str
 use type_burgers, only : burgers
 use Data_Type_Command_Line_Interface, only : Type_Command_Line_Interface
 use foodie, only : euler_explicit_integrator, tvd_runge_kutta_integrator, adams_bashforth_integrator
@@ -23,9 +23,11 @@ integer(I_P), parameter           :: Ni=100              !< Number of grid nodes
 real(R_P)                         :: h                   !< Space step discretization.
 real(R_P)                         :: initial_state(1:Ni) !< Initial state.
 real(R_P)                         :: x(1:Ni)             !< Nodes values.
-  real(R_P), allocatable          :: final_state(:)      !< Final state.
+real(R_P), allocatable            :: final_state(:)      !< Final state.
 integer(I_P)                      :: error               !< Error handler.
 character(99)                     :: solver              !< Solver used.
+logical                           :: plots               !< Flag for activating plots saving.
+logical                           :: results             !< Flag for activating results saving.
 !-----------------------------------------------------------------------------------------------------------------------------------
 
 !-----------------------------------------------------------------------------------------------------------------------------------
@@ -34,14 +36,20 @@ call cli%init(progname    = 'burgers',                                          
               authors     = 'Fortran-FOSS-Programmers',                            &
               license     = 'GNU GPLv3',                                           &
               description = 'Test FOODiE library on Burgers equation integration', &
-              examples    = ["burgers --solver euler          ",                   &
-                             "burgers --solver runge-kutta    ",                   &
+              examples    = ["burgers --solver euler --results",                   &
+                             "burgers --solver runge-kutta -r ",                   &
                              "burgers --solver adams-bashforth",                   &
-                             "burgers --solver all            "])
+                             "burgers --solver all --plots -r "])
 call cli%add(switch='--solver', switch_ab='-s', help='ODE solver used', required=.true., act='store', error=error)
+call cli%add(switch='--results', switch_ab='-r', help='Save results', required=.false., act='store_true', def='.false.', &
+             error=error)
+call cli%add(switch='--plots', switch_ab='-p', help='Save plots of results', required=.false., act='store_true', def='.false.', &
+             error=error)
 ! parsing Command Line Interface
 call cli%parse(error=error)
 call cli%get(switch='-s', val=solver, error=error) ; if (error/=0) stop
+call cli%get(switch='-r', val=results, error=error) ; if (error/=0) stop
+call cli%get(switch='-p', val=plots, error=error) ; if (error/=0) stop
 ! create Burgers field initial state
 call init()
 ! integrate Burgers equation
@@ -85,22 +93,35 @@ contains
   !---------------------------------------------------------------------------------------------------------------------------------
   endsubroutine init
 
-  subroutine save_plots(title, filename)
+  subroutine save_results(title, filename)
   !---------------------------------------------------------------------------------------------------------------------------------
   !< Save plots of results.
   !---------------------------------------------------------------------------------------------------------------------------------
   character(*), intent(IN) :: title    !< Plot title.
   character(*), intent(IN) :: filename !< Output filename.
+  integer(I_P)             :: rawfile  !< Raw file unit for saving results.
   type(pyplot)             :: plt      !< Plot file handler.
+  integer(I_P)             :: i        !< Counter.
   !---------------------------------------------------------------------------------------------------------------------------------
 
   !---------------------------------------------------------------------------------------------------------------------------------
-  call plt%initialize(grid=.true., xlabel='x', title=title)
-  call plt%add_plot(x=x, y=final_state, label='U', linestyle='b-', linewidth=1)
-  call plt%savefig(filename)
+  if (results) then
+    open(newunit=rawfile, file=filename//'.dat')
+    write(rawfile, '(A)')'# '//title
+    write(rawfile, '(A)')'# VARIABLES: "x" "U"'
+    do i=1, Ni
+      write(rawfile, '(2('//FR_P//',1X))')x(i), final_state(i)
+    enddo
+    close(rawfile)
+  endif
+  if (plots) then
+    call plt%initialize(grid=.true., xlabel='x', title=title)
+    call plt%add_plot(x=x, y=final_state, label='U', linestyle='b-', linewidth=1)
+    call plt%savefig(filename//'.png')
+  endif
   return
   !---------------------------------------------------------------------------------------------------------------------------------
-  endsubroutine save_plots
+  endsubroutine save_results
 
   subroutine test_euler()
   !---------------------------------------------------------------------------------------------------------------------------------
@@ -123,8 +144,8 @@ contains
     t = t + dt
   enddo
   final_state = domain%output()
-  call save_plots(title='FOODiE test: Burgers equation integration at t=0.6, explicit Euler', &
-                  filename='burgers_integration-euler.png')
+  call save_results(title='FOODiE test: Burgers equation integration at t=0.6, explicit Euler', &
+                    filename='burgers_integration-euler')
   print "(A)", 'Finish!'
   return
   !---------------------------------------------------------------------------------------------------------------------------------
@@ -159,9 +180,9 @@ contains
       t = t + dt
     enddo
     final_state = domain%output()
-    call save_plots(title='FOODiE test: Burgers equation integration at t=0.6, explicit Runge-Kutta '//&
-                          trim(str(.true., s))//' stages', &
-                    filename='burgers_integration-rk-'//trim(str(.true., s))//'.png')
+    call save_results(title='FOODiE test: Burgers equation integration at t=0.6, explicit Runge-Kutta '//&
+                            trim(str(.true., s))//' stages', &
+                      filename='burgers_integration-rk-'//trim(str(.true., s)))
   enddo
   print "(A)", 'Finish!'
   return
@@ -208,9 +229,9 @@ contains
       step = step + 1
     enddo
     final_state = domain%output()
-    call save_plots(title='FOODiE test: Burgers equation integration at t=0.6, explicit '//&
-                          'Adams-Bashforth '//trim(str(.true., s))//' steps', &
-                    filename='burgers_integration-ab-'//trim(str(.true., s))//'.png')
+    call save_results(title='FOODiE test: Burgers equation integration at t=0.6, explicit '//&
+                            'Adams-Bashforth '//trim(str(.true., s))//' steps', &
+                      filename='burgers_integration-ab-'//trim(str(.true., s)))
   enddo
   print "(A)", 'Finish!'
   return

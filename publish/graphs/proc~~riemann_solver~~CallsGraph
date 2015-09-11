@@ -1,0 +1,41 @@
+digraph "proc~~riemann_solver~~CallsGraph" {
+	graph [concentrate=true rankdir=LR size="8.90625,1000.0"]
+	node [fontname=Helvetica fontsize=10.5 height=0.0 margin=0.08 shape=box]
+	edge [fontname=Helvetica fontsize=9.5]
+		"proc~riemann_solver" [label=riemann_solver]
+		graph [concentrate=false]
+		"proc~compute_inter_states" [label=compute_inter_states URL="../proc/compute_inter_states.html" color="#d9534f" fontcolor=white style=filled]
+		"none~fluxes" [label=fluxes color="#d94e8f" fontcolor=white style=filled]
+		f1 [label=f1 color="#777777" fontcolor=white style=filled]
+		f [label=f color="#777777" fontcolor=white style=filled]
+		"proc~e" [label=E URL="../proc/e.html" color="#d94e8f" fontcolor=white style=filled]
+		f4 [label=f4 color="#777777" fontcolor=white style=filled]
+		graph [concentrate=false]
+		graph [concentrate=false]
+		graph [concentrate=false]
+		fc [label=fc color="#777777" fontcolor=white style=filled]
+		"proc~h" [label=H URL="../proc/h.html" color="#d94e8f" fontcolor=white style=filled]
+		graph [concentrate=false]
+		graph [concentrate=false]
+		graph [concentrate=false]
+		graph [concentrate=false]
+		graph [concentrate=false]
+			"none~fluxes" -> fc
+			"none~fluxes" -> "proc~h"
+		graph [concentrate=false]
+		graph [concentrate=false]
+		graph [concentrate=false]
+		graph [concentrate=false]
+		graph [concentrate=false]
+		graph [concentrate=false]
+		graph [concentrate=false]
+		graph [concentrate=false]
+		graph [concentrate=false]
+			"proc~riemann_solver" -> "proc~compute_inter_states"
+			"proc~riemann_solver" -> "none~fluxes"
+			"proc~riemann_solver" -> f1
+			"proc~riemann_solver" -> f
+			"proc~riemann_solver" -> "proc~e"
+			"proc~riemann_solver" -> f4
+		graph [concentrate=false]
+}
