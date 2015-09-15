@@ -13,7 +13,7 @@ implicit none
 private
 save
 public :: weno_factory, weno_constructor, weno_interpolator
-public :: weno_constructor_upwind
+public :: weno_constructor_upwind, weno_interpolator_upwind
 !-----------------------------------------------------------------------------------------------------------------------------------
 
 !-----------------------------------------------------------------------------------------------------------------------------------

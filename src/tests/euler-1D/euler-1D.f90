@@ -19,7 +19,6 @@ type(euler_1D)                    :: domain                   !< Domain of Euler
 real(R_P),    parameter           :: CFL=0.7_R_P              !< CFL value.
 real(R_P),    parameter           :: t_final=0.15_R_P         !< Final time.
 integer(I_P), parameter           :: Ni=100                   !< Number of grid cells.
-integer(I_P), parameter           :: Ng=3                     !< Number of ghost cells.
 integer(I_P), parameter           :: Ns=1                     !< Number of differnt initial gas species.
 integer(I_P), parameter           :: Nc=Ns+2                  !< Number of conservative variables.
 integer(I_P), parameter           :: Np=Ns+4                  !< Number of primitive variables.
@@ -68,13 +67,13 @@ select case(trim(adjustl(solver)))
 case('euler')
   call test_euler()
 case('runge-kutta')
-  ! call test_rk()
+  call test_rk()
 case('adams-bashforth')
-  ! call test_ab()
+  call test_ab()
 case('all')
   call test_euler()
-  ! call test_rk()
-  ! call test_ab()
+  call test_rk()
+  call test_ab()
 case default
   print "(A)", 'Error: unknown solver "'//trim(adjustl(solver))//'"'
   print "(A)", 'Valid solver names are:'
@@ -201,7 +200,7 @@ contains
 
   !---------------------------------------------------------------------------------------------------------------------------------
   print "(A)", 'Integrating 1D Euler equations by means of explicit Euler solver'
-  call domain%init(Ni=Ni, Ng=Ng, Ns=Ns, Dx=Dx, BC_L=BC_L, BC_R=BC_R, initial_state=initial_state, cp0=cp0, cv0=cv0)
+  call domain%init(Ni=Ni, Ns=Ns, Dx=Dx, BC_L=BC_L, BC_R=BC_R, initial_state=initial_state, cp0=cp0, cv0=cv0)
   t = 0._R_P
   call save_time_serie(title='FOODiE test: 1D Euler equations integration, explicit Euler, t='//str(n=t_final), &
                        filename='euler_1D_integration-euler-time_serie.dat', &
@@ -220,4 +219,111 @@ contains
   return
   !---------------------------------------------------------------------------------------------------------------------------------
   endsubroutine test_euler
+
+  subroutine test_rk()
+  !---------------------------------------------------------------------------------------------------------------------------------
+  !< Test explicit TVD/SSP Runge-Kutta class of ODE solvers.
+  !---------------------------------------------------------------------------------------------------------------------------------
+  type(tvd_runge_kutta_integrator) :: rk_integrator         !< Runge-Kutta integrator.
+  integer, parameter               :: rk_stages=5           !< Runge-Kutta stages number.
+  type(euler_1D)                   :: rk_stage(1:rk_stages) !< Runge-Kutta stages.
+  real(R_P)                        :: dt                    !< Time step.
+  real(R_P)                        :: t                     !< Time.
+  integer(I_P)                     :: s                     !< RK stages counter.
+  integer(I_P)                     :: ord                   !< Space order.
+  !---------------------------------------------------------------------------------------------------------------------------------
+
+  !---------------------------------------------------------------------------------------------------------------------------------
+  print "(A)", 'Integrating 1D Euler equations by means of TVD/SSP Runge-Kutta class of solvers'
+  do s=1, rk_stages
+    if (s==4) cycle ! 4 stages not yet implemented
+    print "(A)", ' RK-'//trim(str(.true.,s))
+    rk_integrator = tvd_runge_kutta_integrator(stages=s)
+    select case(s)
+    case(1)
+      call domain%init(Ni=Ni, Ns=Ns, Dx=Dx, BC_L=BC_L, BC_R=BC_R, initial_state=initial_state, cp0=cp0, cv0=cv0, ord=1)
+    case(2, 3)
+      call domain%init(Ni=Ni, Ns=Ns, Dx=Dx, BC_L=BC_L, BC_R=BC_R, initial_state=initial_state, cp0=cp0, cv0=cv0, ord=3)
+    case(5)
+      call domain%init(Ni=Ni, Ns=Ns, Dx=Dx, BC_L=BC_L, BC_R=BC_R, initial_state=initial_state, cp0=cp0, cv0=cv0, ord=7)
+    endselect
+    t = 0._R_P
+    call save_time_serie(title='FOODiE test: 1D Euler equations integration, explicit Runge-Kutta, t='//str(n=t_final)// &
+                               trim(str(.true., s))//' stages', &
+                         filename='euler_1D_integration-rk-'//trim(str(.true., s))//'-time_serie.dat', &
+                         t=t)
+    do while(t<t_final)
+      print "(A)", '    Time step: '//str(n=dt)//', Time: '//str(n=t)
+      dt = domain%dt(Nmax=0, Tmax=t_final, t=t, CFL=CFL)
+      call rk_integrator%integrate(field=domain, stage=rk_stage(1:s), dt=dt)
+      t = t + dt
+      call save_time_serie(t=t)
+    enddo
+    call save_time_serie(t=t, finish=.true.)
+    call save_results(title='FOODiE test: 1D Euler equations integration, explicit Runge-Kutta, t='//str(n=t_final)// &
+                            trim(str(.true., s))//' stages', &
+                      filename='euler_1D_integration-rk-'//trim(str(.true., s)))
+  enddo
+  print "(A)", 'Finish!'
+  return
+  !---------------------------------------------------------------------------------------------------------------------------------
+  endsubroutine test_rk
+
+  subroutine test_ab()
+  !---------------------------------------------------------------------------------------------------------------------------------
+  !< Test explicit Adams-Bashforth class of ODE solvers.
+  !---------------------------------------------------------------------------------------------------------------------------------
+  type(tvd_runge_kutta_integrator) :: rk_integrator         !< Runge-Kutta integrator.
+  integer, parameter               :: rk_stages=5           !< Runge-Kutta stages number.
+  type(euler_1D)                   :: rk_stage(1:rk_stages) !< Runge-Kutta stages.
+  type(adams_bashforth_integrator) :: ab_integrator         !< Adams-Bashforth integrator.
+  integer, parameter               :: ab_steps=3            !< Adams-Bashforth steps number.
+  integer                          :: step                  !< Time steps counter.
+  real(R_P)                        :: dt                    !< Time step.
+  real(R_P)                        :: t                     !< Time.
+  integer(I_P)                     :: s                     !< AB steps counter.
+  !---------------------------------------------------------------------------------------------------------------------------------
+
+  !---------------------------------------------------------------------------------------------------------------------------------
+  print "(A)", 'Integrating 1D Euler equations by means of Adams-Bashforth class of solvers'
+  do s=1, ab_steps
+    print "(A)", ' AB-'//trim(str(.true.,s))
+    call ab_integrator%init(steps=s)
+    rk_integrator = tvd_runge_kutta_integrator(stages=s)
+    select case(s)
+    case(1)
+      call domain%init(Ni=Ni, Ns=Ns, Dx=Dx, BC_L=BC_L, BC_R=BC_R, initial_state=initial_state, cp0=cp0, cv0=cv0, ord=1)
+    case(2, 3)
+      call domain%init(Ni=Ni, Ns=Ns, Dx=Dx, BC_L=BC_L, BC_R=BC_R, initial_state=initial_state, cp0=cp0, cv0=cv0, ord=3)
+    case(5)
+      call domain%init(Ni=Ni, Ns=Ns, Dx=Dx, BC_L=BC_L, BC_R=BC_R, initial_state=initial_state, cp0=cp0, cv0=cv0, ord=7)
+    endselect
+    t = 0._R_P
+    call save_time_serie(title='FOODiE test: 1D Euler equations integration, explicit Adams-Bashforth, t='//str(n=t_final)// &
+                               trim(str(.true., s))//' steps', &
+                         filename='euler_1D_integration-ab-'//trim(str(.true., s))//'-time_serie.dat', &
+                         t=t)
+    step = 1
+    do while(t<t_final)
+      print "(A)", '    Time step: '//str(n=dt)//', Time: '//str(n=t)
+      dt = domain%dt(Nmax=0, Tmax=t_final, t=t, CFL=0.1_R_P*CFL)
+      if (s>step) then
+        ! the time steps from 1 to s - 1 must be computed with other scheme...
+        call rk_integrator%integrate(field=domain, stage=rk_stage(1:s), dt=dt)
+      else
+        call ab_integrator%integrate(field=domain, dt=dt)
+      endif
+      t = t + dt
+      step = step + 1
+      call save_time_serie(t=t)
+    enddo
+    call save_time_serie(t=t, finish=.true.)
+    call save_results(title='FOODiE test: 1D Euler equations integration, explicit Adams-Bashforth, t='//str(n=t_final)// &
+                            trim(str(.true., s))//' steps', &
+                      filename='euler_1D_integration-ab-'//trim(str(.true., s)))
+  enddo
+  print "(A)", 'Finish!'
+  return
+  !---------------------------------------------------------------------------------------------------------------------------------
+  endsubroutine test_ab
 endprogram integrate_euler_1D

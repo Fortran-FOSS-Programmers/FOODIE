@@ -3,6 +3,8 @@ modes = flap-static-gnu flap-static-gnu-debug
         flap-static-intel flap-static-intel-debug
         pyplot-fortran-static-gnu pyplot-fortran-static-gnu-debug
         pyplot-fortran-static-intel pyplot-fortran-static-intel-debug
+        wenoof-static-gnu wenoof-static-gnu-debug
+        wenoof-static-intel wenoof-static-intel-debug
 
 [common-variables]
 $CSTATIC_GNU = -cpp -c -frealloc-lhs
@@ -69,6 +71,35 @@ src       = ./pyplot-fortran/src/
 build_dir = ./lib/pyplot-fortran/
 target    = pyplot_module.f90
 output    = libpyplot.a
+
+# WenOOF
+[wenoof-static-gnu]
+template  = template-static-gnu
+src       = ./WenOOF/src/
+build_dir = ./lib/wenoof/
+target    = wenoof.f90
+output    = libwenoof.a
+
+[wenoof-static-gnu-debug]
+template  = template-static-gnu-debug
+src       = ./WenOOF/src/
+build_dir = ./lib/wenoof/
+target    = wenoof.f90
+output    = libwenoof.a
+
+[wenoof-static-intel]
+template  = template-static-intel
+src       = ./WenOOF/src/
+build_dir = ./lib/wenoof/
+target    = wenoof.f90
+output    = libwenoof.a
+
+[wenoof-static-intel-debug]
+template  = template-static-intel-debug
+src       = ./WenOOF/src/
+build_dir = ./lib/wenoof/
+target    = wenoof.f90
+output    = libwenoof.a
 
 # templates
 [template-static-gnu]

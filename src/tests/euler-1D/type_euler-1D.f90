@@ -7,6 +7,7 @@ module type_euler_1D
 !-----------------------------------------------------------------------------------------------------------------------------------
 use IR_Precision, only : R_P, I_P
 use foodie, only : integrand
+use wenoof, only : weno_factory, weno_constructor_upwind, weno_interpolator, weno_interpolator_upwind
 !-----------------------------------------------------------------------------------------------------------------------------------
 
 !-----------------------------------------------------------------------------------------------------------------------------------
@@ -110,20 +111,21 @@ type, extends(integrand) :: euler_1D
   !< + Ns+1 : momentum conservation             (r*u)
   !< + Ns+2 : energy conservation               (r*E)
   private
-  integer(I_P)              :: steps=0         !< Number of time steps stored.
-  integer(I_P)              :: ord=0           !< Space accuracy formal order.
-  integer(I_P)              :: Ni=0            !< Space dimension.
-  integer(I_P)              :: Ng=0            !< Number of ghost cells for boundary conditions handling.
-  integer(I_P)              :: Ns=0            !< Number of initial species.
-  integer(I_P)              :: Nc=0            !< Number of conservative variables, Ns+2.
-  integer(I_P)              :: Np=0            !< Number of primitive variables, Ns+4.
-  real(R_P)                 :: Dx=0._R_P       !< Space step.
-  real(R_P),    allocatable :: U(:,:)          !< Conservative (state) variables [1:Nc,1-Ng:Ni+Ng].
-  real(R_P),    allocatable :: previous(:,:,:) !< Conservative (state) variables of previous time steps [1:Nc,1-Ng:Ni+Ng,1:steps].
-  real(R_P),    allocatable :: cp0(:)          !< Specific heat cp of initial species [1:Ns].
-  real(R_P),    allocatable :: cv0(:)          !< Specific heat cv of initial species [1:Ns].
-  character(:), allocatable :: BC_L            !< Left boundary condition type.
-  character(:), allocatable :: BC_R            !< Right boundary condition type.
+  integer(I_P)                   :: steps=0         !< Number of time steps stored.
+  integer(I_P)                   :: ord=0           !< Space accuracy formal order.
+  integer(I_P)                   :: Ni=0            !< Space dimension.
+  integer(I_P)                   :: Ng=0            !< Number of ghost cells for boundary conditions handling.
+  integer(I_P)                   :: Ns=0            !< Number of initial species.
+  integer(I_P)                   :: Nc=0            !< Number of conservative variables, Ns+2.
+  integer(I_P)                   :: Np=0            !< Number of primitive variables, Ns+4.
+  real(R_P)                      :: Dx=0._R_P       !< Space step.
+  type(weno_interpolator_upwind) :: weno            !< WENO interpolator.
+  real(R_P),    allocatable      :: U(:,:)          !< Conservative (state) variables [1:Nc,1-Ng:Ni+Ng].
+  real(R_P),    allocatable      :: previous(:,:,:) !< Conservative variables of previous time steps [:,:,1:steps].
+  real(R_P),    allocatable      :: cp0(:)          !< Specific heat cp of initial species [1:Ns].
+  real(R_P),    allocatable      :: cv0(:)          !< Specific heat cv of initial species [1:Ns].
+  character(:), allocatable      :: BC_L            !< Left boundary condition type.
+  character(:), allocatable      :: BC_R            !< Right boundary condition type.
   contains
     ! public methods
     ! auxiliary methods
@@ -152,13 +154,12 @@ endtype euler_1D
 !-----------------------------------------------------------------------------------------------------------------------------------
 contains
   ! public methods
-  subroutine init(self, Ni, Ng, Ns, Dx, BC_L, BC_R, initial_state, cp0, cv0, steps, ord)
+  subroutine init(self, Ni, Ns, Dx, BC_L, BC_R, initial_state, cp0, cv0, steps, ord)
   !---------------------------------------------------------------------------------------------------------------------------------
   !< Init field.
   !---------------------------------------------------------------------------------------------------------------------------------
   class(euler_1D),        intent(INOUT) :: self               !< Euler field.
   integer(I_P),           intent(IN)    :: Ni                 !< Space dimension.
-  integer(I_P),           intent(IN)    :: Ng                 !< Number of ghost cells.
   integer(I_P),           intent(IN)    :: Ns                 !< Number of initial species.
   real(R_P),              intent(IN)    :: Dx                 !< Space step.
   character(*),           intent(IN)    :: BC_L               !< Left boundary condition type.
@@ -168,6 +169,8 @@ contains
   real(R_P),              intent(IN)    :: cv0(:)             !< Initial specific heat, constant volume.
   integer(I_P), optional, intent(IN)    :: steps              !< Time steps stored.
   integer(I_P), optional, intent(IN)    :: ord                !< Space accuracy formal order.
+  type(weno_factory)                    :: factory            !< WENO factory.
+  class(weno_interpolator), allocatable :: weno               !< WENO interpolator.
   integer(I_P)                          :: i                  !< Space counter.
   integer(I_P)                          :: s                  !< Steps counter.
   !---------------------------------------------------------------------------------------------------------------------------------
@@ -175,8 +178,12 @@ contains
   !---------------------------------------------------------------------------------------------------------------------------------
   self%steps = 0 ; if (present(steps)) self%steps = steps
   self%ord = 1 ; if (present(ord)) self%ord = ord
+  self%Ng = (self%ord + 1) / 2
+  if (self%ord>1) then
+    call factory%create(constructor=weno_constructor_upwind(S=self%Ng, eps=10._R_P**(-40)), interpolator=weno)
+    self%weno = weno
+  endif
   self%Ni = Ni
-  self%Ng = Ng
   self%Ns = Ns
   self%Nc = Ns + 2
   self%Np = Ns + 4
@@ -247,7 +254,7 @@ contains
   !---------------------------------------------------------------------------------------------------------------------------------
   endfunction output
 
-  function compute_dt(self, Nmax, Tmax, t, CFL) result(Dt)
+  pure function compute_dt(self, Nmax, Tmax, t, CFL) result(Dt)
   !--------------------------------------------------------------------------------------------------------------------------------
   !< Compute the current time step by means of CFL condition.
   !--------------------------------------------------------------------------------------------------------------------------------
@@ -278,7 +285,7 @@ contains
   !--------------------------------------------------------------------------------------------------------------------------------
   endfunction compute_dt
 
-  function dEuler_dt(self, n) result(dState_dt)
+  pure function dEuler_dt(self, n) result(dState_dt)
   !---------------------------------------------------------------------------------------------------------------------------------
   !< Time derivative of Euler field, the residuals function.
   !---------------------------------------------------------------------------------------------------------------------------------
@@ -287,20 +294,28 @@ contains
   class(integrand), allocatable      :: dState_dt !< Euler field time derivative.
   real(R_P), allocatable             :: F(:,:)    !< Fluxes of conservative variables.
   real(R_P), allocatable             :: P(:,:)    !< Primitive variables.
-  real(R_P), allocatable             :: PR(:,:,:) ! Left (1) and right (2) (reconstructed) interface values of primitive variables.
+  real(R_P), allocatable             :: PR(:,:,:) !< Left (1) and right (2) (reconstructed) interface values of primitive variables.
+  integer(I_P)                       :: dn        !< Time level, dummy variable.
   integer(I_P)                       :: i         !< Counter.
   !---------------------------------------------------------------------------------------------------------------------------------
 
   !---------------------------------------------------------------------------------------------------------------------------------
-  associate (Ni=>self%Ni, Ng=>self%Ng, Nc=>self%Nc, Np=>self%Np, Ns=>self%Ns, U=>self%U)
+  associate (Ni=>self%Ni, Ng=>self%Ng, Nc=>self%Nc, Np=>self%Np, Ns=>self%Ns, U=>self%U, previous=>self%previous)
     ! allocate temporary arrays
     allocate(F(1:Nc, 0:Ni)) ; F = 0._R_P
     allocate(P(1:Np, 1-Ng:Ni+Ng)) ; P = 0._R_P
     allocate(PR(1:Np, 1:2, 0:Ni+1)) ; PR = 0._R_P
     ! compute primitive variables
-    do i=1, Ni
-      P(:, i) = self%conservative2primitive(U(:, i))
-    enddo
+    if (self%steps>=2) then ! self%previous should be used, multi-step time integration
+      dn = self%steps ; if (present(n)) dn = n
+      do i=1, Ni
+        P(:, i) = self%conservative2primitive(previous(:, i, dn))
+      enddo
+    else ! self%U should be used, single-step time integration
+      do i=1, Ni
+        P(:, i) = self%conservative2primitive(U(:, i))
+      enddo
+    endif
     call self%impose_boundary_conditions(primitive=P)
     call self%reconstruct_interfaces_states(primitive=P, r_primitive=PR)
     ! compute fluxes by solving Rimeann Problems at each interface
@@ -359,19 +374,7 @@ contains
     opr = lhs
     select type(rhs)
     class is (euler_1D)
-      ! opr%steps = lhs%steps
-      ! opr%ord   = lhs%ord
-      ! opr%Ni    = lhs%Ni
-      ! opr%Ng    = lhs%Ng
-      ! opr%Ns    = lhs%Ns
-      ! opr%Nc    = lhs%Nc
-      ! opr%Np    = lhs%Np
-      ! opr%Dx    = lhs%Dx
-      opr%U     = lhs%U * rhs%U
-      ! opr%cp0   = lhs%cp0
-      ! opr%cv0   = lhs%cv0
-      ! opr%BC_L  = lhs%BC_L
-      ! opr%BC_R  = lhs%BC_R
+      opr%U = lhs%U * rhs%U
     endselect
   endselect
   return
@@ -392,19 +395,7 @@ contains
   select type(opr)
   class is(euler_1D)
     opr = lhs
-    ! opr%steps = lhs%steps
-    ! opr%ord   = lhs%ord
-    ! opr%Ni    = lhs%Ni
-    ! opr%Ng    = lhs%Ng
-    ! opr%Ns    = lhs%Ns
-    ! opr%Nc    = lhs%Nc
-    ! opr%Np    = lhs%Np
-    ! opr%Dx    = lhs%Dx
-    opr%U     = lhs%U * rhs
-    ! opr%cp0   = lhs%cp0
-    ! opr%cv0   = lhs%cv0
-    ! opr%BC_L  = lhs%BC_L
-    ! opr%BC_R  = lhs%BC_R
+    opr%U = lhs%U * rhs
   endselect
   return
   !---------------------------------------------------------------------------------------------------------------------------------
@@ -424,19 +415,7 @@ contains
   select type(opr)
   class is(euler_1D)
     opr = rhs
-    ! opr%steps = rhs%steps
-    ! opr%ord   = rhs%ord
-    ! opr%Ni    = rhs%Ni
-    ! opr%Ng    = rhs%Ng
-    ! opr%Ns    = rhs%Ns
-    ! opr%Nc    = rhs%Nc
-    ! opr%Np    = rhs%Np
-    ! opr%Dx    = rhs%Dx
-    opr%U     = rhs%U * lhs
-    ! opr%cp0   = rhs%cp0
-    ! opr%cv0   = rhs%cv0
-    ! opr%BC_L  = rhs%BC_L
-    ! opr%BC_R  = rhs%BC_R
+    opr%U = rhs%U * lhs
   endselect
   return
   !---------------------------------------------------------------------------------------------------------------------------------
@@ -458,19 +437,7 @@ contains
     opr = lhs
     select type(rhs)
     class is (euler_1D)
-      ! opr%steps = lhs%steps
-      ! opr%ord   = lhs%ord
-      ! opr%Ni    = lhs%Ni
-      ! opr%Ng    = lhs%Ng
-      ! opr%Ns    = lhs%Ns
-      ! opr%Nc    = lhs%Nc
-      ! opr%Np    = lhs%Np
-      ! opr%Dx    = lhs%Dx
-      opr%U     = lhs%U + rhs%U
-      ! opr%cp0   = lhs%cp0
-      ! opr%cv0   = lhs%cv0
-      ! opr%BC_L  = lhs%BC_L
-      ! opr%BC_R  = lhs%BC_R
+      opr%U = lhs%U + rhs%U
     endselect
   endselect
   return
@@ -496,6 +463,7 @@ contains
                                  lhs%Nc       = rhs%Nc
                                  lhs%Np       = rhs%Np
                                  lhs%Dx       = rhs%Dx
+                                 lhs%weno     = rhs%weno
     if (allocated(rhs%U))        lhs%U        = rhs%U
     if (allocated(rhs%previous)) lhs%previous = rhs%previous
     if (allocated(rhs%cp0))      lhs%cp0      = rhs%cp0
@@ -567,7 +535,7 @@ contains
   !--------------------------------------------------------------------------------------------------------------------------------
   endfunction conservative2primitive
 
-  subroutine impose_boundary_conditions(self, primitive)
+  pure subroutine impose_boundary_conditions(self, primitive)
   !--------------------------------------------------------------------------------------------------------------------------------
   !< Impose boundary conditions.
   !<
@@ -606,30 +574,124 @@ contains
   !--------------------------------------------------------------------------------------------------------------------------------
   endsubroutine impose_boundary_conditions
 
-  subroutine reconstruct_interfaces_states(self, primitive, r_primitive)
+  pure subroutine reconstruct_interfaces_states(self, primitive, r_primitive)
   !--------------------------------------------------------------------------------------------------------------------------------
   !< Reconstruct the interfaces states (into primitive variables formulation) by the requested order of accuracy.
   !--------------------------------------------------------------------------------------------------------------------------------
-  class(euler_1D), intent(IN)    :: self                                            !< Euler field.
-  real(R_P),       intent(IN)    :: primitive(1:self%Np, 1-self%Ng:self%Ni+self%Ng)  !< Primitive variables.
-  real(R_P),       intent(INOUT) :: r_primitive(1:self%Np, 1:2, 0:self%Ni+1)         !< Reconstructed primitive variables.
-  integer(I_P)                   :: i                                                !< Space counter.
+  class(euler_1D), intent(IN)           :: self                                            !< Euler field.
+  real(R_P),       intent(IN)           :: primitive(1:self%Np, 1-self%Ng:self%Ni+self%Ng) !< Primitive variables.
+  real(R_P),       intent(INOUT)        :: r_primitive(1:self%Np, 1:2, 0:self%Ni+1)        !< Reconstructed primitive variables.
+  real(R_P)                             :: C(1:2, 1-self%Ng:-1+self%Ng, 1:self%Ns+2)       !< Pseudo characteristic variables.
+  real(R_P)                             :: CR(1:self%Ns+2, 1:2)                            !< Pseudo characteristic reconst. vars.
+  real(R_P)                             :: Pm(1:self%Np, 1:2)                              !< Mean of primitive variables.
+  real(R_P)                             :: LPm(1:self%Ns+2, 1:self%Ns+2, 1:2)              !< Mean left eigenvectors matrix.
+  real(R_P)                             :: RPm(1:self%Ns+2, 1:self%Ns+2, 1:2)              !< Mean right eigenvectors matrix.
+  integer(I_P)                          :: i, j, f, v                                      !< Counters.
   !--------------------------------------------------------------------------------------------------------------------------------
 
   !--------------------------------------------------------------------------------------------------------------------------------
-  select case(self%ord)
-  case(1) ! 1st order piecewise constant reconstruction
-    do i=0, self%Ni+1
-      r_primitive(:, 1, i) = primitive(:, i)
-      r_primitive(:, 2, i) = r_primitive(:, 1, i)
-    enddo
-  case(3, 5, 7) ! 3rd, 5th or 7th order WENO reconstruction
-  endselect
+  associate(Ni=>self%Ni, Ng=>self%Ng, Ns=>self%Ns, Np=>self%Np, ord=>self%ord, cv0=>self%cv0, cp0=>self%cp0, weno=>self%weno)
+    select case(ord)
+    case(1) ! 1st order piecewise constant reconstruction
+      do i=0, Ni+1
+        r_primitive(:, 1, i) = primitive(:, i)
+        r_primitive(:, 2, i) = r_primitive(:, 1, i)
+      enddo
+    case(3, 5, 7) ! 3rd, 5th or 7th order WENO reconstruction
+      do i=0, Ni+1
+        ! trasform primitive variables to pseudo charteristic ones
+        do f=1, 2
+          Pm(:,f) = 0.5_R_P * (primitive(:, i+f-2) + primitive(:, i+f-1))
+        enddo
+        do f=1, 2
+          LPm(:, :, f) = eigen_vect_L(Ns=Ns, Np=Np, primitive=Pm(:, f))
+          RPm(:, :, f) = eigen_vect_R(Ns=Ns, Np=Np, primitive=Pm(:, f))
+        enddo
+        do j=i+1-Ng, i-1+Ng
+          do f=1, 2
+            do v=1, Ns+2
+              C(f, j-i, v) = dot_product(LPm(v, 1:Ns+2, f), primitive(1:Ns+2, j))
+            enddo
+          enddo
+        enddo
+        ! compute WENO reconstruction of pseudo charteristic variables
+        do v=1, Ns+2
+          call weno%interpolate(S=Ng,                          &
+                                stencil=C(1:2, 1-Ng:-1+Ng, v), &
+                                location='both',               &
+                                interpolation=CR(v, 1:2))
+        enddo
+        ! trasform back reconstructed pseudo charteristic variables to primitive ones
+        do f=1, 2
+          do v=1, Ns+2
+            r_primitive(v, f, i) = dot_product(RPm(v, 1:Ns+2, f), CR(1:Ns+2, f))
+          enddo
+          r_primitive(Ns+3, f, i) = sum(r_primitive(1:Ns, f, i))
+          r_primitive(Ns+4, f, i) = dot_product(r_primitive(1:Ns, f, i) / r_primitive(Ns+3, f, i), cp0) / &
+                                    dot_product(r_primitive(1:Ns, f, i) / r_primitive(Ns+3, f, i), cv0)
+        enddo
+      enddo
+    endselect
+  endassociate
   return
   !--------------------------------------------------------------------------------------------------------------------------------
+  contains
+    pure function eigen_vect_L(Ns, Np, primitive) result(L)
+    !-------------------------------------------------------------------------------------------------------------------------------
+    !< Compute left eigenvectors from primitive variables.
+    !-------------------------------------------------------------------------------------------------------------------------------
+    integer(I_P), intent(IN) :: Ns               !< Number of initial species.
+    integer(I_P), intent(IN) :: Np               !< Number of primitive variables.
+    real(R_P),    intent(IN) :: primitive(1:Np)  !< Primitive variables.
+    real(R_P)                :: L(1:Ns+2,1:Ns+2) !< Left eigenvectors matrix.
+    real(R_P)                :: gp               !< g*p.
+    real(R_P)                :: gp_a             !< g*p/a.
+    integer(I_P)             :: i, s             !< Counters.
+    !-------------------------------------------------------------------------------------------------------------------------------
+
+    !-------------------------------------------------------------------------------------------------------------------------------
+    gp   = primitive(Ns+4) * primitive(Ns+2)
+    gp_a = gp/a(p=primitive(Ns+2), r=primitive(Ns+3), g=primitive(Ns+4))
+    L = 0._R_P
+                            L(1,    Ns+1) = -gp_a              ; L(1,    Ns+2) =  1._R_P
+    do s=2, Ns+1
+      if (primitive(s-1)>0) L(s,    s-1 ) =  gp/primitive(s-1) ; L(s,    Ns+2) = -1._R_P
+    enddo
+                            L(Ns+2, Ns+1) =  gp_a              ; L(Ns+2, Ns+2) =  1._R_P
+    return
+    !-------------------------------------------------------------------------------------------------------------------------------
+    endfunction eigen_vect_L
+
+    pure function eigen_vect_R(Ns, Np, primitive) result(R)
+    !-------------------------------------------------------------------------------------------------------------------------------
+    !< Compute right eigenvectors from primitive variables.
+    !-------------------------------------------------------------------------------------------------------------------------------
+    integer(I_P), intent(IN) :: Ns               !< Number of initial species.
+    integer(I_P), intent(IN) :: Np               !< Number of primitive variables.
+    real(R_P),    intent(IN) :: primitive(1:Np)  !< Primitive variables.
+    real(R_P)                :: R(1:Ns+2,1:Ns+2) !< Right eigenvectors matrix.
+    real(R_P)                :: gp               !< g*p.
+    real(R_P)                :: ss               !< Speed of sound, sqrt(g*p/r).
+    real(R_P)                :: gp_inv           !< 1/(g*p).
+    integer(I_P)             :: i, s             !< Counters.
+    !-------------------------------------------------------------------------------------------------------------------------------
+
+    !-------------------------------------------------------------------------------------------------------------------------------
+    gp = primitive(Ns+4) * primitive(Ns+2)
+    ss = a(p=primitive(Ns+2), r=primitive(Ns+3), g=primitive(Ns+4))
+    gp_inv = 1._R_P/gp
+    R = 0._R_P
+    do s=1, Ns
+      R(s,    1) =  0.5_R_P*primitive(s) * gp_inv ; R(s, s+1) = primitive(s) * gp_inv ; R(s,    Ns+2) = R(s, 1)
+    enddo
+      R(Ns+1, 1) = -0.5_R_P* ss *gp_inv           ;                                     R(Ns+1, Ns+2) = 0.5_R_P* ss * gp_inv
+      R(Ns+2, 1) =  0.5_R_P                       ;                                     R(Ns+2, Ns+2) = 0.5_R_P
+    return
+    !-------------------------------------------------------------------------------------------------------------------------------
+    endfunction eigen_vect_R
   endsubroutine reconstruct_interfaces_states
 
-  subroutine riemann_solver(self, p1, r1, u1, g1, p4, r4, u4, g4, F)
+  pure subroutine riemann_solver(self, p1, r1, u1, g1, p4, r4, u4, g4, F)
   !---------------------------------------------------------------------------------------------------------------------------------
   !< Solve the Riemann problem between the state $1$ and $4$ using the (local) Lax Friedrichs (Rusanov) solver.
   !---------------------------------------------------------------------------------------------------------------------------------
@@ -667,7 +729,7 @@ contains
   return
   !---------------------------------------------------------------------------------------------------------------------------------
   contains
-    function fluxes(p, r, u, g) result(Fc)
+    pure function fluxes(p, r, u, g) result(Fc)
     !-------------------------------------------------------------------------------------------------------------------------------
     !< 1D Euler fluxes from primitive variables.
     !-------------------------------------------------------------------------------------------------------------------------------
@@ -701,7 +763,7 @@ contains
   endsubroutine finalize
 
   ! non type-bound procedures
-  subroutine compute_inter_states(r1, p1, u1, g1, r4, p4, u4, g4, p, S, S1, S4)
+  pure subroutine compute_inter_states(r1, p1, u1, g1, r4, p4, u4, g4, p, S, S1, S4)
   !------------------------------------------------------------------------------------------------------------------------------
   !< Compute inter states (23*-states) from state1 and state4.
   !------------------------------------------------------------------------------------------------------------------------------

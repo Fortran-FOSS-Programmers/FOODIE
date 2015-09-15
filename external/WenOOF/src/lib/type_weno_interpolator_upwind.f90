@@ -51,7 +51,9 @@ type, extends(weno_interpolator) :: weno_interpolator_upwind
     procedure, pass(self), public :: create
     procedure, pass(self), public :: description
     procedure, pass(self), public :: interpolate
+    generic,               public :: assignment(=) => assign_interpolator !< Overloading = assignament.
     ! private methods
+    procedure, pass(lhs), private :: assign_interpolator !< Assignament operator.
     final :: finalize
 endtype weno_interpolator_upwind
 !-----------------------------------------------------------------------------------------------------------------------------------
@@ -437,6 +439,27 @@ contains
   endsubroutine interpolate
 
   ! private methods
+  pure subroutine assign_interpolator(lhs, rhs)
+  !---------------------------------------------------------------------------------------------------------------------------------
+  !< Assign one interpolator to another.
+  !---------------------------------------------------------------------------------------------------------------------------------
+  class(weno_interpolator_upwind), intent(INOUT) :: lhs !< Left hand side.
+  class(weno_interpolator),        intent(IN)    :: rhs !< Right hand side.
+  !---------------------------------------------------------------------------------------------------------------------------------
+
+  !---------------------------------------------------------------------------------------------------------------------------------
+  select type(rhs)
+  class is(weno_interpolator_upwind)
+    lhs%S = rhs%S
+    lhs%eps = rhs%eps
+    if (allocated(rhs%weights_opt)) lhs%weights_opt = rhs%weights_opt
+    if (allocated(rhs%poly_coef)) lhs%poly_coef = rhs%poly_coef
+    if (allocated(rhs%smooth_coef)) lhs%smooth_coef = rhs%smooth_coef
+  endselect
+  return
+  !---------------------------------------------------------------------------------------------------------------------------------
+  endsubroutine assign_interpolator
+
   elemental subroutine finalize(self)
   !---------------------------------------------------------------------------------------------------------------------------------
   !< Finalize object.
