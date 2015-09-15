@@ -9,7 +9,7 @@
 [![License](https://img.shields.io/badge/license-BSD3-red.svg)]()
 [![License](https://img.shields.io/badge/license-MIT-red.svg)]()
 
-[![Status](https://img.shields.io/badge/status-alpha-orange.svg)]()
+[![Status](https://img.shields.io/badge/status-beta-blue.svg)]()
 [![Build Status](https://travis-ci.org/Fortran-FOSS-Programmers/FOODiE.svg?branch=master)](https://travis-ci.org/Fortran-FOSS-Programmers/FOODiE)
 [![Coverage Status](https://img.shields.io/codecov/c/github/Fortran-FOSS-Programmers/FOODiE.svg)](http://codecov.io/github/Fortran-FOSS-Programmers/FOODiE?branch=master)
 [![GitHub issues](https://img.shields.io/github/issues/Fortran-FOSS-Programmers/FOODiE.svg)]()
@@ -57,16 +57,17 @@ FOODiE is aimed to be a KISS-pure-Fortran library for integrating Ordinary Diffe
     + [ ] Leapfrog, 2nd order accurate:
         + [ ] Robert-Asselin filter, for stability and leapfrog, 1st order accurate;
         + [ ] Robert-Asselin-Williams filter, for stability and leapfrog, 3rd order accurate;
-    + [ ] Adams-Bashforth variants of 2nd and 3rd order accurate;
+    + [x] Adams-Bashforth variants of 2nd and 3rd order accurate;
 + [ ] efficient:
     + [ ] high scalability on parallel architectures:
         + [ ] support for shared memory multi/many cores architecture;
         + [ ] support for distributed memory cluster;
         + [ ] support for GPGPU/accelerators device;
-+ [ ] well documented:
-    + [ ] clear documentation of schemes implementations;
++ [x] Tests-Driven Developed (TDD):
++ [x] well documented:
+    + [x] clear documentation of schemes implementations;
     + [x] complete API reference;
-    + [ ] comprehensive wiki:
+    + [x] comprehensive wiki:
 + [x] collaborative developed;
 + [x] FOSS licensed;
 
@@ -86,7 +87,7 @@ Go to [Top](#top)
 
 ## Status
 
-FOODiE project is just started. A small bunch of integrators have been implemented using the Rouson's Abstract Data Type Pattern, but the library API is not stable.
+FOODiE project is young, but developed with love. A bunch of integrators have been implemented using the Rouson's Abstract Data Type Pattern and test with complex problems, but the library API is not stable. Nevertheless, FOODiE is already proven to be able to integrate a wide range of different ODE problems, from pure ODEs (Lorenz and inertial oscillations equations) to complex PDEs (Burgers and Euler equations), see the documentation.
 
 We are searching for Fortraners enthusiast joining our team.
 
