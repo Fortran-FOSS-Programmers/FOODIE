@@ -9,7 +9,7 @@
 [![License](https://img.shields.io/badge/license-BSD3-red.svg)]()
 [![License](https://img.shields.io/badge/license-MIT-red.svg)]()
 
-[![Status](https://img.shields.io/badge/status-beta-blue.svg)]()
+[![Status](https://img.shields.io/badge/status-beta-orange.svg)]()
 [![Build Status](https://travis-ci.org/Fortran-FOSS-Programmers/FOODiE.svg?branch=master)](https://travis-ci.org/Fortran-FOSS-Programmers/FOODiE)
 [![Coverage Status](https://img.shields.io/codecov/c/github/Fortran-FOSS-Programmers/FOODiE.svg)](http://codecov.io/github/Fortran-FOSS-Programmers/FOODiE?branch=master)
 [![GitHub issues](https://img.shields.io/github/issues/Fortran-FOSS-Programmers/FOODiE.svg)]()
