@@ -303,6 +303,8 @@
       
       <a class="list-group-item" href="../proc/test_ab%7E3.html">test_ab</a>
       
+      <a class="list-group-item" href="../proc/test_ab%7E4.html">test_ab</a>
+      
       <a class="list-group-item" href="../proc/test_euler.html">test_euler</a>
       
       <a class="list-group-item" href="../proc/test_euler%7E2.html">test_euler</a>
@@ -316,6 +318,8 @@
       <a class="list-group-item" href="../proc/test_rk%7E2.html">test_rk</a>
       
       <a class="list-group-item" href="../proc/test_rk%7E3.html">test_rk</a>
+      
+      <a class="list-group-item" href="../proc/test_rk%7E4.html">test_rk</a>
       
       <a class="list-group-item" href="../interface/tvd_runge_kutta_integrator.html">tvd_runge_kutta_integrator</a>
       
@@ -438,19 +442,7 @@ private purefunction real_multiply_euler(lhs, rhs) result(opr)
   <span class="k">select type</span><span class="p">(</span><span class="n">opr</span><span class="p">)</span>
   <span class="k">class is</span><span class="p">(</span><span class="n">euler_1D</span><span class="p">)</span>
     <span class="n">opr</span> <span class="o">=</span> <span class="n">rhs</span>
-    <span class="c">! opr%steps = rhs%steps</span>
-    <span class="c">! opr%ord   = rhs%ord</span>
-    <span class="c">! opr%Ni    = rhs%Ni</span>
-    <span class="c">! opr%Ng    = rhs%Ng</span>
-    <span class="c">! opr%Ns    = rhs%Ns</span>
-    <span class="c">! opr%Nc    = rhs%Nc</span>
-    <span class="c">! opr%Np    = rhs%Np</span>
-    <span class="c">! opr%Dx    = rhs%Dx</span>
-    <span class="n">opr</span><span class="p">%</span><span class="n">U</span>     <span class="o">=</span> <span class="n">rhs</span><span class="p">%</span><span class="n">U</span> <span class="o">*</span> <span class="n">lhs</span>
-    <span class="c">! opr%cp0   = rhs%cp0</span>
-    <span class="c">! opr%cv0   = rhs%cv0</span>
-    <span class="c">! opr%BC_L  = rhs%BC_L</span>
-    <span class="c">! opr%BC_R  = rhs%BC_R</span>
+    <span class="n">opr</span><span class="p">%</span><span class="n">U</span> <span class="o">=</span> <span class="n">rhs</span><span class="p">%</span><span class="n">U</span> <span class="o">*</span> <span class="n">lhs</span>
   <span class="n">endselect</span>
   <span class="k">return</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>

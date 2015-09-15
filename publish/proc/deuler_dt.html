@@ -136,6 +136,8 @@
       
       <a class="list-group-item" href="../proc/deuler_dt.html#variable-pr">PR</a>
       
+      <a class="list-group-item" href="../proc/deuler_dt.html#variable-dn%7E3">dn</a>
+      
       <a class="list-group-item" href="../proc/deuler_dt.html#variable-i%7E10">i</a>
       
     </div>
@@ -319,6 +321,8 @@
       
       <a class="list-group-item" href="../proc/test_ab%7E3.html">test_ab</a>
       
+      <a class="list-group-item" href="../proc/test_ab%7E4.html">test_ab</a>
+      
       <a class="list-group-item" href="../proc/test_euler.html">test_euler</a>
       
       <a class="list-group-item" href="../proc/test_euler%7E2.html">test_euler</a>
@@ -332,6 +336,8 @@
       <a class="list-group-item" href="../proc/test_rk%7E2.html">test_rk</a>
       
       <a class="list-group-item" href="../proc/test_rk%7E3.html">test_rk</a>
+      
+      <a class="list-group-item" href="../proc/test_rk%7E4.html">test_rk</a>
       
       <a class="list-group-item" href="../interface/tvd_runge_kutta_integrator.html">tvd_runge_kutta_integrator</a>
       
@@ -351,7 +357,7 @@
     
     <div class="col-lg-9" id='text'>
     <h2>
-private function dEuler_dt(self, n) result(dState_dt)
+private purefunction dEuler_dt(self, n) result(dState_dt)
     
     
     
@@ -426,7 +432,7 @@ private function dEuler_dt(self, n) result(dState_dt)
      
             <img class="depgraph" alt="dependency graph" src=../graphs/proc%7E%7Edeuler_dt%7E%7ECallsGraph.svg usemap="#proc~~deuler_dt~~CallsGraph">
             <map id="proc~~deuler_dt~~CallsGraph" name="proc~~deuler_dt~~CallsGraph">
-<area shape="rect" id="node5" href="../proc/p.html" title="p" alt="" coords="131,181,203,216"/>
+<area shape="rect" id="node4" href="../proc/p.html" title="p" alt="" coords="131,123,203,157"/>
 </map>
 
             <div><a type="button" class="graph-help" data-toggle="modal" href="#graph-help-text">Help</a></div>
@@ -573,7 +579,21 @@ implementation in a submodule of an interface in a parent module.</p>
   
   <td>public,</td>
   <td>allocatable</td><td>::</td>
-  <td><strong>PR</strong>(:,:,:)</td><td></td><td></td><td></td>
+  <td><strong>PR</strong>(:,:,:)</td><td></td><td></td><td><p>Left (1) and right (2) (reconstructed) interface values of primitive variables.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-dn%7E3"></span>integer(kind=I_P),</td>
+  
+  <td>public</td>
+  <td></td><td>::</td>
+  <td><strong>dn</strong></td><td></td><td></td><td><p>Time level, dummy variable.</p></td>
   
 </tr>
 
@@ -612,7 +632,7 @@ implementation in a submodule of an interface in a parent module.</p>
     
     <section>
     <h2><span class="anchor" id="src"></span>Source Code</h2>
-    <div class="highlight"><pre>  <span class="k">function </span><span class="n">dEuler_dt</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">n</span><span class="p">)</span> <span class="k">result</span><span class="p">(</span><span class="n">dState_dt</span><span class="p">)</span>
+    <div class="highlight"><pre>  <span class="k">pure function </span><span class="n">dEuler_dt</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">n</span><span class="p">)</span> <span class="k">result</span><span class="p">(</span><span class="n">dState_dt</span><span class="p">)</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
   <span class="c">!&lt; Time derivative of Euler field, the residuals function.</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
@@ -621,20 +641,28 @@ implementation in a submodule of an interface in a parent module.</p>
   <span class="k">class</span><span class="p">(</span><span class="n">integrand</span><span class="p">),</span> <span class="k">allocatable</span>      <span class="kd">::</span> <span class="n">dState_dt</span> <span class="c">!&lt; Euler field time derivative.</span>
   <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">),</span> <span class="k">allocatable</span>             <span class="kd">::</span> <span class="n">F</span><span class="p">(:,:)</span>    <span class="c">!&lt; Fluxes of conservative variables.</span>
   <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">),</span> <span class="k">allocatable</span>             <span class="kd">::</span> <span class="n">P</span><span class="p">(:,:)</span>    <span class="c">!&lt; Primitive variables.</span>
-  <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">),</span> <span class="k">allocatable</span>             <span class="kd">::</span> <span class="n">PR</span><span class="p">(:,:,:)</span> <span class="c">! Left (1) and right (2) (reconstructed) interface values of primitive variables.</span>
+  <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">),</span> <span class="k">allocatable</span>             <span class="kd">::</span> <span class="n">PR</span><span class="p">(:,:,:)</span> <span class="c">!&lt; Left (1) and right (2) (reconstructed) interface values of primitive variables.</span>
+  <span class="kt">integer</span><span class="p">(</span><span class="n">I_P</span><span class="p">)</span>                       <span class="kd">::</span> <span class="n">dn</span>        <span class="c">!&lt; Time level, dummy variable.</span>
   <span class="kt">integer</span><span class="p">(</span><span class="n">I_P</span><span class="p">)</span>                       <span class="kd">::</span> <span class="n">i</span>         <span class="c">!&lt; Counter.</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
 
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
-  <span class="k">associate</span> <span class="p">(</span><span class="n">Ni</span><span class="o">=&gt;</span><span class="n">self</span><span class="p">%</span><span class="n">Ni</span><span class="p">,</span> <span class="n">Ng</span><span class="o">=&gt;</span><span class="n">self</span><span class="p">%</span><span class="n">Ng</span><span class="p">,</span> <span class="n">Nc</span><span class="o">=&gt;</span><span class="n">self</span><span class="p">%</span><span class="n">Nc</span><span class="p">,</span> <span class="n">Np</span><span class="o">=&gt;</span><span class="n">self</span><span class="p">%</span><span class="n">Np</span><span class="p">,</span> <span class="n">Ns</span><span class="o">=&gt;</span><span class="n">self</span><span class="p">%</span><span class="n">Ns</span><span class="p">,</span> <span class="n">U</span><span class="o">=&gt;</span><span class="n">self</span><span class="p">%</span><span class="n">U</span><span class="p">)</span>
+  <span class="k">associate</span> <span class="p">(</span><span class="n">Ni</span><span class="o">=&gt;</span><span class="n">self</span><span class="p">%</span><span class="n">Ni</span><span class="p">,</span> <span class="n">Ng</span><span class="o">=&gt;</span><span class="n">self</span><span class="p">%</span><span class="n">Ng</span><span class="p">,</span> <span class="n">Nc</span><span class="o">=&gt;</span><span class="n">self</span><span class="p">%</span><span class="n">Nc</span><span class="p">,</span> <span class="n">Np</span><span class="o">=&gt;</span><span class="n">self</span><span class="p">%</span><span class="n">Np</span><span class="p">,</span> <span class="n">Ns</span><span class="o">=&gt;</span><span class="n">self</span><span class="p">%</span><span class="n">Ns</span><span class="p">,</span> <span class="n">U</span><span class="o">=&gt;</span><span class="n">self</span><span class="p">%</span><span class="n">U</span><span class="p">,</span> <span class="n">previous</span><span class="o">=&gt;</span><span class="n">self</span><span class="p">%</span><span class="n">previous</span><span class="p">)</span>
     <span class="c">! allocate temporary arrays</span>
     <span class="k">allocate</span><span class="p">(</span><span class="n">F</span><span class="p">(</span><span class="mi">1</span><span class="p">:</span><span class="n">Nc</span><span class="p">,</span> <span class="mi">0</span><span class="p">:</span><span class="n">Ni</span><span class="p">))</span> <span class="p">;</span> <span class="n">F</span> <span class="o">=</span> <span class="mf">0._R_P</span>
     <span class="k">allocate</span><span class="p">(</span><span class="n">P</span><span class="p">(</span><span class="mi">1</span><span class="p">:</span><span class="n">Np</span><span class="p">,</span> <span class="mi">1</span><span class="o">-</span><span class="n">Ng</span><span class="p">:</span><span class="n">Ni</span><span class="o">+</span><span class="n">Ng</span><span class="p">))</span> <span class="p">;</span> <span class="n">P</span> <span class="o">=</span> <span class="mf">0._R_P</span>
     <span class="k">allocate</span><span class="p">(</span><span class="n">PR</span><span class="p">(</span><span class="mi">1</span><span class="p">:</span><span class="n">Np</span><span class="p">,</span> <span class="mi">1</span><span class="p">:</span><span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">:</span><span class="n">Ni</span><span class="o">+</span><span class="mi">1</span><span class="p">))</span> <span class="p">;</span> <span class="n">PR</span> <span class="o">=</span> <span class="mf">0._R_P</span>
     <span class="c">! compute primitive variables</span>
-    <span class="k">do </span><span class="n">i</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">Ni</span>
-      <span class="n">P</span><span class="p">(:,</span> <span class="n">i</span><span class="p">)</span> <span class="o">=</span> <span class="n">self</span><span class="p">%</span><span class="n">conservative2primitive</span><span class="p">(</span><span class="n">U</span><span class="p">(:,</span> <span class="n">i</span><span class="p">))</span>
-    <span class="n">enddo</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">steps</span><span class="o">&gt;=</span><span class="mi">2</span><span class="p">)</span> <span class="k">then</span> <span class="c">! self%previous should be used, multi-step time integration</span>
+      <span class="n">dn</span> <span class="o">=</span> <span class="n">self</span><span class="p">%</span><span class="n">steps</span> <span class="p">;</span> <span class="k">if</span> <span class="p">(</span><span class="nb">present</span><span class="p">(</span><span class="n">n</span><span class="p">))</span> <span class="n">dn</span> <span class="o">=</span> <span class="n">n</span>
+      <span class="k">do </span><span class="n">i</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">Ni</span>
+        <span class="n">P</span><span class="p">(:,</span> <span class="n">i</span><span class="p">)</span> <span class="o">=</span> <span class="n">self</span><span class="p">%</span><span class="n">conservative2primitive</span><span class="p">(</span><span class="n">previous</span><span class="p">(:,</span> <span class="n">i</span><span class="p">,</span> <span class="n">dn</span><span class="p">))</span>
+      <span class="n">enddo</span>
+    <span class="k">else</span> <span class="c">! self%U should be used, single-step time integration</span>
+      <span class="k">do </span><span class="n">i</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">Ni</span>
+        <span class="n">P</span><span class="p">(:,</span> <span class="n">i</span><span class="p">)</span> <span class="o">=</span> <span class="n">self</span><span class="p">%</span><span class="n">conservative2primitive</span><span class="p">(</span><span class="n">U</span><span class="p">(:,</span> <span class="n">i</span><span class="p">))</span>
+      <span class="n">enddo</span>
+    <span class="n">endif</span>
     <span class="k">call </span><span class="n">self</span><span class="p">%</span><span class="n">impose_boundary_conditions</span><span class="p">(</span><span class="n">primitive</span><span class="o">=</span><span class="n">P</span><span class="p">)</span>
     <span class="k">call </span><span class="n">self</span><span class="p">%</span><span class="n">reconstruct_interfaces_states</span><span class="p">(</span><span class="n">primitive</span><span class="o">=</span><span class="n">P</span><span class="p">,</span> <span class="n">r_primitive</span><span class="o">=</span><span class="n">PR</span><span class="p">)</span>
     <span class="c">! compute fluxes by solving Rimeann Problems at each interface</span>

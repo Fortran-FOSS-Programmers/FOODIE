@@ -103,14 +103,14 @@
      
     
     
-    <li><i class="fa fa-code"></i><a href="../src/oscillation.f90"> Source File</a></li>
+    <li><i class="fa fa-code"></i><a href="../src/lorenz.f90"> Source File</a></li>
      
   </ul>
   <ol class="breadcrumb in-well text-right">
   
-     <li><a href='../sourcefile/oscillation.f90.html'>oscillation.f90</a></li>
+     <li><a href='../sourcefile/lorenz.f90.html'>lorenz.f90</a></li>
   
-     <li><a href='../program/integrate_oscillation.html'>integrate_oscillation</a></li>
+     <li><a href='../program/integrate_lorenz.html'>integrate_lorenz</a></li>
   
      <li class="active">test_ab</li>
   </ol>
@@ -140,9 +140,9 @@
       
       <a class="list-group-item" href="../proc/test_ab%7E3.html#variable-ab_steps%7E3">ab_steps</a>
       
-      <a class="list-group-item" href="../proc/test_ab%7E3.html#variable-s%7E16">s</a>
+      <a class="list-group-item" href="../proc/test_ab%7E3.html#variable-s%7E13">s</a>
       
-      <a class="list-group-item" href="../proc/test_ab%7E3.html#variable-step%7E7">step</a>
+      <a class="list-group-item" href="../proc/test_ab%7E3.html#variable-step%7E5">step</a>
       
     </div>
   </div>
@@ -325,6 +325,8 @@
       
       <a class="list-group-item" href="../proc/test_ab%7E3.html">test_ab</a>
       
+      <a class="list-group-item" href="../proc/test_ab%7E4.html">test_ab</a>
+      
       <a class="list-group-item" href="../proc/test_euler.html">test_euler</a>
       
       <a class="list-group-item" href="../proc/test_euler%7E2.html">test_euler</a>
@@ -338,6 +340,8 @@
       <a class="list-group-item" href="../proc/test_rk%7E2.html">test_rk</a>
       
       <a class="list-group-item" href="../proc/test_rk%7E3.html">test_rk</a>
+      
+      <a class="list-group-item" href="../proc/test_rk%7E4.html">test_rk</a>
       
       <a class="list-group-item" href="../interface/tvd_runge_kutta_integrator.html">tvd_runge_kutta_integrator</a>
       
@@ -381,7 +385,7 @@ subroutine test_ab()
      
             <img class="depgraph" alt="dependency graph" src=../graphs/proc%7E%7Etest_ab%7E3%7E%7ECallsGraph.svg usemap="#proc~~test_ab~3~~CallsGraph">
             <map id="proc~~test_ab~3~~CallsGraph" name="proc~~test_ab~3~~CallsGraph">
-<area shape="rect" id="node2" href="../proc/save_results%7E4.html" title="save_results" alt="" coords="172,5,268,40"/>
+<area shape="rect" id="node2" href="../proc/save_results%7E3.html" title="save_results" alt="" coords="172,5,268,40"/>
 <area shape="rect" id="node4" href="../interface/tvd_runge_kutta_integrator.html" title="tvd_runge_kutta_integrator" alt="" coords="125,123,315,157"/>
 <area shape="rect" id="node5" href="../proc/create.html" title="create" alt="" coords="363,123,435,157"/>
 </map>
@@ -482,7 +486,7 @@ implementation in a submodule of an interface in a parent module.</p>
      
             <img class="depgraph" alt="dependency graph" src=../graphs/proc%7E%7Etest_ab%7E3%7E%7ECalledByGraph.svg usemap="#proc~~test_ab~3~~CalledByGraph">
             <map id="proc~~test_ab~3~~CalledByGraph" name="proc~~test_ab~3~~CalledByGraph">
-<area shape="rect" id="node2" href="../program/integrate_oscillation.html" title="integrate_oscillation" alt="" coords="7,5,148,40"/>
+<area shape="rect" id="node2" href="../program/integrate_lorenz.html" title="integrate_lorenz" alt="" coords="5,5,125,40"/>
 </map>
 
             <div><a type="button" class="graph-help" data-toggle="modal" href="#graph-help-text">Help</a></div>
@@ -614,7 +618,7 @@ implementation in a submodule of an interface in a parent module.</p>
   
   <td>public,</td>
   <td>parameter</td><td>::</td>
-  <td><strong>rk_stages</strong></td><td> =</td><td>3</td><td><p>Runge-Kutta stages number.</p></td>
+  <td><strong>rk_stages</strong></td><td> =</td><td>5</td><td><p>Runge-Kutta stages number.</p></td>
   
 </tr>
 
@@ -624,7 +628,7 @@ implementation in a submodule of an interface in a parent module.</p>
   
 <tr>
   
-  <td><span class="anchor" id="variable-rk_stage%7E6"></span>type(<a href='../type/oscillation.html'>oscillation</a>),</td>
+  <td><span class="anchor" id="variable-rk_stage%7E6"></span>type(<a href='../type/lorenz.html'>lorenz</a>),</td>
   
   <td>public</td>
   <td></td><td>::</td>
@@ -666,7 +670,7 @@ implementation in a submodule of an interface in a parent module.</p>
   
 <tr>
   
-  <td><span class="anchor" id="variable-s%7E16"></span>integer(kind=I_P),</td>
+  <td><span class="anchor" id="variable-s%7E13"></span>integer(kind=I_P),</td>
   
   <td>public</td>
   <td></td><td>::</td>
@@ -680,7 +684,7 @@ implementation in a submodule of an interface in a parent module.</p>
   
 <tr>
   
-  <td><span class="anchor" id="variable-step%7E7"></span>integer,</td>
+  <td><span class="anchor" id="variable-step%7E5"></span>integer,</td>
   
   <td>public</td>
   <td></td><td>::</td>
@@ -714,8 +718,8 @@ implementation in a submodule of an interface in a parent module.</p>
   <span class="c">!&lt; Test explicit Adams-Bashforth class of ODE solvers.</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
   <span class="k">type</span><span class="p">(</span><span class="n">tvd_runge_kutta_integrator</span><span class="p">)</span> <span class="kd">::</span> <span class="n">rk_integrator</span>         <span class="c">!&lt; Runge-Kutta integrator.</span>
-  <span class="kt">integer</span><span class="p">,</span> <span class="k">parameter</span>               <span class="kd">::</span> <span class="n">rk_stages</span><span class="o">=</span><span class="mi">3</span>           <span class="c">!&lt; Runge-Kutta stages number.</span>
-  <span class="k">type</span><span class="p">(</span><span class="n">oscillation</span><span class="p">)</span>                <span class="kd">::</span> <span class="n">rk_stage</span><span class="p">(</span><span class="mi">1</span><span class="p">:</span><span class="n">rk_stages</span><span class="p">)</span> <span class="c">!&lt; Runge-Kutta stages.</span>
+  <span class="kt">integer</span><span class="p">,</span> <span class="k">parameter</span>               <span class="kd">::</span> <span class="n">rk_stages</span><span class="o">=</span><span class="mi">5</span>           <span class="c">!&lt; Runge-Kutta stages number.</span>
+  <span class="k">type</span><span class="p">(</span><span class="n">lorenz</span><span class="p">)</span>                     <span class="kd">::</span> <span class="n">rk_stage</span><span class="p">(</span><span class="mi">1</span><span class="p">:</span><span class="n">rk_stages</span><span class="p">)</span> <span class="c">!&lt; Runge-Kutta stages.</span>
   <span class="k">type</span><span class="p">(</span><span class="n">adams_bashforth_integrator</span><span class="p">)</span> <span class="kd">::</span> <span class="n">ab_integrator</span>         <span class="c">!&lt; Adams-Bashforth integrator.</span>
   <span class="kt">integer</span><span class="p">,</span> <span class="k">parameter</span>               <span class="kd">::</span> <span class="n">ab_steps</span><span class="o">=</span><span class="mi">3</span>            <span class="c">!&lt; Adams-Bashforth steps number.</span>
   <span class="kt">integer</span><span class="p">(</span><span class="n">I_P</span><span class="p">)</span>                     <span class="kd">::</span> <span class="n">s</span>                     <span class="c">!&lt; AB steps counter.</span>
@@ -723,7 +727,7 @@ implementation in a submodule of an interface in a parent module.</p>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
 
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
-  <span class="k">print</span> <span class="s2">&quot;(A)&quot;</span><span class="p">,</span> <span class="s1">&#39;Integrating Oscillation equations by means of Adams-Bashforth class of solvers&#39;</span>
+  <span class="k">print</span> <span class="s2">&quot;(A)&quot;</span><span class="p">,</span> <span class="s1">&#39;Integrating Lorenz equations by means of Adams-Bashforth class of solvers&#39;</span>
   <span class="k">do </span><span class="n">s</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">ab_steps</span>
     <span class="k">print</span> <span class="s2">&quot;(A)&quot;</span><span class="p">,</span> <span class="s1">&#39; AB-&#39;</span><span class="o">//</span><span class="nb">trim</span><span class="p">(</span><span class="n">str</span><span class="p">(.</span><span class="n">true</span><span class="p">.,</span><span class="n">s</span><span class="p">))</span>
     <span class="c">! initialize the AB integrator accordingly to the number of time steps used</span>
@@ -731,7 +735,7 @@ implementation in a submodule of an interface in a parent module.</p>
     <span class="c">! initialize the RK integrator used for initial steps of AB integration</span>
     <span class="n">rk_integrator</span> <span class="o">=</span> <span class="n">tvd_runge_kutta_integrator</span><span class="p">(</span><span class="n">stages</span><span class="o">=</span><span class="n">s</span><span class="p">)</span>
     <span class="c">! initialize field</span>
-    <span class="k">call </span><span class="n">attractor</span><span class="p">%</span><span class="n">init</span><span class="p">(</span><span class="n">initial_state</span><span class="o">=</span><span class="n">initial_state</span><span class="p">,</span> <span class="n">f</span><span class="o">=</span><span class="n">f</span><span class="p">,</span> <span class="n">steps</span><span class="o">=</span><span class="n">s</span><span class="p">)</span>
+    <span class="k">call </span><span class="n">attractor</span><span class="p">%</span><span class="n">init</span><span class="p">(</span><span class="n">initial_state</span><span class="o">=</span><span class="n">initial_state</span><span class="p">,</span> <span class="n">sigma</span><span class="o">=</span><span class="n">sigma</span><span class="p">,</span> <span class="n">rho</span><span class="o">=</span><span class="n">rho</span><span class="p">,</span> <span class="n">beta</span><span class="o">=</span><span class="n">beta</span><span class="p">,</span> <span class="n">steps</span><span class="o">=</span><span class="n">s</span><span class="p">)</span>
     <span class="n">solution</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span> <span class="o">=</span> <span class="mf">0._R_P</span>
     <span class="n">solution</span><span class="p">(</span><span class="mi">1</span><span class="p">:</span><span class="n">space_dimension</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span> <span class="o">=</span> <span class="n">attractor</span><span class="p">%</span><span class="n">output</span><span class="p">()</span>
     <span class="c">! integrate field</span>
@@ -745,9 +749,8 @@ implementation in a submodule of an interface in a parent module.</p>
       <span class="n">solution</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">step</span><span class="p">)</span> <span class="o">=</span> <span class="n">step</span> <span class="o">*</span> <span class="n">dt</span>
       <span class="n">solution</span><span class="p">(</span><span class="mi">1</span><span class="p">:</span><span class="n">space_dimension</span><span class="p">,</span> <span class="n">step</span><span class="p">)</span> <span class="o">=</span> <span class="n">attractor</span><span class="p">%</span><span class="n">output</span><span class="p">()</span>
     <span class="n">enddo</span>
-    <span class="k">call </span><span class="n">save_results</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s1">&#39;FOODiE test: Oscillation equation integration, explicit &#39;</span><span class="o">//</span><span class="s1">&#39;Adams-Bashforth &#39;</span><span class="o">//</span><span class="p">&amp;</span>
-                            <span class="nb">trim</span><span class="p">(</span><span class="n">str</span><span class="p">(.</span><span class="n">true</span><span class="p">.,</span> <span class="n">s</span><span class="p">))</span><span class="o">//</span><span class="s1">&#39; steps&#39;</span><span class="p">,</span> <span class="p">&amp;</span>
-                      <span class="n">filename</span><span class="o">=</span><span class="s1">&#39;oscillation_integration-ab-&#39;</span><span class="o">//</span><span class="nb">trim</span><span class="p">(</span><span class="n">str</span><span class="p">(.</span><span class="n">true</span><span class="p">.,</span> <span class="n">s</span><span class="p">)))</span>
+    <span class="k">call </span><span class="n">save_results</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s1">&#39;FOODiE test: Lorenz equation integration, explicit Adams-Bashforth &#39;</span><span class="o">//</span><span class="nb">trim</span><span class="p">(</span><span class="n">str</span><span class="p">(.</span><span class="n">true</span><span class="p">.,</span> <span class="n">s</span><span class="p">))</span><span class="o">//</span><span class="s1">&#39; steps&#39;</span><span class="p">,</span> <span class="p">&amp;</span>
+                      <span class="n">filename</span><span class="o">=</span><span class="s1">&#39;lorenz_integration-ab-&#39;</span><span class="o">//</span><span class="nb">trim</span><span class="p">(</span><span class="n">str</span><span class="p">(.</span><span class="n">true</span><span class="p">.,</span> <span class="n">s</span><span class="p">)))</span>
   <span class="n">enddo</span>
   <span class="k">print</span> <span class="s2">&quot;(A)&quot;</span><span class="p">,</span> <span class="s1">&#39;Finish!&#39;</span>
   <span class="k">return</span>

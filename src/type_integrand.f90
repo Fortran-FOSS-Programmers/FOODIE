@@ -38,7 +38,7 @@ endtype integrand
 
 abstract interface
   !< Abstract type bound procedures necessary for implementing a concrete extension of the class(integrand).
-  function time_derivative(self, n) result(dState_dt)
+  pure function time_derivative(self, n) result(dState_dt)
   !---------------------------------------------------------------------------------------------------------------------------------
   !< Time derivative function of integrand class, i.e. the residuals function.
   !---------------------------------------------------------------------------------------------------------------------------------

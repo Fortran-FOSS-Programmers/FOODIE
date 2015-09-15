@@ -138,8 +138,6 @@
       
       <a class="list-group-item" href="../program/integrate_euler_1d.html#variable-ni%7E6">Ni</a>
       
-      <a class="list-group-item" href="../program/integrate_euler_1d.html#variable-ng%7E3">Ng</a>
-      
       <a class="list-group-item" href="../program/integrate_euler_1d.html#variable-ns%7E3">Ns</a>
       
       <a class="list-group-item" href="../program/integrate_euler_1d.html#variable-nc%7E2">Nc</a>
@@ -196,6 +194,10 @@
       <a class="list-group-item" href="../program/integrate_euler_1d.html#proc-save_time_serie">save_time_serie</a>
       
       <a class="list-group-item" href="../program/integrate_euler_1d.html#proc-test_euler%7E2">test_euler</a>
+      
+      <a class="list-group-item" href="../program/integrate_euler_1d.html#proc-test_rk%7E2">test_rk</a>
+      
+      <a class="list-group-item" href="../program/integrate_euler_1d.html#proc-test_ab%7E2">test_ab</a>
       
     </div>
   </div>
@@ -257,12 +259,12 @@
     
             <img class="depgraph" alt="dependency graph" src=../graphs/program%7E%7Eintegrate_euler_1d%7E%7EUsesGraph.svg usemap="#program~~integrate_euler_1d~~UsesGraph">
             <map id="program~~integrate_euler_1d~~UsesGraph" name="program~~integrate_euler_1d~~UsesGraph">
-<area shape="rect" id="node5" href="../module/type_euler_1d.html" title="type_euler_1D" alt="" coords="581,167,660,192"/>
-<area shape="rect" id="node7" href="../module/foodie_integrator_tvd_runge_kutta.html" title="foodie_integrator_tvd_runge_kutta" alt="" coords="230,157,400,182"/>
-<area shape="rect" id="node8" href="../module/foodie_integrator_adams_bashforth.html" title="foodie_integrator_adams_bashforth" alt="" coords="227,200,403,225"/>
-<area shape="rect" id="node9" href="../module/type_integrand.html" title="type_integrand" alt="" coords="110,138,191,163"/>
-<area shape="rect" id="node10" href="../module/foodie_integrator_euler_explicit.html" title="foodie_integrator_euler_explicit" alt="" coords="237,78,393,103"/>
-<area shape="rect" id="node4" href="../module/foodie.html" title="foodie" alt="" coords="439,148,491,173"/>
+<area shape="rect" id="node6" href="../module/type_euler_1d.html" title="type_euler_1D" alt="" coords="581,206,660,231"/>
+<area shape="rect" id="node7" href="../module/foodie_integrator_adams_bashforth.html" title="foodie_integrator_adams_bashforth" alt="" coords="227,143,403,168"/>
+<area shape="rect" id="node8" href="../module/foodie_integrator_tvd_runge_kutta.html" title="foodie_integrator_tvd_runge_kutta" alt="" coords="230,186,400,211"/>
+<area shape="rect" id="node9" href="../module/type_integrand.html" title="type_integrand" alt="" coords="110,124,191,149"/>
+<area shape="rect" id="node10" href="../module/foodie_integrator_euler_explicit.html" title="foodie_integrator_euler_explicit" alt="" coords="237,64,393,89"/>
+<area shape="rect" id="node3" href="../module/foodie.html" title="foodie" alt="" coords="439,124,491,149"/>
 </map>
 
             <div><a type="button" class="graph-help" data-toggle="modal" href="#graph-help-text">Help</a></div>
@@ -362,10 +364,14 @@ implementation in a submodule of an interface in a parent module.</p>
      
             <img class="depgraph" alt="dependency graph" src=../graphs/program%7E%7Eintegrate_euler_1d%7E%7ECallsGraph.svg usemap="#program~~integrate_euler_1d~~CallsGraph">
             <map id="program~~integrate_euler_1d~~CallsGraph" name="program~~integrate_euler_1d~~CallsGraph">
-<area shape="rect" id="node2" href="../proc/test_euler%7E2.html" title="test_euler" alt="" coords="192,60,272,95"/>
-<area shape="rect" id="node3" href="../proc/init%7E5.html" title="init" alt="" coords="196,119,268,153"/>
-<area shape="rect" id="node4" href="../proc/save_time_serie.html" title="save_time_serie" alt="" coords="321,5,441,40"/>
-<area shape="rect" id="node6" href="../proc/save_results%7E2.html" title="save_results" alt="" coords="333,115,429,149"/>
+<area shape="rect" id="node2" href="../proc/test_euler%7E2.html" title="test_euler" alt="" coords="192,34,272,69"/>
+<area shape="rect" id="node3" href="../proc/test_ab%7E2.html" title="test_ab" alt="" coords="196,152,268,186"/>
+<area shape="rect" id="node4" href="../proc/init%7E5.html" title="init" alt="" coords="196,210,268,245"/>
+<area shape="rect" id="node5" href="../proc/test_rk%7E2.html" title="test_rk" alt="" coords="196,93,268,128"/>
+<area shape="rect" id="node6" href="../proc/save_time_serie.html" title="save_time_serie" alt="" coords="355,34,475,69"/>
+<area shape="rect" id="node8" href="../proc/save_results%7E2.html" title="save_results" alt="" coords="367,93,463,128"/>
+<area shape="rect" id="node14" href="../interface/tvd_runge_kutta_integrator.html" title="tvd_runge_kutta_integrator" alt="" coords="320,202,509,237"/>
+<area shape="rect" id="node15" href="../proc/create.html" title="create" alt="" coords="557,202,629,237"/>
 </map>
 
             <div><a type="button" class="graph-help" data-toggle="modal" href="#graph-help-text">Help</a></div>
@@ -541,20 +547,6 @@ implementation in a submodule of an interface in a parent module.</p>
   
   <td>parameter</td><td>::</td>
   <td><strong>Ni</strong></td><td> =</td><td>100</td><td><p>Number of grid cells.</p></td>
-  
-</tr>
-
-  
-  
-  
-  
-<tr>
-  
-  <td><span class="anchor" id="variable-ng%7E3"></span>integer(kind=I_P),</td>
-  
-  
-  <td>parameter</td><td>::</td>
-  <td><strong>Ng</strong></td><td> =</td><td>3</td><td><p>Number of ghost cells.</p></td>
   
 </tr>
 
@@ -1040,6 +1032,66 @@ subroutine <a href='../proc/test_euler%7E2.html'>test_euler</a>()
   </div>
 
     
+    
+  <div class="panel panel-default">
+  <div class="panel-heading codesum"><span class="anchor" id="proc-test_rk%7E2"></span><h3>
+subroutine <a href='../proc/test_rk%7E2.html'>test_rk</a>()
+    
+    
+    
+</h3></div>
+  <div class="panel-body">
+       
+    
+    <h4>Arguments</h4>
+    
+      <em>None</em>
+    
+    
+    
+    <h4>Description</h4>
+       
+       
+
+
+       
+       <p>Test explicit TVD/SSP Runge-Kutta class of ODE solvers.</p>
+        
+
+  </div>
+  </div>
+
+    
+    
+  <div class="panel panel-default">
+  <div class="panel-heading codesum"><span class="anchor" id="proc-test_ab%7E2"></span><h3>
+subroutine <a href='../proc/test_ab%7E2.html'>test_ab</a>()
+    
+    
+    
+</h3></div>
+  <div class="panel-body">
+       
+    
+    <h4>Arguments</h4>
+    
+      <em>None</em>
+    
+    
+    
+    <h4>Description</h4>
+       
+       
+
+
+       
+       <p>Test explicit Adams-Bashforth class of ODE solvers.</p>
+        
+
+  </div>
+  </div>
+
+    
     </section>    
     
     
@@ -1066,7 +1118,6 @@ subroutine <a href='../proc/test_euler%7E2.html'>test_euler</a>()
 <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">),</span>    <span class="k">parameter</span>           <span class="kd">::</span> <span class="n">CFL</span><span class="o">=</span><span class="mf">0.7_R_P</span>              <span class="c">!&lt; CFL value.</span>
 <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">),</span>    <span class="k">parameter</span>           <span class="kd">::</span> <span class="n">t_final</span><span class="o">=</span><span class="mf">0.15_R_P</span>         <span class="c">!&lt; Final time.</span>
 <span class="kt">integer</span><span class="p">(</span><span class="n">I_P</span><span class="p">),</span> <span class="k">parameter</span>           <span class="kd">::</span> <span class="n">Ni</span><span class="o">=</span><span class="mi">100</span>                   <span class="c">!&lt; Number of grid cells.</span>
-<span class="kt">integer</span><span class="p">(</span><span class="n">I_P</span><span class="p">),</span> <span class="k">parameter</span>           <span class="kd">::</span> <span class="n">Ng</span><span class="o">=</span><span class="mi">3</span>                     <span class="c">!&lt; Number of ghost cells.</span>
 <span class="kt">integer</span><span class="p">(</span><span class="n">I_P</span><span class="p">),</span> <span class="k">parameter</span>           <span class="kd">::</span> <span class="n">Ns</span><span class="o">=</span><span class="mi">1</span>                     <span class="c">!&lt; Number of differnt initial gas species.</span>
 <span class="kt">integer</span><span class="p">(</span><span class="n">I_P</span><span class="p">),</span> <span class="k">parameter</span>           <span class="kd">::</span> <span class="n">Nc</span><span class="o">=</span><span class="n">Ns</span><span class="o">+</span><span class="mi">2</span>                  <span class="c">!&lt; Number of conservative variables.</span>
 <span class="kt">integer</span><span class="p">(</span><span class="n">I_P</span><span class="p">),</span> <span class="k">parameter</span>           <span class="kd">::</span> <span class="n">Np</span><span class="o">=</span><span class="n">Ns</span><span class="o">+</span><span class="mi">4</span>                  <span class="c">!&lt; Number of primitive variables.</span>
@@ -1115,13 +1166,13 @@ subroutine <a href='../proc/test_euler%7E2.html'>test_euler</a>()
 <span class="k">case</span><span class="p">(</span><span class="s1">&#39;euler&#39;</span><span class="p">)</span>
   <span class="k">call </span><span class="n">test_euler</span><span class="p">()</span>
 <span class="k">case</span><span class="p">(</span><span class="s1">&#39;runge-kutta&#39;</span><span class="p">)</span>
-  <span class="c">! call test_rk()</span>
+  <span class="k">call </span><span class="n">test_rk</span><span class="p">()</span>
 <span class="k">case</span><span class="p">(</span><span class="s1">&#39;adams-bashforth&#39;</span><span class="p">)</span>
-  <span class="c">! call test_ab()</span>
+  <span class="k">call </span><span class="n">test_ab</span><span class="p">()</span>
 <span class="k">case</span><span class="p">(</span><span class="s1">&#39;all&#39;</span><span class="p">)</span>
   <span class="k">call </span><span class="n">test_euler</span><span class="p">()</span>
-  <span class="c">! call test_rk()</span>
-  <span class="c">! call test_ab()</span>
+  <span class="k">call </span><span class="n">test_rk</span><span class="p">()</span>
+  <span class="k">call </span><span class="n">test_ab</span><span class="p">()</span>
 <span class="k">case </span><span class="n">default</span>
   <span class="k">print</span> <span class="s2">&quot;(A)&quot;</span><span class="p">,</span> <span class="s1">&#39;Error: unknown solver &quot;&#39;</span><span class="o">//</span><span class="nb">trim</span><span class="p">(</span><span class="nb">adjustl</span><span class="p">(</span><span class="n">solver</span><span class="p">))</span><span class="o">//</span><span class="s1">&#39;&quot;&#39;</span>
   <span class="k">print</span> <span class="s2">&quot;(A)&quot;</span><span class="p">,</span> <span class="s1">&#39;Valid solver names are:&#39;</span>
@@ -1248,7 +1299,7 @@ subroutine <a href='../proc/test_euler%7E2.html'>test_euler</a>()
 
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
   <span class="k">print</span> <span class="s2">&quot;(A)&quot;</span><span class="p">,</span> <span class="s1">&#39;Integrating 1D Euler equations by means of explicit Euler solver&#39;</span>
-  <span class="k">call </span><span class="n">domain</span><span class="p">%</span><span class="n">init</span><span class="p">(</span><span class="n">Ni</span><span class="o">=</span><span class="n">Ni</span><span class="p">,</span> <span class="n">Ng</span><span class="o">=</span><span class="n">Ng</span><span class="p">,</span> <span class="n">Ns</span><span class="o">=</span><span class="n">Ns</span><span class="p">,</span> <span class="n">Dx</span><span class="o">=</span><span class="n">Dx</span><span class="p">,</span> <span class="n">BC_L</span><span class="o">=</span><span class="n">BC_L</span><span class="p">,</span> <span class="n">BC_R</span><span class="o">=</span><span class="n">BC_R</span><span class="p">,</span> <span class="n">initial_state</span><span class="o">=</span><span class="n">initial_state</span><span class="p">,</span> <span class="n">cp0</span><span class="o">=</span><span class="n">cp0</span><span class="p">,</span> <span class="n">cv0</span><span class="o">=</span><span class="n">cv0</span><span class="p">)</span>
+  <span class="k">call </span><span class="n">domain</span><span class="p">%</span><span class="n">init</span><span class="p">(</span><span class="n">Ni</span><span class="o">=</span><span class="n">Ni</span><span class="p">,</span> <span class="n">Ns</span><span class="o">=</span><span class="n">Ns</span><span class="p">,</span> <span class="n">Dx</span><span class="o">=</span><span class="n">Dx</span><span class="p">,</span> <span class="n">BC_L</span><span class="o">=</span><span class="n">BC_L</span><span class="p">,</span> <span class="n">BC_R</span><span class="o">=</span><span class="n">BC_R</span><span class="p">,</span> <span class="n">initial_state</span><span class="o">=</span><span class="n">initial_state</span><span class="p">,</span> <span class="n">cp0</span><span class="o">=</span><span class="n">cp0</span><span class="p">,</span> <span class="n">cv0</span><span class="o">=</span><span class="n">cv0</span><span class="p">)</span>
   <span class="n">t</span> <span class="o">=</span> <span class="mf">0._R_P</span>
   <span class="k">call </span><span class="n">save_time_serie</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s1">&#39;FOODiE test: 1D Euler equations integration, explicit Euler, t=&#39;</span><span class="o">//</span><span class="n">str</span><span class="p">(</span><span class="n">n</span><span class="o">=</span><span class="n">t_final</span><span class="p">),</span> <span class="p">&amp;</span>
                        <span class="n">filename</span><span class="o">=</span><span class="s1">&#39;euler_1D_integration-euler-time_serie.dat&#39;</span><span class="p">,</span> <span class="p">&amp;</span>
@@ -1267,6 +1318,113 @@ subroutine <a href='../proc/test_euler%7E2.html'>test_euler</a>()
   <span class="k">return</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
   <span class="n">endsubroutine</span> <span class="n">test_euler</span>
+
+  <span class="k">subroutine </span><span class="n">test_rk</span><span class="p">()</span>
+  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+  <span class="c">!&lt; Test explicit TVD/SSP Runge-Kutta class of ODE solvers.</span>
+  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+  <span class="k">type</span><span class="p">(</span><span class="n">tvd_runge_kutta_integrator</span><span class="p">)</span> <span class="kd">::</span> <span class="n">rk_integrator</span>         <span class="c">!&lt; Runge-Kutta integrator.</span>
+  <span class="kt">integer</span><span class="p">,</span> <span class="k">parameter</span>               <span class="kd">::</span> <span class="n">rk_stages</span><span class="o">=</span><span class="mi">5</span>           <span class="c">!&lt; Runge-Kutta stages number.</span>
+  <span class="k">type</span><span class="p">(</span><span class="n">euler_1D</span><span class="p">)</span>                   <span class="kd">::</span> <span class="n">rk_stage</span><span class="p">(</span><span class="mi">1</span><span class="p">:</span><span class="n">rk_stages</span><span class="p">)</span> <span class="c">!&lt; Runge-Kutta stages.</span>
+  <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">)</span>                        <span class="kd">::</span> <span class="n">dt</span>                    <span class="c">!&lt; Time step.</span>
+  <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">)</span>                        <span class="kd">::</span> <span class="n">t</span>                     <span class="c">!&lt; Time.</span>
+  <span class="kt">integer</span><span class="p">(</span><span class="n">I_P</span><span class="p">)</span>                     <span class="kd">::</span> <span class="n">s</span>                     <span class="c">!&lt; RK stages counter.</span>
+  <span class="kt">integer</span><span class="p">(</span><span class="n">I_P</span><span class="p">)</span>                     <span class="kd">::</span> <span class="n">ord</span>                   <span class="c">!&lt; Space order.</span>
+  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+
+  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+  <span class="k">print</span> <span class="s2">&quot;(A)&quot;</span><span class="p">,</span> <span class="s1">&#39;Integrating 1D Euler equations by means of TVD/SSP Runge-Kutta class of solvers&#39;</span>
+  <span class="k">do </span><span class="n">s</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">rk_stages</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">s</span><span class="o">==</span><span class="mi">4</span><span class="p">)</span> <span class="k">cycle</span> <span class="c">! 4 stages not yet implemented</span>
+    <span class="k">print</span> <span class="s2">&quot;(A)&quot;</span><span class="p">,</span> <span class="s1">&#39; RK-&#39;</span><span class="o">//</span><span class="nb">trim</span><span class="p">(</span><span class="n">str</span><span class="p">(.</span><span class="n">true</span><span class="p">.,</span><span class="n">s</span><span class="p">))</span>
+    <span class="n">rk_integrator</span> <span class="o">=</span> <span class="n">tvd_runge_kutta_integrator</span><span class="p">(</span><span class="n">stages</span><span class="o">=</span><span class="n">s</span><span class="p">)</span>
+    <span class="k">select case</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
+    <span class="k">case</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+      <span class="k">call </span><span class="n">domain</span><span class="p">%</span><span class="n">init</span><span class="p">(</span><span class="n">Ni</span><span class="o">=</span><span class="n">Ni</span><span class="p">,</span> <span class="n">Ns</span><span class="o">=</span><span class="n">Ns</span><span class="p">,</span> <span class="n">Dx</span><span class="o">=</span><span class="n">Dx</span><span class="p">,</span> <span class="n">BC_L</span><span class="o">=</span><span class="n">BC_L</span><span class="p">,</span> <span class="n">BC_R</span><span class="o">=</span><span class="n">BC_R</span><span class="p">,</span> <span class="n">initial_state</span><span class="o">=</span><span class="n">initial_state</span><span class="p">,</span> <span class="n">cp0</span><span class="o">=</span><span class="n">cp0</span><span class="p">,</span> <span class="n">cv0</span><span class="o">=</span><span class="n">cv0</span><span class="p">,</span> <span class="n">ord</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+    <span class="k">case</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
+      <span class="k">call </span><span class="n">domain</span><span class="p">%</span><span class="n">init</span><span class="p">(</span><span class="n">Ni</span><span class="o">=</span><span class="n">Ni</span><span class="p">,</span> <span class="n">Ns</span><span class="o">=</span><span class="n">Ns</span><span class="p">,</span> <span class="n">Dx</span><span class="o">=</span><span class="n">Dx</span><span class="p">,</span> <span class="n">BC_L</span><span class="o">=</span><span class="n">BC_L</span><span class="p">,</span> <span class="n">BC_R</span><span class="o">=</span><span class="n">BC_R</span><span class="p">,</span> <span class="n">initial_state</span><span class="o">=</span><span class="n">initial_state</span><span class="p">,</span> <span class="n">cp0</span><span class="o">=</span><span class="n">cp0</span><span class="p">,</span> <span class="n">cv0</span><span class="o">=</span><span class="n">cv0</span><span class="p">,</span> <span class="n">ord</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+    <span class="k">case</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
+      <span class="k">call </span><span class="n">domain</span><span class="p">%</span><span class="n">init</span><span class="p">(</span><span class="n">Ni</span><span class="o">=</span><span class="n">Ni</span><span class="p">,</span> <span class="n">Ns</span><span class="o">=</span><span class="n">Ns</span><span class="p">,</span> <span class="n">Dx</span><span class="o">=</span><span class="n">Dx</span><span class="p">,</span> <span class="n">BC_L</span><span class="o">=</span><span class="n">BC_L</span><span class="p">,</span> <span class="n">BC_R</span><span class="o">=</span><span class="n">BC_R</span><span class="p">,</span> <span class="n">initial_state</span><span class="o">=</span><span class="n">initial_state</span><span class="p">,</span> <span class="n">cp0</span><span class="o">=</span><span class="n">cp0</span><span class="p">,</span> <span class="n">cv0</span><span class="o">=</span><span class="n">cv0</span><span class="p">,</span> <span class="n">ord</span><span class="o">=</span><span class="mi">7</span><span class="p">)</span>
+    <span class="n">endselect</span>
+    <span class="n">t</span> <span class="o">=</span> <span class="mf">0._R_P</span>
+    <span class="k">call </span><span class="n">save_time_serie</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s1">&#39;FOODiE test: 1D Euler equations integration, explicit Runge-Kutta, t=&#39;</span><span class="o">//</span><span class="n">str</span><span class="p">(</span><span class="n">n</span><span class="o">=</span><span class="n">t_final</span><span class="p">)</span><span class="o">//</span> <span class="p">&amp;</span>
+                               <span class="nb">trim</span><span class="p">(</span><span class="n">str</span><span class="p">(.</span><span class="n">true</span><span class="p">.,</span> <span class="n">s</span><span class="p">))</span><span class="o">//</span><span class="s1">&#39; stages&#39;</span><span class="p">,</span> <span class="p">&amp;</span>
+                         <span class="n">filename</span><span class="o">=</span><span class="s1">&#39;euler_1D_integration-rk-&#39;</span><span class="o">//</span><span class="nb">trim</span><span class="p">(</span><span class="n">str</span><span class="p">(.</span><span class="n">true</span><span class="p">.,</span> <span class="n">s</span><span class="p">))</span><span class="o">//</span><span class="s1">&#39;-time_serie.dat&#39;</span><span class="p">,</span> <span class="p">&amp;</span>
+                         <span class="n">t</span><span class="o">=</span><span class="n">t</span><span class="p">)</span>
+    <span class="k">do while</span><span class="p">(</span><span class="n">t</span><span class="o">&lt;</span><span class="n">t_final</span><span class="p">)</span>
+      <span class="k">print</span> <span class="s2">&quot;(A)&quot;</span><span class="p">,</span> <span class="s1">&#39;    Time step: &#39;</span><span class="o">//</span><span class="n">str</span><span class="p">(</span><span class="n">n</span><span class="o">=</span><span class="n">dt</span><span class="p">)</span><span class="o">//</span><span class="s1">&#39;, Time: &#39;</span><span class="o">//</span><span class="n">str</span><span class="p">(</span><span class="n">n</span><span class="o">=</span><span class="n">t</span><span class="p">)</span>
+      <span class="n">dt</span> <span class="o">=</span> <span class="n">domain</span><span class="p">%</span><span class="n">dt</span><span class="p">(</span><span class="n">Nmax</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">Tmax</span><span class="o">=</span><span class="n">t_final</span><span class="p">,</span> <span class="n">t</span><span class="o">=</span><span class="n">t</span><span class="p">,</span> <span class="n">CFL</span><span class="o">=</span><span class="n">CFL</span><span class="p">)</span>
+      <span class="k">call </span><span class="n">rk_integrator</span><span class="p">%</span><span class="n">integrate</span><span class="p">(</span><span class="n">field</span><span class="o">=</span><span class="n">domain</span><span class="p">,</span> <span class="n">stage</span><span class="o">=</span><span class="n">rk_stage</span><span class="p">(</span><span class="mi">1</span><span class="p">:</span><span class="n">s</span><span class="p">),</span> <span class="n">dt</span><span class="o">=</span><span class="n">dt</span><span class="p">)</span>
+      <span class="n">t</span> <span class="o">=</span> <span class="n">t</span> <span class="o">+</span> <span class="n">dt</span>
+      <span class="k">call </span><span class="n">save_time_serie</span><span class="p">(</span><span class="n">t</span><span class="o">=</span><span class="n">t</span><span class="p">)</span>
+    <span class="n">enddo</span>
+    <span class="k">call </span><span class="n">save_time_serie</span><span class="p">(</span><span class="n">t</span><span class="o">=</span><span class="n">t</span><span class="p">,</span> <span class="n">finish</span><span class="o">=</span><span class="p">.</span><span class="n">true</span><span class="p">.)</span>
+    <span class="k">call </span><span class="n">save_results</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s1">&#39;FOODiE test: 1D Euler equations integration, explicit Runge-Kutta, t=&#39;</span><span class="o">//</span><span class="n">str</span><span class="p">(</span><span class="n">n</span><span class="o">=</span><span class="n">t_final</span><span class="p">)</span><span class="o">//</span> <span class="p">&amp;</span>
+                            <span class="nb">trim</span><span class="p">(</span><span class="n">str</span><span class="p">(.</span><span class="n">true</span><span class="p">.,</span> <span class="n">s</span><span class="p">))</span><span class="o">//</span><span class="s1">&#39; stages&#39;</span><span class="p">,</span> <span class="p">&amp;</span>
+                      <span class="n">filename</span><span class="o">=</span><span class="s1">&#39;euler_1D_integration-rk-&#39;</span><span class="o">//</span><span class="nb">trim</span><span class="p">(</span><span class="n">str</span><span class="p">(.</span><span class="n">true</span><span class="p">.,</span> <span class="n">s</span><span class="p">)))</span>
+  <span class="n">enddo</span>
+  <span class="k">print</span> <span class="s2">&quot;(A)&quot;</span><span class="p">,</span> <span class="s1">&#39;Finish!&#39;</span>
+  <span class="k">return</span>
+  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+  <span class="n">endsubroutine</span> <span class="n">test_rk</span>
+
+  <span class="k">subroutine </span><span class="n">test_ab</span><span class="p">()</span>
+  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+  <span class="c">!&lt; Test explicit Adams-Bashforth class of ODE solvers.</span>
+  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+  <span class="k">type</span><span class="p">(</span><span class="n">tvd_runge_kutta_integrator</span><span class="p">)</span> <span class="kd">::</span> <span class="n">rk_integrator</span>         <span class="c">!&lt; Runge-Kutta integrator.</span>
+  <span class="kt">integer</span><span class="p">,</span> <span class="k">parameter</span>               <span class="kd">::</span> <span class="n">rk_stages</span><span class="o">=</span><span class="mi">5</span>           <span class="c">!&lt; Runge-Kutta stages number.</span>
+  <span class="k">type</span><span class="p">(</span><span class="n">euler_1D</span><span class="p">)</span>                   <span class="kd">::</span> <span class="n">rk_stage</span><span class="p">(</span><span class="mi">1</span><span class="p">:</span><span class="n">rk_stages</span><span class="p">)</span> <span class="c">!&lt; Runge-Kutta stages.</span>
+  <span class="k">type</span><span class="p">(</span><span class="n">adams_bashforth_integrator</span><span class="p">)</span> <span class="kd">::</span> <span class="n">ab_integrator</span>         <span class="c">!&lt; Adams-Bashforth integrator.</span>
+  <span class="kt">integer</span><span class="p">,</span> <span class="k">parameter</span>               <span class="kd">::</span> <span class="n">ab_steps</span><span class="o">=</span><span class="mi">3</span>            <span class="c">!&lt; Adams-Bashforth steps number.</span>
+  <span class="kt">integer</span>                          <span class="kd">::</span> <span class="n">step</span>                  <span class="c">!&lt; Time steps counter.</span>
+  <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">)</span>                        <span class="kd">::</span> <span class="n">dt</span>                    <span class="c">!&lt; Time step.</span>
+  <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">)</span>                        <span class="kd">::</span> <span class="n">t</span>                     <span class="c">!&lt; Time.</span>
+  <span class="kt">integer</span><span class="p">(</span><span class="n">I_P</span><span class="p">)</span>                     <span class="kd">::</span> <span class="n">s</span>                     <span class="c">!&lt; AB steps counter.</span>
+  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+
+  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+  <span class="k">print</span> <span class="s2">&quot;(A)&quot;</span><span class="p">,</span> <span class="s1">&#39;Integrating 1D Euler equations by means of Adams-Bashforth class of solvers&#39;</span>
+  <span class="k">do </span><span class="n">s</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">ab_steps</span>
+    <span class="k">print</span> <span class="s2">&quot;(A)&quot;</span><span class="p">,</span> <span class="s1">&#39; AB-&#39;</span><span class="o">//</span><span class="nb">trim</span><span class="p">(</span><span class="n">str</span><span class="p">(.</span><span class="n">true</span><span class="p">.,</span><span class="n">s</span><span class="p">))</span>
+    <span class="k">call </span><span class="n">ab_integrator</span><span class="p">%</span><span class="n">init</span><span class="p">(</span><span class="n">steps</span><span class="o">=</span><span class="n">s</span><span class="p">)</span>
+    <span class="n">rk_integrator</span> <span class="o">=</span> <span class="n">tvd_runge_kutta_integrator</span><span class="p">(</span><span class="n">stages</span><span class="o">=</span><span class="n">s</span><span class="p">)</span>
+    <span class="k">select case</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
+    <span class="k">case</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+      <span class="k">call </span><span class="n">domain</span><span class="p">%</span><span class="n">init</span><span class="p">(</span><span class="n">Ni</span><span class="o">=</span><span class="n">Ni</span><span class="p">,</span> <span class="n">Ns</span><span class="o">=</span><span class="n">Ns</span><span class="p">,</span> <span class="n">Dx</span><span class="o">=</span><span class="n">Dx</span><span class="p">,</span> <span class="n">BC_L</span><span class="o">=</span><span class="n">BC_L</span><span class="p">,</span> <span class="n">BC_R</span><span class="o">=</span><span class="n">BC_R</span><span class="p">,</span> <span class="n">initial_state</span><span class="o">=</span><span class="n">initial_state</span><span class="p">,</span> <span class="n">cp0</span><span class="o">=</span><span class="n">cp0</span><span class="p">,</span> <span class="n">cv0</span><span class="o">=</span><span class="n">cv0</span><span class="p">,</span> <span class="n">ord</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+    <span class="k">case</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
+      <span class="k">call </span><span class="n">domain</span><span class="p">%</span><span class="n">init</span><span class="p">(</span><span class="n">Ni</span><span class="o">=</span><span class="n">Ni</span><span class="p">,</span> <span class="n">Ns</span><span class="o">=</span><span class="n">Ns</span><span class="p">,</span> <span class="n">Dx</span><span class="o">=</span><span class="n">Dx</span><span class="p">,</span> <span class="n">BC_L</span><span class="o">=</span><span class="n">BC_L</span><span class="p">,</span> <span class="n">BC_R</span><span class="o">=</span><span class="n">BC_R</span><span class="p">,</span> <span class="n">initial_state</span><span class="o">=</span><span class="n">initial_state</span><span class="p">,</span> <span class="n">cp0</span><span class="o">=</span><span class="n">cp0</span><span class="p">,</span> <span class="n">cv0</span><span class="o">=</span><span class="n">cv0</span><span class="p">,</span> <span class="n">ord</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+    <span class="k">case</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
+      <span class="k">call </span><span class="n">domain</span><span class="p">%</span><span class="n">init</span><span class="p">(</span><span class="n">Ni</span><span class="o">=</span><span class="n">Ni</span><span class="p">,</span> <span class="n">Ns</span><span class="o">=</span><span class="n">Ns</span><span class="p">,</span> <span class="n">Dx</span><span class="o">=</span><span class="n">Dx</span><span class="p">,</span> <span class="n">BC_L</span><span class="o">=</span><span class="n">BC_L</span><span class="p">,</span> <span class="n">BC_R</span><span class="o">=</span><span class="n">BC_R</span><span class="p">,</span> <span class="n">initial_state</span><span class="o">=</span><span class="n">initial_state</span><span class="p">,</span> <span class="n">cp0</span><span class="o">=</span><span class="n">cp0</span><span class="p">,</span> <span class="n">cv0</span><span class="o">=</span><span class="n">cv0</span><span class="p">,</span> <span class="n">ord</span><span class="o">=</span><span class="mi">7</span><span class="p">)</span>
+    <span class="n">endselect</span>
+    <span class="n">t</span> <span class="o">=</span> <span class="mf">0._R_P</span>
+    <span class="k">call </span><span class="n">save_time_serie</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s1">&#39;FOODiE test: 1D Euler equations integration, explicit Adams-Bashforth, t=&#39;</span><span class="o">//</span><span class="n">str</span><span class="p">(</span><span class="n">n</span><span class="o">=</span><span class="n">t_final</span><span class="p">)</span><span class="o">//</span> <span class="p">&amp;</span>
+                               <span class="nb">trim</span><span class="p">(</span><span class="n">str</span><span class="p">(.</span><span class="n">true</span><span class="p">.,</span> <span class="n">s</span><span class="p">))</span><span class="o">//</span><span class="s1">&#39; steps&#39;</span><span class="p">,</span> <span class="p">&amp;</span>
+                         <span class="n">filename</span><span class="o">=</span><span class="s1">&#39;euler_1D_integration-ab-&#39;</span><span class="o">//</span><span class="nb">trim</span><span class="p">(</span><span class="n">str</span><span class="p">(.</span><span class="n">true</span><span class="p">.,</span> <span class="n">s</span><span class="p">))</span><span class="o">//</span><span class="s1">&#39;-time_serie.dat&#39;</span><span class="p">,</span> <span class="p">&amp;</span>
+                         <span class="n">t</span><span class="o">=</span><span class="n">t</span><span class="p">)</span>
+    <span class="n">step</span> <span class="o">=</span> <span class="mi">1</span>
+    <span class="k">do while</span><span class="p">(</span><span class="n">t</span><span class="o">&lt;</span><span class="n">t_final</span><span class="p">)</span>
+      <span class="k">print</span> <span class="s2">&quot;(A)&quot;</span><span class="p">,</span> <span class="s1">&#39;    Time step: &#39;</span><span class="o">//</span><span class="n">str</span><span class="p">(</span><span class="n">n</span><span class="o">=</span><span class="n">dt</span><span class="p">)</span><span class="o">//</span><span class="s1">&#39;, Time: &#39;</span><span class="o">//</span><span class="n">str</span><span class="p">(</span><span class="n">n</span><span class="o">=</span><span class="n">t</span><span class="p">)</span>
+      <span class="n">dt</span> <span class="o">=</span> <span class="n">domain</span><span class="p">%</span><span class="n">dt</span><span class="p">(</span><span class="n">Nmax</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">Tmax</span><span class="o">=</span><span class="n">t_final</span><span class="p">,</span> <span class="n">t</span><span class="o">=</span><span class="n">t</span><span class="p">,</span> <span class="n">CFL</span><span class="o">=</span><span class="mf">0.1_R_P</span><span class="o">*</span><span class="n">CFL</span><span class="p">)</span>
+      <span class="k">if</span> <span class="p">(</span><span class="n">s</span><span class="o">&gt;</span><span class="n">step</span><span class="p">)</span> <span class="k">then</span>
+        <span class="c">! the time steps from 1 to s - 1 must be computed with other scheme...</span>
+        <span class="k">call </span><span class="n">rk_integrator</span><span class="p">%</span><span class="n">integrate</span><span class="p">(</span><span class="n">field</span><span class="o">=</span><span class="n">domain</span><span class="p">,</span> <span class="n">stage</span><span class="o">=</span><span class="n">rk_stage</span><span class="p">(</span><span class="mi">1</span><span class="p">:</span><span class="n">s</span><span class="p">),</span> <span class="n">dt</span><span class="o">=</span><span class="n">dt</span><span class="p">)</span>
+      <span class="k">else</span>
+<span class="k">        call </span><span class="n">ab_integrator</span><span class="p">%</span><span class="n">integrate</span><span class="p">(</span><span class="n">field</span><span class="o">=</span><span class="n">domain</span><span class="p">,</span> <span class="n">dt</span><span class="o">=</span><span class="n">dt</span><span class="p">)</span>
+      <span class="n">endif</span>
+      <span class="n">t</span> <span class="o">=</span> <span class="n">t</span> <span class="o">+</span> <span class="n">dt</span>
+      <span class="n">step</span> <span class="o">=</span> <span class="n">step</span> <span class="o">+</span> <span class="mi">1</span>
+      <span class="k">call </span><span class="n">save_time_serie</span><span class="p">(</span><span class="n">t</span><span class="o">=</span><span class="n">t</span><span class="p">)</span>
+    <span class="n">enddo</span>
+    <span class="k">call </span><span class="n">save_time_serie</span><span class="p">(</span><span class="n">t</span><span class="o">=</span><span class="n">t</span><span class="p">,</span> <span class="n">finish</span><span class="o">=</span><span class="p">.</span><span class="n">true</span><span class="p">.)</span>
+    <span class="k">call </span><span class="n">save_results</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s1">&#39;FOODiE test: 1D Euler equations integration, explicit Adams-Bashforth, t=&#39;</span><span class="o">//</span><span class="n">str</span><span class="p">(</span><span class="n">n</span><span class="o">=</span><span class="n">t_final</span><span class="p">)</span><span class="o">//</span> <span class="p">&amp;</span>
+                            <span class="nb">trim</span><span class="p">(</span><span class="n">str</span><span class="p">(.</span><span class="n">true</span><span class="p">.,</span> <span class="n">s</span><span class="p">))</span><span class="o">//</span><span class="s1">&#39; steps&#39;</span><span class="p">,</span> <span class="p">&amp;</span>
+                      <span class="n">filename</span><span class="o">=</span><span class="s1">&#39;euler_1D_integration-ab-&#39;</span><span class="o">//</span><span class="nb">trim</span><span class="p">(</span><span class="n">str</span><span class="p">(.</span><span class="n">true</span><span class="p">.,</span> <span class="n">s</span><span class="p">)))</span>
+  <span class="n">enddo</span>
+  <span class="k">print</span> <span class="s2">&quot;(A)&quot;</span><span class="p">,</span> <span class="s1">&#39;Finish!&#39;</span>
+  <span class="k">return</span>
+  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+  <span class="n">endsubroutine</span> <span class="n">test_ab</span>
 <span class="n">endprogram</span> <span class="n">integrate_euler_1D</span>
 </pre></div>
 

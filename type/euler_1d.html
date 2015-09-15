@@ -146,6 +146,8 @@
       
       <a class="list-group-item" href="../type/euler_1d.html#variable-dx">Dx</a>
       
+      <a class="list-group-item" href="../type/euler_1d.html#variable-weno">weno</a>
+      
       <a class="list-group-item" href="../type/euler_1d.html#variable-u">U</a>
       
       <a class="list-group-item" href="../type/euler_1d.html#variable-previous%7E2">previous</a>
@@ -588,6 +590,20 @@ $$
   
 <tr>
   
+  <td><span class="anchor" id="variable-weno"></span>type(weno_interpolator_upwind),</td>
+  
+  <td>private</td>
+  <td></td><td>::</td>
+  <td><strong>weno</strong></td><td></td><td></td><td><p>WENO interpolator.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
   <td><span class="anchor" id="variable-u"></span>real(kind=R_P),</td>
   
   <td>private,</td>
@@ -606,7 +622,7 @@ $$
   
   <td>private,</td>
   <td>allocatable</td><td>::</td>
-  <td><strong>previous</strong>(:,:,:)</td><td></td><td></td><td><p>Conservative (state) variables of previous time steps [1:Nc,1-Ng:Ni+Ng,1:steps].</p></td>
+  <td><strong>previous</strong>(:,:,:)</td><td></td><td></td><td><p>Conservative variables of previous time steps [:,:,1:steps].</p></td>
   
 </tr>
 
@@ -768,7 +784,7 @@ private subroutine <a href='../proc/finalize%7E3.html'>finalize</a>(self)
          
     
     <h3>
-private subroutine <a href='../proc/init%7E6.html'>init</a>(self, Ni, Ng, Ns, Dx, BC_L, BC_R, initial_state, cp0, cv0, steps, ord)
+private subroutine <a href='../proc/init%7E6.html'>init</a>(self, Ni, Ns, Dx, BC_L, BC_R, initial_state, cp0, cv0, steps, ord)
     
     
     
@@ -814,21 +830,6 @@ private subroutine <a href='../proc/init%7E6.html'>init</a>(self, Ni, Ng, Ns, Dx
   
   <td></td><td>::</td>
   <td><strong>Ni</strong></td><td><p>Space dimension.</p></td>
-  
-</tr>
-
-  
-  
-  
-  
-<tr>
-  
-  <td><span class="anchor" ></span>integer(kind=I_P),</td>
-  <td>intent(in)</td>
-  <td></td>
-  
-  <td></td><td>::</td>
-  <td><strong>Ng</strong></td><td><p>Number of ghost cells.</p></td>
   
 </tr>
 
@@ -1173,7 +1174,7 @@ private purefunction <a href='../proc/output%7E2.html'>output</a>(self) result(s
          
     
     <h3>
-private function <a href='../proc/compute_dt%7E2.html'>compute_dt</a>(self, Nmax, Tmax, t, CFL) result(Dt)
+private purefunction <a href='../proc/compute_dt%7E2.html'>compute_dt</a>(self, Nmax, Tmax, t, CFL) result(Dt)
     
     
     
@@ -1319,7 +1320,7 @@ private function <a href='../proc/compute_dt%7E2.html'>compute_dt</a>(self, Nmax
          
     
     <h3>
-private function <a href='../proc/deuler_dt.html'>dEuler_dt</a>(self, n) result(dState_dt)
+private purefunction <a href='../proc/deuler_dt.html'>dEuler_dt</a>(self, n) result(dState_dt)
     
     
     
@@ -2287,7 +2288,7 @@ private purefunction <a href='../proc/conservative2primitive.html'>conservative2
          
     
     <h3>
-private subroutine <a href='../proc/impose_boundary_conditions.html'>impose_boundary_conditions</a>(self, primitive)
+private puresubroutine <a href='../proc/impose_boundary_conditions.html'>impose_boundary_conditions</a>(self, primitive)
     
     
     
@@ -2379,7 +2380,7 @@ private subroutine <a href='../proc/impose_boundary_conditions.html'>impose_boun
          
     
     <h3>
-private subroutine <a href='../proc/reconstruct_interfaces_states.html'>reconstruct_interfaces_states</a>(self, primitive, r_primitive)
+private puresubroutine <a href='../proc/reconstruct_interfaces_states.html'>reconstruct_interfaces_states</a>(self, primitive, r_primitive)
     
     
     
@@ -2486,7 +2487,7 @@ private subroutine <a href='../proc/reconstruct_interfaces_states.html'>reconstr
          
     
     <h3>
-private subroutine <a href='../proc/riemann_solver.html'>riemann_solver</a>(self, p1, r1, u1, g1, p4, r4, u4, g4, F)
+private puresubroutine <a href='../proc/riemann_solver.html'>riemann_solver</a>(self, p1, r1, u1, g1, p4, r4, u4, g4, F)
     
     
     
@@ -2778,20 +2779,21 @@ private subroutine <a href='../proc/riemann_solver.html'>riemann_solver</a>(self
   <span class="c">!&lt; + Ns+1 : momentum conservation             (r*u)</span>
   <span class="c">!&lt; + Ns+2 : energy conservation               (r*E)</span>
   <span class="k">private</span>
-<span class="k">  </span><span class="kt">integer</span><span class="p">(</span><span class="n">I_P</span><span class="p">)</span>              <span class="kd">::</span> <span class="n">steps</span><span class="o">=</span><span class="mi">0</span>         <span class="c">!&lt; Number of time steps stored.</span>
-  <span class="kt">integer</span><span class="p">(</span><span class="n">I_P</span><span class="p">)</span>              <span class="kd">::</span> <span class="n">ord</span><span class="o">=</span><span class="mi">0</span>           <span class="c">!&lt; Space accuracy formal order.</span>
-  <span class="kt">integer</span><span class="p">(</span><span class="n">I_P</span><span class="p">)</span>              <span class="kd">::</span> <span class="n">Ni</span><span class="o">=</span><span class="mi">0</span>            <span class="c">!&lt; Space dimension.</span>
-  <span class="kt">integer</span><span class="p">(</span><span class="n">I_P</span><span class="p">)</span>              <span class="kd">::</span> <span class="n">Ng</span><span class="o">=</span><span class="mi">0</span>            <span class="c">!&lt; Number of ghost cells for boundary conditions handling.</span>
-  <span class="kt">integer</span><span class="p">(</span><span class="n">I_P</span><span class="p">)</span>              <span class="kd">::</span> <span class="n">Ns</span><span class="o">=</span><span class="mi">0</span>            <span class="c">!&lt; Number of initial species.</span>
-  <span class="kt">integer</span><span class="p">(</span><span class="n">I_P</span><span class="p">)</span>              <span class="kd">::</span> <span class="n">Nc</span><span class="o">=</span><span class="mi">0</span>            <span class="c">!&lt; Number of conservative variables, Ns+2.</span>
-  <span class="kt">integer</span><span class="p">(</span><span class="n">I_P</span><span class="p">)</span>              <span class="kd">::</span> <span class="n">Np</span><span class="o">=</span><span class="mi">0</span>            <span class="c">!&lt; Number of primitive variables, Ns+4.</span>
-  <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">)</span>                 <span class="kd">::</span> <span class="n">Dx</span><span class="o">=</span><span class="mf">0._R_P</span>       <span class="c">!&lt; Space step.</span>
-  <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">),</span>    <span class="k">allocatable</span> <span class="kd">::</span> <span class="n">U</span><span class="p">(:,:)</span>          <span class="c">!&lt; Conservative (state) variables [1:Nc,1-Ng:Ni+Ng].</span>
-  <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">),</span>    <span class="k">allocatable</span> <span class="kd">::</span> <span class="n">previous</span><span class="p">(:,:,:)</span> <span class="c">!&lt; Conservative (state) variables of previous time steps [1:Nc,1-Ng:Ni+Ng,1:steps].</span>
-  <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">),</span>    <span class="k">allocatable</span> <span class="kd">::</span> <span class="n">cp0</span><span class="p">(:)</span>          <span class="c">!&lt; Specific heat cp of initial species [1:Ns].</span>
-  <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">),</span>    <span class="k">allocatable</span> <span class="kd">::</span> <span class="n">cv0</span><span class="p">(:)</span>          <span class="c">!&lt; Specific heat cv of initial species [1:Ns].</span>
-  <span class="kt">character</span><span class="p">(:),</span> <span class="k">allocatable</span> <span class="kd">::</span> <span class="n">BC_L</span>            <span class="c">!&lt; Left boundary condition type.</span>
-  <span class="kt">character</span><span class="p">(:),</span> <span class="k">allocatable</span> <span class="kd">::</span> <span class="n">BC_R</span>            <span class="c">!&lt; Right boundary condition type.</span>
+<span class="k">  </span><span class="kt">integer</span><span class="p">(</span><span class="n">I_P</span><span class="p">)</span>                   <span class="kd">::</span> <span class="n">steps</span><span class="o">=</span><span class="mi">0</span>         <span class="c">!&lt; Number of time steps stored.</span>
+  <span class="kt">integer</span><span class="p">(</span><span class="n">I_P</span><span class="p">)</span>                   <span class="kd">::</span> <span class="n">ord</span><span class="o">=</span><span class="mi">0</span>           <span class="c">!&lt; Space accuracy formal order.</span>
+  <span class="kt">integer</span><span class="p">(</span><span class="n">I_P</span><span class="p">)</span>                   <span class="kd">::</span> <span class="n">Ni</span><span class="o">=</span><span class="mi">0</span>            <span class="c">!&lt; Space dimension.</span>
+  <span class="kt">integer</span><span class="p">(</span><span class="n">I_P</span><span class="p">)</span>                   <span class="kd">::</span> <span class="n">Ng</span><span class="o">=</span><span class="mi">0</span>            <span class="c">!&lt; Number of ghost cells for boundary conditions handling.</span>
+  <span class="kt">integer</span><span class="p">(</span><span class="n">I_P</span><span class="p">)</span>                   <span class="kd">::</span> <span class="n">Ns</span><span class="o">=</span><span class="mi">0</span>            <span class="c">!&lt; Number of initial species.</span>
+  <span class="kt">integer</span><span class="p">(</span><span class="n">I_P</span><span class="p">)</span>                   <span class="kd">::</span> <span class="n">Nc</span><span class="o">=</span><span class="mi">0</span>            <span class="c">!&lt; Number of conservative variables, Ns+2.</span>
+  <span class="kt">integer</span><span class="p">(</span><span class="n">I_P</span><span class="p">)</span>                   <span class="kd">::</span> <span class="n">Np</span><span class="o">=</span><span class="mi">0</span>            <span class="c">!&lt; Number of primitive variables, Ns+4.</span>
+  <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">)</span>                      <span class="kd">::</span> <span class="n">Dx</span><span class="o">=</span><span class="mf">0._R_P</span>       <span class="c">!&lt; Space step.</span>
+  <span class="k">type</span><span class="p">(</span><span class="n">weno_interpolator_upwind</span><span class="p">)</span> <span class="kd">::</span> <span class="n">weno</span>            <span class="c">!&lt; WENO interpolator.</span>
+  <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">),</span>    <span class="k">allocatable</span>      <span class="kd">::</span> <span class="n">U</span><span class="p">(:,:)</span>          <span class="c">!&lt; Conservative (state) variables [1:Nc,1-Ng:Ni+Ng].</span>
+  <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">),</span>    <span class="k">allocatable</span>      <span class="kd">::</span> <span class="n">previous</span><span class="p">(:,:,:)</span> <span class="c">!&lt; Conservative variables of previous time steps [:,:,1:steps].</span>
+  <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">),</span>    <span class="k">allocatable</span>      <span class="kd">::</span> <span class="n">cp0</span><span class="p">(:)</span>          <span class="c">!&lt; Specific heat cp of initial species [1:Ns].</span>
+  <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">),</span>    <span class="k">allocatable</span>      <span class="kd">::</span> <span class="n">cv0</span><span class="p">(:)</span>          <span class="c">!&lt; Specific heat cv of initial species [1:Ns].</span>
+  <span class="kt">character</span><span class="p">(:),</span> <span class="k">allocatable</span>      <span class="kd">::</span> <span class="n">BC_L</span>            <span class="c">!&lt; Left boundary condition type.</span>
+  <span class="kt">character</span><span class="p">(:),</span> <span class="k">allocatable</span>      <span class="kd">::</span> <span class="n">BC_R</span>            <span class="c">!&lt; Right boundary condition type.</span>
   <span class="k">contains</span>
     <span class="c">! public methods</span>
     <span class="c">! auxiliary methods</span>

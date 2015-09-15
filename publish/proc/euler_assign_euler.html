@@ -303,6 +303,8 @@
       
       <a class="list-group-item" href="../proc/test_ab%7E3.html">test_ab</a>
       
+      <a class="list-group-item" href="../proc/test_ab%7E4.html">test_ab</a>
+      
       <a class="list-group-item" href="../proc/test_euler.html">test_euler</a>
       
       <a class="list-group-item" href="../proc/test_euler%7E2.html">test_euler</a>
@@ -316,6 +318,8 @@
       <a class="list-group-item" href="../proc/test_rk%7E2.html">test_rk</a>
       
       <a class="list-group-item" href="../proc/test_rk%7E3.html">test_rk</a>
+      
+      <a class="list-group-item" href="../proc/test_rk%7E4.html">test_rk</a>
       
       <a class="list-group-item" href="../interface/tvd_runge_kutta_integrator.html">tvd_runge_kutta_integrator</a>
       
@@ -434,6 +438,7 @@ private puresubroutine euler_assign_euler(lhs, rhs)
                                  <span class="n">lhs</span><span class="p">%</span><span class="n">Nc</span>       <span class="o">=</span> <span class="n">rhs</span><span class="p">%</span><span class="n">Nc</span>
                                  <span class="n">lhs</span><span class="p">%</span><span class="n">Np</span>       <span class="o">=</span> <span class="n">rhs</span><span class="p">%</span><span class="n">Np</span>
                                  <span class="n">lhs</span><span class="p">%</span><span class="n">Dx</span>       <span class="o">=</span> <span class="n">rhs</span><span class="p">%</span><span class="n">Dx</span>
+                                 <span class="n">lhs</span><span class="p">%</span><span class="n">weno</span>     <span class="o">=</span> <span class="n">rhs</span><span class="p">%</span><span class="n">weno</span>
     <span class="k">if</span> <span class="p">(</span><span class="nb">allocated</span><span class="p">(</span><span class="n">rhs</span><span class="p">%</span><span class="n">U</span><span class="p">))</span>        <span class="n">lhs</span><span class="p">%</span><span class="n">U</span>        <span class="o">=</span> <span class="n">rhs</span><span class="p">%</span><span class="n">U</span>
     <span class="k">if</span> <span class="p">(</span><span class="nb">allocated</span><span class="p">(</span><span class="n">rhs</span><span class="p">%</span><span class="n">previous</span><span class="p">))</span> <span class="n">lhs</span><span class="p">%</span><span class="n">previous</span> <span class="o">=</span> <span class="n">rhs</span><span class="p">%</span><span class="n">previous</span>
     <span class="k">if</span> <span class="p">(</span><span class="nb">allocated</span><span class="p">(</span><span class="n">rhs</span><span class="p">%</span><span class="n">cp0</span><span class="p">))</span>      <span class="n">lhs</span><span class="p">%</span><span class="n">cp0</span>      <span class="o">=</span> <span class="n">rhs</span><span class="p">%</span><span class="n">cp0</span>
