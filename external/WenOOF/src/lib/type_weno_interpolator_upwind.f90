@@ -452,9 +452,18 @@ contains
   class is(weno_interpolator_upwind)
     lhs%S = rhs%S
     lhs%eps = rhs%eps
-    if (allocated(rhs%weights_opt)) lhs%weights_opt = rhs%weights_opt
-    if (allocated(rhs%poly_coef)) lhs%poly_coef = rhs%poly_coef
-    if (allocated(rhs%smooth_coef)) lhs%smooth_coef = rhs%smooth_coef
+    if (allocated(rhs%weights_opt)) then
+      if (allocated(lhs%weights_opt)) deallocate(lhs%weights_opt) ; allocate(lhs%weights_opt(1:2, 0:lhs%S - 1))
+      lhs%weights_opt = rhs%weights_opt
+    endif
+    if (allocated(rhs%poly_coef)) then
+      if (allocated(lhs%poly_coef)) deallocate(lhs%poly_coef) ; allocate(lhs%poly_coef(1:2, 0:lhs%S - 1, 0:lhs%S - 1))
+      lhs%poly_coef = rhs%poly_coef
+    endif
+    if (allocated(rhs%smooth_coef)) then
+      if (allocated(lhs%smooth_coef)) deallocate(lhs%smooth_coef) ; allocate(lhs%smooth_coef(0:lhs%S - 1, 0:lhs%S - 1, 0:lhs%S - 1))
+      lhs%smooth_coef = rhs%smooth_coef
+    endif
   endselect
   return
   !---------------------------------------------------------------------------------------------------------------------------------

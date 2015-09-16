@@ -69,17 +69,19 @@ module foodie
 
 !-----------------------------------------------------------------------------------------------------------------------------------
 use type_integrand, only : integrand
-use foodie_integrator_euler_explicit, only : euler_explicit_integrator
-use foodie_integrator_tvd_runge_kutta, only : tvd_runge_kutta_integrator
 use foodie_integrator_adams_bashforth, only : adams_bashforth_integrator
+use foodie_integrator_euler_explicit, only : euler_explicit_integrator
+use foodie_integrator_low_storage_runge_kutta, only : ls_runge_kutta_integrator
+use foodie_integrator_tvd_runge_kutta, only : tvd_runge_kutta_integrator
 !-----------------------------------------------------------------------------------------------------------------------------------
 
 !-----------------------------------------------------------------------------------------------------------------------------------
 implicit none
 private
 public :: integrand
-public :: euler_explicit_integrator
-public :: tvd_runge_kutta_integrator
 public :: adams_bashforth_integrator
+public :: euler_explicit_integrator
+public :: ls_runge_kutta_integrator
+public :: tvd_runge_kutta_integrator
 !-----------------------------------------------------------------------------------------------------------------------------------
 endmodule foodie
