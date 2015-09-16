@@ -39,12 +39,12 @@ type, extends(integrand) :: burgers
     procedure, pass(lhs),  public :: integrand_multiply_integrand => burgers_multiply_burgers !< Burgers * burgers operator.
     procedure, pass(lhs),  public :: integrand_multiply_real => burgers_multiply_real         !< Burgers * real operator.
     procedure, pass(rhs),  public :: real_multiply_integrand => real_multiply_burgers         !< Real * Burgers operator.
-    procedure, pass(lhs),  public :: add => add_burgers                                       !< Burgers + Burgers oprator.
-    procedure, pass(lhs),  public :: sub => sub_burgers                                       !< Burgers - Burgers oprator.
+    procedure, pass(lhs),  public :: add => add_burgers                                       !< Burgers + Burgers operator.
+    procedure, pass(lhs),  public :: sub => sub_burgers                                       !< Burgers - Burgers operator.
     procedure, pass(lhs),  public :: assign_integrand => burgers_assign_burgers               !< Burgers = Burgers.
     procedure, pass(lhs),  public :: assign_real => burgers_assign_real                       !< Burgers = real.
     ! operators overloading
-    generic, public :: operator(-) => sub
+    generic, public :: operator(-) => sub !< Subtraction operator overloading.
     ! private methods
     procedure, pass(self), private :: x  => dBurgers_dx   !< 1st derivative.
     procedure, pass(self), private :: xx => d2Burgers_dx2 !< 2nd derivative.
