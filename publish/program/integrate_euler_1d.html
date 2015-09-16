@@ -170,6 +170,8 @@
       
       <a class="list-group-item" href="../program/integrate_euler_1d.html#variable-time_serie">time_serie</a>
       
+      <a class="list-group-item" href="../program/integrate_euler_1d.html#variable-verbose">verbose</a>
+      
     </div>
   </div>
   
@@ -187,7 +189,7 @@
     <div class="panel-heading text-left"><h3 class="panel-title">Subroutines</h3></div>
     <div class="list-group">
       
-      <a class="list-group-item" href="../program/integrate_euler_1d.html#proc-init%7E5">init</a>
+      <a class="list-group-item" href="../program/integrate_euler_1d.html#proc-init%7E6">init</a>
       
       <a class="list-group-item" href="../program/integrate_euler_1d.html#proc-save_results%7E2">save_results</a>
       
@@ -195,7 +197,9 @@
       
       <a class="list-group-item" href="../program/integrate_euler_1d.html#proc-test_euler%7E2">test_euler</a>
       
-      <a class="list-group-item" href="../program/integrate_euler_1d.html#proc-test_rk%7E2">test_rk</a>
+      <a class="list-group-item" href="../program/integrate_euler_1d.html#proc-test_tvd_rk%7E2">test_tvd_rk</a>
+      
+      <a class="list-group-item" href="../program/integrate_euler_1d.html#proc-test_ls_rk%7E2">test_ls_rk</a>
       
       <a class="list-group-item" href="../program/integrate_euler_1d.html#proc-test_ab%7E2">test_ab</a>
       
@@ -259,12 +263,13 @@
     
             <img class="depgraph" alt="dependency graph" src=../graphs/program%7E%7Eintegrate_euler_1d%7E%7EUsesGraph.svg usemap="#program~~integrate_euler_1d~~UsesGraph">
             <map id="program~~integrate_euler_1d~~UsesGraph" name="program~~integrate_euler_1d~~UsesGraph">
-<area shape="rect" id="node6" href="../module/type_euler_1d.html" title="type_euler_1D" alt="" coords="581,206,660,231"/>
-<area shape="rect" id="node7" href="../module/foodie_integrator_adams_bashforth.html" title="foodie_integrator_adams_bashforth" alt="" coords="227,143,403,168"/>
-<area shape="rect" id="node8" href="../module/foodie_integrator_tvd_runge_kutta.html" title="foodie_integrator_tvd_runge_kutta" alt="" coords="230,186,400,211"/>
-<area shape="rect" id="node9" href="../module/type_integrand.html" title="type_integrand" alt="" coords="110,124,191,149"/>
-<area shape="rect" id="node10" href="../module/foodie_integrator_euler_explicit.html" title="foodie_integrator_euler_explicit" alt="" coords="237,64,393,89"/>
-<area shape="rect" id="node3" href="../module/foodie.html" title="foodie" alt="" coords="439,124,491,149"/>
+<area shape="rect" id="node2" href="../module/foodie.html" title="foodie" alt="" coords="455,148,505,172"/>
+<area shape="rect" id="node5" href="../module/type_euler_1d.html" title="type_euler_1D" alt="" coords="592,207,668,231"/>
+<area shape="rect" id="node7" href="../module/foodie_integrator_low_storage_runge_kutta.html" title="foodie_integrator_low_storage_runge_kutta" alt="" coords="217,110,422,134"/>
+<area shape="rect" id="node8" href="../module/foodie_integrator_tvd_runge_kutta.html" title="foodie_integrator_tvd_runge_kutta" alt="" coords="238,186,401,211"/>
+<area shape="rect" id="node9" href="../module/type_integrand.html" title="type_integrand" alt="" coords="106,148,184,172"/>
+<area shape="rect" id="node10" href="../module/foodie_integrator_euler_explicit.html" title="foodie_integrator_euler_explicit" alt="" coords="244,227,395,251"/>
+<area shape="rect" id="node11" href="../module/foodie_integrator_adams_bashforth.html" title="foodie_integrator_adams_bashforth" alt="" coords="235,69,404,93"/>
 </map>
 
             <div><a type="button" class="graph-help" data-toggle="modal" href="#graph-help-text">Help</a></div>
@@ -364,14 +369,13 @@ implementation in a submodule of an interface in a parent module.</p>
      
             <img class="depgraph" alt="dependency graph" src=../graphs/program%7E%7Eintegrate_euler_1d%7E%7ECallsGraph.svg usemap="#program~~integrate_euler_1d~~CallsGraph">
             <map id="program~~integrate_euler_1d~~CallsGraph" name="program~~integrate_euler_1d~~CallsGraph">
-<area shape="rect" id="node2" href="../proc/test_euler%7E2.html" title="test_euler" alt="" coords="192,34,272,69"/>
-<area shape="rect" id="node3" href="../proc/test_ab%7E2.html" title="test_ab" alt="" coords="196,152,268,186"/>
-<area shape="rect" id="node4" href="../proc/init%7E5.html" title="init" alt="" coords="196,210,268,245"/>
-<area shape="rect" id="node5" href="../proc/test_rk%7E2.html" title="test_rk" alt="" coords="196,93,268,128"/>
-<area shape="rect" id="node6" href="../proc/save_time_serie.html" title="save_time_serie" alt="" coords="355,34,475,69"/>
-<area shape="rect" id="node8" href="../proc/save_results%7E2.html" title="save_results" alt="" coords="367,93,463,128"/>
-<area shape="rect" id="node14" href="../interface/tvd_runge_kutta_integrator.html" title="tvd_runge_kutta_integrator" alt="" coords="320,202,509,237"/>
-<area shape="rect" id="node15" href="../proc/create.html" title="create" alt="" coords="557,202,629,237"/>
+<area shape="rect" id="node2" href="../proc/test_ab%7E2.html" title="test_ab" alt="" coords="200,5,272,40"/>
+<area shape="rect" id="node3" href="../proc/init%7E6.html" title="init" alt="" coords="200,240,272,275"/>
+<area shape="rect" id="node4" href="../proc/test_euler%7E2.html" title="test_euler" alt="" coords="196,64,276,99"/>
+<area shape="rect" id="node5" href="../proc/test_ls_rk%7E2.html" title="test_ls_rk" alt="" coords="197,123,275,157"/>
+<area shape="rect" id="node6" href="../proc/test_tvd_rk%7E2.html" title="test_tvd_rk" alt="" coords="193,181,279,216"/>
+<area shape="rect" id="node8" href="../proc/save_time_serie.html" title="save_time_serie" alt="" coords="329,64,449,99"/>
+<area shape="rect" id="node9" href="../proc/save_results%7E2.html" title="save_results" alt="" coords="341,123,437,157"/>
 </map>
 
             <div><a type="button" class="graph-help" data-toggle="modal" href="#graph-help-text">Help</a></div>
@@ -774,6 +778,20 @@ implementation in a submodule of an interface in a parent module.</p>
   
 </tr>
 
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-verbose"></span>logical</td>
+  
+  
+  <td></td><td>::</td>
+  <td><strong>verbose</strong></td><td></td><td></td><td><p>Flag for activating more verbose output.</p></td>
+  
+</tr>
+
 </tbody>
 </table>
 
@@ -796,8 +814,8 @@ implementation in a submodule of an interface in a parent module.</p>
     
     
   <div class="panel panel-default">
-  <div class="panel-heading codesum"><span class="anchor" id="proc-init%7E5"></span><h3>
-subroutine <a href='../proc/init%7E5.html'>init</a>()
+  <div class="panel-heading codesum"><span class="anchor" id="proc-init%7E6"></span><h3>
+subroutine <a href='../proc/init%7E6.html'>init</a>()
     
     
     
@@ -1034,8 +1052,8 @@ subroutine <a href='../proc/test_euler%7E2.html'>test_euler</a>()
     
     
   <div class="panel panel-default">
-  <div class="panel-heading codesum"><span class="anchor" id="proc-test_rk%7E2"></span><h3>
-subroutine <a href='../proc/test_rk%7E2.html'>test_rk</a>()
+  <div class="panel-heading codesum"><span class="anchor" id="proc-test_tvd_rk%7E2"></span><h3>
+subroutine <a href='../proc/test_tvd_rk%7E2.html'>test_tvd_rk</a>()
     
     
     
@@ -1056,6 +1074,36 @@ subroutine <a href='../proc/test_rk%7E2.html'>test_rk</a>()
 
        
        <p>Test explicit TVD/SSP Runge-Kutta class of ODE solvers.</p>
+        
+
+  </div>
+  </div>
+
+    
+    
+  <div class="panel panel-default">
+  <div class="panel-heading codesum"><span class="anchor" id="proc-test_ls_rk%7E2"></span><h3>
+subroutine <a href='../proc/test_ls_rk%7E2.html'>test_ls_rk</a>()
+    
+    
+    
+</h3></div>
+  <div class="panel-body">
+       
+    
+    <h4>Arguments</h4>
+    
+      <em>None</em>
+    
+    
+    
+    <h4>Description</h4>
+       
+       
+
+
+       
+       <p>Test explicit low storage Runge-Kutta class of ODE solvers.</p>
         
 
   </div>
@@ -1107,7 +1155,7 @@ subroutine <a href='../proc/test_ab%7E2.html'>test_ab</a>()
 <span class="k">use </span><span class="n">IR_Precision</span><span class="p">,</span> <span class="n">only</span> <span class="p">:</span> <span class="n">R_P</span><span class="p">,</span> <span class="n">I_P</span><span class="p">,</span> <span class="n">FR_P</span><span class="p">,</span> <span class="n">str</span>
 <span class="k">use </span><span class="n">type_euler_1D</span><span class="p">,</span> <span class="n">only</span> <span class="p">:</span> <span class="n">euler_1D</span>
 <span class="k">use </span><span class="n">Data_Type_Command_Line_Interface</span><span class="p">,</span> <span class="n">only</span> <span class="p">:</span> <span class="n">Type_Command_Line_Interface</span>
-<span class="k">use </span><span class="n">foodie</span><span class="p">,</span> <span class="n">only</span> <span class="p">:</span> <span class="n">euler_explicit_integrator</span><span class="p">,</span> <span class="n">tvd_runge_kutta_integrator</span><span class="p">,</span> <span class="n">adams_bashforth_integrator</span>
+<span class="k">use </span><span class="n">foodie</span><span class="p">,</span> <span class="n">only</span> <span class="p">:</span> <span class="n">adams_bashforth_integrator</span><span class="p">,</span> <span class="n">euler_explicit_integrator</span><span class="p">,</span> <span class="n">ls_runge_kutta_integrator</span><span class="p">,</span> <span class="n">tvd_runge_kutta_integrator</span>
 <span class="k">use </span><span class="n">pyplot_module</span><span class="p">,</span> <span class="n">only</span> <span class="p">:</span>  <span class="n">pyplot</span>
 <span class="c">!-----------------------------------------------------------------------------------------------------------------------------------</span>
 
@@ -1134,6 +1182,7 @@ subroutine <a href='../proc/test_ab%7E2.html'>test_ab</a>()
 <span class="kt">logical</span>                           <span class="kd">::</span> <span class="n">plots</span>                    <span class="c">!&lt; Flag for activating plots saving.</span>
 <span class="kt">logical</span>                           <span class="kd">::</span> <span class="n">results</span>                  <span class="c">!&lt; Flag for activating results saving.</span>
 <span class="kt">logical</span>                           <span class="kd">::</span> <span class="n">time_serie</span>               <span class="c">!&lt; Flag for activating time serie-results saving.</span>
+<span class="kt">logical</span>                           <span class="kd">::</span> <span class="n">verbose</span>                  <span class="c">!&lt; Flag for activating more verbose output.</span>
 <span class="c">!-----------------------------------------------------------------------------------------------------------------------------------</span>
 
 <span class="c">!-----------------------------------------------------------------------------------------------------------------------------------</span>
@@ -1153,31 +1202,37 @@ subroutine <a href='../proc/test_ab%7E2.html'>test_ab</a>()
              <span class="n">error</span><span class="o">=</span><span class="n">error</span><span class="p">)</span>
 <span class="k">call </span><span class="n">cli</span><span class="p">%</span><span class="n">add</span><span class="p">(</span><span class="n">switch</span><span class="o">=</span><span class="s1">&#39;--tserie&#39;</span><span class="p">,</span> <span class="n">switch_ab</span><span class="o">=</span><span class="s1">&#39;-t&#39;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s1">&#39;Save time-serie-results&#39;</span><span class="p">,</span> <span class="n">required</span><span class="o">=</span><span class="p">.</span><span class="n">false</span><span class="p">.,</span> <span class="n">act</span><span class="o">=</span><span class="s1">&#39;store_true&#39;</span><span class="p">,</span> <span class="n">def</span><span class="o">=</span><span class="s1">&#39;.false.&#39;</span><span class="p">,</span> <span class="p">&amp;</span>
              <span class="n">error</span><span class="o">=</span><span class="n">error</span><span class="p">)</span>
+<span class="k">call </span><span class="n">cli</span><span class="p">%</span><span class="n">add</span><span class="p">(</span><span class="n">switch</span><span class="o">=</span><span class="s1">&#39;--verbose&#39;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s1">&#39;Verbose output&#39;</span><span class="p">,</span> <span class="n">required</span><span class="o">=</span><span class="p">.</span><span class="n">false</span><span class="p">.,</span> <span class="n">act</span><span class="o">=</span><span class="s1">&#39;store_true&#39;</span><span class="p">,</span> <span class="n">def</span><span class="o">=</span><span class="s1">&#39;.false.&#39;</span><span class="p">,</span> <span class="n">error</span><span class="o">=</span><span class="n">error</span><span class="p">)</span>
 <span class="c">! parsing Command Line Interface</span>
 <span class="k">call </span><span class="n">cli</span><span class="p">%</span><span class="n">parse</span><span class="p">(</span><span class="n">error</span><span class="o">=</span><span class="n">error</span><span class="p">)</span>
 <span class="k">call </span><span class="n">cli</span><span class="p">%</span><span class="n">get</span><span class="p">(</span><span class="n">switch</span><span class="o">=</span><span class="s1">&#39;-s&#39;</span><span class="p">,</span> <span class="n">val</span><span class="o">=</span><span class="n">solver</span><span class="p">,</span> <span class="n">error</span><span class="o">=</span><span class="n">error</span><span class="p">)</span> <span class="p">;</span> <span class="k">if</span> <span class="p">(</span><span class="n">error</span><span class="o">/=</span><span class="mi">0</span><span class="p">)</span> <span class="k">stop</span>
 <span class="k">call </span><span class="n">cli</span><span class="p">%</span><span class="n">get</span><span class="p">(</span><span class="n">switch</span><span class="o">=</span><span class="s1">&#39;-r&#39;</span><span class="p">,</span> <span class="n">val</span><span class="o">=</span><span class="n">results</span><span class="p">,</span> <span class="n">error</span><span class="o">=</span><span class="n">error</span><span class="p">)</span> <span class="p">;</span> <span class="k">if</span> <span class="p">(</span><span class="n">error</span><span class="o">/=</span><span class="mi">0</span><span class="p">)</span> <span class="k">stop</span>
 <span class="k">call </span><span class="n">cli</span><span class="p">%</span><span class="n">get</span><span class="p">(</span><span class="n">switch</span><span class="o">=</span><span class="s1">&#39;-p&#39;</span><span class="p">,</span> <span class="n">val</span><span class="o">=</span><span class="n">plots</span><span class="p">,</span> <span class="n">error</span><span class="o">=</span><span class="n">error</span><span class="p">)</span> <span class="p">;</span> <span class="k">if</span> <span class="p">(</span><span class="n">error</span><span class="o">/=</span><span class="mi">0</span><span class="p">)</span> <span class="k">stop</span>
 <span class="k">call </span><span class="n">cli</span><span class="p">%</span><span class="n">get</span><span class="p">(</span><span class="n">switch</span><span class="o">=</span><span class="s1">&#39;-t&#39;</span><span class="p">,</span> <span class="n">val</span><span class="o">=</span><span class="n">time_serie</span><span class="p">,</span> <span class="n">error</span><span class="o">=</span><span class="n">error</span><span class="p">)</span> <span class="p">;</span> <span class="k">if</span> <span class="p">(</span><span class="n">error</span><span class="o">/=</span><span class="mi">0</span><span class="p">)</span> <span class="k">stop</span>
+<span class="k">call </span><span class="n">cli</span><span class="p">%</span><span class="n">get</span><span class="p">(</span><span class="n">switch</span><span class="o">=</span><span class="s1">&#39;--verbose&#39;</span><span class="p">,</span> <span class="n">val</span><span class="o">=</span><span class="n">verbose</span><span class="p">,</span> <span class="n">error</span><span class="o">=</span><span class="n">error</span><span class="p">)</span> <span class="p">;</span> <span class="k">if</span> <span class="p">(</span><span class="n">error</span><span class="o">/=</span><span class="mi">0</span><span class="p">)</span> <span class="k">stop</span>
 <span class="c">! create Euler field initial state</span>
 <span class="k">call </span><span class="n">init</span><span class="p">()</span>
 <span class="c">! integrate Euler equation</span>
 <span class="k">select case</span><span class="p">(</span><span class="nb">trim</span><span class="p">(</span><span class="nb">adjustl</span><span class="p">(</span><span class="n">solver</span><span class="p">)))</span>
 <span class="k">case</span><span class="p">(</span><span class="s1">&#39;euler&#39;</span><span class="p">)</span>
   <span class="k">call </span><span class="n">test_euler</span><span class="p">()</span>
-<span class="k">case</span><span class="p">(</span><span class="s1">&#39;runge-kutta&#39;</span><span class="p">)</span>
-  <span class="k">call </span><span class="n">test_rk</span><span class="p">()</span>
+<span class="k">case</span><span class="p">(</span><span class="s1">&#39;tvd-runge-kutta&#39;</span><span class="p">)</span>
+  <span class="k">call </span><span class="n">test_tvd_rk</span><span class="p">()</span>
+<span class="k">case</span><span class="p">(</span><span class="s1">&#39;ls-runge-kutta&#39;</span><span class="p">)</span>
+  <span class="k">call </span><span class="n">test_ls_rk</span><span class="p">()</span>
 <span class="k">case</span><span class="p">(</span><span class="s1">&#39;adams-bashforth&#39;</span><span class="p">)</span>
   <span class="k">call </span><span class="n">test_ab</span><span class="p">()</span>
 <span class="k">case</span><span class="p">(</span><span class="s1">&#39;all&#39;</span><span class="p">)</span>
   <span class="k">call </span><span class="n">test_euler</span><span class="p">()</span>
-  <span class="k">call </span><span class="n">test_rk</span><span class="p">()</span>
+  <span class="k">call </span><span class="n">test_tvd_rk</span><span class="p">()</span>
+  <span class="k">call </span><span class="n">test_ls_rk</span><span class="p">()</span>
   <span class="k">call </span><span class="n">test_ab</span><span class="p">()</span>
 <span class="k">case </span><span class="n">default</span>
   <span class="k">print</span> <span class="s2">&quot;(A)&quot;</span><span class="p">,</span> <span class="s1">&#39;Error: unknown solver &quot;&#39;</span><span class="o">//</span><span class="nb">trim</span><span class="p">(</span><span class="nb">adjustl</span><span class="p">(</span><span class="n">solver</span><span class="p">))</span><span class="o">//</span><span class="s1">&#39;&quot;&#39;</span>
   <span class="k">print</span> <span class="s2">&quot;(A)&quot;</span><span class="p">,</span> <span class="s1">&#39;Valid solver names are:&#39;</span>
   <span class="k">print</span> <span class="s2">&quot;(A)&quot;</span><span class="p">,</span> <span class="s1">&#39;  + euler&#39;</span>
-  <span class="k">print</span> <span class="s2">&quot;(A)&quot;</span><span class="p">,</span> <span class="s1">&#39;  + runge-kutta&#39;</span>
+  <span class="k">print</span> <span class="s2">&quot;(A)&quot;</span><span class="p">,</span> <span class="s1">&#39;  + tvd-runge-kutta&#39;</span>
+  <span class="k">print</span> <span class="s2">&quot;(A)&quot;</span><span class="p">,</span> <span class="s1">&#39;  + ls-runge-kutta&#39;</span>
   <span class="k">print</span> <span class="s2">&quot;(A)&quot;</span><span class="p">,</span> <span class="s1">&#39;  + adams-bashforth&#39;</span>
   <span class="k">print</span> <span class="s2">&quot;(A)&quot;</span><span class="p">,</span> <span class="s1">&#39;  + all&#39;</span>
 <span class="n">endselect</span>
@@ -1305,7 +1360,7 @@ subroutine <a href='../proc/test_ab%7E2.html'>test_ab</a>()
                        <span class="n">filename</span><span class="o">=</span><span class="s1">&#39;euler_1D_integration-euler-time_serie.dat&#39;</span><span class="p">,</span> <span class="p">&amp;</span>
                        <span class="n">t</span><span class="o">=</span><span class="n">t</span><span class="p">)</span>
   <span class="k">do while</span><span class="p">(</span><span class="n">t</span><span class="o">&lt;</span><span class="n">t_final</span><span class="p">)</span>
-    <span class="k">print</span> <span class="s2">&quot;(A)&quot;</span><span class="p">,</span> <span class="s1">&#39;  Time step: &#39;</span><span class="o">//</span><span class="n">str</span><span class="p">(</span><span class="n">n</span><span class="o">=</span><span class="n">dt</span><span class="p">)</span><span class="o">//</span><span class="s1">&#39;, Time: &#39;</span><span class="o">//</span><span class="n">str</span><span class="p">(</span><span class="n">n</span><span class="o">=</span><span class="n">t</span><span class="p">)</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">verbose</span><span class="p">)</span> <span class="k">print</span> <span class="s2">&quot;(A)&quot;</span><span class="p">,</span> <span class="s1">&#39;  Time step: &#39;</span><span class="o">//</span><span class="n">str</span><span class="p">(</span><span class="n">n</span><span class="o">=</span><span class="n">dt</span><span class="p">)</span><span class="o">//</span><span class="s1">&#39;, Time: &#39;</span><span class="o">//</span><span class="n">str</span><span class="p">(</span><span class="n">n</span><span class="o">=</span><span class="n">t</span><span class="p">)</span>
     <span class="n">dt</span> <span class="o">=</span> <span class="n">domain</span><span class="p">%</span><span class="n">dt</span><span class="p">(</span><span class="n">Nmax</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">Tmax</span><span class="o">=</span><span class="n">t_final</span><span class="p">,</span> <span class="n">t</span><span class="o">=</span><span class="n">t</span><span class="p">,</span> <span class="n">CFL</span><span class="o">=</span><span class="n">CFL</span><span class="p">)</span>
     <span class="k">call </span><span class="n">euler_integrator</span><span class="p">%</span><span class="n">integrate</span><span class="p">(</span><span class="n">field</span><span class="o">=</span><span class="n">domain</span><span class="p">,</span> <span class="n">dt</span><span class="o">=</span><span class="n">dt</span><span class="p">)</span>
     <span class="n">t</span> <span class="o">=</span> <span class="n">t</span> <span class="o">+</span> <span class="n">dt</span>
@@ -1319,7 +1374,7 @@ subroutine <a href='../proc/test_ab%7E2.html'>test_ab</a>()
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
   <span class="n">endsubroutine</span> <span class="n">test_euler</span>
 
-  <span class="k">subroutine </span><span class="n">test_rk</span><span class="p">()</span>
+  <span class="k">subroutine </span><span class="n">test_tvd_rk</span><span class="p">()</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
   <span class="c">!&lt; Test explicit TVD/SSP Runge-Kutta class of ODE solvers.</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
@@ -1329,7 +1384,6 @@ subroutine <a href='../proc/test_ab%7E2.html'>test_ab</a>()
   <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">)</span>                        <span class="kd">::</span> <span class="n">dt</span>                    <span class="c">!&lt; Time step.</span>
   <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">)</span>                        <span class="kd">::</span> <span class="n">t</span>                     <span class="c">!&lt; Time.</span>
   <span class="kt">integer</span><span class="p">(</span><span class="n">I_P</span><span class="p">)</span>                     <span class="kd">::</span> <span class="n">s</span>                     <span class="c">!&lt; RK stages counter.</span>
-  <span class="kt">integer</span><span class="p">(</span><span class="n">I_P</span><span class="p">)</span>                     <span class="kd">::</span> <span class="n">ord</span>                   <span class="c">!&lt; Space order.</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
 
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
@@ -1337,7 +1391,7 @@ subroutine <a href='../proc/test_ab%7E2.html'>test_ab</a>()
   <span class="k">do </span><span class="n">s</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">rk_stages</span>
     <span class="k">if</span> <span class="p">(</span><span class="n">s</span><span class="o">==</span><span class="mi">4</span><span class="p">)</span> <span class="k">cycle</span> <span class="c">! 4 stages not yet implemented</span>
     <span class="k">print</span> <span class="s2">&quot;(A)&quot;</span><span class="p">,</span> <span class="s1">&#39; RK-&#39;</span><span class="o">//</span><span class="nb">trim</span><span class="p">(</span><span class="n">str</span><span class="p">(.</span><span class="n">true</span><span class="p">.,</span><span class="n">s</span><span class="p">))</span>
-    <span class="n">rk_integrator</span> <span class="o">=</span> <span class="n">tvd_runge_kutta_integrator</span><span class="p">(</span><span class="n">stages</span><span class="o">=</span><span class="n">s</span><span class="p">)</span>
+    <span class="k">call </span><span class="n">rk_integrator</span><span class="p">%</span><span class="n">init</span><span class="p">(</span><span class="n">stages</span><span class="o">=</span><span class="n">s</span><span class="p">)</span>
     <span class="k">select case</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
     <span class="k">case</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
       <span class="k">call </span><span class="n">domain</span><span class="p">%</span><span class="n">init</span><span class="p">(</span><span class="n">Ni</span><span class="o">=</span><span class="n">Ni</span><span class="p">,</span> <span class="n">Ns</span><span class="o">=</span><span class="n">Ns</span><span class="p">,</span> <span class="n">Dx</span><span class="o">=</span><span class="n">Dx</span><span class="p">,</span> <span class="n">BC_L</span><span class="o">=</span><span class="n">BC_L</span><span class="p">,</span> <span class="n">BC_R</span><span class="o">=</span><span class="n">BC_R</span><span class="p">,</span> <span class="n">initial_state</span><span class="o">=</span><span class="n">initial_state</span><span class="p">,</span> <span class="n">cp0</span><span class="o">=</span><span class="n">cp0</span><span class="p">,</span> <span class="n">cv0</span><span class="o">=</span><span class="n">cv0</span><span class="p">,</span> <span class="n">ord</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
@@ -1347,26 +1401,77 @@ subroutine <a href='../proc/test_ab%7E2.html'>test_ab</a>()
       <span class="k">call </span><span class="n">domain</span><span class="p">%</span><span class="n">init</span><span class="p">(</span><span class="n">Ni</span><span class="o">=</span><span class="n">Ni</span><span class="p">,</span> <span class="n">Ns</span><span class="o">=</span><span class="n">Ns</span><span class="p">,</span> <span class="n">Dx</span><span class="o">=</span><span class="n">Dx</span><span class="p">,</span> <span class="n">BC_L</span><span class="o">=</span><span class="n">BC_L</span><span class="p">,</span> <span class="n">BC_R</span><span class="o">=</span><span class="n">BC_R</span><span class="p">,</span> <span class="n">initial_state</span><span class="o">=</span><span class="n">initial_state</span><span class="p">,</span> <span class="n">cp0</span><span class="o">=</span><span class="n">cp0</span><span class="p">,</span> <span class="n">cv0</span><span class="o">=</span><span class="n">cv0</span><span class="p">,</span> <span class="n">ord</span><span class="o">=</span><span class="mi">7</span><span class="p">)</span>
     <span class="n">endselect</span>
     <span class="n">t</span> <span class="o">=</span> <span class="mf">0._R_P</span>
-    <span class="k">call </span><span class="n">save_time_serie</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s1">&#39;FOODiE test: 1D Euler equations integration, explicit Runge-Kutta, t=&#39;</span><span class="o">//</span><span class="n">str</span><span class="p">(</span><span class="n">n</span><span class="o">=</span><span class="n">t_final</span><span class="p">)</span><span class="o">//</span> <span class="p">&amp;</span>
+    <span class="k">call </span><span class="n">save_time_serie</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s1">&#39;FOODiE test: 1D Euler equations integration, explicit TVD Runge-Kutta, t=&#39;</span><span class="o">//</span><span class="n">str</span><span class="p">(</span><span class="n">n</span><span class="o">=</span><span class="n">t_final</span><span class="p">)</span><span class="o">//</span> <span class="p">&amp;</span>
                                <span class="nb">trim</span><span class="p">(</span><span class="n">str</span><span class="p">(.</span><span class="n">true</span><span class="p">.,</span> <span class="n">s</span><span class="p">))</span><span class="o">//</span><span class="s1">&#39; stages&#39;</span><span class="p">,</span> <span class="p">&amp;</span>
-                         <span class="n">filename</span><span class="o">=</span><span class="s1">&#39;euler_1D_integration-rk-&#39;</span><span class="o">//</span><span class="nb">trim</span><span class="p">(</span><span class="n">str</span><span class="p">(.</span><span class="n">true</span><span class="p">.,</span> <span class="n">s</span><span class="p">))</span><span class="o">//</span><span class="s1">&#39;-time_serie.dat&#39;</span><span class="p">,</span> <span class="p">&amp;</span>
+                         <span class="n">filename</span><span class="o">=</span><span class="s1">&#39;euler_1D_integration-tvdrk-&#39;</span><span class="o">//</span><span class="nb">trim</span><span class="p">(</span><span class="n">str</span><span class="p">(.</span><span class="n">true</span><span class="p">.,</span> <span class="n">s</span><span class="p">))</span><span class="o">//</span><span class="s1">&#39;-time_serie.dat&#39;</span><span class="p">,</span> <span class="p">&amp;</span>
                          <span class="n">t</span><span class="o">=</span><span class="n">t</span><span class="p">)</span>
     <span class="k">do while</span><span class="p">(</span><span class="n">t</span><span class="o">&lt;</span><span class="n">t_final</span><span class="p">)</span>
-      <span class="k">print</span> <span class="s2">&quot;(A)&quot;</span><span class="p">,</span> <span class="s1">&#39;    Time step: &#39;</span><span class="o">//</span><span class="n">str</span><span class="p">(</span><span class="n">n</span><span class="o">=</span><span class="n">dt</span><span class="p">)</span><span class="o">//</span><span class="s1">&#39;, Time: &#39;</span><span class="o">//</span><span class="n">str</span><span class="p">(</span><span class="n">n</span><span class="o">=</span><span class="n">t</span><span class="p">)</span>
+      <span class="k">if</span> <span class="p">(</span><span class="n">verbose</span><span class="p">)</span> <span class="k">print</span> <span class="s2">&quot;(A)&quot;</span><span class="p">,</span> <span class="s1">&#39;    Time step: &#39;</span><span class="o">//</span><span class="n">str</span><span class="p">(</span><span class="n">n</span><span class="o">=</span><span class="n">dt</span><span class="p">)</span><span class="o">//</span><span class="s1">&#39;, Time: &#39;</span><span class="o">//</span><span class="n">str</span><span class="p">(</span><span class="n">n</span><span class="o">=</span><span class="n">t</span><span class="p">)</span>
       <span class="n">dt</span> <span class="o">=</span> <span class="n">domain</span><span class="p">%</span><span class="n">dt</span><span class="p">(</span><span class="n">Nmax</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">Tmax</span><span class="o">=</span><span class="n">t_final</span><span class="p">,</span> <span class="n">t</span><span class="o">=</span><span class="n">t</span><span class="p">,</span> <span class="n">CFL</span><span class="o">=</span><span class="n">CFL</span><span class="p">)</span>
       <span class="k">call </span><span class="n">rk_integrator</span><span class="p">%</span><span class="n">integrate</span><span class="p">(</span><span class="n">field</span><span class="o">=</span><span class="n">domain</span><span class="p">,</span> <span class="n">stage</span><span class="o">=</span><span class="n">rk_stage</span><span class="p">(</span><span class="mi">1</span><span class="p">:</span><span class="n">s</span><span class="p">),</span> <span class="n">dt</span><span class="o">=</span><span class="n">dt</span><span class="p">)</span>
       <span class="n">t</span> <span class="o">=</span> <span class="n">t</span> <span class="o">+</span> <span class="n">dt</span>
       <span class="k">call </span><span class="n">save_time_serie</span><span class="p">(</span><span class="n">t</span><span class="o">=</span><span class="n">t</span><span class="p">)</span>
     <span class="n">enddo</span>
     <span class="k">call </span><span class="n">save_time_serie</span><span class="p">(</span><span class="n">t</span><span class="o">=</span><span class="n">t</span><span class="p">,</span> <span class="n">finish</span><span class="o">=</span><span class="p">.</span><span class="n">true</span><span class="p">.)</span>
-    <span class="k">call </span><span class="n">save_results</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s1">&#39;FOODiE test: 1D Euler equations integration, explicit Runge-Kutta, t=&#39;</span><span class="o">//</span><span class="n">str</span><span class="p">(</span><span class="n">n</span><span class="o">=</span><span class="n">t_final</span><span class="p">)</span><span class="o">//</span> <span class="p">&amp;</span>
+    <span class="k">call </span><span class="n">save_results</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s1">&#39;FOODiE test: 1D Euler equations integration, explicit TVD Runge-Kutta, t=&#39;</span><span class="o">//</span><span class="n">str</span><span class="p">(</span><span class="n">n</span><span class="o">=</span><span class="n">t_final</span><span class="p">)</span><span class="o">//</span> <span class="p">&amp;</span>
                             <span class="nb">trim</span><span class="p">(</span><span class="n">str</span><span class="p">(.</span><span class="n">true</span><span class="p">.,</span> <span class="n">s</span><span class="p">))</span><span class="o">//</span><span class="s1">&#39; stages&#39;</span><span class="p">,</span> <span class="p">&amp;</span>
-                      <span class="n">filename</span><span class="o">=</span><span class="s1">&#39;euler_1D_integration-rk-&#39;</span><span class="o">//</span><span class="nb">trim</span><span class="p">(</span><span class="n">str</span><span class="p">(.</span><span class="n">true</span><span class="p">.,</span> <span class="n">s</span><span class="p">)))</span>
+                      <span class="n">filename</span><span class="o">=</span><span class="s1">&#39;euler_1D_integration-tvdrk-&#39;</span><span class="o">//</span><span class="nb">trim</span><span class="p">(</span><span class="n">str</span><span class="p">(.</span><span class="n">true</span><span class="p">.,</span> <span class="n">s</span><span class="p">)))</span>
   <span class="n">enddo</span>
   <span class="k">print</span> <span class="s2">&quot;(A)&quot;</span><span class="p">,</span> <span class="s1">&#39;Finish!&#39;</span>
   <span class="k">return</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
-  <span class="n">endsubroutine</span> <span class="n">test_rk</span>
+  <span class="n">endsubroutine</span> <span class="n">test_tvd_rk</span>
+
+  <span class="k">subroutine </span><span class="n">test_ls_rk</span><span class="p">()</span>
+  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+  <span class="c">!&lt; Test explicit low storage Runge-Kutta class of ODE solvers.</span>
+  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+  <span class="k">type</span><span class="p">(</span><span class="n">ls_runge_kutta_integrator</span><span class="p">)</span> <span class="kd">::</span> <span class="n">rk_integrator</span>         <span class="c">!&lt; Runge-Kutta integrator.</span>
+  <span class="kt">integer</span><span class="p">,</span> <span class="k">parameter</span>              <span class="kd">::</span> <span class="n">rk_stages</span><span class="o">=</span><span class="mi">5</span>           <span class="c">!&lt; Runge-Kutta stages number.</span>
+  <span class="kt">integer</span><span class="p">,</span> <span class="k">parameter</span>              <span class="kd">::</span> <span class="n">registers</span><span class="o">=</span><span class="mi">2</span>           <span class="c">!&lt; Runge-Kutta stages number.</span>
+  <span class="k">type</span><span class="p">(</span><span class="n">euler_1D</span><span class="p">)</span>                  <span class="kd">::</span> <span class="n">rk_stage</span><span class="p">(</span><span class="mi">1</span><span class="p">:</span><span class="n">registers</span><span class="p">)</span> <span class="c">!&lt; Runge-Kutta stages.</span>
+  <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">)</span>                       <span class="kd">::</span> <span class="n">dt</span>                    <span class="c">!&lt; Time step.</span>
+  <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">)</span>                       <span class="kd">::</span> <span class="n">t</span>                     <span class="c">!&lt; Time.</span>
+  <span class="kt">integer</span><span class="p">(</span><span class="n">I_P</span><span class="p">)</span>                    <span class="kd">::</span> <span class="n">s</span>                     <span class="c">!&lt; RK stages counter.</span>
+  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+
+  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+  <span class="k">print</span> <span class="s2">&quot;(A)&quot;</span><span class="p">,</span> <span class="s1">&#39;Integrating 1D Euler equations by means of low storage (2N) Runge-Kutta class of solvers&#39;</span>
+  <span class="k">do </span><span class="n">s</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">rk_stages</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">s</span><span class="o">==</span><span class="mi">2</span><span class="p">)</span> <span class="k">cycle</span> <span class="c">! 2 stages not yet implemented</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">s</span><span class="o">==</span><span class="mi">3</span><span class="p">)</span> <span class="k">cycle</span> <span class="c">! 3 stages not yet implemented</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">s</span><span class="o">==</span><span class="mi">4</span><span class="p">)</span> <span class="k">cycle</span> <span class="c">! 4 stages not yet implemented</span>
+    <span class="k">print</span> <span class="s2">&quot;(A)&quot;</span><span class="p">,</span> <span class="s1">&#39; RK-&#39;</span><span class="o">//</span><span class="nb">trim</span><span class="p">(</span><span class="n">str</span><span class="p">(.</span><span class="n">true</span><span class="p">.,</span><span class="n">s</span><span class="p">))</span>
+    <span class="k">call </span><span class="n">rk_integrator</span><span class="p">%</span><span class="n">init</span><span class="p">(</span><span class="n">stages</span><span class="o">=</span><span class="n">s</span><span class="p">)</span>
+    <span class="k">select case</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
+    <span class="k">case</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+      <span class="k">call </span><span class="n">domain</span><span class="p">%</span><span class="n">init</span><span class="p">(</span><span class="n">Ni</span><span class="o">=</span><span class="n">Ni</span><span class="p">,</span> <span class="n">Ns</span><span class="o">=</span><span class="n">Ns</span><span class="p">,</span> <span class="n">Dx</span><span class="o">=</span><span class="n">Dx</span><span class="p">,</span> <span class="n">BC_L</span><span class="o">=</span><span class="n">BC_L</span><span class="p">,</span> <span class="n">BC_R</span><span class="o">=</span><span class="n">BC_R</span><span class="p">,</span> <span class="n">initial_state</span><span class="o">=</span><span class="n">initial_state</span><span class="p">,</span> <span class="n">cp0</span><span class="o">=</span><span class="n">cp0</span><span class="p">,</span> <span class="n">cv0</span><span class="o">=</span><span class="n">cv0</span><span class="p">,</span> <span class="n">ord</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+    <span class="k">case</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
+      <span class="k">call </span><span class="n">domain</span><span class="p">%</span><span class="n">init</span><span class="p">(</span><span class="n">Ni</span><span class="o">=</span><span class="n">Ni</span><span class="p">,</span> <span class="n">Ns</span><span class="o">=</span><span class="n">Ns</span><span class="p">,</span> <span class="n">Dx</span><span class="o">=</span><span class="n">Dx</span><span class="p">,</span> <span class="n">BC_L</span><span class="o">=</span><span class="n">BC_L</span><span class="p">,</span> <span class="n">BC_R</span><span class="o">=</span><span class="n">BC_R</span><span class="p">,</span> <span class="n">initial_state</span><span class="o">=</span><span class="n">initial_state</span><span class="p">,</span> <span class="n">cp0</span><span class="o">=</span><span class="n">cp0</span><span class="p">,</span> <span class="n">cv0</span><span class="o">=</span><span class="n">cv0</span><span class="p">,</span> <span class="n">ord</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+    <span class="k">case</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
+      <span class="k">call </span><span class="n">domain</span><span class="p">%</span><span class="n">init</span><span class="p">(</span><span class="n">Ni</span><span class="o">=</span><span class="n">Ni</span><span class="p">,</span> <span class="n">Ns</span><span class="o">=</span><span class="n">Ns</span><span class="p">,</span> <span class="n">Dx</span><span class="o">=</span><span class="n">Dx</span><span class="p">,</span> <span class="n">BC_L</span><span class="o">=</span><span class="n">BC_L</span><span class="p">,</span> <span class="n">BC_R</span><span class="o">=</span><span class="n">BC_R</span><span class="p">,</span> <span class="n">initial_state</span><span class="o">=</span><span class="n">initial_state</span><span class="p">,</span> <span class="n">cp0</span><span class="o">=</span><span class="n">cp0</span><span class="p">,</span> <span class="n">cv0</span><span class="o">=</span><span class="n">cv0</span><span class="p">,</span> <span class="n">ord</span><span class="o">=</span><span class="mi">7</span><span class="p">)</span>
+    <span class="n">endselect</span>
+    <span class="n">t</span> <span class="o">=</span> <span class="mf">0._R_P</span>
+    <span class="k">call </span><span class="n">save_time_serie</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s1">&#39;FOODiE test: 1D Euler equations integration, explicit low storage Runge-Kutta, t=&#39;</span><span class="o">//</span><span class="p">&amp;</span>
+                               <span class="n">str</span><span class="p">(</span><span class="n">n</span><span class="o">=</span><span class="n">t_final</span><span class="p">)</span><span class="o">//</span><span class="nb">trim</span><span class="p">(</span><span class="n">str</span><span class="p">(.</span><span class="n">true</span><span class="p">.,</span> <span class="n">s</span><span class="p">))</span><span class="o">//</span><span class="s1">&#39; stages&#39;</span><span class="p">,</span> <span class="p">&amp;</span>
+                         <span class="n">filename</span><span class="o">=</span><span class="s1">&#39;euler_1D_integration-lsrk-&#39;</span><span class="o">//</span><span class="nb">trim</span><span class="p">(</span><span class="n">str</span><span class="p">(.</span><span class="n">true</span><span class="p">.,</span> <span class="n">s</span><span class="p">))</span><span class="o">//</span><span class="s1">&#39;-time_serie.dat&#39;</span><span class="p">,</span> <span class="p">&amp;</span>
+                         <span class="n">t</span><span class="o">=</span><span class="n">t</span><span class="p">)</span>
+    <span class="k">do while</span><span class="p">(</span><span class="n">t</span><span class="o">&lt;</span><span class="n">t_final</span><span class="p">)</span>
+      <span class="k">if</span> <span class="p">(</span><span class="n">verbose</span><span class="p">)</span> <span class="k">print</span> <span class="s2">&quot;(A)&quot;</span><span class="p">,</span> <span class="s1">&#39;    Time step: &#39;</span><span class="o">//</span><span class="n">str</span><span class="p">(</span><span class="n">n</span><span class="o">=</span><span class="n">dt</span><span class="p">)</span><span class="o">//</span><span class="s1">&#39;, Time: &#39;</span><span class="o">//</span><span class="n">str</span><span class="p">(</span><span class="n">n</span><span class="o">=</span><span class="n">t</span><span class="p">)</span>
+      <span class="n">dt</span> <span class="o">=</span> <span class="n">domain</span><span class="p">%</span><span class="n">dt</span><span class="p">(</span><span class="n">Nmax</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">Tmax</span><span class="o">=</span><span class="n">t_final</span><span class="p">,</span> <span class="n">t</span><span class="o">=</span><span class="n">t</span><span class="p">,</span> <span class="n">CFL</span><span class="o">=</span><span class="n">CFL</span><span class="p">)</span>
+      <span class="k">call </span><span class="n">rk_integrator</span><span class="p">%</span><span class="n">integrate</span><span class="p">(</span><span class="n">field</span><span class="o">=</span><span class="n">domain</span><span class="p">,</span> <span class="n">stage</span><span class="o">=</span><span class="n">rk_stage</span><span class="p">,</span> <span class="n">dt</span><span class="o">=</span><span class="n">dt</span><span class="p">)</span>
+      <span class="n">t</span> <span class="o">=</span> <span class="n">t</span> <span class="o">+</span> <span class="n">dt</span>
+      <span class="k">call </span><span class="n">save_time_serie</span><span class="p">(</span><span class="n">t</span><span class="o">=</span><span class="n">t</span><span class="p">)</span>
+    <span class="n">enddo</span>
+    <span class="k">call </span><span class="n">save_time_serie</span><span class="p">(</span><span class="n">t</span><span class="o">=</span><span class="n">t</span><span class="p">,</span> <span class="n">finish</span><span class="o">=</span><span class="p">.</span><span class="n">true</span><span class="p">.)</span>
+    <span class="k">call </span><span class="n">save_results</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s1">&#39;FOODiE test: 1D Euler equations integration, explicit low storage Runge-Kutta, t=&#39;</span><span class="o">//</span><span class="n">str</span><span class="p">(</span><span class="n">n</span><span class="o">=</span><span class="n">t_final</span><span class="p">)</span><span class="o">//</span> <span class="p">&amp;</span>
+                            <span class="nb">trim</span><span class="p">(</span><span class="n">str</span><span class="p">(.</span><span class="n">true</span><span class="p">.,</span> <span class="n">s</span><span class="p">))</span><span class="o">//</span><span class="s1">&#39; stages&#39;</span><span class="p">,</span> <span class="p">&amp;</span>
+                      <span class="n">filename</span><span class="o">=</span><span class="s1">&#39;euler_1D_integration-lsrk-&#39;</span><span class="o">//</span><span class="nb">trim</span><span class="p">(</span><span class="n">str</span><span class="p">(.</span><span class="n">true</span><span class="p">.,</span> <span class="n">s</span><span class="p">)))</span>
+  <span class="n">enddo</span>
+  <span class="k">print</span> <span class="s2">&quot;(A)&quot;</span><span class="p">,</span> <span class="s1">&#39;Finish!&#39;</span>
+  <span class="k">return</span>
+  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+  <span class="n">endsubroutine</span> <span class="n">test_ls_rk</span>
 
   <span class="k">subroutine </span><span class="n">test_ab</span><span class="p">()</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
@@ -1388,7 +1493,7 @@ subroutine <a href='../proc/test_ab%7E2.html'>test_ab</a>()
   <span class="k">do </span><span class="n">s</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">ab_steps</span>
     <span class="k">print</span> <span class="s2">&quot;(A)&quot;</span><span class="p">,</span> <span class="s1">&#39; AB-&#39;</span><span class="o">//</span><span class="nb">trim</span><span class="p">(</span><span class="n">str</span><span class="p">(.</span><span class="n">true</span><span class="p">.,</span><span class="n">s</span><span class="p">))</span>
     <span class="k">call </span><span class="n">ab_integrator</span><span class="p">%</span><span class="n">init</span><span class="p">(</span><span class="n">steps</span><span class="o">=</span><span class="n">s</span><span class="p">)</span>
-    <span class="n">rk_integrator</span> <span class="o">=</span> <span class="n">tvd_runge_kutta_integrator</span><span class="p">(</span><span class="n">stages</span><span class="o">=</span><span class="n">s</span><span class="p">)</span>
+    <span class="k">call </span><span class="n">rk_integrator</span><span class="p">%</span><span class="n">init</span><span class="p">(</span><span class="n">stages</span><span class="o">=</span><span class="n">s</span><span class="p">)</span>
     <span class="k">select case</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
     <span class="k">case</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
       <span class="k">call </span><span class="n">domain</span><span class="p">%</span><span class="n">init</span><span class="p">(</span><span class="n">Ni</span><span class="o">=</span><span class="n">Ni</span><span class="p">,</span> <span class="n">Ns</span><span class="o">=</span><span class="n">Ns</span><span class="p">,</span> <span class="n">Dx</span><span class="o">=</span><span class="n">Dx</span><span class="p">,</span> <span class="n">BC_L</span><span class="o">=</span><span class="n">BC_L</span><span class="p">,</span> <span class="n">BC_R</span><span class="o">=</span><span class="n">BC_R</span><span class="p">,</span> <span class="n">initial_state</span><span class="o">=</span><span class="n">initial_state</span><span class="p">,</span> <span class="n">cp0</span><span class="o">=</span><span class="n">cp0</span><span class="p">,</span> <span class="n">cv0</span><span class="o">=</span><span class="n">cv0</span><span class="p">,</span> <span class="n">ord</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
@@ -1404,7 +1509,7 @@ subroutine <a href='../proc/test_ab%7E2.html'>test_ab</a>()
                          <span class="n">t</span><span class="o">=</span><span class="n">t</span><span class="p">)</span>
     <span class="n">step</span> <span class="o">=</span> <span class="mi">1</span>
     <span class="k">do while</span><span class="p">(</span><span class="n">t</span><span class="o">&lt;</span><span class="n">t_final</span><span class="p">)</span>
-      <span class="k">print</span> <span class="s2">&quot;(A)&quot;</span><span class="p">,</span> <span class="s1">&#39;    Time step: &#39;</span><span class="o">//</span><span class="n">str</span><span class="p">(</span><span class="n">n</span><span class="o">=</span><span class="n">dt</span><span class="p">)</span><span class="o">//</span><span class="s1">&#39;, Time: &#39;</span><span class="o">//</span><span class="n">str</span><span class="p">(</span><span class="n">n</span><span class="o">=</span><span class="n">t</span><span class="p">)</span>
+      <span class="k">if</span> <span class="p">(</span><span class="n">verbose</span><span class="p">)</span> <span class="k">print</span> <span class="s2">&quot;(A)&quot;</span><span class="p">,</span> <span class="s1">&#39;    Time step: &#39;</span><span class="o">//</span><span class="n">str</span><span class="p">(</span><span class="n">n</span><span class="o">=</span><span class="n">dt</span><span class="p">)</span><span class="o">//</span><span class="s1">&#39;, Time: &#39;</span><span class="o">//</span><span class="n">str</span><span class="p">(</span><span class="n">n</span><span class="o">=</span><span class="n">t</span><span class="p">)</span>
       <span class="n">dt</span> <span class="o">=</span> <span class="n">domain</span><span class="p">%</span><span class="n">dt</span><span class="p">(</span><span class="n">Nmax</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">Tmax</span><span class="o">=</span><span class="n">t_final</span><span class="p">,</span> <span class="n">t</span><span class="o">=</span><span class="n">t</span><span class="p">,</span> <span class="n">CFL</span><span class="o">=</span><span class="mf">0.1_R_P</span><span class="o">*</span><span class="n">CFL</span><span class="p">)</span>
       <span class="k">if</span> <span class="p">(</span><span class="n">s</span><span class="o">&gt;</span><span class="n">step</span><span class="p">)</span> <span class="k">then</span>
         <span class="c">! the time steps from 1 to s - 1 must be computed with other scheme...</span>

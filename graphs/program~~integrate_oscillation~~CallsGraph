@@ -6,7 +6,8 @@ digraph "program~~integrate_oscillation~~CallsGraph" {
 		graph [concentrate=false]
 		"proc~test_euler~4" [label=test_euler URL="../proc/test_euler%7E4.html" color="#d9534f" fontcolor=white style=filled]
 		"proc~test_ab~4" [label=test_ab URL="../proc/test_ab%7E4.html" color="#d9534f" fontcolor=white style=filled]
-		"proc~test_rk~4" [label=test_rk URL="../proc/test_rk%7E4.html" color="#d9534f" fontcolor=white style=filled]
+		"proc~test_ls_rk~4" [label=test_ls_rk URL="../proc/test_ls_rk%7E4.html" color="#d9534f" fontcolor=white style=filled]
+		"proc~test_tvd_rk~4" [label=test_tvd_rk URL="../proc/test_tvd_rk%7E4.html" color="#d9534f" fontcolor=white style=filled]
 		graph [concentrate=false]
 		"proc~save_results~4" [label=save_results URL="../proc/save_results%7E4.html" color="#d9534f" fontcolor=white style=filled]
 		graph [concentrate=false]
@@ -15,27 +16,23 @@ digraph "program~~integrate_oscillation~~CallsGraph" {
 			"proc~test_euler~4" -> "proc~save_results~4"
 		graph [concentrate=false]
 		str [label=str color="#777777" fontcolor=white style=filled]
-		"interface~tvd_runge_kutta_integrator" [label=tvd_runge_kutta_integrator URL="../interface/tvd_runge_kutta_integrator.html" color="#A7506F" fontcolor=white style=filled]
 		graph [concentrate=false]
 		graph [concentrate=false]
 		graph [concentrate=false]
-		graph [concentrate=false]
-		"proc~create" [label=create URL="../proc/create.html" color="#d94e8f" fontcolor=white style=filled]
-		graph [concentrate=false]
-		graph [concentrate=false]
-		graph [concentrate=false]
-			"interface~tvd_runge_kutta_integrator" -> "proc~create" [style=dashed]
-			"proc~test_ab~4" -> "proc~save_results~4"
 			"proc~test_ab~4" -> str
-			"proc~test_ab~4" -> "interface~tvd_runge_kutta_integrator"
+			"proc~test_ab~4" -> "proc~save_results~4"
 		graph [concentrate=false]
 		graph [concentrate=false]
-			"proc~test_rk~4" -> "proc~save_results~4"
-			"proc~test_rk~4" -> str
-			"proc~test_rk~4" -> "interface~tvd_runge_kutta_integrator"
+			"proc~test_ls_rk~4" -> str
+			"proc~test_ls_rk~4" -> "proc~save_results~4"
+		graph [concentrate=false]
+		graph [concentrate=false]
+			"proc~test_tvd_rk~4" -> str
+			"proc~test_tvd_rk~4" -> "proc~save_results~4"
 		graph [concentrate=false]
 			"program~integrate_oscillation" -> "proc~test_euler~4"
 			"program~integrate_oscillation" -> "proc~test_ab~4"
-			"program~integrate_oscillation" -> "proc~test_rk~4"
+			"program~integrate_oscillation" -> "proc~test_ls_rk~4"
+			"program~integrate_oscillation" -> "proc~test_tvd_rk~4"
 		graph [concentrate=false]
 }

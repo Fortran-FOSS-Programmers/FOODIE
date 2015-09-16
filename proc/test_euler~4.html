@@ -132,7 +132,7 @@
       
       <a class="list-group-item" href="../proc/test_euler%7E4.html#variable-euler_integrator%7E4">euler_integrator</a>
       
-      <a class="list-group-item" href="../proc/test_euler%7E4.html#variable-step%7E6">step</a>
+      <a class="list-group-item" href="../proc/test_euler%7E4.html#variable-step%7E7">step</a>
       
     </div>
   </div>
@@ -193,8 +193,6 @@
       
       <a class="list-group-item" href="../proc/conservative2primitive.html">conservative2primitive</a>
       
-      <a class="list-group-item" href="../proc/create.html">create</a>
-      
       <a class="list-group-item" href="../proc/d2burgers_dx2.html">d2Burgers_dx2</a>
       
       <a class="list-group-item" href="../proc/dburgers_dt.html">dBurgers_dt</a>
@@ -206,6 +204,8 @@
       <a class="list-group-item" href="../proc/destroy%7E2.html">destroy</a>
       
       <a class="list-group-item" href="../proc/destroy%7E3.html">destroy</a>
+      
+      <a class="list-group-item" href="../proc/destroy%7E4.html">destroy</a>
       
       <a class="list-group-item" href="../proc/deuler_dt.html">dEuler_dt</a>
       
@@ -229,6 +229,8 @@
       
       <a class="list-group-item" href="../proc/finalize%7E3.html">finalize</a>
       
+      <a class="list-group-item" href="../proc/finalize%7E4.html">finalize</a>
+      
       <a class="list-group-item" href="../proc/h.html">H</a>
       
       <a class="list-group-item" href="../proc/impose_boundary_conditions.html">impose_boundary_conditions</a>
@@ -249,11 +251,15 @@
       
       <a class="list-group-item" href="../proc/init%7E8.html">init</a>
       
+      <a class="list-group-item" href="../proc/init%7E9.html">init</a>
+      
       <a class="list-group-item" href="../proc/integrate.html">integrate</a>
       
       <a class="list-group-item" href="../proc/integrate%7E2.html">integrate</a>
       
       <a class="list-group-item" href="../proc/integrate%7E3.html">integrate</a>
+      
+      <a class="list-group-item" href="../proc/integrate%7E4.html">integrate</a>
       
       <a class="list-group-item" href="../proc/lorenz_assign_lorenz.html">lorenz_assign_lorenz</a>
       
@@ -325,15 +331,21 @@
       
       <a class="list-group-item" href="../proc/test_euler%7E4.html">test_euler</a>
       
-      <a class="list-group-item" href="../proc/test_rk.html">test_rk</a>
+      <a class="list-group-item" href="../proc/test_ls_rk.html">test_ls_rk</a>
       
-      <a class="list-group-item" href="../proc/test_rk%7E2.html">test_rk</a>
+      <a class="list-group-item" href="../proc/test_ls_rk%7E2.html">test_ls_rk</a>
       
-      <a class="list-group-item" href="../proc/test_rk%7E3.html">test_rk</a>
+      <a class="list-group-item" href="../proc/test_ls_rk%7E3.html">test_ls_rk</a>
       
-      <a class="list-group-item" href="../proc/test_rk%7E4.html">test_rk</a>
+      <a class="list-group-item" href="../proc/test_ls_rk%7E4.html">test_ls_rk</a>
       
-      <a class="list-group-item" href="../interface/tvd_runge_kutta_integrator.html">tvd_runge_kutta_integrator</a>
+      <a class="list-group-item" href="../proc/test_tvd_rk.html">test_tvd_rk</a>
+      
+      <a class="list-group-item" href="../proc/test_tvd_rk%7E2.html">test_tvd_rk</a>
+      
+      <a class="list-group-item" href="../proc/test_tvd_rk%7E3.html">test_tvd_rk</a>
+      
+      <a class="list-group-item" href="../proc/test_tvd_rk%7E4.html">test_tvd_rk</a>
       
       <a class="list-group-item" href="../proc/update_previous_steps.html">update_previous_steps</a>
       
@@ -602,7 +614,7 @@ implementation in a submodule of an interface in a parent module.</p>
   
 <tr>
   
-  <td><span class="anchor" id="variable-step%7E6"></span>integer(kind=I_P),</td>
+  <td><span class="anchor" id="variable-step%7E7"></span>integer(kind=I_P),</td>
   
   <td>public</td>
   <td></td><td>::</td>
@@ -641,11 +653,9 @@ implementation in a submodule of an interface in a parent module.</p>
 
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
   <span class="k">print</span> <span class="s2">&quot;(A)&quot;</span><span class="p">,</span> <span class="s1">&#39;Integrating Oscillation equations by means of explicit Euler solver&#39;</span>
-  <span class="c">! initialize field</span>
   <span class="k">call </span><span class="n">attractor</span><span class="p">%</span><span class="n">init</span><span class="p">(</span><span class="n">initial_state</span><span class="o">=</span><span class="n">initial_state</span><span class="p">,</span> <span class="n">f</span><span class="o">=</span><span class="n">f</span><span class="p">)</span>
   <span class="n">solution</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span> <span class="o">=</span> <span class="mf">0._R_P</span>
   <span class="n">solution</span><span class="p">(</span><span class="mi">1</span><span class="p">:</span><span class="n">space_dimension</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span> <span class="o">=</span> <span class="n">attractor</span><span class="p">%</span><span class="n">output</span><span class="p">()</span>
-  <span class="c">! integrate field</span>
   <span class="k">do </span><span class="n">step</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span> <span class="n">num_steps</span>
     <span class="k">call </span><span class="n">euler_integrator</span><span class="p">%</span><span class="n">integrate</span><span class="p">(</span><span class="n">field</span><span class="o">=</span><span class="n">attractor</span><span class="p">,</span> <span class="n">dt</span><span class="o">=</span><span class="n">dt</span><span class="p">)</span>
     <span class="n">solution</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">step</span><span class="p">)</span> <span class="o">=</span> <span class="n">step</span> <span class="o">*</span> <span class="n">dt</span>

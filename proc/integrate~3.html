@@ -103,14 +103,14 @@
      
     
     
-    <li><i class="fa fa-code"></i><a href="../src/foodie_integrator_tvd_runge_kutta.f90"> Source File</a></li>
+    <li><i class="fa fa-code"></i><a href="../src/foodie_integrator_low_storage_runge_kutta.f90"> Source File</a></li>
      
   </ul>
   <ol class="breadcrumb in-well text-right">
   
-     <li><a href='../sourcefile/foodie_integrator_tvd_runge_kutta.f90.html'>foodie_integrator_tvd_runge_kutta.f90</a></li>
+     <li><a href='../sourcefile/foodie_integrator_low_storage_runge_kutta.f90.html'>foodie_integrator_low_storage_runge_kutta.f90</a></li>
   
-     <li><a href='../module/foodie_integrator_tvd_runge_kutta.html'>foodie_integrator_tvd_runge_kutta</a></li>
+     <li><a href='../module/foodie_integrator_low_storage_runge_kutta.html'>foodie_integrator_low_storage_runge_kutta</a></li>
   
      <li class="active">integrate</li>
   </ol>
@@ -193,8 +193,6 @@
       
       <a class="list-group-item" href="../proc/conservative2primitive.html">conservative2primitive</a>
       
-      <a class="list-group-item" href="../proc/create.html">create</a>
-      
       <a class="list-group-item" href="../proc/d2burgers_dx2.html">d2Burgers_dx2</a>
       
       <a class="list-group-item" href="../proc/dburgers_dt.html">dBurgers_dt</a>
@@ -206,6 +204,8 @@
       <a class="list-group-item" href="../proc/destroy%7E2.html">destroy</a>
       
       <a class="list-group-item" href="../proc/destroy%7E3.html">destroy</a>
+      
+      <a class="list-group-item" href="../proc/destroy%7E4.html">destroy</a>
       
       <a class="list-group-item" href="../proc/deuler_dt.html">dEuler_dt</a>
       
@@ -229,6 +229,8 @@
       
       <a class="list-group-item" href="../proc/finalize%7E3.html">finalize</a>
       
+      <a class="list-group-item" href="../proc/finalize%7E4.html">finalize</a>
+      
       <a class="list-group-item" href="../proc/h.html">H</a>
       
       <a class="list-group-item" href="../proc/impose_boundary_conditions.html">impose_boundary_conditions</a>
@@ -249,11 +251,15 @@
       
       <a class="list-group-item" href="../proc/init%7E8.html">init</a>
       
+      <a class="list-group-item" href="../proc/init%7E9.html">init</a>
+      
       <a class="list-group-item" href="../proc/integrate.html">integrate</a>
       
       <a class="list-group-item" href="../proc/integrate%7E2.html">integrate</a>
       
       <a class="list-group-item" href="../proc/integrate%7E3.html">integrate</a>
+      
+      <a class="list-group-item" href="../proc/integrate%7E4.html">integrate</a>
       
       <a class="list-group-item" href="../proc/lorenz_assign_lorenz.html">lorenz_assign_lorenz</a>
       
@@ -325,15 +331,21 @@
       
       <a class="list-group-item" href="../proc/test_euler%7E4.html">test_euler</a>
       
-      <a class="list-group-item" href="../proc/test_rk.html">test_rk</a>
+      <a class="list-group-item" href="../proc/test_ls_rk.html">test_ls_rk</a>
       
-      <a class="list-group-item" href="../proc/test_rk%7E2.html">test_rk</a>
+      <a class="list-group-item" href="../proc/test_ls_rk%7E2.html">test_ls_rk</a>
       
-      <a class="list-group-item" href="../proc/test_rk%7E3.html">test_rk</a>
+      <a class="list-group-item" href="../proc/test_ls_rk%7E3.html">test_ls_rk</a>
       
-      <a class="list-group-item" href="../proc/test_rk%7E4.html">test_rk</a>
+      <a class="list-group-item" href="../proc/test_ls_rk%7E4.html">test_ls_rk</a>
       
-      <a class="list-group-item" href="../interface/tvd_runge_kutta_integrator.html">tvd_runge_kutta_integrator</a>
+      <a class="list-group-item" href="../proc/test_tvd_rk.html">test_tvd_rk</a>
+      
+      <a class="list-group-item" href="../proc/test_tvd_rk%7E2.html">test_tvd_rk</a>
+      
+      <a class="list-group-item" href="../proc/test_tvd_rk%7E3.html">test_tvd_rk</a>
+      
+      <a class="list-group-item" href="../proc/test_tvd_rk%7E4.html">test_tvd_rk</a>
       
       <a class="list-group-item" href="../proc/update_previous_steps.html">update_previous_steps</a>
       
@@ -379,7 +391,7 @@ private subroutine integrate(self, field, stage, Dt)
   
 <tr>
   
-  <td><span class="anchor" id="variable-self%7E9"></span>class(<a href='../type/tvd_runge_kutta_integrator.html'>tvd_runge_kutta_integrator</a>),</td>
+  <td><span class="anchor" id="variable-self%7E9"></span>class(<a href='../type/ls_runge_kutta_integrator.html'>ls_runge_kutta_integrator</a>),</td>
   <td>intent(in)</td>
   <td></td>
   
@@ -414,7 +426,7 @@ private subroutine integrate(self, field, stage, Dt)
   <td></td>
   
   <td></td><td>::</td>
-  <td><strong>stage</strong>(1:)</td><td><p>Runge-Kutta stages [1:stages].</p></td>
+  <td><strong>stage</strong>(1:2)</td><td><p>Runge-Kutta registers [1:2].</p></td>
   
 </tr>
 
@@ -440,7 +452,7 @@ private subroutine integrate(self, field, stage, Dt)
     
     
     <h3>Description</h3>
-    <p>Integrate field with explicit TVD (or SSP) Runge-Kutta scheme.</p>
+    <p>Integrate field with explicit low storage Runge-Kutta scheme.</p>
 <p></p><div class="alert alert-info" role="alert"><h4>Note</h4>This method can be used <strong>after</strong> the integrator is created (i.e. the RK coeficients are initialized).</div>
     
     
@@ -510,33 +522,30 @@ private subroutine integrate(self, field, stage, Dt)
     <h2><span class="anchor" id="src"></span>Source Code</h2>
     <div class="highlight"><pre>  <span class="k">subroutine </span><span class="n">integrate</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">field</span><span class="p">,</span> <span class="n">stage</span><span class="p">,</span> <span class="n">Dt</span><span class="p">)</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
-  <span class="c">!&lt; Integrate field with explicit TVD (or SSP) Runge-Kutta scheme.</span>
+  <span class="c">!&lt; Integrate field with explicit low storage Runge-Kutta scheme.</span>
   <span class="c">!&lt;</span>
   <span class="c">!&lt; @note This method can be used **after** the integrator is created (i.e. the RK coeficients are initialized).</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
-  <span class="k">class</span><span class="p">(</span><span class="n">tvd_runge_kutta_integrator</span><span class="p">),</span> <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span>    <span class="kd">::</span> <span class="n">self</span>      <span class="c">!&lt; Actual RK integrator.</span>
-  <span class="k">class</span><span class="p">(</span><span class="n">integrand</span><span class="p">),</span>                  <span class="k">intent</span><span class="p">(</span><span class="n">INOUT</span><span class="p">)</span> <span class="kd">::</span> <span class="n">field</span>     <span class="c">!&lt; Field to be integrated.</span>
-  <span class="k">class</span><span class="p">(</span><span class="n">integrand</span><span class="p">),</span>                  <span class="k">intent</span><span class="p">(</span><span class="n">INOUT</span><span class="p">)</span> <span class="kd">::</span> <span class="n">stage</span><span class="p">(</span><span class="mi">1</span><span class="p">:)</span> <span class="c">!&lt; Runge-Kutta stages [1:stages].</span>
-  <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">),</span>                         <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span>    <span class="kd">::</span> <span class="n">Dt</span>        <span class="c">!&lt; Time step.</span>
-  <span class="kt">integer</span><span class="p">(</span><span class="n">I_P</span><span class="p">)</span>                                     <span class="kd">::</span> <span class="n">s</span>         <span class="c">!&lt; First stages counter.</span>
-  <span class="kt">integer</span><span class="p">(</span><span class="n">I_P</span><span class="p">)</span>                                     <span class="kd">::</span> <span class="n">ss</span>        <span class="c">!&lt; Second stages counter.</span>
+  <span class="k">class</span><span class="p">(</span><span class="n">ls_runge_kutta_integrator</span><span class="p">),</span> <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span>    <span class="kd">::</span> <span class="n">self</span>       <span class="c">!&lt; Actual RK integrator.</span>
+  <span class="k">class</span><span class="p">(</span><span class="n">integrand</span><span class="p">),</span>                 <span class="k">intent</span><span class="p">(</span><span class="n">INOUT</span><span class="p">)</span> <span class="kd">::</span> <span class="n">field</span>      <span class="c">!&lt; Field to be integrated.</span>
+  <span class="k">class</span><span class="p">(</span><span class="n">integrand</span><span class="p">),</span>                 <span class="k">intent</span><span class="p">(</span><span class="n">INOUT</span><span class="p">)</span> <span class="kd">::</span> <span class="n">stage</span><span class="p">(</span><span class="mi">1</span><span class="p">:</span><span class="mi">2</span><span class="p">)</span> <span class="c">!&lt; Runge-Kutta registers [1:2].</span>
+  <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">),</span>                        <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span>    <span class="kd">::</span> <span class="n">Dt</span>         <span class="c">!&lt; Time step.</span>
+  <span class="kt">integer</span><span class="p">(</span><span class="n">I_P</span><span class="p">)</span>                                    <span class="kd">::</span> <span class="n">s</span>          <span class="c">!&lt; First stages counter.</span>
+
+  <span class="kt">integer</span><span class="p">(</span><span class="n">I_P</span><span class="p">)</span>                                    <span class="kd">::</span> <span class="n">ss</span>         <span class="c">!&lt; Second stages counter.</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
 
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
   <span class="k">select type</span><span class="p">(</span><span class="n">stage</span><span class="p">)</span>
   <span class="k">class is</span><span class="p">(</span><span class="n">integrand</span><span class="p">)</span>
     <span class="c">! computing stages</span>
-    <span class="k">do </span><span class="n">s</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">size</span><span class="p">(</span><span class="n">stage</span><span class="p">)</span>
-      <span class="n">stage</span><span class="p">(</span><span class="n">s</span><span class="p">)</span> <span class="o">=</span> <span class="n">field</span>
-      <span class="k">do </span><span class="n">ss</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">s</span> <span class="o">-</span> <span class="mi">1</span>
-        <span class="n">stage</span><span class="p">(</span><span class="n">s</span><span class="p">)</span> <span class="o">=</span> <span class="n">stage</span><span class="p">(</span><span class="n">s</span><span class="p">)</span> <span class="o">+</span> <span class="n">stage</span><span class="p">(</span><span class="n">ss</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="n">Dt</span> <span class="o">*</span> <span class="n">self</span><span class="p">%</span><span class="n">alph</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">ss</span><span class="p">))</span>
-      <span class="n">enddo</span>
-      <span class="n">stage</span><span class="p">(</span><span class="n">s</span><span class="p">)</span> <span class="o">=</span> <span class="n">stage</span><span class="p">(</span><span class="n">s</span><span class="p">)%</span><span class="n">t</span><span class="p">()</span>
+    <span class="n">stage</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">=</span> <span class="n">field</span>
+    <span class="n">stage</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span> <span class="o">=</span> <span class="n">field</span><span class="o">*</span><span class="mf">0._R_P</span>
+    <span class="k">do </span><span class="n">s</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">self</span><span class="p">%</span><span class="n">stages</span>
+      <span class="n">stage</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span> <span class="o">=</span> <span class="n">stage</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span> <span class="o">*</span> <span class="n">self</span><span class="p">%</span><span class="n">A</span><span class="p">(</span><span class="n">s</span><span class="p">)</span> <span class="o">+</span> <span class="n">stage</span><span class="p">(</span><span class="mi">1</span><span class="p">)%</span><span class="n">t</span><span class="p">()</span> <span class="o">*</span> <span class="n">Dt</span>
+      <span class="n">stage</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">=</span> <span class="n">stage</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">+</span> <span class="n">stage</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span> <span class="o">*</span> <span class="n">self</span><span class="p">%</span><span class="n">B</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
     <span class="n">enddo</span>
-    <span class="c">! computing new time step</span>
-    <span class="k">do </span><span class="n">s</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">size</span><span class="p">(</span><span class="n">stage</span><span class="p">)</span>
-      <span class="n">field</span> <span class="o">=</span> <span class="n">field</span> <span class="o">+</span>  <span class="n">stage</span><span class="p">(</span><span class="n">s</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="n">Dt</span> <span class="o">*</span> <span class="n">self</span><span class="p">%</span><span class="n">beta</span><span class="p">(</span><span class="n">s</span><span class="p">))</span>
-    <span class="n">enddo</span>
+    <span class="n">field</span> <span class="o">=</span> <span class="n">stage</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
   <span class="n">endselect</span>
   <span class="k">return</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>

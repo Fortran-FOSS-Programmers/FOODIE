@@ -175,7 +175,7 @@
     <div class="panel-heading text-left"><h3 class="panel-title">Subroutines</h3></div>
     <div class="list-group">
       
-      <a class="list-group-item" href="../module/type_burgers.html#proc-init%7E4">init</a>
+      <a class="list-group-item" href="../module/type_burgers.html#proc-init%7E5">init</a>
       
       <a class="list-group-item" href="../module/type_burgers.html#proc-update_previous_steps">update_previous_steps</a>
       
@@ -204,6 +204,8 @@
       <a class="list-group-item" href="../module/foodie_integrator_adams_bashforth.html">foodie_integrator_adams_bashforth</a>
       
       <a class="list-group-item" href="../module/foodie_integrator_euler_explicit.html">foodie_integrator_euler_explicit</a>
+      
+      <a class="list-group-item" href="../module/foodie_integrator_low_storage_runge_kutta.html">foodie_integrator_low_storage_runge_kutta</a>
       
       <a class="list-group-item" href="../module/foodie_integrator_tvd_runge_kutta.html">foodie_integrator_tvd_runge_kutta</a>
       
@@ -240,11 +242,12 @@
     
             <img class="depgraph" alt="dependency graph" src=../graphs/module%7E%7Etype_burgers%7E%7EUsesGraph.svg usemap="#module~~type_burgers~~UsesGraph">
             <map id="module~~type_burgers~~UsesGraph" name="module~~type_burgers~~UsesGraph">
-<area shape="rect" id="node4" href="../module/foodie_integrator_adams_bashforth.html" title="foodie_integrator_adams_bashforth" alt="" coords="313,61,556,96"/>
-<area shape="rect" id="node5" href="../module/foodie_integrator_tvd_runge_kutta.html" title="foodie_integrator_tvd_runge_kutta" alt="" coords="317,120,552,154"/>
-<area shape="rect" id="node6" href="../module/type_integrand.html" title="type_integrand" alt="" coords="152,146,264,181"/>
-<area shape="rect" id="node7" href="../module/foodie_integrator_euler_explicit.html" title="foodie_integrator_euler_explicit" alt="" coords="327,229,543,264"/>
-<area shape="rect" id="node3" href="../module/foodie.html" title="foodie" alt="" coords="605,120,677,154"/>
+<area shape="rect" id="node4" href="../module/foodie_integrator_low_storage_runge_kutta.html" title="foodie_integrator_low_storage_runge_kutta" alt="" coords="303,287,588,321"/>
+<area shape="rect" id="node5" href="../module/foodie_integrator_tvd_runge_kutta.html" title="foodie_integrator_tvd_runge_kutta" alt="" coords="332,67,559,101"/>
+<area shape="rect" id="node6" href="../module/type_integrand.html" title="type_integrand" alt="" coords="148,177,256,211"/>
+<area shape="rect" id="node7" href="../module/foodie_integrator_euler_explicit.html" title="foodie_integrator_euler_explicit" alt="" coords="341,124,550,158"/>
+<area shape="rect" id="node8" href="../module/foodie_integrator_adams_bashforth.html" title="foodie_integrator_adams_bashforth" alt="" coords="328,230,563,264"/>
+<area shape="rect" id="node3" href="../module/foodie.html" title="foodie" alt="" coords="635,151,704,185"/>
 </map>
 
             <div><a type="button" class="graph-help" data-toggle="modal" href="#graph-help-text">Help</a></div>
@@ -589,10 +592,10 @@ implementation in a submodule of an interface in a parent module.</p>
        <td><p>Real * Burgers operator.</p></td></tr>
       
        <tr><td>procedure, public, pass(lhs) :: <strong>add</strong>  => add_burgers </td>
-       <td><p>Burgers + Burgers oprator.</p></td></tr>
+       <td><p>Burgers + Burgers operator.</p></td></tr>
       
        <tr><td>procedure, public, pass(lhs) :: <strong>sub</strong>  => sub_burgers </td>
-       <td><p>Burgers - Burgers oprator.</p></td></tr>
+       <td><p>Burgers - Burgers operator.</p></td></tr>
       
        <tr><td>procedure, public, pass(lhs) :: <strong>assign_integrand</strong>  => burgers_assign_burgers </td>
        <td><p>Burgers = Burgers.</p></td></tr>
@@ -601,7 +604,7 @@ implementation in a submodule of an interface in a parent module.</p>
        <td><p>Burgers = real.</p></td></tr>
       
        <tr><td>generic, public :: <strong>operator(-)</strong>  => sub </td>
-       <td></td></tr>
+       <td><p>Subtraction operator overloading.</p></td></tr>
       
        <tr><td>procedure, private, pass(self) :: <strong>x</strong>  => dBurgers_dx </td>
        <td><p>1st derivative.</p></td></tr>
@@ -1454,8 +1457,8 @@ private purefunction <a href='../proc/d2burgers_dx2.html'>d2Burgers_dx2</a>(self
     
     
   <div class="panel panel-default">
-  <div class="panel-heading codesum"><span class="anchor" id="proc-init%7E4"></span><h3>
-private subroutine <a href='../proc/init%7E4.html'>init</a>(self, initial_state, Ni, h, nu, steps)
+  <div class="panel-heading codesum"><span class="anchor" id="proc-init%7E5"></span><h3>
+private subroutine <a href='../proc/init%7E5.html'>init</a>(self, initial_state, Ni, h, nu, steps)
     
     
     

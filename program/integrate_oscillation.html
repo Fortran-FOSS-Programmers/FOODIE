@@ -138,7 +138,7 @@
       
       <a class="list-group-item" href="../program/integrate_oscillation.html#variable-f%7E4">f</a>
       
-      <a class="list-group-item" href="../program/integrate_oscillation.html#variable-dt%7E13">dt</a>
+      <a class="list-group-item" href="../program/integrate_oscillation.html#variable-dt%7E15">dt</a>
       
       <a class="list-group-item" href="../program/integrate_oscillation.html#variable-initial_state%7E8">initial_state</a>
       
@@ -173,7 +173,9 @@
       
       <a class="list-group-item" href="../program/integrate_oscillation.html#proc-test_euler%7E4">test_euler</a>
       
-      <a class="list-group-item" href="../program/integrate_oscillation.html#proc-test_rk%7E4">test_rk</a>
+      <a class="list-group-item" href="../program/integrate_oscillation.html#proc-test_tvd_rk%7E4">test_tvd_rk</a>
+      
+      <a class="list-group-item" href="../program/integrate_oscillation.html#proc-test_ls_rk%7E4">test_ls_rk</a>
       
       <a class="list-group-item" href="../program/integrate_oscillation.html#proc-test_ab%7E4">test_ab</a>
       
@@ -237,12 +239,13 @@
     
             <img class="depgraph" alt="dependency graph" src=../graphs/program%7E%7Eintegrate_oscillation%7E%7EUsesGraph.svg usemap="#program~~integrate_oscillation~~UsesGraph">
             <map id="program~~integrate_oscillation~~UsesGraph" name="program~~integrate_oscillation~~UsesGraph">
-<area shape="rect" id="node6" href="../module/type_oscillation.html" title="type_oscillation" alt="" coords="577,144,658,169"/>
-<area shape="rect" id="node7" href="../module/foodie_integrator_adams_bashforth.html" title="foodie_integrator_adams_bashforth" alt="" coords="226,138,401,163"/>
-<area shape="rect" id="node8" href="../module/foodie_integrator_tvd_runge_kutta.html" title="foodie_integrator_tvd_runge_kutta" alt="" coords="229,180,398,205"/>
-<area shape="rect" id="node9" href="../module/type_integrand.html" title="type_integrand" alt="" coords="110,119,191,144"/>
-<area shape="rect" id="node10" href="../module/foodie_integrator_euler_explicit.html" title="foodie_integrator_euler_explicit" alt="" coords="236,59,392,84"/>
-<area shape="rect" id="node3" href="../module/foodie.html" title="foodie" alt="" coords="437,119,489,144"/>
+<area shape="rect" id="node2" href="../module/foodie.html" title="foodie" alt="" coords="453,120,503,144"/>
+<area shape="rect" id="node6" href="../module/type_oscillation.html" title="type_oscillation" alt="" coords="588,199,666,223"/>
+<area shape="rect" id="node7" href="../module/foodie_integrator_low_storage_runge_kutta.html" title="foodie_integrator_low_storage_runge_kutta" alt="" coords="216,120,420,144"/>
+<area shape="rect" id="node8" href="../module/foodie_integrator_tvd_runge_kutta.html" title="foodie_integrator_tvd_runge_kutta" alt="" coords="237,161,400,185"/>
+<area shape="rect" id="node9" href="../module/type_integrand.html" title="type_integrand" alt="" coords="105,82,183,106"/>
+<area shape="rect" id="node10" href="../module/foodie_integrator_euler_explicit.html" title="foodie_integrator_euler_explicit" alt="" coords="243,4,393,28"/>
+<area shape="rect" id="node11" href="../module/foodie_integrator_adams_bashforth.html" title="foodie_integrator_adams_bashforth" alt="" coords="234,44,402,68"/>
 </map>
 
             <div><a type="button" class="graph-help" data-toggle="modal" href="#graph-help-text">Help</a></div>
@@ -342,12 +345,11 @@ implementation in a submodule of an interface in a parent module.</p>
      
             <img class="depgraph" alt="dependency graph" src=../graphs/program%7E%7Eintegrate_oscillation%7E%7ECallsGraph.svg usemap="#program~~integrate_oscillation~~CallsGraph">
             <map id="program~~integrate_oscillation~~CallsGraph" name="program~~integrate_oscillation~~CallsGraph">
-<area shape="rect" id="node2" href="../proc/test_euler%7E4.html" title="test_euler" alt="" coords="197,5,277,40"/>
-<area shape="rect" id="node3" href="../proc/test_ab%7E4.html" title="test_ab" alt="" coords="201,123,273,157"/>
-<area shape="rect" id="node4" href="../proc/test_rk%7E4.html" title="test_rk" alt="" coords="201,64,273,99"/>
-<area shape="rect" id="node5" href="../proc/save_results%7E4.html" title="save_results" alt="" coords="372,5,468,40"/>
-<area shape="rect" id="node8" href="../interface/tvd_runge_kutta_integrator.html" title="tvd_runge_kutta_integrator" alt="" coords="325,64,515,99"/>
-<area shape="rect" id="node9" href="../proc/create.html" title="create" alt="" coords="563,64,635,99"/>
+<area shape="rect" id="node2" href="../proc/test_euler%7E4.html" title="test_euler" alt="" coords="201,5,281,40"/>
+<area shape="rect" id="node3" href="../proc/test_ab%7E4.html" title="test_ab" alt="" coords="205,64,277,99"/>
+<area shape="rect" id="node4" href="../proc/test_ls_rk%7E4.html" title="test_ls_rk" alt="" coords="203,123,280,157"/>
+<area shape="rect" id="node5" href="../proc/test_tvd_rk%7E4.html" title="test_tvd_rk" alt="" coords="199,181,284,216"/>
+<area shape="rect" id="node6" href="../proc/save_results%7E4.html" title="save_results" alt="" coords="335,64,431,99"/>
 </map>
 
             <div><a type="button" class="graph-help" data-toggle="modal" href="#graph-help-text">Help</a></div>
@@ -532,7 +534,7 @@ implementation in a submodule of an interface in a parent module.</p>
   
 <tr>
   
-  <td><span class="anchor" id="variable-dt%7E13"></span>real(kind=R_P),</td>
+  <td><span class="anchor" id="variable-dt%7E15"></span>real(kind=R_P),</td>
   
   
   <td>parameter</td><td>::</td>
@@ -750,8 +752,8 @@ subroutine <a href='../proc/test_euler%7E4.html'>test_euler</a>()
     
     
   <div class="panel panel-default">
-  <div class="panel-heading codesum"><span class="anchor" id="proc-test_rk%7E4"></span><h3>
-subroutine <a href='../proc/test_rk%7E4.html'>test_rk</a>()
+  <div class="panel-heading codesum"><span class="anchor" id="proc-test_tvd_rk%7E4"></span><h3>
+subroutine <a href='../proc/test_tvd_rk%7E4.html'>test_tvd_rk</a>()
     
     
     
@@ -772,6 +774,36 @@ subroutine <a href='../proc/test_rk%7E4.html'>test_rk</a>()
 
        
        <p>Test explicit TVD/SSP Runge-Kutta class of ODE solvers.</p>
+        
+
+  </div>
+  </div>
+
+    
+    
+  <div class="panel panel-default">
+  <div class="panel-heading codesum"><span class="anchor" id="proc-test_ls_rk%7E4"></span><h3>
+subroutine <a href='../proc/test_ls_rk%7E4.html'>test_ls_rk</a>()
+    
+    
+    
+</h3></div>
+  <div class="panel-body">
+       
+    
+    <h4>Arguments</h4>
+    
+      <em>None</em>
+    
+    
+    
+    <h4>Description</h4>
+       
+       
+
+
+       
+       <p>Test explicit low storage Runge-Kutta class of ODE solvers.</p>
         
 
   </div>
@@ -823,7 +855,7 @@ subroutine <a href='../proc/test_ab%7E4.html'>test_ab</a>()
 <span class="k">use </span><span class="n">IR_Precision</span><span class="p">,</span> <span class="n">only</span> <span class="p">:</span> <span class="n">R_P</span><span class="p">,</span> <span class="n">I_P</span><span class="p">,</span> <span class="n">FR_P</span><span class="p">,</span> <span class="n">str</span>
 <span class="k">use </span><span class="n">type_oscillation</span><span class="p">,</span> <span class="n">only</span> <span class="p">:</span> <span class="n">oscillation</span>
 <span class="k">use </span><span class="n">Data_Type_Command_Line_Interface</span><span class="p">,</span> <span class="n">only</span> <span class="p">:</span> <span class="n">Type_Command_Line_Interface</span>
-<span class="k">use </span><span class="n">foodie</span><span class="p">,</span> <span class="n">only</span> <span class="p">:</span> <span class="n">euler_explicit_integrator</span><span class="p">,</span> <span class="n">tvd_runge_kutta_integrator</span><span class="p">,</span> <span class="n">adams_bashforth_integrator</span>
+<span class="k">use </span><span class="n">foodie</span><span class="p">,</span> <span class="n">only</span> <span class="p">:</span> <span class="n">adams_bashforth_integrator</span><span class="p">,</span> <span class="n">euler_explicit_integrator</span><span class="p">,</span> <span class="n">ls_runge_kutta_integrator</span><span class="p">,</span> <span class="n">tvd_runge_kutta_integrator</span>
 <span class="k">use </span><span class="n">pyplot_module</span><span class="p">,</span> <span class="n">only</span> <span class="p">:</span>  <span class="n">pyplot</span>
 <span class="c">!-----------------------------------------------------------------------------------------------------------------------------------</span>
 
@@ -867,19 +899,23 @@ subroutine <a href='../proc/test_ab%7E4.html'>test_ab</a>()
 <span class="k">select case</span><span class="p">(</span><span class="nb">trim</span><span class="p">(</span><span class="nb">adjustl</span><span class="p">(</span><span class="n">solver</span><span class="p">)))</span>
 <span class="k">case</span><span class="p">(</span><span class="s1">&#39;euler&#39;</span><span class="p">)</span>
   <span class="k">call </span><span class="n">test_euler</span><span class="p">()</span>
-<span class="k">case</span><span class="p">(</span><span class="s1">&#39;runge-kutta&#39;</span><span class="p">)</span>
-  <span class="k">call </span><span class="n">test_rk</span><span class="p">()</span>
+<span class="k">case</span><span class="p">(</span><span class="s1">&#39;tvd-runge-kutta&#39;</span><span class="p">)</span>
+  <span class="k">call </span><span class="n">test_tvd_rk</span><span class="p">()</span>
+<span class="k">case</span><span class="p">(</span><span class="s1">&#39;ls-runge-kutta&#39;</span><span class="p">)</span>
+  <span class="k">call </span><span class="n">test_ls_rk</span><span class="p">()</span>
 <span class="k">case</span><span class="p">(</span><span class="s1">&#39;adams-bashforth&#39;</span><span class="p">)</span>
   <span class="k">call </span><span class="n">test_ab</span><span class="p">()</span>
 <span class="k">case</span><span class="p">(</span><span class="s1">&#39;all&#39;</span><span class="p">)</span>
   <span class="k">call </span><span class="n">test_euler</span><span class="p">()</span>
-  <span class="k">call </span><span class="n">test_rk</span><span class="p">()</span>
+  <span class="k">call </span><span class="n">test_tvd_rk</span><span class="p">()</span>
+  <span class="k">call </span><span class="n">test_ls_rk</span><span class="p">()</span>
   <span class="k">call </span><span class="n">test_ab</span><span class="p">()</span>
 <span class="k">case </span><span class="n">default</span>
   <span class="k">print</span> <span class="s2">&quot;(A)&quot;</span><span class="p">,</span> <span class="s1">&#39;Error: unknown solver &quot;&#39;</span><span class="o">//</span><span class="nb">trim</span><span class="p">(</span><span class="nb">adjustl</span><span class="p">(</span><span class="n">solver</span><span class="p">))</span><span class="o">//</span><span class="s1">&#39;&quot;&#39;</span>
   <span class="k">print</span> <span class="s2">&quot;(A)&quot;</span><span class="p">,</span> <span class="s1">&#39;Valid solver names are:&#39;</span>
   <span class="k">print</span> <span class="s2">&quot;(A)&quot;</span><span class="p">,</span> <span class="s1">&#39;  + euler&#39;</span>
-  <span class="k">print</span> <span class="s2">&quot;(A)&quot;</span><span class="p">,</span> <span class="s1">&#39;  + runge-kutta&#39;</span>
+  <span class="k">print</span> <span class="s2">&quot;(A)&quot;</span><span class="p">,</span> <span class="s1">&#39;  + tvd-runge-kutta&#39;</span>
+  <span class="k">print</span> <span class="s2">&quot;(A)&quot;</span><span class="p">,</span> <span class="s1">&#39;  + ls-runge-kutta&#39;</span>
   <span class="k">print</span> <span class="s2">&quot;(A)&quot;</span><span class="p">,</span> <span class="s1">&#39;  + adams-bashforth&#39;</span>
   <span class="k">print</span> <span class="s2">&quot;(A)&quot;</span><span class="p">,</span> <span class="s1">&#39;  + all&#39;</span>
 <span class="n">endselect</span>
@@ -932,11 +968,9 @@ subroutine <a href='../proc/test_ab%7E4.html'>test_ab</a>()
 
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
   <span class="k">print</span> <span class="s2">&quot;(A)&quot;</span><span class="p">,</span> <span class="s1">&#39;Integrating Oscillation equations by means of explicit Euler solver&#39;</span>
-  <span class="c">! initialize field</span>
   <span class="k">call </span><span class="n">attractor</span><span class="p">%</span><span class="n">init</span><span class="p">(</span><span class="n">initial_state</span><span class="o">=</span><span class="n">initial_state</span><span class="p">,</span> <span class="n">f</span><span class="o">=</span><span class="n">f</span><span class="p">)</span>
   <span class="n">solution</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span> <span class="o">=</span> <span class="mf">0._R_P</span>
   <span class="n">solution</span><span class="p">(</span><span class="mi">1</span><span class="p">:</span><span class="n">space_dimension</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span> <span class="o">=</span> <span class="n">attractor</span><span class="p">%</span><span class="n">output</span><span class="p">()</span>
-  <span class="c">! integrate field</span>
   <span class="k">do </span><span class="n">step</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span> <span class="n">num_steps</span>
     <span class="k">call </span><span class="n">euler_integrator</span><span class="p">%</span><span class="n">integrate</span><span class="p">(</span><span class="n">field</span><span class="o">=</span><span class="n">attractor</span><span class="p">,</span> <span class="n">dt</span><span class="o">=</span><span class="n">dt</span><span class="p">)</span>
     <span class="n">solution</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">step</span><span class="p">)</span> <span class="o">=</span> <span class="n">step</span> <span class="o">*</span> <span class="n">dt</span>
@@ -949,7 +983,7 @@ subroutine <a href='../proc/test_ab%7E4.html'>test_ab</a>()
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
   <span class="n">endsubroutine</span> <span class="n">test_euler</span>
 
-  <span class="k">subroutine </span><span class="n">test_rk</span><span class="p">()</span>
+  <span class="k">subroutine </span><span class="n">test_tvd_rk</span><span class="p">()</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
   <span class="c">!&lt; Test explicit TVD/SSP Runge-Kutta class of ODE solvers.</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
@@ -965,25 +999,58 @@ subroutine <a href='../proc/test_ab%7E4.html'>test_ab</a>()
   <span class="k">do </span><span class="n">s</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">rk_stages</span>
     <span class="k">if</span> <span class="p">(</span><span class="n">s</span><span class="o">==</span><span class="mi">4</span><span class="p">)</span> <span class="k">cycle</span> <span class="c">! 4 stages not yet implemented</span>
     <span class="k">print</span> <span class="s2">&quot;(A)&quot;</span><span class="p">,</span> <span class="s1">&#39; RK-&#39;</span><span class="o">//</span><span class="nb">trim</span><span class="p">(</span><span class="n">str</span><span class="p">(.</span><span class="n">true</span><span class="p">.,</span><span class="n">s</span><span class="p">))</span>
-    <span class="c">! initialize the RK integrator accordingly to the number of stages used</span>
-    <span class="n">rk_integrator</span> <span class="o">=</span> <span class="n">tvd_runge_kutta_integrator</span><span class="p">(</span><span class="n">stages</span><span class="o">=</span><span class="n">s</span><span class="p">)</span>
-    <span class="c">! initialize field</span>
+    <span class="k">call </span><span class="n">rk_integrator</span><span class="p">%</span><span class="n">init</span><span class="p">(</span><span class="n">stages</span><span class="o">=</span><span class="n">s</span><span class="p">)</span>
     <span class="k">call </span><span class="n">attractor</span><span class="p">%</span><span class="n">init</span><span class="p">(</span><span class="n">initial_state</span><span class="o">=</span><span class="n">initial_state</span><span class="p">,</span> <span class="n">f</span><span class="o">=</span><span class="n">f</span><span class="p">)</span>
     <span class="n">solution</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span> <span class="o">=</span> <span class="mf">0._R_P</span>
     <span class="n">solution</span><span class="p">(</span><span class="mi">1</span><span class="p">:</span><span class="n">space_dimension</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span> <span class="o">=</span> <span class="n">attractor</span><span class="p">%</span><span class="n">output</span><span class="p">()</span>
-    <span class="c">! integrate field</span>
     <span class="k">do </span><span class="n">step</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span> <span class="n">num_steps</span>
       <span class="k">call </span><span class="n">rk_integrator</span><span class="p">%</span><span class="n">integrate</span><span class="p">(</span><span class="n">field</span><span class="o">=</span><span class="n">attractor</span><span class="p">,</span> <span class="n">stage</span><span class="o">=</span><span class="n">rk_stage</span><span class="p">(</span><span class="mi">1</span><span class="p">:</span><span class="n">s</span><span class="p">),</span> <span class="n">dt</span><span class="o">=</span><span class="n">dt</span><span class="p">)</span>
       <span class="n">solution</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">step</span><span class="p">)</span> <span class="o">=</span> <span class="n">step</span> <span class="o">*</span> <span class="n">dt</span>
       <span class="n">solution</span><span class="p">(</span><span class="mi">1</span><span class="p">:</span><span class="n">space_dimension</span><span class="p">,</span> <span class="n">step</span><span class="p">)</span> <span class="o">=</span> <span class="n">attractor</span><span class="p">%</span><span class="n">output</span><span class="p">()</span>
     <span class="n">enddo</span>
-    <span class="k">call </span><span class="n">save_results</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s1">&#39;FOODiE test: Oscillation equation integration, explicit Runge-Kutta &#39;</span><span class="o">//</span><span class="nb">trim</span><span class="p">(</span><span class="n">str</span><span class="p">(.</span><span class="n">true</span><span class="p">.,</span> <span class="n">s</span><span class="p">))</span><span class="o">//</span><span class="p">&amp;</span>
-                      <span class="s1">&#39; stages&#39;</span><span class="p">,</span> <span class="n">filename</span><span class="o">=</span><span class="s1">&#39;oscillation_integration-rk-&#39;</span><span class="o">//</span><span class="nb">trim</span><span class="p">(</span><span class="n">str</span><span class="p">(.</span><span class="n">true</span><span class="p">.,</span> <span class="n">s</span><span class="p">)))</span>
+    <span class="k">call </span><span class="n">save_results</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s1">&#39;FOODiE test: Oscillation equation integration, explicit TVD Runge-Kutta &#39;</span><span class="o">//</span><span class="nb">trim</span><span class="p">(</span><span class="n">str</span><span class="p">(.</span><span class="n">true</span><span class="p">.,</span> <span class="n">s</span><span class="p">))</span><span class="o">//</span><span class="p">&amp;</span>
+                      <span class="s1">&#39; stages&#39;</span><span class="p">,</span> <span class="n">filename</span><span class="o">=</span><span class="s1">&#39;oscillation_integration-tvdrk-&#39;</span><span class="o">//</span><span class="nb">trim</span><span class="p">(</span><span class="n">str</span><span class="p">(.</span><span class="n">true</span><span class="p">.,</span> <span class="n">s</span><span class="p">)))</span>
   <span class="n">enddo</span>
   <span class="k">print</span> <span class="s2">&quot;(A)&quot;</span><span class="p">,</span> <span class="s1">&#39;Finish!&#39;</span>
   <span class="k">return</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
-  <span class="n">endsubroutine</span> <span class="n">test_rk</span>
+  <span class="n">endsubroutine</span> <span class="n">test_tvd_rk</span>
+
+  <span class="k">subroutine </span><span class="n">test_ls_rk</span><span class="p">()</span>
+  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+  <span class="c">!&lt; Test explicit low storage Runge-Kutta class of ODE solvers.</span>
+  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+  <span class="k">type</span><span class="p">(</span><span class="n">ls_runge_kutta_integrator</span><span class="p">)</span> <span class="kd">::</span> <span class="n">rk_integrator</span>         <span class="c">!&lt; Runge-Kutta integrator.</span>
+  <span class="kt">integer</span><span class="p">,</span> <span class="k">parameter</span>              <span class="kd">::</span> <span class="n">rk_stages</span><span class="o">=</span><span class="mi">5</span>           <span class="c">!&lt; Runge-Kutta stages number.</span>
+  <span class="kt">integer</span><span class="p">,</span> <span class="k">parameter</span>              <span class="kd">::</span> <span class="n">registers</span><span class="o">=</span><span class="mi">2</span>           <span class="c">!&lt; Runge-Kutta stages number.</span>
+  <span class="k">type</span><span class="p">(</span><span class="n">oscillation</span><span class="p">)</span>               <span class="kd">::</span> <span class="n">rk_stage</span><span class="p">(</span><span class="mi">1</span><span class="p">:</span><span class="n">registers</span><span class="p">)</span> <span class="c">!&lt; Runge-Kutta registers.</span>
+  <span class="kt">integer</span><span class="p">(</span><span class="n">I_P</span><span class="p">)</span>                    <span class="kd">::</span> <span class="n">s</span>                     <span class="c">!&lt; RK stages counter.</span>
+  <span class="kt">integer</span><span class="p">(</span><span class="n">I_P</span><span class="p">)</span>                    <span class="kd">::</span> <span class="n">step</span>                  <span class="c">!&lt; Time steps counter.</span>
+  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+
+  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+  <span class="k">print</span> <span class="s2">&quot;(A)&quot;</span><span class="p">,</span> <span class="s1">&#39;Integrating Oscillation equations by means of low storage (2N) Runge-Kutta class of solvers&#39;</span>
+  <span class="k">do </span><span class="n">s</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">rk_stages</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">s</span><span class="o">==</span><span class="mi">2</span><span class="p">)</span> <span class="k">cycle</span> <span class="c">! 2 stages not yet implemented</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">s</span><span class="o">==</span><span class="mi">3</span><span class="p">)</span> <span class="k">cycle</span> <span class="c">! 3 stages not yet implemented</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">s</span><span class="o">==</span><span class="mi">4</span><span class="p">)</span> <span class="k">cycle</span> <span class="c">! 4 stages not yet implemented</span>
+    <span class="k">print</span> <span class="s2">&quot;(A)&quot;</span><span class="p">,</span> <span class="s1">&#39; RK-&#39;</span><span class="o">//</span><span class="nb">trim</span><span class="p">(</span><span class="n">str</span><span class="p">(.</span><span class="n">true</span><span class="p">.,</span><span class="n">s</span><span class="p">))</span>
+    <span class="k">call </span><span class="n">rk_integrator</span><span class="p">%</span><span class="n">init</span><span class="p">(</span><span class="n">stages</span><span class="o">=</span><span class="n">s</span><span class="p">)</span>
+    <span class="k">call </span><span class="n">attractor</span><span class="p">%</span><span class="n">init</span><span class="p">(</span><span class="n">initial_state</span><span class="o">=</span><span class="n">initial_state</span><span class="p">,</span> <span class="n">f</span><span class="o">=</span><span class="n">f</span><span class="p">)</span>
+    <span class="n">solution</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span> <span class="o">=</span> <span class="mf">0._R_P</span>
+    <span class="n">solution</span><span class="p">(</span><span class="mi">1</span><span class="p">:</span><span class="n">space_dimension</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span> <span class="o">=</span> <span class="n">attractor</span><span class="p">%</span><span class="n">output</span><span class="p">()</span>
+    <span class="k">do </span><span class="n">step</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span> <span class="n">num_steps</span>
+      <span class="k">call </span><span class="n">rk_integrator</span><span class="p">%</span><span class="n">integrate</span><span class="p">(</span><span class="n">field</span><span class="o">=</span><span class="n">attractor</span><span class="p">,</span> <span class="n">stage</span><span class="o">=</span><span class="n">rk_stage</span><span class="p">,</span> <span class="n">dt</span><span class="o">=</span><span class="n">dt</span><span class="p">)</span>
+      <span class="n">solution</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">step</span><span class="p">)</span> <span class="o">=</span> <span class="n">step</span> <span class="o">*</span> <span class="n">dt</span>
+      <span class="n">solution</span><span class="p">(</span><span class="mi">1</span><span class="p">:</span><span class="n">space_dimension</span><span class="p">,</span> <span class="n">step</span><span class="p">)</span> <span class="o">=</span> <span class="n">attractor</span><span class="p">%</span><span class="n">output</span><span class="p">()</span>
+    <span class="n">enddo</span>
+    <span class="k">call </span><span class="n">save_results</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s1">&#39;FOODiE test: Oscillation equation integration, explicit low storage Runge-Kutta &#39;</span><span class="o">//</span><span class="p">&amp;</span>
+                      <span class="nb">trim</span><span class="p">(</span><span class="n">str</span><span class="p">(.</span><span class="n">true</span><span class="p">.,</span> <span class="n">s</span><span class="p">))</span><span class="o">//</span><span class="s1">&#39; stages&#39;</span><span class="p">,</span> <span class="n">filename</span><span class="o">=</span><span class="s1">&#39;oscillation_integration-lsrk-&#39;</span><span class="o">//</span><span class="nb">trim</span><span class="p">(</span><span class="n">str</span><span class="p">(.</span><span class="n">true</span><span class="p">.,</span> <span class="n">s</span><span class="p">)))</span>
+  <span class="n">enddo</span>
+  <span class="k">print</span> <span class="s2">&quot;(A)&quot;</span><span class="p">,</span> <span class="s1">&#39;Finish!&#39;</span>
+  <span class="k">return</span>
+  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+  <span class="n">endsubroutine</span> <span class="n">test_ls_rk</span>
 
   <span class="k">subroutine </span><span class="n">test_ab</span><span class="p">()</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
@@ -1002,15 +1069,11 @@ subroutine <a href='../proc/test_ab%7E4.html'>test_ab</a>()
   <span class="k">print</span> <span class="s2">&quot;(A)&quot;</span><span class="p">,</span> <span class="s1">&#39;Integrating Oscillation equations by means of Adams-Bashforth class of solvers&#39;</span>
   <span class="k">do </span><span class="n">s</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">ab_steps</span>
     <span class="k">print</span> <span class="s2">&quot;(A)&quot;</span><span class="p">,</span> <span class="s1">&#39; AB-&#39;</span><span class="o">//</span><span class="nb">trim</span><span class="p">(</span><span class="n">str</span><span class="p">(.</span><span class="n">true</span><span class="p">.,</span><span class="n">s</span><span class="p">))</span>
-    <span class="c">! initialize the AB integrator accordingly to the number of time steps used</span>
     <span class="k">call </span><span class="n">ab_integrator</span><span class="p">%</span><span class="n">init</span><span class="p">(</span><span class="n">steps</span><span class="o">=</span><span class="n">s</span><span class="p">)</span>
-    <span class="c">! initialize the RK integrator used for initial steps of AB integration</span>
-    <span class="n">rk_integrator</span> <span class="o">=</span> <span class="n">tvd_runge_kutta_integrator</span><span class="p">(</span><span class="n">stages</span><span class="o">=</span><span class="n">s</span><span class="p">)</span>
-    <span class="c">! initialize field</span>
+    <span class="k">call </span><span class="n">rk_integrator</span><span class="p">%</span><span class="n">init</span><span class="p">(</span><span class="n">stages</span><span class="o">=</span><span class="n">s</span><span class="p">)</span>
     <span class="k">call </span><span class="n">attractor</span><span class="p">%</span><span class="n">init</span><span class="p">(</span><span class="n">initial_state</span><span class="o">=</span><span class="n">initial_state</span><span class="p">,</span> <span class="n">f</span><span class="o">=</span><span class="n">f</span><span class="p">,</span> <span class="n">steps</span><span class="o">=</span><span class="n">s</span><span class="p">)</span>
     <span class="n">solution</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span> <span class="o">=</span> <span class="mf">0._R_P</span>
     <span class="n">solution</span><span class="p">(</span><span class="mi">1</span><span class="p">:</span><span class="n">space_dimension</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span> <span class="o">=</span> <span class="n">attractor</span><span class="p">%</span><span class="n">output</span><span class="p">()</span>
-    <span class="c">! integrate field</span>
     <span class="k">do </span><span class="n">step</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span> <span class="n">num_steps</span>
       <span class="k">if</span> <span class="p">(</span><span class="n">s</span><span class="o">&gt;</span><span class="n">step</span><span class="p">)</span> <span class="k">then</span>
         <span class="c">! the time steps from 1 to s - 1 must be computed with other scheme...</span>

@@ -8,7 +8,7 @@ program integrate_burgers
 use IR_Precision, only : R_P, I_P, FR_P, str
 use type_burgers, only : burgers
 use Data_Type_Command_Line_Interface, only : Type_Command_Line_Interface
-use foodie, only : euler_explicit_integrator, tvd_runge_kutta_integrator, adams_bashforth_integrator
+use foodie, only : adams_bashforth_integrator, euler_explicit_integrator, ls_runge_kutta_integrator, tvd_runge_kutta_integrator
 use pyplot_module, only :  pyplot
 !-----------------------------------------------------------------------------------------------------------------------------------
 
@@ -56,19 +56,23 @@ call init()
 select case(trim(adjustl(solver)))
 case('euler')
   call test_euler()
-case('runge-kutta')
-  call test_rk()
+case('tvd-runge-kutta')
+  call test_tvd_rk()
+case('ls-runge-kutta')
+  call test_ls_rk()
 case('adams-bashforth')
   call test_ab()
 case('all')
   call test_euler()
-  call test_rk()
+  call test_tvd_rk()
+  call test_ls_rk()
   call test_ab()
 case default
   print "(A)", 'Error: unknown solver "'//trim(adjustl(solver))//'"'
   print "(A)", 'Valid solver names are:'
   print "(A)", '  + euler'
-  print "(A)", '  + runge-kutta'
+  print "(A)", '  + tvd-runge-kutta'
+  print "(A)", '  + ls-runge-kutta'
   print "(A)", '  + adams-bashforth'
   print "(A)", '  + all'
 endselect
@@ -134,9 +138,7 @@ contains
 
   !---------------------------------------------------------------------------------------------------------------------------------
   print "(A)", 'Integrating Burgers equation by means of explicit Euler solver'
-  ! initialize field
   call domain%init(initial_state=initial_state, Ni=Ni, h=h, nu=nu)
-  ! integrate field
   dt = domain%dt(CFL=CFL)
   t = 0._R_P
   do while(t<t_final)
@@ -151,7 +153,7 @@ contains
   !---------------------------------------------------------------------------------------------------------------------------------
   endsubroutine test_euler
 
-  subroutine test_rk()
+  subroutine test_tvd_rk()
   !---------------------------------------------------------------------------------------------------------------------------------
   !< Test explicit TVD/SSP Runge-Kutta class of ODE solvers.
   !---------------------------------------------------------------------------------------------------------------------------------
@@ -168,11 +170,8 @@ contains
   do s=1, rk_stages
     if (s==4) cycle ! 4 stages not yet implemented
     print "(A)", ' RK-'//trim(str(.true.,s))
-    ! initialize the RK integrator accordingly to the number of stages used
-    rk_integrator = tvd_runge_kutta_integrator(stages=s)
-    ! initialize field
+    call rk_integrator%init(stages=s)
     call domain%init(initial_state=initial_state, Ni=Ni, h=h, nu=nu)
-    ! integrate field
     dt = domain%dt(CFL=CFL)
     t = 0._R_P
     do while(t<t_final)
@@ -180,14 +179,52 @@ contains
       t = t + dt
     enddo
     final_state = domain%output()
-    call save_results(title='FOODiE test: Burgers equation integration at t=0.6, explicit Runge-Kutta '//&
+    call save_results(title='FOODiE test: Burgers equation integration at t=0.6, explicit TVD Runge-Kutta '//&
                             trim(str(.true., s))//' stages', &
-                      filename='burgers_integration-rk-'//trim(str(.true., s)))
+                      filename='burgers_integration-tvdrk-'//trim(str(.true., s)))
   enddo
   print "(A)", 'Finish!'
   return
   !---------------------------------------------------------------------------------------------------------------------------------
-  endsubroutine test_rk
+  endsubroutine test_tvd_rk
+
+  subroutine test_ls_rk()
+  !---------------------------------------------------------------------------------------------------------------------------------
+  !< Test explicit low storage Runge-Kutta class of ODE solvers.
+  !---------------------------------------------------------------------------------------------------------------------------------
+  type(ls_runge_kutta_integrator) :: rk_integrator         !< Runge-Kutta integrator.
+  integer, parameter              :: rk_stages=5           !< Runge-Kutta stages number.
+  integer, parameter              :: registers=2           !< Runge-Kutta stages number.
+  type(burgers)                   :: rk_stage(1:registers) !< Runge-Kutta stages.
+  real(R_P)                       :: dt                    !< Time step.
+  real(R_P)                       :: t                     !< Time.
+  integer(I_P)                    :: s                     !< RK stages counter.
+  !---------------------------------------------------------------------------------------------------------------------------------
+
+  !---------------------------------------------------------------------------------------------------------------------------------
+  print "(A)", 'Integrating Burgers equation by means of low storage (2N) Runge-Kutta class of solvers'
+  do s=1, rk_stages
+    if (s==2) cycle ! 2 stages not yet implemented
+    if (s==3) cycle ! 3 stages not yet implemented
+    if (s==4) cycle ! 4 stages not yet implemented
+    print "(A)", ' RK-'//trim(str(.true.,s))
+    call rk_integrator%init(stages=s)
+    call domain%init(initial_state=initial_state, Ni=Ni, h=h, nu=nu)
+    dt = domain%dt(CFL=CFL)
+    t = 0._R_P
+    do while(t<t_final)
+      call rk_integrator%integrate(field=domain, stage=rk_stage, dt=dt)
+      t = t + dt
+    enddo
+    final_state = domain%output()
+    call save_results(title='FOODiE test: Burgers equation integration at t=0.6, explicit low storage Runge-Kutta '//&
+                            trim(str(.true., s))//' stages', &
+                      filename='burgers_integration-lsrk-'//trim(str(.true., s)))
+  enddo
+  print "(A)", 'Finish!'
+  return
+  !---------------------------------------------------------------------------------------------------------------------------------
+  endsubroutine test_ls_rk
 
   subroutine test_ab()
   !---------------------------------------------------------------------------------------------------------------------------------
@@ -208,13 +245,9 @@ contains
   print "(A)", 'Integrating Burgers equation by means of Adams-Bashforth class of solvers'
   do s=1, ab_steps
     print "(A)", ' AB-'//trim(str(.true.,s))
-    ! initialize the AB integrator accordingly to the number of time steps used
     call ab_integrator%init(steps=s)
-    ! initialize the RK integrator used for initial steps of AB integration
-    rk_integrator = tvd_runge_kutta_integrator(stages=s)
-    ! initialize field
+    call rk_integrator%init(stages=s)
     call domain%init(initial_state=initial_state, Ni=Ni, h=h, nu=nu, steps=s)
-    ! integrate field
     dt = domain%dt(CFL=CFL)
     t = 0._R_P
     step = 1

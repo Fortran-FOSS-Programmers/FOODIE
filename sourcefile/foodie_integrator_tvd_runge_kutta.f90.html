@@ -170,6 +170,8 @@
       
       <a class="list-group-item" href="../sourcefile/foodie_integrator_euler_explicit.f90.html">foodie_integrator_euler_explicit.f90</a>
       
+      <a class="list-group-item" href="../sourcefile/foodie_integrator_low_storage_runge_kutta.f90.html">foodie_integrator_low_storage_runge_kutta.f90</a>
+      
       <a class="list-group-item" href="../sourcefile/foodie_integrator_tvd_runge_kutta.f90.html">foodie_integrator_tvd_runge_kutta.f90</a>
       
       <a class="list-group-item" href="../sourcefile/lorenz.f90.html">lorenz.f90</a>
@@ -202,8 +204,7 @@
 <span class="c">!&lt; FOODiE integrator: provide an explicit class of TVD or SSP Runge-Kutta schemes, from 1st to 4th order accutate.</span>
 <span class="c">!&lt;</span>
 <span class="c">!&lt; The class of integrators provided have the Total Variation Diminishing (TVD) property or the Strong Stability Preserving (SSP)</span>
-<span class="c">!&lt; one. The schemes are explicit and defined through the Butcher&#39;s table syntax (see Butcher, J.C., *Coefficients for the study of</span>
-<span class="c">!&lt; Runge-Kutta integration processes*, J. Austral. Math. Soc., Vol. 3, pages: 185--201, 1963).</span>
+<span class="c">!&lt; one. The schemes are explicit and defined through the Butcher&#39;s table syntax, see[1] .</span>
 <span class="c">!&lt;</span>
 <span class="c">!&lt; Considering the following ODE system:</span>
 <span class="c">!&lt;</span>
@@ -253,25 +254,19 @@
 <span class="c">!&lt; $$\gamma = \left[0\right]$$</span>
 <span class="c">!&lt;</span>
 <span class="c">!&lt;##### 2 stages, SSP, 2nd order</span>
-<span class="c">!&lt; This scheme is an optmial SSP(2, 2) without low-storage algorithm. See *High Order Strong Stability Preserving Time</span>
-<span class="c">!&lt; Discretizations*, Gottlieb, S., Ketcheson, D. I., Shu, C.W., Journal of Scientific Computing, vol. 38, N. 3, 2009,</span>
-<span class="c">!&lt; pp. 251-289.</span>
+<span class="c">!&lt; This scheme is an optmial SSP(2, 2) without low-storage algorithm, see [2].</span>
 <span class="c">!&lt; $$\beta = \left[ {\begin{array}{*{20}{c}} \frac{1}{2}&amp;\frac{1}{2} \end{array}} \right]$$</span>
 <span class="c">!&lt; $$\alpha = \left[ {\begin{array}{*{20}{c}} 0&amp;0\\ 1&amp;0 \end{array}} \right]$$</span>
 <span class="c">!&lt; $$\gamma = \left[ {\begin{array}{*{20}{c}} 0 \\ 1 \end{array}} \right]$$</span>
 <span class="c">!&lt;</span>
 <span class="c">!&lt;##### 3 stages, SSP, 3rd order</span>
-<span class="c">!&lt; This scheme is an optmial SSP(3, 3) without low-storage algorithm. See *High Order Strong Stability Preserving Time</span>
-<span class="c">!&lt; Discretizations*, Gottlieb, S., Ketcheson, D. I., Shu, C.W., Journal of Scientific Computing, vol. 38, N. 3, 2009,</span>
-<span class="c">!&lt; pp. 251-289.</span>
+<span class="c">!&lt; This scheme is an optmial SSP(3, 3) without low-storage algorithm, see [2].</span>
 <span class="c">!&lt; $$\beta = \left[ {\begin{array}{*{20}{c}} \frac{1}{6}&amp;\frac{1}{6}&amp;\frac{1}{3}  \end{array}} \right]$$</span>
 <span class="c">!&lt; $$\alpha = \left[ {\begin{array}{*{20}{c}} 0&amp;0&amp;0\\ 1&amp;0&amp;0\\ \frac{1}{4}&amp;\frac{1}{4}&amp;0 \end{array}} \right]$$</span>
 <span class="c">!&lt; $$\gamma = \left[ {\begin{array}{*{20}{c}} 0 \\ 1 \\ \frac{1}{2} \end{array}} \right]$$</span>
 <span class="c">!&lt;</span>
 <span class="c">!&lt;##### 5 stages, SSP, 4th order</span>
-<span class="c">!&lt; This scheme is an optmial SSP(5, 4) without low-storage algorithm. See *High Order Strong Stability Preserving Time</span>
-<span class="c">!&lt; Discretizations*, Gottlieb, S., Ketcheson, D. I., Shu, C.W., Journal of Scientific Computing, vol. 38, N. 3, 2009,</span>
-<span class="c">!&lt; pp. 251-289.</span>
+<span class="c">!&lt; This scheme is an optmial SSP(5, 4) without low-storage algorithm, see [2].</span>
 <span class="c">!&lt; $$\beta = \left[ {\begin{array}{*{20}{c}} 0.14681187618661&amp;0.24848290924556&amp;0.10425883036650&amp;0.27443890091960&amp;</span>
 <span class="c">!&lt; 0.22600748319395 \end{array}} \right]$$</span>
 <span class="c">!&lt; $$\alpha = \left[ {\begin{array}{*{20}{c}}</span>
@@ -280,6 +275,14 @@
 <span class="c">!&lt; \end{array}} \right]$$</span>
 <span class="c">!&lt; $$\gamma = \left[ {\begin{array}{*{20}{c}} 0\\0.39175222700392\\0.58607968896780\\0.47454236302687\\0.93501063100924</span>
 <span class="c">!&lt;           \end{array}} \right]$$</span>
+<span class="c">!&lt;</span>
+<span class="c">!&lt;#### Bibliography</span>
+<span class="c">!&lt;</span>
+<span class="c">!&lt; [1] *Coefficients for the study of !&lt; Runge-Kutta integration processes*, Butcher, J.C., J. Austral. Math. Soc., Vol. 3,</span>
+<span class="c">!&lt; pages: 185--201, 1963.</span>
+<span class="c">!&lt;</span>
+<span class="c">!&lt; [2] *High Order Strong Stability Preserving Time Discretizations*, Gottlieb, S., Ketcheson, D. I., Shu, C.W., Journal of</span>
+<span class="c">!&lt; Scientific Computing, vol. 38, N. 3, 2009, pp. 251-289.</span>
 <span class="c">!-----------------------------------------------------------------------------------------------------------------------------------</span>
 
 <span class="c">!-----------------------------------------------------------------------------------------------------------------------------------</span>
@@ -298,35 +301,18 @@
   <span class="c">!&lt; FOODiE integrator: provide an explicit class of TVD or SSP Runge-Kutta schemes, from 1st to 4th order accutate.</span>
   <span class="c">!&lt;</span>
   <span class="c">!&lt; @note The integrator must be created or initialized (initialize the RK coeficients) before used.</span>
-  <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">),</span> <span class="k">allocatable</span><span class="kd">::</span> <span class="n">alph</span><span class="p">(:,:)</span> <span class="c">!&lt; \(\alpha\) Butcher&#39;s coefficients.</span>
-  <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">),</span> <span class="k">allocatable</span><span class="kd">::</span> <span class="n">beta</span><span class="p">(:)</span>   <span class="c">!&lt; \(\beta\) Butcher&#39;s coefficients.</span>
-  <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">),</span> <span class="k">allocatable</span><span class="kd">::</span> <span class="n">gamm</span><span class="p">(:)</span>   <span class="c">!&lt; \(\gamma\) Butcher&#39;s coefficients.</span>
+  <span class="kt">integer</span><span class="p">(</span><span class="n">I_P</span><span class="p">)</span>           <span class="kd">::</span> <span class="n">stages</span><span class="o">=</span><span class="mi">0</span>  <span class="c">!&lt; Number of stages.</span>
+  <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">),</span> <span class="k">allocatable</span> <span class="kd">::</span> <span class="n">alph</span><span class="p">(:,:)</span> <span class="c">!&lt; \(\alpha\) Butcher&#39;s coefficients.</span>
+  <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">),</span> <span class="k">allocatable</span> <span class="kd">::</span> <span class="n">beta</span><span class="p">(:)</span>   <span class="c">!&lt; \(\beta\) Butcher&#39;s coefficients.</span>
+  <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">),</span> <span class="k">allocatable</span> <span class="kd">::</span> <span class="n">gamm</span><span class="p">(:)</span>   <span class="c">!&lt; \(\gamma\) Butcher&#39;s coefficients.</span>
   <span class="k">contains</span>
 <span class="k">    procedure</span><span class="p">,</span> <span class="k">pass</span><span class="p">(</span><span class="n">self</span><span class="p">),</span> <span class="k">public</span> <span class="kd">::</span> <span class="n">destroy</span>   <span class="c">!&lt; Destroy the integrator.</span>
     <span class="k">procedure</span><span class="p">,</span> <span class="k">pass</span><span class="p">(</span><span class="n">self</span><span class="p">),</span> <span class="k">public</span> <span class="kd">::</span> <span class="n">init</span>      <span class="c">!&lt; Initialize (create) the integrator.</span>
     <span class="k">procedure</span><span class="p">,</span> <span class="k">pass</span><span class="p">(</span><span class="n">self</span><span class="p">),</span> <span class="k">public</span> <span class="kd">::</span> <span class="n">integrate</span> <span class="c">!&lt; Integrate integrand field.</span>
     <span class="k">final</span>                         <span class="kd">::</span> <span class="n">finalize</span>  <span class="c">!&lt; Finalize object.</span>
 <span class="n">endtype</span> <span class="n">tvd_runge_kutta_integrator</span>
-<span class="k">interface </span><span class="n">tvd_runge_kutta_integrator</span>
-  <span class="c">!&lt; Overload tvd_runge_kutta_integrator name with the constructor function *create*.</span>
-  <span class="k">module procedure </span><span class="n">create</span>
-<span class="n">endinterface</span> <span class="n">tvd_runge_kutta_integrator</span>
 <span class="c">!-----------------------------------------------------------------------------------------------------------------------------------</span>
 <span class="k">contains</span>
-<span class="k">  elemental function </span><span class="n">create</span><span class="p">(</span><span class="n">stages</span><span class="p">)</span> <span class="k">result</span><span class="p">(</span><span class="n">rk</span><span class="p">)</span>
-  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
-  <span class="c">!&lt; Create the actual RK integrator: initialize the Butcher&#39; table coefficients.</span>
-  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
-  <span class="kt">integer</span><span class="p">(</span><span class="n">I_P</span><span class="p">),</span> <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span>         <span class="kd">::</span> <span class="n">stages</span> <span class="c">!&lt; Number of stages used.</span>
-  <span class="k">type</span><span class="p">(</span><span class="n">tvd_runge_kutta_integrator</span><span class="p">)</span> <span class="kd">::</span> <span class="n">rk</span>     <span class="c">!&lt; Actual RK integrator.</span>
-  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
-
-  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
-  <span class="k">call </span><span class="n">rk</span><span class="p">%</span><span class="n">init</span><span class="p">(</span><span class="n">stages</span><span class="o">=</span><span class="n">stages</span><span class="p">)</span>
-  <span class="k">return</span>
-  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
-  <span class="n">endfunction</span> <span class="n">create</span>
-
   <span class="c">! public methods</span>
   <span class="k">elemental subroutine </span><span class="n">init</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">stages</span><span class="p">)</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
@@ -337,6 +323,8 @@
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
 
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+  <span class="k">if</span> <span class="p">(</span><span class="n">stages</span><span class="o">&lt;</span><span class="mi">1</span><span class="p">)</span> <span class="k">return</span> <span class="c">! error print should be added</span>
+  <span class="n">self</span><span class="p">%</span><span class="n">stages</span> <span class="o">=</span> <span class="n">stages</span>
   <span class="k">if</span> <span class="p">(</span><span class="nb">allocated</span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">beta</span><span class="p">))</span> <span class="k">deallocate</span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">beta</span><span class="p">)</span> <span class="p">;</span> <span class="k">allocate</span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">beta</span><span class="p">(</span><span class="mi">1</span><span class="p">:</span><span class="n">stages</span>          <span class="p">))</span> <span class="p">;</span> <span class="n">self</span><span class="p">%</span><span class="n">beta</span> <span class="o">=</span> <span class="mf">0._R_P</span>
   <span class="k">if</span> <span class="p">(</span><span class="nb">allocated</span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">alph</span><span class="p">))</span> <span class="k">deallocate</span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">alph</span><span class="p">)</span> <span class="p">;</span> <span class="k">allocate</span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">alph</span><span class="p">(</span><span class="mi">1</span><span class="p">:</span><span class="n">stages</span><span class="p">,</span> <span class="mi">1</span><span class="p">:</span><span class="n">stages</span><span class="p">))</span> <span class="p">;</span> <span class="n">self</span><span class="p">%</span><span class="n">alph</span> <span class="o">=</span> <span class="mf">0._R_P</span>
   <span class="k">if</span> <span class="p">(</span><span class="nb">allocated</span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">gamm</span><span class="p">))</span> <span class="k">deallocate</span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">gamm</span><span class="p">)</span> <span class="p">;</span> <span class="k">allocate</span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">gamm</span><span class="p">(</span>          <span class="mi">1</span><span class="p">:</span><span class="n">stages</span><span class="p">))</span> <span class="p">;</span> <span class="n">self</span><span class="p">%</span><span class="n">gamm</span> <span class="o">=</span> <span class="mf">0._R_P</span>
@@ -375,7 +363,7 @@
     <span class="n">self</span><span class="p">%</span><span class="n">alph</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span><span class="o">=</span><span class="mf">0.21766909633821_R_P</span><span class="p">;</span><span class="n">self</span><span class="p">%</span><span class="n">alph</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span><span class="o">=</span><span class="mf">0.36841059262959_R_P</span>
     <span class="n">self</span><span class="p">%</span><span class="n">alph</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span><span class="o">=</span><span class="mf">0.08269208670950_R_P</span><span class="p">;</span><span class="n">self</span><span class="p">%</span><span class="n">alph</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span><span class="o">=</span><span class="mf">0.13995850206999_R_P</span><span class="p">;</span><span class="n">self</span><span class="p">%</span><span class="n">alph</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span><span class="o">=</span><span class="mf">0.25189177424738_R_P</span>
     <span class="n">self</span><span class="p">%</span><span class="n">alph</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span><span class="o">=</span><span class="mf">0.06796628370320_R_P</span><span class="p">;</span><span class="n">self</span><span class="p">%</span><span class="n">alph</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span><span class="o">=</span><span class="mf">0.11503469844438_R_P</span><span class="p">;</span><span class="n">self</span><span class="p">%</span><span class="n">alph</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span><span class="o">=</span><span class="mf">0.20703489864929_R_P</span>
-      <span class="n">self</span><span class="p">%</span><span class="n">alph</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">4</span><span class="p">)</span><span class="o">=</span><span class="mf">0.54497475021237_R_P</span>
+    <span class="n">self</span><span class="p">%</span><span class="n">alph</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">4</span><span class="p">)</span><span class="o">=</span><span class="mf">0.54497475021237_R_P</span>
 
     <span class="n">self</span><span class="p">%</span><span class="n">gamm</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span> <span class="o">=</span> <span class="mf">0.39175222700392_R_P</span>
     <span class="n">self</span><span class="p">%</span><span class="n">gamm</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span> <span class="o">=</span> <span class="mf">0.58607968896780_R_P</span>
@@ -394,6 +382,7 @@
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
 
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+  <span class="n">self</span><span class="p">%</span><span class="n">stages</span> <span class="o">=</span> <span class="mi">0</span>
   <span class="k">if</span> <span class="p">(</span><span class="nb">allocated</span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">alph</span><span class="p">))</span> <span class="k">deallocate</span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">alph</span><span class="p">)</span>
   <span class="k">if</span> <span class="p">(</span><span class="nb">allocated</span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">beta</span><span class="p">))</span> <span class="k">deallocate</span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">beta</span><span class="p">)</span>
   <span class="k">if</span> <span class="p">(</span><span class="nb">allocated</span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">gamm</span><span class="p">))</span> <span class="k">deallocate</span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">gamm</span><span class="p">)</span>
@@ -419,7 +408,7 @@
   <span class="k">select type</span><span class="p">(</span><span class="n">stage</span><span class="p">)</span>
   <span class="k">class is</span><span class="p">(</span><span class="n">integrand</span><span class="p">)</span>
     <span class="c">! computing stages</span>
-    <span class="k">do </span><span class="n">s</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">size</span><span class="p">(</span><span class="n">stage</span><span class="p">)</span>
+    <span class="k">do </span><span class="n">s</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">self</span><span class="p">%</span><span class="n">stages</span>
       <span class="n">stage</span><span class="p">(</span><span class="n">s</span><span class="p">)</span> <span class="o">=</span> <span class="n">field</span>
       <span class="k">do </span><span class="n">ss</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">s</span> <span class="o">-</span> <span class="mi">1</span>
         <span class="n">stage</span><span class="p">(</span><span class="n">s</span><span class="p">)</span> <span class="o">=</span> <span class="n">stage</span><span class="p">(</span><span class="n">s</span><span class="p">)</span> <span class="o">+</span> <span class="n">stage</span><span class="p">(</span><span class="n">ss</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="n">Dt</span> <span class="o">*</span> <span class="n">self</span><span class="p">%</span><span class="n">alph</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">ss</span><span class="p">))</span>
@@ -427,7 +416,7 @@
       <span class="n">stage</span><span class="p">(</span><span class="n">s</span><span class="p">)</span> <span class="o">=</span> <span class="n">stage</span><span class="p">(</span><span class="n">s</span><span class="p">)%</span><span class="n">t</span><span class="p">()</span>
     <span class="n">enddo</span>
     <span class="c">! computing new time step</span>
-    <span class="k">do </span><span class="n">s</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">size</span><span class="p">(</span><span class="n">stage</span><span class="p">)</span>
+    <span class="k">do </span><span class="n">s</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">self</span><span class="p">%</span><span class="n">stages</span>
       <span class="n">field</span> <span class="o">=</span> <span class="n">field</span> <span class="o">+</span>  <span class="n">stage</span><span class="p">(</span><span class="n">s</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="n">Dt</span> <span class="o">*</span> <span class="n">self</span><span class="p">%</span><span class="n">beta</span><span class="p">(</span><span class="n">s</span><span class="p">))</span>
     <span class="n">enddo</span>
   <span class="n">endselect</span>

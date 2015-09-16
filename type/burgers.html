@@ -164,7 +164,7 @@
     <div class="panel-heading text-left"><h3 class="panel-title">Type-Bound Procedures</h3></div>
     <div class="list-group">
       
-      <a class="list-group-item" href="../type/burgers.html#boundprocedure-init%7E3">init</a>
+      <a class="list-group-item" href="../type/burgers.html#boundprocedure-init%7E4">init</a>
       
       <a class="list-group-item" href="../type/burgers.html#boundprocedure-output">output</a>
       
@@ -224,6 +224,8 @@
       <a class="list-group-item" href="../type/integrand.html">integrand</a>
       
       <a class="list-group-item" href="../type/lorenz.html">lorenz</a>
+      
+      <a class="list-group-item" href="../type/ls_runge_kutta_integrator.html">ls_runge_kutta_integrator</a>
       
       <a class="list-group-item" href="../type/oscillation.html">oscillation</a>
       
@@ -453,7 +455,7 @@ implementation in a submodule of an interface in a parent module.</p>
     
 	   
 <div class="panel panel-default">
-  <div class="panel-heading codesum"><span class="anchor" id="boundprocedure-init%7E3"></span><h3>procedure, public, pass(self) :: <strong>init</strong>  
+  <div class="panel-heading codesum"><span class="anchor" id="boundprocedure-init%7E4"></span><h3>procedure, public, pass(self) :: <strong>init</strong>  
     
   </h3></div>
   
@@ -471,7 +473,7 @@ implementation in a submodule of an interface in a parent module.</p>
          
     
     <h3>
-private subroutine <a href='../proc/init%7E4.html'>init</a>(self, initial_state, Ni, h, nu, steps)
+private subroutine <a href='../proc/init%7E5.html'>init</a>(self, initial_state, Ni, h, nu, steps)
     
     
     
@@ -1281,7 +1283,7 @@ private purefunction <a href='../proc/real_multiply_burgers.html'>real_multiply_
     
 
 
-    <p>Burgers + Burgers oprator.</p>
+    <p>Burgers + Burgers operator.</p>
   </div>
   
   <ul class="list-group">
@@ -1382,7 +1384,7 @@ private purefunction <a href='../proc/add_burgers.html'>add_burgers</a>(lhs, rhs
     
 
 
-    <p>Burgers - Burgers oprator.</p>
+    <p>Burgers - Burgers operator.</p>
   </div>
   
   <ul class="list-group">
@@ -1663,6 +1665,13 @@ private puresubroutine <a href='../proc/burgers_assign_real.html'>burgers_assign
     
   </h3></div>
   
+  <div class="panel-body">
+    
+
+
+    <p>Subtraction operator overloading.</p>
+  </div>
+  
   <ul class="list-group">
     
       <li class="list-group-item">
@@ -1688,7 +1697,7 @@ pass(lhs) <a href='../type/burgers.html#boundprocedure-sub'>sub</a>()
 
 
        
-       <p>Burgers - Burgers oprator.</p>
+       <p>Burgers - Burgers operator.</p>
         
 
       
@@ -1929,12 +1938,12 @@ private purefunction <a href='../proc/d2burgers_dx2.html'>d2Burgers_dx2</a>(self
     <span class="k">procedure</span><span class="p">,</span> <span class="k">pass</span><span class="p">(</span><span class="n">lhs</span><span class="p">),</span>  <span class="k">public</span> <span class="kd">::</span> <span class="n">integrand_multiply_integrand</span> <span class="o">=&gt;</span> <span class="n">burgers_multiply_burgers</span> <span class="c">!&lt; Burgers * burgers operator.</span>
     <span class="k">procedure</span><span class="p">,</span> <span class="k">pass</span><span class="p">(</span><span class="n">lhs</span><span class="p">),</span>  <span class="k">public</span> <span class="kd">::</span> <span class="n">integrand_multiply_real</span> <span class="o">=&gt;</span> <span class="n">burgers_multiply_real</span>         <span class="c">!&lt; Burgers * real operator.</span>
     <span class="k">procedure</span><span class="p">,</span> <span class="k">pass</span><span class="p">(</span><span class="n">rhs</span><span class="p">),</span>  <span class="k">public</span> <span class="kd">::</span> <span class="n">real_multiply_integrand</span> <span class="o">=&gt;</span> <span class="n">real_multiply_burgers</span>         <span class="c">!&lt; Real * Burgers operator.</span>
-    <span class="k">procedure</span><span class="p">,</span> <span class="k">pass</span><span class="p">(</span><span class="n">lhs</span><span class="p">),</span>  <span class="k">public</span> <span class="kd">::</span> <span class="n">add</span> <span class="o">=&gt;</span> <span class="n">add_burgers</span>                                       <span class="c">!&lt; Burgers + Burgers oprator.</span>
-    <span class="k">procedure</span><span class="p">,</span> <span class="k">pass</span><span class="p">(</span><span class="n">lhs</span><span class="p">),</span>  <span class="k">public</span> <span class="kd">::</span> <span class="n">sub</span> <span class="o">=&gt;</span> <span class="n">sub_burgers</span>                                       <span class="c">!&lt; Burgers - Burgers oprator.</span>
+    <span class="k">procedure</span><span class="p">,</span> <span class="k">pass</span><span class="p">(</span><span class="n">lhs</span><span class="p">),</span>  <span class="k">public</span> <span class="kd">::</span> <span class="n">add</span> <span class="o">=&gt;</span> <span class="n">add_burgers</span>                                       <span class="c">!&lt; Burgers + Burgers operator.</span>
+    <span class="k">procedure</span><span class="p">,</span> <span class="k">pass</span><span class="p">(</span><span class="n">lhs</span><span class="p">),</span>  <span class="k">public</span> <span class="kd">::</span> <span class="n">sub</span> <span class="o">=&gt;</span> <span class="n">sub_burgers</span>                                       <span class="c">!&lt; Burgers - Burgers operator.</span>
     <span class="k">procedure</span><span class="p">,</span> <span class="k">pass</span><span class="p">(</span><span class="n">lhs</span><span class="p">),</span>  <span class="k">public</span> <span class="kd">::</span> <span class="n">assign_integrand</span> <span class="o">=&gt;</span> <span class="n">burgers_assign_burgers</span>               <span class="c">!&lt; Burgers = Burgers.</span>
     <span class="k">procedure</span><span class="p">,</span> <span class="k">pass</span><span class="p">(</span><span class="n">lhs</span><span class="p">),</span>  <span class="k">public</span> <span class="kd">::</span> <span class="n">assign_real</span> <span class="o">=&gt;</span> <span class="n">burgers_assign_real</span>                       <span class="c">!&lt; Burgers = real.</span>
     <span class="c">! operators overloading</span>
-    <span class="k">generic</span><span class="p">,</span> <span class="k">public</span> <span class="kd">::</span> <span class="n">operator</span><span class="p">(</span><span class="o">-</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="n">sub</span>
+    <span class="k">generic</span><span class="p">,</span> <span class="k">public</span> <span class="kd">::</span> <span class="n">operator</span><span class="p">(</span><span class="o">-</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="n">sub</span> <span class="c">!&lt; Subtraction operator overloading.</span>
     <span class="c">! private methods</span>
     <span class="k">procedure</span><span class="p">,</span> <span class="k">pass</span><span class="p">(</span><span class="n">self</span><span class="p">),</span> <span class="k">private</span> <span class="kd">::</span> <span class="n">x</span>  <span class="o">=&gt;</span> <span class="n">dBurgers_dx</span>   <span class="c">!&lt; 1st derivative.</span>
     <span class="k">procedure</span><span class="p">,</span> <span class="k">pass</span><span class="p">(</span><span class="n">self</span><span class="p">),</span> <span class="k">private</span> <span class="kd">::</span> <span class="n">xx</span> <span class="o">=&gt;</span> <span class="n">d2Burgers_dx2</span> <span class="c">!&lt; 2nd derivative.</span>

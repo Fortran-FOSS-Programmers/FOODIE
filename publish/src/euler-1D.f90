@@ -8,7 +8,7 @@ program integrate_euler_1D
 use IR_Precision, only : R_P, I_P, FR_P, str
 use type_euler_1D, only : euler_1D
 use Data_Type_Command_Line_Interface, only : Type_Command_Line_Interface
-use foodie, only : euler_explicit_integrator, tvd_runge_kutta_integrator, adams_bashforth_integrator
+use foodie, only : adams_bashforth_integrator, euler_explicit_integrator, ls_runge_kutta_integrator, tvd_runge_kutta_integrator
 use pyplot_module, only :  pyplot
 !-----------------------------------------------------------------------------------------------------------------------------------
 
@@ -35,6 +35,7 @@ character(99)                     :: solver                   !< Solver used.
 logical                           :: plots                    !< Flag for activating plots saving.
 logical                           :: results                  !< Flag for activating results saving.
 logical                           :: time_serie               !< Flag for activating time serie-results saving.
+logical                           :: verbose                  !< Flag for activating more verbose output.
 !-----------------------------------------------------------------------------------------------------------------------------------
 
 !-----------------------------------------------------------------------------------------------------------------------------------
@@ -54,31 +55,37 @@ call cli%add(switch='--plots', switch_ab='-p', help='Save plots of results', req
              error=error)
 call cli%add(switch='--tserie', switch_ab='-t', help='Save time-serie-results', required=.false., act='store_true', def='.false.', &
              error=error)
+call cli%add(switch='--verbose', help='Verbose output', required=.false., act='store_true', def='.false.', error=error)
 ! parsing Command Line Interface
 call cli%parse(error=error)
 call cli%get(switch='-s', val=solver, error=error) ; if (error/=0) stop
 call cli%get(switch='-r', val=results, error=error) ; if (error/=0) stop
 call cli%get(switch='-p', val=plots, error=error) ; if (error/=0) stop
 call cli%get(switch='-t', val=time_serie, error=error) ; if (error/=0) stop
+call cli%get(switch='--verbose', val=verbose, error=error) ; if (error/=0) stop
 ! create Euler field initial state
 call init()
 ! integrate Euler equation
 select case(trim(adjustl(solver)))
 case('euler')
   call test_euler()
-case('runge-kutta')
-  call test_rk()
+case('tvd-runge-kutta')
+  call test_tvd_rk()
+case('ls-runge-kutta')
+  call test_ls_rk()
 case('adams-bashforth')
   call test_ab()
 case('all')
   call test_euler()
-  call test_rk()
+  call test_tvd_rk()
+  call test_ls_rk()
   call test_ab()
 case default
   print "(A)", 'Error: unknown solver "'//trim(adjustl(solver))//'"'
   print "(A)", 'Valid solver names are:'
   print "(A)", '  + euler'
-  print "(A)", '  + runge-kutta'
+  print "(A)", '  + tvd-runge-kutta'
+  print "(A)", '  + ls-runge-kutta'
   print "(A)", '  + adams-bashforth'
   print "(A)", '  + all'
 endselect
@@ -206,7 +213,7 @@ contains
                        filename='euler_1D_integration-euler-time_serie.dat', &
                        t=t)
   do while(t<t_final)
-    print "(A)", '  Time step: '//str(n=dt)//', Time: '//str(n=t)
+    if (verbose) print "(A)", '  Time step: '//str(n=dt)//', Time: '//str(n=t)
     dt = domain%dt(Nmax=0, Tmax=t_final, t=t, CFL=CFL)
     call euler_integrator%integrate(field=domain, dt=dt)
     t = t + dt
@@ -220,7 +227,7 @@ contains
   !---------------------------------------------------------------------------------------------------------------------------------
   endsubroutine test_euler
 
-  subroutine test_rk()
+  subroutine test_tvd_rk()
   !---------------------------------------------------------------------------------------------------------------------------------
   !< Test explicit TVD/SSP Runge-Kutta class of ODE solvers.
   !---------------------------------------------------------------------------------------------------------------------------------
@@ -230,7 +237,6 @@ contains
   real(R_P)                        :: dt                    !< Time step.
   real(R_P)                        :: t                     !< Time.
   integer(I_P)                     :: s                     !< RK stages counter.
-  integer(I_P)                     :: ord                   !< Space order.
   !---------------------------------------------------------------------------------------------------------------------------------
 
   !---------------------------------------------------------------------------------------------------------------------------------
@@ -238,7 +244,7 @@ contains
   do s=1, rk_stages
     if (s==4) cycle ! 4 stages not yet implemented
     print "(A)", ' RK-'//trim(str(.true.,s))
-    rk_integrator = tvd_runge_kutta_integrator(stages=s)
+    call rk_integrator%init(stages=s)
     select case(s)
     case(1)
       call domain%init(Ni=Ni, Ns=Ns, Dx=Dx, BC_L=BC_L, BC_R=BC_R, initial_state=initial_state, cp0=cp0, cv0=cv0, ord=1)
@@ -248,26 +254,77 @@ contains
       call domain%init(Ni=Ni, Ns=Ns, Dx=Dx, BC_L=BC_L, BC_R=BC_R, initial_state=initial_state, cp0=cp0, cv0=cv0, ord=7)
     endselect
     t = 0._R_P
-    call save_time_serie(title='FOODiE test: 1D Euler equations integration, explicit Runge-Kutta, t='//str(n=t_final)// &
+    call save_time_serie(title='FOODiE test: 1D Euler equations integration, explicit TVD Runge-Kutta, t='//str(n=t_final)// &
                                trim(str(.true., s))//' stages', &
-                         filename='euler_1D_integration-rk-'//trim(str(.true., s))//'-time_serie.dat', &
+                         filename='euler_1D_integration-tvdrk-'//trim(str(.true., s))//'-time_serie.dat', &
                          t=t)
     do while(t<t_final)
-      print "(A)", '    Time step: '//str(n=dt)//', Time: '//str(n=t)
+      if (verbose) print "(A)", '    Time step: '//str(n=dt)//', Time: '//str(n=t)
       dt = domain%dt(Nmax=0, Tmax=t_final, t=t, CFL=CFL)
       call rk_integrator%integrate(field=domain, stage=rk_stage(1:s), dt=dt)
       t = t + dt
       call save_time_serie(t=t)
     enddo
     call save_time_serie(t=t, finish=.true.)
-    call save_results(title='FOODiE test: 1D Euler equations integration, explicit Runge-Kutta, t='//str(n=t_final)// &
+    call save_results(title='FOODiE test: 1D Euler equations integration, explicit TVD Runge-Kutta, t='//str(n=t_final)// &
                             trim(str(.true., s))//' stages', &
-                      filename='euler_1D_integration-rk-'//trim(str(.true., s)))
+                      filename='euler_1D_integration-tvdrk-'//trim(str(.true., s)))
   enddo
   print "(A)", 'Finish!'
   return
   !---------------------------------------------------------------------------------------------------------------------------------
-  endsubroutine test_rk
+  endsubroutine test_tvd_rk
+
+  subroutine test_ls_rk()
+  !---------------------------------------------------------------------------------------------------------------------------------
+  !< Test explicit low storage Runge-Kutta class of ODE solvers.
+  !---------------------------------------------------------------------------------------------------------------------------------
+  type(ls_runge_kutta_integrator) :: rk_integrator         !< Runge-Kutta integrator.
+  integer, parameter              :: rk_stages=5           !< Runge-Kutta stages number.
+  integer, parameter              :: registers=2           !< Runge-Kutta stages number.
+  type(euler_1D)                  :: rk_stage(1:registers) !< Runge-Kutta stages.
+  real(R_P)                       :: dt                    !< Time step.
+  real(R_P)                       :: t                     !< Time.
+  integer(I_P)                    :: s                     !< RK stages counter.
+  !---------------------------------------------------------------------------------------------------------------------------------
+
+  !---------------------------------------------------------------------------------------------------------------------------------
+  print "(A)", 'Integrating 1D Euler equations by means of low storage (2N) Runge-Kutta class of solvers'
+  do s=1, rk_stages
+    if (s==2) cycle ! 2 stages not yet implemented
+    if (s==3) cycle ! 3 stages not yet implemented
+    if (s==4) cycle ! 4 stages not yet implemented
+    print "(A)", ' RK-'//trim(str(.true.,s))
+    call rk_integrator%init(stages=s)
+    select case(s)
+    case(1)
+      call domain%init(Ni=Ni, Ns=Ns, Dx=Dx, BC_L=BC_L, BC_R=BC_R, initial_state=initial_state, cp0=cp0, cv0=cv0, ord=1)
+    case(2, 3)
+      call domain%init(Ni=Ni, Ns=Ns, Dx=Dx, BC_L=BC_L, BC_R=BC_R, initial_state=initial_state, cp0=cp0, cv0=cv0, ord=3)
+    case(5)
+      call domain%init(Ni=Ni, Ns=Ns, Dx=Dx, BC_L=BC_L, BC_R=BC_R, initial_state=initial_state, cp0=cp0, cv0=cv0, ord=7)
+    endselect
+    t = 0._R_P
+    call save_time_serie(title='FOODiE test: 1D Euler equations integration, explicit low storage Runge-Kutta, t='//&
+                               str(n=t_final)//trim(str(.true., s))//' stages', &
+                         filename='euler_1D_integration-lsrk-'//trim(str(.true., s))//'-time_serie.dat', &
+                         t=t)
+    do while(t<t_final)
+      if (verbose) print "(A)", '    Time step: '//str(n=dt)//', Time: '//str(n=t)
+      dt = domain%dt(Nmax=0, Tmax=t_final, t=t, CFL=CFL)
+      call rk_integrator%integrate(field=domain, stage=rk_stage, dt=dt)
+      t = t + dt
+      call save_time_serie(t=t)
+    enddo
+    call save_time_serie(t=t, finish=.true.)
+    call save_results(title='FOODiE test: 1D Euler equations integration, explicit low storage Runge-Kutta, t='//str(n=t_final)// &
+                            trim(str(.true., s))//' stages', &
+                      filename='euler_1D_integration-lsrk-'//trim(str(.true., s)))
+  enddo
+  print "(A)", 'Finish!'
+  return
+  !---------------------------------------------------------------------------------------------------------------------------------
+  endsubroutine test_ls_rk
 
   subroutine test_ab()
   !---------------------------------------------------------------------------------------------------------------------------------
@@ -289,7 +346,7 @@ contains
   do s=1, ab_steps
     print "(A)", ' AB-'//trim(str(.true.,s))
     call ab_integrator%init(steps=s)
-    rk_integrator = tvd_runge_kutta_integrator(stages=s)
+    call rk_integrator%init(stages=s)
     select case(s)
     case(1)
       call domain%init(Ni=Ni, Ns=Ns, Dx=Dx, BC_L=BC_L, BC_R=BC_R, initial_state=initial_state, cp0=cp0, cv0=cv0, ord=1)
@@ -305,7 +362,7 @@ contains
                          t=t)
     step = 1
     do while(t<t_final)
-      print "(A)", '    Time step: '//str(n=dt)//', Time: '//str(n=t)
+      if (verbose) print "(A)", '    Time step: '//str(n=dt)//', Time: '//str(n=t)
       dt = domain%dt(Nmax=0, Tmax=t_final, t=t, CFL=0.1_R_P*CFL)
       if (s>step) then
         ! the time steps from 1 to s - 1 must be computed with other scheme...

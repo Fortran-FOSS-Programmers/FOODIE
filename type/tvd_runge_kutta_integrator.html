@@ -130,6 +130,8 @@
     <div class="panel-heading text-left"><h3 class="panel-title">Variables</h3></div>
     <div class="list-group">
       
+      <a class="list-group-item" href="../type/tvd_runge_kutta_integrator.html#variable-stages%7E2">stages</a>
+      
       <a class="list-group-item" href="../type/tvd_runge_kutta_integrator.html#variable-alph">alph</a>
       
       <a class="list-group-item" href="../type/tvd_runge_kutta_integrator.html#variable-beta">beta</a>
@@ -139,14 +141,6 @@
     </div>
   </div>
   
-  
-  
-  <div class="panel panel-primary">
-    <div class="panel-heading text-left"><h3 class="panel-title">Constructor</h3></div>
-    <div class="list-group">
-      <a class="list-group-item" href="../type/tvd_runge_kutta_integrator.html#interface-tvd_runge_kutta_integrator">tvd_runge_kutta_integrator</a>
-    </div>
-  </div>
   
   
   
@@ -165,7 +159,7 @@
     <div class="panel-heading text-left"><h3 class="panel-title">Finalization Procedures</h3></div>
     <div class="list-group">
       
-      <a class="list-group-item" href="../type/tvd_runge_kutta_integrator.html#proc-finalize%7E2">finalize</a>
+      <a class="list-group-item" href="../type/tvd_runge_kutta_integrator.html#proc-finalize%7E3">finalize</a>
       
     </div>
   </div>
@@ -176,11 +170,11 @@
     <div class="panel-heading text-left"><h3 class="panel-title">Type-Bound Procedures</h3></div>
     <div class="list-group">
       
-      <a class="list-group-item" href="../type/tvd_runge_kutta_integrator.html#boundprocedure-destroy%7E2">destroy</a>
+      <a class="list-group-item" href="../type/tvd_runge_kutta_integrator.html#boundprocedure-destroy%7E3">destroy</a>
       
-      <a class="list-group-item" href="../type/tvd_runge_kutta_integrator.html#boundprocedure-init%7E2">init</a>
+      <a class="list-group-item" href="../type/tvd_runge_kutta_integrator.html#boundprocedure-init%7E3">init</a>
       
-      <a class="list-group-item" href="../type/tvd_runge_kutta_integrator.html#boundprocedure-integrate%7E3">integrate</a>
+      <a class="list-group-item" href="../type/tvd_runge_kutta_integrator.html#boundprocedure-integrate%7E4">integrate</a>
       
     </div>
   </div>
@@ -213,6 +207,8 @@
       
       <a class="list-group-item" href="../type/lorenz.html">lorenz</a>
       
+      <a class="list-group-item" href="../type/ls_runge_kutta_integrator.html">ls_runge_kutta_integrator</a>
+      
       <a class="list-group-item" href="../type/oscillation.html">oscillation</a>
       
       <a class="list-group-item" href="../type/tvd_runge_kutta_integrator.html">tvd_runge_kutta_integrator</a>
@@ -243,6 +239,20 @@
 
 
 <tbody>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-stages%7E2"></span>integer(kind=I_P),</td>
+  
+  <td>public</td>
+  <td></td><td>::</td>
+  <td><strong>stages</strong></td><td> =</td><td>0</td><td><p>Number of stages.</p></td>
+  
+</tr>
 
   
   
@@ -294,97 +304,6 @@
     
     
     
-	 <section>
-	 <h2>Constructor</h2>
-	   
-	   
-<div class="panel panel-default">
-  <div class="panel-heading codesum"><span class="anchor" id="interface-tvd_runge_kutta_integrator"></span><h3>public interface <a href='../interface/tvd_runge_kutta_integrator.html'>tvd_runge_kutta_integrator</a>
-    
-  </h3></div>
-  
-  <div class="panel-body">
-    
-    <p>Overload tvd_runge_kutta_integrator name with the constructor function <em>create</em>.</p>
-  </div>
-  
-  <ul class="list-group">
-  
-  
-  
-    <li class="list-group-item">
-    
-    
-    <h3>
-private elementalfunction <a href='../proc/create.html'>create</a>(stages) result(rk)
-    
-    
-    
-</h3>
-    
-    <h4>Arguments</h4>
-    
-      
-      
-<table class="table table-striped varlist">
-<thead><tr><th>Type</th>
-<th>Intent</th><th>Optional</th>
-<th>Attributes</th><th></th><th>Name</th><th></th></thead>
-
-
-
-<tbody>
-
-  
-  
-  
-  
-<tr>
-  
-  <td><span class="anchor" ></span>integer(kind=I_P),</td>
-  <td>intent(in)</td>
-  <td></td>
-  
-  <td></td><td>::</td>
-  <td><strong>stages</strong></td><td><p>Number of stages used.</p></td>
-  
-</tr>
-
-</tbody>
-</table>
-
-      
-    
-    
-
-  
-  
-  
-  
-     <h4>Return Value <small>type(<a href='../type/tvd_runge_kutta_integrator.html'>tvd_runge_kutta_integrator</a>)
-  </small></h4>
-  <p>Actual RK integrator.</p>
-    
-    
-    <h4>Description</h4>
-       
-       
-
-
-       
-       <p>Create the actual RK integrator: initialize the Butcher' table coefficients.</p>
-        
-
-    </li>
-  
-  
-  </ul>
-</div>
-
-	   
-	 </section>
-	 <br>
-    
     
     
     <section>
@@ -392,12 +311,12 @@ private elementalfunction <a href='../proc/create.html'>create</a>(stages) resul
 	   
     
 <div class="panel panel-default">
-  <div class="panel-heading codesum"><span class="anchor" id="proc-finalize%7E2"></span><h3>final :: <strong>finalize</strong></h3></div>
+  <div class="panel-heading codesum"><span class="anchor" id="proc-finalize%7E3"></span><h3>final :: <strong>finalize</strong></h3></div>
   <div class="panel-body">
      
     
     <h3>
-private elementalsubroutine <a href='../proc/finalize%7E2.html'>finalize</a>(self)
+private elementalsubroutine <a href='../proc/finalize%7E3.html'>finalize</a>(self)
     
     
     
@@ -461,7 +380,7 @@ private elementalsubroutine <a href='../proc/finalize%7E2.html'>finalize</a>(sel
     
 	   
 <div class="panel panel-default">
-  <div class="panel-heading codesum"><span class="anchor" id="boundprocedure-destroy%7E2"></span><h3>procedure, public, pass(self) :: <strong>destroy</strong>  
+  <div class="panel-heading codesum"><span class="anchor" id="boundprocedure-destroy%7E3"></span><h3>procedure, public, pass(self) :: <strong>destroy</strong>  
     
   </h3></div>
   
@@ -479,7 +398,7 @@ private elementalsubroutine <a href='../proc/finalize%7E2.html'>finalize</a>(sel
          
     
     <h3>
-private elementalsubroutine <a href='../proc/destroy%7E2.html'>destroy</a>(self)
+private elementalsubroutine <a href='../proc/destroy%7E3.html'>destroy</a>(self)
     
     
     
@@ -538,7 +457,7 @@ private elementalsubroutine <a href='../proc/destroy%7E2.html'>destroy</a>(self)
     
 	   
 <div class="panel panel-default">
-  <div class="panel-heading codesum"><span class="anchor" id="boundprocedure-init%7E2"></span><h3>procedure, public, pass(self) :: <strong>init</strong>  
+  <div class="panel-heading codesum"><span class="anchor" id="boundprocedure-init%7E3"></span><h3>procedure, public, pass(self) :: <strong>init</strong>  
     
   </h3></div>
   
@@ -556,7 +475,7 @@ private elementalsubroutine <a href='../proc/destroy%7E2.html'>destroy</a>(self)
          
     
     <h3>
-private elementalsubroutine <a href='../proc/init%7E2.html'>init</a>(self, stages)
+private elementalsubroutine <a href='../proc/init%7E3.html'>init</a>(self, stages)
     
     
     
@@ -630,7 +549,7 @@ private elementalsubroutine <a href='../proc/init%7E2.html'>init</a>(self, stage
     
 	   
 <div class="panel panel-default">
-  <div class="panel-heading codesum"><span class="anchor" id="boundprocedure-integrate%7E3"></span><h3>procedure, public, pass(self) :: <strong>integrate</strong>  
+  <div class="panel-heading codesum"><span class="anchor" id="boundprocedure-integrate%7E4"></span><h3>procedure, public, pass(self) :: <strong>integrate</strong>  
     
   </h3></div>
   
@@ -648,7 +567,7 @@ private elementalsubroutine <a href='../proc/init%7E2.html'>init</a>(self, stage
          
     
     <h3>
-private subroutine <a href='../proc/integrate%7E3.html'>integrate</a>(self, field, stage, Dt)
+private subroutine <a href='../proc/integrate%7E4.html'>integrate</a>(self, field, stage, Dt)
     
     
     
@@ -760,9 +679,10 @@ private subroutine <a href='../proc/integrate%7E3.html'>integrate</a>(self, fiel
   <span class="c">!&lt; FOODiE integrator: provide an explicit class of TVD or SSP Runge-Kutta schemes, from 1st to 4th order accutate.</span>
   <span class="c">!&lt;</span>
   <span class="c">!&lt; @note The integrator must be created or initialized (initialize the RK coeficients) before used.</span>
-  <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">),</span> <span class="k">allocatable</span><span class="kd">::</span> <span class="n">alph</span><span class="p">(:,:)</span> <span class="c">!&lt; \(\alpha\) Butcher&#39;s coefficients.</span>
-  <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">),</span> <span class="k">allocatable</span><span class="kd">::</span> <span class="n">beta</span><span class="p">(:)</span>   <span class="c">!&lt; \(\beta\) Butcher&#39;s coefficients.</span>
-  <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">),</span> <span class="k">allocatable</span><span class="kd">::</span> <span class="n">gamm</span><span class="p">(:)</span>   <span class="c">!&lt; \(\gamma\) Butcher&#39;s coefficients.</span>
+  <span class="kt">integer</span><span class="p">(</span><span class="n">I_P</span><span class="p">)</span>           <span class="kd">::</span> <span class="n">stages</span><span class="o">=</span><span class="mi">0</span>  <span class="c">!&lt; Number of stages.</span>
+  <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">),</span> <span class="k">allocatable</span> <span class="kd">::</span> <span class="n">alph</span><span class="p">(:,:)</span> <span class="c">!&lt; \(\alpha\) Butcher&#39;s coefficients.</span>
+  <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">),</span> <span class="k">allocatable</span> <span class="kd">::</span> <span class="n">beta</span><span class="p">(:)</span>   <span class="c">!&lt; \(\beta\) Butcher&#39;s coefficients.</span>
+  <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">),</span> <span class="k">allocatable</span> <span class="kd">::</span> <span class="n">gamm</span><span class="p">(:)</span>   <span class="c">!&lt; \(\gamma\) Butcher&#39;s coefficients.</span>
   <span class="k">contains</span>
 <span class="k">    procedure</span><span class="p">,</span> <span class="k">pass</span><span class="p">(</span><span class="n">self</span><span class="p">),</span> <span class="k">public</span> <span class="kd">::</span> <span class="n">destroy</span>   <span class="c">!&lt; Destroy the integrator.</span>
     <span class="k">procedure</span><span class="p">,</span> <span class="k">pass</span><span class="p">(</span><span class="n">self</span><span class="p">),</span> <span class="k">public</span> <span class="kd">::</span> <span class="n">init</span>      <span class="c">!&lt; Initialize (create) the integrator.</span>

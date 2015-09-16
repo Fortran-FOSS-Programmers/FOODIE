@@ -586,7 +586,10 @@ contains
   real(R_P)                             :: Pm(1:self%Np, 1:2)                              !< Mean of primitive variables.
   real(R_P)                             :: LPm(1:self%Ns+2, 1:self%Ns+2, 1:2)              !< Mean left eigenvectors matrix.
   real(R_P)                             :: RPm(1:self%Ns+2, 1:self%Ns+2, 1:2)              !< Mean right eigenvectors matrix.
-  integer(I_P)                          :: i, j, f, v                                      !< Counters.
+  integer(I_P)                          :: i                                               !< Counter.
+  integer(I_P)                          :: j                                               !< Counter.
+  integer(I_P)                          :: f                                               !< Counter.
+  integer(I_P)                          :: v                                               !< Counter.
   !--------------------------------------------------------------------------------------------------------------------------------
 
   !--------------------------------------------------------------------------------------------------------------------------------
@@ -646,7 +649,8 @@ contains
     real(R_P)                :: L(1:Ns+2,1:Ns+2) !< Left eigenvectors matrix.
     real(R_P)                :: gp               !< g*p.
     real(R_P)                :: gp_a             !< g*p/a.
-    integer(I_P)             :: i, s             !< Counters.
+    integer(I_P)             :: i                !< Counter.
+    integer(I_P)             :: s                !< Counter.
     !-------------------------------------------------------------------------------------------------------------------------------
 
     !-------------------------------------------------------------------------------------------------------------------------------
@@ -673,7 +677,8 @@ contains
     real(R_P)                :: gp               !< g*p.
     real(R_P)                :: ss               !< Speed of sound, sqrt(g*p/r).
     real(R_P)                :: gp_inv           !< 1/(g*p).
-    integer(I_P)             :: i, s             !< Counters.
+    integer(I_P)             :: i                !< Counter.
+    integer(I_P)             :: s                !< Counter.
     !-------------------------------------------------------------------------------------------------------------------------------
 
     !-------------------------------------------------------------------------------------------------------------------------------

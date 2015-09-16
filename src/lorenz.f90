@@ -8,7 +8,7 @@ program integrate_lorenz
 use IR_Precision, only : R_P, I_P, FR_P, str
 use type_lorenz, only : lorenz
 use Data_Type_Command_Line_Interface, only : Type_Command_Line_Interface
-use foodie, only : euler_explicit_integrator, tvd_runge_kutta_integrator, adams_bashforth_integrator
+use foodie, only : adams_bashforth_integrator, euler_explicit_integrator, ls_runge_kutta_integrator, tvd_runge_kutta_integrator
 use pyplot_module, only :  pyplot
 !-----------------------------------------------------------------------------------------------------------------------------------
 
@@ -54,19 +54,23 @@ call cli%get(switch='-p', val=plots, error=error) ; if (error/=0) stop
 select case(trim(adjustl(solver)))
 case('euler')
   call test_euler()
-case('runge-kutta')
-  call test_rk()
+case('tvd-runge-kutta')
+  call test_tvd_rk()
+case('ls-runge-kutta')
+  call test_ls_rk()
 case('adams-bashforth')
   call test_ab()
 case('all')
   call test_euler()
-  call test_rk()
+  call test_tvd_rk()
+  call test_ls_rk()
   call test_ab()
 case default
   print "(A)", 'Error: unknown solver "'//trim(adjustl(solver))//'"'
   print "(A)", 'Valid solver names are:'
   print "(A)", '  + euler'
-  print "(A)", '  + runge-kutta'
+  print "(A)", '  + tvd-runge-kutta'
+  print "(A)", '  + ls-runge-kutta'
   print "(A)", '  + adams-bashforth'
   print "(A)", '  + all'
 endselect
@@ -122,11 +126,9 @@ contains
 
   !---------------------------------------------------------------------------------------------------------------------------------
   print "(A)", 'Integrating Lorenz equations by means of explicit Euler solver'
-  ! initialize field
   call attractor%init(initial_state=initial_state, sigma=sigma, rho=rho, beta=beta)
   solution(0, 0) = 0._R_P
   solution(1:space_dimension, 0) = attractor%output()
-  ! integrate field
   do step = 1, num_steps
     call euler_integrator%integrate(field=attractor, dt=dt)
     solution(0, step) = step * dt
@@ -139,7 +141,7 @@ contains
   !---------------------------------------------------------------------------------------------------------------------------------
   endsubroutine test_euler
 
-  subroutine test_rk()
+  subroutine test_tvd_rk()
   !---------------------------------------------------------------------------------------------------------------------------------
   !< Test explicit TVD/SSP Runge-Kutta class of ODE solvers.
   !---------------------------------------------------------------------------------------------------------------------------------
@@ -155,25 +157,58 @@ contains
   do s=1, rk_stages
     if (s==4) cycle ! 4 stages not yet implemented
     print "(A)", ' RK-'//trim(str(.true.,s))
-    ! initialize the RK integrator accordingly to the number of stages used
-    rk_integrator = tvd_runge_kutta_integrator(stages=s)
-    ! initialize field
+    call rk_integrator%init(stages=s)
     call attractor%init(initial_state=initial_state, sigma=sigma, rho=rho, beta=beta)
     solution(0, 0) = 0._R_P
     solution(1:space_dimension, 0) = attractor%output()
-    ! integrate field
     do step = 1, num_steps
       call rk_integrator%integrate(field=attractor, stage=rk_stage(1:s), dt=dt)
       solution(0, step) = step * dt
       solution(1:space_dimension, step) = attractor%output()
     enddo
-    call save_results(title='FOODiE test: Lorenz equation integration, explicit Runge-Kutta '//trim(str(.true., s))//' stages', &
-                      filename='lorenz_integration-rk-'//trim(str(.true., s)))
+    call save_results(title='FOODiE test: Lorenz equation integration, explicit TVD Runge-Kutta '//trim(str(.true., s))//' stages',&
+                      filename='lorenz_integration-tvdrk-'//trim(str(.true., s)))
   enddo
   print "(A)", 'Finish!'
   return
   !---------------------------------------------------------------------------------------------------------------------------------
-  endsubroutine test_rk
+  endsubroutine test_tvd_rk
+
+  subroutine test_ls_rk()
+  !---------------------------------------------------------------------------------------------------------------------------------
+  !< Test explicit low storage Runge-Kutta class of ODE solvers.
+  !---------------------------------------------------------------------------------------------------------------------------------
+  type(ls_runge_kutta_integrator) :: rk_integrator         !< Runge-Kutta integrator.
+  integer, parameter              :: rk_stages=5           !< Runge-Kutta stages number.
+  integer, parameter              :: registers=2           !< Runge-Kutta stages number.
+  type(lorenz)                    :: rk_stage(1:registers) !< Runge-Kutta stages.
+  integer(I_P)                    :: s                     !< RK stages counter.
+  integer(I_P)                    :: step                  !< Time steps counter.
+  !---------------------------------------------------------------------------------------------------------------------------------
+
+  !---------------------------------------------------------------------------------------------------------------------------------
+  print "(A)", 'Integrating Lorenz equations by means of low storage (2N) Runge-Kutta class of solvers'
+  do s=1, rk_stages
+    if (s==2) cycle ! 2 stages not yet implemented
+    if (s==3) cycle ! 3 stages not yet implemented
+    if (s==4) cycle ! 4 stages not yet implemented
+    print "(A)", ' RK-'//trim(str(.true.,s))
+    call rk_integrator%init(stages=s)
+    call attractor%init(initial_state=initial_state, sigma=sigma, rho=rho, beta=beta)
+    solution(0, 0) = 0._R_P
+    solution(1:space_dimension, 0) = attractor%output()
+    do step = 1, num_steps
+      call rk_integrator%integrate(field=attractor, stage=rk_stage, dt=dt)
+      solution(0, step) = step * dt
+      solution(1:space_dimension, step) = attractor%output()
+    enddo
+    call save_results(title='FOODiE test: Lorenz equation integration, explicit low storage Runge-Kutta '//trim(str(.true., s))//&
+                      ' stages', filename='lorenz_integration-lsrk-'//trim(str(.true., s)))
+  enddo
+  print "(A)", 'Finish!'
+  return
+  !---------------------------------------------------------------------------------------------------------------------------------
+  endsubroutine test_ls_rk
 
   subroutine test_ab()
   !---------------------------------------------------------------------------------------------------------------------------------
@@ -192,15 +227,11 @@ contains
   print "(A)", 'Integrating Lorenz equations by means of Adams-Bashforth class of solvers'
   do s=1, ab_steps
     print "(A)", ' AB-'//trim(str(.true.,s))
-    ! initialize the AB integrator accordingly to the number of time steps used
     call ab_integrator%init(steps=s)
-    ! initialize the RK integrator used for initial steps of AB integration
-    rk_integrator = tvd_runge_kutta_integrator(stages=s)
-    ! initialize field
+    call rk_integrator%init(stages=s)
     call attractor%init(initial_state=initial_state, sigma=sigma, rho=rho, beta=beta, steps=s)
     solution(0, 0) = 0._R_P
     solution(1:space_dimension, 0) = attractor%output()
-    ! integrate field
     do step = 1, num_steps
       if (s>step) then
         ! the time steps from 1 to s - 1 must be computed with other scheme...

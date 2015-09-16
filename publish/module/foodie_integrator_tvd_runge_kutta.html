@@ -129,16 +129,6 @@
   
   
   
-  <div class="panel panel-primary">
-    <div class="panel-heading text-left"><h3 class="panel-title">Interfaces</h3></div>
-    <div class="list-group">
-      
-      <a class="list-group-item" href="../module/foodie_integrator_tvd_runge_kutta.html#interface-tvd_runge_kutta_integrator">tvd_runge_kutta_integrator</a>
-      
-    </div>
-  </div>
-  
-  
   
   
   <div class="panel panel-primary">
@@ -152,28 +142,18 @@
   
   
   
-  <div class="panel panel-primary">
-    <div class="panel-heading text-left"><h3 class="panel-title">Functions</h3></div>
-    <div class="list-group">
-      
-      <a class="list-group-item" href="../module/foodie_integrator_tvd_runge_kutta.html#proc-create">create</a>
-      
-    </div>
-  </div>
-  
-  
   
   <div class="panel panel-primary">
     <div class="panel-heading text-left"><h3 class="panel-title">Subroutines</h3></div>
     <div class="list-group">
       
-      <a class="list-group-item" href="../module/foodie_integrator_tvd_runge_kutta.html#proc-init%7E2">init</a>
+      <a class="list-group-item" href="../module/foodie_integrator_tvd_runge_kutta.html#proc-init%7E3">init</a>
       
-      <a class="list-group-item" href="../module/foodie_integrator_tvd_runge_kutta.html#proc-destroy%7E2">destroy</a>
+      <a class="list-group-item" href="../module/foodie_integrator_tvd_runge_kutta.html#proc-destroy%7E3">destroy</a>
       
-      <a class="list-group-item" href="../module/foodie_integrator_tvd_runge_kutta.html#proc-integrate%7E3">integrate</a>
+      <a class="list-group-item" href="../module/foodie_integrator_tvd_runge_kutta.html#proc-integrate%7E4">integrate</a>
       
-      <a class="list-group-item" href="../module/foodie_integrator_tvd_runge_kutta.html#proc-finalize%7E2">finalize</a>
+      <a class="list-group-item" href="../module/foodie_integrator_tvd_runge_kutta.html#proc-finalize%7E3">finalize</a>
       
     </div>
   </div>
@@ -196,6 +176,8 @@
       <a class="list-group-item" href="../module/foodie_integrator_adams_bashforth.html">foodie_integrator_adams_bashforth</a>
       
       <a class="list-group-item" href="../module/foodie_integrator_euler_explicit.html">foodie_integrator_euler_explicit</a>
+      
+      <a class="list-group-item" href="../module/foodie_integrator_low_storage_runge_kutta.html">foodie_integrator_low_storage_runge_kutta</a>
       
       <a class="list-group-item" href="../module/foodie_integrator_tvd_runge_kutta.html">foodie_integrator_tvd_runge_kutta</a>
       
@@ -328,8 +310,7 @@ implementation in a submodule of an interface in a parent module.</p>
     
     <p>FOODiE integrator: provide an explicit class of TVD or SSP Runge-Kutta schemes, from 1st to 4th order accutate.</p>
 <p>The class of integrators provided have the Total Variation Diminishing (TVD) property or the Strong Stability Preserving (SSP)
- one. The schemes are explicit and defined through the Butcher's table syntax (see Butcher, J.C., <em>Coefficients for the study of
- Runge-Kutta integration processes</em>, J. Austral. Math. Soc., Vol. 3, pages: 185&ndash;201, 1963).</p>
+ one. The schemes are explicit and defined through the Butcher's table syntax, see[1] .</p>
 <p>Considering the following ODE system:</p>
 <p>$$ U_t = R(t,U) $$</p>
 <p>where \(U_t = \frac{dU}{dt}\), <em>U</em> is the vector of <em>state</em> variables being a function of the time-like independent variable
@@ -446,23 +427,17 @@ implementation in a submodule of an interface in a parent module.</p>
  $$\alpha = \left[ {\begin{array}{*{20}{c}} 0&amp;0 \end{array}} \right]$$
  $$\gamma = \left[0\right]$$</p>
 <h5 id="2-stages-ssp-2nd-order"><a class="toclink" href="#2-stages-ssp-2nd-order">2 stages, SSP, 2nd order</a></h5>
-<p>This scheme is an optmial SSP(2, 2) without low-storage algorithm. See <em>High Order Strong Stability Preserving Time
- Discretizations</em>, Gottlieb, S., Ketcheson, D. I., Shu, C.W., Journal of Scientific Computing, vol. 38, N. 3, 2009,
- pp. 251-289.
+<p>This scheme is an optmial SSP(2, 2) without low-storage algorithm, see [2].
  $$\beta = \left[ {\begin{array}{*{20}{c}} \frac{1}{2}&amp;\frac{1}{2} \end{array}} \right]$$
  $$\alpha = \left[ {\begin{array}{*{20}{c}} 0&amp;0\\ 1&amp;0 \end{array}} \right]$$
  $$\gamma = \left[ {\begin{array}{*{20}{c}} 0 \\ 1 \end{array}} \right]$$</p>
 <h5 id="3-stages-ssp-3rd-order"><a class="toclink" href="#3-stages-ssp-3rd-order">3 stages, SSP, 3rd order</a></h5>
-<p>This scheme is an optmial SSP(3, 3) without low-storage algorithm. See <em>High Order Strong Stability Preserving Time
- Discretizations</em>, Gottlieb, S., Ketcheson, D. I., Shu, C.W., Journal of Scientific Computing, vol. 38, N. 3, 2009,
- pp. 251-289.
+<p>This scheme is an optmial SSP(3, 3) without low-storage algorithm, see [2].
  $$\beta = \left[ {\begin{array}{*{20}{c}} \frac{1}{6}&amp;\frac{1}{6}&amp;\frac{1}{3}  \end{array}} \right]$$
  $$\alpha = \left[ {\begin{array}{*{20}{c}} 0&amp;0&amp;0\\ 1&amp;0&amp;0\\ \frac{1}{4}&amp;\frac{1}{4}&amp;0 \end{array}} \right]$$
  $$\gamma = \left[ {\begin{array}{*{20}{c}} 0 \\ 1 \\ \frac{1}{2} \end{array}} \right]$$</p>
 <h5 id="5-stages-ssp-4th-order"><a class="toclink" href="#5-stages-ssp-4th-order">5 stages, SSP, 4th order</a></h5>
-<p>This scheme is an optmial SSP(5, 4) without low-storage algorithm. See <em>High Order Strong Stability Preserving Time
- Discretizations</em>, Gottlieb, S., Ketcheson, D. I., Shu, C.W., Journal of Scientific Computing, vol. 38, N. 3, 2009,
- pp. 251-289.
+<p>This scheme is an optmial SSP(5, 4) without low-storage algorithm, see [2].
  $$\beta = \left[ {\begin{array}{*{20}{c}} 0.14681187618661&amp;0.24848290924556&amp;0.10425883036650&amp;0.27443890091960&amp;
  0.22600748319395 \end{array}} \right]$$
  $$\alpha = \left[ {\begin{array}{*{20}{c}}
@@ -471,21 +446,26 @@ implementation in a submodule of an interface in a parent module.</p>
  \end{array}} \right]$$
  $$\gamma = \left[ {\begin{array}{*{20}{c}} 0\\0.39175222700392\\0.58607968896780\\0.47454236302687\\0.93501063100924
            \end{array}} \right]$$</p>
+<h4 id="bibliography"><a class="toclink" href="#bibliography">Bibliography</a></h4>
+<p>[1] <em>Coefficients for the study of !&lt; Runge-Kutta integration processes</em>, Butcher, J.C., J. Austral. Math. Soc., Vol. 3,
+ pages: 185&ndash;201, 1963.</p>
+<p>[2] <em>High Order Strong Stability Preserving Time Discretizations</em>, Gottlieb, S., Ketcheson, D. I., Shu, C.W., Journal of
+ Scientific Computing, vol. 38, N. 3, 2009, pp. 251-289.</p>
     
     
     <h3>Used By</h3>
     
             <img class="depgraph" alt="dependency graph" src=../graphs/module%7E%7Efoodie_integrator_tvd_runge_kutta%7E%7EUsedByGraph.svg usemap="#module~~foodie_integrator_tvd_runge_kutta~~UsedByGraph">
             <map id="module~~foodie_integrator_tvd_runge_kutta~~UsedByGraph" name="module~~foodie_integrator_tvd_runge_kutta~~UsedByGraph">
-<area shape="rect" id="node2" href="../module/foodie.html" title="foodie" alt="" coords="291,169,363,204"/>
-<area shape="rect" id="node3" href="../module/type_burgers.html" title="type_burgers" alt="" coords="417,5,519,40"/>
-<area shape="rect" id="node4" href="../module/type_oscillation.html" title="type_oscillation" alt="" coords="412,115,524,149"/>
-<area shape="rect" id="node5" href="../program/integrate_lorenz.html" title="integrate_lorenz" alt="" coords="585,224,705,259"/>
-<area shape="rect" id="node6" href="../program/integrate_burgers.html" title="integrate_burgers" alt="" coords="581,33,709,68"/>
-<area shape="rect" id="node7" href="../module/type_euler_1d.html" title="type_euler_1D" alt="" coords="413,283,523,317"/>
-<area shape="rect" id="node8" href="../program/integrate_oscillation.html" title="integrate_oscillation" alt="" coords="575,165,716,200"/>
-<area shape="rect" id="node9" href="../module/type_lorenz.html" title="type_lorenz" alt="" coords="423,224,513,259"/>
-<area shape="rect" id="node10" href="../program/integrate_euler_1d.html" title="integrate_euler_1D" alt="" coords="576,309,715,344"/>
+<area shape="rect" id="node2" href="../module/foodie.html" title="foodie" alt="" coords="291,153,363,188"/>
+<area shape="rect" id="node3" href="../program/integrate_euler_1d.html" title="integrate_euler_1D" alt="" coords="576,13,715,48"/>
+<area shape="rect" id="node4" href="../module/type_lorenz.html" title="type_lorenz" alt="" coords="423,99,513,133"/>
+<area shape="rect" id="node5" href="../program/integrate_lorenz.html" title="integrate_lorenz" alt="" coords="585,149,705,184"/>
+<area shape="rect" id="node6" href="../program/integrate_oscillation.html" title="integrate_oscillation" alt="" coords="575,208,716,243"/>
+<area shape="rect" id="node7" href="../module/type_oscillation.html" title="type_oscillation" alt="" coords="412,208,524,243"/>
+<area shape="rect" id="node8" href="../program/integrate_burgers.html" title="integrate_burgers" alt="" coords="581,292,709,327"/>
+<area shape="rect" id="node9" href="../module/type_burgers.html" title="type_burgers" alt="" coords="417,317,519,352"/>
+<area shape="rect" id="node10" href="../module/type_euler_1d.html" title="type_euler_1D" alt="" coords="413,40,523,75"/>
 </map>
 
             <div><a type="button" class="graph-help" data-toggle="modal" href="#graph-help-text">Help</a></div>
@@ -584,97 +564,6 @@ implementation in a submodule of an interface in a parent module.</p>
     
     
     
-    <section>
-	 <h2>Interfaces</h2>
-	 
-	   
-<div class="panel panel-default">
-  <div class="panel-heading codesum"><span class="anchor" id="interface-tvd_runge_kutta_integrator"></span><h3>public interface <a href='../interface/tvd_runge_kutta_integrator.html'>tvd_runge_kutta_integrator</a>
-    
-  </h3></div>
-  
-  <div class="panel-body">
-    
-    <p>Overload tvd_runge_kutta_integrator name with the constructor function <em>create</em>.</p>
-  </div>
-  
-  <ul class="list-group">
-  
-  
-  
-    <li class="list-group-item">
-    
-    
-    <h3>
-private elementalfunction <a href='../proc/create.html'>create</a>(stages) result(rk)
-    
-    
-    
-</h3>
-    
-    <h4>Arguments</h4>
-    
-      
-      
-<table class="table table-striped varlist">
-<thead><tr><th>Type</th>
-<th>Intent</th><th>Optional</th>
-<th>Attributes</th><th></th><th>Name</th><th></th></thead>
-
-
-
-<tbody>
-
-  
-  
-  
-  
-<tr>
-  
-  <td><span class="anchor" ></span>integer(kind=I_P),</td>
-  <td>intent(in)</td>
-  <td></td>
-  
-  <td></td><td>::</td>
-  <td><strong>stages</strong></td><td><p>Number of stages used.</p></td>
-  
-</tr>
-
-</tbody>
-</table>
-
-      
-    
-    
-
-  
-  
-  
-  
-     <h4>Return Value <small>type(<a href='../type/tvd_runge_kutta_integrator.html'>tvd_runge_kutta_integrator</a>)
-  </small></h4>
-  <p>Actual RK integrator.</p>
-    
-    
-    <h4>Description</h4>
-       
-       
-
-
-       
-       <p>Create the actual RK integrator: initialize the Butcher' table coefficients.</p>
-        
-
-    </li>
-  
-  
-  </ul>
-</div>
-
-    
-    </section>
-	<br>
-    
 
     
     
@@ -699,6 +588,20 @@ private elementalfunction <a href='../proc/create.html'>create</a>(stages) resul
 
 
 <tbody>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-stages%7E2"></span>integer(kind=I_P),</td>
+  
+  <td>public</td>
+  <td></td><td>::</td>
+  <td><strong>stages</strong></td><td> =</td><td>0</td><td><p>Number of stages.</p></td>
+  
+</tr>
 
   
   
@@ -747,22 +650,6 @@ private elementalfunction <a href='../proc/create.html'>create</a>(stages) resul
 
      
      
-     <h4>Constructor</h4>
-       
-         <p>Overload tvd_runge_kutta_integrator name with the constructor function <em>create</em>.</p>
-       
-       <table class="table table-striped varlist">
-      <tbody>
-        
-             
-             
-             
-             <tr><td>private elemental function <strong><a href='../proc/create.html'>create</a></strong>(stages)</td><td><p>Create the actual RK integrator: initialize the Butcher' table coefficients.</p></td></tr>
-             
-        
-       </tbody>
-       </table>
-     
      
      <h4>Finalizations Procedures</h4>
       <table class="table table-striped varlist">
@@ -803,80 +690,6 @@ private elementalfunction <a href='../proc/create.html'>create</a>(stages) resul
 	<br>
     
     
-     
-    <section>
-    <h2>Functions</h2>
-    
-    
-  <div class="panel panel-default">
-  <div class="panel-heading codesum"><span class="anchor" id="proc-create"></span><h3>
-private elementalfunction <a href='../proc/create.html'>create</a>(stages) result(rk)
-    
-    
-    
-</h3></div>
-  <div class="panel-body">
-       
-    
-    <h4>Arguments</h4>
-    
-      
-      
-<table class="table table-striped varlist">
-<thead><tr><th>Type</th>
-<th>Intent</th><th>Optional</th>
-<th>Attributes</th><th></th><th>Name</th><th></th></thead>
-
-
-
-<tbody>
-
-  
-  
-  
-  
-<tr>
-  
-  <td><span class="anchor" ></span>integer(kind=I_P),</td>
-  <td>intent(in)</td>
-  <td></td>
-  
-  <td></td><td>::</td>
-  <td><strong>stages</strong></td><td><p>Number of stages used.</p></td>
-  
-</tr>
-
-</tbody>
-</table>
-
-      
-    
-    
-
-  
-  
-  
-  
-     <h4>Return Value <small>type(<a href='../type/tvd_runge_kutta_integrator.html'>tvd_runge_kutta_integrator</a>)
-  </small></h4>
-  <p>Actual RK integrator.</p>
-    
-    
-    <h4>Description</h4>
-       
-       
-
-
-       
-       <p>Create the actual RK integrator: initialize the Butcher' table coefficients.</p>
-        
-
-  </div>
-  </div>
-
-    
-    </section>
-    <br>
     
 
     
@@ -885,8 +698,8 @@ private elementalfunction <a href='../proc/create.html'>create</a>(stages) resul
     
     
   <div class="panel panel-default">
-  <div class="panel-heading codesum"><span class="anchor" id="proc-init%7E2"></span><h3>
-private elementalsubroutine <a href='../proc/init%7E2.html'>init</a>(self, stages)
+  <div class="panel-heading codesum"><span class="anchor" id="proc-init%7E3"></span><h3>
+private elementalsubroutine <a href='../proc/init%7E3.html'>init</a>(self, stages)
     
     
     
@@ -959,8 +772,8 @@ private elementalsubroutine <a href='../proc/init%7E2.html'>init</a>(self, stage
     
     
   <div class="panel panel-default">
-  <div class="panel-heading codesum"><span class="anchor" id="proc-destroy%7E2"></span><h3>
-private elementalsubroutine <a href='../proc/destroy%7E2.html'>destroy</a>(self)
+  <div class="panel-heading codesum"><span class="anchor" id="proc-destroy%7E3"></span><h3>
+private elementalsubroutine <a href='../proc/destroy%7E3.html'>destroy</a>(self)
     
     
     
@@ -1018,8 +831,8 @@ private elementalsubroutine <a href='../proc/destroy%7E2.html'>destroy</a>(self)
     
     
   <div class="panel panel-default">
-  <div class="panel-heading codesum"><span class="anchor" id="proc-integrate%7E3"></span><h3>
-private subroutine <a href='../proc/integrate%7E3.html'>integrate</a>(self, field, stage, Dt)
+  <div class="panel-heading codesum"><span class="anchor" id="proc-integrate%7E4"></span><h3>
+private subroutine <a href='../proc/integrate%7E4.html'>integrate</a>(self, field, stage, Dt)
     
     
     
@@ -1122,8 +935,8 @@ private subroutine <a href='../proc/integrate%7E3.html'>integrate</a>(self, fiel
     
     
   <div class="panel panel-default">
-  <div class="panel-heading codesum"><span class="anchor" id="proc-finalize%7E2"></span><h3>
-private elementalsubroutine <a href='../proc/finalize%7E2.html'>finalize</a>(self)
+  <div class="panel-heading codesum"><span class="anchor" id="proc-finalize%7E3"></span><h3>
+private elementalsubroutine <a href='../proc/finalize%7E3.html'>finalize</a>(self)
     
     
     
