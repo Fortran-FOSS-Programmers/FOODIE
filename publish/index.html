@@ -142,14 +142,35 @@
 <ul class="checklist">
 <li><input type="checkbox" disabled checked> Pure Fortran implementation;</li>
 <li><input type="checkbox" disabled checked> KISS and user-friendly:<ul class="checklist">
-<li><input type="checkbox" disabled checked> simple API, presently based on the Rouson's Abstract Data Type Pattern [1];</li>
+<li><input type="checkbox" disabled checked> simple API, presently based on the Rouson's Abstract Data Type Pattern [8];</li>
 <li><input type="checkbox" disabled> easy building and porting on heterogeneous architectures;</li>
 </ul>
 </li>
-<li><input type="checkbox" disabled> comprehensive:<ul class="checklist">
-<li><input type="checkbox" disabled checked> explicit Euler scheme, 1st order accurate;</li>
-<li><input type="checkbox" disabled> explicit Runge-Kutta schemes:<ul class="checklist">
-<li><input type="checkbox" disabled> TVD or SSP schemes, see [2]:<ul class="checklist">
+<li><input type="checkbox" disabled> comprehensive solvers set out-of-the-box:<ul class="checklist">
+<li><input type="checkbox" disabled checked> explicit schemes:<ul class="checklist">
+<li><input type="checkbox" disabled checked> <a href="http://fortran-foss-programmers.github.io/FOODiE/module/foodie_integrator_adams_bashforth.html">Adams-Bashforth</a> schemes see [7]:<ul class="checklist">
+<li><input type="checkbox" disabled checked> 1 step, namely the forward explicit Euler scheme, 1st order accurate;</li>
+<li><input type="checkbox" disabled checked> 2 steps, 2nd accurate;</li>
+<li><input type="checkbox" disabled checked> 3 steps, 3rd accurate;</li>
+</ul>
+</li>
+<li><input type="checkbox" disabled checked> <a href="http://fortran-foss-programmers.github.io/FOODiE/module/foodie_integrator_euler_explicit.html">Euler</a> scheme, 1st order accurate;</li>
+<li><input type="checkbox" disabled checked> <a href="http://fortran-foss-programmers.github.io/FOODiE/module/foodie_integrator_leapfrog.html">Leapfrog</a>, 2nd order accurate:<ul class="checklist">
+<li><input type="checkbox" disabled checked> unfiltered leapfrog, 2nd order accurate, mostly unstable, see [4];</li>
+<li><input type="checkbox" disabled checked> Robert-Asselin filtered leapfrog, 1st order accurate, see [4, 5, 6];</li>
+<li><input type="checkbox" disabled checked> Robert-Asselin-Williams filtered leapfrog, 3rd order accurate, see [5, 6];</li>
+</ul>
+</li>
+<li><input type="checkbox" disabled> Runge-Kutta schemes:<ul class="checklist">
+<li><input type="checkbox" disabled> <a href="http://fortran-foss-programmers.github.io/FOODiE/module/foodie_integrator_low_storage_runge_kutta.html">low-storage</a> schemes, see [1, 2, 3]:<ul class="checklist">
+<li><input type="checkbox" disabled checked> 1 stage, namely the forward explicit Euler scheme, 1st order accurate;</li>
+<li><input type="checkbox" disabled> 2 stages;</li>
+<li><input type="checkbox" disabled> 3 stages;</li>
+<li><input type="checkbox" disabled> 4 stages;</li>
+<li><input type="checkbox" disabled checked> 5 stages, 4th order accurate, 2N registers, see [3];</li>
+</ul>
+</li>
+<li><input type="checkbox" disabled> <a href="http://fortran-foss-programmers.github.io/FOODiE/module/foodie_integrator_tvd_runge_kutta.html">TVD/SSP</a> schemes, see [1]:<ul class="checklist">
 <li><input type="checkbox" disabled checked> 1 stage, namely the forward explicit Euler scheme, 1st order accurate;</li>
 <li><input type="checkbox" disabled checked> 2 stages, 2nd order accurate;</li>
 <li><input type="checkbox" disabled checked> 3 stages, 3rd order accurate;</li>
@@ -159,14 +180,12 @@
 </li>
 </ul>
 </li>
-<li><input type="checkbox" disabled> implicit Runge-Kutta schemes;</li>
-<li><input type="checkbox" disabled> low-storage explicit schemes, see [2,3,3];</li>
-<li><input type="checkbox" disabled> Leapfrog, 2nd order accurate:<ul class="checklist">
-<li><input type="checkbox" disabled> Robert-Asselin filter, for stability and leapfrog, 1st order accurate;</li>
-<li><input type="checkbox" disabled> Robert-Asselin-Williams filter, for stability and leapfrog, 3rd order accurate;</li>
 </ul>
 </li>
-<li><input type="checkbox" disabled checked> Adams-Bashforth variants of 2nd and 3rd order accurate;</li>
+<li><input type="checkbox" disabled> implicit schemes:<ul class="checklist">
+<li><input type="checkbox" disabled> Runge-Kutta schemes;</li>
+</ul>
+</li>
 </ul>
 </li>
 <li><input type="checkbox" disabled> efficient:<ul class="checklist">
@@ -178,26 +197,30 @@
 </li>
 </ul>
 </li>
-<li><input type="checkbox" disabled checked> Tests-Driven Developed (TDD):</li>
+<li><input type="checkbox" disabled checked> <a href="https://github.com/Fortran-FOSS-Programmers/FOODiE/wiki/Examples">Tests-Driven</a> Developed (<a href="https://en.wikipedia.org/wiki/Test-driven_development">TDD</a>):</li>
 <li><input type="checkbox" disabled checked> well documented:<ul class="checklist">
-<li><input type="checkbox" disabled checked> clear documentation of schemes implementations;</li>
-<li><input type="checkbox" disabled checked> complete API reference;</li>
-<li><input type="checkbox" disabled checked> comprehensive wiki:</li>
+<li><input type="checkbox" disabled checked> clear documentation of schemes implementations, e.g. see <a href="http://fortran-foss-programmers.github.io/FOODiE/module/foodie_integrator_adams_bashforth.html">Adams-Bashforth API documentation</a>;</li>
+<li><input type="checkbox" disabled checked> complete <a href="http://fortran-foss-programmers.github.io/FOODiE/index.html">API</a> reference;</li>
+<li><input type="checkbox" disabled checked> comprehensive <a href="https://github.com/Fortran-FOSS-Programmers/FOODiE/wiki">wiki</a>:</li>
 </ul>
 </li>
-<li><input type="checkbox" disabled checked> collaborative developed;</li>
-<li><input type="checkbox" disabled checked> FOSS licensed;</li>
+<li><input type="checkbox" disabled checked> collaborative developed on <a href="https://github.com/Fortran-FOSS-Programmers/FOODiE">GitHub</a>;</li>
+<li><input type="checkbox" disabled checked> <a href="https://github.com/Fortran-FOSS-Programmers/FOODiE/wiki/Copyrights">FOSS licensed</a>;</li>
 </ul>
 <p>Any feature request is welcome.</p>
 <h4 id="bibliography"><a class="toclink" href="#bibliography">Bibliography</a></h4>
-<p>[1] <em>Scientific Software Design: The Object-Oriented Way</em>, Rouson, Damian and Xia, Jim and Xu, Xiaofeng, 2011, ISBN 9780521888134, Cambridge University Press, New York, NY, USA.</p>
-<p>[2] <em>High Order Strong Stability Preserving Time Discretizations</em>, Gottlieb, S., Ketcheson, D. I., Shu, C.W., Journal of Scientific Computing, vol. 38, N. 3, 2009, pp. 251-289.</p>
-<p>[3] <em>Low-Storage Runge-Kutta Schemes</em>, J. H. Williamson, Journal of Computational Physics, vol. 35, 1980, pp. 48&ndash;56.</p>
-<p>[4] <em>Fourth-Order 2N-Storage Runge-Kutta Schemes</em>, Mark H. Carpenter, Christopher A. Kennedy, NASA Technical Memorandum 109112, June 1994.</p>
+<p>[1] <em>High Order Strong Stability Preserving Time Discretizations</em>, Gottlieb, S., Ketcheson, D. I., Shu, C.W., Journal of Scientific Computing, vol. 38, N. 3, 2009, pp. 251&ndash;289.</p>
+<p>[2] <em>Low-Storage Runge-Kutta Schemes</em>, J. H. Williamson, Journal of Computational Physics, vol. 35, 1980, pp. 48&ndash;56.</p>
+<p>[3] <em>Fourth-Order 2N-Storage Runge-Kutta Schemes</em>, Mark H. Carpenter, Christopher A. Kennedy, NASA Technical Memorandum 109112, June 1994.</p>
+<p>[4] <em>Numerical methods used in atmospheric models</em>, Mesinger F. and A. Arakawa, Global Atmospheric Research Programme (GARP), <a href="http://twister.ou.edu/CFD2003/Mesinger_ArakawaGARP.pdf">Technical Report</a>, 1976.</p>
+<p>[5] <em>A Proposed Modification to the Robert-Asselin Time Filter</em>, Williams, P. D., Mon. Wea. Rev., vol. 137, pp. 2538&ndash;2546, 2009, doi: http://dx.doi.org/10.1175/2009MWR2724.1.</p>
+<p>[6] <em>The RAW filter: An improvement to the Robert-Asselin filter in semi-implicit integrations</em>, Williams, P.D., Monthly Weather Review, vol. 139(6), pages 1996&ndash;2007, June 2011.</p>
+<p>[7] <em>Linear multistep method</em>, <a href="https://en.wikipedia.org/wiki/Linear_multistep_method">wikipedia article</a>.</p>
+<p>[8] <em>Scientific Software Design: The Object-Oriented Way</em>, Rouson, Damian and Xia, Jim and Xu, Xiaofeng, 2011, ISBN 9780521888134, Cambridge University Press, New York, NY, USA.</p>
 <p>Go to <a href="#top">Top</a></p>
-<h2 id="status"><a class="toclink" href="#status">Status</a></h2>
-<p>FOODiE project is young, but developed with love. A bunch of integrators have been implemented using the Rouson's Abstract Data Type Pattern and test with complex problems, but the library API is not stable. Nevertheless, FOODiE is already proven to be able to integrate a wide range of different ODE problems, from pure ODEs (Lorenz and inertial oscillations equations) to complex PDEs (Burgers and Euler equations), see the documentation.</p>
-<p>We are searching for Fortraners enthusiast joining our team.</p>
+<h2 id="status"><a class="toclink" href="#status">Status <a href=""><img alt="Status" src="https://img.shields.io/badge/status-beta-orange.svg"></a></a></h2>
+<p>FOODiE project is young, but developed with love. A bunch of integrators have been implemented using the Rouson's Abstract Data Type Pattern and tested with complex problems, but the library API is not yet stable. Nevertheless, FOODiE is already proven to be able to integrate a wide range of different ODE problems, from pure ODEs (Lorenz and inertial oscillations equations) to complex PDEs (Burgers and Euler equations), see the documentation.</p>
+<p>We are searching for Fortraners enthusiast joining our team!</p>
 <h2 id="copyrights"><a class="toclink" href="#copyrights">Copyrights</a></h2>
 <p>FOODiE is an open source project, it is distributed under a multi-licensing system:</p>
 <ul>

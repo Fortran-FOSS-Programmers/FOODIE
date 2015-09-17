@@ -4,23 +4,23 @@ digraph "proc~~a~~CalledByGraph" {
 	edge [fontname=Helvetica fontsize=9.5]
 		"proc~a" [label=a]
 		graph [concentrate=false]
-		"none~eigen_vect_r" [label=eigen_vect_R color="#d94e8f" fontcolor=white style=filled]
-		"proc~compute_dt~2" [label=compute_dt URL="../proc/compute_dt%7E2.html" color="#d94e8f" fontcolor=white style=filled]
 		"none~eigen_vect_l" [label=eigen_vect_L color="#d94e8f" fontcolor=white style=filled]
+		"proc~compute_dt~2" [label=compute_dt URL="../proc/compute_dt%7E2.html" color="#d94e8f" fontcolor=white style=filled]
+		"none~eigen_vect_r" [label=eigen_vect_R color="#d94e8f" fontcolor=white style=filled]
 		graph [concentrate=false]
 		"proc~reconstruct_interfaces_states" [label=reconstruct_interfaces_states URL="../proc/reconstruct_interfaces_states.html" color="#d9534f" fontcolor=white style=filled]
 		graph [concentrate=false]
 		graph [concentrate=false]
 		graph [concentrate=false]
-			"proc~reconstruct_interfaces_states" -> "none~eigen_vect_r"
-		graph [concentrate=false]
-		graph [concentrate=false]
-		graph [concentrate=false]
-		graph [concentrate=false]
 			"proc~reconstruct_interfaces_states" -> "none~eigen_vect_l"
 		graph [concentrate=false]
-			"none~eigen_vect_r" -> "proc~a"
-			"proc~compute_dt~2" -> "proc~a"
+		graph [concentrate=false]
+		graph [concentrate=false]
+		graph [concentrate=false]
+			"proc~reconstruct_interfaces_states" -> "none~eigen_vect_r"
+		graph [concentrate=false]
 			"none~eigen_vect_l" -> "proc~a"
+			"proc~compute_dt~2" -> "proc~a"
+			"none~eigen_vect_r" -> "proc~a"
 		graph [concentrate=false]
 }

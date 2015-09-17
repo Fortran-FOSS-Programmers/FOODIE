@@ -4,10 +4,10 @@ digraph "proc~~deuler_dt~~CallsGraph" {
 	edge [fontname=Helvetica fontsize=9.5]
 		"proc~deuler_dt" [label=dEuler_dt]
 		graph [concentrate=false]
-		"proc~p" [label=p URL="../proc/p.html" color="#d94e8f" fontcolor=white style=filled]
 		u [label=u color="#777777" fontcolor=white style=filled]
-		previous [label=previous color="#777777" fontcolor=white style=filled]
+		"proc~p" [label=p URL="../proc/p.html" color="#d94e8f" fontcolor=white style=filled]
 		f [label=f color="#777777" fontcolor=white style=filled]
+		previous [label=previous color="#777777" fontcolor=white style=filled]
 		pr [label=pr color="#777777" fontcolor=white style=filled]
 		graph [concentrate=false]
 		graph [concentrate=false]
@@ -20,10 +20,10 @@ digraph "proc~~deuler_dt~~CallsGraph" {
 		graph [concentrate=false]
 		graph [concentrate=false]
 		graph [concentrate=false]
-			"proc~deuler_dt" -> "proc~p"
 			"proc~deuler_dt" -> u
-			"proc~deuler_dt" -> previous
+			"proc~deuler_dt" -> "proc~p"
 			"proc~deuler_dt" -> f
+			"proc~deuler_dt" -> previous
 			"proc~deuler_dt" -> pr
 		graph [concentrate=false]
 }
