@@ -142,7 +142,7 @@
       
       <a class="list-group-item" href="../program/integrate_lorenz.html#variable-beta%7E4">beta</a>
       
-      <a class="list-group-item" href="../program/integrate_lorenz.html#variable-dt%7E14">dt</a>
+      <a class="list-group-item" href="../program/integrate_lorenz.html#variable-dt%7E17">dt</a>
       
       <a class="list-group-item" href="../program/integrate_lorenz.html#variable-initial_state%7E7">initial_state</a>
       
@@ -175,13 +175,15 @@
       
       <a class="list-group-item" href="../program/integrate_lorenz.html#proc-save_results%7E3">save_results</a>
       
+      <a class="list-group-item" href="../program/integrate_lorenz.html#proc-test_ab%7E3">test_ab</a>
+      
       <a class="list-group-item" href="../program/integrate_lorenz.html#proc-test_euler%7E3">test_euler</a>
       
-      <a class="list-group-item" href="../program/integrate_lorenz.html#proc-test_tvd_rk%7E3">test_tvd_rk</a>
+      <a class="list-group-item" href="../program/integrate_lorenz.html#proc-test_leapfrog%7E3">test_leapfrog</a>
       
       <a class="list-group-item" href="../program/integrate_lorenz.html#proc-test_ls_rk%7E3">test_ls_rk</a>
       
-      <a class="list-group-item" href="../program/integrate_lorenz.html#proc-test_ab%7E3">test_ab</a>
+      <a class="list-group-item" href="../program/integrate_lorenz.html#proc-test_tvd_rk%7E3">test_tvd_rk</a>
       
     </div>
   </div>
@@ -243,13 +245,14 @@
     
             <img class="depgraph" alt="dependency graph" src=../graphs/program%7E%7Eintegrate_lorenz%7E%7EUsesGraph.svg usemap="#program~~integrate_lorenz~~UsesGraph">
             <map id="program~~integrate_lorenz~~UsesGraph" name="program~~integrate_lorenz~~UsesGraph">
-<area shape="rect" id="node5" href="../module/type_lorenz.html" title="type_lorenz" alt="" coords="608,102,672,126"/>
-<area shape="rect" id="node7" href="../module/foodie_integrator_low_storage_runge_kutta.html" title="foodie_integrator_low_storage_runge_kutta" alt="" coords="221,200,428,225"/>
-<area shape="rect" id="node8" href="../module/foodie_integrator_tvd_runge_kutta.html" title="foodie_integrator_tvd_runge_kutta" alt="" coords="241,241,408,266"/>
-<area shape="rect" id="node9" href="../module/type_integrand.html" title="type_integrand" alt="" coords="108,161,187,186"/>
-<area shape="rect" id="node10" href="../module/foodie_integrator_euler_explicit.html" title="foodie_integrator_euler_explicit" alt="" coords="248,81,401,106"/>
-<area shape="rect" id="node11" href="../module/foodie_integrator_adams_bashforth.html" title="foodie_integrator_adams_bashforth" alt="" coords="239,123,410,147"/>
-<area shape="rect" id="node4" href="../module/foodie.html" title="foodie" alt="" coords="462,123,513,147"/>
+<area shape="rect" id="node2" href="../module/foodie.html" title="foodie" alt="" coords="462,145,513,170"/>
+<area shape="rect" id="node6" href="../module/type_lorenz.html" title="type_lorenz" alt="" coords="608,244,672,269"/>
+<area shape="rect" id="node7" href="../module/foodie_integrator_tvd_runge_kutta.html" title="foodie_integrator_tvd_runge_kutta" alt="" coords="241,45,408,70"/>
+<area shape="rect" id="node8" href="../module/type_integrand.html" title="type_integrand" alt="" coords="108,107,187,131"/>
+<area shape="rect" id="node9" href="../module/foodie_integrator_adams_bashforth.html" title="foodie_integrator_adams_bashforth" alt="" coords="239,87,410,111"/>
+<area shape="rect" id="node10" href="../module/foodie_integrator_euler_explicit.html" title="foodie_integrator_euler_explicit" alt="" coords="248,164,401,189"/>
+<area shape="rect" id="node11" href="../module/foodie_integrator_leapfrog.html" title="foodie_integrator_leapfrog" alt="" coords="259,206,390,230"/>
+<area shape="rect" id="node12" href="../module/foodie_integrator_low_storage_runge_kutta.html" title="foodie_integrator_low_storage_runge_kutta" alt="" coords="221,4,428,28"/>
 </map>
 
             <div><a type="button" class="graph-help" data-toggle="modal" href="#graph-help-text">Help</a></div>
@@ -349,11 +352,12 @@ implementation in a submodule of an interface in a parent module.</p>
      
             <img class="depgraph" alt="dependency graph" src=../graphs/program%7E%7Eintegrate_lorenz%7E%7ECallsGraph.svg usemap="#program~~integrate_lorenz~~CallsGraph">
             <map id="program~~integrate_lorenz~~CallsGraph" name="program~~integrate_lorenz~~CallsGraph">
-<area shape="rect" id="node2" href="../proc/test_euler%7E3.html" title="test_euler" alt="" coords="177,5,257,40"/>
-<area shape="rect" id="node3" href="../proc/test_ls_rk%7E3.html" title="test_ls_rk" alt="" coords="179,64,256,99"/>
-<area shape="rect" id="node4" href="../proc/test_ab%7E3.html" title="test_ab" alt="" coords="181,123,253,157"/>
-<area shape="rect" id="node5" href="../proc/test_tvd_rk%7E3.html" title="test_tvd_rk" alt="" coords="175,181,260,216"/>
-<area shape="rect" id="node6" href="../proc/save_results%7E3.html" title="save_results" alt="" coords="311,64,407,99"/>
+<area shape="rect" id="node2" href="../proc/test_leapfrog%7E3.html" title="test_leapfrog" alt="" coords="175,64,273,99"/>
+<area shape="rect" id="node3" href="../proc/test_ab%7E3.html" title="test_ab" alt="" coords="188,123,260,157"/>
+<area shape="rect" id="node4" href="../proc/test_ls_rk%7E3.html" title="test_ls_rk" alt="" coords="185,181,263,216"/>
+<area shape="rect" id="node5" href="../proc/test_tvd_rk%7E3.html" title="test_tvd_rk" alt="" coords="181,240,267,275"/>
+<area shape="rect" id="node6" href="../proc/test_euler%7E3.html" title="test_euler" alt="" coords="184,5,264,40"/>
+<area shape="rect" id="node7" href="../proc/save_results%7E3.html" title="save_results" alt="" coords="324,123,420,157"/>
 </map>
 
             <div><a type="button" class="graph-help" data-toggle="modal" href="#graph-help-text">Help</a></div>
@@ -566,7 +570,7 @@ implementation in a submodule of an interface in a parent module.</p>
   
 <tr>
   
-  <td><span class="anchor" id="variable-dt%7E14"></span>real(kind=R_P),</td>
+  <td><span class="anchor" id="variable-dt%7E17"></span>real(kind=R_P),</td>
   
   
   <td>parameter</td><td>::</td>
@@ -754,6 +758,36 @@ subroutine <a href='../proc/save_results%7E3.html'>save_results</a>(title, filen
     
     
   <div class="panel panel-default">
+  <div class="panel-heading codesum"><span class="anchor" id="proc-test_ab%7E3"></span><h3>
+subroutine <a href='../proc/test_ab%7E3.html'>test_ab</a>()
+    
+    
+    
+</h3></div>
+  <div class="panel-body">
+       
+    
+    <h4>Arguments</h4>
+    
+      <em>None</em>
+    
+    
+    
+    <h4>Description</h4>
+       
+       
+
+
+       
+       <p>Test explicit Adams-Bashforth class of ODE solvers.</p>
+        
+
+  </div>
+  </div>
+
+    
+    
+  <div class="panel panel-default">
   <div class="panel-heading codesum"><span class="anchor" id="proc-test_euler%7E3"></span><h3>
 subroutine <a href='../proc/test_euler%7E3.html'>test_euler</a>()
     
@@ -784,8 +818,8 @@ subroutine <a href='../proc/test_euler%7E3.html'>test_euler</a>()
     
     
   <div class="panel panel-default">
-  <div class="panel-heading codesum"><span class="anchor" id="proc-test_tvd_rk%7E3"></span><h3>
-subroutine <a href='../proc/test_tvd_rk%7E3.html'>test_tvd_rk</a>()
+  <div class="panel-heading codesum"><span class="anchor" id="proc-test_leapfrog%7E3"></span><h3>
+subroutine <a href='../proc/test_leapfrog%7E3.html'>test_leapfrog</a>()
     
     
     
@@ -805,7 +839,7 @@ subroutine <a href='../proc/test_tvd_rk%7E3.html'>test_tvd_rk</a>()
 
 
        
-       <p>Test explicit TVD/SSP Runge-Kutta class of ODE solvers.</p>
+       <p>Test explicit leapfrog class of ODE solvers.</p>
         
 
   </div>
@@ -844,8 +878,8 @@ subroutine <a href='../proc/test_ls_rk%7E3.html'>test_ls_rk</a>()
     
     
   <div class="panel panel-default">
-  <div class="panel-heading codesum"><span class="anchor" id="proc-test_ab%7E3"></span><h3>
-subroutine <a href='../proc/test_ab%7E3.html'>test_ab</a>()
+  <div class="panel-heading codesum"><span class="anchor" id="proc-test_tvd_rk%7E3"></span><h3>
+subroutine <a href='../proc/test_tvd_rk%7E3.html'>test_tvd_rk</a>()
     
     
     
@@ -865,7 +899,7 @@ subroutine <a href='../proc/test_ab%7E3.html'>test_ab</a>()
 
 
        
-       <p>Test explicit Adams-Bashforth class of ODE solvers.</p>
+       <p>Test explicit TVD/SSP Runge-Kutta class of ODE solvers.</p>
         
 
   </div>
@@ -887,7 +921,11 @@ subroutine <a href='../proc/test_ab%7E3.html'>test_ab</a>()
 <span class="k">use </span><span class="n">IR_Precision</span><span class="p">,</span> <span class="n">only</span> <span class="p">:</span> <span class="n">R_P</span><span class="p">,</span> <span class="n">I_P</span><span class="p">,</span> <span class="n">FR_P</span><span class="p">,</span> <span class="n">str</span>
 <span class="k">use </span><span class="n">type_lorenz</span><span class="p">,</span> <span class="n">only</span> <span class="p">:</span> <span class="n">lorenz</span>
 <span class="k">use </span><span class="n">Data_Type_Command_Line_Interface</span><span class="p">,</span> <span class="n">only</span> <span class="p">:</span> <span class="n">Type_Command_Line_Interface</span>
-<span class="k">use </span><span class="n">foodie</span><span class="p">,</span> <span class="n">only</span> <span class="p">:</span> <span class="n">adams_bashforth_integrator</span><span class="p">,</span> <span class="n">euler_explicit_integrator</span><span class="p">,</span> <span class="n">ls_runge_kutta_integrator</span><span class="p">,</span> <span class="n">tvd_runge_kutta_integrator</span>
+<span class="k">use </span><span class="n">foodie</span><span class="p">,</span> <span class="n">only</span> <span class="p">:</span> <span class="n">adams_bashforth_integrator</span><span class="p">,</span> <span class="p">&amp;</span>
+                   <span class="n">euler_explicit_integrator</span><span class="p">,</span> <span class="p">&amp;</span>
+                   <span class="n">leapfrog_integrator</span><span class="p">,</span> <span class="p">&amp;</span>
+                   <span class="n">ls_runge_kutta_integrator</span><span class="p">,</span> <span class="p">&amp;</span>
+                   <span class="n">tvd_runge_kutta_integrator</span>
 <span class="k">use </span><span class="n">pyplot_module</span><span class="p">,</span> <span class="n">only</span> <span class="p">:</span>  <span class="n">pyplot</span>
 <span class="c">!-----------------------------------------------------------------------------------------------------------------------------------</span>
 
@@ -931,26 +969,30 @@ subroutine <a href='../proc/test_ab%7E3.html'>test_ab</a>()
 <span class="k">call </span><span class="n">cli</span><span class="p">%</span><span class="n">get</span><span class="p">(</span><span class="n">switch</span><span class="o">=</span><span class="s1">&#39;-p&#39;</span><span class="p">,</span> <span class="n">val</span><span class="o">=</span><span class="n">plots</span><span class="p">,</span> <span class="n">error</span><span class="o">=</span><span class="n">error</span><span class="p">)</span> <span class="p">;</span> <span class="k">if</span> <span class="p">(</span><span class="n">error</span><span class="o">/=</span><span class="mi">0</span><span class="p">)</span> <span class="k">stop</span>
 <span class="c">! integrate Lorenz equations</span>
 <span class="k">select case</span><span class="p">(</span><span class="nb">trim</span><span class="p">(</span><span class="nb">adjustl</span><span class="p">(</span><span class="n">solver</span><span class="p">)))</span>
-<span class="k">case</span><span class="p">(</span><span class="s1">&#39;euler&#39;</span><span class="p">)</span>
-  <span class="k">call </span><span class="n">test_euler</span><span class="p">()</span>
-<span class="k">case</span><span class="p">(</span><span class="s1">&#39;tvd-runge-kutta&#39;</span><span class="p">)</span>
-  <span class="k">call </span><span class="n">test_tvd_rk</span><span class="p">()</span>
-<span class="k">case</span><span class="p">(</span><span class="s1">&#39;ls-runge-kutta&#39;</span><span class="p">)</span>
-  <span class="k">call </span><span class="n">test_ls_rk</span><span class="p">()</span>
 <span class="k">case</span><span class="p">(</span><span class="s1">&#39;adams-bashforth&#39;</span><span class="p">)</span>
   <span class="k">call </span><span class="n">test_ab</span><span class="p">()</span>
-<span class="k">case</span><span class="p">(</span><span class="s1">&#39;all&#39;</span><span class="p">)</span>
+<span class="k">case</span><span class="p">(</span><span class="s1">&#39;euler&#39;</span><span class="p">)</span>
   <span class="k">call </span><span class="n">test_euler</span><span class="p">()</span>
-  <span class="k">call </span><span class="n">test_tvd_rk</span><span class="p">()</span>
+<span class="k">case</span><span class="p">(</span><span class="s1">&#39;leapfrog&#39;</span><span class="p">)</span>
+  <span class="k">call </span><span class="n">test_leapfrog</span><span class="p">()</span>
+<span class="k">case</span><span class="p">(</span><span class="s1">&#39;ls-runge-kutta&#39;</span><span class="p">)</span>
   <span class="k">call </span><span class="n">test_ls_rk</span><span class="p">()</span>
+<span class="k">case</span><span class="p">(</span><span class="s1">&#39;tvd-runge-kutta&#39;</span><span class="p">)</span>
+  <span class="k">call </span><span class="n">test_tvd_rk</span><span class="p">()</span>
+<span class="k">case</span><span class="p">(</span><span class="s1">&#39;all&#39;</span><span class="p">)</span>
   <span class="k">call </span><span class="n">test_ab</span><span class="p">()</span>
+  <span class="k">call </span><span class="n">test_euler</span><span class="p">()</span>
+  <span class="k">call </span><span class="n">test_leapfrog</span><span class="p">()</span>
+  <span class="k">call </span><span class="n">test_ls_rk</span><span class="p">()</span>
+  <span class="k">call </span><span class="n">test_tvd_rk</span><span class="p">()</span>
 <span class="k">case </span><span class="n">default</span>
   <span class="k">print</span> <span class="s2">&quot;(A)&quot;</span><span class="p">,</span> <span class="s1">&#39;Error: unknown solver &quot;&#39;</span><span class="o">//</span><span class="nb">trim</span><span class="p">(</span><span class="nb">adjustl</span><span class="p">(</span><span class="n">solver</span><span class="p">))</span><span class="o">//</span><span class="s1">&#39;&quot;&#39;</span>
   <span class="k">print</span> <span class="s2">&quot;(A)&quot;</span><span class="p">,</span> <span class="s1">&#39;Valid solver names are:&#39;</span>
-  <span class="k">print</span> <span class="s2">&quot;(A)&quot;</span><span class="p">,</span> <span class="s1">&#39;  + euler&#39;</span>
-  <span class="k">print</span> <span class="s2">&quot;(A)&quot;</span><span class="p">,</span> <span class="s1">&#39;  + tvd-runge-kutta&#39;</span>
-  <span class="k">print</span> <span class="s2">&quot;(A)&quot;</span><span class="p">,</span> <span class="s1">&#39;  + ls-runge-kutta&#39;</span>
   <span class="k">print</span> <span class="s2">&quot;(A)&quot;</span><span class="p">,</span> <span class="s1">&#39;  + adams-bashforth&#39;</span>
+  <span class="k">print</span> <span class="s2">&quot;(A)&quot;</span><span class="p">,</span> <span class="s1">&#39;  + euler&#39;</span>
+  <span class="k">print</span> <span class="s2">&quot;(A)&quot;</span><span class="p">,</span> <span class="s1">&#39;  + leapfrog&#39;</span>
+  <span class="k">print</span> <span class="s2">&quot;(A)&quot;</span><span class="p">,</span> <span class="s1">&#39;  + ls-runge-kutta&#39;</span>
+  <span class="k">print</span> <span class="s2">&quot;(A)&quot;</span><span class="p">,</span> <span class="s1">&#39;  + tvd-runge-kutta&#39;</span>
   <span class="k">print</span> <span class="s2">&quot;(A)&quot;</span><span class="p">,</span> <span class="s1">&#39;  + all&#39;</span>
 <span class="n">endselect</span>
 <span class="k">stop</span>
@@ -995,100 +1037,6 @@ subroutine <a href='../proc/test_ab%7E3.html'>test_ab</a>()
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
   <span class="n">endsubroutine</span> <span class="n">save_results</span>
 
-  <span class="k">subroutine </span><span class="n">test_euler</span><span class="p">()</span>
-  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
-  <span class="c">!&lt; Test explicit forward Euler ODE solver.</span>
-  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
-  <span class="k">type</span><span class="p">(</span><span class="n">euler_explicit_integrator</span><span class="p">)</span> <span class="kd">::</span> <span class="n">euler_integrator</span> <span class="c">!&lt; Euler integrator.</span>
-  <span class="kt">integer</span><span class="p">(</span><span class="n">I_P</span><span class="p">)</span>                    <span class="kd">::</span> <span class="n">step</span>             <span class="c">!&lt; Time steps counter.</span>
-  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
-
-  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
-  <span class="k">print</span> <span class="s2">&quot;(A)&quot;</span><span class="p">,</span> <span class="s1">&#39;Integrating Lorenz equations by means of explicit Euler solver&#39;</span>
-  <span class="k">call </span><span class="n">attractor</span><span class="p">%</span><span class="n">init</span><span class="p">(</span><span class="n">initial_state</span><span class="o">=</span><span class="n">initial_state</span><span class="p">,</span> <span class="n">sigma</span><span class="o">=</span><span class="n">sigma</span><span class="p">,</span> <span class="n">rho</span><span class="o">=</span><span class="n">rho</span><span class="p">,</span> <span class="n">beta</span><span class="o">=</span><span class="n">beta</span><span class="p">)</span>
-  <span class="n">solution</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span> <span class="o">=</span> <span class="mf">0._R_P</span>
-  <span class="n">solution</span><span class="p">(</span><span class="mi">1</span><span class="p">:</span><span class="n">space_dimension</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span> <span class="o">=</span> <span class="n">attractor</span><span class="p">%</span><span class="n">output</span><span class="p">()</span>
-  <span class="k">do </span><span class="n">step</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span> <span class="n">num_steps</span>
-    <span class="k">call </span><span class="n">euler_integrator</span><span class="p">%</span><span class="n">integrate</span><span class="p">(</span><span class="n">field</span><span class="o">=</span><span class="n">attractor</span><span class="p">,</span> <span class="n">dt</span><span class="o">=</span><span class="n">dt</span><span class="p">)</span>
-    <span class="n">solution</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">step</span><span class="p">)</span> <span class="o">=</span> <span class="n">step</span> <span class="o">*</span> <span class="n">dt</span>
-    <span class="n">solution</span><span class="p">(</span><span class="mi">1</span><span class="p">:</span><span class="n">space_dimension</span><span class="p">,</span> <span class="n">step</span><span class="p">)</span> <span class="o">=</span> <span class="n">attractor</span><span class="p">%</span><span class="n">output</span><span class="p">()</span>
-  <span class="n">enddo</span>
-  <span class="k">call </span><span class="n">save_results</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s1">&#39;FOODiE test: Lorenz equation integration, explicit Euler&#39;</span><span class="p">,</span> <span class="p">&amp;</span>
-                    <span class="n">filename</span><span class="o">=</span><span class="s1">&#39;lorenz_integration-euler&#39;</span><span class="p">)</span>
-  <span class="k">print</span> <span class="s2">&quot;(A)&quot;</span><span class="p">,</span> <span class="s1">&#39;Finish!&#39;</span>
-  <span class="k">return</span>
-  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
-  <span class="n">endsubroutine</span> <span class="n">test_euler</span>
-
-  <span class="k">subroutine </span><span class="n">test_tvd_rk</span><span class="p">()</span>
-  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
-  <span class="c">!&lt; Test explicit TVD/SSP Runge-Kutta class of ODE solvers.</span>
-  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
-  <span class="k">type</span><span class="p">(</span><span class="n">tvd_runge_kutta_integrator</span><span class="p">)</span> <span class="kd">::</span> <span class="n">rk_integrator</span>         <span class="c">!&lt; Runge-Kutta integrator.</span>
-  <span class="kt">integer</span><span class="p">,</span> <span class="k">parameter</span>               <span class="kd">::</span> <span class="n">rk_stages</span><span class="o">=</span><span class="mi">5</span>           <span class="c">!&lt; Runge-Kutta stages number.</span>
-  <span class="k">type</span><span class="p">(</span><span class="n">lorenz</span><span class="p">)</span>                     <span class="kd">::</span> <span class="n">rk_stage</span><span class="p">(</span><span class="mi">1</span><span class="p">:</span><span class="n">rk_stages</span><span class="p">)</span> <span class="c">!&lt; Runge-Kutta stages.</span>
-  <span class="kt">integer</span><span class="p">(</span><span class="n">I_P</span><span class="p">)</span>                     <span class="kd">::</span> <span class="n">s</span>                     <span class="c">!&lt; RK stages counter.</span>
-  <span class="kt">integer</span><span class="p">(</span><span class="n">I_P</span><span class="p">)</span>                     <span class="kd">::</span> <span class="n">step</span>                  <span class="c">!&lt; Time steps counter.</span>
-  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
-
-  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
-  <span class="k">print</span> <span class="s2">&quot;(A)&quot;</span><span class="p">,</span> <span class="s1">&#39;Integrating Lorenz equations by means of TVD/SSP Runge-Kutta class of solvers&#39;</span>
-  <span class="k">do </span><span class="n">s</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">rk_stages</span>
-    <span class="k">if</span> <span class="p">(</span><span class="n">s</span><span class="o">==</span><span class="mi">4</span><span class="p">)</span> <span class="k">cycle</span> <span class="c">! 4 stages not yet implemented</span>
-    <span class="k">print</span> <span class="s2">&quot;(A)&quot;</span><span class="p">,</span> <span class="s1">&#39; RK-&#39;</span><span class="o">//</span><span class="nb">trim</span><span class="p">(</span><span class="n">str</span><span class="p">(.</span><span class="n">true</span><span class="p">.,</span><span class="n">s</span><span class="p">))</span>
-    <span class="k">call </span><span class="n">rk_integrator</span><span class="p">%</span><span class="n">init</span><span class="p">(</span><span class="n">stages</span><span class="o">=</span><span class="n">s</span><span class="p">)</span>
-    <span class="k">call </span><span class="n">attractor</span><span class="p">%</span><span class="n">init</span><span class="p">(</span><span class="n">initial_state</span><span class="o">=</span><span class="n">initial_state</span><span class="p">,</span> <span class="n">sigma</span><span class="o">=</span><span class="n">sigma</span><span class="p">,</span> <span class="n">rho</span><span class="o">=</span><span class="n">rho</span><span class="p">,</span> <span class="n">beta</span><span class="o">=</span><span class="n">beta</span><span class="p">)</span>
-    <span class="n">solution</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span> <span class="o">=</span> <span class="mf">0._R_P</span>
-    <span class="n">solution</span><span class="p">(</span><span class="mi">1</span><span class="p">:</span><span class="n">space_dimension</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span> <span class="o">=</span> <span class="n">attractor</span><span class="p">%</span><span class="n">output</span><span class="p">()</span>
-    <span class="k">do </span><span class="n">step</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span> <span class="n">num_steps</span>
-      <span class="k">call </span><span class="n">rk_integrator</span><span class="p">%</span><span class="n">integrate</span><span class="p">(</span><span class="n">field</span><span class="o">=</span><span class="n">attractor</span><span class="p">,</span> <span class="n">stage</span><span class="o">=</span><span class="n">rk_stage</span><span class="p">(</span><span class="mi">1</span><span class="p">:</span><span class="n">s</span><span class="p">),</span> <span class="n">dt</span><span class="o">=</span><span class="n">dt</span><span class="p">)</span>
-      <span class="n">solution</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">step</span><span class="p">)</span> <span class="o">=</span> <span class="n">step</span> <span class="o">*</span> <span class="n">dt</span>
-      <span class="n">solution</span><span class="p">(</span><span class="mi">1</span><span class="p">:</span><span class="n">space_dimension</span><span class="p">,</span> <span class="n">step</span><span class="p">)</span> <span class="o">=</span> <span class="n">attractor</span><span class="p">%</span><span class="n">output</span><span class="p">()</span>
-    <span class="n">enddo</span>
-    <span class="k">call </span><span class="n">save_results</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s1">&#39;FOODiE test: Lorenz equation integration, explicit TVD Runge-Kutta &#39;</span><span class="o">//</span><span class="nb">trim</span><span class="p">(</span><span class="n">str</span><span class="p">(.</span><span class="n">true</span><span class="p">.,</span> <span class="n">s</span><span class="p">))</span><span class="o">//</span><span class="s1">&#39; stages&#39;</span><span class="p">,&amp;</span>
-                      <span class="n">filename</span><span class="o">=</span><span class="s1">&#39;lorenz_integration-tvdrk-&#39;</span><span class="o">//</span><span class="nb">trim</span><span class="p">(</span><span class="n">str</span><span class="p">(.</span><span class="n">true</span><span class="p">.,</span> <span class="n">s</span><span class="p">)))</span>
-  <span class="n">enddo</span>
-  <span class="k">print</span> <span class="s2">&quot;(A)&quot;</span><span class="p">,</span> <span class="s1">&#39;Finish!&#39;</span>
-  <span class="k">return</span>
-  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
-  <span class="n">endsubroutine</span> <span class="n">test_tvd_rk</span>
-
-  <span class="k">subroutine </span><span class="n">test_ls_rk</span><span class="p">()</span>
-  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
-  <span class="c">!&lt; Test explicit low storage Runge-Kutta class of ODE solvers.</span>
-  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
-  <span class="k">type</span><span class="p">(</span><span class="n">ls_runge_kutta_integrator</span><span class="p">)</span> <span class="kd">::</span> <span class="n">rk_integrator</span>         <span class="c">!&lt; Runge-Kutta integrator.</span>
-  <span class="kt">integer</span><span class="p">,</span> <span class="k">parameter</span>              <span class="kd">::</span> <span class="n">rk_stages</span><span class="o">=</span><span class="mi">5</span>           <span class="c">!&lt; Runge-Kutta stages number.</span>
-  <span class="kt">integer</span><span class="p">,</span> <span class="k">parameter</span>              <span class="kd">::</span> <span class="n">registers</span><span class="o">=</span><span class="mi">2</span>           <span class="c">!&lt; Runge-Kutta stages number.</span>
-  <span class="k">type</span><span class="p">(</span><span class="n">lorenz</span><span class="p">)</span>                    <span class="kd">::</span> <span class="n">rk_stage</span><span class="p">(</span><span class="mi">1</span><span class="p">:</span><span class="n">registers</span><span class="p">)</span> <span class="c">!&lt; Runge-Kutta stages.</span>
-  <span class="kt">integer</span><span class="p">(</span><span class="n">I_P</span><span class="p">)</span>                    <span class="kd">::</span> <span class="n">s</span>                     <span class="c">!&lt; RK stages counter.</span>
-  <span class="kt">integer</span><span class="p">(</span><span class="n">I_P</span><span class="p">)</span>                    <span class="kd">::</span> <span class="n">step</span>                  <span class="c">!&lt; Time steps counter.</span>
-  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
-
-  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
-  <span class="k">print</span> <span class="s2">&quot;(A)&quot;</span><span class="p">,</span> <span class="s1">&#39;Integrating Lorenz equations by means of low storage (2N) Runge-Kutta class of solvers&#39;</span>
-  <span class="k">do </span><span class="n">s</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">rk_stages</span>
-    <span class="k">if</span> <span class="p">(</span><span class="n">s</span><span class="o">==</span><span class="mi">2</span><span class="p">)</span> <span class="k">cycle</span> <span class="c">! 2 stages not yet implemented</span>
-    <span class="k">if</span> <span class="p">(</span><span class="n">s</span><span class="o">==</span><span class="mi">3</span><span class="p">)</span> <span class="k">cycle</span> <span class="c">! 3 stages not yet implemented</span>
-    <span class="k">if</span> <span class="p">(</span><span class="n">s</span><span class="o">==</span><span class="mi">4</span><span class="p">)</span> <span class="k">cycle</span> <span class="c">! 4 stages not yet implemented</span>
-    <span class="k">print</span> <span class="s2">&quot;(A)&quot;</span><span class="p">,</span> <span class="s1">&#39; RK-&#39;</span><span class="o">//</span><span class="nb">trim</span><span class="p">(</span><span class="n">str</span><span class="p">(.</span><span class="n">true</span><span class="p">.,</span><span class="n">s</span><span class="p">))</span>
-    <span class="k">call </span><span class="n">rk_integrator</span><span class="p">%</span><span class="n">init</span><span class="p">(</span><span class="n">stages</span><span class="o">=</span><span class="n">s</span><span class="p">)</span>
-    <span class="k">call </span><span class="n">attractor</span><span class="p">%</span><span class="n">init</span><span class="p">(</span><span class="n">initial_state</span><span class="o">=</span><span class="n">initial_state</span><span class="p">,</span> <span class="n">sigma</span><span class="o">=</span><span class="n">sigma</span><span class="p">,</span> <span class="n">rho</span><span class="o">=</span><span class="n">rho</span><span class="p">,</span> <span class="n">beta</span><span class="o">=</span><span class="n">beta</span><span class="p">)</span>
-    <span class="n">solution</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span> <span class="o">=</span> <span class="mf">0._R_P</span>
-    <span class="n">solution</span><span class="p">(</span><span class="mi">1</span><span class="p">:</span><span class="n">space_dimension</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span> <span class="o">=</span> <span class="n">attractor</span><span class="p">%</span><span class="n">output</span><span class="p">()</span>
-    <span class="k">do </span><span class="n">step</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span> <span class="n">num_steps</span>
-      <span class="k">call </span><span class="n">rk_integrator</span><span class="p">%</span><span class="n">integrate</span><span class="p">(</span><span class="n">field</span><span class="o">=</span><span class="n">attractor</span><span class="p">,</span> <span class="n">stage</span><span class="o">=</span><span class="n">rk_stage</span><span class="p">,</span> <span class="n">dt</span><span class="o">=</span><span class="n">dt</span><span class="p">)</span>
-      <span class="n">solution</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">step</span><span class="p">)</span> <span class="o">=</span> <span class="n">step</span> <span class="o">*</span> <span class="n">dt</span>
-      <span class="n">solution</span><span class="p">(</span><span class="mi">1</span><span class="p">:</span><span class="n">space_dimension</span><span class="p">,</span> <span class="n">step</span><span class="p">)</span> <span class="o">=</span> <span class="n">attractor</span><span class="p">%</span><span class="n">output</span><span class="p">()</span>
-    <span class="n">enddo</span>
-    <span class="k">call </span><span class="n">save_results</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s1">&#39;FOODiE test: Lorenz equation integration, explicit low storage Runge-Kutta &#39;</span><span class="o">//</span><span class="nb">trim</span><span class="p">(</span><span class="n">str</span><span class="p">(.</span><span class="n">true</span><span class="p">.,</span> <span class="n">s</span><span class="p">))</span><span class="o">//</span><span class="p">&amp;</span>
-                      <span class="s1">&#39; stages&#39;</span><span class="p">,</span> <span class="n">filename</span><span class="o">=</span><span class="s1">&#39;lorenz_integration-lsrk-&#39;</span><span class="o">//</span><span class="nb">trim</span><span class="p">(</span><span class="n">str</span><span class="p">(.</span><span class="n">true</span><span class="p">.,</span> <span class="n">s</span><span class="p">)))</span>
-  <span class="n">enddo</span>
-  <span class="k">print</span> <span class="s2">&quot;(A)&quot;</span><span class="p">,</span> <span class="s1">&#39;Finish!&#39;</span>
-  <span class="k">return</span>
-  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
-  <span class="n">endsubroutine</span> <span class="n">test_ls_rk</span>
-
   <span class="k">subroutine </span><span class="n">test_ab</span><span class="p">()</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
   <span class="c">!&lt; Test explicit Adams-Bashforth class of ODE solvers.</span>
@@ -1128,6 +1076,136 @@ subroutine <a href='../proc/test_ab%7E3.html'>test_ab</a>()
   <span class="k">return</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
   <span class="n">endsubroutine</span> <span class="n">test_ab</span>
+
+  <span class="k">subroutine </span><span class="n">test_euler</span><span class="p">()</span>
+  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+  <span class="c">!&lt; Test explicit forward Euler ODE solver.</span>
+  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+  <span class="k">type</span><span class="p">(</span><span class="n">euler_explicit_integrator</span><span class="p">)</span> <span class="kd">::</span> <span class="n">euler_integrator</span> <span class="c">!&lt; Euler integrator.</span>
+  <span class="kt">integer</span><span class="p">(</span><span class="n">I_P</span><span class="p">)</span>                    <span class="kd">::</span> <span class="n">step</span>             <span class="c">!&lt; Time steps counter.</span>
+  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+
+  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+  <span class="k">print</span> <span class="s2">&quot;(A)&quot;</span><span class="p">,</span> <span class="s1">&#39;Integrating Lorenz equations by means of explicit Euler solver&#39;</span>
+  <span class="k">call </span><span class="n">attractor</span><span class="p">%</span><span class="n">init</span><span class="p">(</span><span class="n">initial_state</span><span class="o">=</span><span class="n">initial_state</span><span class="p">,</span> <span class="n">sigma</span><span class="o">=</span><span class="n">sigma</span><span class="p">,</span> <span class="n">rho</span><span class="o">=</span><span class="n">rho</span><span class="p">,</span> <span class="n">beta</span><span class="o">=</span><span class="n">beta</span><span class="p">)</span>
+  <span class="n">solution</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span> <span class="o">=</span> <span class="mf">0._R_P</span>
+  <span class="n">solution</span><span class="p">(</span><span class="mi">1</span><span class="p">:</span><span class="n">space_dimension</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span> <span class="o">=</span> <span class="n">attractor</span><span class="p">%</span><span class="n">output</span><span class="p">()</span>
+  <span class="k">do </span><span class="n">step</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span> <span class="n">num_steps</span>
+    <span class="k">call </span><span class="n">euler_integrator</span><span class="p">%</span><span class="n">integrate</span><span class="p">(</span><span class="n">field</span><span class="o">=</span><span class="n">attractor</span><span class="p">,</span> <span class="n">dt</span><span class="o">=</span><span class="n">dt</span><span class="p">)</span>
+    <span class="n">solution</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">step</span><span class="p">)</span> <span class="o">=</span> <span class="n">step</span> <span class="o">*</span> <span class="n">dt</span>
+    <span class="n">solution</span><span class="p">(</span><span class="mi">1</span><span class="p">:</span><span class="n">space_dimension</span><span class="p">,</span> <span class="n">step</span><span class="p">)</span> <span class="o">=</span> <span class="n">attractor</span><span class="p">%</span><span class="n">output</span><span class="p">()</span>
+  <span class="n">enddo</span>
+  <span class="k">call </span><span class="n">save_results</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s1">&#39;FOODiE test: Lorenz equation integration, explicit Euler&#39;</span><span class="p">,</span> <span class="p">&amp;</span>
+                    <span class="n">filename</span><span class="o">=</span><span class="s1">&#39;lorenz_integration-euler&#39;</span><span class="p">)</span>
+  <span class="k">print</span> <span class="s2">&quot;(A)&quot;</span><span class="p">,</span> <span class="s1">&#39;Finish!&#39;</span>
+  <span class="k">return</span>
+  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+  <span class="n">endsubroutine</span> <span class="n">test_euler</span>
+
+  <span class="k">subroutine </span><span class="n">test_leapfrog</span><span class="p">()</span>
+  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+  <span class="c">!&lt; Test explicit leapfrog class of ODE solvers.</span>
+  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+  <span class="k">type</span><span class="p">(</span><span class="n">tvd_runge_kutta_integrator</span><span class="p">)</span> <span class="kd">::</span> <span class="n">rk_integrator</span>         <span class="c">!&lt; Runge-Kutta integrator.</span>
+  <span class="kt">integer</span><span class="p">,</span> <span class="k">parameter</span>               <span class="kd">::</span> <span class="n">rk_stages</span><span class="o">=</span><span class="mi">5</span>           <span class="c">!&lt; Runge-Kutta stages number.</span>
+  <span class="k">type</span><span class="p">(</span><span class="n">lorenz</span><span class="p">)</span>                     <span class="kd">::</span> <span class="n">rk_stage</span><span class="p">(</span><span class="mi">1</span><span class="p">:</span><span class="n">rk_stages</span><span class="p">)</span> <span class="c">!&lt; Runge-Kutta stages.</span>
+  <span class="k">type</span><span class="p">(</span><span class="n">lorenz</span><span class="p">)</span>                     <span class="kd">::</span> <span class="n">filter</span>                <span class="c">!&lt; Filter displacement.</span>
+  <span class="k">type</span><span class="p">(</span><span class="n">leapfrog_integrator</span><span class="p">)</span>        <span class="kd">::</span> <span class="n">lf_integrator</span>         <span class="c">!&lt; Leapfrog integrator.</span>
+  <span class="kt">integer</span>                          <span class="kd">::</span> <span class="n">step</span>                  <span class="c">!&lt; Time steps counter.</span>
+  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+
+  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+  <span class="k">print</span> <span class="s2">&quot;(A)&quot;</span><span class="p">,</span> <span class="s1">&#39;Integrating Lorenz equations by means of leapfrog (RAW filtered) class of solvers&#39;</span>
+  <span class="k">call </span><span class="n">lf_integrator</span><span class="p">%</span><span class="n">init</span><span class="p">(</span><span class="n">nu</span><span class="o">=</span><span class="mf">1.0_R_P</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0._R_P</span><span class="p">)</span>
+  <span class="k">call </span><span class="n">rk_integrator</span><span class="p">%</span><span class="n">init</span><span class="p">(</span><span class="n">stages</span><span class="o">=</span><span class="n">rk_stages</span><span class="p">)</span>
+  <span class="k">call </span><span class="n">attractor</span><span class="p">%</span><span class="n">init</span><span class="p">(</span><span class="n">initial_state</span><span class="o">=</span><span class="n">initial_state</span><span class="p">,</span> <span class="n">sigma</span><span class="o">=</span><span class="n">sigma</span><span class="p">,</span> <span class="n">rho</span><span class="o">=</span><span class="n">rho</span><span class="p">,</span> <span class="n">beta</span><span class="o">=</span><span class="n">beta</span><span class="p">,</span> <span class="n">steps</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+  <span class="n">solution</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span> <span class="o">=</span> <span class="mf">0._R_P</span>
+  <span class="n">solution</span><span class="p">(</span><span class="mi">1</span><span class="p">:</span><span class="n">space_dimension</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span> <span class="o">=</span> <span class="n">attractor</span><span class="p">%</span><span class="n">output</span><span class="p">()</span>
+  <span class="k">do </span><span class="n">step</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span> <span class="n">num_steps</span>
+    <span class="k">if</span> <span class="p">(</span><span class="mi">2</span><span class="o">&gt;</span><span class="n">step</span><span class="p">)</span> <span class="k">then</span>
+      <span class="c">! the time steps from 1 to 2 must be computed with other scheme...</span>
+      <span class="k">call </span><span class="n">rk_integrator</span><span class="p">%</span><span class="n">integrate</span><span class="p">(</span><span class="n">field</span><span class="o">=</span><span class="n">attractor</span><span class="p">,</span> <span class="n">stage</span><span class="o">=</span><span class="n">rk_stage</span><span class="p">,</span> <span class="n">dt</span><span class="o">=</span><span class="n">dt</span><span class="p">)</span>
+    <span class="k">else</span>
+<span class="k">      call </span><span class="n">lf_integrator</span><span class="p">%</span><span class="n">integrate</span><span class="p">(</span><span class="n">field</span><span class="o">=</span><span class="n">attractor</span><span class="p">,</span> <span class="n">filter</span><span class="o">=</span><span class="n">filter</span><span class="p">,</span> <span class="n">dt</span><span class="o">=</span><span class="n">dt</span><span class="p">)</span>
+    <span class="n">endif</span>
+    <span class="n">solution</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">step</span><span class="p">)</span> <span class="o">=</span> <span class="n">step</span> <span class="o">*</span> <span class="n">dt</span>
+    <span class="n">solution</span><span class="p">(</span><span class="mi">1</span><span class="p">:</span><span class="n">space_dimension</span><span class="p">,</span> <span class="n">step</span><span class="p">)</span> <span class="o">=</span> <span class="n">attractor</span><span class="p">%</span><span class="n">output</span><span class="p">()</span>
+  <span class="n">enddo</span>
+  <span class="k">call </span><span class="n">save_results</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s1">&#39;FOODiE test: Lorenz equation integration, explicit leapfrog scheme&#39;</span><span class="p">,&amp;</span>
+                    <span class="n">filename</span><span class="o">=</span><span class="s1">&#39;lorenz_integration-lf-RAW-filter&#39;</span><span class="p">)</span>
+  <span class="k">print</span> <span class="s2">&quot;(A)&quot;</span><span class="p">,</span> <span class="s1">&#39;Finish!&#39;</span>
+  <span class="k">return</span>
+  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+  <span class="n">endsubroutine</span> <span class="n">test_leapfrog</span>
+
+  <span class="k">subroutine </span><span class="n">test_ls_rk</span><span class="p">()</span>
+  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+  <span class="c">!&lt; Test explicit low storage Runge-Kutta class of ODE solvers.</span>
+  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+  <span class="k">type</span><span class="p">(</span><span class="n">ls_runge_kutta_integrator</span><span class="p">)</span> <span class="kd">::</span> <span class="n">rk_integrator</span>         <span class="c">!&lt; Runge-Kutta integrator.</span>
+  <span class="kt">integer</span><span class="p">,</span> <span class="k">parameter</span>              <span class="kd">::</span> <span class="n">rk_stages</span><span class="o">=</span><span class="mi">5</span>           <span class="c">!&lt; Runge-Kutta stages number.</span>
+  <span class="kt">integer</span><span class="p">,</span> <span class="k">parameter</span>              <span class="kd">::</span> <span class="n">registers</span><span class="o">=</span><span class="mi">2</span>           <span class="c">!&lt; Runge-Kutta stages number.</span>
+  <span class="k">type</span><span class="p">(</span><span class="n">lorenz</span><span class="p">)</span>                    <span class="kd">::</span> <span class="n">rk_stage</span><span class="p">(</span><span class="mi">1</span><span class="p">:</span><span class="n">registers</span><span class="p">)</span> <span class="c">!&lt; Runge-Kutta stages.</span>
+  <span class="kt">integer</span><span class="p">(</span><span class="n">I_P</span><span class="p">)</span>                    <span class="kd">::</span> <span class="n">s</span>                     <span class="c">!&lt; RK stages counter.</span>
+  <span class="kt">integer</span><span class="p">(</span><span class="n">I_P</span><span class="p">)</span>                    <span class="kd">::</span> <span class="n">step</span>                  <span class="c">!&lt; Time steps counter.</span>
+  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+
+  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+  <span class="k">print</span> <span class="s2">&quot;(A)&quot;</span><span class="p">,</span> <span class="s1">&#39;Integrating Lorenz equations by means of low storage (2N) Runge-Kutta class of solvers&#39;</span>
+  <span class="k">do </span><span class="n">s</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">rk_stages</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">s</span><span class="o">==</span><span class="mi">2</span><span class="p">)</span> <span class="k">cycle</span> <span class="c">! 2 stages not yet implemented</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">s</span><span class="o">==</span><span class="mi">3</span><span class="p">)</span> <span class="k">cycle</span> <span class="c">! 3 stages not yet implemented</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">s</span><span class="o">==</span><span class="mi">4</span><span class="p">)</span> <span class="k">cycle</span> <span class="c">! 4 stages not yet implemented</span>
+    <span class="k">print</span> <span class="s2">&quot;(A)&quot;</span><span class="p">,</span> <span class="s1">&#39; RK-&#39;</span><span class="o">//</span><span class="nb">trim</span><span class="p">(</span><span class="n">str</span><span class="p">(.</span><span class="n">true</span><span class="p">.,</span><span class="n">s</span><span class="p">))</span>
+    <span class="k">call </span><span class="n">rk_integrator</span><span class="p">%</span><span class="n">init</span><span class="p">(</span><span class="n">stages</span><span class="o">=</span><span class="n">s</span><span class="p">)</span>
+    <span class="k">call </span><span class="n">attractor</span><span class="p">%</span><span class="n">init</span><span class="p">(</span><span class="n">initial_state</span><span class="o">=</span><span class="n">initial_state</span><span class="p">,</span> <span class="n">sigma</span><span class="o">=</span><span class="n">sigma</span><span class="p">,</span> <span class="n">rho</span><span class="o">=</span><span class="n">rho</span><span class="p">,</span> <span class="n">beta</span><span class="o">=</span><span class="n">beta</span><span class="p">)</span>
+    <span class="n">solution</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span> <span class="o">=</span> <span class="mf">0._R_P</span>
+    <span class="n">solution</span><span class="p">(</span><span class="mi">1</span><span class="p">:</span><span class="n">space_dimension</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span> <span class="o">=</span> <span class="n">attractor</span><span class="p">%</span><span class="n">output</span><span class="p">()</span>
+    <span class="k">do </span><span class="n">step</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span> <span class="n">num_steps</span>
+      <span class="k">call </span><span class="n">rk_integrator</span><span class="p">%</span><span class="n">integrate</span><span class="p">(</span><span class="n">field</span><span class="o">=</span><span class="n">attractor</span><span class="p">,</span> <span class="n">stage</span><span class="o">=</span><span class="n">rk_stage</span><span class="p">,</span> <span class="n">dt</span><span class="o">=</span><span class="n">dt</span><span class="p">)</span>
+      <span class="n">solution</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">step</span><span class="p">)</span> <span class="o">=</span> <span class="n">step</span> <span class="o">*</span> <span class="n">dt</span>
+      <span class="n">solution</span><span class="p">(</span><span class="mi">1</span><span class="p">:</span><span class="n">space_dimension</span><span class="p">,</span> <span class="n">step</span><span class="p">)</span> <span class="o">=</span> <span class="n">attractor</span><span class="p">%</span><span class="n">output</span><span class="p">()</span>
+    <span class="n">enddo</span>
+    <span class="k">call </span><span class="n">save_results</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s1">&#39;FOODiE test: Lorenz equation integration, explicit low storage Runge-Kutta &#39;</span><span class="o">//</span><span class="nb">trim</span><span class="p">(</span><span class="n">str</span><span class="p">(.</span><span class="n">true</span><span class="p">.,</span> <span class="n">s</span><span class="p">))</span><span class="o">//</span><span class="p">&amp;</span>
+                      <span class="s1">&#39; stages&#39;</span><span class="p">,</span> <span class="n">filename</span><span class="o">=</span><span class="s1">&#39;lorenz_integration-lsrk-&#39;</span><span class="o">//</span><span class="nb">trim</span><span class="p">(</span><span class="n">str</span><span class="p">(.</span><span class="n">true</span><span class="p">.,</span> <span class="n">s</span><span class="p">)))</span>
+  <span class="n">enddo</span>
+  <span class="k">print</span> <span class="s2">&quot;(A)&quot;</span><span class="p">,</span> <span class="s1">&#39;Finish!&#39;</span>
+  <span class="k">return</span>
+  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+  <span class="n">endsubroutine</span> <span class="n">test_ls_rk</span>
+
+  <span class="k">subroutine </span><span class="n">test_tvd_rk</span><span class="p">()</span>
+  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+  <span class="c">!&lt; Test explicit TVD/SSP Runge-Kutta class of ODE solvers.</span>
+  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+  <span class="k">type</span><span class="p">(</span><span class="n">tvd_runge_kutta_integrator</span><span class="p">)</span> <span class="kd">::</span> <span class="n">rk_integrator</span>         <span class="c">!&lt; Runge-Kutta integrator.</span>
+  <span class="kt">integer</span><span class="p">,</span> <span class="k">parameter</span>               <span class="kd">::</span> <span class="n">rk_stages</span><span class="o">=</span><span class="mi">5</span>           <span class="c">!&lt; Runge-Kutta stages number.</span>
+  <span class="k">type</span><span class="p">(</span><span class="n">lorenz</span><span class="p">)</span>                     <span class="kd">::</span> <span class="n">rk_stage</span><span class="p">(</span><span class="mi">1</span><span class="p">:</span><span class="n">rk_stages</span><span class="p">)</span> <span class="c">!&lt; Runge-Kutta stages.</span>
+  <span class="kt">integer</span><span class="p">(</span><span class="n">I_P</span><span class="p">)</span>                     <span class="kd">::</span> <span class="n">s</span>                     <span class="c">!&lt; RK stages counter.</span>
+  <span class="kt">integer</span><span class="p">(</span><span class="n">I_P</span><span class="p">)</span>                     <span class="kd">::</span> <span class="n">step</span>                  <span class="c">!&lt; Time steps counter.</span>
+  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+
+  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+  <span class="k">print</span> <span class="s2">&quot;(A)&quot;</span><span class="p">,</span> <span class="s1">&#39;Integrating Lorenz equations by means of TVD/SSP Runge-Kutta class of solvers&#39;</span>
+  <span class="k">do </span><span class="n">s</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">rk_stages</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">s</span><span class="o">==</span><span class="mi">4</span><span class="p">)</span> <span class="k">cycle</span> <span class="c">! 4 stages not yet implemented</span>
+    <span class="k">print</span> <span class="s2">&quot;(A)&quot;</span><span class="p">,</span> <span class="s1">&#39; RK-&#39;</span><span class="o">//</span><span class="nb">trim</span><span class="p">(</span><span class="n">str</span><span class="p">(.</span><span class="n">true</span><span class="p">.,</span><span class="n">s</span><span class="p">))</span>
+    <span class="k">call </span><span class="n">rk_integrator</span><span class="p">%</span><span class="n">init</span><span class="p">(</span><span class="n">stages</span><span class="o">=</span><span class="n">s</span><span class="p">)</span>
+    <span class="k">call </span><span class="n">attractor</span><span class="p">%</span><span class="n">init</span><span class="p">(</span><span class="n">initial_state</span><span class="o">=</span><span class="n">initial_state</span><span class="p">,</span> <span class="n">sigma</span><span class="o">=</span><span class="n">sigma</span><span class="p">,</span> <span class="n">rho</span><span class="o">=</span><span class="n">rho</span><span class="p">,</span> <span class="n">beta</span><span class="o">=</span><span class="n">beta</span><span class="p">)</span>
+    <span class="n">solution</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span> <span class="o">=</span> <span class="mf">0._R_P</span>
+    <span class="n">solution</span><span class="p">(</span><span class="mi">1</span><span class="p">:</span><span class="n">space_dimension</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span> <span class="o">=</span> <span class="n">attractor</span><span class="p">%</span><span class="n">output</span><span class="p">()</span>
+    <span class="k">do </span><span class="n">step</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span> <span class="n">num_steps</span>
+      <span class="k">call </span><span class="n">rk_integrator</span><span class="p">%</span><span class="n">integrate</span><span class="p">(</span><span class="n">field</span><span class="o">=</span><span class="n">attractor</span><span class="p">,</span> <span class="n">stage</span><span class="o">=</span><span class="n">rk_stage</span><span class="p">(</span><span class="mi">1</span><span class="p">:</span><span class="n">s</span><span class="p">),</span> <span class="n">dt</span><span class="o">=</span><span class="n">dt</span><span class="p">)</span>
+      <span class="n">solution</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">step</span><span class="p">)</span> <span class="o">=</span> <span class="n">step</span> <span class="o">*</span> <span class="n">dt</span>
+      <span class="n">solution</span><span class="p">(</span><span class="mi">1</span><span class="p">:</span><span class="n">space_dimension</span><span class="p">,</span> <span class="n">step</span><span class="p">)</span> <span class="o">=</span> <span class="n">attractor</span><span class="p">%</span><span class="n">output</span><span class="p">()</span>
+    <span class="n">enddo</span>
+    <span class="k">call </span><span class="n">save_results</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s1">&#39;FOODiE test: Lorenz equation integration, explicit TVD Runge-Kutta &#39;</span><span class="o">//</span><span class="nb">trim</span><span class="p">(</span><span class="n">str</span><span class="p">(.</span><span class="n">true</span><span class="p">.,</span> <span class="n">s</span><span class="p">))</span><span class="o">//</span><span class="s1">&#39; stages&#39;</span><span class="p">,&amp;</span>
+                      <span class="n">filename</span><span class="o">=</span><span class="s1">&#39;lorenz_integration-tvdrk-&#39;</span><span class="o">//</span><span class="nb">trim</span><span class="p">(</span><span class="n">str</span><span class="p">(.</span><span class="n">true</span><span class="p">.,</span> <span class="n">s</span><span class="p">)))</span>
+  <span class="n">enddo</span>
+  <span class="k">print</span> <span class="s2">&quot;(A)&quot;</span><span class="p">,</span> <span class="s1">&#39;Finish!&#39;</span>
+  <span class="k">return</span>
+  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+  <span class="n">endsubroutine</span> <span class="n">test_tvd_rk</span>
 <span class="n">endprogram</span> <span class="n">integrate_lorenz</span>
 </pre></div>
 

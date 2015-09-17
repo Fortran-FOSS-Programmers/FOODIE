@@ -132,9 +132,9 @@
       
       <a class="list-group-item" href="../proc/test_euler.html#variable-euler_integrator">euler_integrator</a>
       
-      <a class="list-group-item" href="../proc/test_euler.html#variable-dt%7E5">dt</a>
+      <a class="list-group-item" href="../proc/test_euler.html#variable-dt%7E7">dt</a>
       
-      <a class="list-group-item" href="../proc/test_euler.html#variable-t%7E6">t</a>
+      <a class="list-group-item" href="../proc/test_euler.html#variable-t%7E7">t</a>
       
     </div>
   </div>
@@ -255,6 +255,8 @@
       
       <a class="list-group-item" href="../proc/init%7E9.html">init</a>
       
+      <a class="list-group-item" href="../proc/init%7E10.html">init</a>
+      
       <a class="list-group-item" href="../proc/integrate.html">integrate</a>
       
       <a class="list-group-item" href="../proc/integrate%7E2.html">integrate</a>
@@ -262,6 +264,8 @@
       <a class="list-group-item" href="../proc/integrate%7E3.html">integrate</a>
       
       <a class="list-group-item" href="../proc/integrate%7E4.html">integrate</a>
+      
+      <a class="list-group-item" href="../proc/integrate%7E5.html">integrate</a>
       
       <a class="list-group-item" href="../proc/lorenz_assign_lorenz.html">lorenz_assign_lorenz</a>
       
@@ -288,6 +292,14 @@
       <a class="list-group-item" href="../proc/output%7E4.html">output</a>
       
       <a class="list-group-item" href="../proc/p.html">p</a>
+      
+      <a class="list-group-item" href="../proc/previous_step.html">previous_step</a>
+      
+      <a class="list-group-item" href="../proc/previous_step%7E2.html">previous_step</a>
+      
+      <a class="list-group-item" href="../proc/previous_step%7E3.html">previous_step</a>
+      
+      <a class="list-group-item" href="../proc/previous_step%7E4.html">previous_step</a>
       
       <a class="list-group-item" href="../proc/primitive2conservative.html">primitive2conservative</a>
       
@@ -317,6 +329,12 @@
       
       <a class="list-group-item" href="../proc/sub_burgers.html">sub_burgers</a>
       
+      <a class="list-group-item" href="../proc/sub_euler.html">sub_euler</a>
+      
+      <a class="list-group-item" href="../proc/sub_lorenz.html">sub_lorenz</a>
+      
+      <a class="list-group-item" href="../proc/sub_oscillation.html">sub_oscillation</a>
+      
       <a class="list-group-item" href="../proc/test_ab.html">test_ab</a>
       
       <a class="list-group-item" href="../proc/test_ab%7E2.html">test_ab</a>
@@ -332,6 +350,14 @@
       <a class="list-group-item" href="../proc/test_euler%7E3.html">test_euler</a>
       
       <a class="list-group-item" href="../proc/test_euler%7E4.html">test_euler</a>
+      
+      <a class="list-group-item" href="../proc/test_leapfrog.html">test_leapfrog</a>
+      
+      <a class="list-group-item" href="../proc/test_leapfrog%7E2.html">test_leapfrog</a>
+      
+      <a class="list-group-item" href="../proc/test_leapfrog%7E3.html">test_leapfrog</a>
+      
+      <a class="list-group-item" href="../proc/test_leapfrog%7E4.html">test_leapfrog</a>
       
       <a class="list-group-item" href="../proc/test_ls_rk.html">test_ls_rk</a>
       
@@ -616,7 +642,7 @@ implementation in a submodule of an interface in a parent module.</p>
   
 <tr>
   
-  <td><span class="anchor" id="variable-dt%7E5"></span>real(kind=R_P),</td>
+  <td><span class="anchor" id="variable-dt%7E7"></span>real(kind=R_P),</td>
   
   <td>public</td>
   <td></td><td>::</td>
@@ -630,7 +656,7 @@ implementation in a submodule of an interface in a parent module.</p>
   
 <tr>
   
-  <td><span class="anchor" id="variable-t%7E6"></span>real(kind=R_P),</td>
+  <td><span class="anchor" id="variable-t%7E7"></span>real(kind=R_P),</td>
   
   <td>public</td>
   <td></td><td>::</td>
@@ -678,7 +704,7 @@ implementation in a submodule of an interface in a parent module.</p>
     <span class="n">t</span> <span class="o">=</span> <span class="n">t</span> <span class="o">+</span> <span class="n">dt</span>
   <span class="n">enddo</span>
   <span class="n">final_state</span> <span class="o">=</span> <span class="n">domain</span><span class="p">%</span><span class="n">output</span><span class="p">()</span>
-  <span class="k">call </span><span class="n">save_results</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s1">&#39;FOODiE test: Burgers equation integration at t=0.6, explicit Euler&#39;</span><span class="p">,</span> <span class="p">&amp;</span>
+  <span class="k">call </span><span class="n">save_results</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s1">&#39;FOODiE test: Burgers equation integration, t=&#39;</span><span class="o">//</span><span class="n">str</span><span class="p">(</span><span class="n">n</span><span class="o">=</span><span class="n">t_final</span><span class="p">)</span><span class="o">//</span><span class="s1">&#39; explicit Euler&#39;</span><span class="p">,</span> <span class="p">&amp;</span>
                     <span class="n">filename</span><span class="o">=</span><span class="s1">&#39;burgers_integration-euler&#39;</span><span class="p">)</span>
   <span class="k">print</span> <span class="s2">&quot;(A)&quot;</span><span class="p">,</span> <span class="s1">&#39;Finish!&#39;</span>
   <span class="k">return</span>

@@ -170,6 +170,8 @@
       
       <a class="list-group-item" href="../sourcefile/foodie_integrator_euler_explicit.f90.html">foodie_integrator_euler_explicit.f90</a>
       
+      <a class="list-group-item" href="../sourcefile/foodie_integrator_leapfrog.f90.html">foodie_integrator_leapfrog.f90</a>
+      
       <a class="list-group-item" href="../sourcefile/foodie_integrator_low_storage_runge_kutta.f90.html">foodie_integrator_low_storage_runge_kutta.f90</a>
       
       <a class="list-group-item" href="../sourcefile/foodie_integrator_tvd_runge_kutta.f90.html">foodie_integrator_tvd_runge_kutta.f90</a>
@@ -213,12 +215,23 @@
 <span class="c">!&lt;</span>
 <span class="c">!&lt; FOODiE is aimed to the time-like integration of the above system of ODE. To this aim, different numerical schemes are provided:</span>
 <span class="c">!&lt;</span>
-<span class="c">!&lt;+ *forward explicit Euler* scheme, a 1st order accurate scheme;</span>
-<span class="c">!&lt;+ *TVD or SSP Runge-Kutta* class schemes:</span>
-<span class="c">!&lt;    + TVD(1,1): 1 stage, 1st order scheme, namely the forward explicit Euler one;</span>
-<span class="c">!&lt;    + SSP(2,2): 2 stages, 2nd order scheme;</span>
-<span class="c">!&lt;    + SSP(3,3): 3 stages, 3rd order scheme;</span>
-<span class="c">!&lt;    + SSP(5,4): 5 stages, 4th order scheme;</span>
+<span class="c">!&lt;+ *explicit Adams-Bashforth* class of schemes:</span>
+<span class="c">!&lt;    + 1 step, namely the forward explicit Euler scheme, 1st order accurate;</span>
+<span class="c">!&lt;    + 2 steps, 2nd accurate;</span>
+<span class="c">!&lt;    + 3 steps, 3rd accurate;</span>
+<span class="c">!&lt;+ *forward explicit Euler* scheme, a 1st order accurate;</span>
+<span class="c">!&lt;+ *explicit Leapfrog*:</span>
+<span class="c">!&lt;    + Unfiltered, 2st order accurate, (mostly) unstable;</span>
+<span class="c">!&lt;    + Robert-Asselin filtered, 1st order accurate;</span>
+<span class="c">!&lt;    + Robert-Asselin-Williams filter, 3rd order accurate;</span>
+<span class="c">!&lt;+ *explicit low storage Runge-Kutta 2N* class schemes:</span>
+<span class="c">!&lt;    + LS(1,1): 1 stage, 1st order accurate, namely the forward explicit Euler one;</span>
+<span class="c">!&lt;    + LS(5,4): 5 stages, 4th order accurate;</span>
+<span class="c">!&lt;+ *explicit TVD or SSP Runge-Kutta* class schemes:</span>
+<span class="c">!&lt;    + TVD(1,1): 1 stage, 1st order accurate, namely the forward explicit Euler one;</span>
+<span class="c">!&lt;    + SSP(2,2): 2 stages, 2nd order accurate;</span>
+<span class="c">!&lt;    + SSP(3,3): 3 stages, 3rd order accurate;</span>
+<span class="c">!&lt;    + SSP(5,4): 5 stages, 4th order accurate;</span>
 <span class="c">!&lt;</span>
 <span class="c">!&lt;### Usage</span>
 <span class="c">!&lt;</span>
@@ -241,13 +254,13 @@
 <span class="c">!&lt;   real(R_P)                            :: rho=0._R_P   !&lt; Lorenz \(\rho\).</span>
 <span class="c">!&lt;   real(R_P)                            :: beta=0._R_P  !&lt; Lorenz \(\beta\).</span>
 <span class="c">!&lt;   contains</span>
-<span class="c">!&lt;     procedure, pass(self), public :: output                                          !&lt; Extract Lorenz field.</span>
 <span class="c">!&lt;     procedure, pass(self), public :: t =&gt; dLorenz_dt                                 !&lt; Time derivate, resiuduals function.</span>
 <span class="c">!&lt;     procedure, pass(lhs),  public :: integrand_multiply_real =&gt; lorenz_multiply_real !&lt; lorenz * real operator.</span>
 <span class="c">!&lt;     procedure, pass(rhs),  public :: real_multiply_integrand =&gt; real_multiply_lorenz !&lt; Real * Lorenz operator.</span>
 <span class="c">!&lt;     procedure, pass(lhs),  public :: add =&gt; add_lorenz                               !&lt; Lorenz + Lorenz oprator.</span>
 <span class="c">!&lt;     procedure, pass(lhs),  public :: assign_integrand =&gt; lorenz_assign_lorenz        !&lt; Lorenz = Lorenz.</span>
 <span class="c">!&lt;     procedure, pass(lhs),  public :: assign_real =&gt; lorenz_assign_real               !&lt; Lorenz = real.</span>
+<span class="c">!&lt;     ...</span>
 <span class="c">!&lt; endtype lorenz</span>
 <span class="c">!&lt;```</span>
 <span class="c">!&lt;</span>
@@ -271,6 +284,7 @@
 <span class="k">use </span><span class="n">type_integrand</span><span class="p">,</span> <span class="n">only</span> <span class="p">:</span> <span class="n">integrand</span>
 <span class="k">use </span><span class="n">foodie_integrator_adams_bashforth</span><span class="p">,</span> <span class="n">only</span> <span class="p">:</span> <span class="n">adams_bashforth_integrator</span>
 <span class="k">use </span><span class="n">foodie_integrator_euler_explicit</span><span class="p">,</span> <span class="n">only</span> <span class="p">:</span> <span class="n">euler_explicit_integrator</span>
+<span class="k">use </span><span class="n">foodie_integrator_leapfrog</span><span class="p">,</span> <span class="n">only</span> <span class="p">:</span> <span class="n">leapfrog_integrator</span>
 <span class="k">use </span><span class="n">foodie_integrator_low_storage_runge_kutta</span><span class="p">,</span> <span class="n">only</span> <span class="p">:</span> <span class="n">ls_runge_kutta_integrator</span>
 <span class="k">use </span><span class="n">foodie_integrator_tvd_runge_kutta</span><span class="p">,</span> <span class="n">only</span> <span class="p">:</span> <span class="n">tvd_runge_kutta_integrator</span>
 <span class="c">!-----------------------------------------------------------------------------------------------------------------------------------</span>
@@ -281,6 +295,7 @@
 <span class="k">public</span> <span class="kd">::</span> <span class="n">integrand</span>
 <span class="k">public</span> <span class="kd">::</span> <span class="n">adams_bashforth_integrator</span>
 <span class="k">public</span> <span class="kd">::</span> <span class="n">euler_explicit_integrator</span>
+<span class="k">public</span> <span class="kd">::</span> <span class="n">leapfrog_integrator</span>
 <span class="k">public</span> <span class="kd">::</span> <span class="n">ls_runge_kutta_integrator</span>
 <span class="k">public</span> <span class="kd">::</span> <span class="n">tvd_runge_kutta_integrator</span>
 <span class="c">!-----------------------------------------------------------------------------------------------------------------------------------</span>

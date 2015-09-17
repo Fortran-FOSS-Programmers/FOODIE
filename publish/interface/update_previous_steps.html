@@ -153,6 +153,8 @@
       
       <a class="list-group-item" href="../interface/integrand_op_real.html">integrand_op_real</a>
       
+      <a class="list-group-item" href="../interface/previous_step.html">previous_step</a>
+      
       <a class="list-group-item" href="../interface/real_op_integrand.html">real_op_integrand</a>
       
       <a class="list-group-item" href="../interface/symmetric_operator.html">symmetric_operator</a>
@@ -175,7 +177,7 @@
     
     
     <h2>
-private puresubroutine update_previous_steps(self)
+private puresubroutine update_previous_steps(self, filter, weights)
     
     
     
@@ -210,6 +212,36 @@ private puresubroutine update_previous_steps(self)
   
   <td></td><td>::</td>
   <td><strong>self</strong></td><td><p>Integrand field.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-filter"></span>class(<a href='../type/integrand.html'>integrand</a>),</td>
+  <td>intent(in),</td>
+  <td>optional</td>
+  
+  <td></td><td>::</td>
+  <td><strong>filter</strong></td><td><p>Filter field displacement.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-weights"></span>real(kind=R_P),</td>
+  <td>intent(in),</td>
+  <td>optional</td>
+  
+  <td></td><td>::</td>
+  <td><strong>weights</strong>(:)</td><td><p>Weights for filtering the steps.</p></td>
   
 </tr>
 

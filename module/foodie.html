@@ -151,6 +151,8 @@
       
       <a class="list-group-item" href="../module/foodie_integrator_euler_explicit.html">foodie_integrator_euler_explicit</a>
       
+      <a class="list-group-item" href="../module/foodie_integrator_leapfrog.html">foodie_integrator_leapfrog</a>
+      
       <a class="list-group-item" href="../module/foodie_integrator_low_storage_runge_kutta.html">foodie_integrator_low_storage_runge_kutta</a>
       
       <a class="list-group-item" href="../module/foodie_integrator_tvd_runge_kutta.html">foodie_integrator_tvd_runge_kutta</a>
@@ -184,6 +186,8 @@
       
       <li><a href='../module/foodie_integrator_euler_explicit.html'>foodie_integrator_euler_explicit</a></li>
       
+      <li><a href='../module/foodie_integrator_leapfrog.html'>foodie_integrator_leapfrog</a></li>
+      
       <li><a href='../module/foodie_integrator_low_storage_runge_kutta.html'>foodie_integrator_low_storage_runge_kutta</a></li>
       
       <li><a href='../module/foodie_integrator_tvd_runge_kutta.html'>foodie_integrator_tvd_runge_kutta</a></li>
@@ -194,11 +198,12 @@
     
             <img class="depgraph" alt="dependency graph" src=../graphs/module%7E%7Efoodie%7E%7EUsesGraph.svg usemap="#module~~foodie~~UsesGraph">
             <map id="module~~foodie~~UsesGraph" name="module~~foodie~~UsesGraph">
-<area shape="rect" id="node2" href="../module/foodie_integrator_low_storage_runge_kutta.html" title="foodie_integrator_low_storage_runge_kutta" alt="" coords="312,5,605,40"/>
-<area shape="rect" id="node3" href="../module/foodie_integrator_tvd_runge_kutta.html" title="foodie_integrator_tvd_runge_kutta" alt="" coords="341,64,576,99"/>
-<area shape="rect" id="node4" href="../module/type_integrand.html" title="type_integrand" alt="" coords="152,119,264,153"/>
+<area shape="rect" id="node2" href="../module/foodie_integrator_tvd_runge_kutta.html" title="foodie_integrator_tvd_runge_kutta" alt="" coords="341,5,576,40"/>
+<area shape="rect" id="node3" href="../module/type_integrand.html" title="type_integrand" alt="" coords="152,147,264,181"/>
+<area shape="rect" id="node4" href="../module/foodie_integrator_adams_bashforth.html" title="foodie_integrator_adams_bashforth" alt="" coords="337,64,580,99"/>
 <area shape="rect" id="node5" href="../module/foodie_integrator_euler_explicit.html" title="foodie_integrator_euler_explicit" alt="" coords="351,173,567,208"/>
-<area shape="rect" id="node6" href="../module/foodie_integrator_adams_bashforth.html" title="foodie_integrator_adams_bashforth" alt="" coords="337,232,580,267"/>
+<area shape="rect" id="node6" href="../module/foodie_integrator_leapfrog.html" title="foodie_integrator_leapfrog" alt="" coords="367,232,551,267"/>
+<area shape="rect" id="node7" href="../module/foodie_integrator_low_storage_runge_kutta.html" title="foodie_integrator_low_storage_runge_kutta" alt="" coords="312,291,605,325"/>
 </map>
 
             <div><a type="button" class="graph-help" data-toggle="modal" href="#graph-help-text">Help</a></div>
@@ -301,12 +306,29 @@ implementation in a submodule of an interface in a parent module.</p>
  <em>t</em>, <em>R</em> is the (vectorial) residual function and <em>F</em> is the (vectorial) initial conditions function.</p>
 <p>FOODiE is aimed to the time-like integration of the above system of ODE. To this aim, different numerical schemes are provided:</p>
 <ul>
-<li><em>forward explicit Euler</em> scheme, a 1st order accurate scheme;</li>
-<li><em>TVD or SSP Runge-Kutta</em> class schemes:<ul>
-<li>TVD(1,1): 1 stage, 1st order scheme, namely the forward explicit Euler one;</li>
-<li>SSP(2,2): 2 stages, 2nd order scheme;</li>
-<li>SSP(3,3): 3 stages, 3rd order scheme;</li>
-<li>SSP(5,4): 5 stages, 4th order scheme;</li>
+<li><em>explicit Adams-Bashforth</em> class of schemes:<ul>
+<li>1 step, namely the forward explicit Euler scheme, 1st order accurate;</li>
+<li>2 steps, 2nd accurate;</li>
+<li>3 steps, 3rd accurate;</li>
+</ul>
+</li>
+<li><em>forward explicit Euler</em> scheme, a 1st order accurate;</li>
+<li><em>explicit Leapfrog</em>:<ul>
+<li>Unfiltered, 2st order accurate, (mostly) unstable;</li>
+<li>Robert-Asselin filtered, 1st order accurate;</li>
+<li>Robert-Asselin-Williams filter, 3rd order accurate;</li>
+</ul>
+</li>
+<li><em>explicit low storage Runge-Kutta 2N</em> class schemes:<ul>
+<li>LS(1,1): 1 stage, 1st order accurate, namely the forward explicit Euler one;</li>
+<li>LS(5,4): 5 stages, 4th order accurate;</li>
+</ul>
+</li>
+<li><em>explicit TVD or SSP Runge-Kutta</em> class schemes:<ul>
+<li>TVD(1,1): 1 stage, 1st order accurate, namely the forward explicit Euler one;</li>
+<li>SSP(2,2): 2 stages, 2nd order accurate;</li>
+<li>SSP(3,3): 3 stages, 3rd order accurate;</li>
+<li>SSP(5,4): 5 stages, 4th order accurate;</li>
 </ul>
 </li>
 </ul>
@@ -325,13 +347,13 @@ implementation in a submodule of an interface in a parent module.</p>
    <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">)</span>                            <span class="kd">::</span> <span class="n">rho</span><span class="o">=</span><span class="mf">0._R_P</span>   <span class="c">!&lt; Lorenz \(\rho\).</span>
    <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">)</span>                            <span class="kd">::</span> <span class="n">beta</span><span class="o">=</span><span class="mf">0._R_P</span>  <span class="c">!&lt; Lorenz \(\beta\).</span>
    <span class="k">contains</span>
-<span class="k">     procedure</span><span class="p">,</span> <span class="k">pass</span><span class="p">(</span><span class="n">self</span><span class="p">),</span> <span class="k">public</span> <span class="kd">::</span> <span class="n">output</span>                                          <span class="c">!&lt; Extract Lorenz field.</span>
-     <span class="k">procedure</span><span class="p">,</span> <span class="k">pass</span><span class="p">(</span><span class="n">self</span><span class="p">),</span> <span class="k">public</span> <span class="kd">::</span> <span class="n">t</span> <span class="o">=&gt;</span> <span class="n">dLorenz_dt</span>                                 <span class="c">!&lt; Time derivate, resiuduals function.</span>
+<span class="k">     procedure</span><span class="p">,</span> <span class="k">pass</span><span class="p">(</span><span class="n">self</span><span class="p">),</span> <span class="k">public</span> <span class="kd">::</span> <span class="n">t</span> <span class="o">=&gt;</span> <span class="n">dLorenz_dt</span>                                 <span class="c">!&lt; Time derivate, resiuduals function.</span>
      <span class="k">procedure</span><span class="p">,</span> <span class="k">pass</span><span class="p">(</span><span class="n">lhs</span><span class="p">),</span>  <span class="k">public</span> <span class="kd">::</span> <span class="n">integrand_multiply_real</span> <span class="o">=&gt;</span> <span class="n">lorenz_multiply_real</span> <span class="c">!&lt; lorenz * real operator.</span>
      <span class="k">procedure</span><span class="p">,</span> <span class="k">pass</span><span class="p">(</span><span class="n">rhs</span><span class="p">),</span>  <span class="k">public</span> <span class="kd">::</span> <span class="n">real_multiply_integrand</span> <span class="o">=&gt;</span> <span class="n">real_multiply_lorenz</span> <span class="c">!&lt; Real * Lorenz operator.</span>
      <span class="k">procedure</span><span class="p">,</span> <span class="k">pass</span><span class="p">(</span><span class="n">lhs</span><span class="p">),</span>  <span class="k">public</span> <span class="kd">::</span> <span class="n">add</span> <span class="o">=&gt;</span> <span class="n">add_lorenz</span>                               <span class="c">!&lt; Lorenz + Lorenz oprator.</span>
      <span class="k">procedure</span><span class="p">,</span> <span class="k">pass</span><span class="p">(</span><span class="n">lhs</span><span class="p">),</span>  <span class="k">public</span> <span class="kd">::</span> <span class="n">assign_integrand</span> <span class="o">=&gt;</span> <span class="n">lorenz_assign_lorenz</span>        <span class="c">!&lt; Lorenz = Lorenz.</span>
      <span class="k">procedure</span><span class="p">,</span> <span class="k">pass</span><span class="p">(</span><span class="n">lhs</span><span class="p">),</span>  <span class="k">public</span> <span class="kd">::</span> <span class="n">assign_real</span> <span class="o">=&gt;</span> <span class="n">lorenz_assign_real</span>               <span class="c">!&lt; Lorenz = real.</span>
+     <span class="p">...</span>
  <span class="n">endtype</span> <span class="n">lorenz</span>
 </pre></div>
 
@@ -353,14 +375,14 @@ implementation in a submodule of an interface in a parent module.</p>
     
             <img class="depgraph" alt="dependency graph" src=../graphs/module%7E%7Efoodie%7E%7EUsedByGraph.svg usemap="#module~~foodie~~UsedByGraph">
             <map id="module~~foodie~~UsedByGraph" name="module~~foodie~~UsedByGraph">
-<area shape="rect" id="node2" href="../program/integrate_euler_1d.html" title="integrate_euler_1D" alt="" coords="291,13,429,48"/>
-<area shape="rect" id="node3" href="../module/type_lorenz.html" title="type_lorenz" alt="" coords="137,99,228,133"/>
-<area shape="rect" id="node4" href="../program/integrate_lorenz.html" title="integrate_lorenz" alt="" coords="300,149,420,184"/>
-<area shape="rect" id="node5" href="../program/integrate_oscillation.html" title="integrate_oscillation" alt="" coords="289,208,431,243"/>
-<area shape="rect" id="node6" href="../module/type_oscillation.html" title="type_oscillation" alt="" coords="127,208,239,243"/>
-<area shape="rect" id="node7" href="../program/integrate_burgers.html" title="integrate_burgers" alt="" coords="296,292,424,327"/>
-<area shape="rect" id="node8" href="../module/type_burgers.html" title="type_burgers" alt="" coords="132,317,233,352"/>
-<area shape="rect" id="node9" href="../module/type_euler_1d.html" title="type_euler_1D" alt="" coords="128,40,237,75"/>
+<area shape="rect" id="node2" href="../module/type_burgers.html" title="type_burgers" alt="" coords="132,5,233,40"/>
+<area shape="rect" id="node3" href="../program/integrate_burgers.html" title="integrate_burgers" alt="" coords="296,33,424,68"/>
+<area shape="rect" id="node4" href="../module/type_euler_1d.html" title="type_euler_1D" alt="" coords="128,115,237,149"/>
+<area shape="rect" id="node5" href="../program/integrate_oscillation.html" title="integrate_oscillation" alt="" coords="289,224,431,259"/>
+<area shape="rect" id="node6" href="../program/integrate_euler_1d.html" title="integrate_euler_1D" alt="" coords="291,165,429,200"/>
+<area shape="rect" id="node7" href="../program/integrate_lorenz.html" title="integrate_lorenz" alt="" coords="300,308,420,343"/>
+<area shape="rect" id="node8" href="../module/type_lorenz.html" title="type_lorenz" alt="" coords="137,333,228,368"/>
+<area shape="rect" id="node9" href="../module/type_oscillation.html" title="type_oscillation" alt="" coords="127,224,239,259"/>
 </map>
 
             <div><a type="button" class="graph-help" data-toggle="modal" href="#graph-help-text">Help</a></div>

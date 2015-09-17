@@ -20,16 +20,19 @@ type, abstract :: integrand
   contains
     ! public deferred procedures that concrete integrand-field must implement
     procedure(time_derivative),       pass(self), deferred, public :: t                     !< Time derivative, residuals.
-    procedure(update_previous_steps), pass(self), deferred, public :: update_previous_steps !< Time derivative, residuals.
+    procedure(update_previous_steps), pass(self), deferred, public :: update_previous_steps !< Update the previous time steps.
+    procedure(previous_step),         pass(self), deferred, public :: previous_step         !< Get a previous time step.
     ! operators
     procedure(symmetric_operator),   pass(lhs),  deferred, public :: integrand_multiply_integrand !< Integrand * integrand operator.
     procedure(integrand_op_real),    pass(lhs),  deferred, public :: integrand_multiply_real      !< Integrand * real operator.
     procedure(real_op_integrand),    pass(rhs),  deferred, public :: real_multiply_integrand      !< Real * integrand operator.
     procedure(symmetric_operator),   pass(lhs),  deferred, public :: add                          !< Integrand + integrand oprator.
+    procedure(symmetric_operator),   pass(lhs),  deferred, public :: sub                          !< Integrand - integrand oprator.
     procedure(assignment_integrand), pass(lhs),  deferred, public :: assign_integrand             !< Integrand = integrand.
     procedure(assignment_real),      pass(lhs),  deferred, public :: assign_real                  !< Integrand = real.
     ! operators overloading
     generic, public :: operator(+) => add                              !< Overloading + operator.
+    generic, public :: operator(-) => sub                              !< Overloading - operator.
     generic, public :: operator(*) => integrand_multiply_integrand, &
                                       real_multiply_integrand, &
                                       integrand_multiply_real          !< Overloading * operator.
@@ -49,14 +52,27 @@ abstract interface
   !---------------------------------------------------------------------------------------------------------------------------------
   endfunction time_derivative
 
-  pure subroutine update_previous_steps(self)
+  pure subroutine update_previous_steps(self, filter, weights)
   !---------------------------------------------------------------------------------------------------------------------------------
   !< Update the previous time steps (of integrand field) for multi-step(level) ODE solvers.
   !---------------------------------------------------------------------------------------------------------------------------------
-  import :: integrand
-  class(integrand), intent(INOUT) :: self      !< Integrand field.
+  import :: integrand, R_P
+  class(integrand),           intent(INOUT) :: self       !< Integrand field.
+  class(integrand), optional, intent(IN)    :: filter     !< Filter field displacement.
+  real(R_P),        optional, intent(IN)    :: weights(:) !< Weights for filtering the steps.
   !---------------------------------------------------------------------------------------------------------------------------------
   endsubroutine update_previous_steps
+
+  pure function previous_step(self, n) result(previous)
+  !---------------------------------------------------------------------------------------------------------------------------------
+  !< Get a previous time steps (of integrand field) for multi-step(level) ODE solvers.
+  !---------------------------------------------------------------------------------------------------------------------------------
+  import :: integrand, I_P
+  class(integrand), intent(IN)  :: self     !< Integrand field.
+  integer(I_P),     intent(IN)  :: n        !< Time level.
+  class(integrand), allocatable :: previous !< Selected previous time integrand field.
+  !---------------------------------------------------------------------------------------------------------------------------------
+  endfunction previous_step
 
   pure function integrand_op_real(lhs, rhs) result(operator_result)
   !---------------------------------------------------------------------------------------------------------------------------------

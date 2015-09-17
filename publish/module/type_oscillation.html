@@ -150,6 +150,8 @@
       
       <a class="list-group-item" href="../module/type_oscillation.html#proc-doscillation_dt">dOscillation_dt</a>
       
+      <a class="list-group-item" href="../module/type_oscillation.html#proc-previous_step%7E4">previous_step</a>
+      
       <a class="list-group-item" href="../module/type_oscillation.html#proc-oscillation_multiply_oscillation">oscillation_multiply_oscillation</a>
       
       <a class="list-group-item" href="../module/type_oscillation.html#proc-oscillation_multiply_real">oscillation_multiply_real</a>
@@ -157,6 +159,8 @@
       <a class="list-group-item" href="../module/type_oscillation.html#proc-real_multiply_oscillation">real_multiply_oscillation</a>
       
       <a class="list-group-item" href="../module/type_oscillation.html#proc-add_oscillation">add_oscillation</a>
+      
+      <a class="list-group-item" href="../module/type_oscillation.html#proc-sub_oscillation">sub_oscillation</a>
       
     </div>
   </div>
@@ -167,7 +171,7 @@
     <div class="panel-heading text-left"><h3 class="panel-title">Subroutines</h3></div>
     <div class="list-group">
       
-      <a class="list-group-item" href="../module/type_oscillation.html#proc-init%7E9">init</a>
+      <a class="list-group-item" href="../module/type_oscillation.html#proc-init%7E10">init</a>
       
       <a class="list-group-item" href="../module/type_oscillation.html#proc-update_previous_steps%7E4">update_previous_steps</a>
       
@@ -196,6 +200,8 @@
       <a class="list-group-item" href="../module/foodie_integrator_adams_bashforth.html">foodie_integrator_adams_bashforth</a>
       
       <a class="list-group-item" href="../module/foodie_integrator_euler_explicit.html">foodie_integrator_euler_explicit</a>
+      
+      <a class="list-group-item" href="../module/foodie_integrator_leapfrog.html">foodie_integrator_leapfrog</a>
       
       <a class="list-group-item" href="../module/foodie_integrator_low_storage_runge_kutta.html">foodie_integrator_low_storage_runge_kutta</a>
       
@@ -234,12 +240,13 @@
     
             <img class="depgraph" alt="dependency graph" src=../graphs/module%7E%7Etype_oscillation%7E%7EUsesGraph.svg usemap="#module~~type_oscillation~~UsesGraph">
             <map id="module~~type_oscillation~~UsesGraph" name="module~~type_oscillation~~UsesGraph">
-<area shape="rect" id="node4" href="../module/foodie_integrator_low_storage_runge_kutta.html" title="foodie_integrator_low_storage_runge_kutta" alt="" coords="298,283,579,317"/>
-<area shape="rect" id="node5" href="../module/foodie_integrator_tvd_runge_kutta.html" title="foodie_integrator_tvd_runge_kutta" alt="" coords="327,67,551,100"/>
-<area shape="rect" id="node6" href="../module/type_integrand.html" title="type_integrand" alt="" coords="145,175,253,208"/>
-<area shape="rect" id="node7" href="../module/foodie_integrator_euler_explicit.html" title="foodie_integrator_euler_explicit" alt="" coords="335,123,542,156"/>
-<area shape="rect" id="node8" href="../module/foodie_integrator_adams_bashforth.html" title="foodie_integrator_adams_bashforth" alt="" coords="323,227,555,260"/>
-<area shape="rect" id="node3" href="../module/foodie.html" title="foodie" alt="" coords="625,149,694,183"/>
+<area shape="rect" id="node4" href="../module/foodie_integrator_tvd_runge_kutta.html" title="foodie_integrator_tvd_runge_kutta" alt="" coords="327,249,551,283"/>
+<area shape="rect" id="node5" href="../module/type_integrand.html" title="type_integrand" alt="" coords="145,172,253,205"/>
+<area shape="rect" id="node6" href="../module/foodie_integrator_adams_bashforth.html" title="foodie_integrator_adams_bashforth" alt="" coords="323,305,555,339"/>
+<area shape="rect" id="node7" href="../module/foodie_integrator_euler_explicit.html" title="foodie_integrator_euler_explicit" alt="" coords="335,32,542,66"/>
+<area shape="rect" id="node8" href="../module/foodie_integrator_leapfrog.html" title="foodie_integrator_leapfrog" alt="" coords="351,89,527,122"/>
+<area shape="rect" id="node9" href="../module/foodie_integrator_low_storage_runge_kutta.html" title="foodie_integrator_low_storage_runge_kutta" alt="" coords="298,145,579,178"/>
+<area shape="rect" id="node3" href="../module/foodie.html" title="foodie" alt="" coords="625,145,694,178"/>
 </map>
 
             <div><a type="button" class="graph-help" data-toggle="modal" href="#graph-help-text">Help</a></div>
@@ -498,11 +505,11 @@ implementation in a submodule of an interface in a parent module.</p>
   
 <tr>
   
-  <td><span class="anchor" id="variable-state%7E3"></span>real(kind=R_P),</td>
+  <td><span class="anchor" id="variable-u%7E4"></span>real(kind=R_P),</td>
   
   <td>private,</td>
   <td>dimension(:), allocatable</td><td>::</td>
-  <td><strong>state</strong></td><td></td><td></td><td><p>Solution vector, [1:dims].</p></td>
+  <td><strong>U</strong></td><td></td><td></td><td><p>Integrand (state) variables, [1:dims].</p></td>
   
 </tr>
 
@@ -516,7 +523,7 @@ implementation in a submodule of an interface in a parent module.</p>
   
   <td>private,</td>
   <td>dimension(:,:), allocatable</td><td>::</td>
-  <td><strong>previous</strong></td><td></td><td></td><td><p>Previous steps solution vector, [1:dims,1:steps].</p></td>
+  <td><strong>previous</strong></td><td></td><td></td><td><p>Previous time steps states, [1:dims,1:steps].</p></td>
   
 </tr>
 
@@ -557,6 +564,9 @@ implementation in a submodule of an interface in a parent module.</p>
        <tr><td>procedure, public, pass(self) :: <strong>update_previous_steps</strong>  </td>
        <td><p>Update previous time steps.</p></td></tr>
       
+       <tr><td>procedure, public, pass(self) :: <strong>previous_step</strong>  </td>
+       <td><p>Get a previous time step.</p></td></tr>
+      
        <tr><td>procedure, public, pass(lhs) :: <strong>integrand_multiply_integrand</strong>  => oscillation_multiply_oscillation </td>
        <td><p>Oscillation * oscillation.</p></td></tr>
       
@@ -568,6 +578,9 @@ implementation in a submodule of an interface in a parent module.</p>
       
        <tr><td>procedure, public, pass(lhs) :: <strong>add</strong>  => add_oscillation </td>
        <td><p>Oscillation + Oscillation.</p></td></tr>
+      
+       <tr><td>procedure, public, pass(lhs) :: <strong>sub</strong>  => sub_oscillation </td>
+       <td><p>Oscillation - Oscillation.</p></td></tr>
       
        <tr><td>procedure, public, pass(lhs) :: <strong>assign_integrand</strong>  => oscillation_assign_oscillation </td>
        <td><p>Oscillation = Oscillation.</p></td></tr>
@@ -748,8 +761,91 @@ private purefunction <a href='../proc/doscillation_dt.html'>dOscillation_dt</a>(
     
     
   <div class="panel panel-default">
+  <div class="panel-heading codesum"><span class="anchor" id="proc-previous_step%7E4"></span><h3>
+private purefunction <a href='../proc/previous_step%7E4.html'>previous_step</a>(self, n) result(previous)
+    
+    
+    
+</h3></div>
+  <div class="panel-body">
+       
+    
+    <h4>Arguments</h4>
+    
+      
+      
+<table class="table table-striped varlist">
+<thead><tr><th>Type</th>
+<th>Intent</th><th>Optional</th>
+<th>Attributes</th><th></th><th>Name</th><th></th></thead>
+
+
+
+<tbody>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>class(<a href='../type/oscillation.html'>oscillation</a>),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>self</strong></td><td><p>Oscillation field.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>integer(kind=I_P),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>n</strong></td><td><p>Time level.</p></td>
+  
+</tr>
+
+</tbody>
+</table>
+
+      
+    
+    
+
+  
+  
+  
+  
+     <h4>Return Value <small>class(<a href='../type/integrand.html'>integrand</a>),
+  allocatable</small></h4>
+  <p>Previous time solution of oscillation field.</p>
+    
+    
+    <h4>Description</h4>
+       
+       
+
+
+       
+       <p>Extract previous time solution of oscillation field.</p>
+        
+
+  </div>
+  </div>
+
+    
+    
+  <div class="panel panel-default">
   <div class="panel-heading codesum"><span class="anchor" id="proc-oscillation_multiply_oscillation"></span><h3>
-private purefunction <a href='../proc/oscillation_multiply_oscillation.html'>oscillation_multiply_oscillation</a>(lhs, rhs) result(product)
+private purefunction <a href='../proc/oscillation_multiply_oscillation.html'>oscillation_multiply_oscillation</a>(lhs, rhs) result(opr)
     
     
     
@@ -813,7 +909,7 @@ private purefunction <a href='../proc/oscillation_multiply_oscillation.html'>osc
   
      <h4>Return Value <small>class(<a href='../type/integrand.html'>integrand</a>),
   allocatable</small></h4>
-  <p>Product.</p>
+  <p>Operator result.</p>
     
     
     <h4>Description</h4>
@@ -832,7 +928,7 @@ private purefunction <a href='../proc/oscillation_multiply_oscillation.html'>osc
     
   <div class="panel panel-default">
   <div class="panel-heading codesum"><span class="anchor" id="proc-oscillation_multiply_real"></span><h3>
-private purefunction <a href='../proc/oscillation_multiply_real.html'>oscillation_multiply_real</a>(lhs, rhs) result(product)
+private purefunction <a href='../proc/oscillation_multiply_real.html'>oscillation_multiply_real</a>(lhs, rhs) result(opr)
     
     
     
@@ -896,7 +992,7 @@ private purefunction <a href='../proc/oscillation_multiply_real.html'>oscillatio
   
      <h4>Return Value <small>class(<a href='../type/integrand.html'>integrand</a>),
   allocatable</small></h4>
-  <p>Product.</p>
+  <p>Operator result.</p>
     
     
     <h4>Description</h4>
@@ -915,7 +1011,7 @@ private purefunction <a href='../proc/oscillation_multiply_real.html'>oscillatio
     
   <div class="panel panel-default">
   <div class="panel-heading codesum"><span class="anchor" id="proc-real_multiply_oscillation"></span><h3>
-private purefunction <a href='../proc/real_multiply_oscillation.html'>real_multiply_oscillation</a>(lhs, rhs) result(product)
+private purefunction <a href='../proc/real_multiply_oscillation.html'>real_multiply_oscillation</a>(lhs, rhs) result(opr)
     
     
     
@@ -979,7 +1075,7 @@ private purefunction <a href='../proc/real_multiply_oscillation.html'>real_multi
   
      <h4>Return Value <small>class(<a href='../type/integrand.html'>integrand</a>),
   allocatable</small></h4>
-  <p>Product.</p>
+  <p>Operator result.</p>
     
     
     <h4>Description</h4>
@@ -998,7 +1094,7 @@ private purefunction <a href='../proc/real_multiply_oscillation.html'>real_multi
     
   <div class="panel panel-default">
   <div class="panel-heading codesum"><span class="anchor" id="proc-add_oscillation"></span><h3>
-private purefunction <a href='../proc/add_oscillation.html'>add_oscillation</a>(lhs, rhs) result(sum)
+private purefunction <a href='../proc/add_oscillation.html'>add_oscillation</a>(lhs, rhs) result(opr)
     
     
     
@@ -1062,7 +1158,7 @@ private purefunction <a href='../proc/add_oscillation.html'>add_oscillation</a>(
   
      <h4>Return Value <small>class(<a href='../type/integrand.html'>integrand</a>),
   allocatable</small></h4>
-  <p>Sum.</p>
+  <p>Operator result.</p>
     
     
     <h4>Description</h4>
@@ -1072,6 +1168,89 @@ private purefunction <a href='../proc/add_oscillation.html'>add_oscillation</a>(
 
        
        <p>Add two Oscillation fields.</p>
+        
+
+  </div>
+  </div>
+
+    
+    
+  <div class="panel panel-default">
+  <div class="panel-heading codesum"><span class="anchor" id="proc-sub_oscillation"></span><h3>
+private purefunction <a href='../proc/sub_oscillation.html'>sub_oscillation</a>(lhs, rhs) result(opr)
+    
+    
+    
+</h3></div>
+  <div class="panel-body">
+       
+    
+    <h4>Arguments</h4>
+    
+      
+      
+<table class="table table-striped varlist">
+<thead><tr><th>Type</th>
+<th>Intent</th><th>Optional</th>
+<th>Attributes</th><th></th><th>Name</th><th></th></thead>
+
+
+
+<tbody>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>class(<a href='../type/oscillation.html'>oscillation</a>),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>lhs</strong></td><td><p>Left hand side.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>class(<a href='../type/integrand.html'>integrand</a>),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>rhs</strong></td><td><p>Right hand side.</p></td>
+  
+</tr>
+
+</tbody>
+</table>
+
+      
+    
+    
+
+  
+  
+  
+  
+     <h4>Return Value <small>class(<a href='../type/integrand.html'>integrand</a>),
+  allocatable</small></h4>
+  <p>Operator result.</p>
+    
+    
+    <h4>Description</h4>
+       
+       
+
+
+       
+       <p>Subtract two Oscillation fields.</p>
         
 
   </div>
@@ -1088,8 +1267,8 @@ private purefunction <a href='../proc/add_oscillation.html'>add_oscillation</a>(
     
     
   <div class="panel panel-default">
-  <div class="panel-heading codesum"><span class="anchor" id="proc-init%7E9"></span><h3>
-private subroutine <a href='../proc/init%7E9.html'>init</a>(self, initial_state, f, steps)
+  <div class="panel-heading codesum"><span class="anchor" id="proc-init%7E10"></span><h3>
+private subroutine <a href='../proc/init%7E10.html'>init</a>(self, initial_state, f, steps)
     
     
     
@@ -1136,7 +1315,7 @@ private subroutine <a href='../proc/init%7E9.html'>init</a>(self, initial_state,
   <td></td>
   
   <td>dimension(:)</td><td>::</td>
-  <td><strong>initial_state</strong></td><td><p>Intial state of the Oscillation field vector.</p></td>
+  <td><strong>initial_state</strong></td><td><p>Initial state of the Oscillation field vector.</p></td>
   
 </tr>
 
@@ -1193,7 +1372,7 @@ private subroutine <a href='../proc/init%7E9.html'>init</a>(self, initial_state,
     
   <div class="panel panel-default">
   <div class="panel-heading codesum"><span class="anchor" id="proc-update_previous_steps%7E4"></span><h3>
-private puresubroutine <a href='../proc/update_previous_steps%7E4.html'>update_previous_steps</a>(self)
+private puresubroutine <a href='../proc/update_previous_steps%7E4.html'>update_previous_steps</a>(self, filter, weights)
     
     
     
@@ -1226,6 +1405,36 @@ private puresubroutine <a href='../proc/update_previous_steps%7E4.html'>update_p
   
   <td></td><td>::</td>
   <td><strong>self</strong></td><td><p>Oscillation field.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>class(<a href='../type/integrand.html'>integrand</a>),</td>
+  <td>intent(in),</td>
+  <td>optional</td>
+  
+  <td></td><td>::</td>
+  <td><strong>filter</strong></td><td><p>Filter field displacement.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>real(kind=R_P),</td>
+  <td>intent(in),</td>
+  <td>optional</td>
+  
+  <td></td><td>::</td>
+  <td><strong>weights</strong>(:)</td><td><p>Weights for filtering the steps.</p></td>
   
 </tr>
 

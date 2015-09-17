@@ -148,7 +148,7 @@
       
       <a class="list-group-item" href="../type/euler_1d.html#variable-weno">weno</a>
       
-      <a class="list-group-item" href="../type/euler_1d.html#variable-u">U</a>
+      <a class="list-group-item" href="../type/euler_1d.html#variable-u%7E2">U</a>
       
       <a class="list-group-item" href="../type/euler_1d.html#variable-previous%7E2">previous</a>
       
@@ -192,7 +192,7 @@
     <div class="panel-heading text-left"><h3 class="panel-title">Type-Bound Procedures</h3></div>
     <div class="list-group">
       
-      <a class="list-group-item" href="../type/euler_1d.html#boundprocedure-init%7E5">init</a>
+      <a class="list-group-item" href="../type/euler_1d.html#boundprocedure-init%7E6">init</a>
       
       <a class="list-group-item" href="../type/euler_1d.html#boundprocedure-destroy%7E4">destroy</a>
       
@@ -204,6 +204,8 @@
       
       <a class="list-group-item" href="../type/euler_1d.html#boundprocedure-update_previous_steps%7E3">update_previous_steps</a>
       
+      <a class="list-group-item" href="../type/euler_1d.html#boundprocedure-previous_step%7E3">previous_step</a>
+      
       <a class="list-group-item" href="../type/euler_1d.html#boundprocedure-integrand_multiply_integrand%7E3">integrand_multiply_integrand</a>
       
       <a class="list-group-item" href="../type/euler_1d.html#boundprocedure-integrand_multiply_real%7E3">integrand_multiply_real</a>
@@ -211,6 +213,8 @@
       <a class="list-group-item" href="../type/euler_1d.html#boundprocedure-real_multiply_integrand%7E3">real_multiply_integrand</a>
       
       <a class="list-group-item" href="../type/euler_1d.html#boundprocedure-add%7E3">add</a>
+      
+      <a class="list-group-item" href="../type/euler_1d.html#boundprocedure-sub%7E3">sub</a>
       
       <a class="list-group-item" href="../type/euler_1d.html#boundprocedure-assign_integrand%7E3">assign_integrand</a>
       
@@ -254,6 +258,8 @@
       <a class="list-group-item" href="../type/euler_explicit_integrator.html">euler_explicit_integrator</a>
       
       <a class="list-group-item" href="../type/integrand.html">integrand</a>
+      
+      <a class="list-group-item" href="../type/leapfrog_integrator.html">leapfrog_integrator</a>
       
       <a class="list-group-item" href="../type/lorenz.html">lorenz</a>
       
@@ -370,7 +376,7 @@ implementation in a submodule of an interface in a parent module.</p>
     <br><br>
     
     <p>Euler 1D PDEs system field.</p>
-<p>It is a FOODiE integrand class.</p>
+<p>It is a FOODiE integrand class concrete extension.</p>
 <h3 id="1d-euler-pdes-system"><a class="toclink" href="#1d-euler-pdes-system">1D Euler PDEs system</a></h3>
 <p>The 1D Euler PDEs system considered is a non linear, hyperbolic (inviscid) system of conservation laws for compressible gas
  dynamics, that reads as
@@ -447,7 +453,7 @@ $$
 <li>Ns+4 : specific heats ratio    (g)</li>
 </ul>
 <h4 id="conservative-variables-organization"><a class="toclink" href="#conservative-variables-organization">Conservative variables organization</a></h4>
-<p>Conservative  variables are organized as an array of reals which the first index means:</p>
+<p>Conservative variables are organized as an array (rank 2) of reals which the first index means:</p>
 <ul>
 <li>1    : mass conservation of species 1    (r1)</li>
 <li>2    : mass conservation of species 2    (r2)</li>
@@ -606,11 +612,11 @@ $$
   
 <tr>
   
-  <td><span class="anchor" id="variable-u"></span>real(kind=R_P),</td>
+  <td><span class="anchor" id="variable-u%7E2"></span>real(kind=R_P),</td>
   
   <td>private,</td>
   <td>allocatable</td><td>::</td>
-  <td><strong>U</strong>(:,:)</td><td></td><td></td><td><p>Conservative (state) variables [1:Nc,1-Ng:Ni+Ng].</p></td>
+  <td><strong>U</strong>(:,:)</td><td></td><td></td><td><p>Integrand (state) variables, whole physical domain [1:Nc,1-Ng:Ni+Ng].</p></td>
   
 </tr>
 
@@ -624,7 +630,7 @@ $$
   
   <td>private,</td>
   <td>allocatable</td><td>::</td>
-  <td><strong>previous</strong>(:,:,:)</td><td></td><td></td><td><p>Conservative variables of previous time steps [:,:,1:steps].</p></td>
+  <td><strong>previous</strong>(:,:,:)</td><td></td><td></td><td><p>Previous time steps states [1:Nc,1-Ng:Ni+Ng,1:steps].</p></td>
   
 </tr>
 
@@ -768,7 +774,7 @@ private subroutine <a href='../proc/finalize%7E4.html'>finalize</a>(self)
     
 	   
 <div class="panel panel-default">
-  <div class="panel-heading codesum"><span class="anchor" id="boundprocedure-init%7E5"></span><h3>procedure, public, pass(self) :: <strong>init</strong>  
+  <div class="panel-heading codesum"><span class="anchor" id="boundprocedure-init%7E6"></span><h3>procedure, public, pass(self) :: <strong>init</strong>  
     
   </h3></div>
   
@@ -786,7 +792,7 @@ private subroutine <a href='../proc/finalize%7E4.html'>finalize</a>(self)
          
     
     <h3>
-private subroutine <a href='../proc/init%7E7.html'>init</a>(self, Ni, Ns, Dx, BC_L, BC_R, initial_state, cp0, cv0, steps, ord)
+private subroutine <a href='../proc/init%7E8.html'>init</a>(self, Ni, Ns, Dx, BC_L, BC_R, initial_state, cp0, cv0, steps, ord)
     
     
     
@@ -1312,7 +1318,7 @@ private purefunction <a href='../proc/compute_dt%7E2.html'>compute_dt</a>(self, 
     
 
 
-    <p>Time derivate, residuals function.</p>
+    <p>Time derivative, residuals function.</p>
   </div>
   
   <ul class="list-group">
@@ -1423,7 +1429,7 @@ private purefunction <a href='../proc/deuler_dt.html'>dEuler_dt</a>(self, n) res
          
     
     <h3>
-private puresubroutine <a href='../proc/update_previous_steps%7E2.html'>update_previous_steps</a>(self)
+private puresubroutine <a href='../proc/update_previous_steps%7E2.html'>update_previous_steps</a>(self, filter, weights)
     
     
     
@@ -1457,6 +1463,36 @@ private puresubroutine <a href='../proc/update_previous_steps%7E2.html'>update_p
   
 </tr>
 
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>class(<a href='../type/integrand.html'>integrand</a>),</td>
+  <td>intent(in),</td>
+  <td>optional</td>
+  
+  <td></td><td>::</td>
+  <td><strong>filter</strong></td><td><p>Filter field displacement.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>real(kind=R_P),</td>
+  <td>intent(in),</td>
+  <td>optional</td>
+  
+  <td></td><td>::</td>
+  <td><strong>weights</strong>(:)</td><td><p>Weights for filtering the steps.</p></td>
+  
+</tr>
+
 </tbody>
 </table>
 
@@ -1471,6 +1507,107 @@ private puresubroutine <a href='../proc/update_previous_steps%7E2.html'>update_p
 
        
        <p>Update previous time steps.</p>
+        
+
+      
+      </li>
+    
+  </ul>
+</div>
+
+    
+	   
+<div class="panel panel-default">
+  <div class="panel-heading codesum"><span class="anchor" id="boundprocedure-previous_step%7E3"></span><h3>procedure, public, pass(self) :: <strong>previous_step</strong>  
+    
+  </h3></div>
+  
+  <div class="panel-body">
+    
+
+
+    <p>Get a previous time step.</p>
+  </div>
+  
+  <ul class="list-group">
+    
+      <li class="list-group-item">
+      
+         
+    
+    <h3>
+private purefunction <a href='../proc/previous_step%7E2.html'>previous_step</a>(self, n) result(previous)
+    
+    
+    
+</h3>
+    
+    <h4>Arguments</h4>
+    
+      
+      
+<table class="table table-striped varlist">
+<thead><tr><th>Type</th>
+<th>Intent</th><th>Optional</th>
+<th>Attributes</th><th></th><th>Name</th><th></th></thead>
+
+
+
+<tbody>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>class(euler_1D),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>self</strong></td><td><p>Euler field.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>integer(kind=I_P),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>n</strong></td><td><p>Time level.</p></td>
+  
+</tr>
+
+</tbody>
+</table>
+
+      
+    
+    
+
+  
+  
+  
+  
+     <h4>Return Value <small>class(<a href='../type/integrand.html'>integrand</a>),
+  allocatable</small></h4>
+  <p>Previous time solution of Euler field.</p>
+    
+    
+    <h4>Description</h4>
+       
+       
+
+
+       
+       <p>Extract previous time solution of Euler field.</p>
         
 
       
@@ -1793,7 +1930,7 @@ private purefunction <a href='../proc/real_multiply_euler.html'>real_multiply_eu
     
 
 
-    <p>Euler + Euler oprator.</p>
+    <p>Euler + Euler operator.</p>
   </div>
   
   <ul class="list-group">
@@ -1875,6 +2012,107 @@ private purefunction <a href='../proc/add_euler.html'>add_euler</a>(lhs, rhs) re
 
        
        <p>Add two Euler fields.</p>
+        
+
+      
+      </li>
+    
+  </ul>
+</div>
+
+    
+	   
+<div class="panel panel-default">
+  <div class="panel-heading codesum"><span class="anchor" id="boundprocedure-sub%7E3"></span><h3>procedure, public, pass(lhs) :: <strong>sub</strong>  => <a href='../proc/sub_euler.html'>sub_euler</a> 
+    
+  </h3></div>
+  
+  <div class="panel-body">
+    
+
+
+    <p>Euler - Euler.</p>
+  </div>
+  
+  <ul class="list-group">
+    
+      <li class="list-group-item">
+      
+         
+    
+    <h3>
+private purefunction <a href='../proc/sub_euler.html'>sub_euler</a>(lhs, rhs) result(opr)
+    
+    
+    
+</h3>
+    
+    <h4>Arguments</h4>
+    
+      
+      
+<table class="table table-striped varlist">
+<thead><tr><th>Type</th>
+<th>Intent</th><th>Optional</th>
+<th>Attributes</th><th></th><th>Name</th><th></th></thead>
+
+
+
+<tbody>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>class(euler_1D),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>lhs</strong></td><td><p>Left hand side.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>class(<a href='../type/integrand.html'>integrand</a>),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>rhs</strong></td><td><p>Right hand side.</p></td>
+  
+</tr>
+
+</tbody>
+</table>
+
+      
+    
+    
+
+  
+  
+  
+  
+     <h4>Return Value <small>class(<a href='../type/integrand.html'>integrand</a>),
+  allocatable</small></h4>
+  <p>Operator result.</p>
+    
+    
+    <h4>Description</h4>
+       
+       
+
+
+       
+       <p>Subtract two Euler fields.</p>
         
 
       
@@ -2690,7 +2928,7 @@ private puresubroutine <a href='../proc/riemann_solver.html'>riemann_solver</a>(
     <div class="highlight"><pre><span class="k">type</span><span class="p">,</span> <span class="k">extends</span><span class="p">(</span><span class="n">integrand</span><span class="p">)</span> <span class="kd">::</span> <span class="n">euler_1D</span>
   <span class="c">!&lt; Euler 1D PDEs system field.</span>
   <span class="c">!&lt;</span>
-  <span class="c">!&lt; It is a FOODiE integrand class.</span>
+  <span class="c">!&lt; It is a FOODiE integrand class concrete extension.</span>
   <span class="c">!&lt;</span>
   <span class="c">!&lt;### 1D Euler PDEs system</span>
   <span class="c">!&lt; The 1D Euler PDEs system considered is a non linear, hyperbolic (inviscid) system of conservation laws for compressible gas</span>
@@ -2770,7 +3008,7 @@ private puresubroutine <a href='../proc/riemann_solver.html'>riemann_solver</a>(
   <span class="c">!&lt; + Ns+4 : specific heats ratio    (g)</span>
   <span class="c">!&lt;</span>
   <span class="c">!&lt;#### Conservative variables organization</span>
-  <span class="c">!&lt; Conservative  variables are organized as an array of reals which the first index means:</span>
+  <span class="c">!&lt; Conservative variables are organized as an array (rank 2) of reals which the first index means:</span>
   <span class="c">!&lt;</span>
   <span class="c">!&lt; + 1    : mass conservation of species 1    (r1)</span>
   <span class="c">!&lt; + 2    : mass conservation of species 2    (r2)</span>
@@ -2790,27 +3028,27 @@ private puresubroutine <a href='../proc/riemann_solver.html'>riemann_solver</a>(
   <span class="kt">integer</span><span class="p">(</span><span class="n">I_P</span><span class="p">)</span>                   <span class="kd">::</span> <span class="n">Np</span><span class="o">=</span><span class="mi">0</span>            <span class="c">!&lt; Number of primitive variables, Ns+4.</span>
   <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">)</span>                      <span class="kd">::</span> <span class="n">Dx</span><span class="o">=</span><span class="mf">0._R_P</span>       <span class="c">!&lt; Space step.</span>
   <span class="k">type</span><span class="p">(</span><span class="n">weno_interpolator_upwind</span><span class="p">)</span> <span class="kd">::</span> <span class="n">weno</span>            <span class="c">!&lt; WENO interpolator.</span>
-  <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">),</span>    <span class="k">allocatable</span>      <span class="kd">::</span> <span class="n">U</span><span class="p">(:,:)</span>          <span class="c">!&lt; Conservative (state) variables [1:Nc,1-Ng:Ni+Ng].</span>
-  <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">),</span>    <span class="k">allocatable</span>      <span class="kd">::</span> <span class="n">previous</span><span class="p">(:,:,:)</span> <span class="c">!&lt; Conservative variables of previous time steps [:,:,1:steps].</span>
+  <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">),</span>    <span class="k">allocatable</span>      <span class="kd">::</span> <span class="n">U</span><span class="p">(:,:)</span>          <span class="c">!&lt; Integrand (state) variables, whole physical domain [1:Nc,1-Ng:Ni+Ng].</span>
+  <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">),</span>    <span class="k">allocatable</span>      <span class="kd">::</span> <span class="n">previous</span><span class="p">(:,:,:)</span> <span class="c">!&lt; Previous time steps states [1:Nc,1-Ng:Ni+Ng,1:steps].</span>
   <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">),</span>    <span class="k">allocatable</span>      <span class="kd">::</span> <span class="n">cp0</span><span class="p">(:)</span>          <span class="c">!&lt; Specific heat cp of initial species [1:Ns].</span>
   <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">),</span>    <span class="k">allocatable</span>      <span class="kd">::</span> <span class="n">cv0</span><span class="p">(:)</span>          <span class="c">!&lt; Specific heat cv of initial species [1:Ns].</span>
   <span class="kt">character</span><span class="p">(:),</span> <span class="k">allocatable</span>      <span class="kd">::</span> <span class="n">BC_L</span>            <span class="c">!&lt; Left boundary condition type.</span>
   <span class="kt">character</span><span class="p">(:),</span> <span class="k">allocatable</span>      <span class="kd">::</span> <span class="n">BC_R</span>            <span class="c">!&lt; Right boundary condition type.</span>
   <span class="k">contains</span>
-    <span class="c">! public methods</span>
     <span class="c">! auxiliary methods</span>
     <span class="k">procedure</span><span class="p">,</span> <span class="k">pass</span><span class="p">(</span><span class="n">self</span><span class="p">),</span> <span class="k">public</span> <span class="kd">::</span> <span class="n">init</span>             <span class="c">!&lt; Init field.</span>
     <span class="k">procedure</span><span class="p">,</span> <span class="k">pass</span><span class="p">(</span><span class="n">self</span><span class="p">),</span> <span class="k">public</span> <span class="kd">::</span> <span class="n">destroy</span>          <span class="c">!&lt; Destroy field.</span>
     <span class="k">procedure</span><span class="p">,</span> <span class="k">pass</span><span class="p">(</span><span class="n">self</span><span class="p">),</span> <span class="k">public</span> <span class="kd">::</span> <span class="n">output</span>           <span class="c">!&lt; Extract Euler field.</span>
     <span class="k">procedure</span><span class="p">,</span> <span class="k">pass</span><span class="p">(</span><span class="n">self</span><span class="p">),</span> <span class="k">public</span> <span class="kd">::</span> <span class="n">dt</span> <span class="o">=&gt;</span> <span class="n">compute_dt</span> <span class="c">!&lt; Compute the current time step, by means of CFL condition.</span>
     <span class="c">! type_integrand deferred methods</span>
-    <span class="k">procedure</span><span class="p">,</span> <span class="k">pass</span><span class="p">(</span><span class="n">self</span><span class="p">),</span> <span class="k">public</span> <span class="kd">::</span> <span class="n">t</span> <span class="o">=&gt;</span> <span class="n">dEuler_dt</span>        <span class="c">!&lt; Time derivate, residuals function.</span>
-    <span class="k">procedure</span><span class="p">,</span> <span class="k">pass</span><span class="p">(</span><span class="n">self</span><span class="p">),</span> <span class="k">public</span> <span class="kd">::</span> <span class="n">update_previous_steps</span> <span class="c">!&lt; Update previous time steps.</span>
-    <span class="c">! operators overloading</span>
+    <span class="k">procedure</span><span class="p">,</span> <span class="k">pass</span><span class="p">(</span><span class="n">self</span><span class="p">),</span> <span class="k">public</span> <span class="kd">::</span> <span class="n">t</span> <span class="o">=&gt;</span> <span class="n">dEuler_dt</span>                                       <span class="c">!&lt; Time derivative, residuals function.</span>
+    <span class="k">procedure</span><span class="p">,</span> <span class="k">pass</span><span class="p">(</span><span class="n">self</span><span class="p">),</span> <span class="k">public</span> <span class="kd">::</span> <span class="n">update_previous_steps</span>                                <span class="c">!&lt; Update previous time steps.</span>
+    <span class="k">procedure</span><span class="p">,</span> <span class="k">pass</span><span class="p">(</span><span class="n">self</span><span class="p">),</span> <span class="k">public</span> <span class="kd">::</span> <span class="n">previous_step</span>                                        <span class="c">!&lt; Get a previous time step.</span>
     <span class="k">procedure</span><span class="p">,</span> <span class="k">pass</span><span class="p">(</span><span class="n">lhs</span><span class="p">),</span>  <span class="k">public</span> <span class="kd">::</span> <span class="n">integrand_multiply_integrand</span> <span class="o">=&gt;</span> <span class="n">euler_multiply_euler</span> <span class="c">!&lt; Euler * Euler operator.</span>
     <span class="k">procedure</span><span class="p">,</span> <span class="k">pass</span><span class="p">(</span><span class="n">lhs</span><span class="p">),</span>  <span class="k">public</span> <span class="kd">::</span> <span class="n">integrand_multiply_real</span> <span class="o">=&gt;</span> <span class="n">euler_multiply_real</span>       <span class="c">!&lt; Euler * real operator.</span>
     <span class="k">procedure</span><span class="p">,</span> <span class="k">pass</span><span class="p">(</span><span class="n">rhs</span><span class="p">),</span>  <span class="k">public</span> <span class="kd">::</span> <span class="n">real_multiply_integrand</span> <span class="o">=&gt;</span> <span class="n">real_multiply_euler</span>       <span class="c">!&lt; Real * Euler operator.</span>
-    <span class="k">procedure</span><span class="p">,</span> <span class="k">pass</span><span class="p">(</span><span class="n">lhs</span><span class="p">),</span>  <span class="k">public</span> <span class="kd">::</span> <span class="n">add</span> <span class="o">=&gt;</span> <span class="n">add_euler</span>                                     <span class="c">!&lt; Euler + Euler oprator.</span>
+    <span class="k">procedure</span><span class="p">,</span> <span class="k">pass</span><span class="p">(</span><span class="n">lhs</span><span class="p">),</span>  <span class="k">public</span> <span class="kd">::</span> <span class="n">add</span> <span class="o">=&gt;</span> <span class="n">add_euler</span>                                     <span class="c">!&lt; Euler + Euler operator.</span>
+    <span class="k">procedure</span><span class="p">,</span> <span class="k">pass</span><span class="p">(</span><span class="n">lhs</span><span class="p">),</span>  <span class="k">public</span> <span class="kd">::</span> <span class="n">sub</span> <span class="o">=&gt;</span> <span class="n">sub_euler</span>                                     <span class="c">!&lt; Euler - Euler.</span>
     <span class="k">procedure</span><span class="p">,</span> <span class="k">pass</span><span class="p">(</span><span class="n">lhs</span><span class="p">),</span>  <span class="k">public</span> <span class="kd">::</span> <span class="n">assign_integrand</span> <span class="o">=&gt;</span> <span class="n">euler_assign_euler</span>               <span class="c">!&lt; Euler = Euler.</span>
     <span class="k">procedure</span><span class="p">,</span> <span class="k">pass</span><span class="p">(</span><span class="n">lhs</span><span class="p">),</span>  <span class="k">public</span> <span class="kd">::</span> <span class="n">assign_real</span> <span class="o">=&gt;</span> <span class="n">euler_assign_real</span>                     <span class="c">!&lt; Euler = real.</span>
     <span class="c">! private methods</span>
@@ -2819,7 +3057,7 @@ private puresubroutine <a href='../proc/riemann_solver.html'>riemann_solver</a>(
     <span class="k">procedure</span><span class="p">,</span> <span class="k">pass</span><span class="p">(</span><span class="n">self</span><span class="p">),</span> <span class="k">private</span> <span class="kd">::</span> <span class="n">impose_boundary_conditions</span>    <span class="c">!&lt; Impose boundary conditions.</span>
     <span class="k">procedure</span><span class="p">,</span> <span class="k">pass</span><span class="p">(</span><span class="n">self</span><span class="p">),</span> <span class="k">private</span> <span class="kd">::</span> <span class="n">reconstruct_interfaces_states</span> <span class="c">!&lt; Reconstruct interfaces states.</span>
     <span class="k">procedure</span><span class="p">,</span> <span class="k">pass</span><span class="p">(</span><span class="n">self</span><span class="p">),</span> <span class="k">private</span> <span class="kd">::</span> <span class="n">riemann_solver</span>                <span class="c">!&lt; Solve the Riemann Problem at cell interfaces.</span>
-    <span class="k">final</span>                          <span class="kd">::</span> <span class="n">finalize</span>                   <span class="c">!&lt; Finalize field.</span>
+    <span class="k">final</span>                          <span class="kd">::</span> <span class="n">finalize</span>                      <span class="c">!&lt; Finalize field.</span>
 <span class="n">endtype</span> <span class="n">euler_1D</span>
 </pre></div>
 

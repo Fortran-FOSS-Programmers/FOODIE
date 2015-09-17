@@ -152,6 +152,8 @@
       
       <a class="list-group-item" href="../module/type_euler_1d.html#proc-deuler_dt">dEuler_dt</a>
       
+      <a class="list-group-item" href="../module/type_euler_1d.html#proc-previous_step%7E2">previous_step</a>
+      
       <a class="list-group-item" href="../module/type_euler_1d.html#proc-euler_multiply_euler">euler_multiply_euler</a>
       
       <a class="list-group-item" href="../module/type_euler_1d.html#proc-euler_multiply_real">euler_multiply_real</a>
@@ -159,6 +161,8 @@
       <a class="list-group-item" href="../module/type_euler_1d.html#proc-real_multiply_euler">real_multiply_euler</a>
       
       <a class="list-group-item" href="../module/type_euler_1d.html#proc-add_euler">add_euler</a>
+      
+      <a class="list-group-item" href="../module/type_euler_1d.html#proc-sub_euler">sub_euler</a>
       
       <a class="list-group-item" href="../module/type_euler_1d.html#proc-primitive2conservative">primitive2conservative</a>
       
@@ -183,7 +187,7 @@
     <div class="panel-heading text-left"><h3 class="panel-title">Subroutines</h3></div>
     <div class="list-group">
       
-      <a class="list-group-item" href="../module/type_euler_1d.html#proc-init%7E7">init</a>
+      <a class="list-group-item" href="../module/type_euler_1d.html#proc-init%7E8">init</a>
       
       <a class="list-group-item" href="../module/type_euler_1d.html#proc-destroy%7E4">destroy</a>
       
@@ -225,6 +229,8 @@
       
       <a class="list-group-item" href="../module/foodie_integrator_euler_explicit.html">foodie_integrator_euler_explicit</a>
       
+      <a class="list-group-item" href="../module/foodie_integrator_leapfrog.html">foodie_integrator_leapfrog</a>
+      
       <a class="list-group-item" href="../module/foodie_integrator_low_storage_runge_kutta.html">foodie_integrator_low_storage_runge_kutta</a>
       
       <a class="list-group-item" href="../module/foodie_integrator_tvd_runge_kutta.html">foodie_integrator_tvd_runge_kutta</a>
@@ -264,12 +270,13 @@
     
             <img class="depgraph" alt="dependency graph" src=../graphs/module%7E%7Etype_euler_1d%7E%7EUsesGraph.svg usemap="#module~~type_euler_1d~~UsesGraph">
             <map id="module~~type_euler_1d~~UsesGraph" name="module~~type_euler_1d~~UsesGraph">
-<area shape="rect" id="node5" href="../module/foodie_integrator_low_storage_runge_kutta.html" title="foodie_integrator_low_storage_runge_kutta" alt="" coords="300,284,583,317"/>
-<area shape="rect" id="node6" href="../module/foodie_integrator_tvd_runge_kutta.html" title="foodie_integrator_tvd_runge_kutta" alt="" coords="329,65,554,99"/>
-<area shape="rect" id="node7" href="../module/type_integrand.html" title="type_integrand" alt="" coords="146,175,254,208"/>
-<area shape="rect" id="node8" href="../module/foodie_integrator_euler_explicit.html" title="foodie_integrator_euler_explicit" alt="" coords="338,122,545,155"/>
-<area shape="rect" id="node9" href="../module/foodie_integrator_adams_bashforth.html" title="foodie_integrator_adams_bashforth" alt="" coords="325,227,558,261"/>
-<area shape="rect" id="node4" href="../module/foodie.html" title="foodie" alt="" coords="629,162,698,195"/>
+<area shape="rect" id="node5" href="../module/foodie_integrator_tvd_runge_kutta.html" title="foodie_integrator_tvd_runge_kutta" alt="" coords="329,250,554,283"/>
+<area shape="rect" id="node6" href="../module/type_integrand.html" title="type_integrand" alt="" coords="146,172,254,205"/>
+<area shape="rect" id="node7" href="../module/foodie_integrator_adams_bashforth.html" title="foodie_integrator_adams_bashforth" alt="" coords="325,306,558,340"/>
+<area shape="rect" id="node8" href="../module/foodie_integrator_euler_explicit.html" title="foodie_integrator_euler_explicit" alt="" coords="338,32,545,65"/>
+<area shape="rect" id="node9" href="../module/foodie_integrator_leapfrog.html" title="foodie_integrator_leapfrog" alt="" coords="353,88,530,122"/>
+<area shape="rect" id="node10" href="../module/foodie_integrator_low_storage_runge_kutta.html" title="foodie_integrator_low_storage_runge_kutta" alt="" coords="300,145,583,178"/>
+<area shape="rect" id="node4" href="../module/foodie.html" title="foodie" alt="" coords="629,145,698,178"/>
 </map>
 
             <div><a type="button" class="graph-help" data-toggle="modal" href="#graph-help-text">Help</a></div>
@@ -626,11 +633,11 @@ implementation in a submodule of an interface in a parent module.</p>
   
 <tr>
   
-  <td><span class="anchor" id="variable-u"></span>real(kind=R_P),</td>
+  <td><span class="anchor" id="variable-u%7E2"></span>real(kind=R_P),</td>
   
   <td>private,</td>
   <td>allocatable</td><td>::</td>
-  <td><strong>U</strong>(:,:)</td><td></td><td></td><td><p>Conservative (state) variables [1:Nc,1-Ng:Ni+Ng].</p></td>
+  <td><strong>U</strong>(:,:)</td><td></td><td></td><td><p>Integrand (state) variables, whole physical domain [1:Nc,1-Ng:Ni+Ng].</p></td>
   
 </tr>
 
@@ -644,7 +651,7 @@ implementation in a submodule of an interface in a parent module.</p>
   
   <td>private,</td>
   <td>allocatable</td><td>::</td>
-  <td><strong>previous</strong>(:,:,:)</td><td></td><td></td><td><p>Conservative variables of previous time steps [:,:,1:steps].</p></td>
+  <td><strong>previous</strong>(:,:,:)</td><td></td><td></td><td><p>Previous time steps states [1:Nc,1-Ng:Ni+Ng,1:steps].</p></td>
   
 </tr>
 
@@ -737,10 +744,13 @@ implementation in a submodule of an interface in a parent module.</p>
        <td><p>Compute the current time step, by means of CFL condition.</p></td></tr>
       
        <tr><td>procedure, public, pass(self) :: <strong>t</strong>  => dEuler_dt </td>
-       <td><p>Time derivate, residuals function.</p></td></tr>
+       <td><p>Time derivative, residuals function.</p></td></tr>
       
        <tr><td>procedure, public, pass(self) :: <strong>update_previous_steps</strong>  </td>
        <td><p>Update previous time steps.</p></td></tr>
+      
+       <tr><td>procedure, public, pass(self) :: <strong>previous_step</strong>  </td>
+       <td><p>Get a previous time step.</p></td></tr>
       
        <tr><td>procedure, public, pass(lhs) :: <strong>integrand_multiply_integrand</strong>  => euler_multiply_euler </td>
        <td><p>Euler * Euler operator.</p></td></tr>
@@ -752,7 +762,10 @@ implementation in a submodule of an interface in a parent module.</p>
        <td><p>Real * Euler operator.</p></td></tr>
       
        <tr><td>procedure, public, pass(lhs) :: <strong>add</strong>  => add_euler </td>
-       <td><p>Euler + Euler oprator.</p></td></tr>
+       <td><p>Euler + Euler operator.</p></td></tr>
+      
+       <tr><td>procedure, public, pass(lhs) :: <strong>sub</strong>  => sub_euler </td>
+       <td><p>Euler - Euler.</p></td></tr>
       
        <tr><td>procedure, public, pass(lhs) :: <strong>assign_integrand</strong>  => euler_assign_euler </td>
        <td><p>Euler = Euler.</p></td></tr>
@@ -1068,6 +1081,89 @@ private purefunction <a href='../proc/deuler_dt.html'>dEuler_dt</a>(self, n) res
 
        
        <p>Time derivative of Euler field, the residuals function.</p>
+        
+
+  </div>
+  </div>
+
+    
+    
+  <div class="panel panel-default">
+  <div class="panel-heading codesum"><span class="anchor" id="proc-previous_step%7E2"></span><h3>
+private purefunction <a href='../proc/previous_step%7E2.html'>previous_step</a>(self, n) result(previous)
+    
+    
+    
+</h3></div>
+  <div class="panel-body">
+       
+    
+    <h4>Arguments</h4>
+    
+      
+      
+<table class="table table-striped varlist">
+<thead><tr><th>Type</th>
+<th>Intent</th><th>Optional</th>
+<th>Attributes</th><th></th><th>Name</th><th></th></thead>
+
+
+
+<tbody>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>class(euler_1D),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>self</strong></td><td><p>Euler field.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>integer(kind=I_P),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>n</strong></td><td><p>Time level.</p></td>
+  
+</tr>
+
+</tbody>
+</table>
+
+      
+    
+    
+
+  
+  
+  
+  
+     <h4>Return Value <small>class(<a href='../type/integrand.html'>integrand</a>),
+  allocatable</small></h4>
+  <p>Previous time solution of Euler field.</p>
+    
+    
+    <h4>Description</h4>
+       
+       
+
+
+       
+       <p>Extract previous time solution of Euler field.</p>
         
 
   </div>
@@ -1400,6 +1496,89 @@ private purefunction <a href='../proc/add_euler.html'>add_euler</a>(lhs, rhs) re
 
        
        <p>Add two Euler fields.</p>
+        
+
+  </div>
+  </div>
+
+    
+    
+  <div class="panel panel-default">
+  <div class="panel-heading codesum"><span class="anchor" id="proc-sub_euler"></span><h3>
+private purefunction <a href='../proc/sub_euler.html'>sub_euler</a>(lhs, rhs) result(opr)
+    
+    
+    
+</h3></div>
+  <div class="panel-body">
+       
+    
+    <h4>Arguments</h4>
+    
+      
+      
+<table class="table table-striped varlist">
+<thead><tr><th>Type</th>
+<th>Intent</th><th>Optional</th>
+<th>Attributes</th><th></th><th>Name</th><th></th></thead>
+
+
+
+<tbody>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>class(euler_1D),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>lhs</strong></td><td><p>Left hand side.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>class(<a href='../type/integrand.html'>integrand</a>),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>rhs</strong></td><td><p>Right hand side.</p></td>
+  
+</tr>
+
+</tbody>
+</table>
+
+      
+    
+    
+
+  
+  
+  
+  
+     <h4>Return Value <small>class(<a href='../type/integrand.html'>integrand</a>),
+  allocatable</small></h4>
+  <p>Operator result.</p>
+    
+    
+    <h4>Description</h4>
+       
+       
+
+
+       
+       <p>Subtract two Euler fields.</p>
         
 
   </div>
@@ -2108,8 +2287,8 @@ $$</p>
     
     
   <div class="panel panel-default">
-  <div class="panel-heading codesum"><span class="anchor" id="proc-init%7E7"></span><h3>
-private subroutine <a href='../proc/init%7E7.html'>init</a>(self, Ni, Ns, Dx, BC_L, BC_R, initial_state, cp0, cv0, steps, ord)
+  <div class="panel-heading codesum"><span class="anchor" id="proc-init%7E8"></span><h3>
+private subroutine <a href='../proc/init%7E8.html'>init</a>(self, Ni, Ns, Dx, BC_L, BC_R, initial_state, cp0, cv0, steps, ord)
     
     
     
@@ -2377,7 +2556,7 @@ private puresubroutine <a href='../proc/destroy%7E4.html'>destroy</a>(self)
     
   <div class="panel panel-default">
   <div class="panel-heading codesum"><span class="anchor" id="proc-update_previous_steps%7E2"></span><h3>
-private puresubroutine <a href='../proc/update_previous_steps%7E2.html'>update_previous_steps</a>(self)
+private puresubroutine <a href='../proc/update_previous_steps%7E2.html'>update_previous_steps</a>(self, filter, weights)
     
     
     
@@ -2410,6 +2589,36 @@ private puresubroutine <a href='../proc/update_previous_steps%7E2.html'>update_p
   
   <td></td><td>::</td>
   <td><strong>self</strong></td><td><p>Euler field.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>class(<a href='../type/integrand.html'>integrand</a>),</td>
+  <td>intent(in),</td>
+  <td>optional</td>
+  
+  <td></td><td>::</td>
+  <td><strong>filter</strong></td><td><p>Filter field displacement.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>real(kind=R_P),</td>
+  <td>intent(in),</td>
+  <td>optional</td>
+  
+  <td></td><td>::</td>
+  <td><strong>weights</strong>(:)</td><td><p>Weights for filtering the steps.</p></td>
   
 </tr>
 

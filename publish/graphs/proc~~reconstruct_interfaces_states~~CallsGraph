@@ -4,14 +4,12 @@ digraph "proc~~reconstruct_interfaces_states~~CallsGraph" {
 	edge [fontname=Helvetica fontsize=9.5]
 		"proc~reconstruct_interfaces_states" [label=reconstruct_interfaces_states]
 		graph [concentrate=false]
-		lpm [label=lpm color="#777777" fontcolor=white style=filled]
 		"none~eigen_vect_l" [label=eigen_vect_L color="#d94e8f" fontcolor=white style=filled]
 		rpm [label=rpm color="#777777" fontcolor=white style=filled]
 		"none~eigen_vect_r" [label=eigen_vect_R color="#d94e8f" fontcolor=white style=filled]
 		cr [label=cr color="#777777" fontcolor=white style=filled]
 		pm [label=pm color="#777777" fontcolor=white style=filled]
-		graph [concentrate=false]
-		graph [concentrate=false]
+		lpm [label=lpm color="#777777" fontcolor=white style=filled]
 		graph [concentrate=false]
 		"proc~a" [label=a URL="../proc/a.html" color="#d94e8f" fontcolor=white style=filled]
 		l [label=l color="#777777" fontcolor=white style=filled]
@@ -36,11 +34,13 @@ digraph "proc~~reconstruct_interfaces_states~~CallsGraph" {
 		graph [concentrate=false]
 		graph [concentrate=false]
 		graph [concentrate=false]
-			"proc~reconstruct_interfaces_states" -> lpm
+		graph [concentrate=false]
+		graph [concentrate=false]
 			"proc~reconstruct_interfaces_states" -> "none~eigen_vect_l"
 			"proc~reconstruct_interfaces_states" -> rpm
 			"proc~reconstruct_interfaces_states" -> "none~eigen_vect_r"
 			"proc~reconstruct_interfaces_states" -> cr
 			"proc~reconstruct_interfaces_states" -> pm
+			"proc~reconstruct_interfaces_states" -> lpm
 		graph [concentrate=false]
 }

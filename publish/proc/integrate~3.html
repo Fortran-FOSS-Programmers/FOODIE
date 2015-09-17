@@ -103,14 +103,14 @@
      
     
     
-    <li><i class="fa fa-code"></i><a href="../src/foodie_integrator_low_storage_runge_kutta.f90"> Source File</a></li>
+    <li><i class="fa fa-code"></i><a href="../src/foodie_integrator_leapfrog.f90"> Source File</a></li>
      
   </ul>
   <ol class="breadcrumb in-well text-right">
   
-     <li><a href='../sourcefile/foodie_integrator_low_storage_runge_kutta.f90.html'>foodie_integrator_low_storage_runge_kutta.f90</a></li>
+     <li><a href='../sourcefile/foodie_integrator_leapfrog.f90.html'>foodie_integrator_leapfrog.f90</a></li>
   
-     <li><a href='../module/foodie_integrator_low_storage_runge_kutta.html'>foodie_integrator_low_storage_runge_kutta</a></li>
+     <li><a href='../module/foodie_integrator_leapfrog.html'>foodie_integrator_leapfrog</a></li>
   
      <li class="active">integrate</li>
   </ol>
@@ -124,18 +124,6 @@
     <div class="col-lg-3">
     
   
-  
-  
-  <div class="panel panel-primary">
-    <div class="panel-heading text-left"><h3 class="panel-title">Variables</h3></div>
-    <div class="list-group">
-      
-      <a class="list-group-item" href="../proc/integrate%7E3.html#variable-s%7E2">s</a>
-      
-      <a class="list-group-item" href="../proc/integrate%7E3.html#variable-ss">ss</a>
-      
-    </div>
-  </div>
   
   
   
@@ -253,6 +241,8 @@
       
       <a class="list-group-item" href="../proc/init%7E9.html">init</a>
       
+      <a class="list-group-item" href="../proc/init%7E10.html">init</a>
+      
       <a class="list-group-item" href="../proc/integrate.html">integrate</a>
       
       <a class="list-group-item" href="../proc/integrate%7E2.html">integrate</a>
@@ -260,6 +250,8 @@
       <a class="list-group-item" href="../proc/integrate%7E3.html">integrate</a>
       
       <a class="list-group-item" href="../proc/integrate%7E4.html">integrate</a>
+      
+      <a class="list-group-item" href="../proc/integrate%7E5.html">integrate</a>
       
       <a class="list-group-item" href="../proc/lorenz_assign_lorenz.html">lorenz_assign_lorenz</a>
       
@@ -286,6 +278,14 @@
       <a class="list-group-item" href="../proc/output%7E4.html">output</a>
       
       <a class="list-group-item" href="../proc/p.html">p</a>
+      
+      <a class="list-group-item" href="../proc/previous_step.html">previous_step</a>
+      
+      <a class="list-group-item" href="../proc/previous_step%7E2.html">previous_step</a>
+      
+      <a class="list-group-item" href="../proc/previous_step%7E3.html">previous_step</a>
+      
+      <a class="list-group-item" href="../proc/previous_step%7E4.html">previous_step</a>
       
       <a class="list-group-item" href="../proc/primitive2conservative.html">primitive2conservative</a>
       
@@ -315,6 +315,12 @@
       
       <a class="list-group-item" href="../proc/sub_burgers.html">sub_burgers</a>
       
+      <a class="list-group-item" href="../proc/sub_euler.html">sub_euler</a>
+      
+      <a class="list-group-item" href="../proc/sub_lorenz.html">sub_lorenz</a>
+      
+      <a class="list-group-item" href="../proc/sub_oscillation.html">sub_oscillation</a>
+      
       <a class="list-group-item" href="../proc/test_ab.html">test_ab</a>
       
       <a class="list-group-item" href="../proc/test_ab%7E2.html">test_ab</a>
@@ -330,6 +336,14 @@
       <a class="list-group-item" href="../proc/test_euler%7E3.html">test_euler</a>
       
       <a class="list-group-item" href="../proc/test_euler%7E4.html">test_euler</a>
+      
+      <a class="list-group-item" href="../proc/test_leapfrog.html">test_leapfrog</a>
+      
+      <a class="list-group-item" href="../proc/test_leapfrog%7E2.html">test_leapfrog</a>
+      
+      <a class="list-group-item" href="../proc/test_leapfrog%7E3.html">test_leapfrog</a>
+      
+      <a class="list-group-item" href="../proc/test_leapfrog%7E4.html">test_leapfrog</a>
       
       <a class="list-group-item" href="../proc/test_ls_rk.html">test_ls_rk</a>
       
@@ -363,7 +377,7 @@
     
     <div class="col-lg-9" id='text'>
     <h2>
-private subroutine integrate(self, field, stage, Dt)
+private subroutine integrate(self, field, filter, dt)
     
     
     
@@ -391,12 +405,12 @@ private subroutine integrate(self, field, stage, Dt)
   
 <tr>
   
-  <td><span class="anchor" id="variable-self%7E9"></span>class(<a href='../type/ls_runge_kutta_integrator.html'>ls_runge_kutta_integrator</a>),</td>
+  <td><span class="anchor" id="variable-self%7E9"></span>class(<a href='../type/leapfrog_integrator.html'>leapfrog_integrator</a>),</td>
   <td>intent(in)</td>
   <td></td>
   
   <td></td><td>::</td>
-  <td><strong>self</strong></td><td><p>Actual RK integrator.</p></td>
+  <td><strong>self</strong></td><td><p>LF integrator.</p></td>
   
 </tr>
 
@@ -421,12 +435,12 @@ private subroutine integrate(self, field, stage, Dt)
   
 <tr>
   
-  <td><span class="anchor" id="variable-stage"></span>class(<a href='../type/integrand.html'>integrand</a>),</td>
-  <td>intent(inout)</td>
-  <td></td>
+  <td><span class="anchor" id="variable-filter%7E2"></span>class(<a href='../type/integrand.html'>integrand</a>),</td>
+  <td>intent(inout),</td>
+  <td>optional</td>
   
   <td></td><td>::</td>
-  <td><strong>stage</strong>(1:2)</td><td><p>Runge-Kutta registers [1:2].</p></td>
+  <td><strong>filter</strong></td><td><p>Filter field displacement.</p></td>
   
 </tr>
 
@@ -436,12 +450,12 @@ private subroutine integrate(self, field, stage, Dt)
   
 <tr>
   
-  <td><span class="anchor" id="variable-dt"></span>real(kind=R_P),</td>
+  <td><span class="anchor" id="variable-dt%7E5"></span>real(kind=R_P),</td>
   <td>intent(in)</td>
   <td></td>
   
   <td></td><td>::</td>
-  <td><strong>Dt</strong></td><td><p>Time step.</p></td>
+  <td><strong>dt</strong></td><td><p>Time step.</p></td>
   
 </tr>
 
@@ -452,57 +466,10 @@ private subroutine integrate(self, field, stage, Dt)
     
     
     <h3>Description</h3>
-    <p>Integrate field with explicit low storage Runge-Kutta scheme.</p>
-<p></p><div class="alert alert-info" role="alert"><h4>Note</h4>This method can be used <strong>after</strong> the integrator is created (i.e. the RK coeficients are initialized).</div>
+    <p>Integrate field with leapfrog class scheme.</p>
     
     
      
-    <br>
-    
-    <section>
-    <h2>Variables</h2>
-    
-<table class="table table-striped varlist">
-<thead><tr><th>Type</th><th>Visibility</th>
-
-<th>Attributes</th><th></th><th>Name</th><th></th><th>Initial</th><th></th></thead>
-
-
-
-<tbody>
-
-  
-  
-  
-  
-<tr>
-  
-  <td><span class="anchor" id="variable-s%7E2"></span>integer(kind=I_P),</td>
-  
-  <td>public</td>
-  <td></td><td>::</td>
-  <td><strong>s</strong></td><td></td><td></td><td><p>First stages counter.</p></td>
-  
-</tr>
-
-  
-  
-  
-  
-<tr>
-  
-  <td><span class="anchor" id="variable-ss"></span>integer(kind=I_P),</td>
-  
-  <td>public</td>
-  <td></td><td>::</td>
-  <td><strong>ss</strong></td><td></td><td></td><td><p>Second stages counter.</p></td>
-  
-</tr>
-
-</tbody>
-</table>
-
-    </section>
     <br>
     
     
@@ -520,33 +487,22 @@ private subroutine integrate(self, field, stage, Dt)
     
     <section>
     <h2><span class="anchor" id="src"></span>Source Code</h2>
-    <div class="highlight"><pre>  <span class="k">subroutine </span><span class="n">integrate</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">field</span><span class="p">,</span> <span class="n">stage</span><span class="p">,</span> <span class="n">Dt</span><span class="p">)</span>
+    <div class="highlight"><pre>  <span class="k">subroutine </span><span class="n">integrate</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">field</span><span class="p">,</span> <span class="n">filter</span><span class="p">,</span> <span class="n">dt</span><span class="p">)</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
-  <span class="c">!&lt; Integrate field with explicit low storage Runge-Kutta scheme.</span>
-  <span class="c">!&lt;</span>
-  <span class="c">!&lt; @note This method can be used **after** the integrator is created (i.e. the RK coeficients are initialized).</span>
+  <span class="c">!&lt; Integrate field with leapfrog class scheme.</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
-  <span class="k">class</span><span class="p">(</span><span class="n">ls_runge_kutta_integrator</span><span class="p">),</span> <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span>    <span class="kd">::</span> <span class="n">self</span>       <span class="c">!&lt; Actual RK integrator.</span>
-  <span class="k">class</span><span class="p">(</span><span class="n">integrand</span><span class="p">),</span>                 <span class="k">intent</span><span class="p">(</span><span class="n">INOUT</span><span class="p">)</span> <span class="kd">::</span> <span class="n">field</span>      <span class="c">!&lt; Field to be integrated.</span>
-  <span class="k">class</span><span class="p">(</span><span class="n">integrand</span><span class="p">),</span>                 <span class="k">intent</span><span class="p">(</span><span class="n">INOUT</span><span class="p">)</span> <span class="kd">::</span> <span class="n">stage</span><span class="p">(</span><span class="mi">1</span><span class="p">:</span><span class="mi">2</span><span class="p">)</span> <span class="c">!&lt; Runge-Kutta registers [1:2].</span>
-  <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">),</span>                        <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span>    <span class="kd">::</span> <span class="n">Dt</span>         <span class="c">!&lt; Time step.</span>
-  <span class="kt">integer</span><span class="p">(</span><span class="n">I_P</span><span class="p">)</span>                                    <span class="kd">::</span> <span class="n">s</span>          <span class="c">!&lt; First stages counter.</span>
-
-  <span class="kt">integer</span><span class="p">(</span><span class="n">I_P</span><span class="p">)</span>                                    <span class="kd">::</span> <span class="n">ss</span>         <span class="c">!&lt; Second stages counter.</span>
+  <span class="k">class</span><span class="p">(</span><span class="n">leapfrog_integrator</span><span class="p">),</span> <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span>    <span class="kd">::</span> <span class="n">self</span>   <span class="c">!&lt; LF integrator.</span>
+  <span class="k">class</span><span class="p">(</span><span class="n">integrand</span><span class="p">),</span>           <span class="k">intent</span><span class="p">(</span><span class="n">INOUT</span><span class="p">)</span> <span class="kd">::</span> <span class="n">field</span>  <span class="c">!&lt; Field to be integrated.</span>
+  <span class="k">class</span><span class="p">(</span><span class="n">integrand</span><span class="p">),</span> <span class="k">optional</span><span class="p">,</span> <span class="k">intent</span><span class="p">(</span><span class="n">INOUT</span><span class="p">)</span> <span class="kd">::</span> <span class="n">filter</span> <span class="c">!&lt; Filter field displacement.</span>
+  <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">),</span>                  <span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span>    <span class="kd">::</span> <span class="n">dt</span>     <span class="c">!&lt; Time step.</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
 
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
-  <span class="k">select type</span><span class="p">(</span><span class="n">stage</span><span class="p">)</span>
-  <span class="k">class is</span><span class="p">(</span><span class="n">integrand</span><span class="p">)</span>
-    <span class="c">! computing stages</span>
-    <span class="n">stage</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">=</span> <span class="n">field</span>
-    <span class="n">stage</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span> <span class="o">=</span> <span class="n">field</span><span class="o">*</span><span class="mf">0._R_P</span>
-    <span class="k">do </span><span class="n">s</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">self</span><span class="p">%</span><span class="n">stages</span>
-      <span class="n">stage</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span> <span class="o">=</span> <span class="n">stage</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span> <span class="o">*</span> <span class="n">self</span><span class="p">%</span><span class="n">A</span><span class="p">(</span><span class="n">s</span><span class="p">)</span> <span class="o">+</span> <span class="n">stage</span><span class="p">(</span><span class="mi">1</span><span class="p">)%</span><span class="n">t</span><span class="p">()</span> <span class="o">*</span> <span class="n">Dt</span>
-      <span class="n">stage</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">=</span> <span class="n">stage</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">+</span> <span class="n">stage</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span> <span class="o">*</span> <span class="n">self</span><span class="p">%</span><span class="n">B</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
-    <span class="n">enddo</span>
-    <span class="n">field</span> <span class="o">=</span> <span class="n">stage</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
-  <span class="n">endselect</span>
+  <span class="n">field</span> <span class="o">=</span> <span class="n">field</span><span class="p">%</span><span class="n">previous_step</span><span class="p">(</span><span class="n">n</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span> <span class="o">+</span> <span class="n">field</span><span class="p">%</span><span class="n">t</span><span class="p">(</span><span class="n">n</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="n">dt</span> <span class="o">*</span> <span class="mf">2._R_P</span><span class="p">)</span>
+  <span class="k">if</span> <span class="p">(</span><span class="nb">present</span><span class="p">(</span><span class="n">filter</span><span class="p">))</span> <span class="k">then</span>
+<span class="k">    </span><span class="n">filter</span> <span class="o">=</span> <span class="p">(</span><span class="n">field</span><span class="p">%</span><span class="n">previous_step</span><span class="p">(</span><span class="n">n</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span> <span class="o">-</span> <span class="n">field</span><span class="p">%</span><span class="n">previous_step</span><span class="p">(</span><span class="n">n</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span> <span class="o">*</span> <span class="mf">2._R_P</span> <span class="o">+</span> <span class="n">field</span><span class="p">)</span> <span class="o">*</span> <span class="n">self</span><span class="p">%</span><span class="n">nu</span> <span class="o">*</span> <span class="mf">0.5_R_P</span>
+  <span class="n">endif</span>
+  <span class="k">call </span><span class="n">field</span><span class="p">%</span><span class="n">update_previous_steps</span><span class="p">(</span><span class="n">filter</span><span class="o">=</span><span class="n">filter</span><span class="p">,</span> <span class="n">weights</span><span class="o">=</span><span class="p">[</span><span class="n">self</span><span class="p">%</span><span class="n">alpha</span><span class="p">,</span> <span class="n">self</span><span class="p">%</span><span class="n">alpha</span> <span class="o">-</span> <span class="mf">1._R_P</span><span class="p">])</span>
   <span class="k">return</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
   <span class="n">endsubroutine</span> <span class="n">integrate</span>

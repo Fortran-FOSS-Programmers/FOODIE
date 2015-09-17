@@ -126,16 +126,6 @@
   
   
   
-  <div class="panel panel-primary">
-    <div class="panel-heading text-left"><h3 class="panel-title">Variables</h3></div>
-    <div class="list-group">
-      
-      <a class="list-group-item" href="../proc/lorenz_multiply_lorenz.html#variable-local_product%7E4">local_product</a>
-      
-    </div>
-  </div>
-  
-  
   
   
   
@@ -251,6 +241,8 @@
       
       <a class="list-group-item" href="../proc/init%7E9.html">init</a>
       
+      <a class="list-group-item" href="../proc/init%7E10.html">init</a>
+      
       <a class="list-group-item" href="../proc/integrate.html">integrate</a>
       
       <a class="list-group-item" href="../proc/integrate%7E2.html">integrate</a>
@@ -258,6 +250,8 @@
       <a class="list-group-item" href="../proc/integrate%7E3.html">integrate</a>
       
       <a class="list-group-item" href="../proc/integrate%7E4.html">integrate</a>
+      
+      <a class="list-group-item" href="../proc/integrate%7E5.html">integrate</a>
       
       <a class="list-group-item" href="../proc/lorenz_assign_lorenz.html">lorenz_assign_lorenz</a>
       
@@ -284,6 +278,14 @@
       <a class="list-group-item" href="../proc/output%7E4.html">output</a>
       
       <a class="list-group-item" href="../proc/p.html">p</a>
+      
+      <a class="list-group-item" href="../proc/previous_step.html">previous_step</a>
+      
+      <a class="list-group-item" href="../proc/previous_step%7E2.html">previous_step</a>
+      
+      <a class="list-group-item" href="../proc/previous_step%7E3.html">previous_step</a>
+      
+      <a class="list-group-item" href="../proc/previous_step%7E4.html">previous_step</a>
       
       <a class="list-group-item" href="../proc/primitive2conservative.html">primitive2conservative</a>
       
@@ -313,6 +315,12 @@
       
       <a class="list-group-item" href="../proc/sub_burgers.html">sub_burgers</a>
       
+      <a class="list-group-item" href="../proc/sub_euler.html">sub_euler</a>
+      
+      <a class="list-group-item" href="../proc/sub_lorenz.html">sub_lorenz</a>
+      
+      <a class="list-group-item" href="../proc/sub_oscillation.html">sub_oscillation</a>
+      
       <a class="list-group-item" href="../proc/test_ab.html">test_ab</a>
       
       <a class="list-group-item" href="../proc/test_ab%7E2.html">test_ab</a>
@@ -328,6 +336,14 @@
       <a class="list-group-item" href="../proc/test_euler%7E3.html">test_euler</a>
       
       <a class="list-group-item" href="../proc/test_euler%7E4.html">test_euler</a>
+      
+      <a class="list-group-item" href="../proc/test_leapfrog.html">test_leapfrog</a>
+      
+      <a class="list-group-item" href="../proc/test_leapfrog%7E2.html">test_leapfrog</a>
+      
+      <a class="list-group-item" href="../proc/test_leapfrog%7E3.html">test_leapfrog</a>
+      
+      <a class="list-group-item" href="../proc/test_leapfrog%7E4.html">test_leapfrog</a>
       
       <a class="list-group-item" href="../proc/test_ls_rk.html">test_ls_rk</a>
       
@@ -361,7 +377,7 @@
     
     <div class="col-lg-9" id='text'>
     <h2>
-private purefunction lorenz_multiply_lorenz(lhs, rhs) result(product)
+private purefunction lorenz_multiply_lorenz(lhs, rhs) result(opr)
     
     
     
@@ -389,7 +405,7 @@ private purefunction lorenz_multiply_lorenz(lhs, rhs) result(product)
   
 <tr>
   
-  <td><span class="anchor" id="variable-lhs%7E19"></span>class(<a href='../type/lorenz.html'>lorenz</a>),</td>
+  <td><span class="anchor" id="variable-lhs%7E20"></span>class(<a href='../type/lorenz.html'>lorenz</a>),</td>
   <td>intent(in)</td>
   <td></td>
   
@@ -404,7 +420,7 @@ private purefunction lorenz_multiply_lorenz(lhs, rhs) result(product)
   
 <tr>
   
-  <td><span class="anchor" id="variable-rhs%7E19"></span>class(<a href='../type/integrand.html'>integrand</a>),</td>
+  <td><span class="anchor" id="variable-rhs%7E20"></span>class(<a href='../type/integrand.html'>integrand</a>),</td>
   <td>intent(in)</td>
   <td></td>
   
@@ -423,9 +439,9 @@ private purefunction lorenz_multiply_lorenz(lhs, rhs) result(product)
     
     
     
-	 <h3>Return Value <small><span class="anchor" id="variable-product%7E4"></span>class(<a href='../type/integrand.html'>integrand</a>),
+	 <h3>Return Value <small><span class="anchor" id="variable-opr%7E11"></span>class(<a href='../type/integrand.html'>integrand</a>),
   allocatable</small></h3>
-    <p>Product.</p>
+    <p>Operator result.</p>
     
     
     <h3>Description</h3>
@@ -433,38 +449,6 @@ private purefunction lorenz_multiply_lorenz(lhs, rhs) result(product)
     
     
      
-    <br>
-    
-    <section>
-    <h2>Variables</h2>
-    
-<table class="table table-striped varlist">
-<thead><tr><th>Type</th><th>Visibility</th>
-
-<th>Attributes</th><th></th><th>Name</th><th></th><th>Initial</th><th></th></thead>
-
-
-
-<tbody>
-
-  
-  
-  
-  
-<tr>
-  
-  <td><span class="anchor" id="variable-local_product%7E4"></span>type(<a href='../type/lorenz.html'>lorenz</a>),</td>
-  
-  <td>public,</td>
-  <td>allocatable</td><td>::</td>
-  <td><strong>local_product</strong></td><td></td><td></td><td><p>Temporary produtc.</p></td>
-  
-</tr>
-
-</tbody>
-</table>
-
-    </section>
     <br>
     
     
@@ -482,29 +466,25 @@ private purefunction lorenz_multiply_lorenz(lhs, rhs) result(product)
     
     <section>
     <h2><span class="anchor" id="src"></span>Source Code</h2>
-    <div class="highlight"><pre>  <span class="k">pure function </span><span class="n">lorenz_multiply_lorenz</span><span class="p">(</span><span class="n">lhs</span><span class="p">,</span> <span class="n">rhs</span><span class="p">)</span> <span class="k">result</span><span class="p">(</span><span class="nb">product</span><span class="p">)</span>
+    <div class="highlight"><pre>  <span class="k">pure function </span><span class="n">lorenz_multiply_lorenz</span><span class="p">(</span><span class="n">lhs</span><span class="p">,</span> <span class="n">rhs</span><span class="p">)</span> <span class="k">result</span><span class="p">(</span><span class="n">opr</span><span class="p">)</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
   <span class="c">!&lt; Multiply a lorenz field by another one.</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
-  <span class="k">class</span><span class="p">(</span><span class="n">lorenz</span><span class="p">),</span>    <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span>  <span class="kd">::</span> <span class="n">lhs</span>           <span class="c">!&lt; Left hand side.</span>
-  <span class="k">class</span><span class="p">(</span><span class="n">integrand</span><span class="p">),</span> <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span>  <span class="kd">::</span> <span class="n">rhs</span>           <span class="c">!&lt; Right hand side.</span>
-  <span class="k">class</span><span class="p">(</span><span class="n">integrand</span><span class="p">),</span> <span class="k">allocatable</span> <span class="kd">::</span> <span class="nb">product</span>       <span class="c">!&lt; Product.</span>
-  <span class="k">type</span><span class="p">(</span><span class="n">lorenz</span><span class="p">),</span>     <span class="k">allocatable</span> <span class="kd">::</span> <span class="n">local_product</span> <span class="c">!&lt; Temporary produtc.</span>
+  <span class="k">class</span><span class="p">(</span><span class="n">lorenz</span><span class="p">),</span>    <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span>  <span class="kd">::</span> <span class="n">lhs</span> <span class="c">!&lt; Left hand side.</span>
+  <span class="k">class</span><span class="p">(</span><span class="n">integrand</span><span class="p">),</span> <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span>  <span class="kd">::</span> <span class="n">rhs</span> <span class="c">!&lt; Right hand side.</span>
+  <span class="k">class</span><span class="p">(</span><span class="n">integrand</span><span class="p">),</span> <span class="k">allocatable</span> <span class="kd">::</span> <span class="n">opr</span> <span class="c">!&lt; Operator result.</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
 
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
-  <span class="k">allocate</span><span class="p">(</span><span class="n">local_product</span><span class="p">)</span>
-  <span class="k">select type</span><span class="p">(</span><span class="n">rhs</span><span class="p">)</span>
-  <span class="k">class is</span> <span class="p">(</span><span class="n">lorenz</span><span class="p">)</span>
-    <span class="n">local_product</span><span class="p">%</span><span class="n">dims</span> <span class="o">=</span> <span class="n">lhs</span><span class="p">%</span><span class="n">dims</span>
-    <span class="n">local_product</span><span class="p">%</span><span class="n">steps</span> <span class="o">=</span> <span class="n">lhs</span><span class="p">%</span><span class="n">steps</span>
-    <span class="n">local_product</span><span class="p">%</span><span class="n">state</span> <span class="o">=</span> <span class="n">lhs</span><span class="p">%</span><span class="n">state</span> <span class="o">*</span> <span class="n">rhs</span><span class="p">%</span><span class="n">state</span>
-    <span class="k">if</span> <span class="p">(</span><span class="nb">allocated</span><span class="p">(</span><span class="n">lhs</span><span class="p">%</span><span class="n">previous</span><span class="p">))</span> <span class="n">local_product</span><span class="p">%</span><span class="n">previous</span> <span class="o">=</span> <span class="n">lhs</span><span class="p">%</span><span class="n">previous</span>
-    <span class="n">local_product</span><span class="p">%</span><span class="n">sigma</span> <span class="o">=</span> <span class="n">lhs</span><span class="p">%</span><span class="n">sigma</span>
-    <span class="n">local_product</span><span class="p">%</span><span class="n">rho</span> <span class="o">=</span> <span class="n">lhs</span><span class="p">%</span><span class="n">rho</span>
-    <span class="n">local_product</span><span class="p">%</span><span class="n">beta</span> <span class="o">=</span> <span class="n">lhs</span><span class="p">%</span><span class="n">beta</span>
+  <span class="k">allocate</span><span class="p">(</span><span class="n">lorenz</span> <span class="kd">::</span> <span class="n">opr</span><span class="p">)</span>
+  <span class="k">select type</span><span class="p">(</span><span class="n">opr</span><span class="p">)</span>
+  <span class="k">class is</span><span class="p">(</span><span class="n">lorenz</span><span class="p">)</span>
+    <span class="n">opr</span> <span class="o">=</span> <span class="n">lhs</span>
+    <span class="k">select type</span><span class="p">(</span><span class="n">rhs</span><span class="p">)</span>
+    <span class="k">class is</span> <span class="p">(</span><span class="n">lorenz</span><span class="p">)</span>
+      <span class="n">opr</span><span class="p">%</span><span class="n">U</span> <span class="o">=</span> <span class="n">lhs</span><span class="p">%</span><span class="n">U</span> <span class="o">*</span> <span class="n">rhs</span><span class="p">%</span><span class="n">U</span>
+    <span class="n">endselect</span>
   <span class="n">endselect</span>
-  <span class="k">call </span><span class="nb">move_alloc</span><span class="p">(</span><span class="n">local_product</span><span class="p">,</span> <span class="nb">product</span><span class="p">)</span>
   <span class="k">return</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
   <span class="n">endfunction</span> <span class="n">lorenz_multiply_lorenz</span>

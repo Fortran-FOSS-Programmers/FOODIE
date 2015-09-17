@@ -150,6 +150,8 @@
       
       <a class="list-group-item" href="../module/type_lorenz.html#proc-dlorenz_dt">dLorenz_dt</a>
       
+      <a class="list-group-item" href="../module/type_lorenz.html#proc-previous_step%7E3">previous_step</a>
+      
       <a class="list-group-item" href="../module/type_lorenz.html#proc-lorenz_multiply_lorenz">lorenz_multiply_lorenz</a>
       
       <a class="list-group-item" href="../module/type_lorenz.html#proc-lorenz_multiply_real">lorenz_multiply_real</a>
@@ -157,6 +159,8 @@
       <a class="list-group-item" href="../module/type_lorenz.html#proc-real_multiply_lorenz">real_multiply_lorenz</a>
       
       <a class="list-group-item" href="../module/type_lorenz.html#proc-add_lorenz">add_lorenz</a>
+      
+      <a class="list-group-item" href="../module/type_lorenz.html#proc-sub_lorenz">sub_lorenz</a>
       
     </div>
   </div>
@@ -167,7 +171,7 @@
     <div class="panel-heading text-left"><h3 class="panel-title">Subroutines</h3></div>
     <div class="list-group">
       
-      <a class="list-group-item" href="../module/type_lorenz.html#proc-init%7E8">init</a>
+      <a class="list-group-item" href="../module/type_lorenz.html#proc-init%7E9">init</a>
       
       <a class="list-group-item" href="../module/type_lorenz.html#proc-update_previous_steps%7E3">update_previous_steps</a>
       
@@ -196,6 +200,8 @@
       <a class="list-group-item" href="../module/foodie_integrator_adams_bashforth.html">foodie_integrator_adams_bashforth</a>
       
       <a class="list-group-item" href="../module/foodie_integrator_euler_explicit.html">foodie_integrator_euler_explicit</a>
+      
+      <a class="list-group-item" href="../module/foodie_integrator_leapfrog.html">foodie_integrator_leapfrog</a>
       
       <a class="list-group-item" href="../module/foodie_integrator_low_storage_runge_kutta.html">foodie_integrator_low_storage_runge_kutta</a>
       
@@ -234,12 +240,13 @@
     
             <img class="depgraph" alt="dependency graph" src=../graphs/module%7E%7Etype_lorenz%7E%7EUsesGraph.svg usemap="#module~~type_lorenz~~UsesGraph">
             <map id="module~~type_lorenz~~UsesGraph" name="module~~type_lorenz~~UsesGraph">
-<area shape="rect" id="node4" href="../module/foodie_integrator_low_storage_runge_kutta.html" title="foodie_integrator_low_storage_runge_kutta" alt="" coords="307,291,595,325"/>
-<area shape="rect" id="node5" href="../module/foodie_integrator_tvd_runge_kutta.html" title="foodie_integrator_tvd_runge_kutta" alt="" coords="336,68,566,102"/>
-<area shape="rect" id="node6" href="../module/type_integrand.html" title="type_integrand" alt="" coords="149,179,260,213"/>
-<area shape="rect" id="node7" href="../module/foodie_integrator_euler_explicit.html" title="foodie_integrator_euler_explicit" alt="" coords="345,125,557,160"/>
-<area shape="rect" id="node8" href="../module/foodie_integrator_adams_bashforth.html" title="foodie_integrator_adams_bashforth" alt="" coords="332,233,570,267"/>
-<area shape="rect" id="node3" href="../module/foodie.html" title="foodie" alt="" coords="642,153,713,187"/>
+<area shape="rect" id="node4" href="../module/foodie_integrator_tvd_runge_kutta.html" title="foodie_integrator_tvd_runge_kutta" alt="" coords="336,257,566,291"/>
+<area shape="rect" id="node5" href="../module/type_integrand.html" title="type_integrand" alt="" coords="149,177,260,211"/>
+<area shape="rect" id="node6" href="../module/foodie_integrator_adams_bashforth.html" title="foodie_integrator_adams_bashforth" alt="" coords="332,314,570,349"/>
+<area shape="rect" id="node7" href="../module/foodie_integrator_euler_explicit.html" title="foodie_integrator_euler_explicit" alt="" coords="345,34,557,68"/>
+<area shape="rect" id="node8" href="../module/foodie_integrator_leapfrog.html" title="foodie_integrator_leapfrog" alt="" coords="360,92,541,126"/>
+<area shape="rect" id="node9" href="../module/foodie_integrator_low_storage_runge_kutta.html" title="foodie_integrator_low_storage_runge_kutta" alt="" coords="307,149,595,183"/>
+<area shape="rect" id="node3" href="../module/foodie.html" title="foodie" alt="" coords="642,149,713,183"/>
 </map>
 
             <div><a type="button" class="graph-help" data-toggle="modal" href="#graph-help-text">Help</a></div>
@@ -498,11 +505,11 @@ implementation in a submodule of an interface in a parent module.</p>
   
 <tr>
   
-  <td><span class="anchor" id="variable-state%7E2"></span>real(kind=R_P),</td>
+  <td><span class="anchor" id="variable-u%7E3"></span>real(kind=R_P),</td>
   
   <td>private,</td>
   <td>dimension(:), allocatable</td><td>::</td>
-  <td><strong>state</strong></td><td></td><td></td><td><p>Solution vector, [1:dims].</p></td>
+  <td><strong>U</strong></td><td></td><td></td><td><p>Integrand (state) variables, [1:dims].</p></td>
   
 </tr>
 
@@ -516,7 +523,7 @@ implementation in a submodule of an interface in a parent module.</p>
   
   <td>private,</td>
   <td>dimension(:,:), allocatable</td><td>::</td>
-  <td><strong>previous</strong></td><td></td><td></td><td><p>Previous steps solution vector, [1:dims,1:steps].</p></td>
+  <td><strong>previous</strong></td><td></td><td></td><td><p>Previous time steps states, [1:dims,1:steps].</p></td>
   
 </tr>
 
@@ -580,13 +587,16 @@ implementation in a submodule of an interface in a parent module.</p>
        <td><p>Extract Lorenz field.</p></td></tr>
       
        <tr><td>procedure, public, pass(self) :: <strong>t</strong>  => dLorenz_dt </td>
-       <td><p>Time derivate, resiuduals function.</p></td></tr>
+       <td><p>Time derivative, residuals function.</p></td></tr>
       
        <tr><td>procedure, public, pass(self) :: <strong>update_previous_steps</strong>  </td>
        <td><p>Update previous time steps.</p></td></tr>
       
+       <tr><td>procedure, public, pass(self) :: <strong>previous_step</strong>  </td>
+       <td><p>Get a previous time step.</p></td></tr>
+      
        <tr><td>procedure, public, pass(lhs) :: <strong>integrand_multiply_integrand</strong>  => lorenz_multiply_lorenz </td>
-       <td><p>Lorenz * lorenz operator.</p></td></tr>
+       <td><p>Lorenz * Lorenz operator.</p></td></tr>
       
        <tr><td>procedure, public, pass(lhs) :: <strong>integrand_multiply_real</strong>  => lorenz_multiply_real </td>
        <td><p>Lorenz * real operator.</p></td></tr>
@@ -595,7 +605,10 @@ implementation in a submodule of an interface in a parent module.</p>
        <td><p>Real * Lorenz operator.</p></td></tr>
       
        <tr><td>procedure, public, pass(lhs) :: <strong>add</strong>  => add_lorenz </td>
-       <td><p>Lorenz + Lorenz oprator.</p></td></tr>
+       <td><p>Lorenz + Lorenz operator.</p></td></tr>
+      
+       <tr><td>procedure, public, pass(lhs) :: <strong>sub</strong>  => sub_lorenz </td>
+       <td><p>Lorenz - Lorenz.</p></td></tr>
       
        <tr><td>procedure, public, pass(lhs) :: <strong>assign_integrand</strong>  => lorenz_assign_lorenz </td>
        <td><p>Lorenz = Lorenz.</p></td></tr>
@@ -776,8 +789,91 @@ private purefunction <a href='../proc/dlorenz_dt.html'>dLorenz_dt</a>(self, n) r
     
     
   <div class="panel panel-default">
+  <div class="panel-heading codesum"><span class="anchor" id="proc-previous_step%7E3"></span><h3>
+private purefunction <a href='../proc/previous_step%7E3.html'>previous_step</a>(self, n) result(previous)
+    
+    
+    
+</h3></div>
+  <div class="panel-body">
+       
+    
+    <h4>Arguments</h4>
+    
+      
+      
+<table class="table table-striped varlist">
+<thead><tr><th>Type</th>
+<th>Intent</th><th>Optional</th>
+<th>Attributes</th><th></th><th>Name</th><th></th></thead>
+
+
+
+<tbody>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>class(<a href='../type/lorenz.html'>lorenz</a>),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>self</strong></td><td><p>Lorenz field.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>integer(kind=I_P),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>n</strong></td><td><p>Time level.</p></td>
+  
+</tr>
+
+</tbody>
+</table>
+
+      
+    
+    
+
+  
+  
+  
+  
+     <h4>Return Value <small>class(<a href='../type/integrand.html'>integrand</a>),
+  allocatable</small></h4>
+  <p>Previous time solution of Lorenz field.</p>
+    
+    
+    <h4>Description</h4>
+       
+       
+
+
+       
+       <p>Extract previous time solution of Lorenz field.</p>
+        
+
+  </div>
+  </div>
+
+    
+    
+  <div class="panel panel-default">
   <div class="panel-heading codesum"><span class="anchor" id="proc-lorenz_multiply_lorenz"></span><h3>
-private purefunction <a href='../proc/lorenz_multiply_lorenz.html'>lorenz_multiply_lorenz</a>(lhs, rhs) result(product)
+private purefunction <a href='../proc/lorenz_multiply_lorenz.html'>lorenz_multiply_lorenz</a>(lhs, rhs) result(opr)
     
     
     
@@ -841,7 +937,7 @@ private purefunction <a href='../proc/lorenz_multiply_lorenz.html'>lorenz_multip
   
      <h4>Return Value <small>class(<a href='../type/integrand.html'>integrand</a>),
   allocatable</small></h4>
-  <p>Product.</p>
+  <p>Operator result.</p>
     
     
     <h4>Description</h4>
@@ -860,7 +956,7 @@ private purefunction <a href='../proc/lorenz_multiply_lorenz.html'>lorenz_multip
     
   <div class="panel panel-default">
   <div class="panel-heading codesum"><span class="anchor" id="proc-lorenz_multiply_real"></span><h3>
-private purefunction <a href='../proc/lorenz_multiply_real.html'>lorenz_multiply_real</a>(lhs, rhs) result(product)
+private purefunction <a href='../proc/lorenz_multiply_real.html'>lorenz_multiply_real</a>(lhs, rhs) result(opr)
     
     
     
@@ -924,7 +1020,7 @@ private purefunction <a href='../proc/lorenz_multiply_real.html'>lorenz_multiply
   
      <h4>Return Value <small>class(<a href='../type/integrand.html'>integrand</a>),
   allocatable</small></h4>
-  <p>Product.</p>
+  <p>Operator result.</p>
     
     
     <h4>Description</h4>
@@ -943,7 +1039,7 @@ private purefunction <a href='../proc/lorenz_multiply_real.html'>lorenz_multiply
     
   <div class="panel panel-default">
   <div class="panel-heading codesum"><span class="anchor" id="proc-real_multiply_lorenz"></span><h3>
-private purefunction <a href='../proc/real_multiply_lorenz.html'>real_multiply_lorenz</a>(lhs, rhs) result(product)
+private purefunction <a href='../proc/real_multiply_lorenz.html'>real_multiply_lorenz</a>(lhs, rhs) result(opr)
     
     
     
@@ -1007,7 +1103,7 @@ private purefunction <a href='../proc/real_multiply_lorenz.html'>real_multiply_l
   
      <h4>Return Value <small>class(<a href='../type/integrand.html'>integrand</a>),
   allocatable</small></h4>
-  <p>Product.</p>
+  <p>Operator result.</p>
     
     
     <h4>Description</h4>
@@ -1026,7 +1122,7 @@ private purefunction <a href='../proc/real_multiply_lorenz.html'>real_multiply_l
     
   <div class="panel panel-default">
   <div class="panel-heading codesum"><span class="anchor" id="proc-add_lorenz"></span><h3>
-private purefunction <a href='../proc/add_lorenz.html'>add_lorenz</a>(lhs, rhs) result(sum)
+private purefunction <a href='../proc/add_lorenz.html'>add_lorenz</a>(lhs, rhs) result(opr)
     
     
     
@@ -1090,7 +1186,7 @@ private purefunction <a href='../proc/add_lorenz.html'>add_lorenz</a>(lhs, rhs) 
   
      <h4>Return Value <small>class(<a href='../type/integrand.html'>integrand</a>),
   allocatable</small></h4>
-  <p>Sum.</p>
+  <p>Operator result.</p>
     
     
     <h4>Description</h4>
@@ -1100,6 +1196,89 @@ private purefunction <a href='../proc/add_lorenz.html'>add_lorenz</a>(lhs, rhs) 
 
        
        <p>Add two Lorenz fields.</p>
+        
+
+  </div>
+  </div>
+
+    
+    
+  <div class="panel panel-default">
+  <div class="panel-heading codesum"><span class="anchor" id="proc-sub_lorenz"></span><h3>
+private purefunction <a href='../proc/sub_lorenz.html'>sub_lorenz</a>(lhs, rhs) result(opr)
+    
+    
+    
+</h3></div>
+  <div class="panel-body">
+       
+    
+    <h4>Arguments</h4>
+    
+      
+      
+<table class="table table-striped varlist">
+<thead><tr><th>Type</th>
+<th>Intent</th><th>Optional</th>
+<th>Attributes</th><th></th><th>Name</th><th></th></thead>
+
+
+
+<tbody>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>class(<a href='../type/lorenz.html'>lorenz</a>),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>lhs</strong></td><td><p>Left hand side.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>class(<a href='../type/integrand.html'>integrand</a>),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>rhs</strong></td><td><p>Right hand side.</p></td>
+  
+</tr>
+
+</tbody>
+</table>
+
+      
+    
+    
+
+  
+  
+  
+  
+     <h4>Return Value <small>class(<a href='../type/integrand.html'>integrand</a>),
+  allocatable</small></h4>
+  <p>Operator result.</p>
+    
+    
+    <h4>Description</h4>
+       
+       
+
+
+       
+       <p>Subtract two Lorenz fields.</p>
         
 
   </div>
@@ -1116,8 +1295,8 @@ private purefunction <a href='../proc/add_lorenz.html'>add_lorenz</a>(lhs, rhs) 
     
     
   <div class="panel panel-default">
-  <div class="panel-heading codesum"><span class="anchor" id="proc-init%7E8"></span><h3>
-private subroutine <a href='../proc/init%7E8.html'>init</a>(self, initial_state, sigma, rho, beta, steps)
+  <div class="panel-heading codesum"><span class="anchor" id="proc-init%7E9"></span><h3>
+private subroutine <a href='../proc/init%7E9.html'>init</a>(self, initial_state, sigma, rho, beta, steps)
     
     
     
@@ -1164,7 +1343,7 @@ private subroutine <a href='../proc/init%7E8.html'>init</a>(self, initial_state,
   <td></td>
   
   <td>dimension(:)</td><td>::</td>
-  <td><strong>initial_state</strong></td><td><p>Intial state of Lorenz field vector.</p></td>
+  <td><strong>initial_state</strong></td><td><p>Initial state of Lorenz field vector.</p></td>
   
 </tr>
 
@@ -1251,7 +1430,7 @@ private subroutine <a href='../proc/init%7E8.html'>init</a>(self, initial_state,
     
   <div class="panel panel-default">
   <div class="panel-heading codesum"><span class="anchor" id="proc-update_previous_steps%7E3"></span><h3>
-private puresubroutine <a href='../proc/update_previous_steps%7E3.html'>update_previous_steps</a>(self)
+private puresubroutine <a href='../proc/update_previous_steps%7E3.html'>update_previous_steps</a>(self, filter, weights)
     
     
     
@@ -1284,6 +1463,36 @@ private puresubroutine <a href='../proc/update_previous_steps%7E3.html'>update_p
   
   <td></td><td>::</td>
   <td><strong>self</strong></td><td><p>Lorenz field.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>class(<a href='../type/integrand.html'>integrand</a>),</td>
+  <td>intent(in),</td>
+  <td>optional</td>
+  
+  <td></td><td>::</td>
+  <td><strong>filter</strong></td><td><p>Filter field displacement.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>real(kind=R_P),</td>
+  <td>intent(in),</td>
+  <td>optional</td>
+  
+  <td></td><td>::</td>
+  <td><strong>weights</strong>(:)</td><td><p>Weights for filtering the steps.</p></td>
   
 </tr>
 

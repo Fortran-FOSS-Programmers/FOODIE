@@ -170,6 +170,8 @@
       
       <a class="list-group-item" href="../sourcefile/foodie_integrator_euler_explicit.f90.html">foodie_integrator_euler_explicit.f90</a>
       
+      <a class="list-group-item" href="../sourcefile/foodie_integrator_leapfrog.f90.html">foodie_integrator_leapfrog.f90</a>
+      
       <a class="list-group-item" href="../sourcefile/foodie_integrator_low_storage_runge_kutta.f90.html">foodie_integrator_low_storage_runge_kutta.f90</a>
       
       <a class="list-group-item" href="../sourcefile/foodie_integrator_tvd_runge_kutta.f90.html">foodie_integrator_tvd_runge_kutta.f90</a>
@@ -220,7 +222,7 @@
 <span class="k">type</span><span class="p">,</span> <span class="k">extends</span><span class="p">(</span><span class="n">integrand</span><span class="p">)</span> <span class="kd">::</span> <span class="n">euler_1D</span>
   <span class="c">!&lt; Euler 1D PDEs system field.</span>
   <span class="c">!&lt;</span>
-  <span class="c">!&lt; It is a FOODiE integrand class.</span>
+  <span class="c">!&lt; It is a FOODiE integrand class concrete extension.</span>
   <span class="c">!&lt;</span>
   <span class="c">!&lt;### 1D Euler PDEs system</span>
   <span class="c">!&lt; The 1D Euler PDEs system considered is a non linear, hyperbolic (inviscid) system of conservation laws for compressible gas</span>
@@ -300,7 +302,7 @@
   <span class="c">!&lt; + Ns+4 : specific heats ratio    (g)</span>
   <span class="c">!&lt;</span>
   <span class="c">!&lt;#### Conservative variables organization</span>
-  <span class="c">!&lt; Conservative  variables are organized as an array of reals which the first index means:</span>
+  <span class="c">!&lt; Conservative variables are organized as an array (rank 2) of reals which the first index means:</span>
   <span class="c">!&lt;</span>
   <span class="c">!&lt; + 1    : mass conservation of species 1    (r1)</span>
   <span class="c">!&lt; + 2    : mass conservation of species 2    (r2)</span>
@@ -320,27 +322,27 @@
   <span class="kt">integer</span><span class="p">(</span><span class="n">I_P</span><span class="p">)</span>                   <span class="kd">::</span> <span class="n">Np</span><span class="o">=</span><span class="mi">0</span>            <span class="c">!&lt; Number of primitive variables, Ns+4.</span>
   <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">)</span>                      <span class="kd">::</span> <span class="n">Dx</span><span class="o">=</span><span class="mf">0._R_P</span>       <span class="c">!&lt; Space step.</span>
   <span class="k">type</span><span class="p">(</span><span class="n">weno_interpolator_upwind</span><span class="p">)</span> <span class="kd">::</span> <span class="n">weno</span>            <span class="c">!&lt; WENO interpolator.</span>
-  <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">),</span>    <span class="k">allocatable</span>      <span class="kd">::</span> <span class="n">U</span><span class="p">(:,:)</span>          <span class="c">!&lt; Conservative (state) variables [1:Nc,1-Ng:Ni+Ng].</span>
-  <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">),</span>    <span class="k">allocatable</span>      <span class="kd">::</span> <span class="n">previous</span><span class="p">(:,:,:)</span> <span class="c">!&lt; Conservative variables of previous time steps [:,:,1:steps].</span>
+  <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">),</span>    <span class="k">allocatable</span>      <span class="kd">::</span> <span class="n">U</span><span class="p">(:,:)</span>          <span class="c">!&lt; Integrand (state) variables, whole physical domain [1:Nc,1-Ng:Ni+Ng].</span>
+  <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">),</span>    <span class="k">allocatable</span>      <span class="kd">::</span> <span class="n">previous</span><span class="p">(:,:,:)</span> <span class="c">!&lt; Previous time steps states [1:Nc,1-Ng:Ni+Ng,1:steps].</span>
   <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">),</span>    <span class="k">allocatable</span>      <span class="kd">::</span> <span class="n">cp0</span><span class="p">(:)</span>          <span class="c">!&lt; Specific heat cp of initial species [1:Ns].</span>
   <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">),</span>    <span class="k">allocatable</span>      <span class="kd">::</span> <span class="n">cv0</span><span class="p">(:)</span>          <span class="c">!&lt; Specific heat cv of initial species [1:Ns].</span>
   <span class="kt">character</span><span class="p">(:),</span> <span class="k">allocatable</span>      <span class="kd">::</span> <span class="n">BC_L</span>            <span class="c">!&lt; Left boundary condition type.</span>
   <span class="kt">character</span><span class="p">(:),</span> <span class="k">allocatable</span>      <span class="kd">::</span> <span class="n">BC_R</span>            <span class="c">!&lt; Right boundary condition type.</span>
   <span class="k">contains</span>
-    <span class="c">! public methods</span>
     <span class="c">! auxiliary methods</span>
     <span class="k">procedure</span><span class="p">,</span> <span class="k">pass</span><span class="p">(</span><span class="n">self</span><span class="p">),</span> <span class="k">public</span> <span class="kd">::</span> <span class="n">init</span>             <span class="c">!&lt; Init field.</span>
     <span class="k">procedure</span><span class="p">,</span> <span class="k">pass</span><span class="p">(</span><span class="n">self</span><span class="p">),</span> <span class="k">public</span> <span class="kd">::</span> <span class="n">destroy</span>          <span class="c">!&lt; Destroy field.</span>
     <span class="k">procedure</span><span class="p">,</span> <span class="k">pass</span><span class="p">(</span><span class="n">self</span><span class="p">),</span> <span class="k">public</span> <span class="kd">::</span> <span class="n">output</span>           <span class="c">!&lt; Extract Euler field.</span>
     <span class="k">procedure</span><span class="p">,</span> <span class="k">pass</span><span class="p">(</span><span class="n">self</span><span class="p">),</span> <span class="k">public</span> <span class="kd">::</span> <span class="n">dt</span> <span class="o">=&gt;</span> <span class="n">compute_dt</span> <span class="c">!&lt; Compute the current time step, by means of CFL condition.</span>
     <span class="c">! type_integrand deferred methods</span>
-    <span class="k">procedure</span><span class="p">,</span> <span class="k">pass</span><span class="p">(</span><span class="n">self</span><span class="p">),</span> <span class="k">public</span> <span class="kd">::</span> <span class="n">t</span> <span class="o">=&gt;</span> <span class="n">dEuler_dt</span>        <span class="c">!&lt; Time derivate, residuals function.</span>
-    <span class="k">procedure</span><span class="p">,</span> <span class="k">pass</span><span class="p">(</span><span class="n">self</span><span class="p">),</span> <span class="k">public</span> <span class="kd">::</span> <span class="n">update_previous_steps</span> <span class="c">!&lt; Update previous time steps.</span>
-    <span class="c">! operators overloading</span>
+    <span class="k">procedure</span><span class="p">,</span> <span class="k">pass</span><span class="p">(</span><span class="n">self</span><span class="p">),</span> <span class="k">public</span> <span class="kd">::</span> <span class="n">t</span> <span class="o">=&gt;</span> <span class="n">dEuler_dt</span>                                       <span class="c">!&lt; Time derivative, residuals function.</span>
+    <span class="k">procedure</span><span class="p">,</span> <span class="k">pass</span><span class="p">(</span><span class="n">self</span><span class="p">),</span> <span class="k">public</span> <span class="kd">::</span> <span class="n">update_previous_steps</span>                                <span class="c">!&lt; Update previous time steps.</span>
+    <span class="k">procedure</span><span class="p">,</span> <span class="k">pass</span><span class="p">(</span><span class="n">self</span><span class="p">),</span> <span class="k">public</span> <span class="kd">::</span> <span class="n">previous_step</span>                                        <span class="c">!&lt; Get a previous time step.</span>
     <span class="k">procedure</span><span class="p">,</span> <span class="k">pass</span><span class="p">(</span><span class="n">lhs</span><span class="p">),</span>  <span class="k">public</span> <span class="kd">::</span> <span class="n">integrand_multiply_integrand</span> <span class="o">=&gt;</span> <span class="n">euler_multiply_euler</span> <span class="c">!&lt; Euler * Euler operator.</span>
     <span class="k">procedure</span><span class="p">,</span> <span class="k">pass</span><span class="p">(</span><span class="n">lhs</span><span class="p">),</span>  <span class="k">public</span> <span class="kd">::</span> <span class="n">integrand_multiply_real</span> <span class="o">=&gt;</span> <span class="n">euler_multiply_real</span>       <span class="c">!&lt; Euler * real operator.</span>
     <span class="k">procedure</span><span class="p">,</span> <span class="k">pass</span><span class="p">(</span><span class="n">rhs</span><span class="p">),</span>  <span class="k">public</span> <span class="kd">::</span> <span class="n">real_multiply_integrand</span> <span class="o">=&gt;</span> <span class="n">real_multiply_euler</span>       <span class="c">!&lt; Real * Euler operator.</span>
-    <span class="k">procedure</span><span class="p">,</span> <span class="k">pass</span><span class="p">(</span><span class="n">lhs</span><span class="p">),</span>  <span class="k">public</span> <span class="kd">::</span> <span class="n">add</span> <span class="o">=&gt;</span> <span class="n">add_euler</span>                                     <span class="c">!&lt; Euler + Euler oprator.</span>
+    <span class="k">procedure</span><span class="p">,</span> <span class="k">pass</span><span class="p">(</span><span class="n">lhs</span><span class="p">),</span>  <span class="k">public</span> <span class="kd">::</span> <span class="n">add</span> <span class="o">=&gt;</span> <span class="n">add_euler</span>                                     <span class="c">!&lt; Euler + Euler operator.</span>
+    <span class="k">procedure</span><span class="p">,</span> <span class="k">pass</span><span class="p">(</span><span class="n">lhs</span><span class="p">),</span>  <span class="k">public</span> <span class="kd">::</span> <span class="n">sub</span> <span class="o">=&gt;</span> <span class="n">sub_euler</span>                                     <span class="c">!&lt; Euler - Euler.</span>
     <span class="k">procedure</span><span class="p">,</span> <span class="k">pass</span><span class="p">(</span><span class="n">lhs</span><span class="p">),</span>  <span class="k">public</span> <span class="kd">::</span> <span class="n">assign_integrand</span> <span class="o">=&gt;</span> <span class="n">euler_assign_euler</span>               <span class="c">!&lt; Euler = Euler.</span>
     <span class="k">procedure</span><span class="p">,</span> <span class="k">pass</span><span class="p">(</span><span class="n">lhs</span><span class="p">),</span>  <span class="k">public</span> <span class="kd">::</span> <span class="n">assign_real</span> <span class="o">=&gt;</span> <span class="n">euler_assign_real</span>                     <span class="c">!&lt; Euler = real.</span>
     <span class="c">! private methods</span>
@@ -349,11 +351,11 @@
     <span class="k">procedure</span><span class="p">,</span> <span class="k">pass</span><span class="p">(</span><span class="n">self</span><span class="p">),</span> <span class="k">private</span> <span class="kd">::</span> <span class="n">impose_boundary_conditions</span>    <span class="c">!&lt; Impose boundary conditions.</span>
     <span class="k">procedure</span><span class="p">,</span> <span class="k">pass</span><span class="p">(</span><span class="n">self</span><span class="p">),</span> <span class="k">private</span> <span class="kd">::</span> <span class="n">reconstruct_interfaces_states</span> <span class="c">!&lt; Reconstruct interfaces states.</span>
     <span class="k">procedure</span><span class="p">,</span> <span class="k">pass</span><span class="p">(</span><span class="n">self</span><span class="p">),</span> <span class="k">private</span> <span class="kd">::</span> <span class="n">riemann_solver</span>                <span class="c">!&lt; Solve the Riemann Problem at cell interfaces.</span>
-    <span class="k">final</span>                          <span class="kd">::</span> <span class="n">finalize</span>                   <span class="c">!&lt; Finalize field.</span>
+    <span class="k">final</span>                          <span class="kd">::</span> <span class="n">finalize</span>                      <span class="c">!&lt; Finalize field.</span>
 <span class="n">endtype</span> <span class="n">euler_1D</span>
 <span class="c">!-----------------------------------------------------------------------------------------------------------------------------------</span>
 <span class="k">contains</span>
-  <span class="c">! public methods</span>
+  <span class="c">! auxiliary methods</span>
   <span class="k">subroutine </span><span class="n">init</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">Ni</span><span class="p">,</span> <span class="n">Ns</span><span class="p">,</span> <span class="n">Dx</span><span class="p">,</span> <span class="n">BC_L</span><span class="p">,</span> <span class="n">BC_R</span><span class="p">,</span> <span class="n">initial_state</span><span class="p">,</span> <span class="n">cp0</span><span class="p">,</span> <span class="n">cv0</span><span class="p">,</span> <span class="n">steps</span><span class="p">,</span> <span class="n">ord</span><span class="p">)</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
   <span class="c">!&lt; Init field.</span>
@@ -485,6 +487,7 @@
   <span class="c">!--------------------------------------------------------------------------------------------------------------------------------</span>
   <span class="n">endfunction</span> <span class="n">compute_dt</span>
 
+  <span class="c">! type_integrand deferred methods</span>
   <span class="k">pure function </span><span class="n">dEuler_dt</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">n</span><span class="p">)</span> <span class="k">result</span><span class="p">(</span><span class="n">dState_dt</span><span class="p">)</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
   <span class="c">!&lt; Time derivative of Euler field, the residuals function.</span>
@@ -538,12 +541,14 @@
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
   <span class="n">endfunction</span> <span class="n">dEuler_dt</span>
 
-  <span class="k">pure subroutine </span><span class="n">update_previous_steps</span><span class="p">(</span><span class="n">self</span><span class="p">)</span>
+  <span class="k">pure subroutine </span><span class="n">update_previous_steps</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">filter</span><span class="p">,</span> <span class="n">weights</span><span class="p">)</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
   <span class="c">!&lt; Update previous time steps.</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
-  <span class="k">class</span><span class="p">(</span><span class="n">euler_1D</span><span class="p">),</span> <span class="k">intent</span><span class="p">(</span><span class="n">INOUT</span><span class="p">)</span> <span class="kd">::</span> <span class="n">self</span> <span class="c">!&lt; Euler field.</span>
-  <span class="kt">integer</span>                        <span class="kd">::</span> <span class="n">s</span>    <span class="c">!&lt; Time steps counter.</span>
+  <span class="k">class</span><span class="p">(</span><span class="n">euler_1D</span><span class="p">),</span>            <span class="k">intent</span><span class="p">(</span><span class="n">INOUT</span><span class="p">)</span> <span class="kd">::</span> <span class="n">self</span>       <span class="c">!&lt; Euler field.</span>
+  <span class="k">class</span><span class="p">(</span><span class="n">integrand</span><span class="p">),</span> <span class="k">optional</span><span class="p">,</span> <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span>    <span class="kd">::</span> <span class="n">filter</span>     <span class="c">!&lt; Filter field displacement.</span>
+  <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">),</span>        <span class="k">optional</span><span class="p">,</span> <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span>    <span class="kd">::</span> <span class="n">weights</span><span class="p">(:)</span> <span class="c">!&lt; Weights for filtering the steps.</span>
+  <span class="kt">integer</span>                                   <span class="kd">::</span> <span class="n">s</span>          <span class="c">!&lt; Time steps counter.</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
 
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
@@ -553,11 +558,38 @@
     <span class="n">enddo</span>
     <span class="n">self</span><span class="p">%</span><span class="n">previous</span><span class="p">(:,</span> <span class="p">:,</span> <span class="n">self</span><span class="p">%</span><span class="n">steps</span><span class="p">)</span> <span class="o">=</span> <span class="n">self</span><span class="p">%</span><span class="n">U</span>
   <span class="n">endif</span>
+  <span class="k">if</span> <span class="p">(</span><span class="nb">present</span><span class="p">(</span><span class="n">filter</span><span class="p">).</span><span class="nb">and</span><span class="p">.</span><span class="nb">present</span><span class="p">(</span><span class="n">weights</span><span class="p">))</span> <span class="k">then</span>
+<span class="k">    select type</span><span class="p">(</span><span class="n">filter</span><span class="p">)</span>
+    <span class="k">class is</span><span class="p">(</span><span class="n">euler_1D</span><span class="p">)</span>
+      <span class="k">do </span><span class="n">s</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">self</span><span class="p">%</span><span class="n">steps</span>
+        <span class="n">self</span><span class="p">%</span><span class="n">previous</span><span class="p">(:,</span> <span class="p">:,</span> <span class="n">s</span><span class="p">)</span> <span class="o">=</span> <span class="n">self</span><span class="p">%</span><span class="n">previous</span><span class="p">(:,</span> <span class="p">:,</span> <span class="n">s</span><span class="p">)</span> <span class="o">+</span> <span class="n">filter</span><span class="p">%</span><span class="n">U</span> <span class="o">*</span> <span class="n">weights</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
+      <span class="n">enddo</span>
+    <span class="n">endselect</span>
+  <span class="n">endif</span>
   <span class="k">return</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
   <span class="n">endsubroutine</span> <span class="n">update_previous_steps</span>
 
-  <span class="c">! operators overloading</span>
+  <span class="k">pure function </span><span class="n">previous_step</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">n</span><span class="p">)</span> <span class="k">result</span><span class="p">(</span><span class="n">previous</span><span class="p">)</span>
+  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+  <span class="c">!&lt; Extract previous time solution of Euler field.</span>
+  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+  <span class="k">class</span><span class="p">(</span><span class="n">euler_1D</span><span class="p">),</span> <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span>   <span class="kd">::</span> <span class="n">self</span>     <span class="c">!&lt; Euler field.</span>
+  <span class="kt">integer</span><span class="p">(</span><span class="n">I_P</span><span class="p">),</span>    <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span>   <span class="kd">::</span> <span class="n">n</span>        <span class="c">!&lt; Time level.</span>
+  <span class="k">class</span><span class="p">(</span><span class="n">integrand</span><span class="p">),</span> <span class="k">allocatable</span> <span class="kd">::</span> <span class="n">previous</span> <span class="c">!&lt; Previous time solution of Euler field.</span>
+  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+
+  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+  <span class="k">allocate</span><span class="p">(</span><span class="n">euler_1D</span> <span class="kd">::</span> <span class="n">previous</span><span class="p">)</span>
+  <span class="k">select type</span><span class="p">(</span><span class="n">previous</span><span class="p">)</span>
+  <span class="k">class is</span><span class="p">(</span><span class="n">euler_1D</span><span class="p">)</span>
+    <span class="n">previous</span> <span class="o">=</span> <span class="n">self</span>
+    <span class="n">previous</span><span class="p">%</span><span class="n">U</span> <span class="o">=</span> <span class="n">self</span><span class="p">%</span><span class="n">previous</span><span class="p">(:,</span> <span class="p">:,</span> <span class="n">n</span><span class="p">)</span>
+  <span class="n">endselect</span>
+  <span class="k">return</span>
+  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+  <span class="n">endfunction</span> <span class="n">previous_step</span>
+
   <span class="k">pure function </span><span class="n">euler_multiply_euler</span><span class="p">(</span><span class="n">lhs</span><span class="p">,</span> <span class="n">rhs</span><span class="p">)</span> <span class="k">result</span><span class="p">(</span><span class="n">opr</span><span class="p">)</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
   <span class="c">!&lt; Multiply an Euler field by another one.</span>
@@ -643,6 +675,29 @@
   <span class="k">return</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
   <span class="n">endfunction</span> <span class="n">add_euler</span>
+
+  <span class="k">pure function </span><span class="n">sub_euler</span><span class="p">(</span><span class="n">lhs</span><span class="p">,</span> <span class="n">rhs</span><span class="p">)</span> <span class="k">result</span><span class="p">(</span><span class="n">opr</span><span class="p">)</span>
+  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+  <span class="c">!&lt; Subtract two Euler fields.</span>
+  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+  <span class="k">class</span><span class="p">(</span><span class="n">euler_1D</span><span class="p">),</span>  <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span>  <span class="kd">::</span> <span class="n">lhs</span> <span class="c">!&lt; Left hand side.</span>
+  <span class="k">class</span><span class="p">(</span><span class="n">integrand</span><span class="p">),</span> <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span>  <span class="kd">::</span> <span class="n">rhs</span> <span class="c">!&lt; Right hand side.</span>
+  <span class="k">class</span><span class="p">(</span><span class="n">integrand</span><span class="p">),</span> <span class="k">allocatable</span> <span class="kd">::</span> <span class="n">opr</span> <span class="c">!&lt; Operator result.</span>
+  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+
+  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+  <span class="k">allocate</span> <span class="p">(</span><span class="n">euler_1D</span> <span class="kd">::</span> <span class="n">opr</span><span class="p">)</span>
+  <span class="k">select type</span><span class="p">(</span><span class="n">opr</span><span class="p">)</span>
+  <span class="k">class is</span><span class="p">(</span><span class="n">euler_1D</span><span class="p">)</span>
+    <span class="n">opr</span> <span class="o">=</span> <span class="n">lhs</span>
+    <span class="k">select type</span><span class="p">(</span><span class="n">rhs</span><span class="p">)</span>
+    <span class="k">class is</span> <span class="p">(</span><span class="n">euler_1D</span><span class="p">)</span>
+      <span class="n">opr</span><span class="p">%</span><span class="n">U</span> <span class="o">=</span> <span class="n">lhs</span><span class="p">%</span><span class="n">U</span> <span class="o">-</span> <span class="n">rhs</span><span class="p">%</span><span class="n">U</span>
+    <span class="n">endselect</span>
+  <span class="n">endselect</span>
+  <span class="k">return</span>
+  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+  <span class="n">endfunction</span> <span class="n">sub_euler</span>
 
   <span class="k">pure subroutine </span><span class="n">euler_assign_euler</span><span class="p">(</span><span class="n">lhs</span><span class="p">,</span> <span class="n">rhs</span><span class="p">)</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>

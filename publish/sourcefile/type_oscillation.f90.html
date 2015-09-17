@@ -170,6 +170,8 @@
       
       <a class="list-group-item" href="../sourcefile/foodie_integrator_euler_explicit.f90.html">foodie_integrator_euler_explicit.f90</a>
       
+      <a class="list-group-item" href="../sourcefile/foodie_integrator_leapfrog.f90.html">foodie_integrator_leapfrog.f90</a>
+      
       <a class="list-group-item" href="../sourcefile/foodie_integrator_low_storage_runge_kutta.f90.html">foodie_integrator_low_storage_runge_kutta.f90</a>
       
       <a class="list-group-item" href="../sourcefile/foodie_integrator_tvd_runge_kutta.f90.html">foodie_integrator_tvd_runge_kutta.f90</a>
@@ -219,12 +221,39 @@
 <span class="k">type</span><span class="p">,</span> <span class="k">extends</span><span class="p">(</span><span class="n">integrand</span><span class="p">)</span> <span class="kd">::</span> <span class="n">oscillation</span>
   <span class="c">!&lt; Oscillation equations field.</span>
   <span class="c">!&lt;</span>
-  <span class="c">!&lt; It is a FOODiE integrand class.</span>
+  <span class="c">!&lt; It is a FOODiE integrand class concrete extension.</span>
+  <span class="c">!&lt;</span>
+  <span class="c">!&lt;### Oscillation ODEs system</span>
+  <span class="c">!&lt;The (inertial) Oscillation equations system is a non linear system of pure ODEs and it can be written as:</span>
+  <span class="c">!&lt;</span>
+  <span class="c">!&lt;$$\begin{matrix}</span>
+  <span class="c">!&lt; U_t = R(U)  \\</span>
+  <span class="c">!&lt; U = \begin{bmatrix}</span>
+  <span class="c">!&lt; v_1 \\</span>
+  <span class="c">!&lt; v_2</span>
+  <span class="c">!&lt; \end{bmatrix}\;\;\;</span>
+  <span class="c">!&lt; R(U) = \begin{bmatrix}</span>
+  <span class="c">!&lt; -f v_2 \\</span>
+  <span class="c">!&lt; f v_1</span>
+  <span class="c">!&lt; \end{bmatrix}</span>
+  <span class="c">!&lt;\end{matrix}$$</span>
+  <span class="c">!&lt;</span>
+  <span class="c">!&lt;The frequency *f* is constant and it is here selected as *f=10^-4*.</span>
+  <span class="c">!&lt;</span>
+  <span class="c">!&lt;In the space *v1-v2* the path of the oscillation must be a circle, but for the frequency selected some ODE solvers are not</span>
+  <span class="c">!&lt;stable leading to a wrong path, see [1].</span>
+  <span class="c">!&lt;</span>
+  <span class="c">!&lt;#### Bibliography</span>
+  <span class="c">!&lt;</span>
+  <span class="c">!&lt;[1] *Numerical Methods for Fluid Dynamics With Applications to Geophysics*, Dale R. Durran, Springer, 2010.</span>
+  <span class="c">!&lt;</span>
+  <span class="c">!&lt;#### State variables organization</span>
+  <span class="c">!&lt; State variables are organized as an array (rank 1) of reals of *dims* elements, in this case 2 elements.</span>
   <span class="k">private</span>
 <span class="k">  </span><span class="kt">integer</span><span class="p">(</span><span class="n">I_P</span><span class="p">)</span>                           <span class="kd">::</span> <span class="n">dims</span><span class="o">=</span><span class="mi">0</span>     <span class="c">!&lt; Space dimensions.</span>
   <span class="kt">integer</span><span class="p">(</span><span class="n">I_P</span><span class="p">)</span>                           <span class="kd">::</span> <span class="n">steps</span><span class="o">=</span><span class="mi">0</span>    <span class="c">!&lt; Number of time steps stored.</span>
-  <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">),</span> <span class="k">dimension</span><span class="p">(:),</span>   <span class="k">allocatable</span> <span class="kd">::</span> <span class="n">state</span>      <span class="c">!&lt; Solution vector, [1:dims].</span>
-  <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">),</span> <span class="k">dimension</span><span class="p">(:,:),</span> <span class="k">allocatable</span> <span class="kd">::</span> <span class="n">previous</span>   <span class="c">!&lt; Previous steps solution vector, [1:dims,1:steps].</span>
+  <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">),</span> <span class="k">dimension</span><span class="p">(:),</span>   <span class="k">allocatable</span> <span class="kd">::</span> <span class="n">U</span>          <span class="c">!&lt; Integrand (state) variables, [1:dims].</span>
+  <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">),</span> <span class="k">dimension</span><span class="p">(:,:),</span> <span class="k">allocatable</span> <span class="kd">::</span> <span class="n">previous</span>   <span class="c">!&lt; Previous time steps states, [1:dims,1:steps].</span>
   <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">)</span>                              <span class="kd">::</span> <span class="n">f</span> <span class="o">=</span> <span class="mf">0._R_P</span> <span class="c">!&lt; Oscillation frequency (Hz).</span>
   <span class="k">contains</span>
     <span class="c">! auxiliary methods</span>
@@ -233,21 +262,24 @@
     <span class="c">! type_integrand deferred methods</span>
     <span class="k">procedure</span><span class="p">,</span> <span class="k">pass</span><span class="p">(</span><span class="n">self</span><span class="p">),</span> <span class="k">public</span> <span class="kd">::</span> <span class="n">t</span> <span class="o">=&gt;</span> <span class="n">dOscillation_dt</span>                                             <span class="c">!&lt; Time derivative, residuals.</span>
     <span class="k">procedure</span><span class="p">,</span> <span class="k">pass</span><span class="p">(</span><span class="n">self</span><span class="p">),</span> <span class="k">public</span> <span class="kd">::</span> <span class="n">update_previous_steps</span>                                            <span class="c">!&lt; Update previous time steps.</span>
+    <span class="k">procedure</span><span class="p">,</span> <span class="k">pass</span><span class="p">(</span><span class="n">self</span><span class="p">),</span> <span class="k">public</span> <span class="kd">::</span> <span class="n">previous_step</span>                                                    <span class="c">!&lt; Get a previous time step.</span>
     <span class="k">procedure</span><span class="p">,</span> <span class="k">pass</span><span class="p">(</span><span class="n">lhs</span><span class="p">),</span>  <span class="k">public</span> <span class="kd">::</span> <span class="n">integrand_multiply_integrand</span> <span class="o">=&gt;</span> <span class="n">oscillation_multiply_oscillation</span> <span class="c">!&lt; Oscillation * oscillation.</span>
     <span class="k">procedure</span><span class="p">,</span> <span class="k">pass</span><span class="p">(</span><span class="n">lhs</span><span class="p">),</span>  <span class="k">public</span> <span class="kd">::</span> <span class="n">integrand_multiply_real</span> <span class="o">=&gt;</span> <span class="n">oscillation_multiply_real</span>             <span class="c">!&lt; Oscillation * real.</span>
     <span class="k">procedure</span><span class="p">,</span> <span class="k">pass</span><span class="p">(</span><span class="n">rhs</span><span class="p">),</span>  <span class="k">public</span> <span class="kd">::</span> <span class="n">real_multiply_integrand</span> <span class="o">=&gt;</span> <span class="n">real_multiply_oscillation</span>             <span class="c">!&lt; Real * Oscillation.</span>
     <span class="k">procedure</span><span class="p">,</span> <span class="k">pass</span><span class="p">(</span><span class="n">lhs</span><span class="p">),</span>  <span class="k">public</span> <span class="kd">::</span> <span class="n">add</span> <span class="o">=&gt;</span> <span class="n">add_oscillation</span>                                           <span class="c">!&lt; Oscillation + Oscillation.</span>
+    <span class="k">procedure</span><span class="p">,</span> <span class="k">pass</span><span class="p">(</span><span class="n">lhs</span><span class="p">),</span>  <span class="k">public</span> <span class="kd">::</span> <span class="n">sub</span> <span class="o">=&gt;</span> <span class="n">sub_oscillation</span>                                           <span class="c">!&lt; Oscillation - Oscillation.</span>
     <span class="k">procedure</span><span class="p">,</span> <span class="k">pass</span><span class="p">(</span><span class="n">lhs</span><span class="p">),</span>  <span class="k">public</span> <span class="kd">::</span> <span class="n">assign_integrand</span> <span class="o">=&gt;</span> <span class="n">oscillation_assign_oscillation</span>               <span class="c">!&lt; Oscillation = Oscillation.</span>
     <span class="k">procedure</span><span class="p">,</span> <span class="k">pass</span><span class="p">(</span><span class="n">lhs</span><span class="p">),</span>  <span class="k">public</span> <span class="kd">::</span> <span class="n">assign_real</span> <span class="o">=&gt;</span> <span class="n">oscillation_assign_real</span>                           <span class="c">!&lt; Oscillation = real.</span>
 <span class="n">endtype</span> <span class="n">oscillation</span>
 <span class="c">!-----------------------------------------------------------------------------------------------------------------------------------</span>
 <span class="k">contains</span>
-<span class="k">  subroutine </span><span class="n">init</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">initial_state</span><span class="p">,</span> <span class="n">f</span><span class="p">,</span> <span class="n">steps</span><span class="p">)</span>
+    <span class="c">! auxiliary methods</span>
+  <span class="k">subroutine </span><span class="n">init</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">initial_state</span><span class="p">,</span> <span class="n">f</span><span class="p">,</span> <span class="n">steps</span><span class="p">)</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
   <span class="c">!&lt; Construct an initialized Oscillation field.</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
   <span class="k">class</span><span class="p">(</span><span class="n">oscillation</span><span class="p">),</span>      <span class="k">intent</span><span class="p">(</span><span class="n">INOUT</span><span class="p">)</span> <span class="kd">::</span> <span class="n">self</span>          <span class="c">!&lt; Oscillation field.</span>
-  <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">),</span> <span class="k">dimension</span><span class="p">(:),</span> <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span>    <span class="kd">::</span> <span class="n">initial_state</span> <span class="c">!&lt; Intial state of the Oscillation field vector.</span>
+  <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">),</span> <span class="k">dimension</span><span class="p">(:),</span> <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span>    <span class="kd">::</span> <span class="n">initial_state</span> <span class="c">!&lt; Initial state of the Oscillation field vector.</span>
   <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">),</span>               <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span>    <span class="kd">::</span> <span class="n">f</span>             <span class="c">!&lt; Frequency.</span>
   <span class="kt">integer</span><span class="p">(</span><span class="n">I_P</span><span class="p">),</span> <span class="k">optional</span><span class="p">,</span>  <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span>    <span class="kd">::</span> <span class="n">steps</span>         <span class="c">!&lt; Time steps stored.</span>
   <span class="kt">integer</span><span class="p">(</span><span class="n">I_P</span><span class="p">)</span>                           <span class="kd">::</span> <span class="n">s</span>             <span class="c">!&lt; Time steps counter.</span>
@@ -256,11 +288,11 @@
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
   <span class="n">self</span><span class="p">%</span><span class="n">dims</span> <span class="o">=</span> <span class="n">size</span><span class="p">(</span><span class="n">initial_state</span><span class="p">)</span>
   <span class="n">self</span><span class="p">%</span><span class="n">steps</span> <span class="o">=</span> <span class="mi">0</span> <span class="p">;</span> <span class="k">if</span> <span class="p">(</span><span class="nb">present</span><span class="p">(</span><span class="n">steps</span><span class="p">))</span> <span class="n">self</span><span class="p">%</span><span class="n">steps</span> <span class="o">=</span> <span class="n">steps</span>
-  <span class="k">if</span> <span class="p">(</span><span class="nb">allocated</span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">state</span><span class="p">))</span> <span class="k">deallocate</span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">state</span><span class="p">)</span> <span class="p">;</span> <span class="k">allocate</span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">state</span><span class="p">(</span><span class="mi">1</span><span class="p">:</span><span class="n">self</span><span class="p">%</span><span class="n">dims</span><span class="p">))</span>
+  <span class="k">if</span> <span class="p">(</span><span class="nb">allocated</span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">U</span><span class="p">))</span> <span class="k">deallocate</span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">U</span><span class="p">)</span> <span class="p">;</span> <span class="k">allocate</span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">U</span><span class="p">(</span><span class="mi">1</span><span class="p">:</span><span class="n">self</span><span class="p">%</span><span class="n">dims</span><span class="p">))</span>
   <span class="k">if</span> <span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">steps</span><span class="o">&gt;</span><span class="mi">0</span><span class="p">)</span> <span class="k">then</span>
 <span class="k">    if</span> <span class="p">(</span><span class="nb">allocated</span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">previous</span><span class="p">))</span> <span class="k">deallocate</span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">previous</span><span class="p">)</span> <span class="p">;</span> <span class="k">allocate</span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">previous</span><span class="p">(</span><span class="mi">1</span><span class="p">:</span><span class="n">self</span><span class="p">%</span><span class="n">dims</span><span class="p">,</span> <span class="mi">1</span><span class="p">:</span><span class="n">self</span><span class="p">%</span><span class="n">steps</span><span class="p">))</span>
   <span class="n">endif</span>
-  <span class="n">self</span><span class="p">%</span><span class="n">state</span> <span class="o">=</span> <span class="n">initial_state</span>
+  <span class="n">self</span><span class="p">%</span><span class="n">U</span> <span class="o">=</span> <span class="n">initial_state</span>
   <span class="k">if</span> <span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">steps</span><span class="o">&gt;</span><span class="mi">0</span><span class="p">)</span> <span class="k">then</span>
 <span class="k">    do </span><span class="n">s</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">self</span><span class="p">%</span><span class="n">steps</span>
       <span class="n">self</span><span class="p">%</span><span class="n">previous</span><span class="p">(:,</span> <span class="n">s</span><span class="p">)</span> <span class="o">=</span> <span class="n">initial_state</span>
@@ -280,11 +312,12 @@
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
 
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
-  <span class="n">state</span> <span class="o">=</span> <span class="n">self</span><span class="p">%</span><span class="n">state</span>
+  <span class="n">state</span> <span class="o">=</span> <span class="n">self</span><span class="p">%</span><span class="n">U</span>
   <span class="k">return</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
   <span class="n">endfunction</span> <span class="n">output</span>
 
+    <span class="c">! type_integrand deferred methods</span>
   <span class="k">pure function </span><span class="n">dOscillation_dt</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">n</span><span class="p">)</span> <span class="k">result</span><span class="p">(</span><span class="n">dState_dt</span><span class="p">)</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
   <span class="c">!&lt; Time derivative of Oscillation field.</span>
@@ -292,38 +325,35 @@
   <span class="k">class</span><span class="p">(</span><span class="n">oscillation</span><span class="p">),</span>     <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span> <span class="kd">::</span> <span class="n">self</span>      <span class="c">!&lt; Oscillation field.</span>
   <span class="kt">integer</span><span class="p">(</span><span class="n">I_P</span><span class="p">),</span> <span class="k">optional</span><span class="p">,</span> <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span> <span class="kd">::</span> <span class="n">n</span>         <span class="c">!&lt; Time level.</span>
   <span class="k">class</span><span class="p">(</span><span class="n">integrand</span><span class="p">),</span>  <span class="k">allocatable</span>     <span class="kd">::</span> <span class="n">dState_dt</span> <span class="c">!&lt; Oscillation field time derivative.</span>
-  <span class="k">type</span><span class="p">(</span><span class="n">oscillation</span><span class="p">),</span> <span class="k">allocatable</span>     <span class="kd">::</span> <span class="n">delta</span>     <span class="c">!&lt; Delta state used as temporary variables.</span>
   <span class="kt">integer</span><span class="p">(</span><span class="n">I_P</span><span class="p">)</span>                       <span class="kd">::</span> <span class="n">dn</span>        <span class="c">!&lt; Time level, dummy variable.</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
 
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
-  <span class="c">! preparing temporary delta</span>
-  <span class="k">allocate</span><span class="p">(</span><span class="n">delta</span><span class="p">)</span>
-  <span class="n">delta</span><span class="p">%</span><span class="n">dims</span> <span class="o">=</span> <span class="n">self</span><span class="p">%</span><span class="n">dims</span>
-  <span class="n">delta</span><span class="p">%</span><span class="n">steps</span> <span class="o">=</span> <span class="n">self</span><span class="p">%</span><span class="n">steps</span>
-  <span class="n">delta</span><span class="p">%</span><span class="n">state</span> <span class="o">=</span> <span class="n">self</span><span class="p">%</span><span class="n">state</span>
-  <span class="k">if</span> <span class="p">(</span><span class="nb">allocated</span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">previous</span><span class="p">))</span> <span class="n">delta</span><span class="p">%</span><span class="n">previous</span> <span class="o">=</span> <span class="n">self</span><span class="p">%</span><span class="n">previous</span>
-  <span class="n">delta</span><span class="p">%</span><span class="n">f</span> <span class="o">=</span> <span class="n">self</span><span class="p">%</span><span class="n">f</span>
-  <span class="c">! Oscillation equations</span>
-  <span class="k">if</span> <span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">steps</span><span class="o">&gt;=</span><span class="mi">2</span><span class="p">)</span> <span class="k">then</span> <span class="c">! self%previous should be used</span>
-    <span class="n">dn</span> <span class="o">=</span> <span class="n">self</span><span class="p">%</span><span class="n">steps</span> <span class="p">;</span> <span class="k">if</span> <span class="p">(</span><span class="nb">present</span><span class="p">(</span><span class="n">n</span><span class="p">))</span> <span class="n">dn</span> <span class="o">=</span> <span class="n">n</span>
-    <span class="n">delta</span><span class="p">%</span><span class="n">state</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">=</span> <span class="o">-</span><span class="n">self</span><span class="p">%</span><span class="n">f</span> <span class="o">*</span> <span class="n">self</span><span class="p">%</span><span class="n">previous</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="n">dn</span><span class="p">)</span>
-    <span class="n">delta</span><span class="p">%</span><span class="n">state</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span> <span class="o">=</span>  <span class="n">self</span><span class="p">%</span><span class="n">f</span> <span class="o">*</span> <span class="n">self</span><span class="p">%</span><span class="n">previous</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">dn</span><span class="p">)</span>
-  <span class="k">else</span> <span class="c">! self%previous should not be used, use directly self%state</span>
-    <span class="n">delta</span><span class="p">%</span><span class="n">state</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">=</span> <span class="o">-</span><span class="n">self</span><span class="p">%</span><span class="n">f</span> <span class="o">*</span> <span class="n">self</span><span class="p">%</span><span class="n">state</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
-    <span class="n">delta</span><span class="p">%</span><span class="n">state</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span> <span class="o">=</span>  <span class="n">self</span><span class="p">%</span><span class="n">f</span> <span class="o">*</span> <span class="n">self</span><span class="p">%</span><span class="n">state</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
-  <span class="n">endif</span>
-  <span class="k">call </span><span class="nb">move_alloc</span><span class="p">(</span><span class="n">delta</span><span class="p">,</span> <span class="n">dState_dt</span><span class="p">)</span>
+  <span class="k">allocate</span><span class="p">(</span><span class="n">oscillation</span> <span class="kd">::</span> <span class="n">dState_dt</span><span class="p">)</span>
+  <span class="k">select type</span><span class="p">(</span><span class="n">dState_dt</span><span class="p">)</span>
+  <span class="k">class is</span><span class="p">(</span><span class="n">oscillation</span><span class="p">)</span>
+    <span class="n">dState_dt</span> <span class="o">=</span> <span class="n">self</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">steps</span><span class="o">&gt;=</span><span class="mi">2</span><span class="p">)</span> <span class="k">then</span> <span class="c">! self%previous should be used</span>
+      <span class="n">dn</span> <span class="o">=</span> <span class="n">self</span><span class="p">%</span><span class="n">steps</span> <span class="p">;</span> <span class="k">if</span> <span class="p">(</span><span class="nb">present</span><span class="p">(</span><span class="n">n</span><span class="p">))</span> <span class="n">dn</span> <span class="o">=</span> <span class="n">n</span>
+      <span class="n">dState_dt</span><span class="p">%</span><span class="n">U</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">=</span> <span class="o">-</span><span class="n">self</span><span class="p">%</span><span class="n">f</span> <span class="o">*</span> <span class="n">self</span><span class="p">%</span><span class="n">previous</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="n">dn</span><span class="p">)</span>
+      <span class="n">dState_dt</span><span class="p">%</span><span class="n">U</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span> <span class="o">=</span>  <span class="n">self</span><span class="p">%</span><span class="n">f</span> <span class="o">*</span> <span class="n">self</span><span class="p">%</span><span class="n">previous</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">dn</span><span class="p">)</span>
+    <span class="k">else</span> <span class="c">! self%previous should not be used, use directly self%U</span>
+      <span class="n">dState_dt</span><span class="p">%</span><span class="n">U</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">=</span> <span class="o">-</span><span class="n">self</span><span class="p">%</span><span class="n">f</span> <span class="o">*</span> <span class="n">self</span><span class="p">%</span><span class="n">U</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+      <span class="n">dState_dt</span><span class="p">%</span><span class="n">U</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span> <span class="o">=</span>  <span class="n">self</span><span class="p">%</span><span class="n">f</span> <span class="o">*</span> <span class="n">self</span><span class="p">%</span><span class="n">U</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">endif</span>
+  <span class="n">endselect</span>
   <span class="k">return</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
   <span class="n">endfunction</span> <span class="n">dOscillation_dt</span>
 
-  <span class="k">pure subroutine </span><span class="n">update_previous_steps</span><span class="p">(</span><span class="n">self</span><span class="p">)</span>
+  <span class="k">pure subroutine </span><span class="n">update_previous_steps</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">filter</span><span class="p">,</span> <span class="n">weights</span><span class="p">)</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
   <span class="c">!&lt; Update previous time steps.</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
-  <span class="k">class</span><span class="p">(</span><span class="n">oscillation</span><span class="p">),</span> <span class="k">intent</span><span class="p">(</span><span class="n">INOUT</span><span class="p">)</span> <span class="kd">::</span> <span class="n">self</span> <span class="c">!&lt; Oscillation field.</span>
-  <span class="kt">integer</span>                           <span class="kd">::</span> <span class="n">s</span>    <span class="c">!&lt; Time steps counter.</span>
+  <span class="k">class</span><span class="p">(</span><span class="n">oscillation</span><span class="p">),</span>         <span class="k">intent</span><span class="p">(</span><span class="n">INOUT</span><span class="p">)</span> <span class="kd">::</span> <span class="n">self</span>       <span class="c">!&lt; Oscillation field.</span>
+  <span class="k">class</span><span class="p">(</span><span class="n">integrand</span><span class="p">),</span> <span class="k">optional</span><span class="p">,</span> <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span>    <span class="kd">::</span> <span class="n">filter</span>     <span class="c">!&lt; Filter field displacement.</span>
+  <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">),</span>        <span class="k">optional</span><span class="p">,</span> <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span>    <span class="kd">::</span> <span class="n">weights</span><span class="p">(:)</span> <span class="c">!&lt; Weights for filtering the steps.</span>
+  <span class="kt">integer</span>                                   <span class="kd">::</span> <span class="n">s</span>          <span class="c">!&lt; Time steps counter.</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
 
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
@@ -331,105 +361,148 @@
 <span class="k">    do </span><span class="n">s</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">self</span><span class="p">%</span><span class="n">steps</span> <span class="o">-</span> <span class="mi">1</span>
       <span class="n">self</span><span class="p">%</span><span class="n">previous</span><span class="p">(:,</span> <span class="n">s</span><span class="p">)</span> <span class="o">=</span> <span class="n">self</span><span class="p">%</span><span class="n">previous</span><span class="p">(:,</span> <span class="n">s</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
     <span class="n">enddo</span>
-    <span class="n">self</span><span class="p">%</span><span class="n">previous</span><span class="p">(:,</span> <span class="n">self</span><span class="p">%</span><span class="n">steps</span><span class="p">)</span> <span class="o">=</span> <span class="n">self</span><span class="p">%</span><span class="n">state</span>
+    <span class="n">self</span><span class="p">%</span><span class="n">previous</span><span class="p">(:,</span> <span class="n">self</span><span class="p">%</span><span class="n">steps</span><span class="p">)</span> <span class="o">=</span> <span class="n">self</span><span class="p">%</span><span class="n">U</span>
+  <span class="n">endif</span>
+  <span class="k">if</span> <span class="p">(</span><span class="nb">present</span><span class="p">(</span><span class="n">filter</span><span class="p">).</span><span class="nb">and</span><span class="p">.</span><span class="nb">present</span><span class="p">(</span><span class="n">weights</span><span class="p">))</span> <span class="k">then</span>
+<span class="k">    select type</span><span class="p">(</span><span class="n">filter</span><span class="p">)</span>
+    <span class="k">class is</span><span class="p">(</span><span class="n">oscillation</span><span class="p">)</span>
+      <span class="k">do </span><span class="n">s</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">self</span><span class="p">%</span><span class="n">steps</span>
+        <span class="n">self</span><span class="p">%</span><span class="n">previous</span><span class="p">(:,</span> <span class="n">s</span><span class="p">)</span> <span class="o">=</span> <span class="n">self</span><span class="p">%</span><span class="n">previous</span><span class="p">(:,</span> <span class="n">s</span><span class="p">)</span> <span class="o">+</span> <span class="n">filter</span><span class="p">%</span><span class="n">U</span> <span class="o">*</span> <span class="n">weights</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
+      <span class="n">enddo</span>
+    <span class="n">endselect</span>
   <span class="n">endif</span>
   <span class="k">return</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
   <span class="n">endsubroutine</span> <span class="n">update_previous_steps</span>
 
-  <span class="k">pure function </span><span class="n">oscillation_multiply_oscillation</span><span class="p">(</span><span class="n">lhs</span><span class="p">,</span> <span class="n">rhs</span><span class="p">)</span> <span class="k">result</span><span class="p">(</span><span class="nb">product</span><span class="p">)</span>
+  <span class="k">pure function </span><span class="n">previous_step</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">n</span><span class="p">)</span> <span class="k">result</span><span class="p">(</span><span class="n">previous</span><span class="p">)</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
-  <span class="c">!&lt; Multiply a oscillation field by another one.</span>
+  <span class="c">!&lt; Extract previous time solution of oscillation field.</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
-  <span class="k">class</span><span class="p">(</span><span class="n">oscillation</span><span class="p">),</span> <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span> <span class="kd">::</span> <span class="n">lhs</span>           <span class="c">!&lt; Left hand side.</span>
-  <span class="k">class</span><span class="p">(</span><span class="n">integrand</span><span class="p">),</span>   <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span> <span class="kd">::</span> <span class="n">rhs</span>           <span class="c">!&lt; Right hand side.</span>
-  <span class="k">class</span><span class="p">(</span><span class="n">integrand</span><span class="p">),</span>  <span class="k">allocatable</span> <span class="kd">::</span> <span class="nb">product</span>       <span class="c">!&lt; Product.</span>
-  <span class="k">type</span><span class="p">(</span><span class="n">oscillation</span><span class="p">),</span> <span class="k">allocatable</span> <span class="kd">::</span> <span class="n">local_product</span> <span class="c">!&lt; Temporary product.</span>
+  <span class="k">class</span><span class="p">(</span><span class="n">oscillation</span><span class="p">),</span> <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span> <span class="kd">::</span> <span class="n">self</span>     <span class="c">!&lt; Oscillation field.</span>
+  <span class="kt">integer</span><span class="p">(</span><span class="n">I_P</span><span class="p">),</span>       <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span> <span class="kd">::</span> <span class="n">n</span>        <span class="c">!&lt; Time level.</span>
+  <span class="k">class</span><span class="p">(</span><span class="n">integrand</span><span class="p">),</span> <span class="k">allocatable</span>  <span class="kd">::</span> <span class="n">previous</span> <span class="c">!&lt; Previous time solution of oscillation field.</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
 
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
-  <span class="k">allocate</span><span class="p">(</span><span class="n">local_product</span><span class="p">)</span>
-  <span class="k">select type</span><span class="p">(</span><span class="n">rhs</span><span class="p">)</span>
-  <span class="k">class is</span> <span class="p">(</span><span class="n">oscillation</span><span class="p">)</span>
-    <span class="n">local_product</span><span class="p">%</span><span class="n">dims</span> <span class="o">=</span> <span class="n">lhs</span><span class="p">%</span><span class="n">dims</span>
-    <span class="n">local_product</span><span class="p">%</span><span class="n">steps</span> <span class="o">=</span> <span class="n">lhs</span><span class="p">%</span><span class="n">steps</span>
-    <span class="n">local_product</span><span class="p">%</span><span class="n">state</span> <span class="o">=</span> <span class="n">lhs</span><span class="p">%</span><span class="n">state</span> <span class="o">*</span> <span class="n">rhs</span><span class="p">%</span><span class="n">state</span>
-    <span class="k">if</span> <span class="p">(</span><span class="nb">allocated</span><span class="p">(</span><span class="n">lhs</span><span class="p">%</span><span class="n">previous</span><span class="p">))</span> <span class="n">local_product</span><span class="p">%</span><span class="n">previous</span> <span class="o">=</span> <span class="n">lhs</span><span class="p">%</span><span class="n">previous</span>
-    <span class="n">local_product</span><span class="p">%</span><span class="n">f</span> <span class="o">=</span> <span class="n">lhs</span><span class="p">%</span><span class="n">f</span>
+  <span class="k">allocate</span><span class="p">(</span><span class="n">oscillation</span> <span class="kd">::</span> <span class="n">previous</span><span class="p">)</span>
+  <span class="k">select type</span><span class="p">(</span><span class="n">previous</span><span class="p">)</span>
+  <span class="k">class is</span><span class="p">(</span><span class="n">oscillation</span><span class="p">)</span>
+    <span class="n">previous</span> <span class="o">=</span> <span class="n">self</span>
+    <span class="n">previous</span><span class="p">%</span><span class="n">U</span> <span class="o">=</span> <span class="n">self</span><span class="p">%</span><span class="n">previous</span><span class="p">(:,</span> <span class="n">n</span><span class="p">)</span>
   <span class="n">endselect</span>
-  <span class="k">call </span><span class="nb">move_alloc</span><span class="p">(</span><span class="n">local_product</span><span class="p">,</span> <span class="nb">product</span><span class="p">)</span>
+  <span class="k">return</span>
+  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+  <span class="n">endfunction</span> <span class="n">previous_step</span>
+
+  <span class="k">pure function </span><span class="n">oscillation_multiply_oscillation</span><span class="p">(</span><span class="n">lhs</span><span class="p">,</span> <span class="n">rhs</span><span class="p">)</span> <span class="k">result</span><span class="p">(</span><span class="n">opr</span><span class="p">)</span>
+  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+  <span class="c">!&lt; Multiply a oscillation field by another one.</span>
+  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+  <span class="k">class</span><span class="p">(</span><span class="n">oscillation</span><span class="p">),</span> <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span> <span class="kd">::</span> <span class="n">lhs</span> <span class="c">!&lt; Left hand side.</span>
+  <span class="k">class</span><span class="p">(</span><span class="n">integrand</span><span class="p">),</span>   <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span> <span class="kd">::</span> <span class="n">rhs</span> <span class="c">!&lt; Right hand side.</span>
+  <span class="k">class</span><span class="p">(</span><span class="n">integrand</span><span class="p">),</span> <span class="k">allocatable</span>  <span class="kd">::</span> <span class="n">opr</span> <span class="c">!&lt; Operator result.</span>
+  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+
+  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+  <span class="k">allocate</span><span class="p">(</span><span class="n">oscillation</span> <span class="kd">::</span> <span class="n">opr</span><span class="p">)</span>
+  <span class="k">select type</span><span class="p">(</span><span class="n">opr</span><span class="p">)</span>
+  <span class="k">class is</span><span class="p">(</span><span class="n">oscillation</span><span class="p">)</span>
+    <span class="n">opr</span> <span class="o">=</span> <span class="n">lhs</span>
+    <span class="k">select type</span><span class="p">(</span><span class="n">rhs</span><span class="p">)</span>
+    <span class="k">class is</span> <span class="p">(</span><span class="n">oscillation</span><span class="p">)</span>
+      <span class="n">opr</span><span class="p">%</span><span class="n">U</span> <span class="o">=</span> <span class="n">lhs</span><span class="p">%</span><span class="n">U</span> <span class="o">*</span> <span class="n">rhs</span><span class="p">%</span><span class="n">U</span>
+    <span class="n">endselect</span>
+  <span class="n">endselect</span>
   <span class="k">return</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
   <span class="n">endfunction</span> <span class="n">oscillation_multiply_oscillation</span>
 
-  <span class="k">pure function </span><span class="n">oscillation_multiply_real</span><span class="p">(</span><span class="n">lhs</span><span class="p">,</span> <span class="n">rhs</span><span class="p">)</span> <span class="k">result</span><span class="p">(</span><span class="nb">product</span><span class="p">)</span>
+  <span class="k">pure function </span><span class="n">oscillation_multiply_real</span><span class="p">(</span><span class="n">lhs</span><span class="p">,</span> <span class="n">rhs</span><span class="p">)</span> <span class="k">result</span><span class="p">(</span><span class="n">opr</span><span class="p">)</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
   <span class="c">!&lt; Multiply a Oscillation field by a real scalar.</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
-  <span class="k">class</span><span class="p">(</span><span class="n">oscillation</span><span class="p">),</span> <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span> <span class="kd">::</span> <span class="n">lhs</span>           <span class="c">!&lt; Left hand side.</span>
-  <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">),</span>          <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span> <span class="kd">::</span> <span class="n">rhs</span>           <span class="c">!&lt; Right hand side.</span>
-  <span class="k">class</span><span class="p">(</span><span class="n">integrand</span><span class="p">),</span>  <span class="k">allocatable</span> <span class="kd">::</span> <span class="nb">product</span>       <span class="c">!&lt; Product.</span>
-  <span class="k">type</span><span class="p">(</span><span class="n">oscillation</span><span class="p">),</span> <span class="k">allocatable</span> <span class="kd">::</span> <span class="n">local_product</span> <span class="c">!&lt; Temporary product.</span>
+  <span class="k">class</span><span class="p">(</span><span class="n">oscillation</span><span class="p">),</span> <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span> <span class="kd">::</span> <span class="n">lhs</span> <span class="c">!&lt; Left hand side.</span>
+  <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">),</span>          <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span> <span class="kd">::</span> <span class="n">rhs</span> <span class="c">!&lt; Right hand side.</span>
+  <span class="k">class</span><span class="p">(</span><span class="n">integrand</span><span class="p">),</span> <span class="k">allocatable</span>  <span class="kd">::</span> <span class="n">opr</span> <span class="c">!&lt; Operator result.</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
 
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
-  <span class="k">allocate</span><span class="p">(</span><span class="n">local_product</span><span class="p">)</span>
-  <span class="n">local_product</span><span class="p">%</span><span class="n">dims</span> <span class="o">=</span> <span class="n">lhs</span><span class="p">%</span><span class="n">dims</span>
-  <span class="n">local_product</span><span class="p">%</span><span class="n">steps</span> <span class="o">=</span> <span class="n">lhs</span><span class="p">%</span><span class="n">steps</span>
-  <span class="n">local_product</span><span class="p">%</span><span class="n">state</span> <span class="o">=</span> <span class="n">lhs</span><span class="p">%</span><span class="n">state</span> <span class="o">*</span> <span class="n">rhs</span>
-  <span class="k">if</span> <span class="p">(</span><span class="nb">allocated</span><span class="p">(</span><span class="n">lhs</span><span class="p">%</span><span class="n">previous</span><span class="p">))</span> <span class="n">local_product</span><span class="p">%</span><span class="n">previous</span> <span class="o">=</span> <span class="n">lhs</span><span class="p">%</span><span class="n">previous</span>
-  <span class="n">local_product</span><span class="p">%</span><span class="n">f</span> <span class="o">=</span> <span class="n">lhs</span><span class="p">%</span><span class="n">f</span>
-  <span class="k">call </span><span class="nb">move_alloc</span><span class="p">(</span><span class="n">local_product</span><span class="p">,</span> <span class="nb">product</span><span class="p">)</span>
+  <span class="k">allocate</span><span class="p">(</span><span class="n">oscillation</span> <span class="kd">::</span> <span class="n">opr</span><span class="p">)</span>
+  <span class="k">select type</span><span class="p">(</span><span class="n">opr</span><span class="p">)</span>
+  <span class="k">class is</span><span class="p">(</span><span class="n">oscillation</span><span class="p">)</span>
+    <span class="n">opr</span> <span class="o">=</span> <span class="n">lhs</span>
+    <span class="n">opr</span><span class="p">%</span><span class="n">U</span> <span class="o">=</span> <span class="n">lhs</span><span class="p">%</span><span class="n">U</span> <span class="o">*</span> <span class="n">rhs</span>
+  <span class="n">endselect</span>
   <span class="k">return</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
   <span class="n">endfunction</span> <span class="n">oscillation_multiply_real</span>
 
-  <span class="k">pure function </span><span class="n">real_multiply_oscillation</span><span class="p">(</span><span class="n">lhs</span><span class="p">,</span> <span class="n">rhs</span><span class="p">)</span> <span class="k">result</span><span class="p">(</span><span class="nb">product</span><span class="p">)</span>
+  <span class="k">pure function </span><span class="n">real_multiply_oscillation</span><span class="p">(</span><span class="n">lhs</span><span class="p">,</span> <span class="n">rhs</span><span class="p">)</span> <span class="k">result</span><span class="p">(</span><span class="n">opr</span><span class="p">)</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
   <span class="c">!&lt; Multiply a real scalar by a Oscillation field.</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
-  <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">),</span>          <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span> <span class="kd">::</span> <span class="n">lhs</span>           <span class="c">!&lt; Left hand side.</span>
-  <span class="k">class</span><span class="p">(</span><span class="n">oscillation</span><span class="p">),</span> <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span> <span class="kd">::</span> <span class="n">rhs</span>           <span class="c">!&lt; Right hand side.</span>
-  <span class="k">class</span><span class="p">(</span><span class="n">integrand</span><span class="p">),</span>  <span class="k">allocatable</span> <span class="kd">::</span> <span class="nb">product</span>       <span class="c">!&lt; Product.</span>
-  <span class="k">type</span><span class="p">(</span><span class="n">oscillation</span><span class="p">),</span> <span class="k">allocatable</span> <span class="kd">::</span> <span class="n">local_product</span> <span class="c">!&lt; Temporary product.</span>
+  <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">),</span>          <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span> <span class="kd">::</span> <span class="n">lhs</span> <span class="c">!&lt; Left hand side.</span>
+  <span class="k">class</span><span class="p">(</span><span class="n">oscillation</span><span class="p">),</span> <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span> <span class="kd">::</span> <span class="n">rhs</span> <span class="c">!&lt; Right hand side.</span>
+  <span class="k">class</span><span class="p">(</span><span class="n">integrand</span><span class="p">),</span> <span class="k">allocatable</span>  <span class="kd">::</span> <span class="n">opr</span> <span class="c">!&lt; Operator result.</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
 
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
-  <span class="k">allocate</span><span class="p">(</span><span class="n">local_product</span><span class="p">)</span>
-  <span class="n">local_product</span><span class="p">%</span><span class="n">dims</span> <span class="o">=</span> <span class="n">rhs</span><span class="p">%</span><span class="n">dims</span>
-  <span class="n">local_product</span><span class="p">%</span><span class="n">steps</span> <span class="o">=</span> <span class="n">rhs</span><span class="p">%</span><span class="n">steps</span>
-  <span class="n">local_product</span><span class="p">%</span><span class="n">state</span> <span class="o">=</span> <span class="n">rhs</span><span class="p">%</span><span class="n">state</span> <span class="o">*</span> <span class="n">lhs</span>
-  <span class="k">if</span> <span class="p">(</span><span class="nb">allocated</span><span class="p">(</span><span class="n">rhs</span><span class="p">%</span><span class="n">previous</span><span class="p">))</span> <span class="n">local_product</span><span class="p">%</span><span class="n">previous</span> <span class="o">=</span> <span class="n">rhs</span><span class="p">%</span><span class="n">previous</span>
-  <span class="n">local_product</span><span class="p">%</span><span class="n">f</span>     <span class="o">=</span> <span class="n">rhs</span><span class="p">%</span><span class="n">f</span>
-  <span class="k">call </span><span class="nb">move_alloc</span><span class="p">(</span><span class="n">local_product</span><span class="p">,</span> <span class="nb">product</span><span class="p">)</span>
+  <span class="k">allocate</span><span class="p">(</span><span class="n">oscillation</span> <span class="kd">::</span> <span class="n">opr</span><span class="p">)</span>
+  <span class="k">select type</span><span class="p">(</span><span class="n">opr</span><span class="p">)</span>
+  <span class="k">class is</span><span class="p">(</span><span class="n">oscillation</span><span class="p">)</span>
+    <span class="n">opr</span> <span class="o">=</span> <span class="n">rhs</span>
+    <span class="n">opr</span><span class="p">%</span><span class="n">U</span> <span class="o">=</span> <span class="n">rhs</span><span class="p">%</span><span class="n">U</span> <span class="o">*</span> <span class="n">lhs</span>
+  <span class="n">endselect</span>
   <span class="k">return</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
   <span class="n">endfunction</span> <span class="n">real_multiply_oscillation</span>
 
-  <span class="k">pure function </span><span class="n">add_oscillation</span><span class="p">(</span><span class="n">lhs</span><span class="p">,</span> <span class="n">rhs</span><span class="p">)</span> <span class="k">result</span><span class="p">(</span><span class="nb">sum</span><span class="p">)</span>
+  <span class="k">pure function </span><span class="n">add_oscillation</span><span class="p">(</span><span class="n">lhs</span><span class="p">,</span> <span class="n">rhs</span><span class="p">)</span> <span class="k">result</span><span class="p">(</span><span class="n">opr</span><span class="p">)</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
   <span class="c">!&lt; Add two Oscillation fields.</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
-  <span class="k">class</span><span class="p">(</span><span class="n">oscillation</span><span class="p">),</span> <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span> <span class="kd">::</span> <span class="n">lhs</span>       <span class="c">!&lt; Left hand side.</span>
-  <span class="k">class</span><span class="p">(</span><span class="n">integrand</span><span class="p">),</span>   <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span> <span class="kd">::</span> <span class="n">rhs</span>       <span class="c">!&lt; Right hand side.</span>
-  <span class="k">class</span><span class="p">(</span><span class="n">integrand</span><span class="p">),</span>  <span class="k">allocatable</span> <span class="kd">::</span> <span class="nb">sum</span>       <span class="c">!&lt; Sum.</span>
-  <span class="k">type</span><span class="p">(</span><span class="n">oscillation</span><span class="p">),</span> <span class="k">allocatable</span> <span class="kd">::</span> <span class="n">local_sum</span> <span class="c">!&lt; Temporary sum.</span>
+  <span class="k">class</span><span class="p">(</span><span class="n">oscillation</span><span class="p">),</span> <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span> <span class="kd">::</span> <span class="n">lhs</span> <span class="c">!&lt; Left hand side.</span>
+  <span class="k">class</span><span class="p">(</span><span class="n">integrand</span><span class="p">),</span>   <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span> <span class="kd">::</span> <span class="n">rhs</span> <span class="c">!&lt; Right hand side.</span>
+  <span class="k">class</span><span class="p">(</span><span class="n">integrand</span><span class="p">),</span> <span class="k">allocatable</span>  <span class="kd">::</span> <span class="n">opr</span> <span class="c">!&lt; Operator result.</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
 
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
-  <span class="k">allocate</span> <span class="p">(</span><span class="n">oscillation</span> <span class="kd">::</span> <span class="n">local_sum</span><span class="p">)</span>
-  <span class="k">select type</span><span class="p">(</span><span class="n">rhs</span><span class="p">)</span>
-  <span class="k">class is</span> <span class="p">(</span><span class="n">oscillation</span><span class="p">)</span>
-    <span class="n">local_sum</span><span class="p">%</span><span class="n">dims</span> <span class="o">=</span> <span class="n">lhs</span><span class="p">%</span><span class="n">dims</span>
-    <span class="n">local_sum</span><span class="p">%</span><span class="n">steps</span> <span class="o">=</span> <span class="n">lhs</span><span class="p">%</span><span class="n">steps</span>
-    <span class="n">local_sum</span><span class="p">%</span><span class="n">state</span> <span class="o">=</span> <span class="n">lhs</span><span class="p">%</span><span class="n">state</span> <span class="o">+</span> <span class="n">rhs</span><span class="p">%</span><span class="n">state</span>
-    <span class="k">if</span> <span class="p">(</span><span class="nb">allocated</span><span class="p">(</span><span class="n">lhs</span><span class="p">%</span><span class="n">previous</span><span class="p">))</span> <span class="n">local_sum</span><span class="p">%</span><span class="n">previous</span> <span class="o">=</span> <span class="n">lhs</span><span class="p">%</span><span class="n">previous</span>
-    <span class="n">local_sum</span><span class="p">%</span><span class="n">f</span> <span class="o">=</span> <span class="n">lhs</span><span class="p">%</span><span class="n">f</span>
+  <span class="k">allocate</span><span class="p">(</span><span class="n">oscillation</span> <span class="kd">::</span> <span class="n">opr</span><span class="p">)</span>
+  <span class="k">select type</span><span class="p">(</span><span class="n">opr</span><span class="p">)</span>
+  <span class="k">class is</span><span class="p">(</span><span class="n">oscillation</span><span class="p">)</span>
+    <span class="n">opr</span> <span class="o">=</span> <span class="n">lhs</span>
+    <span class="k">select type</span><span class="p">(</span><span class="n">rhs</span><span class="p">)</span>
+    <span class="k">class is</span> <span class="p">(</span><span class="n">oscillation</span><span class="p">)</span>
+      <span class="n">opr</span><span class="p">%</span><span class="n">U</span> <span class="o">=</span> <span class="n">lhs</span><span class="p">%</span><span class="n">U</span> <span class="o">+</span> <span class="n">rhs</span><span class="p">%</span><span class="n">U</span>
+    <span class="n">endselect</span>
   <span class="n">endselect</span>
-  <span class="k">call </span><span class="nb">move_alloc</span><span class="p">(</span><span class="n">local_sum</span><span class="p">,</span> <span class="nb">sum</span><span class="p">)</span>
   <span class="k">return</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
   <span class="n">endfunction</span> <span class="n">add_Oscillation</span>
+
+  <span class="k">pure function </span><span class="n">sub_oscillation</span><span class="p">(</span><span class="n">lhs</span><span class="p">,</span> <span class="n">rhs</span><span class="p">)</span> <span class="k">result</span><span class="p">(</span><span class="n">opr</span><span class="p">)</span>
+  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+  <span class="c">!&lt; Subtract two Oscillation fields.</span>
+  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+  <span class="k">class</span><span class="p">(</span><span class="n">oscillation</span><span class="p">),</span> <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span> <span class="kd">::</span> <span class="n">lhs</span> <span class="c">!&lt; Left hand side.</span>
+  <span class="k">class</span><span class="p">(</span><span class="n">integrand</span><span class="p">),</span>   <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span> <span class="kd">::</span> <span class="n">rhs</span> <span class="c">!&lt; Right hand side.</span>
+  <span class="k">class</span><span class="p">(</span><span class="n">integrand</span><span class="p">),</span> <span class="k">allocatable</span>  <span class="kd">::</span> <span class="n">opr</span> <span class="c">!&lt; Operator result.</span>
+  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+
+  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+  <span class="k">allocate</span><span class="p">(</span><span class="n">oscillation</span> <span class="kd">::</span> <span class="n">opr</span><span class="p">)</span>
+  <span class="k">select type</span><span class="p">(</span><span class="n">opr</span><span class="p">)</span>
+  <span class="k">class is</span><span class="p">(</span><span class="n">oscillation</span><span class="p">)</span>
+    <span class="n">opr</span> <span class="o">=</span> <span class="n">lhs</span>
+    <span class="k">select type</span><span class="p">(</span><span class="n">rhs</span><span class="p">)</span>
+    <span class="k">class is</span> <span class="p">(</span><span class="n">oscillation</span><span class="p">)</span>
+      <span class="n">opr</span><span class="p">%</span><span class="n">U</span> <span class="o">=</span> <span class="n">lhs</span><span class="p">%</span><span class="n">U</span> <span class="o">-</span> <span class="n">rhs</span><span class="p">%</span><span class="n">U</span>
+    <span class="n">endselect</span>
+  <span class="n">endselect</span>
+  <span class="k">return</span>
+  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+  <span class="n">endfunction</span> <span class="n">sub_Oscillation</span>
 
   <span class="k">pure subroutine </span><span class="n">oscillation_assign_oscillation</span><span class="p">(</span><span class="n">lhs</span><span class="p">,</span> <span class="n">rhs</span><span class="p">)</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
@@ -444,7 +517,7 @@
   <span class="k">class is</span> <span class="p">(</span><span class="n">oscillation</span><span class="p">)</span>
     <span class="n">lhs</span><span class="p">%</span><span class="n">dims</span> <span class="o">=</span> <span class="n">rhs</span><span class="p">%</span><span class="n">dims</span>
     <span class="n">lhs</span><span class="p">%</span><span class="n">steps</span> <span class="o">=</span> <span class="n">rhs</span><span class="p">%</span><span class="n">steps</span>
-    <span class="k">if</span> <span class="p">(</span><span class="nb">allocated</span><span class="p">(</span><span class="n">rhs</span><span class="p">%</span><span class="n">state</span><span class="p">))</span> <span class="n">lhs</span><span class="p">%</span><span class="n">state</span> <span class="o">=</span> <span class="n">rhs</span><span class="p">%</span><span class="n">state</span>
+    <span class="k">if</span> <span class="p">(</span><span class="nb">allocated</span><span class="p">(</span><span class="n">rhs</span><span class="p">%</span><span class="n">U</span><span class="p">))</span> <span class="n">lhs</span><span class="p">%</span><span class="n">U</span> <span class="o">=</span> <span class="n">rhs</span><span class="p">%</span><span class="n">U</span>
     <span class="k">if</span> <span class="p">(</span><span class="nb">allocated</span><span class="p">(</span><span class="n">rhs</span><span class="p">%</span><span class="n">previous</span><span class="p">))</span> <span class="n">lhs</span><span class="p">%</span><span class="n">previous</span> <span class="o">=</span> <span class="n">rhs</span><span class="p">%</span><span class="n">previous</span>
     <span class="n">lhs</span><span class="p">%</span><span class="n">f</span> <span class="o">=</span> <span class="n">rhs</span><span class="p">%</span><span class="n">f</span>
   <span class="n">endselect</span>
@@ -461,7 +534,7 @@
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
 
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
-  <span class="k">if</span> <span class="p">(</span><span class="nb">allocated</span><span class="p">(</span><span class="n">lhs</span><span class="p">%</span><span class="n">state</span><span class="p">))</span> <span class="n">lhs</span><span class="p">%</span><span class="n">state</span> <span class="o">=</span> <span class="n">rhs</span>
+  <span class="k">if</span> <span class="p">(</span><span class="nb">allocated</span><span class="p">(</span><span class="n">lhs</span><span class="p">%</span><span class="n">U</span><span class="p">))</span> <span class="n">lhs</span><span class="p">%</span><span class="n">U</span> <span class="o">=</span> <span class="n">rhs</span>
   <span class="k">if</span> <span class="p">(</span><span class="nb">allocated</span><span class="p">(</span><span class="n">lhs</span><span class="p">%</span><span class="n">previous</span><span class="p">))</span> <span class="n">lhs</span><span class="p">%</span><span class="n">previous</span> <span class="o">=</span> <span class="n">rhs</span>
   <span class="k">return</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>

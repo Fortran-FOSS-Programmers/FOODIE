@@ -103,14 +103,14 @@
      
     
     
-    <li><i class="fa fa-code"></i><a href="../src/type_oscillation.f90"> Source File</a></li>
+    <li><i class="fa fa-code"></i><a href="../src/type_lorenz.f90"> Source File</a></li>
      
   </ul>
   <ol class="breadcrumb in-well text-right">
   
-     <li><a href='../sourcefile/type_oscillation.f90.html'>type_oscillation.f90</a></li>
+     <li><a href='../sourcefile/type_lorenz.f90.html'>type_lorenz.f90</a></li>
   
-     <li><a href='../module/type_oscillation.html'>type_oscillation</a></li>
+     <li><a href='../module/type_lorenz.html'>type_lorenz</a></li>
   
      <li class="active">init</li>
   </ol>
@@ -130,7 +130,7 @@
     <div class="panel-heading text-left"><h3 class="panel-title">Variables</h3></div>
     <div class="list-group">
       
-      <a class="list-group-item" href="../proc/init%7E9.html#variable-s%7E24">s</a>
+      <a class="list-group-item" href="../proc/init%7E9.html#variable-s%7E18">s</a>
       
     </div>
   </div>
@@ -251,6 +251,8 @@
       
       <a class="list-group-item" href="../proc/init%7E9.html">init</a>
       
+      <a class="list-group-item" href="../proc/init%7E10.html">init</a>
+      
       <a class="list-group-item" href="../proc/integrate.html">integrate</a>
       
       <a class="list-group-item" href="../proc/integrate%7E2.html">integrate</a>
@@ -258,6 +260,8 @@
       <a class="list-group-item" href="../proc/integrate%7E3.html">integrate</a>
       
       <a class="list-group-item" href="../proc/integrate%7E4.html">integrate</a>
+      
+      <a class="list-group-item" href="../proc/integrate%7E5.html">integrate</a>
       
       <a class="list-group-item" href="../proc/lorenz_assign_lorenz.html">lorenz_assign_lorenz</a>
       
@@ -284,6 +288,14 @@
       <a class="list-group-item" href="../proc/output%7E4.html">output</a>
       
       <a class="list-group-item" href="../proc/p.html">p</a>
+      
+      <a class="list-group-item" href="../proc/previous_step.html">previous_step</a>
+      
+      <a class="list-group-item" href="../proc/previous_step%7E2.html">previous_step</a>
+      
+      <a class="list-group-item" href="../proc/previous_step%7E3.html">previous_step</a>
+      
+      <a class="list-group-item" href="../proc/previous_step%7E4.html">previous_step</a>
       
       <a class="list-group-item" href="../proc/primitive2conservative.html">primitive2conservative</a>
       
@@ -313,6 +325,12 @@
       
       <a class="list-group-item" href="../proc/sub_burgers.html">sub_burgers</a>
       
+      <a class="list-group-item" href="../proc/sub_euler.html">sub_euler</a>
+      
+      <a class="list-group-item" href="../proc/sub_lorenz.html">sub_lorenz</a>
+      
+      <a class="list-group-item" href="../proc/sub_oscillation.html">sub_oscillation</a>
+      
       <a class="list-group-item" href="../proc/test_ab.html">test_ab</a>
       
       <a class="list-group-item" href="../proc/test_ab%7E2.html">test_ab</a>
@@ -328,6 +346,14 @@
       <a class="list-group-item" href="../proc/test_euler%7E3.html">test_euler</a>
       
       <a class="list-group-item" href="../proc/test_euler%7E4.html">test_euler</a>
+      
+      <a class="list-group-item" href="../proc/test_leapfrog.html">test_leapfrog</a>
+      
+      <a class="list-group-item" href="../proc/test_leapfrog%7E2.html">test_leapfrog</a>
+      
+      <a class="list-group-item" href="../proc/test_leapfrog%7E3.html">test_leapfrog</a>
+      
+      <a class="list-group-item" href="../proc/test_leapfrog%7E4.html">test_leapfrog</a>
       
       <a class="list-group-item" href="../proc/test_ls_rk.html">test_ls_rk</a>
       
@@ -361,7 +387,7 @@
     
     <div class="col-lg-9" id='text'>
     <h2>
-private subroutine init(self, initial_state, f, steps)
+private subroutine init(self, initial_state, sigma, rho, beta, steps)
     
     
     
@@ -389,12 +415,12 @@ private subroutine init(self, initial_state, f, steps)
   
 <tr>
   
-  <td><span class="anchor" id="variable-self%7E40"></span>class(<a href='../type/oscillation.html'>oscillation</a>),</td>
+  <td><span class="anchor" id="variable-self%7E42"></span>class(<a href='../type/lorenz.html'>lorenz</a>),</td>
   <td>intent(inout)</td>
   <td></td>
   
   <td></td><td>::</td>
-  <td><strong>self</strong></td><td><p>Oscillation field.</p></td>
+  <td><strong>self</strong></td><td><p>Lorenz field.</p></td>
   
 </tr>
 
@@ -404,12 +430,12 @@ private subroutine init(self, initial_state, f, steps)
   
 <tr>
   
-  <td><span class="anchor" id="variable-initial_state%7E4"></span>real(kind=R_P),</td>
+  <td><span class="anchor" id="variable-initial_state%7E3"></span>real(kind=R_P),</td>
   <td>intent(in),</td>
   <td></td>
   
   <td>dimension(:)</td><td>::</td>
-  <td><strong>initial_state</strong></td><td><p>Intial state of the Oscillation field vector.</p></td>
+  <td><strong>initial_state</strong></td><td><p>Initial state of Lorenz field vector.</p></td>
   
 </tr>
 
@@ -419,12 +445,12 @@ private subroutine init(self, initial_state, f, steps)
   
 <tr>
   
-  <td><span class="anchor" id="variable-f%7E3"></span>real(kind=R_P),</td>
+  <td><span class="anchor" id="variable-sigma%7E2"></span>real(kind=R_P),</td>
   <td>intent(in)</td>
   <td></td>
   
   <td></td><td>::</td>
-  <td><strong>f</strong></td><td><p>Frequency.</p></td>
+  <td><strong>sigma</strong></td><td><p>Lorenz  \(\sigma\).</p></td>
   
 </tr>
 
@@ -434,7 +460,37 @@ private subroutine init(self, initial_state, f, steps)
   
 <tr>
   
-  <td><span class="anchor" id="variable-steps%7E10"></span>integer(kind=I_P),</td>
+  <td><span class="anchor" id="variable-rho%7E2"></span>real(kind=R_P),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>rho</strong></td><td><p>Lorenz  \(\rho\).</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-beta%7E3"></span>real(kind=R_P),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>beta</strong></td><td><p>Lorenz  \(\beta\).</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-steps%7E9"></span>integer(kind=I_P),</td>
   <td>intent(in),</td>
   <td>optional</td>
   
@@ -450,7 +506,7 @@ private subroutine init(self, initial_state, f, steps)
     
     
     <h3>Description</h3>
-    <p>Construct an initialized Oscillation field.</p>
+    <p>Construct an initialized Lorenz field.</p>
     
     
      
@@ -474,7 +530,7 @@ private subroutine init(self, initial_state, f, steps)
   
 <tr>
   
-  <td><span class="anchor" id="variable-s%7E24"></span>integer(kind=I_P),</td>
+  <td><span class="anchor" id="variable-s%7E18"></span>integer(kind=I_P),</td>
   
   <td>public</td>
   <td></td><td>::</td>
@@ -503,13 +559,15 @@ private subroutine init(self, initial_state, f, steps)
     
     <section>
     <h2><span class="anchor" id="src"></span>Source Code</h2>
-    <div class="highlight"><pre>  <span class="k">subroutine </span><span class="n">init</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">initial_state</span><span class="p">,</span> <span class="n">f</span><span class="p">,</span> <span class="n">steps</span><span class="p">)</span>
+    <div class="highlight"><pre>  <span class="k">subroutine </span><span class="n">init</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">initial_state</span><span class="p">,</span> <span class="n">sigma</span><span class="p">,</span> <span class="n">rho</span><span class="p">,</span> <span class="n">beta</span><span class="p">,</span> <span class="n">steps</span><span class="p">)</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
-  <span class="c">!&lt; Construct an initialized Oscillation field.</span>
+  <span class="c">!&lt; Construct an initialized Lorenz field.</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
-  <span class="k">class</span><span class="p">(</span><span class="n">oscillation</span><span class="p">),</span>      <span class="k">intent</span><span class="p">(</span><span class="n">INOUT</span><span class="p">)</span> <span class="kd">::</span> <span class="n">self</span>          <span class="c">!&lt; Oscillation field.</span>
-  <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">),</span> <span class="k">dimension</span><span class="p">(:),</span> <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span>    <span class="kd">::</span> <span class="n">initial_state</span> <span class="c">!&lt; Intial state of the Oscillation field vector.</span>
-  <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">),</span>               <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span>    <span class="kd">::</span> <span class="n">f</span>             <span class="c">!&lt; Frequency.</span>
+  <span class="k">class</span><span class="p">(</span><span class="n">lorenz</span><span class="p">),</span>           <span class="k">intent</span><span class="p">(</span><span class="n">INOUT</span><span class="p">)</span> <span class="kd">::</span> <span class="n">self</span>          <span class="c">!&lt; Lorenz field.</span>
+  <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">),</span> <span class="k">dimension</span><span class="p">(:),</span> <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span>    <span class="kd">::</span> <span class="n">initial_state</span> <span class="c">!&lt; Initial state of Lorenz field vector.</span>
+  <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">),</span>               <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span>    <span class="kd">::</span> <span class="n">sigma</span>         <span class="c">!&lt; Lorenz  \(\sigma\).</span>
+  <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">),</span>               <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span>    <span class="kd">::</span> <span class="n">rho</span>           <span class="c">!&lt; Lorenz  \(\rho\).</span>
+  <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">),</span>               <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span>    <span class="kd">::</span> <span class="n">beta</span>          <span class="c">!&lt; Lorenz  \(\beta\).</span>
   <span class="kt">integer</span><span class="p">(</span><span class="n">I_P</span><span class="p">),</span> <span class="k">optional</span><span class="p">,</span>  <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span>    <span class="kd">::</span> <span class="n">steps</span>         <span class="c">!&lt; Time steps stored.</span>
   <span class="kt">integer</span><span class="p">(</span><span class="n">I_P</span><span class="p">)</span>                           <span class="kd">::</span> <span class="n">s</span>             <span class="c">!&lt; Time steps counter.</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
@@ -517,17 +575,19 @@ private subroutine init(self, initial_state, f, steps)
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
   <span class="n">self</span><span class="p">%</span><span class="n">dims</span> <span class="o">=</span> <span class="n">size</span><span class="p">(</span><span class="n">initial_state</span><span class="p">)</span>
   <span class="n">self</span><span class="p">%</span><span class="n">steps</span> <span class="o">=</span> <span class="mi">0</span> <span class="p">;</span> <span class="k">if</span> <span class="p">(</span><span class="nb">present</span><span class="p">(</span><span class="n">steps</span><span class="p">))</span> <span class="n">self</span><span class="p">%</span><span class="n">steps</span> <span class="o">=</span> <span class="n">steps</span>
-  <span class="k">if</span> <span class="p">(</span><span class="nb">allocated</span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">state</span><span class="p">))</span> <span class="k">deallocate</span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">state</span><span class="p">)</span> <span class="p">;</span> <span class="k">allocate</span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">state</span><span class="p">(</span><span class="mi">1</span><span class="p">:</span><span class="n">self</span><span class="p">%</span><span class="n">dims</span><span class="p">))</span>
+  <span class="k">if</span> <span class="p">(</span><span class="nb">allocated</span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">U</span><span class="p">))</span> <span class="k">deallocate</span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">U</span><span class="p">)</span> <span class="p">;</span> <span class="k">allocate</span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">U</span><span class="p">(</span><span class="mi">1</span><span class="p">:</span><span class="n">self</span><span class="p">%</span><span class="n">dims</span><span class="p">))</span>
   <span class="k">if</span> <span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">steps</span><span class="o">&gt;</span><span class="mi">0</span><span class="p">)</span> <span class="k">then</span>
 <span class="k">    if</span> <span class="p">(</span><span class="nb">allocated</span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">previous</span><span class="p">))</span> <span class="k">deallocate</span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">previous</span><span class="p">)</span> <span class="p">;</span> <span class="k">allocate</span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">previous</span><span class="p">(</span><span class="mi">1</span><span class="p">:</span><span class="n">self</span><span class="p">%</span><span class="n">dims</span><span class="p">,</span> <span class="mi">1</span><span class="p">:</span><span class="n">self</span><span class="p">%</span><span class="n">steps</span><span class="p">))</span>
   <span class="n">endif</span>
-  <span class="n">self</span><span class="p">%</span><span class="n">state</span> <span class="o">=</span> <span class="n">initial_state</span>
+  <span class="n">self</span><span class="p">%</span><span class="n">U</span> <span class="o">=</span> <span class="n">initial_state</span>
   <span class="k">if</span> <span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">steps</span><span class="o">&gt;</span><span class="mi">0</span><span class="p">)</span> <span class="k">then</span>
 <span class="k">    do </span><span class="n">s</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">self</span><span class="p">%</span><span class="n">steps</span>
       <span class="n">self</span><span class="p">%</span><span class="n">previous</span><span class="p">(:,</span> <span class="n">s</span><span class="p">)</span> <span class="o">=</span> <span class="n">initial_state</span>
     <span class="n">enddo</span>
   <span class="n">endif</span>
-  <span class="n">self</span><span class="p">%</span><span class="n">f</span> <span class="o">=</span> <span class="n">f</span>
+  <span class="n">self</span><span class="p">%</span><span class="n">sigma</span> <span class="o">=</span> <span class="n">sigma</span>
+  <span class="n">self</span><span class="p">%</span><span class="n">rho</span> <span class="o">=</span> <span class="n">rho</span>
+  <span class="n">self</span><span class="p">%</span><span class="n">beta</span> <span class="o">=</span> <span class="n">beta</span>
   <span class="k">return</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
   <span class="n">endsubroutine</span> <span class="n">init</span>

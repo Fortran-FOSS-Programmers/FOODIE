@@ -4,14 +4,18 @@ digraph "proc~~save_results~4~~CalledByGraph" {
 	edge [fontname=Helvetica fontsize=9.5]
 		"proc~save_results~4" [label=save_results]
 		graph [concentrate=false]
-		"proc~test_euler~4" [label=test_euler URL="../proc/test_euler%7E4.html" color="#d9534f" fontcolor=white style=filled]
+		"proc~test_leapfrog~4" [label=test_leapfrog URL="../proc/test_leapfrog%7E4.html" color="#d9534f" fontcolor=white style=filled]
+		"proc~test_tvd_rk~4" [label=test_tvd_rk URL="../proc/test_tvd_rk%7E4.html" color="#d9534f" fontcolor=white style=filled]
 		"proc~test_ab~4" [label=test_ab URL="../proc/test_ab%7E4.html" color="#d9534f" fontcolor=white style=filled]
 		"proc~test_ls_rk~4" [label=test_ls_rk URL="../proc/test_ls_rk%7E4.html" color="#d9534f" fontcolor=white style=filled]
-		"proc~test_tvd_rk~4" [label=test_tvd_rk URL="../proc/test_tvd_rk%7E4.html" color="#d9534f" fontcolor=white style=filled]
+		"proc~test_euler~4" [label=test_euler URL="../proc/test_euler%7E4.html" color="#d9534f" fontcolor=white style=filled]
 		graph [concentrate=false]
 		"program~integrate_oscillation" [label=integrate_oscillation URL="../program/integrate_oscillation.html" color="#f0ad4e" fontcolor=white style=filled]
 		graph [concentrate=false]
-			"program~integrate_oscillation" -> "proc~test_euler~4"
+			"program~integrate_oscillation" -> "proc~test_leapfrog~4"
+		graph [concentrate=false]
+		graph [concentrate=false]
+			"program~integrate_oscillation" -> "proc~test_tvd_rk~4"
 		graph [concentrate=false]
 		graph [concentrate=false]
 			"program~integrate_oscillation" -> "proc~test_ab~4"
@@ -20,11 +24,12 @@ digraph "proc~~save_results~4~~CalledByGraph" {
 			"program~integrate_oscillation" -> "proc~test_ls_rk~4"
 		graph [concentrate=false]
 		graph [concentrate=false]
-			"program~integrate_oscillation" -> "proc~test_tvd_rk~4"
+			"program~integrate_oscillation" -> "proc~test_euler~4"
 		graph [concentrate=false]
-			"proc~test_euler~4" -> "proc~save_results~4"
+			"proc~test_leapfrog~4" -> "proc~save_results~4"
+			"proc~test_tvd_rk~4" -> "proc~save_results~4"
 			"proc~test_ab~4" -> "proc~save_results~4"
 			"proc~test_ls_rk~4" -> "proc~save_results~4"
-			"proc~test_tvd_rk~4" -> "proc~save_results~4"
+			"proc~test_euler~4" -> "proc~save_results~4"
 		graph [concentrate=false]
 }

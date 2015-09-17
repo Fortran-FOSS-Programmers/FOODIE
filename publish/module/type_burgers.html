@@ -152,6 +152,8 @@
       
       <a class="list-group-item" href="../module/type_burgers.html#proc-dburgers_dt">dBurgers_dt</a>
       
+      <a class="list-group-item" href="../module/type_burgers.html#proc-previous_step">previous_step</a>
+      
       <a class="list-group-item" href="../module/type_burgers.html#proc-burgers_multiply_burgers">burgers_multiply_burgers</a>
       
       <a class="list-group-item" href="../module/type_burgers.html#proc-burgers_multiply_real">burgers_multiply_real</a>
@@ -175,7 +177,7 @@
     <div class="panel-heading text-left"><h3 class="panel-title">Subroutines</h3></div>
     <div class="list-group">
       
-      <a class="list-group-item" href="../module/type_burgers.html#proc-init%7E5">init</a>
+      <a class="list-group-item" href="../module/type_burgers.html#proc-init%7E6">init</a>
       
       <a class="list-group-item" href="../module/type_burgers.html#proc-update_previous_steps">update_previous_steps</a>
       
@@ -204,6 +206,8 @@
       <a class="list-group-item" href="../module/foodie_integrator_adams_bashforth.html">foodie_integrator_adams_bashforth</a>
       
       <a class="list-group-item" href="../module/foodie_integrator_euler_explicit.html">foodie_integrator_euler_explicit</a>
+      
+      <a class="list-group-item" href="../module/foodie_integrator_leapfrog.html">foodie_integrator_leapfrog</a>
       
       <a class="list-group-item" href="../module/foodie_integrator_low_storage_runge_kutta.html">foodie_integrator_low_storage_runge_kutta</a>
       
@@ -242,12 +246,13 @@
     
             <img class="depgraph" alt="dependency graph" src=../graphs/module%7E%7Etype_burgers%7E%7EUsesGraph.svg usemap="#module~~type_burgers~~UsesGraph">
             <map id="module~~type_burgers~~UsesGraph" name="module~~type_burgers~~UsesGraph">
-<area shape="rect" id="node4" href="../module/foodie_integrator_low_storage_runge_kutta.html" title="foodie_integrator_low_storage_runge_kutta" alt="" coords="303,287,588,321"/>
-<area shape="rect" id="node5" href="../module/foodie_integrator_tvd_runge_kutta.html" title="foodie_integrator_tvd_runge_kutta" alt="" coords="332,67,559,101"/>
-<area shape="rect" id="node6" href="../module/type_integrand.html" title="type_integrand" alt="" coords="148,177,256,211"/>
-<area shape="rect" id="node7" href="../module/foodie_integrator_euler_explicit.html" title="foodie_integrator_euler_explicit" alt="" coords="341,124,550,158"/>
-<area shape="rect" id="node8" href="../module/foodie_integrator_adams_bashforth.html" title="foodie_integrator_adams_bashforth" alt="" coords="328,230,563,264"/>
-<area shape="rect" id="node3" href="../module/foodie.html" title="foodie" alt="" coords="635,151,704,185"/>
+<area shape="rect" id="node4" href="../module/foodie_integrator_tvd_runge_kutta.html" title="foodie_integrator_tvd_runge_kutta" alt="" coords="332,253,559,287"/>
+<area shape="rect" id="node5" href="../module/type_integrand.html" title="type_integrand" alt="" coords="148,174,256,208"/>
+<area shape="rect" id="node6" href="../module/foodie_integrator_adams_bashforth.html" title="foodie_integrator_adams_bashforth" alt="" coords="328,310,563,344"/>
+<area shape="rect" id="node7" href="../module/foodie_integrator_euler_explicit.html" title="foodie_integrator_euler_explicit" alt="" coords="341,33,550,67"/>
+<area shape="rect" id="node8" href="../module/foodie_integrator_leapfrog.html" title="foodie_integrator_leapfrog" alt="" coords="356,90,535,124"/>
+<area shape="rect" id="node9" href="../module/foodie_integrator_low_storage_runge_kutta.html" title="foodie_integrator_low_storage_runge_kutta" alt="" coords="303,147,588,181"/>
+<area shape="rect" id="node3" href="../module/foodie.html" title="foodie" alt="" coords="635,147,704,181"/>
 </map>
 
             <div><a type="button" class="graph-help" data-toggle="modal" href="#graph-help-text">Help</a></div>
@@ -520,7 +525,7 @@ implementation in a submodule of an interface in a parent module.</p>
   
 <tr>
   
-  <td><span class="anchor" id="variable-nu"></span>real(kind=R_P),</td>
+  <td><span class="anchor" id="variable-nu%7E2"></span>real(kind=R_P),</td>
   
   <td>private</td>
   <td></td><td>::</td>
@@ -534,11 +539,11 @@ implementation in a submodule of an interface in a parent module.</p>
   
 <tr>
   
-  <td><span class="anchor" id="variable-state"></span>real(kind=R_P),</td>
+  <td><span class="anchor" id="variable-u"></span>real(kind=R_P),</td>
   
   <td>private,</td>
   <td>dimension(:), allocatable</td><td>::</td>
-  <td><strong>state</strong></td><td></td><td></td><td><p>Solution vector, whole physical domain, [1:Ni].</p></td>
+  <td><strong>U</strong></td><td></td><td></td><td><p>Integrand (state) variables, whole physical domain, [1:Ni].</p></td>
   
 </tr>
 
@@ -552,7 +557,7 @@ implementation in a submodule of an interface in a parent module.</p>
   
   <td>private,</td>
   <td>dimension(:,:), allocatable</td><td>::</td>
-  <td><strong>previous</strong></td><td></td><td></td><td><p>Previous steps solution vector, [1:Ni,1:steps].</p></td>
+  <td><strong>previous</strong></td><td></td><td></td><td><p>Previous time steps states, [1:Ni,1:steps].</p></td>
   
 </tr>
 
@@ -577,10 +582,13 @@ implementation in a submodule of an interface in a parent module.</p>
        <td><p>Compute the current time step, by means of CFL condition.</p></td></tr>
       
        <tr><td>procedure, public, pass(self) :: <strong>t</strong>  => dBurgers_dt </td>
-       <td><p>Time derivate, residuals function.</p></td></tr>
+       <td><p>Time derivative, residuals func.</p></td></tr>
       
        <tr><td>procedure, public, pass(self) :: <strong>update_previous_steps</strong>  </td>
        <td><p>Update previous time steps.</p></td></tr>
+      
+       <tr><td>procedure, public, pass(self) :: <strong>previous_step</strong>  </td>
+       <td><p>Get a previous time step.</p></td></tr>
       
        <tr><td>procedure, public, pass(lhs) :: <strong>integrand_multiply_integrand</strong>  => burgers_multiply_burgers </td>
        <td><p>Burgers * burgers operator.</p></td></tr>
@@ -602,9 +610,6 @@ implementation in a submodule of an interface in a parent module.</p>
       
        <tr><td>procedure, public, pass(lhs) :: <strong>assign_real</strong>  => burgers_assign_real </td>
        <td><p>Burgers = real.</p></td></tr>
-      
-       <tr><td>generic, public :: <strong>operator(-)</strong>  => sub </td>
-       <td><p>Subtraction operator overloading.</p></td></tr>
       
        <tr><td>procedure, private, pass(self) :: <strong>x</strong>  => dBurgers_dx </td>
        <td><p>1st derivative.</p></td></tr>
@@ -868,8 +873,91 @@ private purefunction <a href='../proc/dburgers_dt.html'>dBurgers_dt</a>(self, n)
     
     
   <div class="panel panel-default">
+  <div class="panel-heading codesum"><span class="anchor" id="proc-previous_step"></span><h3>
+private purefunction <a href='../proc/previous_step.html'>previous_step</a>(self, n) result(previous)
+    
+    
+    
+</h3></div>
+  <div class="panel-body">
+       
+    
+    <h4>Arguments</h4>
+    
+      
+      
+<table class="table table-striped varlist">
+<thead><tr><th>Type</th>
+<th>Intent</th><th>Optional</th>
+<th>Attributes</th><th></th><th>Name</th><th></th></thead>
+
+
+
+<tbody>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>class(<a href='../type/burgers.html'>burgers</a>),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>self</strong></td><td><p>Burgers field.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>integer(kind=I_P),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>n</strong></td><td><p>Time level.</p></td>
+  
+</tr>
+
+</tbody>
+</table>
+
+      
+    
+    
+
+  
+  
+  
+  
+     <h4>Return Value <small>class(<a href='../type/integrand.html'>integrand</a>),
+  allocatable</small></h4>
+  <p>Previous time solution of Burgers field.</p>
+    
+    
+    <h4>Description</h4>
+       
+       
+
+
+       
+       <p>Extract previous time solution of Burgers field.</p>
+        
+
+  </div>
+  </div>
+
+    
+    
+  <div class="panel panel-default">
   <div class="panel-heading codesum"><span class="anchor" id="proc-burgers_multiply_burgers"></span><h3>
-private purefunction <a href='../proc/burgers_multiply_burgers.html'>burgers_multiply_burgers</a>(lhs, rhs) result(product)
+private purefunction <a href='../proc/burgers_multiply_burgers.html'>burgers_multiply_burgers</a>(lhs, rhs) result(opr)
     
     
     
@@ -933,7 +1021,7 @@ private purefunction <a href='../proc/burgers_multiply_burgers.html'>burgers_mul
   
      <h4>Return Value <small>class(<a href='../type/integrand.html'>integrand</a>),
   allocatable</small></h4>
-  <p>Product.</p>
+  <p>Operator result.</p>
     
     
     <h4>Description</h4>
@@ -952,7 +1040,7 @@ private purefunction <a href='../proc/burgers_multiply_burgers.html'>burgers_mul
     
   <div class="panel panel-default">
   <div class="panel-heading codesum"><span class="anchor" id="proc-burgers_multiply_real"></span><h3>
-private purefunction <a href='../proc/burgers_multiply_real.html'>burgers_multiply_real</a>(lhs, rhs) result(product)
+private purefunction <a href='../proc/burgers_multiply_real.html'>burgers_multiply_real</a>(lhs, rhs) result(opr)
     
     
     
@@ -1016,7 +1104,7 @@ private purefunction <a href='../proc/burgers_multiply_real.html'>burgers_multip
   
      <h4>Return Value <small>class(<a href='../type/integrand.html'>integrand</a>),
   allocatable</small></h4>
-  <p>Product.</p>
+  <p>Operator result.</p>
     
     
     <h4>Description</h4>
@@ -1035,7 +1123,7 @@ private purefunction <a href='../proc/burgers_multiply_real.html'>burgers_multip
     
   <div class="panel panel-default">
   <div class="panel-heading codesum"><span class="anchor" id="proc-real_multiply_burgers"></span><h3>
-private purefunction <a href='../proc/real_multiply_burgers.html'>real_multiply_burgers</a>(lhs, rhs) result(product)
+private purefunction <a href='../proc/real_multiply_burgers.html'>real_multiply_burgers</a>(lhs, rhs) result(opr)
     
     
     
@@ -1099,7 +1187,7 @@ private purefunction <a href='../proc/real_multiply_burgers.html'>real_multiply_
   
      <h4>Return Value <small>class(<a href='../type/integrand.html'>integrand</a>),
   allocatable</small></h4>
-  <p>Product.</p>
+  <p>Operator result.</p>
     
     
     <h4>Description</h4>
@@ -1118,7 +1206,7 @@ private purefunction <a href='../proc/real_multiply_burgers.html'>real_multiply_
     
   <div class="panel panel-default">
   <div class="panel-heading codesum"><span class="anchor" id="proc-add_burgers"></span><h3>
-private purefunction <a href='../proc/add_burgers.html'>add_burgers</a>(lhs, rhs) result(sum)
+private purefunction <a href='../proc/add_burgers.html'>add_burgers</a>(lhs, rhs) result(opr)
     
     
     
@@ -1182,7 +1270,7 @@ private purefunction <a href='../proc/add_burgers.html'>add_burgers</a>(lhs, rhs
   
      <h4>Return Value <small>class(<a href='../type/integrand.html'>integrand</a>),
   allocatable</small></h4>
-  <p>Sum.</p>
+  <p>Operator result.</p>
     
     
     <h4>Description</h4>
@@ -1201,7 +1289,7 @@ private purefunction <a href='../proc/add_burgers.html'>add_burgers</a>(lhs, rhs
     
   <div class="panel panel-default">
   <div class="panel-heading codesum"><span class="anchor" id="proc-sub_burgers"></span><h3>
-private purefunction <a href='../proc/sub_burgers.html'>sub_burgers</a>(lhs, rhs) result(sub)
+private purefunction <a href='../proc/sub_burgers.html'>sub_burgers</a>(lhs, rhs) result(opr)
     
     
     
@@ -1265,7 +1353,7 @@ private purefunction <a href='../proc/sub_burgers.html'>sub_burgers</a>(lhs, rhs
   
      <h4>Return Value <small>class(<a href='../type/integrand.html'>integrand</a>),
   allocatable</small></h4>
-  <p>Subtraction.</p>
+  <p>Operator result.</p>
     
     
     <h4>Description</h4>
@@ -1346,8 +1434,8 @@ private purefunction <a href='../proc/dburgers_dx.html'>dBurgers_dx</a>(self, n)
   
   
   
-     <h4>Return Value <small>type(<a href='../type/burgers.html'>burgers</a>),
-  allocatable</small></h4>
+     <h4>Return Value <small>type(<a href='../type/burgers.html'>burgers</a>)
+  </small></h4>
   <p>Burgers field derivative.</p>
     
     
@@ -1429,8 +1517,8 @@ private purefunction <a href='../proc/d2burgers_dx2.html'>d2Burgers_dx2</a>(self
   
   
   
-     <h4>Return Value <small>type(<a href='../type/burgers.html'>burgers</a>),
-  allocatable</small></h4>
+     <h4>Return Value <small>type(<a href='../type/burgers.html'>burgers</a>)
+  </small></h4>
   <p>Burgers field derivative.</p>
     
     
@@ -1457,8 +1545,8 @@ private purefunction <a href='../proc/d2burgers_dx2.html'>d2Burgers_dx2</a>(self
     
     
   <div class="panel panel-default">
-  <div class="panel-heading codesum"><span class="anchor" id="proc-init%7E5"></span><h3>
-private subroutine <a href='../proc/init%7E5.html'>init</a>(self, initial_state, Ni, h, nu, steps)
+  <div class="panel-heading codesum"><span class="anchor" id="proc-init%7E6"></span><h3>
+private subroutine <a href='../proc/init%7E6.html'>init</a>(self, initial_state, Ni, h, nu, steps)
     
     
     
@@ -1592,7 +1680,7 @@ private subroutine <a href='../proc/init%7E5.html'>init</a>(self, initial_state,
     
   <div class="panel panel-default">
   <div class="panel-heading codesum"><span class="anchor" id="proc-update_previous_steps"></span><h3>
-private puresubroutine <a href='../proc/update_previous_steps.html'>update_previous_steps</a>(self)
+private puresubroutine <a href='../proc/update_previous_steps.html'>update_previous_steps</a>(self, filter, weights)
     
     
     
@@ -1625,6 +1713,36 @@ private puresubroutine <a href='../proc/update_previous_steps.html'>update_previ
   
   <td></td><td>::</td>
   <td><strong>self</strong></td><td><p>Burgers field.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>class(<a href='../type/integrand.html'>integrand</a>),</td>
+  <td>intent(in),</td>
+  <td>optional</td>
+  
+  <td></td><td>::</td>
+  <td><strong>filter</strong></td><td><p>Filter field displacement.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>real(kind=R_P),</td>
+  <td>intent(in),</td>
+  <td>optional</td>
+  
+  <td></td><td>::</td>
+  <td><strong>weights</strong>(:)</td><td><p>Weights for filtering the steps.</p></td>
   
 </tr>
 

@@ -134,7 +134,7 @@
       
       <a class="list-group-item" href="../type/oscillation.html#variable-steps%7E5">steps</a>
       
-      <a class="list-group-item" href="../type/oscillation.html#variable-state%7E3">state</a>
+      <a class="list-group-item" href="../type/oscillation.html#variable-u%7E4">U</a>
       
       <a class="list-group-item" href="../type/oscillation.html#variable-previous%7E4">previous</a>
       
@@ -162,13 +162,15 @@
     <div class="panel-heading text-left"><h3 class="panel-title">Type-Bound Procedures</h3></div>
     <div class="list-group">
       
-      <a class="list-group-item" href="../type/oscillation.html#boundprocedure-init%7E7">init</a>
+      <a class="list-group-item" href="../type/oscillation.html#boundprocedure-init%7E8">init</a>
       
       <a class="list-group-item" href="../type/oscillation.html#boundprocedure-output%7E4">output</a>
       
       <a class="list-group-item" href="../type/oscillation.html#boundprocedure-t%7E5">t</a>
       
       <a class="list-group-item" href="../type/oscillation.html#boundprocedure-update_previous_steps%7E5">update_previous_steps</a>
+      
+      <a class="list-group-item" href="../type/oscillation.html#boundprocedure-previous_step%7E5">previous_step</a>
       
       <a class="list-group-item" href="../type/oscillation.html#boundprocedure-integrand_multiply_integrand%7E5">integrand_multiply_integrand</a>
       
@@ -177,6 +179,8 @@
       <a class="list-group-item" href="../type/oscillation.html#boundprocedure-real_multiply_integrand%7E5">real_multiply_integrand</a>
       
       <a class="list-group-item" href="../type/oscillation.html#boundprocedure-add%7E5">add</a>
+      
+      <a class="list-group-item" href="../type/oscillation.html#boundprocedure-sub%7E5">sub</a>
       
       <a class="list-group-item" href="../type/oscillation.html#boundprocedure-assign_integrand%7E5">assign_integrand</a>
       
@@ -210,6 +214,8 @@
       <a class="list-group-item" href="../type/euler_explicit_integrator.html">euler_explicit_integrator</a>
       
       <a class="list-group-item" href="../type/integrand.html">integrand</a>
+      
+      <a class="list-group-item" href="../type/leapfrog_integrator.html">leapfrog_integrator</a>
       
       <a class="list-group-item" href="../type/lorenz.html">lorenz</a>
       
@@ -326,7 +332,27 @@ implementation in a submodule of an interface in a parent module.</p>
     <br><br>
     
     <p>Oscillation equations field.</p>
-<p>It is a FOODiE integrand class.</p>
+<p>It is a FOODiE integrand class concrete extension.</p>
+<h3 id="oscillation-odes-system"><a class="toclink" href="#oscillation-odes-system">Oscillation ODEs system</a></h3>
+<p>The (inertial) Oscillation equations system is a non linear system of pure ODEs and it can be written as:</p>
+<p>$$\begin{matrix}
+ U_t = R(U)  \\
+ U = \begin{bmatrix}
+ v_1 \\
+ v_2
+ \end{bmatrix}\;\;\;
+ R(U) = \begin{bmatrix}
+ -f v_2 \\
+ f v_1
+ \end{bmatrix}
+\end{matrix}$$</p>
+<p>The frequency <em>f</em> is constant and it is here selected as <em>f=10^-4</em>.</p>
+<p>In the space <em>v1-v2</em> the path of the oscillation must be a circle, but for the frequency selected some ODE solvers are not
+stable leading to a wrong path, see [1].</p>
+<h4 id="bibliography"><a class="toclink" href="#bibliography">Bibliography</a></h4>
+<p>[1] <em>Numerical Methods for Fluid Dynamics With Applications to Geophysics</em>, Dale R. Durran, Springer, 2010.</p>
+<h4 id="state-variables-organization"><a class="toclink" href="#state-variables-organization">State variables organization</a></h4>
+<p>State variables are organized as an array (rank 1) of reals of <em>dims</em> elements, in this case 2 elements.</p>
     <br>
     
     
@@ -376,11 +402,11 @@ implementation in a submodule of an interface in a parent module.</p>
   
 <tr>
   
-  <td><span class="anchor" id="variable-state%7E3"></span>real(kind=R_P),</td>
+  <td><span class="anchor" id="variable-u%7E4"></span>real(kind=R_P),</td>
   
   <td>private,</td>
   <td>dimension(:), allocatable</td><td>::</td>
-  <td><strong>state</strong></td><td></td><td></td><td><p>Solution vector, [1:dims].</p></td>
+  <td><strong>U</strong></td><td></td><td></td><td><p>Integrand (state) variables, [1:dims].</p></td>
   
 </tr>
 
@@ -394,7 +420,7 @@ implementation in a submodule of an interface in a parent module.</p>
   
   <td>private,</td>
   <td>dimension(:,:), allocatable</td><td>::</td>
-  <td><strong>previous</strong></td><td></td><td></td><td><p>Previous steps solution vector, [1:dims,1:steps].</p></td>
+  <td><strong>previous</strong></td><td></td><td></td><td><p>Previous time steps states, [1:dims,1:steps].</p></td>
   
 </tr>
 
@@ -429,7 +455,7 @@ implementation in a submodule of an interface in a parent module.</p>
     
 	   
 <div class="panel panel-default">
-  <div class="panel-heading codesum"><span class="anchor" id="boundprocedure-init%7E7"></span><h3>procedure, public, pass(self) :: <strong>init</strong>  
+  <div class="panel-heading codesum"><span class="anchor" id="boundprocedure-init%7E8"></span><h3>procedure, public, pass(self) :: <strong>init</strong>  
     
   </h3></div>
   
@@ -447,7 +473,7 @@ implementation in a submodule of an interface in a parent module.</p>
          
     
     <h3>
-private subroutine <a href='../proc/init%7E9.html'>init</a>(self, initial_state, f, steps)
+private subroutine <a href='../proc/init%7E10.html'>init</a>(self, initial_state, f, steps)
     
     
     
@@ -492,7 +518,7 @@ private subroutine <a href='../proc/init%7E9.html'>init</a>(self, initial_state,
   <td></td>
   
   <td>dimension(:)</td><td>::</td>
-  <td><strong>initial_state</strong></td><td><p>Intial state of the Oscillation field vector.</p></td>
+  <td><strong>initial_state</strong></td><td><p>Initial state of the Oscillation field vector.</p></td>
   
 </tr>
 
@@ -756,7 +782,7 @@ private purefunction <a href='../proc/doscillation_dt.html'>dOscillation_dt</a>(
          
     
     <h3>
-private puresubroutine <a href='../proc/update_previous_steps%7E4.html'>update_previous_steps</a>(self)
+private puresubroutine <a href='../proc/update_previous_steps%7E4.html'>update_previous_steps</a>(self, filter, weights)
     
     
     
@@ -790,6 +816,36 @@ private puresubroutine <a href='../proc/update_previous_steps%7E4.html'>update_p
   
 </tr>
 
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>class(<a href='../type/integrand.html'>integrand</a>),</td>
+  <td>intent(in),</td>
+  <td>optional</td>
+  
+  <td></td><td>::</td>
+  <td><strong>filter</strong></td><td><p>Filter field displacement.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>real(kind=R_P),</td>
+  <td>intent(in),</td>
+  <td>optional</td>
+  
+  <td></td><td>::</td>
+  <td><strong>weights</strong>(:)</td><td><p>Weights for filtering the steps.</p></td>
+  
+</tr>
+
 </tbody>
 </table>
 
@@ -804,6 +860,107 @@ private puresubroutine <a href='../proc/update_previous_steps%7E4.html'>update_p
 
        
        <p>Update previous time steps.</p>
+        
+
+      
+      </li>
+    
+  </ul>
+</div>
+
+    
+	   
+<div class="panel panel-default">
+  <div class="panel-heading codesum"><span class="anchor" id="boundprocedure-previous_step%7E5"></span><h3>procedure, public, pass(self) :: <strong>previous_step</strong>  
+    
+  </h3></div>
+  
+  <div class="panel-body">
+    
+
+
+    <p>Get a previous time step.</p>
+  </div>
+  
+  <ul class="list-group">
+    
+      <li class="list-group-item">
+      
+         
+    
+    <h3>
+private purefunction <a href='../proc/previous_step%7E4.html'>previous_step</a>(self, n) result(previous)
+    
+    
+    
+</h3>
+    
+    <h4>Arguments</h4>
+    
+      
+      
+<table class="table table-striped varlist">
+<thead><tr><th>Type</th>
+<th>Intent</th><th>Optional</th>
+<th>Attributes</th><th></th><th>Name</th><th></th></thead>
+
+
+
+<tbody>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>class(<a href='../type/oscillation.html'>oscillation</a>),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>self</strong></td><td><p>Oscillation field.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>integer(kind=I_P),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>n</strong></td><td><p>Time level.</p></td>
+  
+</tr>
+
+</tbody>
+</table>
+
+      
+    
+    
+
+  
+  
+  
+  
+     <h4>Return Value <small>class(<a href='../type/integrand.html'>integrand</a>),
+  allocatable</small></h4>
+  <p>Previous time solution of oscillation field.</p>
+    
+    
+    <h4>Description</h4>
+       
+       
+
+
+       
+       <p>Extract previous time solution of oscillation field.</p>
         
 
       
@@ -833,7 +990,7 @@ private puresubroutine <a href='../proc/update_previous_steps%7E4.html'>update_p
          
     
     <h3>
-private purefunction <a href='../proc/oscillation_multiply_oscillation.html'>oscillation_multiply_oscillation</a>(lhs, rhs) result(product)
+private purefunction <a href='../proc/oscillation_multiply_oscillation.html'>oscillation_multiply_oscillation</a>(lhs, rhs) result(opr)
     
     
     
@@ -895,7 +1052,7 @@ private purefunction <a href='../proc/oscillation_multiply_oscillation.html'>osc
   
      <h4>Return Value <small>class(<a href='../type/integrand.html'>integrand</a>),
   allocatable</small></h4>
-  <p>Product.</p>
+  <p>Operator result.</p>
     
     
     <h4>Description</h4>
@@ -934,7 +1091,7 @@ private purefunction <a href='../proc/oscillation_multiply_oscillation.html'>osc
          
     
     <h3>
-private purefunction <a href='../proc/oscillation_multiply_real.html'>oscillation_multiply_real</a>(lhs, rhs) result(product)
+private purefunction <a href='../proc/oscillation_multiply_real.html'>oscillation_multiply_real</a>(lhs, rhs) result(opr)
     
     
     
@@ -996,7 +1153,7 @@ private purefunction <a href='../proc/oscillation_multiply_real.html'>oscillatio
   
      <h4>Return Value <small>class(<a href='../type/integrand.html'>integrand</a>),
   allocatable</small></h4>
-  <p>Product.</p>
+  <p>Operator result.</p>
     
     
     <h4>Description</h4>
@@ -1035,7 +1192,7 @@ private purefunction <a href='../proc/oscillation_multiply_real.html'>oscillatio
          
     
     <h3>
-private purefunction <a href='../proc/real_multiply_oscillation.html'>real_multiply_oscillation</a>(lhs, rhs) result(product)
+private purefunction <a href='../proc/real_multiply_oscillation.html'>real_multiply_oscillation</a>(lhs, rhs) result(opr)
     
     
     
@@ -1097,7 +1254,7 @@ private purefunction <a href='../proc/real_multiply_oscillation.html'>real_multi
   
      <h4>Return Value <small>class(<a href='../type/integrand.html'>integrand</a>),
   allocatable</small></h4>
-  <p>Product.</p>
+  <p>Operator result.</p>
     
     
     <h4>Description</h4>
@@ -1136,7 +1293,7 @@ private purefunction <a href='../proc/real_multiply_oscillation.html'>real_multi
          
     
     <h3>
-private purefunction <a href='../proc/add_oscillation.html'>add_oscillation</a>(lhs, rhs) result(sum)
+private purefunction <a href='../proc/add_oscillation.html'>add_oscillation</a>(lhs, rhs) result(opr)
     
     
     
@@ -1198,7 +1355,7 @@ private purefunction <a href='../proc/add_oscillation.html'>add_oscillation</a>(
   
      <h4>Return Value <small>class(<a href='../type/integrand.html'>integrand</a>),
   allocatable</small></h4>
-  <p>Sum.</p>
+  <p>Operator result.</p>
     
     
     <h4>Description</h4>
@@ -1208,6 +1365,107 @@ private purefunction <a href='../proc/add_oscillation.html'>add_oscillation</a>(
 
        
        <p>Add two Oscillation fields.</p>
+        
+
+      
+      </li>
+    
+  </ul>
+</div>
+
+    
+	   
+<div class="panel panel-default">
+  <div class="panel-heading codesum"><span class="anchor" id="boundprocedure-sub%7E5"></span><h3>procedure, public, pass(lhs) :: <strong>sub</strong>  => <a href='../proc/sub_oscillation.html'>sub_oscillation</a> 
+    
+  </h3></div>
+  
+  <div class="panel-body">
+    
+
+
+    <p>Oscillation - Oscillation.</p>
+  </div>
+  
+  <ul class="list-group">
+    
+      <li class="list-group-item">
+      
+         
+    
+    <h3>
+private purefunction <a href='../proc/sub_oscillation.html'>sub_oscillation</a>(lhs, rhs) result(opr)
+    
+    
+    
+</h3>
+    
+    <h4>Arguments</h4>
+    
+      
+      
+<table class="table table-striped varlist">
+<thead><tr><th>Type</th>
+<th>Intent</th><th>Optional</th>
+<th>Attributes</th><th></th><th>Name</th><th></th></thead>
+
+
+
+<tbody>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>class(<a href='../type/oscillation.html'>oscillation</a>),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>lhs</strong></td><td><p>Left hand side.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>class(<a href='../type/integrand.html'>integrand</a>),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>rhs</strong></td><td><p>Right hand side.</p></td>
+  
+</tr>
+
+</tbody>
+</table>
+
+      
+    
+    
+
+  
+  
+  
+  
+     <h4>Return Value <small>class(<a href='../type/integrand.html'>integrand</a>),
+  allocatable</small></h4>
+  <p>Operator result.</p>
+    
+    
+    <h4>Description</h4>
+       
+       
+
+
+       
+       <p>Subtract two Oscillation fields.</p>
         
 
       
@@ -1410,12 +1668,39 @@ private puresubroutine <a href='../proc/oscillation_assign_real.html'>oscillatio
     <div class="highlight"><pre><span class="k">type</span><span class="p">,</span> <span class="k">extends</span><span class="p">(</span><span class="n">integrand</span><span class="p">)</span> <span class="kd">::</span> <span class="n">oscillation</span>
   <span class="c">!&lt; Oscillation equations field.</span>
   <span class="c">!&lt;</span>
-  <span class="c">!&lt; It is a FOODiE integrand class.</span>
+  <span class="c">!&lt; It is a FOODiE integrand class concrete extension.</span>
+  <span class="c">!&lt;</span>
+  <span class="c">!&lt;### Oscillation ODEs system</span>
+  <span class="c">!&lt;The (inertial) Oscillation equations system is a non linear system of pure ODEs and it can be written as:</span>
+  <span class="c">!&lt;</span>
+  <span class="c">!&lt;$$\begin{matrix}</span>
+  <span class="c">!&lt; U_t = R(U)  \\</span>
+  <span class="c">!&lt; U = \begin{bmatrix}</span>
+  <span class="c">!&lt; v_1 \\</span>
+  <span class="c">!&lt; v_2</span>
+  <span class="c">!&lt; \end{bmatrix}\;\;\;</span>
+  <span class="c">!&lt; R(U) = \begin{bmatrix}</span>
+  <span class="c">!&lt; -f v_2 \\</span>
+  <span class="c">!&lt; f v_1</span>
+  <span class="c">!&lt; \end{bmatrix}</span>
+  <span class="c">!&lt;\end{matrix}$$</span>
+  <span class="c">!&lt;</span>
+  <span class="c">!&lt;The frequency *f* is constant and it is here selected as *f=10^-4*.</span>
+  <span class="c">!&lt;</span>
+  <span class="c">!&lt;In the space *v1-v2* the path of the oscillation must be a circle, but for the frequency selected some ODE solvers are not</span>
+  <span class="c">!&lt;stable leading to a wrong path, see [1].</span>
+  <span class="c">!&lt;</span>
+  <span class="c">!&lt;#### Bibliography</span>
+  <span class="c">!&lt;</span>
+  <span class="c">!&lt;[1] *Numerical Methods for Fluid Dynamics With Applications to Geophysics*, Dale R. Durran, Springer, 2010.</span>
+  <span class="c">!&lt;</span>
+  <span class="c">!&lt;#### State variables organization</span>
+  <span class="c">!&lt; State variables are organized as an array (rank 1) of reals of *dims* elements, in this case 2 elements.</span>
   <span class="k">private</span>
 <span class="k">  </span><span class="kt">integer</span><span class="p">(</span><span class="n">I_P</span><span class="p">)</span>                           <span class="kd">::</span> <span class="n">dims</span><span class="o">=</span><span class="mi">0</span>     <span class="c">!&lt; Space dimensions.</span>
   <span class="kt">integer</span><span class="p">(</span><span class="n">I_P</span><span class="p">)</span>                           <span class="kd">::</span> <span class="n">steps</span><span class="o">=</span><span class="mi">0</span>    <span class="c">!&lt; Number of time steps stored.</span>
-  <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">),</span> <span class="k">dimension</span><span class="p">(:),</span>   <span class="k">allocatable</span> <span class="kd">::</span> <span class="n">state</span>      <span class="c">!&lt; Solution vector, [1:dims].</span>
-  <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">),</span> <span class="k">dimension</span><span class="p">(:,:),</span> <span class="k">allocatable</span> <span class="kd">::</span> <span class="n">previous</span>   <span class="c">!&lt; Previous steps solution vector, [1:dims,1:steps].</span>
+  <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">),</span> <span class="k">dimension</span><span class="p">(:),</span>   <span class="k">allocatable</span> <span class="kd">::</span> <span class="n">U</span>          <span class="c">!&lt; Integrand (state) variables, [1:dims].</span>
+  <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">),</span> <span class="k">dimension</span><span class="p">(:,:),</span> <span class="k">allocatable</span> <span class="kd">::</span> <span class="n">previous</span>   <span class="c">!&lt; Previous time steps states, [1:dims,1:steps].</span>
   <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">)</span>                              <span class="kd">::</span> <span class="n">f</span> <span class="o">=</span> <span class="mf">0._R_P</span> <span class="c">!&lt; Oscillation frequency (Hz).</span>
   <span class="k">contains</span>
     <span class="c">! auxiliary methods</span>
@@ -1424,10 +1709,12 @@ private puresubroutine <a href='../proc/oscillation_assign_real.html'>oscillatio
     <span class="c">! type_integrand deferred methods</span>
     <span class="k">procedure</span><span class="p">,</span> <span class="k">pass</span><span class="p">(</span><span class="n">self</span><span class="p">),</span> <span class="k">public</span> <span class="kd">::</span> <span class="n">t</span> <span class="o">=&gt;</span> <span class="n">dOscillation_dt</span>                                             <span class="c">!&lt; Time derivative, residuals.</span>
     <span class="k">procedure</span><span class="p">,</span> <span class="k">pass</span><span class="p">(</span><span class="n">self</span><span class="p">),</span> <span class="k">public</span> <span class="kd">::</span> <span class="n">update_previous_steps</span>                                            <span class="c">!&lt; Update previous time steps.</span>
+    <span class="k">procedure</span><span class="p">,</span> <span class="k">pass</span><span class="p">(</span><span class="n">self</span><span class="p">),</span> <span class="k">public</span> <span class="kd">::</span> <span class="n">previous_step</span>                                                    <span class="c">!&lt; Get a previous time step.</span>
     <span class="k">procedure</span><span class="p">,</span> <span class="k">pass</span><span class="p">(</span><span class="n">lhs</span><span class="p">),</span>  <span class="k">public</span> <span class="kd">::</span> <span class="n">integrand_multiply_integrand</span> <span class="o">=&gt;</span> <span class="n">oscillation_multiply_oscillation</span> <span class="c">!&lt; Oscillation * oscillation.</span>
     <span class="k">procedure</span><span class="p">,</span> <span class="k">pass</span><span class="p">(</span><span class="n">lhs</span><span class="p">),</span>  <span class="k">public</span> <span class="kd">::</span> <span class="n">integrand_multiply_real</span> <span class="o">=&gt;</span> <span class="n">oscillation_multiply_real</span>             <span class="c">!&lt; Oscillation * real.</span>
     <span class="k">procedure</span><span class="p">,</span> <span class="k">pass</span><span class="p">(</span><span class="n">rhs</span><span class="p">),</span>  <span class="k">public</span> <span class="kd">::</span> <span class="n">real_multiply_integrand</span> <span class="o">=&gt;</span> <span class="n">real_multiply_oscillation</span>             <span class="c">!&lt; Real * Oscillation.</span>
     <span class="k">procedure</span><span class="p">,</span> <span class="k">pass</span><span class="p">(</span><span class="n">lhs</span><span class="p">),</span>  <span class="k">public</span> <span class="kd">::</span> <span class="n">add</span> <span class="o">=&gt;</span> <span class="n">add_oscillation</span>                                           <span class="c">!&lt; Oscillation + Oscillation.</span>
+    <span class="k">procedure</span><span class="p">,</span> <span class="k">pass</span><span class="p">(</span><span class="n">lhs</span><span class="p">),</span>  <span class="k">public</span> <span class="kd">::</span> <span class="n">sub</span> <span class="o">=&gt;</span> <span class="n">sub_oscillation</span>                                           <span class="c">!&lt; Oscillation - Oscillation.</span>
     <span class="k">procedure</span><span class="p">,</span> <span class="k">pass</span><span class="p">(</span><span class="n">lhs</span><span class="p">),</span>  <span class="k">public</span> <span class="kd">::</span> <span class="n">assign_integrand</span> <span class="o">=&gt;</span> <span class="n">oscillation_assign_oscillation</span>               <span class="c">!&lt; Oscillation = Oscillation.</span>
     <span class="k">procedure</span><span class="p">,</span> <span class="k">pass</span><span class="p">(</span><span class="n">lhs</span><span class="p">),</span>  <span class="k">public</span> <span class="kd">::</span> <span class="n">assign_real</span> <span class="o">=&gt;</span> <span class="n">oscillation_assign_real</span>                           <span class="c">!&lt; Oscillation = real.</span>
 <span class="n">endtype</span> <span class="n">oscillation</span>
