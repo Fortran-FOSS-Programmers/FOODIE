@@ -4,32 +4,32 @@ digraph "proc~~save_results~~CalledByGraph" {
 	edge [fontname=Helvetica fontsize=9.5]
 		"proc~save_results" [label=save_results]
 		graph [concentrate=false]
-		"proc~test_tvd_rk" [label=test_tvd_rk URL="../proc/test_tvd_rk.html" color="#d9534f" fontcolor=white style=filled]
-		"proc~test_ab" [label=test_ab URL="../proc/test_ab.html" color="#d9534f" fontcolor=white style=filled]
-		"proc~test_ls_rk" [label=test_ls_rk URL="../proc/test_ls_rk.html" color="#d9534f" fontcolor=white style=filled]
 		"proc~test_euler" [label=test_euler URL="../proc/test_euler.html" color="#d9534f" fontcolor=white style=filled]
+		"proc~test_tvd_rk" [label=test_tvd_rk URL="../proc/test_tvd_rk.html" color="#d9534f" fontcolor=white style=filled]
+		"proc~test_ls_rk" [label=test_ls_rk URL="../proc/test_ls_rk.html" color="#d9534f" fontcolor=white style=filled]
+		"proc~test_ab" [label=test_ab URL="../proc/test_ab.html" color="#d9534f" fontcolor=white style=filled]
 		"proc~test_leapfrog" [label=test_leapfrog URL="../proc/test_leapfrog.html" color="#d9534f" fontcolor=white style=filled]
 		graph [concentrate=false]
 		"program~integrate_burgers" [label=integrate_burgers URL="../program/integrate_burgers.html" color="#f0ad4e" fontcolor=white style=filled]
 		graph [concentrate=false]
+			"program~integrate_burgers" -> "proc~test_euler"
+		graph [concentrate=false]
+		graph [concentrate=false]
 			"program~integrate_burgers" -> "proc~test_tvd_rk"
-		graph [concentrate=false]
-		graph [concentrate=false]
-			"program~integrate_burgers" -> "proc~test_ab"
 		graph [concentrate=false]
 		graph [concentrate=false]
 			"program~integrate_burgers" -> "proc~test_ls_rk"
 		graph [concentrate=false]
 		graph [concentrate=false]
-			"program~integrate_burgers" -> "proc~test_euler"
+			"program~integrate_burgers" -> "proc~test_ab"
 		graph [concentrate=false]
 		graph [concentrate=false]
 			"program~integrate_burgers" -> "proc~test_leapfrog"
 		graph [concentrate=false]
-			"proc~test_tvd_rk" -> "proc~save_results"
-			"proc~test_ab" -> "proc~save_results"
-			"proc~test_ls_rk" -> "proc~save_results"
 			"proc~test_euler" -> "proc~save_results"
+			"proc~test_tvd_rk" -> "proc~save_results"
+			"proc~test_ls_rk" -> "proc~save_results"
+			"proc~test_ab" -> "proc~save_results"
 			"proc~test_leapfrog" -> "proc~save_results"
 		graph [concentrate=false]
 }
