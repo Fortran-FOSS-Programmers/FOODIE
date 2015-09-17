@@ -13,12 +13,23 @@ module foodie
 !<
 !< FOODiE is aimed to the time-like integration of the above system of ODE. To this aim, different numerical schemes are provided:
 !<
-!<+ *forward explicit Euler* scheme, a 1st order accurate scheme;
-!<+ *TVD or SSP Runge-Kutta* class schemes:
-!<    + TVD(1,1): 1 stage, 1st order scheme, namely the forward explicit Euler one;
-!<    + SSP(2,2): 2 stages, 2nd order scheme;
-!<    + SSP(3,3): 3 stages, 3rd order scheme;
-!<    + SSP(5,4): 5 stages, 4th order scheme;
+!<+ *explicit Adams-Bashforth* class of schemes:
+!<    + 1 step, namely the forward explicit Euler scheme, 1st order accurate;
+!<    + 2 steps, 2nd accurate;
+!<    + 3 steps, 3rd accurate;
+!<+ *forward explicit Euler* scheme, a 1st order accurate;
+!<+ *explicit Leapfrog*:
+!<    + Unfiltered, 2st order accurate, (mostly) unstable;
+!<    + Robert-Asselin filtered, 1st order accurate;
+!<    + Robert-Asselin-Williams filter, 3rd order accurate;
+!<+ *explicit low storage Runge-Kutta 2N* class schemes:
+!<    + LS(1,1): 1 stage, 1st order accurate, namely the forward explicit Euler one;
+!<    + LS(5,4): 5 stages, 4th order accurate;
+!<+ *explicit TVD or SSP Runge-Kutta* class schemes:
+!<    + TVD(1,1): 1 stage, 1st order accurate, namely the forward explicit Euler one;
+!<    + SSP(2,2): 2 stages, 2nd order accurate;
+!<    + SSP(3,3): 3 stages, 3rd order accurate;
+!<    + SSP(5,4): 5 stages, 4th order accurate;
 !<
 !<### Usage
 !<
@@ -41,13 +52,13 @@ module foodie
 !<   real(R_P)                            :: rho=0._R_P   !< Lorenz \(\rho\).
 !<   real(R_P)                            :: beta=0._R_P  !< Lorenz \(\beta\).
 !<   contains
-!<     procedure, pass(self), public :: output                                          !< Extract Lorenz field.
 !<     procedure, pass(self), public :: t => dLorenz_dt                                 !< Time derivate, resiuduals function.
 !<     procedure, pass(lhs),  public :: integrand_multiply_real => lorenz_multiply_real !< lorenz * real operator.
 !<     procedure, pass(rhs),  public :: real_multiply_integrand => real_multiply_lorenz !< Real * Lorenz operator.
 !<     procedure, pass(lhs),  public :: add => add_lorenz                               !< Lorenz + Lorenz oprator.
 !<     procedure, pass(lhs),  public :: assign_integrand => lorenz_assign_lorenz        !< Lorenz = Lorenz.
 !<     procedure, pass(lhs),  public :: assign_real => lorenz_assign_real               !< Lorenz = real.
+!<     ...
 !< endtype lorenz
 !<```
 !<
@@ -71,6 +82,7 @@ module foodie
 use type_integrand, only : integrand
 use foodie_integrator_adams_bashforth, only : adams_bashforth_integrator
 use foodie_integrator_euler_explicit, only : euler_explicit_integrator
+use foodie_integrator_leapfrog, only : leapfrog_integrator
 use foodie_integrator_low_storage_runge_kutta, only : ls_runge_kutta_integrator
 use foodie_integrator_tvd_runge_kutta, only : tvd_runge_kutta_integrator
 !-----------------------------------------------------------------------------------------------------------------------------------
@@ -81,6 +93,7 @@ private
 public :: integrand
 public :: adams_bashforth_integrator
 public :: euler_explicit_integrator
+public :: leapfrog_integrator
 public :: ls_runge_kutta_integrator
 public :: tvd_runge_kutta_integrator
 !-----------------------------------------------------------------------------------------------------------------------------------

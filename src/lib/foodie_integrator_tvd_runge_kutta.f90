@@ -78,7 +78,7 @@ module foodie_integrator_tvd_runge_kutta
 !<
 !<#### Bibliography
 !<
-!< [1] *Coefficients for the study of !< Runge-Kutta integration processes*, Butcher, J.C., J. Austral. Math. Soc., Vol. 3,
+!< [1] *Coefficients for the study of Runge-Kutta integration processes*, Butcher, J.C., J. Austral. Math. Soc., Vol. 3,
 !< pages: 185--201, 1963.
 !<
 !< [2] *High Order Strong Stability Preserving Time Discretizations*, Gottlieb, S., Ketcheson, D. I., Shu, C.W., Journal of

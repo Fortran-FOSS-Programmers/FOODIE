@@ -20,7 +20,7 @@ public :: euler_1D
 type, extends(integrand) :: euler_1D
   !< Euler 1D PDEs system field.
   !<
-  !< It is a FOODiE integrand class.
+  !< It is a FOODiE integrand class concrete extension.
   !<
   !<### 1D Euler PDEs system
   !< The 1D Euler PDEs system considered is a non linear, hyperbolic (inviscid) system of conservation laws for compressible gas
@@ -100,7 +100,7 @@ type, extends(integrand) :: euler_1D
   !< + Ns+4 : specific heats ratio    (g)
   !<
   !<#### Conservative variables organization
-  !< Conservative  variables are organized as an array of reals which the first index means:
+  !< Conservative variables are organized as an array (rank 2) of reals which the first index means:
   !<
   !< + 1    : mass conservation of species 1    (r1)
   !< + 2    : mass conservation of species 2    (r2)
@@ -120,27 +120,27 @@ type, extends(integrand) :: euler_1D
   integer(I_P)                   :: Np=0            !< Number of primitive variables, Ns+4.
   real(R_P)                      :: Dx=0._R_P       !< Space step.
   type(weno_interpolator_upwind) :: weno            !< WENO interpolator.
-  real(R_P),    allocatable      :: U(:,:)          !< Conservative (state) variables [1:Nc,1-Ng:Ni+Ng].
-  real(R_P),    allocatable      :: previous(:,:,:) !< Conservative variables of previous time steps [:,:,1:steps].
+  real(R_P),    allocatable      :: U(:,:)          !< Integrand (state) variables, whole physical domain [1:Nc,1-Ng:Ni+Ng].
+  real(R_P),    allocatable      :: previous(:,:,:) !< Previous time steps states [1:Nc,1-Ng:Ni+Ng,1:steps].
   real(R_P),    allocatable      :: cp0(:)          !< Specific heat cp of initial species [1:Ns].
   real(R_P),    allocatable      :: cv0(:)          !< Specific heat cv of initial species [1:Ns].
   character(:), allocatable      :: BC_L            !< Left boundary condition type.
   character(:), allocatable      :: BC_R            !< Right boundary condition type.
   contains
-    ! public methods
     ! auxiliary methods
     procedure, pass(self), public :: init             !< Init field.
     procedure, pass(self), public :: destroy          !< Destroy field.
     procedure, pass(self), public :: output           !< Extract Euler field.
     procedure, pass(self), public :: dt => compute_dt !< Compute the current time step, by means of CFL condition.
     ! type_integrand deferred methods
-    procedure, pass(self), public :: t => dEuler_dt        !< Time derivate, residuals function.
-    procedure, pass(self), public :: update_previous_steps !< Update previous time steps.
-    ! operators overloading
+    procedure, pass(self), public :: t => dEuler_dt                                       !< Time derivative, residuals function.
+    procedure, pass(self), public :: update_previous_steps                                !< Update previous time steps.
+    procedure, pass(self), public :: previous_step                                        !< Get a previous time step.
     procedure, pass(lhs),  public :: integrand_multiply_integrand => euler_multiply_euler !< Euler * Euler operator.
     procedure, pass(lhs),  public :: integrand_multiply_real => euler_multiply_real       !< Euler * real operator.
     procedure, pass(rhs),  public :: real_multiply_integrand => real_multiply_euler       !< Real * Euler operator.
-    procedure, pass(lhs),  public :: add => add_euler                                     !< Euler + Euler oprator.
+    procedure, pass(lhs),  public :: add => add_euler                                     !< Euler + Euler operator.
+    procedure, pass(lhs),  public :: sub => sub_euler                                     !< Euler - Euler.
     procedure, pass(lhs),  public :: assign_integrand => euler_assign_euler               !< Euler = Euler.
     procedure, pass(lhs),  public :: assign_real => euler_assign_real                     !< Euler = real.
     ! private methods
@@ -149,11 +149,11 @@ type, extends(integrand) :: euler_1D
     procedure, pass(self), private :: impose_boundary_conditions    !< Impose boundary conditions.
     procedure, pass(self), private :: reconstruct_interfaces_states !< Reconstruct interfaces states.
     procedure, pass(self), private :: riemann_solver                !< Solve the Riemann Problem at cell interfaces.
-    final                          :: finalize                   !< Finalize field.
+    final                          :: finalize                      !< Finalize field.
 endtype euler_1D
 !-----------------------------------------------------------------------------------------------------------------------------------
 contains
-  ! public methods
+  ! auxiliary methods
   subroutine init(self, Ni, Ns, Dx, BC_L, BC_R, initial_state, cp0, cv0, steps, ord)
   !---------------------------------------------------------------------------------------------------------------------------------
   !< Init field.
@@ -285,6 +285,7 @@ contains
   !--------------------------------------------------------------------------------------------------------------------------------
   endfunction compute_dt
 
+  ! type_integrand deferred methods
   pure function dEuler_dt(self, n) result(dState_dt)
   !---------------------------------------------------------------------------------------------------------------------------------
   !< Time derivative of Euler field, the residuals function.
@@ -338,12 +339,14 @@ contains
   !---------------------------------------------------------------------------------------------------------------------------------
   endfunction dEuler_dt
 
-  pure subroutine update_previous_steps(self)
+  pure subroutine update_previous_steps(self, filter, weights)
   !---------------------------------------------------------------------------------------------------------------------------------
   !< Update previous time steps.
   !---------------------------------------------------------------------------------------------------------------------------------
-  class(euler_1D), intent(INOUT) :: self !< Euler field.
-  integer                        :: s    !< Time steps counter.
+  class(euler_1D),            intent(INOUT) :: self       !< Euler field.
+  class(integrand), optional, intent(IN)    :: filter     !< Filter field displacement.
+  real(R_P),        optional, intent(IN)    :: weights(:) !< Weights for filtering the steps.
+  integer                                   :: s          !< Time steps counter.
   !---------------------------------------------------------------------------------------------------------------------------------
 
   !---------------------------------------------------------------------------------------------------------------------------------
@@ -353,11 +356,38 @@ contains
     enddo
     self%previous(:, :, self%steps) = self%U
   endif
+  if (present(filter).and.present(weights)) then
+    select type(filter)
+    class is(euler_1D)
+      do s=1, self%steps
+        self%previous(:, :, s) = self%previous(:, :, s) + filter%U * weights(s)
+      enddo
+    endselect
+  endif
   return
   !---------------------------------------------------------------------------------------------------------------------------------
   endsubroutine update_previous_steps
 
-  ! operators overloading
+  pure function previous_step(self, n) result(previous)
+  !---------------------------------------------------------------------------------------------------------------------------------
+  !< Extract previous time solution of Euler field.
+  !---------------------------------------------------------------------------------------------------------------------------------
+  class(euler_1D), intent(IN)   :: self     !< Euler field.
+  integer(I_P),    intent(IN)   :: n        !< Time level.
+  class(integrand), allocatable :: previous !< Previous time solution of Euler field.
+  !---------------------------------------------------------------------------------------------------------------------------------
+
+  !---------------------------------------------------------------------------------------------------------------------------------
+  allocate(euler_1D :: previous)
+  select type(previous)
+  class is(euler_1D)
+    previous = self
+    previous%U = self%previous(:, :, n)
+  endselect
+  return
+  !---------------------------------------------------------------------------------------------------------------------------------
+  endfunction previous_step
+
   pure function euler_multiply_euler(lhs, rhs) result(opr)
   !---------------------------------------------------------------------------------------------------------------------------------
   !< Multiply an Euler field by another one.
@@ -443,6 +473,29 @@ contains
   return
   !---------------------------------------------------------------------------------------------------------------------------------
   endfunction add_euler
+
+  pure function sub_euler(lhs, rhs) result(opr)
+  !---------------------------------------------------------------------------------------------------------------------------------
+  !< Subtract two Euler fields.
+  !---------------------------------------------------------------------------------------------------------------------------------
+  class(euler_1D),  intent(IN)  :: lhs !< Left hand side.
+  class(integrand), intent(IN)  :: rhs !< Right hand side.
+  class(integrand), allocatable :: opr !< Operator result.
+  !---------------------------------------------------------------------------------------------------------------------------------
+
+  !---------------------------------------------------------------------------------------------------------------------------------
+  allocate (euler_1D :: opr)
+  select type(opr)
+  class is(euler_1D)
+    opr = lhs
+    select type(rhs)
+    class is (euler_1D)
+      opr%U = lhs%U - rhs%U
+    endselect
+  endselect
+  return
+  !---------------------------------------------------------------------------------------------------------------------------------
+  endfunction sub_euler
 
   pure subroutine euler_assign_euler(lhs, rhs)
   !---------------------------------------------------------------------------------------------------------------------------------
