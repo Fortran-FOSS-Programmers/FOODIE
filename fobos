@@ -89,9 +89,22 @@ help   = Rule for performing coverage analysis
 rule_1 = FoBiS.py clean -mode tests-gnu
 rule_2 = FoBiS.py build -mode tests-gnu -coverage
 rule_3 = ./tests/burgers -s all
-rule_4 = ./tests/lorenz -s all
-rule_5 = ./tests/oscillation -s all
-rule_6 = gcov -o tests/obj/ src/lib/foodie*.f90
+rule_4 = ./tests/euler-1D -s all
+rule_5 = ./tests/lorenz -s all
+rule_6 = ./tests/oscillation -s all
+rule_7 = gcov -o tests/obj/ src/lib/foodie*.f90
+
+[rule-coverage-analysis]
+help   = Rule for performing coverage analysis and saving reports in markdown
+rule_1 = FoBiS.py clean -mode tests-gnu
+rule_2 = FoBiS.py build -mode tests-gnu -coverage
+rule_3 = ./tests/burgers -s all
+rule_4 = ./tests/euler-1D -s all
+rule_5 = ./tests/lorenz -s all
+rule_6 = ./tests/oscillation -s all
+rule_7 = gcov -o tests/obj/ src/lib/foodie*.f90
+rule_8 = FoBiS.py rule -gcov_analyzer wiki/ Coverage-Analysis
+rule_9 = rm -f *.gcov
 
 [rule-deldoc]
 help = Rule for deleting documentation
