@@ -162,6 +162,8 @@
       
       <a class="list-group-item" href="../sourcefile/burgers.f90.html">burgers.f90</a>
       
+      <a class="list-group-item" href="../sourcefile/euler-1d-openmp.f90.html">euler-1D-openmp.f90</a>
+      
       <a class="list-group-item" href="../sourcefile/euler-1d.f90.html">euler-1D.f90</a>
       
       <a class="list-group-item" href="../sourcefile/foodie.f90.html">foodie.f90</a>
@@ -181,6 +183,8 @@
       <a class="list-group-item" href="../sourcefile/oscillation.f90.html">oscillation.f90</a>
       
       <a class="list-group-item" href="../sourcefile/type_burgers.f90.html">type_burgers.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/type_euler-1d-openmp.f90.html">type_euler-1D-openmp.f90</a>
       
       <a class="list-group-item" href="../sourcefile/type_euler-1d.f90.html">type_euler-1D.f90</a>
       
@@ -243,7 +247,7 @@
 
 <span class="k">abstract interface</span>
   <span class="c">!&lt; Abstract type bound procedures necessary for implementing a concrete extension of the class(integrand).</span>
-  <span class="k">pure function </span><span class="n">time_derivative</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">n</span><span class="p">,</span> <span class="n">t</span><span class="p">)</span> <span class="k">result</span><span class="p">(</span><span class="n">dState_dt</span><span class="p">)</span>
+  <span class="k">function </span><span class="n">time_derivative</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">n</span><span class="p">,</span> <span class="n">t</span><span class="p">)</span> <span class="k">result</span><span class="p">(</span><span class="n">dState_dt</span><span class="p">)</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
   <span class="c">!&lt; Time derivative function of integrand class, i.e. the residuals function.</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
@@ -255,7 +259,7 @@
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
   <span class="n">endfunction</span> <span class="n">time_derivative</span>
 
-  <span class="k">pure subroutine </span><span class="n">update_previous_steps</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">filter</span><span class="p">,</span> <span class="n">weights</span><span class="p">)</span>
+  <span class="k">subroutine </span><span class="n">update_previous_steps</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">filter</span><span class="p">,</span> <span class="n">weights</span><span class="p">)</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
   <span class="c">!&lt; Update the previous time steps (of integrand field) for multi-step(level) ODE solvers.</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
@@ -266,7 +270,7 @@
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
   <span class="n">endsubroutine</span> <span class="n">update_previous_steps</span>
 
-  <span class="k">pure function </span><span class="n">previous_step</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">n</span><span class="p">)</span> <span class="k">result</span><span class="p">(</span><span class="n">previous</span><span class="p">)</span>
+  <span class="k">function </span><span class="n">previous_step</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">n</span><span class="p">)</span> <span class="k">result</span><span class="p">(</span><span class="n">previous</span><span class="p">)</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
   <span class="c">!&lt; Get a previous time steps (of integrand field) for multi-step(level) ODE solvers.</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
@@ -277,7 +281,7 @@
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
   <span class="n">endfunction</span> <span class="n">previous_step</span>
 
-  <span class="k">pure function </span><span class="n">integrand_op_real</span><span class="p">(</span><span class="n">lhs</span><span class="p">,</span> <span class="n">rhs</span><span class="p">)</span> <span class="k">result</span><span class="p">(</span><span class="n">operator_result</span><span class="p">)</span>
+  <span class="k">function </span><span class="n">integrand_op_real</span><span class="p">(</span><span class="n">lhs</span><span class="p">,</span> <span class="n">rhs</span><span class="p">)</span> <span class="k">result</span><span class="p">(</span><span class="n">operator_result</span><span class="p">)</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
   <span class="c">!&lt; Asymmetric type operator integrand.op.real.</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
@@ -288,7 +292,7 @@
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
   <span class="n">endfunction</span> <span class="n">integrand_op_real</span>
 
-  <span class="k">pure function </span><span class="n">real_op_integrand</span><span class="p">(</span><span class="n">lhs</span><span class="p">,</span> <span class="n">rhs</span><span class="p">)</span> <span class="k">result</span><span class="p">(</span><span class="n">operator_result</span><span class="p">)</span>
+  <span class="k">function </span><span class="n">real_op_integrand</span><span class="p">(</span><span class="n">lhs</span><span class="p">,</span> <span class="n">rhs</span><span class="p">)</span> <span class="k">result</span><span class="p">(</span><span class="n">operator_result</span><span class="p">)</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
   <span class="c">!&lt; Asymmetric type operator real.op.integrand.</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
@@ -299,7 +303,7 @@
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
   <span class="n">endfunction</span> <span class="n">real_op_integrand</span>
 
-  <span class="k">pure function </span><span class="n">symmetric_operator</span><span class="p">(</span><span class="n">lhs</span><span class="p">,</span> <span class="n">rhs</span><span class="p">)</span> <span class="k">result</span><span class="p">(</span><span class="n">operator_result</span><span class="p">)</span>
+  <span class="k">function </span><span class="n">symmetric_operator</span><span class="p">(</span><span class="n">lhs</span><span class="p">,</span> <span class="n">rhs</span><span class="p">)</span> <span class="k">result</span><span class="p">(</span><span class="n">operator_result</span><span class="p">)</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
   <span class="c">!&lt; Symmetric type operator integrand.op.integrand.</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
@@ -310,7 +314,7 @@
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
   <span class="n">endfunction</span> <span class="n">symmetric_operator</span>
 
-  <span class="k">pure subroutine </span><span class="n">assignment_integrand</span><span class="p">(</span><span class="n">lhs</span><span class="p">,</span> <span class="n">rhs</span><span class="p">)</span>
+  <span class="k">subroutine </span><span class="n">assignment_integrand</span><span class="p">(</span><span class="n">lhs</span><span class="p">,</span> <span class="n">rhs</span><span class="p">)</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
   <span class="c">!&lt; Symmetric assignment integrand = integrand.</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
@@ -320,7 +324,7 @@
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
   <span class="n">endsubroutine</span> <span class="n">assignment_integrand</span>
 
-  <span class="k">pure subroutine </span><span class="n">assignment_real</span><span class="p">(</span><span class="n">lhs</span><span class="p">,</span> <span class="n">rhs</span><span class="p">)</span>
+  <span class="k">subroutine </span><span class="n">assignment_real</span><span class="p">(</span><span class="n">lhs</span><span class="p">,</span> <span class="n">rhs</span><span class="p">)</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
   <span class="c">!&lt; Asymmetric assignment integrand = real.</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>

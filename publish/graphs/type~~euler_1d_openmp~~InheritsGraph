@@ -1,0 +1,10 @@
+digraph "type~~euler_1d_openmp~~InheritsGraph" {
+	graph [concentrate=true rankdir=LR size="8.90625,1000.0"]
+	node [fontname=Helvetica fontsize=10.5 height=0.0 margin=0.08 shape=box]
+	edge [fontname=Helvetica fontsize=9.5]
+		"type~euler_1d_openmp" [label=euler_1D_openmp]
+		weno_interpolator_upwind [label=weno_interpolator_upwind color="#5cb85c" fontcolor=white style=filled]
+			weno_interpolator_upwind -> "type~euler_1d_openmp" [label=weno style=dashed]
+		integrand [label=integrand color="#5cb85c" fontcolor=white style=filled]
+			integrand -> "type~euler_1d_openmp"
+}

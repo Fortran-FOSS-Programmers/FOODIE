@@ -195,6 +195,8 @@
       
       <a class="list-group-item" href="../module/type_euler_1d.html">type_euler_1D</a>
       
+      <a class="list-group-item" href="../module/type_euler_1d_openmp.html">type_euler_1D_openmp</a>
+      
       <a class="list-group-item" href="../module/type_integrand.html">type_integrand</a>
       
       <a class="list-group-item" href="../module/type_lorenz.html">type_lorenz</a>
@@ -322,20 +324,22 @@ implementation in a submodule of an interface in a parent module.</p>
     
             <img class="depgraph" alt="dependency graph" src=../graphs/module%7E%7Etype_integrand%7E%7EUsedByGraph.svg usemap="#module~~type_integrand~~UsedByGraph">
             <map id="module~~type_integrand~~UsedByGraph" name="module~~type_integrand~~UsedByGraph">
-<area shape="rect" id="node2" href="../module/foodie_integrator_tvd_runge_kutta.html" title="foodie_integrator_tvd_runge_kutta" alt="" coords="177,30,391,62"/>
-<area shape="rect" id="node3" href="../module/foodie_integrator_adams_bashforth.html" title="foodie_integrator_adams_bashforth" alt="" coords="174,84,395,115"/>
-<area shape="rect" id="node4" href="../module/foodie_integrator_euler_explicit.html" title="foodie_integrator_euler_explicit" alt="" coords="186,137,382,169"/>
-<area shape="rect" id="node5" href="../module/foodie_integrator_leapfrog.html" title="foodie_integrator_leapfrog" alt="" coords="200,191,368,222"/>
-<area shape="rect" id="node6" href="../module/foodie_integrator_low_storage_runge_kutta.html" title="foodie_integrator_low_storage_runge_kutta" alt="" coords="151,244,418,276"/>
-<area shape="rect" id="node7" href="../module/foodie.html" title="foodie" alt="" coords="461,164,527,196"/>
-<area shape="rect" id="node13" href="../program/integrate_burgers.html" title="integrate_burgers" alt="" coords="726,13,843,45"/>
-<area shape="rect" id="node14" href="../program/integrate_lorenz.html" title="integrate_lorenz" alt="" coords="730,113,839,145"/>
-<area shape="rect" id="node15" href="../module/type_euler_1d.html" title="type_euler_1D" alt="" coords="573,191,673,222"/>
-<area shape="rect" id="node16" href="../program/integrate_euler_1d.html" title="integrate_euler_1D" alt="" coords="721,227,847,259"/>
-<area shape="rect" id="node17" href="../module/type_oscillation.html" title="type_oscillation" alt="" coords="572,290,674,322"/>
-<area shape="rect" id="node18" href="../module/type_lorenz.html" title="type_lorenz" alt="" coords="582,137,664,169"/>
-<area shape="rect" id="node19" href="../program/integrate_oscillation.html" title="integrate_oscillation" alt="" coords="720,304,849,335"/>
-<area shape="rect" id="node20" href="../module/type_burgers.html" title="type_burgers" alt="" coords="577,38,669,69"/>
+<area shape="rect" id="node2" href="../module/foodie_integrator_adams_bashforth.html" title="foodie_integrator_adams_bashforth" alt="" coords="155,64,352,92"/>
+<area shape="rect" id="node3" href="../module/foodie_integrator_euler_explicit.html" title="foodie_integrator_euler_explicit" alt="" coords="166,111,342,140"/>
+<area shape="rect" id="node4" href="../module/foodie.html" title="foodie" alt="" coords="412,179,471,207"/>
+<area shape="rect" id="node5" href="../module/foodie_integrator_leapfrog.html" title="foodie_integrator_leapfrog" alt="" coords="179,200,329,229"/>
+<area shape="rect" id="node6" href="../module/foodie_integrator_low_storage_runge_kutta.html" title="foodie_integrator_low_storage_runge_kutta" alt="" coords="134,248,373,276"/>
+<area shape="rect" id="node7" href="../module/foodie_integrator_tvd_runge_kutta.html" title="foodie_integrator_tvd_runge_kutta" alt="" coords="158,296,349,324"/>
+<area shape="rect" id="node10" href="../program/integrate_burgers.html" title="integrate_burgers" alt="" coords="717,20,821,48"/>
+<area shape="rect" id="node11" href="../module/type_euler_1d.html" title="type_euler_1D" alt="" coords="535,90,624,118"/>
+<area shape="rect" id="node12" href="../program/integrate_lorenz.html" title="integrate_lorenz" alt="" coords="720,179,818,207"/>
+<area shape="rect" id="node13" href="../program/integrate_oscillation.html" title="integrate_oscillation" alt="" coords="711,257,826,285"/>
+<area shape="rect" id="node14" href="../module/type_lorenz.html" title="type_lorenz" alt="" coords="542,179,616,207"/>
+<area shape="rect" id="node15" href="../module/type_burgers.html" title="type_burgers" alt="" coords="538,42,620,70"/>
+<area shape="rect" id="node16" href="../program/integrate_euler_1d.html" title="integrate_euler_1D" alt="" coords="713,131,825,159"/>
+<area shape="rect" id="node17" href="../module/type_oscillation.html" title="type_oscillation" alt="" coords="534,268,625,296"/>
+<area shape="rect" id="node18" href="../module/type_euler_1d_openmp.html" title="type_euler_1D_openmp" alt="" coords="511,315,648,344"/>
+<area shape="rect" id="node19" href="../program/integrate_euler_1d_openmp.html" title="integrate_euler_1D_openmp" alt="" coords="689,326,849,354"/>
 </map>
 
             <div><a type="button" class="graph-help" data-toggle="modal" href="#graph-help-text">Help</a></div>
@@ -457,7 +461,7 @@ implementation in a submodule of an interface in a parent module.</p>
     
     
     <h3>
-private puresubroutine <a href='../interface/update_previous_steps.html'>update_previous_steps</a>(self, filter, weights)
+private subroutine <a href='../interface/update_previous_steps.html'>update_previous_steps</a>(self, filter, weights)
     
     
     
@@ -560,7 +564,7 @@ private puresubroutine <a href='../interface/update_previous_steps.html'>update_
     
     
     <h3>
-private puresubroutine <a href='../interface/assignment_integrand.html'>assignment_integrand</a>(lhs, rhs)
+private subroutine <a href='../interface/assignment_integrand.html'>assignment_integrand</a>(lhs, rhs)
     
     
     
@@ -648,7 +652,7 @@ private puresubroutine <a href='../interface/assignment_integrand.html'>assignme
     
     
     <h3>
-private puresubroutine <a href='../interface/assignment_real.html'>assignment_real</a>(lhs, rhs)
+private subroutine <a href='../interface/assignment_real.html'>assignment_real</a>(lhs, rhs)
     
     
     
@@ -736,7 +740,7 @@ private puresubroutine <a href='../interface/assignment_real.html'>assignment_re
     
     
     <h3>
-private purefunction <a href='../interface/time_derivative.html'>time_derivative</a>(self, n, t) result(dState_dt)
+private function <a href='../interface/time_derivative.html'>time_derivative</a>(self, n, t) result(dState_dt)
     
     
     
@@ -848,7 +852,7 @@ private purefunction <a href='../interface/time_derivative.html'>time_derivative
     
     
     <h3>
-private purefunction <a href='../interface/previous_step.html'>previous_step</a>(self, n) result(previous)
+private function <a href='../interface/previous_step.html'>previous_step</a>(self, n) result(previous)
     
     
     
@@ -945,7 +949,7 @@ private purefunction <a href='../interface/previous_step.html'>previous_step</a>
     
     
     <h3>
-private purefunction <a href='../interface/integrand_op_real.html'>integrand_op_real</a>(lhs, rhs) result(operator_result)
+private function <a href='../interface/integrand_op_real.html'>integrand_op_real</a>(lhs, rhs) result(operator_result)
     
     
     
@@ -1042,7 +1046,7 @@ private purefunction <a href='../interface/integrand_op_real.html'>integrand_op_
     
     
     <h3>
-private purefunction <a href='../interface/real_op_integrand.html'>real_op_integrand</a>(lhs, rhs) result(operator_result)
+private function <a href='../interface/real_op_integrand.html'>real_op_integrand</a>(lhs, rhs) result(operator_result)
     
     
     
@@ -1139,7 +1143,7 @@ private purefunction <a href='../interface/real_op_integrand.html'>real_op_integ
     
     
     <h3>
-private purefunction <a href='../interface/symmetric_operator.html'>symmetric_operator</a>(lhs, rhs) result(operator_result)
+private function <a href='../interface/symmetric_operator.html'>symmetric_operator</a>(lhs, rhs) result(operator_result)
     
     
     

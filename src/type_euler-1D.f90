@@ -258,15 +258,15 @@ contains
   !--------------------------------------------------------------------------------------------------------------------------------
   !< Compute the current time step by means of CFL condition.
   !--------------------------------------------------------------------------------------------------------------------------------
-  class(euler_1D), intent(IN) :: self           !< Euler field.
-  integer(I_P),    intent(IN) :: Nmax           !< Maximun number of iterates.
-  real(R_P),       intent(IN) :: Tmax           !< Maximum time (ignored if Nmax>0).
-  real(R_P),       intent(IN) :: t              !< Time.
-  real(R_P),       intent(IN) :: CFL            !< CFL value.
-  real(R_P)                   :: Dt             !< Time step.
-  real(R_P), allocatable      :: P(:)           !< Primitive variables.
-  real(R_P)                   :: vmax           !< Maximum propagation speed of signals.
-  integer(I_P)                :: i              !< Counter.
+  class(euler_1D), intent(IN) :: self !< Euler field.
+  integer(I_P),    intent(IN) :: Nmax !< Maximun number of iterates.
+  real(R_P),       intent(IN) :: Tmax !< Maximum time (ignored if Nmax>0).
+  real(R_P),       intent(IN) :: t    !< Time.
+  real(R_P),       intent(IN) :: CFL  !< CFL value.
+  real(R_P)                   :: Dt   !< Time step.
+  real(R_P), allocatable      :: P(:) !< Primitive variables.
+  real(R_P)                   :: vmax !< Maximum propagation speed of signals.
+  integer(I_P)                :: i    !< Counter.
   !--------------------------------------------------------------------------------------------------------------------------------
 
   !--------------------------------------------------------------------------------------------------------------------------------
@@ -286,7 +286,7 @@ contains
   endfunction compute_dt
 
   ! type_integrand deferred methods
-  pure function dEuler_dt(self, n, t) result(dState_dt)
+  function dEuler_dt(self, n, t) result(dState_dt)
   !---------------------------------------------------------------------------------------------------------------------------------
   !< Time derivative of Euler field, the residuals function.
   !---------------------------------------------------------------------------------------------------------------------------------
@@ -325,6 +325,13 @@ contains
       call self%riemann_solver(r1=PR(Ns+3, 2, i  ), u1=PR(Ns+1, 2, i  ), p1=PR(Ns+2, 2, i  ), g1=PR(Ns+4, 2, i  ), &
                                r4=PR(Ns+3, 1, i+1), u4=PR(Ns+1, 1, i+1), p4=PR(Ns+2, 1, i+1), g4=PR(Ns+4, 1, i+1), &
                                F=F(:, i))
+      if (Ns>1) then
+        if (F(1, i)>0._R_P) then
+          F(1:self%Ns, i) = PR(1:Ns, 2, i  )/PR(Ns+3, 2, i  )*F(1, i)
+        else
+          F(1:self%Ns, i) = PR(1:Ns, 1, i+1)/PR(Ns+3, 1, i+1)*F(1, i)
+        endif
+      endif
     enddo
     ! compute residuals
     allocate(euler_1D :: dState_dt)
@@ -340,7 +347,7 @@ contains
   !---------------------------------------------------------------------------------------------------------------------------------
   endfunction dEuler_dt
 
-  pure subroutine update_previous_steps(self, filter, weights)
+  subroutine update_previous_steps(self, filter, weights)
   !---------------------------------------------------------------------------------------------------------------------------------
   !< Update previous time steps.
   !---------------------------------------------------------------------------------------------------------------------------------
@@ -369,7 +376,7 @@ contains
   !---------------------------------------------------------------------------------------------------------------------------------
   endsubroutine update_previous_steps
 
-  pure function previous_step(self, n) result(previous)
+  function previous_step(self, n) result(previous)
   !---------------------------------------------------------------------------------------------------------------------------------
   !< Extract previous time solution of Euler field.
   !---------------------------------------------------------------------------------------------------------------------------------
@@ -389,7 +396,7 @@ contains
   !---------------------------------------------------------------------------------------------------------------------------------
   endfunction previous_step
 
-  pure function euler_multiply_euler(lhs, rhs) result(opr)
+  function euler_multiply_euler(lhs, rhs) result(opr)
   !---------------------------------------------------------------------------------------------------------------------------------
   !< Multiply an Euler field by another one.
   !---------------------------------------------------------------------------------------------------------------------------------
@@ -412,7 +419,7 @@ contains
   !---------------------------------------------------------------------------------------------------------------------------------
   endfunction euler_multiply_euler
 
-  pure function euler_multiply_real(lhs, rhs) result(opr)
+  function euler_multiply_real(lhs, rhs) result(opr)
   !---------------------------------------------------------------------------------------------------------------------------------
   !< Multiply an Euler field by a real scalar.
   !---------------------------------------------------------------------------------------------------------------------------------
@@ -432,7 +439,7 @@ contains
   !---------------------------------------------------------------------------------------------------------------------------------
   endfunction euler_multiply_real
 
-  pure function real_multiply_euler(lhs, rhs) result(opr)
+  function real_multiply_euler(lhs, rhs) result(opr)
   !---------------------------------------------------------------------------------------------------------------------------------
   !< Multiply a real scalar by an Euler field.
   !---------------------------------------------------------------------------------------------------------------------------------
@@ -452,7 +459,7 @@ contains
   !---------------------------------------------------------------------------------------------------------------------------------
   endfunction real_multiply_euler
 
-  pure function add_euler(lhs, rhs) result(opr)
+  function add_euler(lhs, rhs) result(opr)
   !---------------------------------------------------------------------------------------------------------------------------------
   !< Add two Euler fields.
   !---------------------------------------------------------------------------------------------------------------------------------
@@ -475,7 +482,7 @@ contains
   !---------------------------------------------------------------------------------------------------------------------------------
   endfunction add_euler
 
-  pure function sub_euler(lhs, rhs) result(opr)
+  function sub_euler(lhs, rhs) result(opr)
   !---------------------------------------------------------------------------------------------------------------------------------
   !< Subtract two Euler fields.
   !---------------------------------------------------------------------------------------------------------------------------------
@@ -498,7 +505,7 @@ contains
   !---------------------------------------------------------------------------------------------------------------------------------
   endfunction sub_euler
 
-  pure subroutine euler_assign_euler(lhs, rhs)
+  subroutine euler_assign_euler(lhs, rhs)
   !---------------------------------------------------------------------------------------------------------------------------------
   !< Assign one Euler field to another.
   !---------------------------------------------------------------------------------------------------------------------------------
@@ -529,7 +536,7 @@ contains
   !---------------------------------------------------------------------------------------------------------------------------------
   endsubroutine euler_assign_euler
 
-  pure subroutine euler_assign_real(lhs, rhs)
+  subroutine euler_assign_real(lhs, rhs)
   !---------------------------------------------------------------------------------------------------------------------------------
   !< Assign one real to an Euler field.
   !---------------------------------------------------------------------------------------------------------------------------------
@@ -595,9 +602,9 @@ contains
   !<
   !< The boundary conditions are imposed on the primitive variables by means of the ghost cells approach.
   !--------------------------------------------------------------------------------------------------------------------------------
-  class(euler_1D), intent(IN)    :: self           !< Euler field.
+  class(euler_1D), intent(IN)    :: self                                           !< Euler field.
   real(R_P),       intent(INOUT) :: primitive(1:self%Np,1-self%Ng:self%Ni+self%Ng) !< Primitive variables [1:Np,1-Ng:Ni+Ng].
-  integer(I_P)                   :: i              !< Space counter.
+  integer(I_P)                   :: i                                              !< Space counter.
   !--------------------------------------------------------------------------------------------------------------------------------
 
   !--------------------------------------------------------------------------------------------------------------------------------
@@ -632,18 +639,18 @@ contains
   !--------------------------------------------------------------------------------------------------------------------------------
   !< Reconstruct the interfaces states (into primitive variables formulation) by the requested order of accuracy.
   !--------------------------------------------------------------------------------------------------------------------------------
-  class(euler_1D), intent(IN)           :: self                                            !< Euler field.
-  real(R_P),       intent(IN)           :: primitive(1:self%Np, 1-self%Ng:self%Ni+self%Ng) !< Primitive variables.
-  real(R_P),       intent(INOUT)        :: r_primitive(1:self%Np, 1:2, 0:self%Ni+1)        !< Reconstructed primitive variables.
-  real(R_P)                             :: C(1:2, 1-self%Ng:-1+self%Ng, 1:self%Ns+2)       !< Pseudo characteristic variables.
-  real(R_P)                             :: CR(1:self%Ns+2, 1:2)                            !< Pseudo characteristic reconst. vars.
-  real(R_P)                             :: Pm(1:self%Np, 1:2)                              !< Mean of primitive variables.
-  real(R_P)                             :: LPm(1:self%Ns+2, 1:self%Ns+2, 1:2)              !< Mean left eigenvectors matrix.
-  real(R_P)                             :: RPm(1:self%Ns+2, 1:self%Ns+2, 1:2)              !< Mean right eigenvectors matrix.
-  integer(I_P)                          :: i                                               !< Counter.
-  integer(I_P)                          :: j                                               !< Counter.
-  integer(I_P)                          :: f                                               !< Counter.
-  integer(I_P)                          :: v                                               !< Counter.
+  class(euler_1D), intent(IN)    :: self                                            !< Euler field.
+  real(R_P),       intent(IN)    :: primitive(1:self%Np, 1-self%Ng:self%Ni+self%Ng) !< Primitive variables.
+  real(R_P),       intent(INOUT) :: r_primitive(1:self%Np, 1:2, 0:self%Ni+1)        !< Reconstructed primitive variables.
+  real(R_P)                      :: C(1:2, 1-self%Ng:-1+self%Ng, 1:self%Ns+2)       !< Pseudo characteristic variables.
+  real(R_P)                      :: CR(1:self%Ns+2, 1:2)                            !< Pseudo characteristic reconst. vars.
+  real(R_P)                      :: Pm(1:self%Np, 1:2)                              !< Mean of primitive variables.
+  real(R_P)                      :: LPm(1:self%Ns+2, 1:self%Ns+2, 1:2)              !< Mean left eigenvectors matrix.
+  real(R_P)                      :: RPm(1:self%Ns+2, 1:self%Ns+2, 1:2)              !< Mean right eigenvectors matrix.
+  integer(I_P)                   :: i                                               !< Counter.
+  integer(I_P)                   :: j                                               !< Counter.
+  integer(I_P)                   :: f                                               !< Counter.
+  integer(I_P)                   :: v                                               !< Counter.
   !--------------------------------------------------------------------------------------------------------------------------------
 
   !--------------------------------------------------------------------------------------------------------------------------------
@@ -754,23 +761,23 @@ contains
   !---------------------------------------------------------------------------------------------------------------------------------
   !< Solve the Riemann problem between the state $1$ and $4$ using the (local) Lax Friedrichs (Rusanov) solver.
   !---------------------------------------------------------------------------------------------------------------------------------
-  class(euler_1D), intent(IN) :: self         !< Euler field.
-  real(R_P), intent(IN)       :: p1           !< Pressure of state 1.
-  real(R_P), intent(IN)       :: r1           !< Density of state 1.
-  real(R_P), intent(IN)       :: u1           !< Velocity of state 1.
-  real(R_P), intent(IN)       :: g1           !< Specific heats ratio of state 1.
-  real(R_P), intent(IN)       :: p4           !< Pressure of state 4.
-  real(R_P), intent(IN)       :: r4           !< Density of state 4.
-  real(R_P), intent(IN)       :: u4           !< Velocity of state 4.
-  real(R_P), intent(IN)       :: g4           !< Specific heats ratio of state 4.
-  real(R_P), intent(OUT)      :: F(1:self%Nc) !< Resulting fluxes.
-  real(R_P)                   :: F1(1:3)      !< State 1 fluxes.
-  real(R_P)                   :: F4(1:3)      !< State 4 fluxes.
-  real(R_P)                   :: u            !< Velocity of the intermediate states.
-  real(R_P)                   :: p            !< Pressure of the intermediate states.
-  real(R_P)                   :: S1           !< Maximum wave speed of state 1 and 4.
-  real(R_P)                   :: S4           !< Maximum wave speed of state 1 and 4.
-  real(R_P)                   :: lmax         !< Maximum wave speed estimation.
+  class(euler_1D), intent(IN)  :: self         !< Euler field.
+  real(R_P),       intent(IN)  :: p1           !< Pressure of state 1.
+  real(R_P),       intent(IN)  :: r1           !< Density of state 1.
+  real(R_P),       intent(IN)  :: u1           !< Velocity of state 1.
+  real(R_P),       intent(IN)  :: g1           !< Specific heats ratio of state 1.
+  real(R_P),       intent(IN)  :: p4           !< Pressure of state 4.
+  real(R_P),       intent(IN)  :: r4           !< Density of state 4.
+  real(R_P),       intent(IN)  :: u4           !< Velocity of state 4.
+  real(R_P),       intent(IN)  :: g4           !< Specific heats ratio of state 4.
+  real(R_P),       intent(OUT) :: F(1:self%Nc) !< Resulting fluxes.
+  real(R_P)                    :: F1(1:3)      !< State 1 fluxes.
+  real(R_P)                    :: F4(1:3)      !< State 4 fluxes.
+  real(R_P)                    :: u            !< Velocity of the intermediate states.
+  real(R_P)                    :: p            !< Pressure of the intermediate states.
+  real(R_P)                    :: S1           !< Maximum wave speed of state 1 and 4.
+  real(R_P)                    :: S4           !< Maximum wave speed of state 1 and 4.
+  real(R_P)                    :: lmax         !< Maximum wave speed estimation.
   !---------------------------------------------------------------------------------------------------------------------------------
 
   !---------------------------------------------------------------------------------------------------------------------------------

@@ -162,6 +162,8 @@
       
       <a class="list-group-item" href="../sourcefile/burgers.f90.html">burgers.f90</a>
       
+      <a class="list-group-item" href="../sourcefile/euler-1d-openmp.f90.html">euler-1D-openmp.f90</a>
+      
       <a class="list-group-item" href="../sourcefile/euler-1d.f90.html">euler-1D.f90</a>
       
       <a class="list-group-item" href="../sourcefile/foodie.f90.html">foodie.f90</a>
@@ -181,6 +183,8 @@
       <a class="list-group-item" href="../sourcefile/oscillation.f90.html">oscillation.f90</a>
       
       <a class="list-group-item" href="../sourcefile/type_burgers.f90.html">type_burgers.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/type_euler-1d-openmp.f90.html">type_euler-1D-openmp.f90</a>
       
       <a class="list-group-item" href="../sourcefile/type_euler-1d.f90.html">type_euler-1D.f90</a>
       
@@ -338,7 +342,7 @@
   <span class="n">endfunction</span> <span class="n">compute_dt</span>
 
   <span class="c">! type_integrand deferred methods</span>
-  <span class="k">pure function </span><span class="n">dBurgers_dt</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">n</span><span class="p">,</span> <span class="n">t</span><span class="p">)</span> <span class="k">result</span><span class="p">(</span><span class="n">dState_dt</span><span class="p">)</span>
+  <span class="k">function </span><span class="n">dBurgers_dt</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">n</span><span class="p">,</span> <span class="n">t</span><span class="p">)</span> <span class="k">result</span><span class="p">(</span><span class="n">dState_dt</span><span class="p">)</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
   <span class="c">!&lt; Time derivative of Burgers field, residuals function.</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
@@ -360,7 +364,7 @@
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
   <span class="n">endfunction</span> <span class="n">dBurgers_dt</span>
 
-  <span class="k">pure subroutine </span><span class="n">update_previous_steps</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">filter</span><span class="p">,</span> <span class="n">weights</span><span class="p">)</span>
+  <span class="k">subroutine </span><span class="n">update_previous_steps</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">filter</span><span class="p">,</span> <span class="n">weights</span><span class="p">)</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
   <span class="c">!&lt; Update previous time steps.</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
@@ -389,7 +393,7 @@
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
   <span class="n">endsubroutine</span> <span class="n">update_previous_steps</span>
 
-  <span class="k">pure function </span><span class="n">previous_step</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">n</span><span class="p">)</span> <span class="k">result</span><span class="p">(</span><span class="n">previous</span><span class="p">)</span>
+  <span class="k">function </span><span class="n">previous_step</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">n</span><span class="p">)</span> <span class="k">result</span><span class="p">(</span><span class="n">previous</span><span class="p">)</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
   <span class="c">!&lt; Extract previous time solution of Burgers field.</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
@@ -409,7 +413,7 @@
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
   <span class="n">endfunction</span> <span class="n">previous_step</span>
 
-  <span class="k">pure function </span><span class="n">burgers_multiply_burgers</span><span class="p">(</span><span class="n">lhs</span><span class="p">,</span> <span class="n">rhs</span><span class="p">)</span> <span class="k">result</span><span class="p">(</span><span class="n">opr</span><span class="p">)</span>
+  <span class="k">function </span><span class="n">burgers_multiply_burgers</span><span class="p">(</span><span class="n">lhs</span><span class="p">,</span> <span class="n">rhs</span><span class="p">)</span> <span class="k">result</span><span class="p">(</span><span class="n">opr</span><span class="p">)</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
   <span class="c">!&lt; Multiply a Burgers field by another one.</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
@@ -432,7 +436,7 @@
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
   <span class="n">endfunction</span> <span class="n">burgers_multiply_burgers</span>
 
-  <span class="k">pure function </span><span class="n">burgers_multiply_real</span><span class="p">(</span><span class="n">lhs</span><span class="p">,</span> <span class="n">rhs</span><span class="p">)</span> <span class="k">result</span><span class="p">(</span><span class="n">opr</span><span class="p">)</span>
+  <span class="k">function </span><span class="n">burgers_multiply_real</span><span class="p">(</span><span class="n">lhs</span><span class="p">,</span> <span class="n">rhs</span><span class="p">)</span> <span class="k">result</span><span class="p">(</span><span class="n">opr</span><span class="p">)</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
   <span class="c">!&lt; Multiply a Burgers field by a real scalar.</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
@@ -452,7 +456,7 @@
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
   <span class="n">endfunction</span> <span class="n">burgers_multiply_real</span>
 
-  <span class="k">pure function </span><span class="n">real_multiply_burgers</span><span class="p">(</span><span class="n">lhs</span><span class="p">,</span> <span class="n">rhs</span><span class="p">)</span> <span class="k">result</span><span class="p">(</span><span class="n">opr</span><span class="p">)</span>
+  <span class="k">function </span><span class="n">real_multiply_burgers</span><span class="p">(</span><span class="n">lhs</span><span class="p">,</span> <span class="n">rhs</span><span class="p">)</span> <span class="k">result</span><span class="p">(</span><span class="n">opr</span><span class="p">)</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
   <span class="c">!&lt; Multiply a real scalar by a Burgers field.</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
@@ -472,7 +476,7 @@
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
   <span class="n">endfunction</span> <span class="n">real_multiply_burgers</span>
 
-  <span class="k">pure function </span><span class="n">add_burgers</span><span class="p">(</span><span class="n">lhs</span><span class="p">,</span> <span class="n">rhs</span><span class="p">)</span> <span class="k">result</span><span class="p">(</span><span class="n">opr</span><span class="p">)</span>
+  <span class="k">function </span><span class="n">add_burgers</span><span class="p">(</span><span class="n">lhs</span><span class="p">,</span> <span class="n">rhs</span><span class="p">)</span> <span class="k">result</span><span class="p">(</span><span class="n">opr</span><span class="p">)</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
   <span class="c">!&lt; Add two Burgers fields.</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
@@ -495,7 +499,7 @@
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
   <span class="n">endfunction</span> <span class="n">add_burgers</span>
 
-  <span class="k">pure function </span><span class="n">sub_burgers</span><span class="p">(</span><span class="n">lhs</span><span class="p">,</span> <span class="n">rhs</span><span class="p">)</span> <span class="k">result</span><span class="p">(</span><span class="n">opr</span><span class="p">)</span>
+  <span class="k">function </span><span class="n">sub_burgers</span><span class="p">(</span><span class="n">lhs</span><span class="p">,</span> <span class="n">rhs</span><span class="p">)</span> <span class="k">result</span><span class="p">(</span><span class="n">opr</span><span class="p">)</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
   <span class="c">!&lt; Subtract two Burgers fields.</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
@@ -518,7 +522,7 @@
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
   <span class="n">endfunction</span> <span class="n">sub_burgers</span>
 
-  <span class="k">pure subroutine </span><span class="n">burgers_assign_burgers</span><span class="p">(</span><span class="n">lhs</span><span class="p">,</span> <span class="n">rhs</span><span class="p">)</span>
+  <span class="k">subroutine </span><span class="n">burgers_assign_burgers</span><span class="p">(</span><span class="n">lhs</span><span class="p">,</span> <span class="n">rhs</span><span class="p">)</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
   <span class="c">!&lt; Assign one Burgers field to another.</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
@@ -540,7 +544,7 @@
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
   <span class="n">endsubroutine</span> <span class="n">burgers_assign_burgers</span>
 
-  <span class="k">pure subroutine </span><span class="n">burgers_assign_real</span><span class="p">(</span><span class="n">lhs</span><span class="p">,</span> <span class="n">rhs</span><span class="p">)</span>
+  <span class="k">subroutine </span><span class="n">burgers_assign_real</span><span class="p">(</span><span class="n">lhs</span><span class="p">,</span> <span class="n">rhs</span><span class="p">)</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
   <span class="c">!&lt; Assign one real to a Burgers field.</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
@@ -556,7 +560,7 @@
   <span class="n">endsubroutine</span> <span class="n">burgers_assign_real</span>
 
   <span class="c">! private methods</span>
-  <span class="k">pure function </span><span class="n">dBurgers_dx</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">n</span><span class="p">)</span> <span class="k">result</span><span class="p">(</span><span class="n">derivative</span><span class="p">)</span>
+  <span class="k">function </span><span class="n">dBurgers_dx</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">n</span><span class="p">)</span> <span class="k">result</span><span class="p">(</span><span class="n">derivative</span><span class="p">)</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
   <span class="c">!&lt; Compute the first order spatial derivative of Burgers field.</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
@@ -587,7 +591,7 @@
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
   <span class="n">endfunction</span>
 
-  <span class="k">pure function </span><span class="n">d2Burgers_dx2</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">n</span><span class="p">)</span> <span class="k">result</span><span class="p">(</span><span class="n">derivative</span><span class="p">)</span>
+  <span class="k">function </span><span class="n">d2Burgers_dx2</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">n</span><span class="p">)</span> <span class="k">result</span><span class="p">(</span><span class="n">derivative</span><span class="p">)</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
   <span class="c">!&lt; Compute the second order spatial derivative of Burgers field.</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
