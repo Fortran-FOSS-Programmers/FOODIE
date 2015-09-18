@@ -117,19 +117,20 @@ contains
   !---------------------------------------------------------------------------------------------------------------------------------
   endsubroutine destroy
 
-  subroutine integrate(self, field, dt)
+  subroutine integrate(self, field, Dt, t)
   !---------------------------------------------------------------------------------------------------------------------------------
   !< Integrate field with Adams-Bashforth class scheme.
   !---------------------------------------------------------------------------------------------------------------------------------
   class(adams_bashforth_integrator), intent(IN)    :: self  !< Actual AB integrator.
   class(integrand),                  intent(INOUT) :: field !< Field to be integrated.
-  real(R_P),                         intent(in)    :: dt    !< Time step.
+  real(R_P),                         intent(in)    :: Dt    !< Time steps.
+  real(R_P),                         intent(IN)    :: t(:)  !< Times.
   integer(I_P)                                     :: s     !< Steps counter.
   !---------------------------------------------------------------------------------------------------------------------------------
 
   !---------------------------------------------------------------------------------------------------------------------------------
   do s=1, self%steps
-    field = field + field%t(n=s) * (dt * self%b(s))
+    field = field + field%t(n=s, t=t(s)) * (Dt * self%b(s))
   enddo
   call field%update_previous_steps
   return

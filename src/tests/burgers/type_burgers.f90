@@ -106,7 +106,7 @@ contains
   !---------------------------------------------------------------------------------------------------------------------------------
   endsubroutine init
 
-  function output(self) result(state)
+  pure function output(self) result(state)
   !---------------------------------------------------------------------------------------------------------------------------------
   !< Output the Burgers field state.
   !---------------------------------------------------------------------------------------------------------------------------------
@@ -136,12 +136,13 @@ contains
   endfunction compute_dt
 
   ! type_integrand deferred methods
-  pure function dBurgers_dt(self, n) result(dState_dt)
+  pure function dBurgers_dt(self, n, t) result(dState_dt)
   !---------------------------------------------------------------------------------------------------------------------------------
   !< Time derivative of Burgers field, residuals function.
   !---------------------------------------------------------------------------------------------------------------------------------
   class(burgers),         intent(IN) :: self      !< Burgers field.
   integer(I_P), optional, intent(IN) :: n         !< Time level.
+  real(R_P),    optional, intent(IN) :: t         !< Time.
   class(integrand), allocatable      :: dState_dt !< Burgers field time derivative.
   !---------------------------------------------------------------------------------------------------------------------------------
 

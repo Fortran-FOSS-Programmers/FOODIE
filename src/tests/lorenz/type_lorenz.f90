@@ -121,7 +121,7 @@ contains
   !---------------------------------------------------------------------------------------------------------------------------------
   endsubroutine init
 
-  function output(self) result(state)
+  pure function output(self) result(state)
   !---------------------------------------------------------------------------------------------------------------------------------
   !< Output the Lorenz field state.
   !---------------------------------------------------------------------------------------------------------------------------------
@@ -136,12 +136,13 @@ contains
   endfunction output
 
   ! type_integrand deferred methods
-  pure function dLorenz_dt(self, n) result(dState_dt)
+  pure function dLorenz_dt(self, n, t) result(dState_dt)
   !---------------------------------------------------------------------------------------------------------------------------------
   !< Time derivative of Lorenz field.
   !---------------------------------------------------------------------------------------------------------------------------------
   class(lorenz),          intent(IN) :: self      !< Lorenz field.
   integer(I_P), optional, intent(IN) :: n         !< Time level.
+  real(R_P),    optional, intent(IN) :: t         !< Time.
   class(integrand), allocatable      :: dState_dt !< Lorenz field time derivative.
   integer(I_P)                       :: dn        !< Time level, dummy variable.
   !---------------------------------------------------------------------------------------------------------------------------------
