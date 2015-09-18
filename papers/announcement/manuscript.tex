@@ -1,0 +1,158 @@
+%&pdflatex
+\documentclass[pdftex,preprint,3p,times,numbers]{elsarticle}
+
+\journal{Computer Physics Communications}
+
+%\usepackage{moreverb}
+
+\usepackage{hyperref}
+\hypersetup{pdfborder={0 0 0}}
+
+\usepackage{float}
+\usepackage{wrapfig}
+\usepackage{caption}
+\usepackage{subcaption}
+\usepackage{multirow}
+\graphicspath{{Figures/}}
+
+\usepackage[pdftex,usenames]{xcolor}
+
+\usepackage{booktabs}
+%\usepackage{colortbl}
+\usepackage{multirow}
+
+%\usepackage{amssymb}
+\usepackage[utf8x]{inputenc}
+\usepackage[T1]{fontenc}
+
+\usepackage{xspace}
+
+\usepackage{xcolor}
+\definecolor{Maroon}{cmyk}{0,0.87,0.68,0.32}
+\definecolor{RoyalBlue}{cmyk}{1,0.50,0,0}
+\definecolor{gray}{cmyk}{0.01,0.01,0.01,0.01}
+\usepackage{listings}
+\lstdefinelanguage{MyFortran}[95]{Fortran}{morecomment=[l]{\#},morestring=[d]',morekeywords={procedure,non_overridable,class,is}}
+\lstdefinestyle{code}{%
+  basicstyle=\footnotesize,%
+  backgroundcolor=\color{gray},%
+  language=MyFortran,%
+  captionpos=b,%
+  columns=fixed,%
+  xleftmargin=10pt,%
+  numbers=none,%
+  numberstyle={\tiny},%
+  keywordstyle=\color{RoyalBlue},%
+  stringstyle={\sffamily},%
+  texcl=true,%
+  upquote=true,%
+  commentstyle=\color{Maroon}%
+}
+
+\DeclareSymbolFont{extraup}{U}{zavm}{m}{n}
+\DeclareMathSymbol{\vardiamond}{\mathalpha}{extraup}{87}
+\definecolor{OMP}{RGB}{255,127,0}
+\definecolor{MPI}{RGB}{0,127,255}
+\definecolor{HYB}{RGB}{127,0,255}
+
+\DeclareGraphicsExtensions{.pdf,.png,.jpg,.bmp,.mps}
+\newcommand{\citeh}[1]{\citeauthor{#1} \citenum{#1}}
+
+\renewcommand{\thesubfigure}{\Alph{subfigure}}
+
+\begin{document}
+
+\begin{frontmatter}
+
+\title{FOODiE, Fortran Object oriented Ordinary Differential Equations integration library based on Abstract Calculus Pattern}
+
+\author[insean]{Zaghi S.\corref{cor1}\fnref{sz}}
+\ead{stefano.zaghi@cnr.it}
+\fntext[sz]{Ph. D., Aerospace Engineer, Research Scientist, Dept. of Computational Hydrodynamics at CNR-INSEAN.}
+\address[insean]{CNR-INSEAN, Istituto Nazionale per Studi ed Esperienze di Architettura Navale, Via di Vallerano 139, Rome, Italy, 00128}
+\cortext[cor1]{Corresponding author}
+
+\author[rsmas]{Curcic M.\fnref{mc}}
+\ead{milan@orca.rsmas.miami.edu}
+\fntext[mc]{Ph.D. Meteorology and Physical Oceanography, Research Scientist, Dept. of Ocean Sciences Rosenstiel School of Marine and Atmospheric Science at University of Miami}
+\address[rsmas]{Ocean Sciences Rosenstiel School of Marine and Atmospheric Science, University of Miami, 4600 Rickenbacker Causeway Miami, FL 33149-1098 +1 305.421.4000}
+
+\author[sourcery]{Rouson D.\fnref{dr}}
+\ead{damian@sourceryinstitute.org}
+\fntext[dr]{Ph.D. Mechanical Engineering, Founder and President Sourcery Institute and Sourcery, Inc.}
+\address[sourcery]{Sourcery Institute 482 Michigan Ave., Berkeley, CA 94707}
+
+\author[sourcery]{Beekman I.\fnref{iz}}
+\ead{izaak@izaakbeekman.com}
+\fntext[iz]{Graduate Research Assistant, Princeton/UMD CCROCCO LAB}
+
+\begin{abstract}
+To be written.
+\end{abstract}
+
+\begin{keyword}
+  Ordinary Differential Equations (ODE) \sep
+  Partial Differential Equations (PDE) \sep
+  Object Oriented Programming (OOP) \sep
+  Abstract Calculus Pattern (ACP) \sep
+  Fortran \sep
+\end{keyword}
+
+\end{frontmatter}
+
+{\bf PROGRAM SUMMARY}
+
+\begin{small}
+\noindent
+\emph{Manuscript Title:} FOODiE, Fortran Object oriented Ordinary Differential Equations integration library based on Abstract Calculus Pattern \\
+\emph{Authors:} Zaghi, S., Curcic, M., Rouson, D., Beekman, I. \\
+\emph{Program title:} FOODiE \\
+\emph{Journal Reference:} \\
+\emph{Catalogue identifier:} \\
+\emph{Licensing provisions:} GNU General Public License (GPL) v3 \\
+\emph{Programming language:} Fortran (standard 2008 or newer); developed and tested with GNU gfortran 5.2 or newer \\
+\emph{Computer(s) for which the program has been designed:} designed for shared-memory multi-cores workstations and for hybrid distributed/shared-memory supercomputers, but any computer system with a Fortran (2008+) compiler is suited \\
+\emph{Operating system(s) for which the program has been designed:} designed for POSIX architecture and tested on GNU/Linux one \\
+\emph{RAM required to execute with typical data: bytes:} $[1MB,1GB]\times core$, simulation-dependent \\
+\emph{Has the code been vectorised or parallelized?:} the library is not aware of the parallel back-end, it providing a high-level models, but the provided tests suite shows parallel usage by means of MPI library and OpenMP paradigm \\
+\emph{Number of processors used:} tested up to 256 \\
+\emph{Supplementary material:}    \\
+\emph{Keywords:} ODE, PDE, OOP, ACP, Fortran \\
+\emph{CPC Library Classification:} 4.3 Differential Equations, 4.10 Interpolation, 12 Gases and Fluids \\
+\emph{External routines/libraries used:} \\
+\emph{CPC Program Library subprograms used:} \\
+\emph{Nature of problem:} \\
+Numerical integration of (general) Ordinary Differential Equations system \\
+\emph{Solution method:} \\
+\emph{Restrictions:} \\
+\emph{Unusual features:} \\
+\emph{Additional comments:} \\
+\emph{Running time:} \\
+\emph{References:} \\
+% \begin{thebibliography}{0}
+% \end{thebibliography}
+\end{small}
+
+\section{Introduction}\label{sec:introduction}
+\subsection{Background}
+
+\subsection{Related Works}
+
+\subsection{Motivations and Aims}
+
+\subsection{General Description}
+
+\section{Mathematical and Numerical Models}\label{sec:MNmodels}
+
+\section{Application Program Interface}\label{sec:API}
+
+\section{Tests and Examples}\label{sec:Tests}
+
+\section{Ongoing Development Activities}\label{sec:ongoing}
+
+\section{Concluding Remarks and Perspectives}\label{sec:conclusions}
+
+\bibliographystyle{mycpc2}
+\bibliography{Reference}
+
+\end{document}
