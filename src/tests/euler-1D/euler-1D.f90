@@ -215,8 +215,9 @@ contains
   integer, parameter               :: ab_steps=3            !< Adams-Bashforth steps number.
   integer                          :: step                  !< Time steps counter.
   real(R_P)                        :: dt                    !< Time step.
-  real(R_P)                        :: t                     !< Time.
+  real(R_P)                        :: t(1:ab_steps)         !< Times.
   integer(I_P)                     :: s                     !< AB steps counter.
+  integer(I_P)                     :: ss                    !< AB substeps counter.
   !---------------------------------------------------------------------------------------------------------------------------------
 
   !---------------------------------------------------------------------------------------------------------------------------------
@@ -237,22 +238,30 @@ contains
     call save_time_serie(title='FOODiE test: 1D Euler equations integration, explicit Adams-Bashforth, t='//str(n=t_final)// &
                                trim(str(.true., s))//' steps', &
                          filename='euler_1D_integration-ab-'//trim(str(.true., s))//'-time_serie.dat', &
-                         t=t)
+                         t=t(s))
     step = 1
-    do while(t<t_final)
+    do while(t(s)<t_final)
       if (verbose) print "(A)", '    Time step: '//str(n=dt)//', Time: '//str(n=t)
-      dt = domain%dt(Nmax=0, Tmax=t_final, t=t, CFL=0.1_R_P*CFL)
-      if (s>step) then
+      dt = domain%dt(Nmax=0, Tmax=t_final, t=t(s), CFL=0.1_R_P*CFL)
+      if (s>=step) then
         ! the time steps from 1 to s - 1 must be computed with other scheme...
-        call rk_integrator%integrate(field=domain, stage=rk_stage(1:s), dt=dt)
+        call rk_integrator%integrate(field=domain, stage=rk_stage(1:s), dt=dt, t=t(s))
+        if (step>1) then
+          t(step) = t(step-1) + dt
+        else
+          t(step) = dt
+        endif
       else
-        call ab_integrator%integrate(field=domain, dt=dt)
+        call ab_integrator%integrate(field=domain, dt=dt, t=t)
+        do ss=1, s-1
+          t(ss) = t(ss + 1)
+        enddo
+        t(s) = t(s) + dt
       endif
-      t = t + dt
       step = step + 1
-      call save_time_serie(t=t)
+      call save_time_serie(t=t(s))
     enddo
-    call save_time_serie(t=t, finish=.true.)
+    call save_time_serie(t=t(s), finish=.true.)
     call save_results(title='FOODiE test: 1D Euler equations integration, explicit Adams-Bashforth, t='//str(n=t_final)// &
                             trim(str(.true., s))//' steps', &
                       filename='euler_1D_integration-ab-'//trim(str(.true., s)))
@@ -281,7 +290,7 @@ contains
   do while(t<t_final)
     if (verbose) print "(A)", '  Time step: '//str(n=dt)//', Time: '//str(n=t)
     dt = domain%dt(Nmax=0, Tmax=t_final, t=t, CFL=CFL)
-    call euler_integrator%integrate(field=domain, dt=dt)
+    call euler_integrator%integrate(field=domain, dt=dt, t=t)
     t = t + dt
     call save_time_serie(t=t)
   enddo
@@ -320,11 +329,11 @@ contains
   do while(t<t_final)
     if (verbose) print "(A)", '    Time step: '//str(n=dt)//', Time: '//str(n=t)
     dt = domain%dt(Nmax=0, Tmax=t_final, t=t, CFL=0.1_R_P*CFL)
-    if (2>step) then
+    if (2>=step) then
       ! the time steps from 1 to s - 1 must be computed with other scheme...
-      call rk_integrator%integrate(field=domain, stage=rk_stage, dt=dt)
+      call rk_integrator%integrate(field=domain, stage=rk_stage, dt=dt, t=t)
     else
-      call lf_integrator%integrate(field=domain, filter=filter, dt=dt)
+      call lf_integrator%integrate(field=domain, filter=filter, dt=dt, t=t)
     endif
     t = t + dt
     step = step + 1
@@ -375,7 +384,7 @@ contains
     do while(t<t_final)
       if (verbose) print "(A)", '    Time step: '//str(n=dt)//', Time: '//str(n=t)
       dt = domain%dt(Nmax=0, Tmax=t_final, t=t, CFL=CFL)
-      call rk_integrator%integrate(field=domain, stage=rk_stage, dt=dt)
+      call rk_integrator%integrate(field=domain, stage=rk_stage, dt=dt, t=t)
       t = t + dt
       call save_time_serie(t=t)
     enddo
@@ -423,7 +432,7 @@ contains
     do while(t<t_final)
       if (verbose) print "(A)", '    Time step: '//str(n=dt)//', Time: '//str(n=t)
       dt = domain%dt(Nmax=0, Tmax=t_final, t=t, CFL=CFL)
-      call rk_integrator%integrate(field=domain, stage=rk_stage(1:s), dt=dt)
+      call rk_integrator%integrate(field=domain, stage=rk_stage(1:s), dt=dt, t=t)
       t = t + dt
       call save_time_serie(t=t)
     enddo
