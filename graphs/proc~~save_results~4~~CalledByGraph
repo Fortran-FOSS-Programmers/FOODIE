@@ -5,14 +5,17 @@ digraph "proc~~save_results~4~~CalledByGraph" {
 		"proc~save_results~4" [label=save_results]
 		graph [concentrate=false]
 		"proc~test_ls_rk~3" [label=test_ls_rk URL="../proc/test_ls_rk%7E3.html" color="#d9534f" fontcolor=white style=filled]
+		"proc~test_tvd_rk~3" [label=test_tvd_rk URL="../proc/test_tvd_rk%7E3.html" color="#d9534f" fontcolor=white style=filled]
 		"proc~test_leapfrog~3" [label=test_leapfrog URL="../proc/test_leapfrog%7E3.html" color="#d9534f" fontcolor=white style=filled]
 		"proc~test_ab~3" [label=test_ab URL="../proc/test_ab%7E3.html" color="#d9534f" fontcolor=white style=filled]
-		"proc~test_tvd_rk~3" [label=test_tvd_rk URL="../proc/test_tvd_rk%7E3.html" color="#d9534f" fontcolor=white style=filled]
 		"proc~test_euler~3" [label=test_euler URL="../proc/test_euler%7E3.html" color="#d9534f" fontcolor=white style=filled]
 		graph [concentrate=false]
 		"program~integrate_lorenz" [label=integrate_lorenz URL="../program/integrate_lorenz.html" color="#f0ad4e" fontcolor=white style=filled]
 		graph [concentrate=false]
 			"program~integrate_lorenz" -> "proc~test_ls_rk~3"
+		graph [concentrate=false]
+		graph [concentrate=false]
+			"program~integrate_lorenz" -> "proc~test_tvd_rk~3"
 		graph [concentrate=false]
 		graph [concentrate=false]
 			"program~integrate_lorenz" -> "proc~test_leapfrog~3"
@@ -21,15 +24,12 @@ digraph "proc~~save_results~4~~CalledByGraph" {
 			"program~integrate_lorenz" -> "proc~test_ab~3"
 		graph [concentrate=false]
 		graph [concentrate=false]
-			"program~integrate_lorenz" -> "proc~test_tvd_rk~3"
-		graph [concentrate=false]
-		graph [concentrate=false]
 			"program~integrate_lorenz" -> "proc~test_euler~3"
 		graph [concentrate=false]
 			"proc~test_ls_rk~3" -> "proc~save_results~4"
+			"proc~test_tvd_rk~3" -> "proc~save_results~4"
 			"proc~test_leapfrog~3" -> "proc~save_results~4"
 			"proc~test_ab~3" -> "proc~save_results~4"
-			"proc~test_tvd_rk~3" -> "proc~save_results~4"
 			"proc~test_euler~3" -> "proc~save_results~4"
 		graph [concentrate=false]
 }

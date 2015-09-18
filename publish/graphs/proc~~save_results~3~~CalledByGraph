@@ -4,13 +4,16 @@ digraph "proc~~save_results~3~~CalledByGraph" {
 	edge [fontname=Helvetica fontsize=9.5]
 		"proc~save_results~3" [label=save_results]
 		graph [concentrate=false]
+		"proc~test_ls_rk~2" [label=test_ls_rk URL="../proc/test_ls_rk%7E2.html" color="#d9534f" fontcolor=white style=filled]
 		"proc~test_tvd_rk~2" [label=test_tvd_rk URL="../proc/test_tvd_rk%7E2.html" color="#d9534f" fontcolor=white style=filled]
 		"proc~test_leapfrog~2" [label=test_leapfrog URL="../proc/test_leapfrog%7E2.html" color="#d9534f" fontcolor=white style=filled]
 		"proc~test_ab~2" [label=test_ab URL="../proc/test_ab%7E2.html" color="#d9534f" fontcolor=white style=filled]
-		"proc~test_ls_rk~2" [label=test_ls_rk URL="../proc/test_ls_rk%7E2.html" color="#d9534f" fontcolor=white style=filled]
 		"proc~test_euler~2" [label=test_euler URL="../proc/test_euler%7E2.html" color="#d9534f" fontcolor=white style=filled]
 		graph [concentrate=false]
 		"program~integrate_euler_1d" [label=integrate_euler_1D URL="../program/integrate_euler_1d.html" color="#f0ad4e" fontcolor=white style=filled]
+		graph [concentrate=false]
+			"program~integrate_euler_1d" -> "proc~test_ls_rk~2"
+		graph [concentrate=false]
 		graph [concentrate=false]
 			"program~integrate_euler_1d" -> "proc~test_tvd_rk~2"
 		graph [concentrate=false]
@@ -21,15 +24,12 @@ digraph "proc~~save_results~3~~CalledByGraph" {
 			"program~integrate_euler_1d" -> "proc~test_ab~2"
 		graph [concentrate=false]
 		graph [concentrate=false]
-			"program~integrate_euler_1d" -> "proc~test_ls_rk~2"
-		graph [concentrate=false]
-		graph [concentrate=false]
 			"program~integrate_euler_1d" -> "proc~test_euler~2"
 		graph [concentrate=false]
+			"proc~test_ls_rk~2" -> "proc~save_results~3"
 			"proc~test_tvd_rk~2" -> "proc~save_results~3"
 			"proc~test_leapfrog~2" -> "proc~save_results~3"
 			"proc~test_ab~2" -> "proc~save_results~3"
-			"proc~test_ls_rk~2" -> "proc~save_results~3"
 			"proc~test_euler~2" -> "proc~save_results~3"
 		graph [concentrate=false]
 }
