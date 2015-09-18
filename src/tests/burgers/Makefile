@@ -9,7 +9,7 @@ LIB     = ../../lib
 	$(FC) -c $(FCFLAGS) -I$(INCLUDE) $<
 
 burgers: burgers.o
-	$(FC) burgers.f90 type_burgers.o $(LIB)/*.o $(FCFLAGS) -I$(INCLUDE) -o $@
+	$(FC) burgers.f90 type_burgers.o $(FCFLAGS) -I$(INCLUDE) -L$(LIB) -lfoodie -o $@
 
 burgers.o: burgers.f90 type_burgers.o
 type_burgers.o: type_burgers.f90
