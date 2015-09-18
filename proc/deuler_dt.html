@@ -395,7 +395,7 @@
     
     <div class="col-lg-9" id='text'>
     <h2>
-private purefunction dEuler_dt(self, n) result(dState_dt)
+private purefunction dEuler_dt(self, n, t) result(dState_dt)
     
     
     
@@ -447,6 +447,21 @@ private purefunction dEuler_dt(self, n) result(dState_dt)
   
 </tr>
 
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-t%7E25"></span>real(kind=R_P),</td>
+  <td>intent(in),</td>
+  <td>optional</td>
+  
+  <td></td><td>::</td>
+  <td><strong>t</strong></td><td><p>Time.</p></td>
+  
+</tr>
+
 </tbody>
 </table>
 
@@ -470,7 +485,7 @@ private purefunction dEuler_dt(self, n) result(dState_dt)
      
             <img class="depgraph" alt="dependency graph" src=../graphs/proc%7E%7Edeuler_dt%7E%7ECallsGraph.svg usemap="#proc~~deuler_dt~~CallsGraph">
             <map id="proc~~deuler_dt~~CallsGraph" name="proc~~deuler_dt~~CallsGraph">
-<area shape="rect" id="node3" href="../proc/p.html" title="p" alt="" coords="131,64,203,99"/>
+<area shape="rect" id="node4" href="../proc/p.html" title="p" alt="" coords="131,123,203,157"/>
 </map>
 
             <div><a type="button" class="graph-help" data-toggle="modal" href="#graph-help-text">Help</a></div>
@@ -670,12 +685,13 @@ implementation in a submodule of an interface in a parent module.</p>
     
     <section>
     <h2><span class="anchor" id="src"></span>Source Code</h2>
-    <div class="highlight"><pre>  <span class="k">pure function </span><span class="n">dEuler_dt</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">n</span><span class="p">)</span> <span class="k">result</span><span class="p">(</span><span class="n">dState_dt</span><span class="p">)</span>
+    <div class="highlight"><pre>  <span class="k">pure function </span><span class="n">dEuler_dt</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">n</span><span class="p">,</span> <span class="n">t</span><span class="p">)</span> <span class="k">result</span><span class="p">(</span><span class="n">dState_dt</span><span class="p">)</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
   <span class="c">!&lt; Time derivative of Euler field, the residuals function.</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
   <span class="k">class</span><span class="p">(</span><span class="n">euler_1D</span><span class="p">),</span>        <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span> <span class="kd">::</span> <span class="n">self</span>      <span class="c">!&lt; Euler field.</span>
   <span class="kt">integer</span><span class="p">(</span><span class="n">I_P</span><span class="p">),</span> <span class="k">optional</span><span class="p">,</span> <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span> <span class="kd">::</span> <span class="n">n</span>         <span class="c">!&lt; Time level.</span>
+  <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">),</span>    <span class="k">optional</span><span class="p">,</span> <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span> <span class="kd">::</span> <span class="n">t</span>         <span class="c">!&lt; Time.</span>
   <span class="k">class</span><span class="p">(</span><span class="n">integrand</span><span class="p">),</span> <span class="k">allocatable</span>      <span class="kd">::</span> <span class="n">dState_dt</span> <span class="c">!&lt; Euler field time derivative.</span>
   <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">),</span> <span class="k">allocatable</span>             <span class="kd">::</span> <span class="n">F</span><span class="p">(:,:)</span>    <span class="c">!&lt; Fluxes of conservative variables.</span>
   <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">),</span> <span class="k">allocatable</span>             <span class="kd">::</span> <span class="n">P</span><span class="p">(:,:)</span>    <span class="c">!&lt; Primitive variables.</span>

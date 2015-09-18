@@ -10,7 +10,7 @@ module foodie_integrator_leapfrog
 !< where \(U_t = \frac{dU}{dt}\), *U* is the vector of *state* variables being a function of the time-like independent variable
 !< *t*, *R* is the (vectorial) residual function, the leapfrog class scheme implemented (see [3]) is:
 !<
-!< $$ U^{n+2} = U^{n-1} + 2\Delta t \cdot R(t^{n}, U^{n}) $$
+!< $$ U^{n+2} = U^{n} + 2\Delta t \cdot R(t^{n+1}, U^{n+1}) $$
 !<
 !< Optionally, the Robert-Asselin-Williams (RAW) filter (see [3]) is applied to the computed integration steps:
 !< $$ \Delta = \frac{\nu}{2}(U^{n} - 2 U^{n+1} + U^{n+2}) $$
@@ -81,18 +81,19 @@ contains
   !---------------------------------------------------------------------------------------------------------------------------------
   endsubroutine init
 
-  subroutine integrate(self, field, filter, dt)
+  subroutine integrate(self, field, filter, Dt, t)
   !---------------------------------------------------------------------------------------------------------------------------------
   !< Integrate field with leapfrog class scheme.
   !---------------------------------------------------------------------------------------------------------------------------------
   class(leapfrog_integrator), intent(IN)    :: self   !< LF integrator.
   class(integrand),           intent(INOUT) :: field  !< Field to be integrated.
   class(integrand), optional, intent(INOUT) :: filter !< Filter field displacement.
-  real(R_P),                  intent(in)    :: dt     !< Time step.
+  real(R_P),                  intent(in)    :: Dt     !< Time step.
+  real(R_P),                  intent(IN)    :: t      !< Time.
   !---------------------------------------------------------------------------------------------------------------------------------
 
   !---------------------------------------------------------------------------------------------------------------------------------
-  field = field%previous_step(n=1) + field%t(n=2) * (dt * 2._R_P)
+  field = field%previous_step(n=1) + field%t(n=2, t=t) * (Dt * 2._R_P)
   if (present(filter)) then
     filter = (field%previous_step(n=1) - field%previous_step(n=2) * 2._R_P + field) * self%nu * 0.5_R_P
   endif

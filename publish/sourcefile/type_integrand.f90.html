@@ -243,13 +243,14 @@
 
 <span class="k">abstract interface</span>
   <span class="c">!&lt; Abstract type bound procedures necessary for implementing a concrete extension of the class(integrand).</span>
-  <span class="k">pure function </span><span class="n">time_derivative</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">n</span><span class="p">)</span> <span class="k">result</span><span class="p">(</span><span class="n">dState_dt</span><span class="p">)</span>
+  <span class="k">pure function </span><span class="n">time_derivative</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">n</span><span class="p">,</span> <span class="n">t</span><span class="p">)</span> <span class="k">result</span><span class="p">(</span><span class="n">dState_dt</span><span class="p">)</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
   <span class="c">!&lt; Time derivative function of integrand class, i.e. the residuals function.</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
-  <span class="k">import</span> <span class="kd">::</span> <span class="n">integrand</span><span class="p">,</span> <span class="n">I_P</span>
+  <span class="k">import</span> <span class="kd">::</span> <span class="n">integrand</span><span class="p">,</span> <span class="n">R_P</span><span class="p">,</span> <span class="n">I_P</span>
   <span class="k">class</span><span class="p">(</span><span class="n">integrand</span><span class="p">),</span>       <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span> <span class="kd">::</span> <span class="n">self</span>      <span class="c">!&lt; Integrand field.</span>
   <span class="kt">integer</span><span class="p">(</span><span class="n">I_P</span><span class="p">),</span> <span class="k">optional</span><span class="p">,</span> <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span> <span class="kd">::</span> <span class="n">n</span>         <span class="c">!&lt; Time level.</span>
+  <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">),</span>    <span class="k">optional</span><span class="p">,</span> <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span> <span class="kd">::</span> <span class="n">t</span>         <span class="c">!&lt; Time.</span>
   <span class="k">class</span><span class="p">(</span><span class="n">integrand</span><span class="p">),</span> <span class="k">allocatable</span>      <span class="kd">::</span> <span class="n">dState_dt</span> <span class="c">!&lt; Result of the time derivative function of integrand field.</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
   <span class="n">endfunction</span> <span class="n">time_derivative</span>

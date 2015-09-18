@@ -140,9 +140,9 @@
       
       <a class="list-group-item" href="../proc/test_ab%7E4.html#variable-ab_steps%7E4">ab_steps</a>
       
-      <a class="list-group-item" href="../proc/test_ab%7E4.html#variable-s%7E21">s</a>
-      
       <a class="list-group-item" href="../proc/test_ab%7E4.html#variable-step%7E10">step</a>
+      
+      <a class="list-group-item" href="../proc/test_ab%7E4.html#variable-s%7E21">s</a>
       
     </div>
   </div>
@@ -706,11 +706,11 @@ implementation in a submodule of an interface in a parent module.</p>
   
 <tr>
   
-  <td><span class="anchor" id="variable-s%7E21"></span>integer(kind=I_P),</td>
+  <td><span class="anchor" id="variable-step%7E10"></span>integer,</td>
   
   <td>public</td>
   <td></td><td>::</td>
-  <td><strong>s</strong></td><td></td><td></td><td><p>AB steps counter.</p></td>
+  <td><strong>step</strong></td><td></td><td></td><td><p>Time steps counter.</p></td>
   
 </tr>
 
@@ -720,11 +720,11 @@ implementation in a submodule of an interface in a parent module.</p>
   
 <tr>
   
-  <td><span class="anchor" id="variable-step%7E10"></span>integer,</td>
+  <td><span class="anchor" id="variable-s%7E21"></span>integer(kind=I_P),</td>
   
   <td>public</td>
   <td></td><td>::</td>
-  <td><strong>step</strong></td><td></td><td></td><td><p>Time steps counter.</p></td>
+  <td><strong>s</strong></td><td></td><td></td><td><p>AB steps counter.</p></td>
   
 </tr>
 
@@ -758,8 +758,8 @@ implementation in a submodule of an interface in a parent module.</p>
   <span class="k">type</span><span class="p">(</span><span class="n">oscillation</span><span class="p">)</span>                <span class="kd">::</span> <span class="n">rk_stage</span><span class="p">(</span><span class="mi">1</span><span class="p">:</span><span class="n">rk_stages</span><span class="p">)</span> <span class="c">!&lt; Runge-Kutta stages.</span>
   <span class="k">type</span><span class="p">(</span><span class="n">adams_bashforth_integrator</span><span class="p">)</span> <span class="kd">::</span> <span class="n">ab_integrator</span>         <span class="c">!&lt; Adams-Bashforth integrator.</span>
   <span class="kt">integer</span><span class="p">,</span> <span class="k">parameter</span>               <span class="kd">::</span> <span class="n">ab_steps</span><span class="o">=</span><span class="mi">3</span>            <span class="c">!&lt; Adams-Bashforth steps number.</span>
-  <span class="kt">integer</span><span class="p">(</span><span class="n">I_P</span><span class="p">)</span>                     <span class="kd">::</span> <span class="n">s</span>                     <span class="c">!&lt; AB steps counter.</span>
   <span class="kt">integer</span>                          <span class="kd">::</span> <span class="n">step</span>                  <span class="c">!&lt; Time steps counter.</span>
+  <span class="kt">integer</span><span class="p">(</span><span class="n">I_P</span><span class="p">)</span>                     <span class="kd">::</span> <span class="n">s</span>                     <span class="c">!&lt; AB steps counter.</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
 
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
@@ -772,11 +772,11 @@ implementation in a submodule of an interface in a parent module.</p>
     <span class="n">solution</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span> <span class="o">=</span> <span class="mf">0._R_P</span>
     <span class="n">solution</span><span class="p">(</span><span class="mi">1</span><span class="p">:</span><span class="n">space_dimension</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span> <span class="o">=</span> <span class="n">attractor</span><span class="p">%</span><span class="n">output</span><span class="p">()</span>
     <span class="k">do </span><span class="n">step</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span> <span class="n">num_steps</span>
-      <span class="k">if</span> <span class="p">(</span><span class="n">s</span><span class="o">&gt;</span><span class="n">step</span><span class="p">)</span> <span class="k">then</span>
+      <span class="k">if</span> <span class="p">(</span><span class="n">s</span><span class="o">&gt;=</span><span class="n">step</span><span class="p">)</span> <span class="k">then</span>
         <span class="c">! the time steps from 1 to s - 1 must be computed with other scheme...</span>
-        <span class="k">call </span><span class="n">rk_integrator</span><span class="p">%</span><span class="n">integrate</span><span class="p">(</span><span class="n">field</span><span class="o">=</span><span class="n">attractor</span><span class="p">,</span> <span class="n">stage</span><span class="o">=</span><span class="n">rk_stage</span><span class="p">(</span><span class="mi">1</span><span class="p">:</span><span class="n">s</span><span class="p">),</span> <span class="n">dt</span><span class="o">=</span><span class="n">dt</span><span class="p">)</span>
+        <span class="k">call </span><span class="n">rk_integrator</span><span class="p">%</span><span class="n">integrate</span><span class="p">(</span><span class="n">field</span><span class="o">=</span><span class="n">attractor</span><span class="p">,</span> <span class="n">stage</span><span class="o">=</span><span class="n">rk_stage</span><span class="p">(</span><span class="mi">1</span><span class="p">:</span><span class="n">s</span><span class="p">),</span> <span class="n">dt</span><span class="o">=</span><span class="n">dt</span><span class="p">,</span> <span class="n">t</span><span class="o">=</span><span class="n">solution</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">step</span><span class="p">))</span>
       <span class="k">else</span>
-<span class="k">        call </span><span class="n">ab_integrator</span><span class="p">%</span><span class="n">integrate</span><span class="p">(</span><span class="n">field</span><span class="o">=</span><span class="n">attractor</span><span class="p">,</span> <span class="n">dt</span><span class="o">=</span><span class="n">dt</span><span class="p">)</span>
+<span class="k">        call </span><span class="n">ab_integrator</span><span class="p">%</span><span class="n">integrate</span><span class="p">(</span><span class="n">field</span><span class="o">=</span><span class="n">attractor</span><span class="p">,</span> <span class="n">dt</span><span class="o">=</span><span class="n">dt</span><span class="p">,</span> <span class="n">t</span><span class="o">=</span><span class="n">solution</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">step</span><span class="o">-</span><span class="n">s</span><span class="p">:</span><span class="n">step</span><span class="o">-</span><span class="mi">1</span><span class="p">))</span>
       <span class="n">endif</span>
       <span class="n">solution</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">step</span><span class="p">)</span> <span class="o">=</span> <span class="n">step</span> <span class="o">*</span> <span class="n">dt</span>
       <span class="n">solution</span><span class="p">(</span><span class="mi">1</span><span class="p">:</span><span class="n">space_dimension</span><span class="p">,</span> <span class="n">step</span><span class="p">)</span> <span class="o">=</span> <span class="n">attractor</span><span class="p">%</span><span class="n">output</span><span class="p">()</span>

@@ -247,14 +247,14 @@
     
             <img class="depgraph" alt="dependency graph" src=../graphs/program%7E%7Eintegrate_burgers%7E%7EUsesGraph.svg usemap="#program~~integrate_burgers~~UsesGraph">
             <map id="program~~integrate_burgers~~UsesGraph" name="program~~integrate_burgers~~UsesGraph">
-<area shape="rect" id="node6" href="../module/type_burgers.html" title="type_burgers" alt="" coords="598,117,670,141"/>
-<area shape="rect" id="node7" href="../module/foodie_integrator_leapfrog.html" title="foodie_integrator_leapfrog" alt="" coords="257,76,386,100"/>
-<area shape="rect" id="node8" href="../module/foodie_integrator_low_storage_runge_kutta.html" title="foodie_integrator_low_storage_runge_kutta" alt="" coords="219,117,425,141"/>
-<area shape="rect" id="node9" href="../module/foodie_integrator_tvd_runge_kutta.html" title="foodie_integrator_tvd_runge_kutta" alt="" coords="239,193,404,218"/>
-<area shape="rect" id="node10" href="../module/type_integrand.html" title="type_integrand" alt="" coords="107,136,185,161"/>
-<area shape="rect" id="node11" href="../module/foodie_integrator_adams_bashforth.html" title="foodie_integrator_adams_bashforth" alt="" coords="237,235,407,259"/>
-<area shape="rect" id="node12" href="../module/foodie_integrator_euler_explicit.html" title="foodie_integrator_euler_explicit" alt="" coords="246,35,397,59"/>
-<area shape="rect" id="node3" href="../module/foodie.html" title="foodie" alt="" coords="458,117,509,141"/>
+<area shape="rect" id="node4" href="../module/type_burgers.html" title="type_burgers" alt="" coords="598,133,670,157"/>
+<area shape="rect" id="node7" href="../module/foodie_integrator_tvd_runge_kutta.html" title="foodie_integrator_tvd_runge_kutta" alt="" coords="239,92,404,116"/>
+<area shape="rect" id="node8" href="../module/type_integrand.html" title="type_integrand" alt="" coords="107,153,185,177"/>
+<area shape="rect" id="node9" href="../module/foodie_integrator_adams_bashforth.html" title="foodie_integrator_adams_bashforth" alt="" coords="237,133,407,157"/>
+<area shape="rect" id="node10" href="../module/foodie_integrator_euler_explicit.html" title="foodie_integrator_euler_explicit" alt="" coords="246,210,397,234"/>
+<area shape="rect" id="node11" href="../module/foodie_integrator_leapfrog.html" title="foodie_integrator_leapfrog" alt="" coords="257,251,386,275"/>
+<area shape="rect" id="node12" href="../module/foodie_integrator_low_storage_runge_kutta.html" title="foodie_integrator_low_storage_runge_kutta" alt="" coords="219,51,425,75"/>
+<area shape="rect" id="node3" href="../module/foodie.html" title="foodie" alt="" coords="458,133,509,157"/>
 </map>
 
             <div><a type="button" class="graph-help" data-toggle="modal" href="#graph-help-text">Help</a></div>
@@ -354,13 +354,13 @@ implementation in a submodule of an interface in a parent module.</p>
      
             <img class="depgraph" alt="dependency graph" src=../graphs/program%7E%7Eintegrate_burgers%7E%7ECallsGraph.svg usemap="#program~~integrate_burgers~~CallsGraph">
             <map id="program~~integrate_burgers~~CallsGraph" name="program~~integrate_burgers~~CallsGraph">
-<area shape="rect" id="node2" href="../proc/test_ls_rk.html" title="test_ls_rk" alt="" coords="196,240,273,275"/>
-<area shape="rect" id="node3" href="../proc/test_tvd_rk.html" title="test_tvd_rk" alt="" coords="192,5,277,40"/>
-<area shape="rect" id="node4" href="../proc/test_ab.html" title="test_ab" alt="" coords="199,64,271,99"/>
-<area shape="rect" id="node5" href="../proc/test_euler.html" title="test_euler" alt="" coords="195,123,275,157"/>
-<area shape="rect" id="node6" href="../proc/init%7E5.html" title="init" alt="" coords="199,299,271,333"/>
-<area shape="rect" id="node7" href="../proc/test_leapfrog.html" title="test_leapfrog" alt="" coords="185,181,284,216"/>
-<area shape="rect" id="node9" href="../proc/save_results.html" title="save_results" alt="" coords="335,152,431,187"/>
+<area shape="rect" id="node2" href="../proc/init%7E5.html" title="init" alt="" coords="199,5,271,40"/>
+<area shape="rect" id="node3" href="../proc/test_tvd_rk.html" title="test_tvd_rk" alt="" coords="192,299,277,333"/>
+<area shape="rect" id="node4" href="../proc/test_leapfrog.html" title="test_leapfrog" alt="" coords="185,64,284,99"/>
+<area shape="rect" id="node5" href="../proc/test_ls_rk.html" title="test_ls_rk" alt="" coords="196,123,273,157"/>
+<area shape="rect" id="node6" href="../proc/test_ab.html" title="test_ab" alt="" coords="199,181,271,216"/>
+<area shape="rect" id="node7" href="../proc/test_euler.html" title="test_euler" alt="" coords="195,240,275,275"/>
+<area shape="rect" id="node9" href="../proc/save_results.html" title="save_results" alt="" coords="335,211,431,245"/>
 </map>
 
             <div><a type="button" class="graph-help" data-toggle="modal" href="#graph-help-text">Help</a></div>
@@ -1092,8 +1092,9 @@ subroutine <a href='../proc/test_tvd_rk.html'>test_tvd_rk</a>()
   <span class="kt">integer</span><span class="p">,</span> <span class="k">parameter</span>               <span class="kd">::</span> <span class="n">ab_steps</span><span class="o">=</span><span class="mi">3</span>            <span class="c">!&lt; Adams-Bashforth steps number.</span>
   <span class="kt">integer</span>                          <span class="kd">::</span> <span class="n">step</span>                  <span class="c">!&lt; Time steps counter.</span>
   <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">)</span>                        <span class="kd">::</span> <span class="n">dt</span>                    <span class="c">!&lt; Time step.</span>
-  <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">)</span>                        <span class="kd">::</span> <span class="n">t</span>                     <span class="c">!&lt; Time.</span>
+  <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">)</span>                        <span class="kd">::</span> <span class="n">t</span><span class="p">(</span><span class="mi">1</span><span class="p">:</span><span class="n">ab_steps</span><span class="p">)</span>         <span class="c">!&lt; Times.</span>
   <span class="kt">integer</span><span class="p">(</span><span class="n">I_P</span><span class="p">)</span>                     <span class="kd">::</span> <span class="n">s</span>                     <span class="c">!&lt; AB steps counter.</span>
+  <span class="kt">integer</span><span class="p">(</span><span class="n">I_P</span><span class="p">)</span>                     <span class="kd">::</span> <span class="n">ss</span>                    <span class="c">!&lt; AB substeps counter.</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
 
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
@@ -1106,14 +1107,22 @@ subroutine <a href='../proc/test_tvd_rk.html'>test_tvd_rk</a>()
     <span class="n">dt</span> <span class="o">=</span> <span class="n">domain</span><span class="p">%</span><span class="n">dt</span><span class="p">(</span><span class="n">CFL</span><span class="o">=</span><span class="n">CFL</span><span class="p">)</span>
     <span class="n">t</span> <span class="o">=</span> <span class="mf">0._R_P</span>
     <span class="n">step</span> <span class="o">=</span> <span class="mi">1</span>
-    <span class="k">do while</span><span class="p">(</span><span class="n">t</span><span class="o">&lt;</span><span class="n">t_final</span><span class="p">)</span>
-      <span class="k">if</span> <span class="p">(</span><span class="n">s</span><span class="o">&gt;</span><span class="n">step</span><span class="p">)</span> <span class="k">then</span>
+    <span class="k">do while</span><span class="p">(</span><span class="n">t</span><span class="p">(</span><span class="n">s</span><span class="p">)</span><span class="o">&lt;</span><span class="n">t_final</span><span class="p">)</span>
+      <span class="k">if</span> <span class="p">(</span><span class="n">s</span><span class="o">&gt;=</span><span class="n">step</span><span class="p">)</span> <span class="k">then</span>
         <span class="c">! the time steps from 1 to s - 1 must be computed with other scheme...</span>
-        <span class="k">call </span><span class="n">rk_integrator</span><span class="p">%</span><span class="n">integrate</span><span class="p">(</span><span class="n">field</span><span class="o">=</span><span class="n">domain</span><span class="p">,</span> <span class="n">stage</span><span class="o">=</span><span class="n">rk_stage</span><span class="p">(</span><span class="mi">1</span><span class="p">:</span><span class="n">s</span><span class="p">),</span> <span class="n">dt</span><span class="o">=</span><span class="n">dt</span><span class="p">)</span>
+        <span class="k">call </span><span class="n">rk_integrator</span><span class="p">%</span><span class="n">integrate</span><span class="p">(</span><span class="n">field</span><span class="o">=</span><span class="n">domain</span><span class="p">,</span> <span class="n">stage</span><span class="o">=</span><span class="n">rk_stage</span><span class="p">(</span><span class="mi">1</span><span class="p">:</span><span class="n">s</span><span class="p">),</span> <span class="n">dt</span><span class="o">=</span><span class="n">dt</span><span class="p">,</span> <span class="n">t</span><span class="o">=</span><span class="n">t</span><span class="p">(</span><span class="n">s</span><span class="p">))</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">step</span><span class="o">&gt;</span><span class="mi">1</span><span class="p">)</span> <span class="k">then</span>
+<span class="k">          </span><span class="n">t</span><span class="p">(</span><span class="n">step</span><span class="p">)</span> <span class="o">=</span> <span class="n">t</span><span class="p">(</span><span class="n">step</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="o">+</span> <span class="n">dt</span>
+        <span class="k">else</span>
+<span class="k">          </span><span class="n">t</span><span class="p">(</span><span class="n">step</span><span class="p">)</span> <span class="o">=</span> <span class="n">dt</span>
+        <span class="n">endif</span>
       <span class="k">else</span>
-<span class="k">        call </span><span class="n">ab_integrator</span><span class="p">%</span><span class="n">integrate</span><span class="p">(</span><span class="n">field</span><span class="o">=</span><span class="n">domain</span><span class="p">,</span> <span class="n">dt</span><span class="o">=</span><span class="n">dt</span><span class="p">)</span>
+<span class="k">        call </span><span class="n">ab_integrator</span><span class="p">%</span><span class="n">integrate</span><span class="p">(</span><span class="n">field</span><span class="o">=</span><span class="n">domain</span><span class="p">,</span> <span class="n">dt</span><span class="o">=</span><span class="n">dt</span><span class="p">,</span> <span class="n">t</span><span class="o">=</span><span class="n">t</span><span class="p">)</span>
+        <span class="k">do </span><span class="n">ss</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">s</span><span class="o">-</span><span class="mi">1</span>
+          <span class="n">t</span><span class="p">(</span><span class="n">ss</span><span class="p">)</span> <span class="o">=</span> <span class="n">t</span><span class="p">(</span><span class="n">ss</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="n">enddo</span>
+        <span class="n">t</span><span class="p">(</span><span class="n">s</span><span class="p">)</span> <span class="o">=</span> <span class="n">t</span><span class="p">(</span><span class="n">s</span><span class="p">)</span> <span class="o">+</span> <span class="n">dt</span>
       <span class="n">endif</span>
-      <span class="n">t</span> <span class="o">=</span> <span class="n">t</span> <span class="o">+</span> <span class="n">dt</span>
       <span class="n">step</span> <span class="o">=</span> <span class="n">step</span> <span class="o">+</span> <span class="mi">1</span>
     <span class="n">enddo</span>
     <span class="n">final_state</span> <span class="o">=</span> <span class="n">domain</span><span class="p">%</span><span class="n">output</span><span class="p">()</span>
@@ -1141,7 +1150,7 @@ subroutine <a href='../proc/test_tvd_rk.html'>test_tvd_rk</a>()
   <span class="n">dt</span> <span class="o">=</span> <span class="n">domain</span><span class="p">%</span><span class="n">dt</span><span class="p">(</span><span class="n">CFL</span><span class="o">=</span><span class="n">CFL</span><span class="p">)</span>
   <span class="n">t</span> <span class="o">=</span> <span class="mf">0._R_P</span>
   <span class="k">do while</span><span class="p">(</span><span class="n">t</span><span class="o">&lt;</span><span class="n">t_final</span><span class="p">)</span>
-    <span class="k">call </span><span class="n">euler_integrator</span><span class="p">%</span><span class="n">integrate</span><span class="p">(</span><span class="n">field</span><span class="o">=</span><span class="n">domain</span><span class="p">,</span> <span class="n">dt</span><span class="o">=</span><span class="n">dt</span><span class="p">)</span>
+    <span class="k">call </span><span class="n">euler_integrator</span><span class="p">%</span><span class="n">integrate</span><span class="p">(</span><span class="n">field</span><span class="o">=</span><span class="n">domain</span><span class="p">,</span> <span class="n">dt</span><span class="o">=</span><span class="n">dt</span><span class="p">,</span> <span class="n">t</span><span class="o">=</span><span class="n">t</span><span class="p">)</span>
     <span class="n">t</span> <span class="o">=</span> <span class="n">t</span> <span class="o">+</span> <span class="n">dt</span>
   <span class="n">enddo</span>
   <span class="n">final_state</span> <span class="o">=</span> <span class="n">domain</span><span class="p">%</span><span class="n">output</span><span class="p">()</span>
@@ -1175,11 +1184,11 @@ subroutine <a href='../proc/test_tvd_rk.html'>test_tvd_rk</a>()
   <span class="n">t</span> <span class="o">=</span> <span class="mf">0._R_P</span>
   <span class="n">step</span> <span class="o">=</span> <span class="mi">1</span>
   <span class="k">do while</span><span class="p">(</span><span class="n">t</span><span class="o">&lt;</span><span class="n">t_final</span><span class="p">)</span>
-    <span class="k">if</span> <span class="p">(</span><span class="mi">2</span><span class="o">&gt;</span><span class="n">step</span><span class="p">)</span> <span class="k">then</span>
+    <span class="k">if</span> <span class="p">(</span><span class="mi">2</span><span class="o">&gt;=</span><span class="n">step</span><span class="p">)</span> <span class="k">then</span>
       <span class="c">! the time steps from 1 to 2 must be computed with other scheme...</span>
-      <span class="k">call </span><span class="n">rk_integrator</span><span class="p">%</span><span class="n">integrate</span><span class="p">(</span><span class="n">field</span><span class="o">=</span><span class="n">domain</span><span class="p">,</span> <span class="n">stage</span><span class="o">=</span><span class="n">rk_stage</span><span class="p">,</span> <span class="n">dt</span><span class="o">=</span><span class="n">dt</span><span class="p">)</span>
+      <span class="k">call </span><span class="n">rk_integrator</span><span class="p">%</span><span class="n">integrate</span><span class="p">(</span><span class="n">field</span><span class="o">=</span><span class="n">domain</span><span class="p">,</span> <span class="n">stage</span><span class="o">=</span><span class="n">rk_stage</span><span class="p">,</span> <span class="n">dt</span><span class="o">=</span><span class="n">dt</span><span class="p">,</span> <span class="n">t</span><span class="o">=</span><span class="n">t</span><span class="p">)</span>
     <span class="k">else</span>
-<span class="k">      call </span><span class="n">lf_integrator</span><span class="p">%</span><span class="n">integrate</span><span class="p">(</span><span class="n">field</span><span class="o">=</span><span class="n">domain</span><span class="p">,</span> <span class="n">filter</span><span class="o">=</span><span class="n">filter</span><span class="p">,</span> <span class="n">dt</span><span class="o">=</span><span class="n">dt</span><span class="p">)</span>
+<span class="k">      call </span><span class="n">lf_integrator</span><span class="p">%</span><span class="n">integrate</span><span class="p">(</span><span class="n">field</span><span class="o">=</span><span class="n">domain</span><span class="p">,</span> <span class="n">filter</span><span class="o">=</span><span class="n">filter</span><span class="p">,</span> <span class="n">dt</span><span class="o">=</span><span class="n">dt</span><span class="p">,</span> <span class="n">t</span><span class="o">=</span><span class="n">t</span><span class="p">)</span>
     <span class="n">endif</span>
     <span class="n">t</span> <span class="o">=</span> <span class="n">t</span> <span class="o">+</span> <span class="n">dt</span>
     <span class="n">step</span> <span class="o">=</span> <span class="n">step</span> <span class="o">+</span> <span class="mi">1</span>
@@ -1217,7 +1226,7 @@ subroutine <a href='../proc/test_tvd_rk.html'>test_tvd_rk</a>()
     <span class="n">dt</span> <span class="o">=</span> <span class="n">domain</span><span class="p">%</span><span class="n">dt</span><span class="p">(</span><span class="n">CFL</span><span class="o">=</span><span class="n">CFL</span><span class="p">)</span>
     <span class="n">t</span> <span class="o">=</span> <span class="mf">0._R_P</span>
     <span class="k">do while</span><span class="p">(</span><span class="n">t</span><span class="o">&lt;</span><span class="n">t_final</span><span class="p">)</span>
-      <span class="k">call </span><span class="n">rk_integrator</span><span class="p">%</span><span class="n">integrate</span><span class="p">(</span><span class="n">field</span><span class="o">=</span><span class="n">domain</span><span class="p">,</span> <span class="n">stage</span><span class="o">=</span><span class="n">rk_stage</span><span class="p">,</span> <span class="n">dt</span><span class="o">=</span><span class="n">dt</span><span class="p">)</span>
+      <span class="k">call </span><span class="n">rk_integrator</span><span class="p">%</span><span class="n">integrate</span><span class="p">(</span><span class="n">field</span><span class="o">=</span><span class="n">domain</span><span class="p">,</span> <span class="n">stage</span><span class="o">=</span><span class="n">rk_stage</span><span class="p">,</span> <span class="n">dt</span><span class="o">=</span><span class="n">dt</span><span class="p">,</span> <span class="n">t</span><span class="o">=</span><span class="n">t</span><span class="p">)</span>
       <span class="n">t</span> <span class="o">=</span> <span class="n">t</span> <span class="o">+</span> <span class="n">dt</span>
     <span class="n">enddo</span>
     <span class="n">final_state</span> <span class="o">=</span> <span class="n">domain</span><span class="p">%</span><span class="n">output</span><span class="p">()</span>
@@ -1252,7 +1261,7 @@ subroutine <a href='../proc/test_tvd_rk.html'>test_tvd_rk</a>()
     <span class="n">dt</span> <span class="o">=</span> <span class="n">domain</span><span class="p">%</span><span class="n">dt</span><span class="p">(</span><span class="n">CFL</span><span class="o">=</span><span class="n">CFL</span><span class="p">)</span>
     <span class="n">t</span> <span class="o">=</span> <span class="mf">0._R_P</span>
     <span class="k">do while</span><span class="p">(</span><span class="n">t</span><span class="o">&lt;</span><span class="n">t_final</span><span class="p">)</span>
-      <span class="k">call </span><span class="n">rk_integrator</span><span class="p">%</span><span class="n">integrate</span><span class="p">(</span><span class="n">field</span><span class="o">=</span><span class="n">domain</span><span class="p">,</span> <span class="n">stage</span><span class="o">=</span><span class="n">rk_stage</span><span class="p">(</span><span class="mi">1</span><span class="p">:</span><span class="n">s</span><span class="p">),</span> <span class="n">dt</span><span class="o">=</span><span class="n">dt</span><span class="p">)</span>
+      <span class="k">call </span><span class="n">rk_integrator</span><span class="p">%</span><span class="n">integrate</span><span class="p">(</span><span class="n">field</span><span class="o">=</span><span class="n">domain</span><span class="p">,</span> <span class="n">stage</span><span class="o">=</span><span class="n">rk_stage</span><span class="p">(</span><span class="mi">1</span><span class="p">:</span><span class="n">s</span><span class="p">),</span> <span class="n">dt</span><span class="o">=</span><span class="n">dt</span><span class="p">,</span> <span class="n">t</span><span class="o">=</span><span class="n">t</span><span class="p">)</span>
       <span class="n">t</span> <span class="o">=</span> <span class="n">t</span> <span class="o">+</span> <span class="n">dt</span>
     <span class="n">enddo</span>
     <span class="n">final_state</span> <span class="o">=</span> <span class="n">domain</span><span class="p">%</span><span class="n">output</span><span class="p">()</span>

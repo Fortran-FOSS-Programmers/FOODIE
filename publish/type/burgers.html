@@ -645,7 +645,7 @@ private subroutine <a href='../proc/init%7E6.html'>init</a>(self, initial_state,
          
     
     <h3>
-private function <a href='../proc/output.html'>output</a>(self) result(state)
+private purefunction <a href='../proc/output.html'>output</a>(self) result(state)
     
     
     
@@ -832,7 +832,7 @@ private purefunction <a href='../proc/compute_dt.html'>compute_dt</a>(self, CFL)
          
     
     <h3>
-private purefunction <a href='../proc/dburgers_dt.html'>dBurgers_dt</a>(self, n) result(dState_dt)
+private purefunction <a href='../proc/dburgers_dt.html'>dBurgers_dt</a>(self, n, t) result(dState_dt)
     
     
     
@@ -878,6 +878,21 @@ private purefunction <a href='../proc/dburgers_dt.html'>dBurgers_dt</a>(self, n)
   
   <td></td><td>::</td>
   <td><strong>n</strong></td><td><p>Time level.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>real(kind=R_P),</td>
+  <td>intent(in),</td>
+  <td>optional</td>
+  
+  <td></td><td>::</td>
+  <td><strong>t</strong></td><td><p>Time.</p></td>
   
 </tr>
 

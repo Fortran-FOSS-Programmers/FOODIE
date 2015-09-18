@@ -142,11 +142,13 @@
       
       <a class="list-group-item" href="../proc/test_ab%7E2.html#variable-step%7E3">step</a>
       
-      <a class="list-group-item" href="../proc/test_ab%7E2.html#variable-dt%7E12">dt</a>
+      <a class="list-group-item" href="../proc/test_ab%7E2.html#variable-dt%7E9">dt</a>
       
-      <a class="list-group-item" href="../proc/test_ab%7E2.html#variable-t%7E12">t</a>
+      <a class="list-group-item" href="../proc/test_ab%7E2.html#variable-t%7E19">t</a>
       
       <a class="list-group-item" href="../proc/test_ab%7E2.html#variable-s%7E9">s</a>
+      
+      <a class="list-group-item" href="../proc/test_ab%7E2.html#variable-ss%7E3">ss</a>
       
     </div>
   </div>
@@ -427,8 +429,8 @@ subroutine test_ab()
      
             <img class="depgraph" alt="dependency graph" src=../graphs/proc%7E%7Etest_ab%7E2%7E%7ECallsGraph.svg usemap="#proc~~test_ab~2~~CallsGraph">
             <map id="proc~~test_ab~2~~CallsGraph" name="proc~~test_ab~2~~CallsGraph">
-<area shape="rect" id="node3" href="../proc/save_time_serie.html" title="save_time_serie" alt="" coords="127,24,247,59"/>
-<area shape="rect" id="node4" href="../proc/save_results%7E2.html" title="save_results" alt="" coords="139,83,235,118"/>
+<area shape="rect" id="node3" href="../proc/save_results%7E2.html" title="save_results" alt="" coords="139,24,235,59"/>
+<area shape="rect" id="node4" href="../proc/save_time_serie.html" title="save_time_serie" alt="" coords="127,83,247,118"/>
 </map>
 
             <div><a type="button" class="graph-help" data-toggle="modal" href="#graph-help-text">Help</a></div>
@@ -725,7 +727,7 @@ implementation in a submodule of an interface in a parent module.</p>
   
 <tr>
   
-  <td><span class="anchor" id="variable-dt%7E12"></span>real(kind=R_P),</td>
+  <td><span class="anchor" id="variable-dt%7E9"></span>real(kind=R_P),</td>
   
   <td>public</td>
   <td></td><td>::</td>
@@ -739,11 +741,11 @@ implementation in a submodule of an interface in a parent module.</p>
   
 <tr>
   
-  <td><span class="anchor" id="variable-t%7E12"></span>real(kind=R_P),</td>
+  <td><span class="anchor" id="variable-t%7E19"></span>real(kind=R_P),</td>
   
   <td>public</td>
   <td></td><td>::</td>
-  <td><strong>t</strong></td><td></td><td></td><td><p>Time.</p></td>
+  <td><strong>t</strong>(1:ab_steps)</td><td></td><td></td><td><p>Times.</p></td>
   
 </tr>
 
@@ -758,6 +760,20 @@ implementation in a submodule of an interface in a parent module.</p>
   <td>public</td>
   <td></td><td>::</td>
   <td><strong>s</strong></td><td></td><td></td><td><p>AB steps counter.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-ss%7E3"></span>integer(kind=I_P),</td>
+  
+  <td>public</td>
+  <td></td><td>::</td>
+  <td><strong>ss</strong></td><td></td><td></td><td><p>AB substeps counter.</p></td>
   
 </tr>
 
@@ -793,8 +809,9 @@ implementation in a submodule of an interface in a parent module.</p>
   <span class="kt">integer</span><span class="p">,</span> <span class="k">parameter</span>               <span class="kd">::</span> <span class="n">ab_steps</span><span class="o">=</span><span class="mi">3</span>            <span class="c">!&lt; Adams-Bashforth steps number.</span>
   <span class="kt">integer</span>                          <span class="kd">::</span> <span class="n">step</span>                  <span class="c">!&lt; Time steps counter.</span>
   <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">)</span>                        <span class="kd">::</span> <span class="n">dt</span>                    <span class="c">!&lt; Time step.</span>
-  <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">)</span>                        <span class="kd">::</span> <span class="n">t</span>                     <span class="c">!&lt; Time.</span>
+  <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">)</span>                        <span class="kd">::</span> <span class="n">t</span><span class="p">(</span><span class="mi">1</span><span class="p">:</span><span class="n">ab_steps</span><span class="p">)</span>         <span class="c">!&lt; Times.</span>
   <span class="kt">integer</span><span class="p">(</span><span class="n">I_P</span><span class="p">)</span>                     <span class="kd">::</span> <span class="n">s</span>                     <span class="c">!&lt; AB steps counter.</span>
+  <span class="kt">integer</span><span class="p">(</span><span class="n">I_P</span><span class="p">)</span>                     <span class="kd">::</span> <span class="n">ss</span>                    <span class="c">!&lt; AB substeps counter.</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
 
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
@@ -815,22 +832,30 @@ implementation in a submodule of an interface in a parent module.</p>
     <span class="k">call </span><span class="n">save_time_serie</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s1">&#39;FOODiE test: 1D Euler equations integration, explicit Adams-Bashforth, t=&#39;</span><span class="o">//</span><span class="n">str</span><span class="p">(</span><span class="n">n</span><span class="o">=</span><span class="n">t_final</span><span class="p">)</span><span class="o">//</span> <span class="p">&amp;</span>
                                <span class="nb">trim</span><span class="p">(</span><span class="n">str</span><span class="p">(.</span><span class="n">true</span><span class="p">.,</span> <span class="n">s</span><span class="p">))</span><span class="o">//</span><span class="s1">&#39; steps&#39;</span><span class="p">,</span> <span class="p">&amp;</span>
                          <span class="n">filename</span><span class="o">=</span><span class="s1">&#39;euler_1D_integration-ab-&#39;</span><span class="o">//</span><span class="nb">trim</span><span class="p">(</span><span class="n">str</span><span class="p">(.</span><span class="n">true</span><span class="p">.,</span> <span class="n">s</span><span class="p">))</span><span class="o">//</span><span class="s1">&#39;-time_serie.dat&#39;</span><span class="p">,</span> <span class="p">&amp;</span>
-                         <span class="n">t</span><span class="o">=</span><span class="n">t</span><span class="p">)</span>
+                         <span class="n">t</span><span class="o">=</span><span class="n">t</span><span class="p">(</span><span class="n">s</span><span class="p">))</span>
     <span class="n">step</span> <span class="o">=</span> <span class="mi">1</span>
-    <span class="k">do while</span><span class="p">(</span><span class="n">t</span><span class="o">&lt;</span><span class="n">t_final</span><span class="p">)</span>
+    <span class="k">do while</span><span class="p">(</span><span class="n">t</span><span class="p">(</span><span class="n">s</span><span class="p">)</span><span class="o">&lt;</span><span class="n">t_final</span><span class="p">)</span>
       <span class="k">if</span> <span class="p">(</span><span class="n">verbose</span><span class="p">)</span> <span class="k">print</span> <span class="s2">&quot;(A)&quot;</span><span class="p">,</span> <span class="s1">&#39;    Time step: &#39;</span><span class="o">//</span><span class="n">str</span><span class="p">(</span><span class="n">n</span><span class="o">=</span><span class="n">dt</span><span class="p">)</span><span class="o">//</span><span class="s1">&#39;, Time: &#39;</span><span class="o">//</span><span class="n">str</span><span class="p">(</span><span class="n">n</span><span class="o">=</span><span class="n">t</span><span class="p">)</span>
-      <span class="n">dt</span> <span class="o">=</span> <span class="n">domain</span><span class="p">%</span><span class="n">dt</span><span class="p">(</span><span class="n">Nmax</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">Tmax</span><span class="o">=</span><span class="n">t_final</span><span class="p">,</span> <span class="n">t</span><span class="o">=</span><span class="n">t</span><span class="p">,</span> <span class="n">CFL</span><span class="o">=</span><span class="mf">0.1_R_P</span><span class="o">*</span><span class="n">CFL</span><span class="p">)</span>
-      <span class="k">if</span> <span class="p">(</span><span class="n">s</span><span class="o">&gt;</span><span class="n">step</span><span class="p">)</span> <span class="k">then</span>
+      <span class="n">dt</span> <span class="o">=</span> <span class="n">domain</span><span class="p">%</span><span class="n">dt</span><span class="p">(</span><span class="n">Nmax</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">Tmax</span><span class="o">=</span><span class="n">t_final</span><span class="p">,</span> <span class="n">t</span><span class="o">=</span><span class="n">t</span><span class="p">(</span><span class="n">s</span><span class="p">),</span> <span class="n">CFL</span><span class="o">=</span><span class="mf">0.1_R_P</span><span class="o">*</span><span class="n">CFL</span><span class="p">)</span>
+      <span class="k">if</span> <span class="p">(</span><span class="n">s</span><span class="o">&gt;=</span><span class="n">step</span><span class="p">)</span> <span class="k">then</span>
         <span class="c">! the time steps from 1 to s - 1 must be computed with other scheme...</span>
-        <span class="k">call </span><span class="n">rk_integrator</span><span class="p">%</span><span class="n">integrate</span><span class="p">(</span><span class="n">field</span><span class="o">=</span><span class="n">domain</span><span class="p">,</span> <span class="n">stage</span><span class="o">=</span><span class="n">rk_stage</span><span class="p">(</span><span class="mi">1</span><span class="p">:</span><span class="n">s</span><span class="p">),</span> <span class="n">dt</span><span class="o">=</span><span class="n">dt</span><span class="p">)</span>
+        <span class="k">call </span><span class="n">rk_integrator</span><span class="p">%</span><span class="n">integrate</span><span class="p">(</span><span class="n">field</span><span class="o">=</span><span class="n">domain</span><span class="p">,</span> <span class="n">stage</span><span class="o">=</span><span class="n">rk_stage</span><span class="p">(</span><span class="mi">1</span><span class="p">:</span><span class="n">s</span><span class="p">),</span> <span class="n">dt</span><span class="o">=</span><span class="n">dt</span><span class="p">,</span> <span class="n">t</span><span class="o">=</span><span class="n">t</span><span class="p">(</span><span class="n">s</span><span class="p">))</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">step</span><span class="o">&gt;</span><span class="mi">1</span><span class="p">)</span> <span class="k">then</span>
+<span class="k">          </span><span class="n">t</span><span class="p">(</span><span class="n">step</span><span class="p">)</span> <span class="o">=</span> <span class="n">t</span><span class="p">(</span><span class="n">step</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="o">+</span> <span class="n">dt</span>
+        <span class="k">else</span>
+<span class="k">          </span><span class="n">t</span><span class="p">(</span><span class="n">step</span><span class="p">)</span> <span class="o">=</span> <span class="n">dt</span>
+        <span class="n">endif</span>
       <span class="k">else</span>
-<span class="k">        call </span><span class="n">ab_integrator</span><span class="p">%</span><span class="n">integrate</span><span class="p">(</span><span class="n">field</span><span class="o">=</span><span class="n">domain</span><span class="p">,</span> <span class="n">dt</span><span class="o">=</span><span class="n">dt</span><span class="p">)</span>
+<span class="k">        call </span><span class="n">ab_integrator</span><span class="p">%</span><span class="n">integrate</span><span class="p">(</span><span class="n">field</span><span class="o">=</span><span class="n">domain</span><span class="p">,</span> <span class="n">dt</span><span class="o">=</span><span class="n">dt</span><span class="p">,</span> <span class="n">t</span><span class="o">=</span><span class="n">t</span><span class="p">)</span>
+        <span class="k">do </span><span class="n">ss</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">s</span><span class="o">-</span><span class="mi">1</span>
+          <span class="n">t</span><span class="p">(</span><span class="n">ss</span><span class="p">)</span> <span class="o">=</span> <span class="n">t</span><span class="p">(</span><span class="n">ss</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="n">enddo</span>
+        <span class="n">t</span><span class="p">(</span><span class="n">s</span><span class="p">)</span> <span class="o">=</span> <span class="n">t</span><span class="p">(</span><span class="n">s</span><span class="p">)</span> <span class="o">+</span> <span class="n">dt</span>
       <span class="n">endif</span>
-      <span class="n">t</span> <span class="o">=</span> <span class="n">t</span> <span class="o">+</span> <span class="n">dt</span>
       <span class="n">step</span> <span class="o">=</span> <span class="n">step</span> <span class="o">+</span> <span class="mi">1</span>
-      <span class="k">call </span><span class="n">save_time_serie</span><span class="p">(</span><span class="n">t</span><span class="o">=</span><span class="n">t</span><span class="p">)</span>
+      <span class="k">call </span><span class="n">save_time_serie</span><span class="p">(</span><span class="n">t</span><span class="o">=</span><span class="n">t</span><span class="p">(</span><span class="n">s</span><span class="p">))</span>
     <span class="n">enddo</span>
-    <span class="k">call </span><span class="n">save_time_serie</span><span class="p">(</span><span class="n">t</span><span class="o">=</span><span class="n">t</span><span class="p">,</span> <span class="n">finish</span><span class="o">=</span><span class="p">.</span><span class="n">true</span><span class="p">.)</span>
+    <span class="k">call </span><span class="n">save_time_serie</span><span class="p">(</span><span class="n">t</span><span class="o">=</span><span class="n">t</span><span class="p">(</span><span class="n">s</span><span class="p">),</span> <span class="n">finish</span><span class="o">=</span><span class="p">.</span><span class="n">true</span><span class="p">.)</span>
     <span class="k">call </span><span class="n">save_results</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s1">&#39;FOODiE test: 1D Euler equations integration, explicit Adams-Bashforth, t=&#39;</span><span class="o">//</span><span class="n">str</span><span class="p">(</span><span class="n">n</span><span class="o">=</span><span class="n">t_final</span><span class="p">)</span><span class="o">//</span> <span class="p">&amp;</span>
                             <span class="nb">trim</span><span class="p">(</span><span class="n">str</span><span class="p">(.</span><span class="n">true</span><span class="p">.,</span> <span class="n">s</span><span class="p">))</span><span class="o">//</span><span class="s1">&#39; steps&#39;</span><span class="p">,</span> <span class="p">&amp;</span>
                       <span class="n">filename</span><span class="o">=</span><span class="s1">&#39;euler_1D_integration-ab-&#39;</span><span class="o">//</span><span class="nb">trim</span><span class="p">(</span><span class="n">str</span><span class="p">(.</span><span class="n">true</span><span class="p">.,</span> <span class="n">s</span><span class="p">)))</span>

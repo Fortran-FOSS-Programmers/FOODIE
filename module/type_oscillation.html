@@ -240,12 +240,12 @@
     
             <img class="depgraph" alt="dependency graph" src=../graphs/module%7E%7Etype_oscillation%7E%7EUsesGraph.svg usemap="#module~~type_oscillation~~UsesGraph">
             <map id="module~~type_oscillation~~UsesGraph" name="module~~type_oscillation~~UsesGraph">
-<area shape="rect" id="node4" href="../module/foodie_integrator_leapfrog.html" title="foodie_integrator_leapfrog" alt="" coords="351,249,527,283"/>
-<area shape="rect" id="node5" href="../module/foodie_integrator_low_storage_runge_kutta.html" title="foodie_integrator_low_storage_runge_kutta" alt="" coords="298,305,579,339"/>
-<area shape="rect" id="node6" href="../module/foodie_integrator_tvd_runge_kutta.html" title="foodie_integrator_tvd_runge_kutta" alt="" coords="327,32,551,66"/>
-<area shape="rect" id="node7" href="../module/type_integrand.html" title="type_integrand" alt="" coords="145,172,253,205"/>
-<area shape="rect" id="node8" href="../module/foodie_integrator_adams_bashforth.html" title="foodie_integrator_adams_bashforth" alt="" coords="323,89,555,122"/>
-<area shape="rect" id="node9" href="../module/foodie_integrator_euler_explicit.html" title="foodie_integrator_euler_explicit" alt="" coords="335,145,542,178"/>
+<area shape="rect" id="node4" href="../module/foodie_integrator_tvd_runge_kutta.html" title="foodie_integrator_tvd_runge_kutta" alt="" coords="327,249,551,283"/>
+<area shape="rect" id="node5" href="../module/type_integrand.html" title="type_integrand" alt="" coords="145,172,253,205"/>
+<area shape="rect" id="node6" href="../module/foodie_integrator_adams_bashforth.html" title="foodie_integrator_adams_bashforth" alt="" coords="323,305,555,339"/>
+<area shape="rect" id="node7" href="../module/foodie_integrator_euler_explicit.html" title="foodie_integrator_euler_explicit" alt="" coords="335,32,542,66"/>
+<area shape="rect" id="node8" href="../module/foodie_integrator_leapfrog.html" title="foodie_integrator_leapfrog" alt="" coords="351,89,527,122"/>
+<area shape="rect" id="node9" href="../module/foodie_integrator_low_storage_runge_kutta.html" title="foodie_integrator_low_storage_runge_kutta" alt="" coords="298,145,579,178"/>
 <area shape="rect" id="node3" href="../module/foodie.html" title="foodie" alt="" coords="625,145,694,178"/>
 </map>
 
@@ -611,7 +611,7 @@ implementation in a submodule of an interface in a parent module.</p>
     
   <div class="panel panel-default">
   <div class="panel-heading codesum"><span class="anchor" id="proc-output%7E4"></span><h3>
-private function <a href='../proc/output%7E4.html'>output</a>(self) result(state)
+private purefunction <a href='../proc/output%7E4.html'>output</a>(self) result(state)
     
     
     
@@ -679,7 +679,7 @@ private function <a href='../proc/output%7E4.html'>output</a>(self) result(state
     
   <div class="panel panel-default">
   <div class="panel-heading codesum"><span class="anchor" id="proc-doscillation_dt"></span><h3>
-private purefunction <a href='../proc/doscillation_dt.html'>dOscillation_dt</a>(self, n) result(dState_dt)
+private purefunction <a href='../proc/doscillation_dt.html'>dOscillation_dt</a>(self, n, t) result(dState_dt)
     
     
     
@@ -727,6 +727,21 @@ private purefunction <a href='../proc/doscillation_dt.html'>dOscillation_dt</a>(
   
   <td></td><td>::</td>
   <td><strong>n</strong></td><td><p>Time level.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>real(kind=R_P),</td>
+  <td>intent(in),</td>
+  <td>optional</td>
+  
+  <td></td><td>::</td>
+  <td><strong>t</strong></td><td><p>Time.</p></td>
   
 </tr>
 

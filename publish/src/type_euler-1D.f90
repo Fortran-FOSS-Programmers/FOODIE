@@ -286,12 +286,13 @@ contains
   endfunction compute_dt
 
   ! type_integrand deferred methods
-  pure function dEuler_dt(self, n) result(dState_dt)
+  pure function dEuler_dt(self, n, t) result(dState_dt)
   !---------------------------------------------------------------------------------------------------------------------------------
   !< Time derivative of Euler field, the residuals function.
   !---------------------------------------------------------------------------------------------------------------------------------
   class(euler_1D),        intent(IN) :: self      !< Euler field.
   integer(I_P), optional, intent(IN) :: n         !< Time level.
+  real(R_P),    optional, intent(IN) :: t         !< Time.
   class(integrand), allocatable      :: dState_dt !< Euler field time derivative.
   real(R_P), allocatable             :: F(:,:)    !< Fluxes of conservative variables.
   real(R_P), allocatable             :: P(:,:)    !< Primitive variables.

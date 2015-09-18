@@ -132,9 +132,9 @@
       
       <a class="list-group-item" href="../proc/test_euler%7E2.html#variable-euler_integrator%7E2">euler_integrator</a>
       
-      <a class="list-group-item" href="../proc/test_euler%7E2.html#variable-dt%7E13">dt</a>
+      <a class="list-group-item" href="../proc/test_euler%7E2.html#variable-dt%7E10">dt</a>
       
-      <a class="list-group-item" href="../proc/test_euler%7E2.html#variable-t%7E13">t</a>
+      <a class="list-group-item" href="../proc/test_euler%7E2.html#variable-t%7E20">t</a>
       
     </div>
   </div>
@@ -415,8 +415,8 @@ subroutine test_euler()
      
             <img class="depgraph" alt="dependency graph" src=../graphs/proc%7E%7Etest_euler%7E2%7E%7ECallsGraph.svg usemap="#proc~~test_euler~2~~CallsGraph">
             <map id="proc~~test_euler~2~~CallsGraph" name="proc~~test_euler~2~~CallsGraph">
-<area shape="rect" id="node3" href="../proc/save_time_serie.html" title="save_time_serie" alt="" coords="135,24,255,59"/>
-<area shape="rect" id="node4" href="../proc/save_results%7E2.html" title="save_results" alt="" coords="147,83,243,117"/>
+<area shape="rect" id="node2" href="../proc/save_time_serie.html" title="save_time_serie" alt="" coords="135,5,255,40"/>
+<area shape="rect" id="node3" href="../proc/save_results%7E2.html" title="save_results" alt="" coords="147,64,243,99"/>
 </map>
 
             <div><a type="button" class="graph-help" data-toggle="modal" href="#graph-help-text">Help</a></div>
@@ -643,7 +643,7 @@ implementation in a submodule of an interface in a parent module.</p>
   
 <tr>
   
-  <td><span class="anchor" id="variable-dt%7E13"></span>real(kind=R_P),</td>
+  <td><span class="anchor" id="variable-dt%7E10"></span>real(kind=R_P),</td>
   
   <td>public</td>
   <td></td><td>::</td>
@@ -657,7 +657,7 @@ implementation in a submodule of an interface in a parent module.</p>
   
 <tr>
   
-  <td><span class="anchor" id="variable-t%7E13"></span>real(kind=R_P),</td>
+  <td><span class="anchor" id="variable-t%7E20"></span>real(kind=R_P),</td>
   
   <td>public</td>
   <td></td><td>::</td>
@@ -705,7 +705,7 @@ implementation in a submodule of an interface in a parent module.</p>
   <span class="k">do while</span><span class="p">(</span><span class="n">t</span><span class="o">&lt;</span><span class="n">t_final</span><span class="p">)</span>
     <span class="k">if</span> <span class="p">(</span><span class="n">verbose</span><span class="p">)</span> <span class="k">print</span> <span class="s2">&quot;(A)&quot;</span><span class="p">,</span> <span class="s1">&#39;  Time step: &#39;</span><span class="o">//</span><span class="n">str</span><span class="p">(</span><span class="n">n</span><span class="o">=</span><span class="n">dt</span><span class="p">)</span><span class="o">//</span><span class="s1">&#39;, Time: &#39;</span><span class="o">//</span><span class="n">str</span><span class="p">(</span><span class="n">n</span><span class="o">=</span><span class="n">t</span><span class="p">)</span>
     <span class="n">dt</span> <span class="o">=</span> <span class="n">domain</span><span class="p">%</span><span class="n">dt</span><span class="p">(</span><span class="n">Nmax</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">Tmax</span><span class="o">=</span><span class="n">t_final</span><span class="p">,</span> <span class="n">t</span><span class="o">=</span><span class="n">t</span><span class="p">,</span> <span class="n">CFL</span><span class="o">=</span><span class="n">CFL</span><span class="p">)</span>
-    <span class="k">call </span><span class="n">euler_integrator</span><span class="p">%</span><span class="n">integrate</span><span class="p">(</span><span class="n">field</span><span class="o">=</span><span class="n">domain</span><span class="p">,</span> <span class="n">dt</span><span class="o">=</span><span class="n">dt</span><span class="p">)</span>
+    <span class="k">call </span><span class="n">euler_integrator</span><span class="p">%</span><span class="n">integrate</span><span class="p">(</span><span class="n">field</span><span class="o">=</span><span class="n">domain</span><span class="p">,</span> <span class="n">dt</span><span class="o">=</span><span class="n">dt</span><span class="p">,</span> <span class="n">t</span><span class="o">=</span><span class="n">t</span><span class="p">)</span>
     <span class="n">t</span> <span class="o">=</span> <span class="n">t</span> <span class="o">+</span> <span class="n">dt</span>
     <span class="k">call </span><span class="n">save_time_serie</span><span class="p">(</span><span class="n">t</span><span class="o">=</span><span class="n">t</span><span class="p">)</span>
   <span class="n">enddo</span>
