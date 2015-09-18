@@ -41,7 +41,7 @@ endtype integrand
 
 abstract interface
   !< Abstract type bound procedures necessary for implementing a concrete extension of the class(integrand).
-  pure function time_derivative(self, n, t) result(dState_dt)
+  function time_derivative(self, n, t) result(dState_dt)
   !---------------------------------------------------------------------------------------------------------------------------------
   !< Time derivative function of integrand class, i.e. the residuals function.
   !---------------------------------------------------------------------------------------------------------------------------------
@@ -53,7 +53,7 @@ abstract interface
   !---------------------------------------------------------------------------------------------------------------------------------
   endfunction time_derivative
 
-  pure subroutine update_previous_steps(self, filter, weights)
+  subroutine update_previous_steps(self, filter, weights)
   !---------------------------------------------------------------------------------------------------------------------------------
   !< Update the previous time steps (of integrand field) for multi-step(level) ODE solvers.
   !---------------------------------------------------------------------------------------------------------------------------------
@@ -64,7 +64,7 @@ abstract interface
   !---------------------------------------------------------------------------------------------------------------------------------
   endsubroutine update_previous_steps
 
-  pure function previous_step(self, n) result(previous)
+  function previous_step(self, n) result(previous)
   !---------------------------------------------------------------------------------------------------------------------------------
   !< Get a previous time steps (of integrand field) for multi-step(level) ODE solvers.
   !---------------------------------------------------------------------------------------------------------------------------------
@@ -75,7 +75,7 @@ abstract interface
   !---------------------------------------------------------------------------------------------------------------------------------
   endfunction previous_step
 
-  pure function integrand_op_real(lhs, rhs) result(operator_result)
+  function integrand_op_real(lhs, rhs) result(operator_result)
   !---------------------------------------------------------------------------------------------------------------------------------
   !< Asymmetric type operator integrand.op.real.
   !---------------------------------------------------------------------------------------------------------------------------------
@@ -86,7 +86,7 @@ abstract interface
   !---------------------------------------------------------------------------------------------------------------------------------
   endfunction integrand_op_real
 
-  pure function real_op_integrand(lhs, rhs) result(operator_result)
+  function real_op_integrand(lhs, rhs) result(operator_result)
   !---------------------------------------------------------------------------------------------------------------------------------
   !< Asymmetric type operator real.op.integrand.
   !---------------------------------------------------------------------------------------------------------------------------------
@@ -97,7 +97,7 @@ abstract interface
   !---------------------------------------------------------------------------------------------------------------------------------
   endfunction real_op_integrand
 
-  pure function symmetric_operator(lhs, rhs) result(operator_result)
+  function symmetric_operator(lhs, rhs) result(operator_result)
   !---------------------------------------------------------------------------------------------------------------------------------
   !< Symmetric type operator integrand.op.integrand.
   !---------------------------------------------------------------------------------------------------------------------------------
@@ -108,7 +108,7 @@ abstract interface
   !---------------------------------------------------------------------------------------------------------------------------------
   endfunction symmetric_operator
 
-  pure subroutine assignment_integrand(lhs, rhs)
+  subroutine assignment_integrand(lhs, rhs)
   !---------------------------------------------------------------------------------------------------------------------------------
   !< Symmetric assignment integrand = integrand.
   !---------------------------------------------------------------------------------------------------------------------------------
@@ -118,7 +118,7 @@ abstract interface
   !---------------------------------------------------------------------------------------------------------------------------------
   endsubroutine assignment_integrand
 
-  pure subroutine assignment_real(lhs, rhs)
+  subroutine assignment_real(lhs, rhs)
   !---------------------------------------------------------------------------------------------------------------------------------
   !< Asymmetric assignment integrand = real.
   !---------------------------------------------------------------------------------------------------------------------------------
