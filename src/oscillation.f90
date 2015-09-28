@@ -5,7 +5,7 @@ program integrate_oscillation
 !-----------------------------------------------------------------------------------------------------------------------------------
 
 !-----------------------------------------------------------------------------------------------------------------------------------
-use IR_Precision, only : R_P, I_P, FR_P, str
+use IR_Precision, only : R_P, I_P, FR_P, str, strz
 use type_oscillation, only : oscillation
 use Data_Type_Command_Line_Interface, only : Type_Command_Line_Interface
 use foodie, only : adams_bashforth_integrator, &
@@ -20,16 +20,19 @@ use pyplot_module, only :  pyplot
 implicit none
 type(Type_Command_Line_Interface) :: cli                                               !< Command line interface handler.
 type(oscillation)                 :: attractor                                         !< Oscillation field.
-integer,   parameter              :: num_steps=1e4                                     !< Maximum time steps.
 integer,   parameter              :: space_dimension=2                                 !< Space dimensions.
-real(R_P), parameter              :: f=1e-4_R_P                                        !< Frequency.
-real(R_P), parameter              :: dt = 100._R_P                                     !< Time step.
 real(R_P), parameter              :: initial_state(1:space_dimension)=[0._R_P, 1._R_P] !< Initial state.
-real(R_P)                         :: solution(0:space_dimension, 0:num_steps)          !< Solution at each time step.
+real(R_P), parameter              :: f=1e-4_R_P                                        !< Frequency.
+real(R_P)                         :: t_final                                           !< Final time.
+real(R_P)                         :: Dt                                                !< Time step.
+real(R_P), allocatable            :: solution(:,:)                                     !< Solution at each time step.
 integer(I_P)                      :: error                                             !< Error handler.
+integer(I_P)                      :: stages_steps                                      !< Number of stages/steps used.
 character(99)                     :: solver                                            !< Solver used.
 logical                           :: plots                                             !< Flag for activating plots saving.
 logical                           :: results                                           !< Flag for activating results saving.
+character(len=:), allocatable     :: output                                            !< Output files basename.
+character(99)                     :: output_cli                                        !< Output files basename.
 !-----------------------------------------------------------------------------------------------------------------------------------
 
 !-----------------------------------------------------------------------------------------------------------------------------------
@@ -38,20 +41,28 @@ call cli%init(progname    = 'oscillation',                                      
               authors     = 'Fortran-FOSS-Programmers',                                 &
               license     = 'GNU GPLv3',                                                &
               description = 'Test FOODiE library on Oscillation equations integration', &
-              examples    = ["oscillation --solver euler --results",                    &
-                             "oscillation --solver runge-kutta -r ",                    &
-                             "oscillation --solver adams-bashforth",                    &
-                             "oscillation --solver all --plots -r "])
-call cli%add(switch='--solver', switch_ab='-s', help='ODE solver used', required=.true., act='store', error=error)
-call cli%add(switch='--results', switch_ab='-r', help='Save results', required=.false., act='store_true', def='.false.', &
-             error=error)
-call cli%add(switch='--plots', switch_ab='-p', help='Save plots of results', required=.false., act='store_true', def='.false.', &
-             error=error)
+              examples    = ["oscillation --solver euler --results  ",                  &
+                             "oscillation --solver ls-runge-kutta -r",                  &
+                             "oscillation --solver adams-bashforth  ",                  &
+                             "oscillation --solver all --plots -r   "])
+call cli%add(switch='--solver', switch_ab='-s', help='ODE solver used', required=.true., act='store')
+call cli%add(switch='--ss', help='Stages/steps used', required=.false., act='store', def='-1')
+call cli%add(switch='--time_step', switch_ab='-Dt', help='Integration time step', required=.false., def='100.d0', act='store')
+call cli%add(switch='--t_final', switch_ab='-tf', help='Final integration time', required=.false., def='1e6', act='store')
+call cli%add(switch='--results', switch_ab='-r', help='Save results', required=.false., act='store_true', def='.false.')
+call cli%add(switch='--plots', switch_ab='-p', help='Save plots of results', required=.false., act='store_true', def='.false.')
+call cli%add(switch='--output', help='Output files basename', required=.false., act='store', def='unset')
 ! parsing Command Line Interface
 call cli%parse(error=error)
 call cli%get(switch='-s', val=solver, error=error) ; if (error/=0) stop
+call cli%get(switch='--ss', val=stages_steps, error=error) ; if (error/=0) stop
+call cli%get(switch='-Dt', val=Dt, error=error) ; if (error/=0) stop
+call cli%get(switch='-tf', val=t_final, error=error) ; if (error/=0) stop
 call cli%get(switch='-r', val=results, error=error) ; if (error/=0) stop
 call cli%get(switch='-p', val=plots, error=error) ; if (error/=0) stop
+call cli%get(switch='--output', val=output_cli, error=error) ; if (error/=0) stop
+! init integration
+call init()
 ! integrate Oscillation equations
 select case(trim(adjustl(solver)))
 case('adams-bashforth')
@@ -83,25 +94,64 @@ endselect
 stop
 !-----------------------------------------------------------------------------------------------------------------------------------
 contains
-  subroutine save_results(title, filename)
+  subroutine init()
+  !---------------------------------------------------------------------------------------------------------------------------------
+  !< Initialize the integration
+  !---------------------------------------------------------------------------------------------------------------------------------
+  !---------------------------------------------------------------------------------------------------------------------------------
+
+  !---------------------------------------------------------------------------------------------------------------------------------
+  allocate(solution(0:space_dimension, 0:int(t_final/Dt)))
+  if (trim(adjustl(output_cli))/='unset') then
+    output = trim(adjustl(output_cli))//'-'//trim(strz(10,int(t_final/Dt)))//'-time_steps'//'-'//trim(adjustl(solver))
+  else
+    output = 'oscillation_integration-'//trim(strz(10,int(t_final/Dt)))//'-time_steps'//'-'//trim(adjustl(solver))
+  endif
+  return
+  !---------------------------------------------------------------------------------------------------------------------------------
+  endsubroutine init
+
+  function exact_solution(t) result(ex_sol)
+  !---------------------------------------------------------------------------------------------------------------------------------
+  !< Compute the exact solution.
+  !---------------------------------------------------------------------------------------------------------------------------------
+  real(R_P), intent(IN) :: t                         !< Time.
+  real(R_P)             :: ex_sol(1:space_dimension) !< Exact solution.
+  !---------------------------------------------------------------------------------------------------------------------------------
+
+  !---------------------------------------------------------------------------------------------------------------------------------
+  ex_sol(1) = initial_state(1) * cos(f * t) - initial_state(2) * sin(f * t)
+  ex_sol(2) = initial_state(1) * sin(f * t) + initial_state(2) * cos(f * t)
+  return
+  !---------------------------------------------------------------------------------------------------------------------------------
+  endfunction exact_solution
+
+  subroutine save_results(title, basename)
   !---------------------------------------------------------------------------------------------------------------------------------
   !< Save plots of results.
   !---------------------------------------------------------------------------------------------------------------------------------
-  character(*), intent(IN) :: title    !< Plot title.
-  character(*), intent(IN) :: filename !< Output filename.
-  integer(I_P)             :: rawfile  !< Raw file unit for saving results.
-  type(pyplot)             :: plt      !< Plot file handler.
-  integer(I_P)             :: i        !< Counter.
-  integer(I_P)             :: s        !< Counter.
+  character(*), intent(IN) :: title                     !< Plot title.
+  character(*), intent(IN) :: basename                  !< Output files basename.
+  integer(I_P)             :: rawfile                   !< Raw file unit for saving results.
+  real(R_P)                :: ex_sol(1:space_dimension) !< Initial state.
+  type(pyplot)             :: plt                       !< Plot file handler.
+  integer(I_P)             :: i                         !< Counter.
+  integer(I_P)             :: s                         !< Counter.
   !---------------------------------------------------------------------------------------------------------------------------------
 
   !---------------------------------------------------------------------------------------------------------------------------------
   if (results) then
-    open(newunit=rawfile, file=filename//'.dat')
-    write(rawfile, '(A)')'# '//title
-    write(rawfile, '(A)')'# VARIABLES: "t" "x" "y"'
-    do s=1, num_steps
-      write(rawfile, '(4('//FR_P//',1X))')(solution(i, s), i=0, 2)
+    open(newunit=rawfile, file=basename//'.dat')
+    write(rawfile, '(A)')'TITLE="'//title//'"'
+    write(rawfile, '(A)')'VARIABLES="t" "x" "y"'
+    write(rawfile, '(A)')'ZONE T="FOODiE time serie"'
+    do s=0, ubound(solution, dim=2)
+      write(rawfile, '(3('//FR_P//',1X))')(solution(i, s), i=0, space_dimension)
+    enddo
+    write(rawfile, '(A)')'ZONE T="Exact solution"'
+    do s=0, ubound(solution, dim=2)
+      ex_sol = exact_solution(t=solution(0, s))
+      write(rawfile, '(3('//FR_P//',1X))')solution(0, s), (ex_sol(i), i=1, space_dimension)
     enddo
     close(rawfile)
   endif
@@ -109,11 +159,11 @@ contains
     call plt%initialize(grid=.true., xlabel='time', title=title, legend=.true.)
     call plt%add_plot(x=solution(0, :), y=solution(1, :), label='u', linestyle='r-', linewidth=1)
     call plt%add_plot(x=solution(0, :), y=solution(2, :), label='v', linestyle='b-', linewidth=1)
-    call plt%savefig(filename//'.png')
+    call plt%savefig(basename//'.png')
 
     call plt%initialize(grid=.true., xlabel='v1', ylabel='v2', title=title//'-path', legend=.true.)
     call plt%add_plot(x=solution(1, :), y=solution(2, :), label='path', linestyle='r-', linewidth=1)
-    call plt%savefig('path-'//filename//'.png')
+    call plt%savefig('path-'//basename//'.png')
   endif
   return
   !---------------------------------------------------------------------------------------------------------------------------------
@@ -130,30 +180,34 @@ contains
   integer, parameter               :: ab_steps=3            !< Adams-Bashforth steps number.
   integer                          :: step                  !< Time steps counter.
   integer(I_P)                     :: s                     !< AB steps counter.
+  integer(I_P)                     :: steps_range(1:2)      !< Steps used.
+  character(len=:), allocatable    :: title                 !< Output files title.
   !---------------------------------------------------------------------------------------------------------------------------------
 
   !---------------------------------------------------------------------------------------------------------------------------------
   print "(A)", 'Integrating Oscillation equations by means of Adams-Bashforth class of solvers'
-  do s=1, ab_steps
+  steps_range = [1, ab_steps] ; if (stages_steps>0) steps_range = [stages_steps, stages_steps]
+  do s=steps_range(1), steps_range(2)
     print "(A)", ' AB-'//trim(str(.true.,s))
+    title = 'Oscillation equation integration, explicit Adams-Bashforth, t='//str(n=t_final)//' steps='//trim(str(.true., s))
     call ab_integrator%init(steps=s)
     call rk_integrator%init(stages=s)
     call attractor%init(initial_state=initial_state, f=f, steps=s)
     solution(0, 0) = 0._R_P
     solution(1:space_dimension, 0) = attractor%output()
-    do step = 1, num_steps
+    step = 0
+    do while(solution(0, step)<t_final)
+      step = step + 1
       if (s>=step) then
         ! the time steps from 1 to s - 1 must be computed with other scheme...
-        call rk_integrator%integrate(field=attractor, stage=rk_stage(1:s), dt=dt, t=solution(0, step))
+        call rk_integrator%integrate(field=attractor, stage=rk_stage(1:s), Dt=Dt, t=solution(0, step))
       else
-        call ab_integrator%integrate(field=attractor, dt=dt, t=solution(0, step-s:step-1))
+        call ab_integrator%integrate(field=attractor, Dt=Dt, t=solution(0, step-s:step-1))
       endif
-      solution(0, step) = step * dt
+      solution(0, step) = step * Dt
       solution(1:space_dimension, step) = attractor%output()
     enddo
-    call save_results(title='FOODiE test: Oscillation equation integration, explicit '//'Adams-Bashforth '//&
-                            trim(str(.true., s))//' steps', &
-                      filename='oscillation_integration-ab-'//trim(str(.true., s)))
+    call save_results(title=title, basename=output//'-'//trim(str(.true., s)))
   enddo
   print "(A)", 'Finish!'
   return
@@ -166,20 +220,23 @@ contains
   !---------------------------------------------------------------------------------------------------------------------------------
   type(euler_explicit_integrator) :: euler_integrator !< Euler integrator.
   integer(I_P)                    :: step             !< Time steps counter.
+  character(len=:), allocatable   :: title            !< Output files title.
   !---------------------------------------------------------------------------------------------------------------------------------
 
   !---------------------------------------------------------------------------------------------------------------------------------
   print "(A)", 'Integrating Oscillation equations by means of explicit Euler solver'
+  title = 'Oscillation equation integration, explicit Euler, t='//str(n=t_final)
   call attractor%init(initial_state=initial_state, f=f)
   solution(0, 0) = 0._R_P
   solution(1:space_dimension, 0) = attractor%output()
-  do step = 1, num_steps
-    call euler_integrator%integrate(field=attractor, dt=dt, t=solution(0, step))
-    solution(0, step) = step * dt
+  step = 0
+  do while(solution(0, step)<t_final)
+    step = step + 1
+    call euler_integrator%integrate(field=attractor, Dt=Dt, t=solution(0, step))
+    solution(0, step) = step * Dt
     solution(1:space_dimension, step) = attractor%output()
   enddo
-  call save_results(title='FOODiE test: Oscillation equation integrations, explicit Euler', &
-                    filename='oscillation_integration-euler')
+  call save_results(title=title, basename=output)
   print "(A)", 'Finish!'
   return
   !---------------------------------------------------------------------------------------------------------------------------------
@@ -195,27 +252,30 @@ contains
   type(oscillation)                :: filter                !< Filter displacement.
   type(leapfrog_integrator)        :: lf_integrator         !< Leapfrog integrator.
   integer                          :: step                  !< Time steps counter.
+  character(len=:), allocatable    :: title                 !< Output files title.
   !---------------------------------------------------------------------------------------------------------------------------------
 
   !---------------------------------------------------------------------------------------------------------------------------------
   print "(A)", 'Integrating Oscillation equations by means of leapfrog (RAW filtered) class of solvers'
+  title = 'Oscillation equation integration, leapfrog (RAW filtered), t='//str(n=t_final)
   call lf_integrator%init()
   call rk_integrator%init(stages=rk_stages)
   call attractor%init(initial_state=initial_state, f=f, steps=2)
   solution(0, 0) = 0._R_P
   solution(1:space_dimension, 0) = attractor%output()
-  do step = 1, num_steps
+  step = 0
+  do while(solution(0, step)<t_final)
+    step = step + 1
     if (2>=step) then
       ! the time steps from 1 to 2 must be computed with other scheme...
-      call rk_integrator%integrate(field=attractor, stage=rk_stage, dt=dt, t=solution(0, step))
+      call rk_integrator%integrate(field=attractor, stage=rk_stage, Dt=Dt, t=solution(0, step))
     else
-      call lf_integrator%integrate(field=attractor, filter=filter, dt=dt, t=solution(0, step))
+      call lf_integrator%integrate(field=attractor, filter=filter, Dt=Dt, t=solution(0, step))
     endif
-    solution(0, step) = step * dt
+    solution(0, step) = step * Dt
     solution(1:space_dimension, step) = attractor%output()
   enddo
-  call save_results(title='FOODiE test: Oscillation equation integration, explicit leapfrog scheme',&
-                    filename='oscillation_integration-lf-RAW-filter')
+  call save_results(title=title, basename=output)
   print "(A)", 'Finish!'
   return
   !---------------------------------------------------------------------------------------------------------------------------------
@@ -231,26 +291,32 @@ contains
   type(oscillation)               :: rk_stage(1:registers) !< Runge-Kutta registers.
   integer(I_P)                    :: s                     !< RK stages counter.
   integer(I_P)                    :: step                  !< Time steps counter.
+  integer(I_P)                    :: stages_range(1:2)     !< Stages used.
+  character(len=:), allocatable   :: title                 !< Output files title.
   !---------------------------------------------------------------------------------------------------------------------------------
 
   !---------------------------------------------------------------------------------------------------------------------------------
   print "(A)", 'Integrating Oscillation equations by means of low storage (2N) Runge-Kutta class of solvers'
-  do s=1, rk_stages
+  stages_range = [1, rk_stages] ; if (stages_steps>0) stages_range = [stages_steps, stages_steps]
+  do s=stages_range(1), stages_range(2)
     if (s==2) cycle ! 2 stages not yet implemented
     if (s==3) cycle ! 3 stages not yet implemented
     if (s==4) cycle ! 4 stages not yet implemented
     print "(A)", ' RK-'//trim(str(.true.,s))
+    title = 'Oscillation equation integration, explicit low storage Runge-Kutta, t='//str(n=t_final)//&
+      ' steps='//trim(str(.true., s))
     call rk_integrator%init(stages=s)
     call attractor%init(initial_state=initial_state, f=f)
     solution(0, 0) = 0._R_P
     solution(1:space_dimension, 0) = attractor%output()
-    do step = 1, num_steps
-      call rk_integrator%integrate(field=attractor, stage=rk_stage, dt=dt, t=solution(0, step))
-      solution(0, step) = step * dt
+    step = 0
+    do while(solution(0, step)<t_final)
+      step = step + 1
+      call rk_integrator%integrate(field=attractor, stage=rk_stage, Dt=Dt, t=solution(0, step))
+      solution(0, step) = step * Dt
       solution(1:space_dimension, step) = attractor%output()
     enddo
-    call save_results(title='FOODiE test: Oscillation equation integration, explicit low storage Runge-Kutta '//&
-                      trim(str(.true., s))//' stages', filename='oscillation_integration-lsrk-'//trim(str(.true., s)))
+    call save_results(title=title, basename=output//'-'//trim(str(.true., s)))
   enddo
   print "(A)", 'Finish!'
   return
@@ -266,24 +332,29 @@ contains
   type(oscillation)                :: rk_stage(1:rk_stages) !< Runge-Kutta stages.
   integer(I_P)                     :: s                     !< RK stages counter.
   integer(I_P)                     :: step                  !< Time steps counter.
+  integer(I_P)                     :: stages_range(1:2)     !< Stages used.
+  character(len=:), allocatable    :: title                 !< Output files title.
   !---------------------------------------------------------------------------------------------------------------------------------
 
   !---------------------------------------------------------------------------------------------------------------------------------
   print "(A)", 'Integrating Oscillation equations by means of TVD/SSP Runge-Kutta class of solvers'
-  do s=1, rk_stages
+  stages_range = [1, rk_stages] ; if (stages_steps>0) stages_range = [stages_steps, stages_steps]
+  do s=stages_range(1), stages_range(2)
     if (s==4) cycle ! 4 stages not yet implemented
     print "(A)", ' RK-'//trim(str(.true.,s))
+    title = 'Oscillation equation integration, explicit TVD/SSP Runge-Kutta, t='//str(n=t_final)//' steps='//trim(str(.true., s))
     call rk_integrator%init(stages=s)
     call attractor%init(initial_state=initial_state, f=f)
     solution(0, 0) = 0._R_P
     solution(1:space_dimension, 0) = attractor%output()
-    do step = 1, num_steps
-      call rk_integrator%integrate(field=attractor, stage=rk_stage(1:s), dt=dt, t=solution(0, step))
-      solution(0, step) = step * dt
+    step = 0
+    do while(solution(0, step)<t_final)
+      step = step + 1
+      call rk_integrator%integrate(field=attractor, stage=rk_stage(1:s), Dt=Dt, t=solution(0, step))
+      solution(0, step) = step * Dt
       solution(1:space_dimension, step) = attractor%output()
     enddo
-    call save_results(title='FOODiE test: Oscillation equation integration, explicit TVD Runge-Kutta '//trim(str(.true., s))//&
-                      ' stages', filename='oscillation_integration-tvdrk-'//trim(str(.true., s)))
+    call save_results(title=title, basename=output//'-'//trim(str(.true., s)))
   enddo
   print "(A)", 'Finish!'
   return

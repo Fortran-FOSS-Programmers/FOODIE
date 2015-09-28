@@ -478,6 +478,21 @@ c_p = \sum_{s=1}^{N_S} \frac{\rho_s}{\rho} c_{p,s} \quad  c_v = \sum_{s=1}^{N_S}
 \end{matrix}
 $$
  where \(N_s\) is the number of initial species composing the gas mixture.</p>
+<h4 id="numerical-grid-organization"><a class="toclink" href="#numerical-grid-organization">Numerical grid organization</a></h4>
+<p>The finite volume, Godunov's like approach is employed. The conservative variables (and the primitive ones) are co-located at
+ the cell center. The cell and (inter)faces numeration is as follow.</p>
+<div class="codehilite"><pre>                cell            (inter)faces
+                 |                   |
+                 v                   v
+     |-------|-------|-.....-|-------|-------|-------|-------|-.....-|-------|-------|-------|-.....-|-------|-------|
+     | 1-Ng  | 2-Ng  | ..... |  -1   |   0   |   1   |  2    | ..... |  Ni   | Ni+1  | Ni+1  | ..... |Ni+Ng-1| Ni+Ng |
+     |-------|-------|-.....-|-------|-------|-------|-------|-.....-|-------|-------|-------|-.....-|-------|-------|
+    0-Ng                             -1      0       1       2      Ni-1     Ni                                    Ni+Ng
+</pre></div>
+
+
+<p>Where <em>Ni</em> are the finite volumes (cells) used for discretizing the domain and <em>Ng</em> are the ghost cells used for imposing the
+ left and right boundary conditions (for a total of <em>2Ng</em> cells).</p>
 <h4 id="primitive-variables-organization"><a class="toclink" href="#primitive-variables-organization">Primitive variables organization</a></h4>
 <p>Primitive variables are organized as an array of reals which the first index means:</p>
 <ul>
@@ -3047,6 +3062,21 @@ private puresubroutine <a href='../proc/riemann_solver.html'>riemann_solver</a>(
   <span class="c">!&lt;\end{matrix}</span>
   <span class="c">!&lt;$$</span>
   <span class="c">!&lt; where \(N_s\) is the number of initial species composing the gas mixture.</span>
+  <span class="c">!&lt;</span>
+  <span class="c">!&lt;#### Numerical grid organization</span>
+  <span class="c">!&lt; The finite volume, Godunov&#39;s like approach is employed. The conservative variables (and the primitive ones) are co-located at</span>
+  <span class="c">!&lt; the cell center. The cell and (inter)faces numeration is as follow.</span>
+  <span class="c">!&lt;```</span>
+  <span class="c">!&lt;                cell            (inter)faces</span>
+  <span class="c">!&lt;                 |                   |</span>
+  <span class="c">!&lt;                 v                   v</span>
+  <span class="c">!&lt;     |-------|-------|-.....-|-------|-------|-------|-------|-.....-|-------|-------|-------|-.....-|-------|-------|</span>
+  <span class="c">!&lt;     | 1-Ng  | 2-Ng  | ..... |  -1   |   0   |   1   |  2    | ..... |  Ni   | Ni+1  | Ni+1  | ..... |Ni+Ng-1| Ni+Ng |</span>
+  <span class="c">!&lt;     |-------|-------|-.....-|-------|-------|-------|-------|-.....-|-------|-------|-------|-.....-|-------|-------|</span>
+  <span class="c">!&lt;    0-Ng                             -1      0       1       2      Ni-1     Ni                                    Ni+Ng</span>
+  <span class="c">!&lt;```</span>
+  <span class="c">!&lt; Where *Ni* are the finite volumes (cells) used for discretizing the domain and *Ng* are the ghost cells used for imposing the</span>
+  <span class="c">!&lt; left and right boundary conditions (for a total of *2Ng* cells).</span>
   <span class="c">!&lt;</span>
   <span class="c">!&lt;#### Primitive variables organization</span>
   <span class="c">!&lt; Primitive variables are organized as an array of reals which the first index means:</span>
