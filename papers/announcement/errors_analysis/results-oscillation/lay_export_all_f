@@ -1,0 +1,9 @@
+#!/bin/bash -
+
+lay=`basename $1 .lay`
+
+sed s/MYLAY/$lay''/ lay_export_all_f.mcr > tmp.mcr
+tec360 -b tmp.mcr > /dev/null
+rm -f tmp.mcr
+
+exit 0

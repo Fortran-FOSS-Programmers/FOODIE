@@ -18,28 +18,37 @@ use pyplot_module, only :  pyplot
 
 !-----------------------------------------------------------------------------------------------------------------------------------
 implicit none
-type(Type_Command_Line_Interface) :: cli                      !< Command line interface handler.
-type(euler_1D)                    :: domain                   !< Domain of Euler equations.
-real(R_P),    parameter           :: CFL=0.7_R_P              !< CFL value.
-real(R_P),    parameter           :: t_final=0.15_R_P         !< Final time.
-integer(I_P), parameter           :: Ni=100                   !< Number of grid cells.
-integer(I_P), parameter           :: Ns=1                     !< Number of differnt initial gas species.
-integer(I_P), parameter           :: Nc=Ns+2                  !< Number of conservative variables.
-integer(I_P), parameter           :: Np=Ns+4                  !< Number of primitive variables.
-real(R_P)                         :: Dx=1._R_P/Ni             !< Space step discretization.
-character(3)                      :: BC_L                     !< Left boundary condition type.
-character(3)                      :: BC_R                     !< Right boundary condition type.
-real(R_P)                         :: cp0(1:Ns)                !< Specific heat at constant pressure.
-real(R_P)                         :: cv0(1:Ns)                !< Specific heat at constant volume.
-real(R_P)                         :: initial_state(1:Np,1:Ni) !< Initial state of primitive variables.
-real(R_P)                         :: x(1:Ni)                  !< Cell center x-abscissa values.
-real(R_P), allocatable            :: final_state(:,:)         !< Final state.
-integer(I_P)                      :: error                    !< Error handler.
-character(99)                     :: solver                   !< Solver used.
-logical                           :: plots                    !< Flag for activating plots saving.
-logical                           :: results                  !< Flag for activating results saving.
-logical                           :: time_serie               !< Flag for activating time serie-results saving.
-logical                           :: verbose                  !< Flag for activating more verbose output.
+type(Type_Command_Line_Interface) :: cli                !< Command line interface handler.
+type(euler_1D)                    :: domain             !< Domain of Euler equations.
+integer(I_P)                      :: Ns                 !< Number of differnt initial gas species.
+integer(I_P)                      :: Nc                 !< Number of conservative variables, Nc=Ns+2.
+integer(I_P)                      :: Np                 !< Number of primitive variables, Np=Ns+4.
+integer(I_P)                      :: Ni                 !< Number of grid cells.
+real(R_P)                         :: Dx                 !< Space step discretization.
+real(R_P)                         :: CFL                !< CFL value.
+real(R_P)                         :: t_final            !< Final time.
+character(3)                      :: BC_L               !< Left boundary condition type.
+character(3)                      :: BC_R               !< Right boundary condition type.
+real(R_P), allocatable            :: cp0(:)             !< Specific heat at constant pressure [1:Ns].
+real(R_P), allocatable            :: cv0(:)             !< Specific heat at constant volume [1:Ns].
+real(R_P), allocatable            :: initial_state(:,:) !< Initial state of primitive variables [1:Np,1:Ni].
+real(R_P), allocatable            :: xcenter(:)         !< Cell center x-abscissa values, [1:Ni].
+real(R_P), allocatable            :: xnode(:)           !< Cell node x-abscissa values, [0:Ni].
+real(R_P), allocatable            :: av_xnode(:)        !< Average-grid cell node x-abscissa values, [0:Ni].
+real(R_P), allocatable            :: final_state(:,:)   !< Final state.
+real(R_P), allocatable            :: av_state(:,:)      !< Average-grid final state.
+character(len=:), allocatable     :: variables          !< Variables names list.
+character(len=:), allocatable     :: output             !< Output files basename.
+integer(I_P)                      :: error              !< Error handler.
+integer(I_P)                      :: stages_steps       !< Number of stages/steps used.
+character(99)                     :: solver             !< Solver used.
+character(99)                     :: problem            !< Problem solved.
+character(99)                     :: output_cli         !< Output files basename.
+logical                           :: plots              !< Flag for activating plots saving.
+logical                           :: results            !< Flag for activating results saving.
+logical                           :: time_serie         !< Flag for activating time serie-results saving.
+logical                           :: verbose            !< Flag for activating more verbose output.
+integer(I_P)                      :: av_Ni              !< Average the solution over an average-grid.
 !-----------------------------------------------------------------------------------------------------------------------------------
 
 !-----------------------------------------------------------------------------------------------------------------------------------
@@ -48,24 +57,31 @@ call cli%init(progname    = 'euler-1D',                                         
               authors     = 'Fortran-FOSS-Programmers',                              &
               license     = 'GNU GPLv3',                                             &
               description = 'Test FOODiE library on 1D Euler equations integration', &
-              examples    = ["euler-1D --solver euler --results",                    &
-                             "euler-1D --solver runge-kutta -r ",                    &
-                             "euler-1D --solver adams-bashforth",                    &
-                             "euler-1D --solver all --plots -r "])
-call cli%add(switch='--solver', switch_ab='-s', help='ODE solver used', required=.true., act='store', error=error)
-call cli%add(switch='--results', switch_ab='-r', help='Save results', required=.false., act='store_true', def='.false.', &
-             error=error)
-call cli%add(switch='--plots', switch_ab='-p', help='Save plots of results', required=.false., act='store_true', def='.false.', &
-             error=error)
-call cli%add(switch='--tserie', switch_ab='-t', help='Save time-serie-results', required=.false., act='store_true', def='.false.', &
-             error=error)
-call cli%add(switch='--verbose', help='Verbose output', required=.false., act='store_true', def='.false.', error=error)
+              examples    = ["euler-1D --solver euler --results  ",                  &
+                             "euler-1D --solver ls-runge-kutta -r",                  &
+                             "euler-1D --solver adams-bashforth  ",                  &
+                             "euler-1D --solver all --plots -r   "])
+call cli%add(switch='--solver', switch_ab='-s', help='ODE solver', required=.true., act='store')
+call cli%add(switch='--problem', help='Problem solved', required=.false., def='sod', act='store', choices='sod,smooth')
+call cli%add(switch='--Ni', help='Number finite volumes', required=.false., act='store', def='100')
+call cli%add(switch='--av_Ni', help='Number finite volumes over average the solution', required=.false., act='store', def='-1')
+call cli%add(switch='--ss', help='Stages/steps used', required=.false., act='store', def='-1')
+call cli%add(switch='--results', switch_ab='-r', help='Save results', required=.false., act='store_true', def='.false.')
+call cli%add(switch='--plots', switch_ab='-p', help='Save plots of results', required=.false., act='store_true', def='.false.')
+call cli%add(switch='--tserie', switch_ab='-t', help='Save time-serie-results', required=.false., act='store_true', def='.false.')
+call cli%add(switch='--output', help='Output files basename', required=.false., act='store', def='unset')
+call cli%add(switch='--verbose', help='Verbose output', required=.false., act='store_true', def='.false.')
 ! parsing Command Line Interface
 call cli%parse(error=error)
-call cli%get(switch='-s', val=solver, error=error) ; if (error/=0) stop
-call cli%get(switch='-r', val=results, error=error) ; if (error/=0) stop
-call cli%get(switch='-p', val=plots, error=error) ; if (error/=0) stop
-call cli%get(switch='-t', val=time_serie, error=error) ; if (error/=0) stop
+call cli%get(switch='--solver', val=solver, error=error) ; if (error/=0) stop
+call cli%get(switch='--problem', val=problem, error=error) ; if (error/=0) stop
+call cli%get(switch='--Ni', val=Ni, error=error) ; if (error/=0) stop
+call cli%get(switch='--av_Ni', val=av_Ni, error=error) ; if (error/=0) stop
+call cli%get(switch='--ss', val=stages_steps, error=error) ; if (error/=0) stop
+call cli%get(switch='--results', val=results, error=error) ; if (error/=0) stop
+call cli%get(switch='--plots', val=plots, error=error) ; if (error/=0) stop
+call cli%get(switch='--tserie', val=time_serie, error=error) ; if (error/=0) stop
+call cli%get(switch='--output', val=output_cli, error=error) ; if (error/=0) stop
 call cli%get(switch='--verbose', val=verbose, error=error) ; if (error/=0) stop
 ! create Euler field initial state
 call init()
@@ -104,68 +120,176 @@ contains
   !---------------------------------------------------------------------------------------------------------------------------------
   !< Initialize the field.
   !---------------------------------------------------------------------------------------------------------------------------------
-  integer(I_P) :: i !< Space counter.
+  real(R_P), parameter :: pi=4._R_P * atan(1._R_P) !< Pi greek.
+  integer(I_P)         :: i                        !< Space counter.
+  integer(I_P)         :: s                        !< Species counter.
   !---------------------------------------------------------------------------------------------------------------------------------
 
   !---------------------------------------------------------------------------------------------------------------------------------
-  ! Sod's problem
-  BC_L = 'TRA'
-  BC_R = 'TRA'
-  cp0(1) = 1040._R_P
-  cv0(1) = 743._R_P
-  do i=1, Ni/2
-    x(i) = Dx * i - 0.5_R_P * Dx
-    initial_state(:, i) = [1._R_P, & ! rho(s)
-                           0._R_P, & ! u
-                           1._R_P, & ! p
-                           1._R_P, & ! sum(rho(s))
-                           cp0/cv0]  ! gamma = cp/cv
+  allocate(xcenter(1:Ni))
+  allocate(xnode(0:Ni))
+  Dx=1._R_P/Ni
+  do i=1, Ni
+    xcenter(i) = Dx * i - 0.5_R_P * Dx
   enddo
-  do i=Ni/2 + 1, Ni
-    x(i) = Dx * i - 0.5_R_P * Dx
-    initial_state(:, i) = [0.125_R_P, & ! rho(s)
-                           0._R_P,    & ! u
-                           0.1_R_P,   & ! p
-                           0.125_R_P, & ! sum(rho(s))
-                           cp0/cv0]     ! gamma = cp/cv
+  do i=0, Ni
+    xnode(i) = Dx * i
   enddo
+  if ((av_Ni>0).and.(av_Ni/=Ni)) then
+    allocate(av_xnode(0:av_Ni))
+    do i=0, av_Ni
+      av_xnode(i) = 1._R_P/av_Ni * i
+    enddo
+  endif
+  select case(trim(adjustl(problem)))
+  case('sod')
+    print "(A)", 'Solving "'//trim(adjustl(problem))//'" problem'
+    t_final = 0.2_R_P
+    CFL = 0.7_R_P
+    Ns = 1
+    Nc = Ns + 2
+    Np = Ns + 4
+    allocate(initial_state(1:Np, 1:Ni))
+    allocate(cp0(1:Ns))
+    allocate(cv0(1:Ns))
+    variables = 'VARIABLES="x"'
+    do s=1, Ns
+      variables = variables//' "rho('//trim(str(.true.,s))//')"'
+    enddo
+    variables = variables//'  "u" "p" "rho" "gamma"'
+    BC_L = 'TRA'
+    BC_R = 'TRA'
+    cp0(1) = 1040._R_P
+    cv0(1) = 743._R_P
+    do i=1, Ni/2
+      initial_state(:, i) = [1._R_P, & ! rho(s)
+                             0._R_P, & ! u
+                             1._R_P, & ! p
+                             1._R_P, & ! sum(rho(s))
+                             cp0/cv0]  ! gamma = cp/cv
+    enddo
+    do i=Ni/2 + 1, Ni
+      initial_state(:, i) = [0.125_R_P, & ! rho(s)
+                             0._R_P,    & ! u
+                             0.1_R_P,   & ! p
+                             0.125_R_P, & ! sum(rho(s))
+                             cp0/cv0]     ! gamma = cp/cv
+    enddo
+  case('smooth')
+    print "(A)", 'Solving "'//trim(adjustl(problem))//'" problem'
+    t_final = 0.1_R_P
+    CFL = 0.7_R_P
+    Ns = 1
+    Nc = Ns + 2
+    Np = Ns + 4
+    allocate(initial_state(1:Np, 1:Ni))
+    allocate(cp0(1:Ns))
+    allocate(cv0(1:Ns))
+    variables = 'VARIABLES="x"'
+    do s=1, Ns
+      variables = variables//' "rho('//trim(str(.true.,s))//')"'
+    enddo
+    variables = variables//'  "u" "p" "rho" "gamma"'
+    BC_L = 'TRA'
+    BC_R = 'TRA'
+    cp0(1) = 1040._R_P
+    cv0(1) = 743._R_P
+    do i=1, Ni
+      initial_state(:, i) = [1._R_P + 4._R_P / 5._R_P  * sin(         pi * xcenter(i) * 0.5_R_P) + &
+                                      1._R_P / 10._R_P * sin(5._R_P * pi * xcenter(i) * 0.5_R_P),  & ! rho(s)
+                             0.5_R_P * (xcenter(i) - 0.5_R_P)**4,                                  & ! u
+                             10._R_P + 2._R_P * xcenter(i)**4,                                     & ! p
+                             1._R_P + 4._R_P / 5._R_P  * sin(         pi * xcenter(i) * 0.5_R_P) + &
+                                      1._R_P / 10._R_P * sin(5._R_P * pi * xcenter(i) * 0.5_R_P),  & ! sum(rho(s))
+                             cp0/cv0]     ! gamma = cp/cv
+    enddo
+  case default
+    print "(A)", 'Error: unknown problem "'//trim(adjustl(problem))//'"'
+    print "(A)", 'Valid problem names are:'
+    print "(A)", '  + sod'
+    print "(A)", '  + smooth'
+    stop
+  endselect
+
+  if (trim(adjustl(output_cli))/='unset') then
+    output = trim(adjustl(output_cli))//'-'//trim(adjustl(solver))
+  else
+    output = 'euler_1D_integration-'//trim(adjustl(solver))
+  endif
   return
   !---------------------------------------------------------------------------------------------------------------------------------
   endsubroutine init
 
-  subroutine save_results(title, filename)
+  subroutine average_solution()
+  !---------------------------------------------------------------------------------------------------------------------------------
+  !< Average the solution over an average grid.
+  !---------------------------------------------------------------------------------------------------------------------------------
+  integer(I_P):: i, ii, i1, i2 !< Counters.
+  !---------------------------------------------------------------------------------------------------------------------------------
+
+  !---------------------------------------------------------------------------------------------------------------------------------
+  if ((av_Ni>0).and.(av_Ni/=Ni)) then
+    if (allocated(av_state)) deallocate(av_state) ; allocate(av_state(1:Np, 1:av_Ni))
+    do i=1, av_Ni
+      i1 = minloc(array=xcenter, dim=1, mask=(xcenter>=av_xnode(i-1)))
+      i2 = maxloc(array=xcenter, dim=1, mask=(xcenter<=av_xnode(i)))
+      av_state(:, i) = 0._R_P
+      do ii=i1, i2
+        av_state(:, i) = av_state(:, i) + final_state(:, ii)
+      enddo
+      av_state(:, i) = av_state(:, i) / (i2-i1+1)
+    enddo
+  endif
+  return
+  !---------------------------------------------------------------------------------------------------------------------------------
+  endsubroutine average_solution
+
+  subroutine save_results(title, basename)
   !---------------------------------------------------------------------------------------------------------------------------------
   !< Save results.
   !---------------------------------------------------------------------------------------------------------------------------------
   character(*), intent(IN) :: title    !< Plot title.
-  character(*), intent(IN) :: filename !< Output filename.
+  character(*), intent(IN) :: basename !< Output basename.
   integer(I_P)             :: rawfile  !< Raw file unit for saving results.
   type(pyplot)             :: plt      !< Plot file handler.
-  integer(I_P)             :: i        !< Counter.
   integer(I_P)             :: v        !< Counter.
   !---------------------------------------------------------------------------------------------------------------------------------
 
   !---------------------------------------------------------------------------------------------------------------------------------
   if (results.or.plots) final_state = domain%output()
   if (results) then
-    open(newunit=rawfile, file=filename//'.dat')
-    write(rawfile, '(A)')'# '//title
-    write(rawfile, '(A)')'# VARIABLES: "x" "rho(1)" "rho(2)"... "rho(Ns)" "u" "p" "rho" "gamma"'
-    do i=1, Ni
-      write(rawfile, '('//trim(str(.true.,Np+1))//'('//FR_P//',1X))')x(i), (final_state(v, i), v=1, Np)
+    open(newunit=rawfile, file=basename//'-'//trim(str(.true.,Ni))//'_cells.dat')
+    write(rawfile, '(A)')'TITLE="'//title//'"'
+    write(rawfile, '(A)')variables
+    write(rawfile, '(A)')'ZONE T="FOODiE: '//trim(str(.true.,Ni))//' cells", I='//trim(str(.true.,Ni+1))//&
+                         ', J=1, K=1, DATAPACKING=BLOCK, VARLOCATION=([1]=NODAL,[2-'//trim(str(.true.,Np+1)) //']=CELLCENTERED)'
+    write(rawfile, '('//trim(str(.true.,Ni+1))//'('//FR_P//',1X))')xnode
+    do v=1, Np
+      write(rawfile, '('//trim(str(.true.,Ni))//'('//FR_P//',1X))')final_state(v, :)
     enddo
+    if ((av_Ni>0).and.(av_Ni/=Ni)) then
+      print "(A)", ' Average solution from Ni: '//trim(str(.true.,Ni))//' to av_Ni: '//trim(str(.true.,av_Ni))
+      call average_solution
+      write(rawfile, '(A)')'ZONE T="FOODiE: '//trim(str(.true.,Ni))//' cells averaged over '//trim(str(.true.,av_Ni))//&
+                           ' cells", I='//trim(str(.true.,av_Ni+1))//&
+                           ', J=1, K=1, DATAPACKING=BLOCK, VARLOCATION=([1]=NODAL,[2-'//trim(str(.true.,Np+1)) //']=CELLCENTERED)'
+      write(rawfile, '('//trim(str(.true.,av_Ni+1))//'('//FR_P//',1X))')av_xnode
+      do v=1, Np
+        write(rawfile, '('//trim(str(.true.,av_Ni))//'('//FR_P//',1X))')av_state(v, :)
+      enddo
+    endif
     close(rawfile)
   endif
   if (plots) then
     call plt%initialize(grid=.true., xlabel='x', title=title)
     do v=1, Ns
-      call plt%add_plot(x=x, y=final_state(v, :), label='rho('//trim(str(.true.,v))//')', linestyle='b-', linewidth=1)
+      call plt%add_plot(x=xcenter, y=final_state(v, :), label='rho('//trim(str(.true.,v))//')', linestyle='b-', linewidth=1)
     enddo
-    call plt%add_plot(x=x, y=final_state(Ns+1, :), label='u', linestyle='r-', linewidth=1)
-    call plt%add_plot(x=x, y=final_state(Ns+2, :), label='p', linestyle='g-', linewidth=1)
-    call plt%add_plot(x=x, y=final_state(Ns+3, :), label='rho', linestyle='o-', linewidth=1)
-    call plt%add_plot(x=x, y=final_state(Ns+4, :), label='gamma', linestyle='c-', linewidth=1)
-    call plt%savefig(filename//'.png')
+    call plt%add_plot(x=xcenter, y=final_state(Ns+1, :), label='u', linestyle='r-', linewidth=1)
+    call plt%add_plot(x=xcenter, y=final_state(Ns+2, :), label='p', linestyle='g-', linewidth=1)
+    call plt%add_plot(x=xcenter, y=final_state(Ns+3, :), label='rho', linestyle='o-', linewidth=1)
+    call plt%add_plot(x=xcenter, y=final_state(Ns+4, :), label='gamma', linestyle='c-', linewidth=1)
+    call plt%savefig(basename//'-'//trim(str(.true.,Ni))//'_cells.png')
   endif
   return
   !---------------------------------------------------------------------------------------------------------------------------------
@@ -180,7 +304,6 @@ contains
   logical,      intent(IN), optional :: finish   !< Flag for triggering the file closing.
   real(R_P),    intent(IN)           :: t        !< Current integration time.
   integer(I_P), save                 :: tsfile   !< File unit for saving time serie results.
-  integer(I_P)                       :: i        !< Counter.
   integer(I_P)                       :: v        !< Counter.
   !---------------------------------------------------------------------------------------------------------------------------------
 
@@ -189,13 +312,16 @@ contains
     final_state = domain%output()
     if (present(filename).and.present(title)) then
       open(newunit=tsfile, file=filename)
-      write(tsfile, '(A)')'# '//title
+      write(tsfile, '(A)')'TITLE="'//title//'"'
     endif
-    write(tsfile, '(A)')'# VARIABLES: "x" "rho(1)" "rho(2)"... "rho(Ns)" "u" "p" "rho" "gamma"'
-    write(tsfile, '(A)')'# Time: '//str(n=t)
-    do i=1, Ni
-      write(tsfile, '('//trim(str(.true.,Np+1))//'('//FR_P//',1X))')x(i), (final_state(v, i), v=1, Np)
+    write(tsfile, '(A)')variables//' "t"'
+    write(tsfile, '(A)')'ZONE T="'//str(n=t)//'", I='//trim(str(.true.,Ni+1))//&
+                        ', J=1, K=1, DATAPACKING=BLOCK, VARLOCATION=([1]=NODAL,[2-'//trim(str(.true.,Np+2)) //']=CELLCENTERED)'
+    write(tsfile, '('//trim(str(.true.,Ni+1))//'('//FR_P//',1X))')xnode
+    do v=1, Np
+      write(tsfile, '('//trim(str(.true.,Ni))//'('//FR_P//',1X))')final_state(v, :)
     enddo
+    write(tsfile, '('//trim(str(.true.,Ni))//'('//FR_P//',1X))')(t, v=1,Ni)
     if (present(finish)) then
       if (finish) close(tsfile)
     endif
@@ -218,12 +344,16 @@ contains
   real(R_P)                        :: t(1:ab_steps)         !< Times.
   integer(I_P)                     :: s                     !< AB steps counter.
   integer(I_P)                     :: ss                    !< AB substeps counter.
+  integer(I_P)                     :: steps_range(1:2)      !< Steps used.
+  character(len=:), allocatable    :: title                 !< Output files title.
   !---------------------------------------------------------------------------------------------------------------------------------
 
   !---------------------------------------------------------------------------------------------------------------------------------
   print "(A)", 'Integrating 1D Euler equations by means of Adams-Bashforth class of solvers'
-  do s=1, ab_steps
+  steps_range = [1, ab_steps] ; if (stages_steps>0) steps_range = [stages_steps, stages_steps]
+  do s=steps_range(1), steps_range(2)
     print "(A)", ' AB-'//trim(str(.true.,s))
+    title = '1D Euler equations integration, explicit Adams-Bashforth, t='//str(n=t_final)//trim(str(.true., s))//' steps'
     call ab_integrator%init(steps=s)
     call rk_integrator%init(stages=s)
     select case(s)
@@ -235,10 +365,7 @@ contains
       call domain%init(Ni=Ni, Ns=Ns, Dx=Dx, BC_L=BC_L, BC_R=BC_R, initial_state=initial_state, cp0=cp0, cv0=cv0, steps=s, ord=7)
     endselect
     t = 0._R_P
-    call save_time_serie(title='FOODiE test: 1D Euler equations integration, explicit Adams-Bashforth, t='//str(n=t_final)// &
-                               trim(str(.true., s))//' steps', &
-                         filename='euler_1D_integration-ab-'//trim(str(.true., s))//'-time_serie.dat', &
-                         t=t(s))
+    call save_time_serie(title=title, filename=output//'-'//trim(str(.true., s))//'-time_serie.dat', t=t(s))
     step = 1
     do while(t(s)<t_final)
       if (verbose) print "(A)", '    Time step: '//str(n=dt)//', Time: '//str(n=t)
@@ -262,9 +389,7 @@ contains
       call save_time_serie(t=t(s))
     enddo
     call save_time_serie(t=t(s), finish=.true.)
-    call save_results(title='FOODiE test: 1D Euler equations integration, explicit Adams-Bashforth, t='//str(n=t_final)// &
-                            trim(str(.true., s))//' steps', &
-                      filename='euler_1D_integration-ab-'//trim(str(.true., s)))
+    call save_results(title=title, basename=output//'-'//trim(str(.true., s)))
   enddo
   print "(A)", 'Finish!'
   return
@@ -278,15 +403,15 @@ contains
   type(euler_explicit_integrator) :: euler_integrator !< Euler integrator.
   real(R_P)                       :: dt               !< Time step.
   real(R_P)                       :: t                !< Time.
+  character(len=:), allocatable   :: title            !< Output files title.
   !---------------------------------------------------------------------------------------------------------------------------------
 
   !---------------------------------------------------------------------------------------------------------------------------------
   print "(A)", 'Integrating 1D Euler equations by means of explicit Euler solver'
+  title = '1D Euler equations integration, explicit Euler, t='//str(n=t_final)
   call domain%init(Ni=Ni, Ns=Ns, Dx=Dx, BC_L=BC_L, BC_R=BC_R, initial_state=initial_state, cp0=cp0, cv0=cv0)
   t = 0._R_P
-  call save_time_serie(title='FOODiE test: 1D Euler equations integration, explicit Euler, t='//str(n=t_final), &
-                       filename='euler_1D_integration-euler-time_serie.dat', &
-                       t=t)
+  call save_time_serie(title=title, filename=output//'-time_serie.dat', t=t)
   do while(t<t_final)
     if (verbose) print "(A)", '  Time step: '//str(n=dt)//', Time: '//str(n=t)
     dt = domain%dt(Nmax=0, Tmax=t_final, t=t, CFL=CFL)
@@ -295,8 +420,7 @@ contains
     call save_time_serie(t=t)
   enddo
   call save_time_serie(t=t, finish=.true.)
-  call save_results(title='FOODiE test: 1D Euler equations integration, explicit Euler, t='//str(n=t_final), &
-                    filename='euler_1D_integration-euler')
+  call save_results(title=title, basename=output)
   print "(A)", 'Finish!'
   return
   !---------------------------------------------------------------------------------------------------------------------------------
@@ -314,17 +438,17 @@ contains
   integer                          :: step                  !< Time steps counter.
   real(R_P)                        :: dt                    !< Time step.
   real(R_P)                        :: t                     !< Time.
+  character(len=:), allocatable    :: title                 !< Output files title.
   !---------------------------------------------------------------------------------------------------------------------------------
 
   !---------------------------------------------------------------------------------------------------------------------------------
   print "(A)", 'Integrating 1D Euler equations by means of leapfrog (RAW filtered) class of solvers'
+  title = '1D Euler equations integration, explicit leapfrog (RAW filtered), t='//str(n=t_final)
   call lf_integrator%init(nu=1.0_R_P, alpha=0._R_P)
   call rk_integrator%init(stages=rk_stages)
   call domain%init(Ni=Ni, Ns=Ns, Dx=Dx, BC_L=BC_L, BC_R=BC_R, initial_state=initial_state, cp0=cp0, cv0=cv0, steps=2, ord=3)
   t = 0._R_P
-  call save_time_serie(title='FOODiE test: 1D Euler equations integration, explicit leapfrog, t='//str(n=t_final), &
-                       filename='euler_1D_integration-lf-RAW-filter-time_serie.dat', &
-                       t=t)
+  call save_time_serie(title=title, filename=output//'-time_serie.dat', t=t)
   step = 1
   do while(t<t_final)
     if (verbose) print "(A)", '    Time step: '//str(n=dt)//', Time: '//str(n=t)
@@ -340,8 +464,7 @@ contains
     call save_time_serie(t=t)
   enddo
   call save_time_serie(t=t, finish=.true.)
-  call save_results(title='FOODiE test: 1D Euler equations integration, explicit leapfrog, t='//str(n=t_final), &
-                    filename='euler_1D_integration-lf-RAW-filter')
+  call save_results(title=title, basename=output)
   print "(A)", 'Finish!'
   return
   !---------------------------------------------------------------------------------------------------------------------------------
@@ -358,15 +481,19 @@ contains
   real(R_P)                       :: dt                    !< Time step.
   real(R_P)                       :: t                     !< Time.
   integer(I_P)                    :: s                     !< RK stages counter.
+  integer(I_P)                    :: stages_range(1:2)     !< Stages used.
+  character(len=:), allocatable   :: title                 !< Output files title.
   !---------------------------------------------------------------------------------------------------------------------------------
 
   !---------------------------------------------------------------------------------------------------------------------------------
   print "(A)", 'Integrating 1D Euler equations by means of low storage (2N) Runge-Kutta class of solvers'
-  do s=1, rk_stages
+  stages_range = [1, rk_stages] ; if (stages_steps>0) stages_range = [stages_steps, stages_steps]
+  do s=stages_range(1), stages_range(2)
     if (s==2) cycle ! 2 stages not yet implemented
     if (s==3) cycle ! 3 stages not yet implemented
     if (s==4) cycle ! 4 stages not yet implemented
     print "(A)", ' RK-'//trim(str(.true.,s))
+    title = '1D Euler equations integration, explicit low storage Runge-Kutta, t='//str(n=t_final)//trim(str(.true., s))//' stages'
     call rk_integrator%init(stages=s)
     select case(s)
     case(1)
@@ -377,10 +504,7 @@ contains
       call domain%init(Ni=Ni, Ns=Ns, Dx=Dx, BC_L=BC_L, BC_R=BC_R, initial_state=initial_state, cp0=cp0, cv0=cv0, ord=7)
     endselect
     t = 0._R_P
-    call save_time_serie(title='FOODiE test: 1D Euler equations integration, explicit low storage Runge-Kutta, t='//&
-                               str(n=t_final)//trim(str(.true., s))//' stages', &
-                         filename='euler_1D_integration-lsrk-'//trim(str(.true., s))//'-time_serie.dat', &
-                         t=t)
+    call save_time_serie(title=title, filename=output//'-'//trim(str(.true., s))//'-time_serie.dat', t=t)
     do while(t<t_final)
       if (verbose) print "(A)", '    Time step: '//str(n=dt)//', Time: '//str(n=t)
       dt = domain%dt(Nmax=0, Tmax=t_final, t=t, CFL=CFL)
@@ -389,9 +513,7 @@ contains
       call save_time_serie(t=t)
     enddo
     call save_time_serie(t=t, finish=.true.)
-    call save_results(title='FOODiE test: 1D Euler equations integration, explicit low storage Runge-Kutta, t='//str(n=t_final)// &
-                            trim(str(.true., s))//' stages', &
-                      filename='euler_1D_integration-lsrk-'//trim(str(.true., s)))
+    call save_results(title=title, basename=output//'-'//trim(str(.true., s)))
   enddo
   print "(A)", 'Finish!'
   return
@@ -408,13 +530,17 @@ contains
   real(R_P)                        :: dt                    !< Time step.
   real(R_P)                        :: t                     !< Time.
   integer(I_P)                     :: s                     !< RK stages counter.
+  integer(I_P)                     :: stages_range(1:2)     !< Stages used.
+  character(len=:), allocatable    :: title                 !< Output files title.
   !---------------------------------------------------------------------------------------------------------------------------------
 
   !---------------------------------------------------------------------------------------------------------------------------------
   print "(A)", 'Integrating 1D Euler equations by means of TVD/SSP Runge-Kutta class of solvers'
-  do s=1, rk_stages
+  stages_range = [1, rk_stages] ; if (stages_steps>0) stages_range = [stages_steps, stages_steps]
+  do s=stages_range(1), stages_range(2)
     if (s==4) cycle ! 4 stages not yet implemented
     print "(A)", ' RK-'//trim(str(.true.,s))
+    title = '1D Euler equations integration, explicit TVD/SSP Runge-Kutta, t='//str(n=t_final)//trim(str(.true., s))//' stages'
     call rk_integrator%init(stages=s)
     select case(s)
     case(1)
@@ -425,9 +551,7 @@ contains
       call domain%init(Ni=Ni, Ns=Ns, Dx=Dx, BC_L=BC_L, BC_R=BC_R, initial_state=initial_state, cp0=cp0, cv0=cv0, ord=7)
     endselect
     t = 0._R_P
-    call save_time_serie(title='FOODiE test: 1D Euler equations integration, explicit TVD Runge-Kutta, t='//str(n=t_final)// &
-                               trim(str(.true., s))//' stages', &
-                         filename='euler_1D_integration-tvdrk-'//trim(str(.true., s))//'-time_serie.dat', &
+    call save_time_serie(title=title, filename=output//'-'//trim(str(.true., s))//'-time_serie.dat', &
                          t=t)
     do while(t<t_final)
       if (verbose) print "(A)", '    Time step: '//str(n=dt)//', Time: '//str(n=t)
@@ -437,9 +561,7 @@ contains
       call save_time_serie(t=t)
     enddo
     call save_time_serie(t=t, finish=.true.)
-    call save_results(title='FOODiE test: 1D Euler equations integration, explicit TVD Runge-Kutta, t='//str(n=t_final)// &
-                            trim(str(.true., s))//' stages', &
-                      filename='euler_1D_integration-tvdrk-'//trim(str(.true., s)))
+    call save_results(title=title, basename=output//'-'//trim(str(.true., s)))
   enddo
   print "(A)", 'Finish!'
   return
