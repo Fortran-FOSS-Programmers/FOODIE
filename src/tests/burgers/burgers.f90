@@ -40,15 +40,13 @@ call cli%init(progname    = 'burgers',                                          
               authors     = 'Fortran-FOSS-Programmers',                            &
               license     = 'GNU GPLv3',                                           &
               description = 'Test FOODiE library on Burgers equation integration', &
-              examples    = ["burgers --solver euler --results",                   &
-                             "burgers --solver runge-kutta -r ",                   &
-                             "burgers --solver adams-bashforth",                   &
-                             "burgers --solver all --plots -r "])
-call cli%add(switch='--solver', switch_ab='-s', help='ODE solver used', required=.true., act='store', error=error)
-call cli%add(switch='--results', switch_ab='-r', help='Save results', required=.false., act='store_true', def='.false.', &
-             error=error)
-call cli%add(switch='--plots', switch_ab='-p', help='Save plots of results', required=.false., act='store_true', def='.false.', &
-             error=error)
+              examples    = ["burgers --solver euler --results  ",                 &
+                             "burgers --solver ls-runge-kutta -r",                 &
+                             "burgers --solver adams-bashforth  ",                 &
+                             "burgers --solver all --plots -r   "])
+call cli%add(switch='--solver', switch_ab='-s', help='ODE solver used', required=.true., act='store')
+call cli%add(switch='--results', switch_ab='-r', help='Save results', required=.false., act='store_true', def='.false.')
+call cli%add(switch='--plots', switch_ab='-p', help='Save plots of results', required=.false., act='store_true', def='.false.')
 ! parsing Command Line Interface
 call cli%parse(error=error)
 call cli%get(switch='-s', val=solver, error=error) ; if (error/=0) stop

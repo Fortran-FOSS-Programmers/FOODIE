@@ -75,12 +75,12 @@ call cli%add(switch='--verbose', help='Verbose output', required=.false., act='s
 call cli%add(switch='--omp_threads', help='Number of OpenMP threads used', required=.false., act='store', def='1', error=error)
 ! parsing Command Line Interface
 call cli%parse(error=error)
+call cli%get(switch='--omp_threads', val=omp_threads, error=error) ; if (error/=0) stop
+call cli%get(switch='--Ni', val=Ni, error=error) ; if (error/=0) stop
 call cli%get(switch='-r', val=results, error=error) ; if (error/=0) stop
 call cli%get(switch='-p', val=plots, error=error) ; if (error/=0) stop
 call cli%get(switch='-t', val=time_serie, error=error) ; if (error/=0) stop
 call cli%get(switch='--verbose', val=verbose, error=error) ; if (error/=0) stop
-call cli%get(switch='--omp_threads', val=omp_threads, error=error) ; if (error/=0) stop
-call cli%get(switch='--Ni', val=Ni, error=error) ; if (error/=0) stop
 #ifdef OPENMP
 call omp_set_dynamic(.false.)
 call omp_set_num_threads(omp_threads)

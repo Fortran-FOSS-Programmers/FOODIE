@@ -85,6 +85,21 @@ type, extends(integrand) :: euler_1D_openmp
   !<$$
   !< where \(N_s\) is the number of initial species composing the gas mixture.
   !<
+  !<#### Numerical grid organization
+  !< The finite volume, Godunov's like approach is employed. The conservative variables (and the primitive ones) are co-located at
+  !< the cell center. The cell and (inter)faces numeration is as follow.
+  !<```
+  !<                cell            (inter)faces
+  !<                 |                   |
+  !<                 v                   v
+  !<     |-------|-------|-.....-|-------|-------|-------|-------|-.....-|-------|-------|-------|-.....-|-------|-------|
+  !<     | 1-Ng  | 2-Ng  | ..... |  -1   |   0   |   1   |  2    | ..... |  Ni   | Ni+1  | Ni+1  | ..... |Ni+Ng-1| Ni+Ng |
+  !<     |-------|-------|-.....-|-------|-------|-------|-------|-.....-|-------|-------|-------|-.....-|-------|-------|
+  !<    0-Ng                             -1      0       1       2      Ni-1     Ni                                    Ni+Ng
+  !<```
+  !< Where *Ni* are the finite volumes (cells) used for discretizing the domain and *Ng* are the ghost cells used for imposing the
+  !< left and right boundary conditions (for a total of *2Ng* cells).
+  !<
   !<#### Primitive variables organization
   !< Primitive variables are organized as an array of reals which the first index means:
   !<
