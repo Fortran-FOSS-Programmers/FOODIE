@@ -1,5 +1,5 @@
 [modes]
-modes = error-analysis
+modes = errors-analysis
         tests-gnu tests-intel
         tests-gnu-debug tests-intel-debug
         euler-gnu-openmp-on euler-intel-openmp-on
@@ -13,14 +13,14 @@ $LSHARED         = -shared
 $CSTATIC_GNU     = -cpp -c -frealloc-lhs
 $CSTATIC_INT     = -cpp -c -assume realloc_lhs
 $DEBUG_GNU       = -O0 -g3 -Warray-bounds -Wcharacter-truncation -Wline-truncation -Wimplicit-interface -Wimplicit-procedure -Wunderflow -Wuninitialized -fcheck=all -fmodule-private -ffree-line-length-132 -fimplicit-none -fbacktrace -fdump-core -finit-real=nan -std=f2008 -fall-intrinsics
-$DEBUG_INT       = -O0 -debug all -check all -warn all -extend-source 132 -traceback -gen-interfaces#-fpe-all=0 -fp-stack-check -fstack-protector-all -ftrapuv -no-ftz -std08
+$DEBUG_INT       = -O0 -debug all -check all -warn all -extend-source 132 -traceback -gen-interfaces -fp-stack-check -fstack-protector-all -ftrapuv -no-ftz -std08
 $OPTIMIZE        = -O2
 $EXT_DEPENDS_GNU = ./external/fobos:flap-static-gnu ./external/fobos:pyplot-fortran-static-gnu ./external/fobos:wenoof-static-gnu
 $EXT_DEPENDS_INT = ./external/fobos:flap-static-intel ./external/fobos:pyplot-fortran-static-intel ./external/fobos:wenoof-static-intel
 $OMP_EXCLUDE     = ./src/tests/euler-1D-openmp/euler-1D-openmp.f90 ./src/tests/euler-1D-openmp/type_euler-1D-openmp.f90
 
 # main modes
-[error-analysis]
+[errors-analysis]
 help      = build all tests for errors analysis: GNU gfortran, release mode
 template  = template-static-gnu
 dependon  = $EXT_DEPENDS_GNU
