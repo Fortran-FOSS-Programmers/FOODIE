@@ -1,0 +1,1480 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+	 
+	 <meta name="description" content="Fortran Object oriented Ordinary Differential Equations integration library">
+    
+    <meta name="author" content="Chris MacMackin" >
+    <link rel="icon" href="../favicon.png">
+
+    <title>perform_errors_analysis &ndash; FOODiE</title>
+
+    <link href="../css/bootstrap.min.css" rel="stylesheet">
+    <link href="../css/pygments.css" rel="stylesheet">
+    <link href="../css/font-awesome.min.css" rel="stylesheet">
+    <link href="../css/local.css" rel="stylesheet">
+    
+
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+    
+    <script src="../js/jquery-2.1.3.min.js"></script>
+    <script src="../js/svg-pan-zoom.min.js"></script>
+
+    
+    <script src="../tipuesearch/tipuesearch_content.js"></script>
+    <link  href="../tipuesearch/tipuesearch.css" rel="stylesheet">
+    <script src="../tipuesearch/tipuesearch_set.js"></script>
+    <script src="../tipuesearch/tipuesearch.js"></script>
+    
+
+  </head>
+
+  <body>
+
+    <!-- Fixed navbar -->
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="../index.html">FOODiE </a>
+        </div>
+        <div id="navbar" class="navbar-collapse collapse">
+          <ul class="nav navbar-nav">
+				
+                
+            <li><a href="../lists/files.html">Source Files</a></li>
+				
+				
+            <li><a href="../lists/modules.html">Modules</a></li>
+				
+				
+            <li><a href="../lists/procedures.html">Procedures</a></li>
+				
+				
+            <li><a href="../lists/absint.html">Abstract Interfaces</a></li>
+								
+            <li><a href="../lists/types.html">Derived Types</a></li>
+				
+				
+            <li><a href="../lists/programs.html">Programs</a></li>
+				
+          </ul>
+        
+        <form action="../search.html" class="navbar-form navbar-right" role="search">
+        <div class="form-group">
+          <input type="text" class="form-control" placeholder="Search" name="q" id="tipue_search_input" autocomplete="off" required>
+        </div>
+<!--
+        <button type="submit" class="btn btn-default">Submit</button>
+-->
+        </form>
+        
+        </div><!--/.nav-collapse -->
+      </div>
+    </nav>
+
+    <div class="container">
+    
+  
+  <div class="row">
+    <h1>perform_errors_analysis
+    <small>Subroutine</small>
+    
+    </h1>
+	 
+<div class="row">
+<div class="col-lg-12">
+<div class="well well-sm">
+  <ul class="list-inline" style="margin-bottom:0px;display:inline">
+     
+     
+     
+     
+    
+    
+    <li><i class="fa fa-code"></i><a href="../src/oscillation.f90"> Source File</a></li>
+     
+  </ul>
+  <ol class="breadcrumb in-well text-right">
+  
+     <li><a href='../sourcefile/oscillation.f90.html'>oscillation.f90</a></li>
+  
+     <li><a href='../program/integrate_oscillation.html'>integrate_oscillation</a></li>
+  
+     <li class="active">perform_errors_analysis</li>
+  </ol>
+</div>
+</div>
+</div>
+    
+  </div>
+  
+  <div class="row">
+    <div class="col-lg-3">
+    
+  
+  
+  
+  <div class="panel panel-primary">
+    <div class="panel-heading text-left"><h3 class="panel-title">Variables</h3></div>
+    <div class="list-group">
+      
+      <a class="list-group-item" href="../proc/perform_errors_analysis.html#variable-ndt">NDt</a>
+      
+      <a class="list-group-item" href="../proc/perform_errors_analysis.html#variable-time_steps">time_steps</a>
+      
+      <a class="list-group-item" href="../proc/perform_errors_analysis.html#variable-ab_integrator%7E5">ab_integrator</a>
+      
+      <a class="list-group-item" href="../proc/perform_errors_analysis.html#variable-lf_integrator%7E5">lf_integrator</a>
+      
+      <a class="list-group-item" href="../proc/perform_errors_analysis.html#variable-ls_integrator">ls_integrator</a>
+      
+      <a class="list-group-item" href="../proc/perform_errors_analysis.html#variable-rk_integrator%7E17">rk_integrator</a>
+      
+      <a class="list-group-item" href="../proc/perform_errors_analysis.html#variable-ab_steps%7E5">ab_steps</a>
+      
+      <a class="list-group-item" href="../proc/perform_errors_analysis.html#variable-rk_stages%7E17">rk_stages</a>
+      
+      <a class="list-group-item" href="../proc/perform_errors_analysis.html#variable-rk_stage%7E17">rk_stage</a>
+      
+      <a class="list-group-item" href="../proc/perform_errors_analysis.html#variable-filter%7E11">filter</a>
+      
+      <a class="list-group-item" href="../proc/perform_errors_analysis.html#variable-ab_errors">ab_errors</a>
+      
+      <a class="list-group-item" href="../proc/perform_errors_analysis.html#variable-lf_errors">lf_errors</a>
+      
+      <a class="list-group-item" href="../proc/perform_errors_analysis.html#variable-ls_errors">ls_errors</a>
+      
+      <a class="list-group-item" href="../proc/perform_errors_analysis.html#variable-rk_errors">rk_errors</a>
+      
+      <a class="list-group-item" href="../proc/perform_errors_analysis.html#variable-ab_orders">ab_orders</a>
+      
+      <a class="list-group-item" href="../proc/perform_errors_analysis.html#variable-lf_orders">lf_orders</a>
+      
+      <a class="list-group-item" href="../proc/perform_errors_analysis.html#variable-ls_orders">ls_orders</a>
+      
+      <a class="list-group-item" href="../proc/perform_errors_analysis.html#variable-rk_orders">rk_orders</a>
+      
+      <a class="list-group-item" href="../proc/perform_errors_analysis.html#variable-step%7E15">step</a>
+      
+      <a class="list-group-item" href="../proc/perform_errors_analysis.html#variable-s%7E28">s</a>
+      
+      <a class="list-group-item" href="../proc/perform_errors_analysis.html#variable-d">d</a>
+      
+      <a class="list-group-item" href="../proc/perform_errors_analysis.html#variable-title%7E18">title</a>
+      
+    </div>
+  </div>
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  <div class="panel panel-primary">
+    <div class="panel-heading text-left"><h3 class="panel-title">Source Code</h3></div>
+    <div class="list-group">
+      <a class="list-group-item" href="../proc/perform_errors_analysis.html#src">perform_errors_analysis</a>
+    </div>
+  </div>
+  
+  <hr>
+  
+  <div class="panel panel-default">
+    <div class="panel-heading text-left"><h3 class="panel-title">All Procedures</h3></div>
+    <div class="list-group">
+      
+      <a class="list-group-item" href="../proc/a.html">a</a>
+      
+      <a class="list-group-item" href="../proc/a%7E2.html">a</a>
+      
+      <a class="list-group-item" href="../proc/add_burgers.html">add_burgers</a>
+      
+      <a class="list-group-item" href="../proc/add_euler.html">add_euler</a>
+      
+      <a class="list-group-item" href="../proc/add_euler%7E2.html">add_euler</a>
+      
+      <a class="list-group-item" href="../proc/add_lorenz.html">add_lorenz</a>
+      
+      <a class="list-group-item" href="../proc/add_oscillation.html">add_oscillation</a>
+      
+      <a class="list-group-item" href="../proc/average_solution.html">average_solution</a>
+      
+      <a class="list-group-item" href="../proc/burgers_assign_burgers.html">burgers_assign_burgers</a>
+      
+      <a class="list-group-item" href="../proc/burgers_assign_real.html">burgers_assign_real</a>
+      
+      <a class="list-group-item" href="../proc/burgers_multiply_burgers.html">burgers_multiply_burgers</a>
+      
+      <a class="list-group-item" href="../proc/burgers_multiply_real.html">burgers_multiply_real</a>
+      
+      <a class="list-group-item" href="../proc/compute_dt.html">compute_dt</a>
+      
+      <a class="list-group-item" href="../proc/compute_dt%7E2.html">compute_dt</a>
+      
+      <a class="list-group-item" href="../proc/compute_dt%7E3.html">compute_dt</a>
+      
+      <a class="list-group-item" href="../proc/compute_errors.html">compute_errors</a>
+      
+      <a class="list-group-item" href="../proc/compute_inter_states.html">compute_inter_states</a>
+      
+      <a class="list-group-item" href="../proc/compute_inter_states%7E2.html">compute_inter_states</a>
+      
+      <a class="list-group-item" href="../proc/conservative2primitive.html">conservative2primitive</a>
+      
+      <a class="list-group-item" href="../proc/conservative2primitive%7E2.html">conservative2primitive</a>
+      
+      <a class="list-group-item" href="../proc/d2burgers_dx2.html">d2Burgers_dx2</a>
+      
+      <a class="list-group-item" href="../proc/dburgers_dt.html">dBurgers_dt</a>
+      
+      <a class="list-group-item" href="../proc/dburgers_dx.html">dBurgers_dx</a>
+      
+      <a class="list-group-item" href="../proc/destroy.html">destroy</a>
+      
+      <a class="list-group-item" href="../proc/destroy%7E2.html">destroy</a>
+      
+      <a class="list-group-item" href="../proc/destroy%7E3.html">destroy</a>
+      
+      <a class="list-group-item" href="../proc/destroy%7E4.html">destroy</a>
+      
+      <a class="list-group-item" href="../proc/destroy%7E5.html">destroy</a>
+      
+      <a class="list-group-item" href="../proc/deuler_dt.html">dEuler_dt</a>
+      
+      <a class="list-group-item" href="../proc/deuler_dt%7E2.html">dEuler_dt</a>
+      
+      <a class="list-group-item" href="../proc/dlorenz_dt.html">dLorenz_dt</a>
+      
+      <a class="list-group-item" href="../proc/doscillation_dt.html">dOscillation_dt</a>
+      
+      <a class="list-group-item" href="../proc/e.html">E</a>
+      
+      <a class="list-group-item" href="../proc/e%7E2.html">E</a>
+      
+      <a class="list-group-item" href="../proc/estimate_orders.html">estimate_orders</a>
+      
+      <a class="list-group-item" href="../proc/euler_assign_euler.html">euler_assign_euler</a>
+      
+      <a class="list-group-item" href="../proc/euler_assign_euler%7E2.html">euler_assign_euler</a>
+      
+      <a class="list-group-item" href="../proc/euler_assign_real.html">euler_assign_real</a>
+      
+      <a class="list-group-item" href="../proc/euler_assign_real%7E2.html">euler_assign_real</a>
+      
+      <a class="list-group-item" href="../proc/euler_multiply_euler.html">euler_multiply_euler</a>
+      
+      <a class="list-group-item" href="../proc/euler_multiply_euler%7E2.html">euler_multiply_euler</a>
+      
+      <a class="list-group-item" href="../proc/euler_multiply_real.html">euler_multiply_real</a>
+      
+      <a class="list-group-item" href="../proc/euler_multiply_real%7E2.html">euler_multiply_real</a>
+      
+      <a class="list-group-item" href="../proc/exact_solution.html">exact_solution</a>
+      
+      <a class="list-group-item" href="../proc/finalize.html">finalize</a>
+      
+      <a class="list-group-item" href="../proc/finalize%7E2.html">finalize</a>
+      
+      <a class="list-group-item" href="../proc/finalize%7E3.html">finalize</a>
+      
+      <a class="list-group-item" href="../proc/finalize%7E4.html">finalize</a>
+      
+      <a class="list-group-item" href="../proc/finalize%7E5.html">finalize</a>
+      
+      <a class="list-group-item" href="../proc/h.html">H</a>
+      
+      <a class="list-group-item" href="../proc/h%7E2.html">H</a>
+      
+      <a class="list-group-item" href="../proc/impose_boundary_conditions.html">impose_boundary_conditions</a>
+      
+      <a class="list-group-item" href="../proc/impose_boundary_conditions%7E2.html">impose_boundary_conditions</a>
+      
+      <a class="list-group-item" href="../proc/init.html">init</a>
+      
+      <a class="list-group-item" href="../proc/init%7E2.html">init</a>
+      
+      <a class="list-group-item" href="../proc/init%7E3.html">init</a>
+      
+      <a class="list-group-item" href="../proc/init%7E4.html">init</a>
+      
+      <a class="list-group-item" href="../proc/init%7E5.html">init</a>
+      
+      <a class="list-group-item" href="../proc/init%7E6.html">init</a>
+      
+      <a class="list-group-item" href="../proc/init%7E7.html">init</a>
+      
+      <a class="list-group-item" href="../proc/init%7E8.html">init</a>
+      
+      <a class="list-group-item" href="../proc/init%7E9.html">init</a>
+      
+      <a class="list-group-item" href="../proc/init%7E10.html">init</a>
+      
+      <a class="list-group-item" href="../proc/init%7E11.html">init</a>
+      
+      <a class="list-group-item" href="../proc/init%7E12.html">init</a>
+      
+      <a class="list-group-item" href="../proc/init%7E13.html">init</a>
+      
+      <a class="list-group-item" href="../proc/integrate.html">integrate</a>
+      
+      <a class="list-group-item" href="../proc/integrate%7E2.html">integrate</a>
+      
+      <a class="list-group-item" href="../proc/integrate%7E3.html">integrate</a>
+      
+      <a class="list-group-item" href="../proc/integrate%7E4.html">integrate</a>
+      
+      <a class="list-group-item" href="../proc/integrate%7E5.html">integrate</a>
+      
+      <a class="list-group-item" href="../proc/lorenz_assign_lorenz.html">lorenz_assign_lorenz</a>
+      
+      <a class="list-group-item" href="../proc/lorenz_assign_real.html">lorenz_assign_real</a>
+      
+      <a class="list-group-item" href="../proc/lorenz_multiply_lorenz.html">lorenz_multiply_lorenz</a>
+      
+      <a class="list-group-item" href="../proc/lorenz_multiply_real.html">lorenz_multiply_real</a>
+      
+      <a class="list-group-item" href="../proc/oscillation_assign_oscillation.html">oscillation_assign_oscillation</a>
+      
+      <a class="list-group-item" href="../proc/oscillation_assign_real.html">oscillation_assign_real</a>
+      
+      <a class="list-group-item" href="../proc/oscillation_multiply_oscillation.html">oscillation_multiply_oscillation</a>
+      
+      <a class="list-group-item" href="../proc/oscillation_multiply_real.html">oscillation_multiply_real</a>
+      
+      <a class="list-group-item" href="../proc/output.html">output</a>
+      
+      <a class="list-group-item" href="../proc/output%7E2.html">output</a>
+      
+      <a class="list-group-item" href="../proc/output%7E3.html">output</a>
+      
+      <a class="list-group-item" href="../proc/output%7E4.html">output</a>
+      
+      <a class="list-group-item" href="../proc/output%7E5.html">output</a>
+      
+      <a class="list-group-item" href="../proc/p.html">p</a>
+      
+      <a class="list-group-item" href="../proc/p%7E2.html">p</a>
+      
+      <a class="list-group-item" href="../proc/perform_errors_analysis.html">perform_errors_analysis</a>
+      
+      <a class="list-group-item" href="../proc/previous_step.html">previous_step</a>
+      
+      <a class="list-group-item" href="../proc/previous_step%7E2.html">previous_step</a>
+      
+      <a class="list-group-item" href="../proc/previous_step%7E3.html">previous_step</a>
+      
+      <a class="list-group-item" href="../proc/previous_step%7E4.html">previous_step</a>
+      
+      <a class="list-group-item" href="../proc/previous_step%7E5.html">previous_step</a>
+      
+      <a class="list-group-item" href="../proc/primitive2conservative.html">primitive2conservative</a>
+      
+      <a class="list-group-item" href="../proc/primitive2conservative%7E2.html">primitive2conservative</a>
+      
+      <a class="list-group-item" href="../proc/print_analysis.html">print_analysis</a>
+      
+      <a class="list-group-item" href="../proc/r.html">r</a>
+      
+      <a class="list-group-item" href="../proc/r%7E2.html">r</a>
+      
+      <a class="list-group-item" href="../proc/real_multiply_burgers.html">real_multiply_burgers</a>
+      
+      <a class="list-group-item" href="../proc/real_multiply_euler.html">real_multiply_euler</a>
+      
+      <a class="list-group-item" href="../proc/real_multiply_euler%7E2.html">real_multiply_euler</a>
+      
+      <a class="list-group-item" href="../proc/real_multiply_lorenz.html">real_multiply_lorenz</a>
+      
+      <a class="list-group-item" href="../proc/real_multiply_oscillation.html">real_multiply_oscillation</a>
+      
+      <a class="list-group-item" href="../proc/reconstruct_interfaces_states.html">reconstruct_interfaces_states</a>
+      
+      <a class="list-group-item" href="../proc/reconstruct_interfaces_states%7E2.html">reconstruct_interfaces_states</a>
+      
+      <a class="list-group-item" href="../proc/riemann_solver.html">riemann_solver</a>
+      
+      <a class="list-group-item" href="../proc/riemann_solver%7E2.html">riemann_solver</a>
+      
+      <a class="list-group-item" href="../proc/save_results.html">save_results</a>
+      
+      <a class="list-group-item" href="../proc/save_results%7E2.html">save_results</a>
+      
+      <a class="list-group-item" href="../proc/save_results%7E3.html">save_results</a>
+      
+      <a class="list-group-item" href="../proc/save_results%7E4.html">save_results</a>
+      
+      <a class="list-group-item" href="../proc/save_results%7E5.html">save_results</a>
+      
+      <a class="list-group-item" href="../proc/save_time_serie.html">save_time_serie</a>
+      
+      <a class="list-group-item" href="../proc/save_time_serie%7E2.html">save_time_serie</a>
+      
+      <a class="list-group-item" href="../proc/sub_burgers.html">sub_burgers</a>
+      
+      <a class="list-group-item" href="../proc/sub_euler.html">sub_euler</a>
+      
+      <a class="list-group-item" href="../proc/sub_euler%7E2.html">sub_euler</a>
+      
+      <a class="list-group-item" href="../proc/sub_lorenz.html">sub_lorenz</a>
+      
+      <a class="list-group-item" href="../proc/sub_oscillation.html">sub_oscillation</a>
+      
+      <a class="list-group-item" href="../proc/test_ab.html">test_ab</a>
+      
+      <a class="list-group-item" href="../proc/test_ab%7E2.html">test_ab</a>
+      
+      <a class="list-group-item" href="../proc/test_ab%7E3.html">test_ab</a>
+      
+      <a class="list-group-item" href="../proc/test_ab%7E4.html">test_ab</a>
+      
+      <a class="list-group-item" href="../proc/test_euler.html">test_euler</a>
+      
+      <a class="list-group-item" href="../proc/test_euler%7E2.html">test_euler</a>
+      
+      <a class="list-group-item" href="../proc/test_euler%7E3.html">test_euler</a>
+      
+      <a class="list-group-item" href="../proc/test_euler%7E4.html">test_euler</a>
+      
+      <a class="list-group-item" href="../proc/test_leapfrog.html">test_leapfrog</a>
+      
+      <a class="list-group-item" href="../proc/test_leapfrog%7E2.html">test_leapfrog</a>
+      
+      <a class="list-group-item" href="../proc/test_leapfrog%7E3.html">test_leapfrog</a>
+      
+      <a class="list-group-item" href="../proc/test_leapfrog%7E4.html">test_leapfrog</a>
+      
+      <a class="list-group-item" href="../proc/test_ls_rk.html">test_ls_rk</a>
+      
+      <a class="list-group-item" href="../proc/test_ls_rk%7E2.html">test_ls_rk</a>
+      
+      <a class="list-group-item" href="../proc/test_ls_rk%7E3.html">test_ls_rk</a>
+      
+      <a class="list-group-item" href="../proc/test_ls_rk%7E4.html">test_ls_rk</a>
+      
+      <a class="list-group-item" href="../proc/test_tvd_rk.html">test_tvd_rk</a>
+      
+      <a class="list-group-item" href="../proc/test_tvd_rk%7E2.html">test_tvd_rk</a>
+      
+      <a class="list-group-item" href="../proc/test_tvd_rk%7E3.html">test_tvd_rk</a>
+      
+      <a class="list-group-item" href="../proc/test_tvd_rk%7E4.html">test_tvd_rk</a>
+      
+      <a class="list-group-item" href="../proc/update_previous_steps.html">update_previous_steps</a>
+      
+      <a class="list-group-item" href="../proc/update_previous_steps%7E2.html">update_previous_steps</a>
+      
+      <a class="list-group-item" href="../proc/update_previous_steps%7E3.html">update_previous_steps</a>
+      
+      <a class="list-group-item" href="../proc/update_previous_steps%7E4.html">update_previous_steps</a>
+      
+      <a class="list-group-item" href="../proc/update_previous_steps%7E5.html">update_previous_steps</a>
+      
+    </div>
+  </div>
+  
+  
+    </div>
+    
+    <div class="col-lg-9" id='text'>
+    <h2>
+subroutine perform_errors_analysis()
+    
+    
+    
+</h2>
+    
+  
+
+
+
+    <h3>Arguments</h3>
+    
+      <em>None</em>
+    
+    
+    
+    <h3>Description</h3>
+    <p>Peform errors analysis.</p>
+<p>The analysis is based on the integration of the Oscillation equations with different, decreasing time steps in the range
+ <em>[5000, 2500, 1250, 625, 320, 100]</em>. The error is estimated by the L2 norm of the difference between the exact (\(U_e\)) and
+ the numerical (\(U_{\Delta t}\)) solutions for each time step:</p>
+<p>$$
+\varepsilon (\Delta t) = || U_e - U_{\Delta t} ||_2 = \sqrt{ \sum_{s=1}^{N_s} { \left(U_e(t_0 + s * \Delta t) -
+U_{\Delta t}(t_0 + s * \Delta t) \right)^2 }}
+$$</p>
+<p>Using two pairs of subsequent-decreasing time steps solution is possible to estimate the order of accuracy of the solver
+ employed computing the \emph{observed order} of accuracy:</p>
+<p>$$
+p = \frac{log10 \left( \frac{\varepsilon (\Delta t_1)}{\varepsilon (\Delta t_2)} \right)}
+{log10 \left( \frac{\Delta t_1}{\Delta t_2} \right)}
+$$</p>
+<p>where \(\frac{\Delta t_1}{\Delta t_2}&gt;1\).</p>
+    
+    
+     <h3>Calls</h3>
+     
+                <div class="depgraph"><?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.26.3 (20100126.1600)
+ -->
+<!-- Title: proc~~perform_errors_analysis~~CallsGraph Pages: 1 -->
+<svg id="procperform_errors_analysisCallsGraph" width="382pt" height="248pt"
+ viewBox="0.00 0.00 382.00 248.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="proc~~perform_errors_analysis~~CallsGraph" class="graph" transform="scale(1 1) rotate(0) translate(4 244)">
+<title>proc~~perform_errors_analysis~~CallsGraph</title>
+<polygon fill="white" stroke="white" points="-4,5 -4,-244 379,-244 379,5 -4,5"/>
+<!-- proc~perform_errors_analysis -->
+<g id="node1" class="node"><title>proc~perform_errors_analysis</title>
+<polygon fill="none" stroke="black" points="129,-131 1,-131 1,-105 129,-105 129,-131"/>
+<text text-anchor="middle" x="65" y="-115.55" font-family="Helvetica,sans-Serif" font-size="10.50">perform_errors_analysis</text>
+</g>
+<!-- proc~compute_errors -->
+<g id="node2" class="node"><title>proc~compute_errors</title>
+<a xlink:href="../proc/compute_errors.html" xlink:title="compute_errors">
+<polygon fill="#d94e8f" stroke="#d94e8f" points="255,-240 167,-240 167,-214 255,-214 255,-240"/>
+<text text-anchor="middle" x="211" y="-224.55" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">compute_errors</text>
+</a>
+</g>
+<!-- proc~perform_errors_analysis&#45;&gt;proc~compute_errors -->
+<g id="edge12" class="edge"><title>proc~perform_errors_analysis&#45;&gt;proc~compute_errors</title>
+<path fill="none" stroke="black" d="M78.1481,-131.3C96.6104,-149.494 131.801,-182.452 166,-205 168.096,-206.382 170.292,-207.732 172.539,-209.04"/>
+<polygon fill="black" stroke="black" points="170.895,-212.131 181.349,-213.854 174.251,-205.988 170.895,-212.131"/>
+</g>
+<!-- proc~print_analysis -->
+<g id="node3" class="node"><title>proc~print_analysis</title>
+<a xlink:href="../proc/print_analysis.html" xlink:title="print_analysis">
+<polygon fill="#d9534f" stroke="#d9534f" points="250,-70 172,-70 172,-44 250,-44 250,-70"/>
+<text text-anchor="middle" x="211" y="-54.55" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">print_analysis</text>
+</a>
+</g>
+<!-- proc~perform_errors_analysis&#45;&gt;proc~print_analysis -->
+<g id="edge14" class="edge"><title>proc~perform_errors_analysis&#45;&gt;proc~print_analysis</title>
+<path fill="none" stroke="black" d="M96.3207,-104.914C117.971,-95.8681 146.978,-83.7489 170.401,-73.9624"/>
+<polygon fill="black" stroke="black" points="171.853,-77.149 179.731,-70.0644 169.155,-70.6901 171.853,-77.149"/>
+</g>
+<!-- proc~estimate_orders -->
+<g id="node4" class="node"><title>proc~estimate_orders</title>
+<a xlink:href="../proc/estimate_orders.html" xlink:title="estimate_orders">
+<polygon fill="#d94e8f" stroke="#d94e8f" points="256,-152 166,-152 166,-126 256,-126 256,-152"/>
+<text text-anchor="middle" x="211" y="-136.55" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">estimate_orders</text>
+</a>
+</g>
+<!-- proc~perform_errors_analysis&#45;&gt;proc~estimate_orders -->
+<g id="edge16" class="edge"><title>proc~perform_errors_analysis&#45;&gt;proc~estimate_orders</title>
+<path fill="none" stroke="black" d="M129.888,-127.333C138.551,-128.579 147.368,-129.847 155.844,-131.067"/>
+<polygon fill="black" stroke="black" points="155.583,-134.565 165.979,-132.524 156.579,-127.636 155.583,-134.565"/>
+</g>
+<!-- str -->
+<g id="node5" class="node"><title>str</title>
+<polygon fill="#777777" stroke="#777777" points="360,-70 306,-70 306,-44 360,-44 360,-70"/>
+<text text-anchor="middle" x="333" y="-54.55" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">str</text>
+</g>
+<!-- proc~perform_errors_analysis&#45;&gt;str -->
+<g id="edge18" class="edge"><title>proc~perform_errors_analysis&#45;&gt;str</title>
+<path fill="none" stroke="black" d="M129.814,-106.05C166.916,-98.889 214.249,-89.211 256,-79 269.107,-75.7944 283.343,-71.8573 295.969,-68.2041"/>
+<polygon fill="black" stroke="black" points="297.083,-71.5248 305.696,-65.3546 295.115,-64.8071 297.083,-71.5248"/>
+</g>
+<!-- proc~init~12 -->
+<g id="node6" class="node"><title>proc~init~12</title>
+<a xlink:href="../proc/init%7E12.html" xlink:title="init">
+<polygon fill="#d9534f" stroke="#d9534f" points="238,-26 184,-26 184,-1.24345e-14 238,-3.55271e-15 238,-26"/>
+<text text-anchor="middle" x="211" y="-10.55" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">init</text>
+</a>
+</g>
+<!-- proc~perform_errors_analysis&#45;&gt;proc~init~12 -->
+<g id="edge20" class="edge"><title>proc~perform_errors_analysis&#45;&gt;proc~init~12</title>
+<path fill="none" stroke="black" d="M78.9011,-104.78C97.66,-87.3766 132.589,-56.4765 166,-35 168.78,-33.2131 171.726,-31.472 174.728,-29.8024"/>
+<polygon fill="black" stroke="black" points="176.569,-32.7882 183.789,-25.034 173.31,-26.5936 176.569,-32.7882"/>
+</g>
+<!-- proc~save_results~5 -->
+<g id="node7" class="node"><title>proc~save_results~5</title>
+<a xlink:href="../proc/save_results%7E5.html" xlink:title="save_results">
+<polygon fill="#d9534f" stroke="#d9534f" points="247,-196 175,-196 175,-170 247,-170 247,-196"/>
+<text text-anchor="middle" x="211" y="-180.55" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">save_results</text>
+</a>
+</g>
+<!-- proc~perform_errors_analysis&#45;&gt;proc~save_results~5 -->
+<g id="edge22" class="edge"><title>proc~perform_errors_analysis&#45;&gt;proc~save_results~5</title>
+<path fill="none" stroke="black" d="M94.5453,-131.154C116.907,-141.109 147.823,-154.873 172.181,-165.717"/>
+<polygon fill="black" stroke="black" points="170.94,-168.996 181.499,-169.866 173.787,-162.601 170.94,-168.996"/>
+</g>
+<!-- proc~exact_solution -->
+<g id="node8" class="node"><title>proc~exact_solution</title>
+<a xlink:href="../proc/exact_solution.html" xlink:title="exact_solution">
+<polygon fill="#d94e8f" stroke="#d94e8f" points="373,-218 293,-218 293,-192 373,-192 373,-218"/>
+<text text-anchor="middle" x="333" y="-202.55" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">exact_solution</text>
+</a>
+</g>
+<!-- proc~compute_errors&#45;&gt;proc~exact_solution -->
+<g id="edge2" class="edge"><title>proc~compute_errors&#45;&gt;proc~exact_solution</title>
+<path fill="none" stroke="black" d="M255.045,-219.057C263.872,-217.466 273.213,-215.781 282.246,-214.152"/>
+<polygon fill="black" stroke="black" points="283.05,-217.564 292.27,-212.345 281.807,-210.675 283.05,-217.564"/>
+</g>
+<!-- proc~print_analysis&#45;&gt;str -->
+<g id="edge4" class="edge"><title>proc~print_analysis&#45;&gt;str</title>
+<path fill="none" stroke="black" d="M250.273,-57C264.847,-57 281.324,-57 295.715,-57"/>
+<polygon fill="black" stroke="black" points="295.768,-60.5001 305.768,-57 295.768,-53.5001 295.768,-60.5001"/>
+</g>
+<!-- proc~init~12&#45;&gt;str -->
+<g id="edge6" class="edge"><title>proc~init~12&#45;&gt;str</title>
+<path fill="none" stroke="black" d="M238.076,-22.765C255.292,-28.9742 277.795,-37.09 296.57,-43.8612"/>
+<polygon fill="black" stroke="black" points="295.406,-47.162 306,-47.2623 297.78,-40.5771 295.406,-47.162"/>
+</g>
+<!-- strz -->
+<g id="node11" class="node"><title>strz</title>
+<polygon fill="#777777" stroke="#777777" points="360,-26 306,-26 306,-1.24345e-14 360,-3.55271e-15 360,-26"/>
+<text text-anchor="middle" x="333" y="-10.55" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">strz</text>
+</g>
+<!-- proc~init~12&#45;&gt;strz -->
+<g id="edge8" class="edge"><title>proc~init~12&#45;&gt;strz</title>
+<path fill="none" stroke="black" d="M238.076,-13C255.055,-13 277.177,-13 295.792,-13"/>
+<polygon fill="black" stroke="black" points="296,-16.5001 306,-13 296,-9.5001 296,-16.5001"/>
+</g>
+<!-- proc~save_results~5&#45;&gt;proc~exact_solution -->
+<g id="edge10" class="edge"><title>proc~save_results~5&#45;&gt;proc~exact_solution</title>
+<path fill="none" stroke="black" d="M247.604,-189.601C258.461,-191.559 270.553,-193.739 282.142,-195.829"/>
+<polygon fill="black" stroke="black" points="281.691,-199.304 292.153,-197.634 282.933,-192.415 281.691,-199.304"/>
+</g>
+</g>
+</svg>
+</div>
+                <div><a type="button" class="graph-help" data-toggle="modal" href="#graph-help-text">Help</a></div>
+                <div class="modal fade" id="graph-help-text" tabindex="-1" role="dialog">
+                  <div class="modal-dialog modal-lg" role="document">
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title" id="-graph-help-label">Graph Key</h4>
+                      </div>
+                      <div class="modal-body">
+                        
+Nodes of different colours represent the following:
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.26.3 (20100126.1600)
+ -->
+<!-- Title: Graph Key Pages: 1 -->
+<svg width="641pt" height="28pt"
+ viewBox="0.00 0.00 641.00 27.80" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="graph1" class="graph" transform="scale(0.817602 0.817602) rotate(0) translate(4 30)">
+<title>Graph Key</title>
+<polygon fill="white" stroke="white" points="-4,5 -4,-30 781,-30 781,5 -4,5"/>
+<!-- Module -->
+<g id="node1" class="node"><title>Module</title>
+<polygon fill="#337ab7" stroke="#337ab7" points="54,-26 2.13163e-14,-26 0,-1.24345e-14 54,-3.55271e-15 54,-26"/>
+<text text-anchor="middle" x="27" y="-10.55" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Module</text>
+</g>
+<!-- Submodule -->
+<g id="node2" class="node"><title>Submodule</title>
+<polygon fill="#5bc0de" stroke="#5bc0de" points="138,-26 72,-26 72,-1.24345e-14 138,-3.55271e-15 138,-26"/>
+<text text-anchor="middle" x="105" y="-10.55" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Submodule</text>
+</g>
+<!-- Type -->
+<g id="node3" class="node"><title>Type</title>
+<polygon fill="#5cb85c" stroke="#5cb85c" points="210,-26 156,-26 156,-1.24345e-14 210,-3.55271e-15 210,-26"/>
+<text text-anchor="middle" x="183" y="-10.55" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Type</text>
+</g>
+<!-- Subroutine -->
+<g id="node4" class="node"><title>Subroutine</title>
+<polygon fill="#d9534f" stroke="#d9534f" points="292,-26 228,-26 228,-1.24345e-14 292,-3.55271e-15 292,-26"/>
+<text text-anchor="middle" x="260" y="-10.55" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Subroutine</text>
+</g>
+<!-- Function -->
+<g id="node5" class="node"><title>Function</title>
+<polygon fill="#d94e8f" stroke="#d94e8f" points="364,-26 310,-26 310,-1.24345e-14 364,-3.55271e-15 364,-26"/>
+<text text-anchor="middle" x="337" y="-10.55" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Function</text>
+</g>
+<!-- Interface -->
+<g id="node6" class="node"><title>Interface</title>
+<polygon fill="#a7506f" stroke="#a7506f" points="436,-26 382,-26 382,-1.24345e-14 436,-3.55271e-15 436,-26"/>
+<text text-anchor="middle" x="409" y="-10.55" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Interface</text>
+</g>
+<!-- Unknown Procedure Type -->
+<g id="node7" class="node"><title>Unknown Procedure Type</title>
+<polygon fill="#777777" stroke="#777777" points="590,-26 454,-26 454,-1.24345e-14 590,-3.55271e-15 590,-26"/>
+<text text-anchor="middle" x="522" y="-10.55" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Unknown Procedure Type</text>
+</g>
+<!-- Program -->
+<g id="node8" class="node"><title>Program</title>
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="662,-26 608,-26 608,-1.24345e-14 662,-3.55271e-15 662,-26"/>
+<text text-anchor="middle" x="635" y="-10.55" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Program</text>
+</g>
+<!-- This Page&#39;s Entity -->
+<g id="node9" class="node"><title>This Page&#39;s Entity</title>
+<polygon fill="none" stroke="black" points="776,-26 680,-26 680,-1.24345e-14 776,-3.55271e-15 776,-26"/>
+<text text-anchor="middle" x="728" y="-10.55" font-family="Helvetica,sans-Serif" font-size="10.50">This Page&#39;s Entity</text>
+</g>
+</g>
+</svg>
+
+<h5>Module Graph</h5>
+<p>Solid arrows point from a parent (sub)module to the submodule which is
+descended from it. Dashed arrows point from a module being used to the
+module using it.</p>
+<h5>Type Graph</h5>
+<p>Solid arrows point from one derived type to another which extends
+(inherits from) it. Dashed arrows point from a derived type to another
+type containing it as a components, with a label listing the name(s) of
+said component(s).</p>
+<h5>Call Graph</h5>
+<p>Solid arrows point from a procedure to one which it calls. Dashed 
+arrows point from an interface to procedures which implement that interface.
+This could include the module procedures in a generic interface or the
+implementation in a submodule of an interface in a parent module.</p>
+
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                
+     
+     
+     <h3>Called By</h3>
+     
+                <div class="depgraph"><?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.26.3 (20100126.1600)
+ -->
+<!-- Title: proc~~perform_errors_analysis~~CalledByGraph Pages: 1 -->
+<svg id="procperform_errors_analysisCalledByGraph" width="282pt" height="34pt"
+ viewBox="0.00 0.00 282.00 34.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="proc~~perform_errors_analysis~~CalledByGraph" class="graph" transform="scale(1 1) rotate(0) translate(4 30)">
+<title>proc~~perform_errors_analysis~~CalledByGraph</title>
+<polygon fill="white" stroke="white" points="-4,5 -4,-30 279,-30 279,5 -4,5"/>
+<!-- proc~perform_errors_analysis -->
+<g id="node1" class="node"><title>proc~perform_errors_analysis</title>
+<polygon fill="none" stroke="black" points="273,-26 145,-26 145,-1.24345e-14 273,-3.55271e-15 273,-26"/>
+<text text-anchor="middle" x="209" y="-10.55" font-family="Helvetica,sans-Serif" font-size="10.50">perform_errors_analysis</text>
+</g>
+<!-- program~integrate_oscillation -->
+<g id="node2" class="node"><title>program~integrate_oscillation</title>
+<a xlink:href="../program/integrate_oscillation.html" xlink:title="integrate_oscillation">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="107,-26 1,-26 1,-1.24345e-14 107,-3.55271e-15 107,-26"/>
+<text text-anchor="middle" x="54" y="-10.55" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">integrate_oscillation</text>
+</a>
+</g>
+<!-- program~integrate_oscillation&#45;&gt;proc~perform_errors_analysis -->
+<g id="edge2" class="edge"><title>program~integrate_oscillation&#45;&gt;proc~perform_errors_analysis</title>
+<path fill="none" stroke="black" d="M107.776,-13C116.353,-13 125.358,-13 134.313,-13"/>
+<polygon fill="black" stroke="black" points="134.377,-16.5001 144.377,-13 134.377,-9.5001 134.377,-16.5001"/>
+</g>
+</g>
+</svg>
+</div>
+                <div><a type="button" class="graph-help" data-toggle="modal" href="#graph-help-text">Help</a></div>
+                <div class="modal fade" id="graph-help-text" tabindex="-1" role="dialog">
+                  <div class="modal-dialog modal-lg" role="document">
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title" id="-graph-help-label">Graph Key</h4>
+                      </div>
+                      <div class="modal-body">
+                        
+Nodes of different colours represent the following:
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.26.3 (20100126.1600)
+ -->
+<!-- Title: Graph Key Pages: 1 -->
+<svg width="641pt" height="28pt"
+ viewBox="0.00 0.00 641.00 27.80" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="graph1" class="graph" transform="scale(0.817602 0.817602) rotate(0) translate(4 30)">
+<title>Graph Key</title>
+<polygon fill="white" stroke="white" points="-4,5 -4,-30 781,-30 781,5 -4,5"/>
+<!-- Module -->
+<g id="node1" class="node"><title>Module</title>
+<polygon fill="#337ab7" stroke="#337ab7" points="54,-26 2.13163e-14,-26 0,-1.24345e-14 54,-3.55271e-15 54,-26"/>
+<text text-anchor="middle" x="27" y="-10.55" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Module</text>
+</g>
+<!-- Submodule -->
+<g id="node2" class="node"><title>Submodule</title>
+<polygon fill="#5bc0de" stroke="#5bc0de" points="138,-26 72,-26 72,-1.24345e-14 138,-3.55271e-15 138,-26"/>
+<text text-anchor="middle" x="105" y="-10.55" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Submodule</text>
+</g>
+<!-- Type -->
+<g id="node3" class="node"><title>Type</title>
+<polygon fill="#5cb85c" stroke="#5cb85c" points="210,-26 156,-26 156,-1.24345e-14 210,-3.55271e-15 210,-26"/>
+<text text-anchor="middle" x="183" y="-10.55" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Type</text>
+</g>
+<!-- Subroutine -->
+<g id="node4" class="node"><title>Subroutine</title>
+<polygon fill="#d9534f" stroke="#d9534f" points="292,-26 228,-26 228,-1.24345e-14 292,-3.55271e-15 292,-26"/>
+<text text-anchor="middle" x="260" y="-10.55" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Subroutine</text>
+</g>
+<!-- Function -->
+<g id="node5" class="node"><title>Function</title>
+<polygon fill="#d94e8f" stroke="#d94e8f" points="364,-26 310,-26 310,-1.24345e-14 364,-3.55271e-15 364,-26"/>
+<text text-anchor="middle" x="337" y="-10.55" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Function</text>
+</g>
+<!-- Interface -->
+<g id="node6" class="node"><title>Interface</title>
+<polygon fill="#a7506f" stroke="#a7506f" points="436,-26 382,-26 382,-1.24345e-14 436,-3.55271e-15 436,-26"/>
+<text text-anchor="middle" x="409" y="-10.55" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Interface</text>
+</g>
+<!-- Unknown Procedure Type -->
+<g id="node7" class="node"><title>Unknown Procedure Type</title>
+<polygon fill="#777777" stroke="#777777" points="590,-26 454,-26 454,-1.24345e-14 590,-3.55271e-15 590,-26"/>
+<text text-anchor="middle" x="522" y="-10.55" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Unknown Procedure Type</text>
+</g>
+<!-- Program -->
+<g id="node8" class="node"><title>Program</title>
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="662,-26 608,-26 608,-1.24345e-14 662,-3.55271e-15 662,-26"/>
+<text text-anchor="middle" x="635" y="-10.55" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Program</text>
+</g>
+<!-- This Page&#39;s Entity -->
+<g id="node9" class="node"><title>This Page&#39;s Entity</title>
+<polygon fill="none" stroke="black" points="776,-26 680,-26 680,-1.24345e-14 776,-3.55271e-15 776,-26"/>
+<text text-anchor="middle" x="728" y="-10.55" font-family="Helvetica,sans-Serif" font-size="10.50">This Page&#39;s Entity</text>
+</g>
+</g>
+</svg>
+
+<h5>Module Graph</h5>
+<p>Solid arrows point from a parent (sub)module to the submodule which is
+descended from it. Dashed arrows point from a module being used to the
+module using it.</p>
+<h5>Type Graph</h5>
+<p>Solid arrows point from one derived type to another which extends
+(inherits from) it. Dashed arrows point from a derived type to another
+type containing it as a components, with a label listing the name(s) of
+said component(s).</p>
+<h5>Call Graph</h5>
+<p>Solid arrows point from a procedure to one which it calls. Dashed 
+arrows point from an interface to procedures which implement that interface.
+This could include the module procedures in a generic interface or the
+implementation in a submodule of an interface in a parent module.</p>
+
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                
+     
+    <br>
+    
+    <section>
+    <h2>Variables</h2>
+    
+<table class="table table-striped varlist">
+<thead><tr><th>Type</th><th>Visibility</th>
+
+<th>Attributes</th><th></th><th>Name</th><th></th><th>Initial</th><th></th></thead>
+
+
+
+<tbody>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-ndt"></span>integer(kind=I_P),</td>
+  
+  <td>public,</td>
+  <td>parameter</td><td>::</td>
+  <td><strong>NDt</strong></td><td> =</td><td>6</td><td><p>Number of time steps exercised.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-time_steps"></span>real(kind=R_P),</td>
+  
+  <td>public,</td>
+  <td>parameter</td><td>::</td>
+  <td><strong>time_steps</strong>(1:NDt)</td><td> =</td><td>[5000._R_P,2500._R_P,1250._R_P,625._R_P,320._R_P,100._R_P]</td><td><p>Time steps exercised.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-ab_integrator%7E5"></span>type(<a href='../type/adams_bashforth_integrator.html'>adams_bashforth_integrator</a>),</td>
+  
+  <td>public</td>
+  <td></td><td>::</td>
+  <td><strong>ab_integrator</strong></td><td></td><td></td><td><p>Adams-Bashforth integrator.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-lf_integrator%7E5"></span>type(<a href='../type/leapfrog_integrator.html'>leapfrog_integrator</a>),</td>
+  
+  <td>public</td>
+  <td></td><td>::</td>
+  <td><strong>lf_integrator</strong></td><td></td><td></td><td><p>Leapfrog integrator.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-ls_integrator"></span>type(<a href='../type/ls_runge_kutta_integrator.html'>ls_runge_kutta_integrator</a>),</td>
+  
+  <td>public</td>
+  <td></td><td>::</td>
+  <td><strong>ls_integrator</strong></td><td></td><td></td><td><p>Low storage Runge-Kutta integrator.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-rk_integrator%7E17"></span>type(<a href='../type/tvd_runge_kutta_integrator.html'>tvd_runge_kutta_integrator</a>),</td>
+  
+  <td>public</td>
+  <td></td><td>::</td>
+  <td><strong>rk_integrator</strong></td><td></td><td></td><td><p>TVD/SSP Runge-Kutta integrator.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-ab_steps%7E5"></span>integer,</td>
+  
+  <td>public,</td>
+  <td>parameter</td><td>::</td>
+  <td><strong>ab_steps</strong></td><td> =</td><td>3</td><td><p>Adams-Bashforth steps number.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-rk_stages%7E17"></span>integer,</td>
+  
+  <td>public,</td>
+  <td>parameter</td><td>::</td>
+  <td><strong>rk_stages</strong></td><td> =</td><td>5</td><td><p>Runge-Kutta stages number.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-rk_stage%7E17"></span>type(<a href='../type/oscillation.html'>oscillation</a>),</td>
+  
+  <td>public</td>
+  <td></td><td>::</td>
+  <td><strong>rk_stage</strong>(1:rk_stages)</td><td></td><td></td><td><p>Runge-Kutta stages.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-filter%7E11"></span>type(<a href='../type/oscillation.html'>oscillation</a>),</td>
+  
+  <td>public</td>
+  <td></td><td>::</td>
+  <td><strong>filter</strong></td><td></td><td></td><td><p>Filter displacement.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-ab_errors"></span>real(kind=R_P),</td>
+  
+  <td>public</td>
+  <td></td><td>::</td>
+  <td><strong>ab_errors</strong>(1:space_dimension,1:ab_steps,1:NDt)</td><td></td><td></td><td><p>Adams-Bashforth errors.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-lf_errors"></span>real(kind=R_P),</td>
+  
+  <td>public</td>
+  <td></td><td>::</td>
+  <td><strong>lf_errors</strong>(1:space_dimension,1:NDt)</td><td></td><td></td><td><p>Leapfrog errors.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-ls_errors"></span>real(kind=R_P),</td>
+  
+  <td>public</td>
+  <td></td><td>::</td>
+  <td><strong>ls_errors</strong>(1:space_dimension,1:rk_stages,1:NDt)</td><td></td><td></td><td><p>Low storage Runge-Kutta errors.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-rk_errors"></span>real(kind=R_P),</td>
+  
+  <td>public</td>
+  <td></td><td>::</td>
+  <td><strong>rk_errors</strong>(1:space_dimension,1:rk_stages,1:NDt)</td><td></td><td></td><td><p>TVD/SSP Runge-Kutta errors.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-ab_orders"></span>real(kind=R_P),</td>
+  
+  <td>public</td>
+  <td></td><td>::</td>
+  <td><strong>ab_orders</strong>(1:space_dimension,1:ab_steps,1:NDt-1)</td><td></td><td></td><td><p>Adams-Bashforth orders.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-lf_orders"></span>real(kind=R_P),</td>
+  
+  <td>public</td>
+  <td></td><td>::</td>
+  <td><strong>lf_orders</strong>(1:space_dimension,1:NDt-1)</td><td></td><td></td><td><p>Leapfrog orders.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-ls_orders"></span>real(kind=R_P),</td>
+  
+  <td>public</td>
+  <td></td><td>::</td>
+  <td><strong>ls_orders</strong>(1:space_dimension,1:rk_stages,1:NDt-1)</td><td></td><td></td><td><p>Low storage Runge-Kutta orders.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-rk_orders"></span>real(kind=R_P),</td>
+  
+  <td>public</td>
+  <td></td><td>::</td>
+  <td><strong>rk_orders</strong>(1:space_dimension,1:rk_stages,1:NDt-1)</td><td></td><td></td><td><p>TVD/SSP Runge-Kutta orders.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-step%7E15"></span>integer,</td>
+  
+  <td>public</td>
+  <td></td><td>::</td>
+  <td><strong>step</strong></td><td></td><td></td><td><p>Time steps counter.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-s%7E28"></span>integer(kind=I_P),</td>
+  
+  <td>public</td>
+  <td></td><td>::</td>
+  <td><strong>s</strong></td><td></td><td></td><td><p>Steps/stages counter.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-d"></span>integer(kind=I_P),</td>
+  
+  <td>public</td>
+  <td></td><td>::</td>
+  <td><strong>d</strong></td><td></td><td></td><td><p>Time steps-exercised counter.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-title%7E18"></span>character(len=:),</td>
+  
+  <td>public,</td>
+  <td>allocatable</td><td>::</td>
+  <td><strong>title</strong></td><td></td><td></td><td><p>Output files title.</p></td>
+  
+</tr>
+
+</tbody>
+</table>
+
+    </section>
+    <br>
+    
+    
+    
+    
+    
+
+    
+    
+    
+    
+    
+
+
+    
+    
+    
+    <section>
+    <h2><span class="anchor" id="src"></span>Source Code</h2>
+    <div class="highlight"><pre>  <span class="k">subroutine </span><span class="n">perform_errors_analysis</span><span class="p">()</span>
+  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+  <span class="c">!&lt; Peform errors analysis.</span>
+  <span class="c">!&lt;</span>
+  <span class="c">!&lt; The analysis is based on the integration of the Oscillation equations with different, decreasing time steps in the range</span>
+  <span class="c">!&lt; *[5000, 2500, 1250, 625, 320, 100]*. The error is estimated by the L2 norm of the difference between the exact (\(U_e\)) and</span>
+  <span class="c">!&lt; the numerical (\(U_{\Delta t}\)) solutions for each time step:</span>
+  <span class="c">!&lt;</span>
+  <span class="c">!&lt;$$</span>
+  <span class="c">!&lt;\varepsilon (\Delta t) = || U_e - U_{\Delta t} ||_2 = \sqrt{ \sum_{s=1}^{N_s} { \left(U_e(t_0 + s * \Delta t) -</span>
+  <span class="c">!&lt;U_{\Delta t}(t_0 + s * \Delta t) \right)^2 }}</span>
+  <span class="c">!&lt;$$</span>
+  <span class="c">!&lt;</span>
+  <span class="c">!&lt; Using two pairs of subsequent-decreasing time steps solution is possible to estimate the order of accuracy of the solver</span>
+  <span class="c">!&lt; employed computing the \emph{observed order} of accuracy:</span>
+  <span class="c">!&lt;</span>
+  <span class="c">!&lt;$$</span>
+  <span class="c">!&lt;p = \frac{log10 \left( \frac{\varepsilon (\Delta t_1)}{\varepsilon (\Delta t_2)} \right)}</span>
+  <span class="c">!&lt;{log10 \left( \frac{\Delta t_1}{\Delta t_2} \right)}</span>
+  <span class="c">!&lt;$$</span>
+  <span class="c">!&lt;</span>
+  <span class="c">!&lt;where \(\frac{\Delta t_1}{\Delta t_2}&gt;1\).</span>
+  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+  <span class="kt">integer</span><span class="p">(</span><span class="n">I_P</span><span class="p">),</span> <span class="k">parameter</span>          <span class="kd">::</span> <span class="n">NDt</span><span class="o">=</span><span class="mi">6</span>                        <span class="c">!&lt; Number of time steps exercised.</span>
+  <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">),</span>    <span class="k">parameter</span>          <span class="kd">::</span> <span class="n">time_steps</span><span class="p">(</span><span class="mi">1</span><span class="p">:</span><span class="n">NDt</span><span class="p">)</span><span class="o">=</span><span class="p">[</span><span class="mi">500</span><span class="mf">0._R_P</span><span class="p">,</span> <span class="p">&amp;</span>
+                                                         <span class="mi">250</span><span class="mf">0._R_P</span><span class="p">,</span> <span class="p">&amp;</span>
+                                                         <span class="mi">125</span><span class="mf">0._R_P</span><span class="p">,</span> <span class="p">&amp;</span>
+                                                         <span class="mi">62</span><span class="mf">5._R_P</span><span class="p">,</span>  <span class="p">&amp;</span>
+                                                         <span class="mi">32</span><span class="mf">0._R_P</span><span class="p">,</span>  <span class="p">&amp;</span>
+                                                         <span class="mi">10</span><span class="mf">0._R_P</span><span class="p">]</span> <span class="c">!&lt; Time steps exercised.</span>
+  <span class="k">type</span><span class="p">(</span><span class="n">adams_bashforth_integrator</span><span class="p">)</span> <span class="kd">::</span> <span class="n">ab_integrator</span>                <span class="c">!&lt; Adams-Bashforth integrator.</span>
+  <span class="k">type</span><span class="p">(</span><span class="n">leapfrog_integrator</span><span class="p">)</span>        <span class="kd">::</span> <span class="n">lf_integrator</span>                <span class="c">!&lt; Leapfrog integrator.</span>
+  <span class="k">type</span><span class="p">(</span><span class="n">ls_runge_kutta_integrator</span><span class="p">)</span>  <span class="kd">::</span> <span class="n">ls_integrator</span>                <span class="c">!&lt; Low storage Runge-Kutta integrator.</span>
+  <span class="k">type</span><span class="p">(</span><span class="n">tvd_runge_kutta_integrator</span><span class="p">)</span> <span class="kd">::</span> <span class="n">rk_integrator</span>                <span class="c">!&lt; TVD/SSP Runge-Kutta integrator.</span>
+  <span class="kt">integer</span><span class="p">,</span> <span class="k">parameter</span>               <span class="kd">::</span> <span class="n">ab_steps</span><span class="o">=</span><span class="mi">3</span>                   <span class="c">!&lt; Adams-Bashforth steps number.</span>
+  <span class="kt">integer</span><span class="p">,</span> <span class="k">parameter</span>               <span class="kd">::</span> <span class="n">rk_stages</span><span class="o">=</span><span class="mi">5</span>                  <span class="c">!&lt; Runge-Kutta stages number.</span>
+  <span class="k">type</span><span class="p">(</span><span class="n">oscillation</span><span class="p">)</span>                <span class="kd">::</span> <span class="n">rk_stage</span><span class="p">(</span><span class="mi">1</span><span class="p">:</span><span class="n">rk_stages</span><span class="p">)</span>        <span class="c">!&lt; Runge-Kutta stages.</span>
+  <span class="k">type</span><span class="p">(</span><span class="n">oscillation</span><span class="p">)</span>                <span class="kd">::</span> <span class="n">filter</span>                       <span class="c">!&lt; Filter displacement.</span>
+  <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">)</span>                        <span class="kd">::</span> <span class="n">ab_errors</span><span class="p">(</span><span class="mi">1</span><span class="p">:</span><span class="n">space_dimension</span><span class="p">,&amp;</span>
+                                                <span class="mi">1</span><span class="p">:</span><span class="n">ab_steps</span><span class="p">,</span>       <span class="p">&amp;</span>
+                                                <span class="mi">1</span><span class="p">:</span><span class="n">NDt</span><span class="p">)</span>             <span class="c">!&lt; Adams-Bashforth errors.</span>
+  <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">)</span>                        <span class="kd">::</span> <span class="n">lf_errors</span><span class="p">(</span><span class="mi">1</span><span class="p">:</span><span class="n">space_dimension</span><span class="p">,&amp;</span>
+                                                <span class="mi">1</span><span class="p">:</span><span class="n">NDt</span><span class="p">)</span>             <span class="c">!&lt; Leapfrog errors.</span>
+  <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">)</span>                        <span class="kd">::</span> <span class="n">ls_errors</span><span class="p">(</span><span class="mi">1</span><span class="p">:</span><span class="n">space_dimension</span><span class="p">,&amp;</span>
+                                                <span class="mi">1</span><span class="p">:</span><span class="n">rk_stages</span><span class="p">,</span>      <span class="p">&amp;</span>
+                                                <span class="mi">1</span><span class="p">:</span><span class="n">NDt</span><span class="p">)</span>             <span class="c">!&lt; Low storage Runge-Kutta errors.</span>
+  <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">)</span>                        <span class="kd">::</span> <span class="n">rk_errors</span><span class="p">(</span><span class="mi">1</span><span class="p">:</span><span class="n">space_dimension</span><span class="p">,&amp;</span>
+                                                <span class="mi">1</span><span class="p">:</span><span class="n">rk_stages</span><span class="p">,</span>      <span class="p">&amp;</span>
+                                                <span class="mi">1</span><span class="p">:</span><span class="n">NDt</span><span class="p">)</span>             <span class="c">!&lt; TVD/SSP Runge-Kutta errors.</span>
+  <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">)</span>                        <span class="kd">::</span> <span class="n">ab_orders</span><span class="p">(</span><span class="mi">1</span><span class="p">:</span><span class="n">space_dimension</span><span class="p">,&amp;</span>
+                                                <span class="mi">1</span><span class="p">:</span><span class="n">ab_steps</span><span class="p">,</span>       <span class="p">&amp;</span>
+                                                <span class="mi">1</span><span class="p">:</span><span class="n">NDt</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>           <span class="c">!&lt; Adams-Bashforth orders.</span>
+  <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">)</span>                        <span class="kd">::</span> <span class="n">lf_orders</span><span class="p">(</span><span class="mi">1</span><span class="p">:</span><span class="n">space_dimension</span><span class="p">,&amp;</span>
+                                                <span class="mi">1</span><span class="p">:</span><span class="n">NDt</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>           <span class="c">!&lt; Leapfrog orders.</span>
+  <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">)</span>                        <span class="kd">::</span> <span class="n">ls_orders</span><span class="p">(</span><span class="mi">1</span><span class="p">:</span><span class="n">space_dimension</span><span class="p">,&amp;</span>
+                                                <span class="mi">1</span><span class="p">:</span><span class="n">rk_stages</span><span class="p">,</span>      <span class="p">&amp;</span>
+                                                <span class="mi">1</span><span class="p">:</span><span class="n">NDt</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>           <span class="c">!&lt; Low storage Runge-Kutta orders.</span>
+  <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">)</span>                        <span class="kd">::</span> <span class="n">rk_orders</span><span class="p">(</span><span class="mi">1</span><span class="p">:</span><span class="n">space_dimension</span><span class="p">,&amp;</span>
+                                                <span class="mi">1</span><span class="p">:</span><span class="n">rk_stages</span><span class="p">,</span>      <span class="p">&amp;</span>
+                                                <span class="mi">1</span><span class="p">:</span><span class="n">NDt</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>           <span class="c">!&lt; TVD/SSP Runge-Kutta orders.</span>
+  <span class="kt">integer</span>                          <span class="kd">::</span> <span class="n">step</span>                         <span class="c">!&lt; Time steps counter.</span>
+  <span class="kt">integer</span><span class="p">(</span><span class="n">I_P</span><span class="p">)</span>                     <span class="kd">::</span> <span class="n">s</span>                            <span class="c">!&lt; Steps/stages counter.</span>
+  <span class="kt">integer</span><span class="p">(</span><span class="n">I_P</span><span class="p">)</span>                     <span class="kd">::</span> <span class="n">d</span>                            <span class="c">!&lt; Time steps-exercised counter.</span>
+  <span class="kt">character</span><span class="p">(</span><span class="nb">len</span><span class="o">=</span><span class="p">:),</span> <span class="k">allocatable</span>    <span class="kd">::</span> <span class="n">title</span>                        <span class="c">!&lt; Output files title.</span>
+  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+
+  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+  <span class="n">results</span> <span class="o">=</span> <span class="p">.</span><span class="n">true</span><span class="p">.</span> <span class="c">! activate results saving</span>
+  <span class="c">! Analyze errors of Adams-Bashforth solvers</span>
+  <span class="k">do </span><span class="n">d</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">NDt</span> <span class="c">! loop over exercised time steps</span>
+    <span class="n">Dt</span> <span class="o">=</span> <span class="n">time_steps</span><span class="p">(</span><span class="n">d</span><span class="p">)</span>
+    <span class="n">solver</span> <span class="o">=</span> <span class="s1">&#39;adams-bashforth&#39;</span>
+    <span class="k">call </span><span class="n">init</span>
+    <span class="k">do </span><span class="n">s</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">ab_steps</span>
+      <span class="k">if</span> <span class="p">(</span><span class="n">s</span><span class="o">==</span><span class="mi">1</span><span class="p">)</span> <span class="k">cycle</span> <span class="c">! 1st order scheme surely not stable for this test</span>
+      <span class="n">title</span> <span class="o">=</span> <span class="s1">&#39;Oscillation equation integration, explicit Adams-Bashforth, t=&#39;</span><span class="o">//</span><span class="n">str</span><span class="p">(</span><span class="n">n</span><span class="o">=</span><span class="n">t_final</span><span class="p">)</span><span class="o">//</span><span class="s1">&#39; steps=&#39;</span><span class="o">//</span><span class="nb">trim</span><span class="p">(</span><span class="n">str</span><span class="p">(.</span><span class="n">true</span><span class="p">.,</span> <span class="n">s</span><span class="p">))</span>
+      <span class="k">call </span><span class="n">ab_integrator</span><span class="p">%</span><span class="n">init</span><span class="p">(</span><span class="n">steps</span><span class="o">=</span><span class="n">s</span><span class="p">)</span>
+      <span class="k">call </span><span class="n">rk_integrator</span><span class="p">%</span><span class="n">init</span><span class="p">(</span><span class="n">stages</span><span class="o">=</span><span class="n">s</span><span class="p">)</span>
+      <span class="k">call </span><span class="n">attractor</span><span class="p">%</span><span class="n">init</span><span class="p">(</span><span class="n">initial_state</span><span class="o">=</span><span class="n">initial_state</span><span class="p">,</span> <span class="n">f</span><span class="o">=</span><span class="n">f</span><span class="p">,</span> <span class="n">steps</span><span class="o">=</span><span class="n">s</span><span class="p">)</span>
+      <span class="n">solution</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span> <span class="o">=</span> <span class="mf">0._R_P</span>
+      <span class="n">solution</span><span class="p">(</span><span class="mi">1</span><span class="p">:</span><span class="n">space_dimension</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span> <span class="o">=</span> <span class="n">attractor</span><span class="p">%</span><span class="n">output</span><span class="p">()</span>
+      <span class="n">step</span> <span class="o">=</span> <span class="mi">0</span>
+      <span class="k">do while</span><span class="p">(</span><span class="n">solution</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">step</span><span class="p">)</span><span class="o">&lt;</span><span class="n">t_final</span><span class="p">)</span>
+        <span class="n">step</span> <span class="o">=</span> <span class="n">step</span> <span class="o">+</span> <span class="mi">1</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">s</span><span class="o">&gt;=</span><span class="n">step</span><span class="p">)</span> <span class="k">then</span>
+          <span class="c">! the time steps from 1 to s - 1 must be computed with other scheme...</span>
+          <span class="k">call </span><span class="n">rk_integrator</span><span class="p">%</span><span class="n">integrate</span><span class="p">(</span><span class="n">field</span><span class="o">=</span><span class="n">attractor</span><span class="p">,</span> <span class="n">stage</span><span class="o">=</span><span class="n">rk_stage</span><span class="p">(</span><span class="mi">1</span><span class="p">:</span><span class="n">s</span><span class="p">),</span> <span class="n">Dt</span><span class="o">=</span><span class="n">Dt</span><span class="p">,</span> <span class="n">t</span><span class="o">=</span><span class="n">solution</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">step</span><span class="p">))</span>
+        <span class="k">else</span>
+<span class="k">          call </span><span class="n">ab_integrator</span><span class="p">%</span><span class="n">integrate</span><span class="p">(</span><span class="n">field</span><span class="o">=</span><span class="n">attractor</span><span class="p">,</span> <span class="n">Dt</span><span class="o">=</span><span class="n">Dt</span><span class="p">,</span> <span class="n">t</span><span class="o">=</span><span class="n">solution</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">step</span><span class="o">-</span><span class="n">s</span><span class="p">:</span><span class="n">step</span><span class="o">-</span><span class="mi">1</span><span class="p">))</span>
+        <span class="n">endif</span>
+        <span class="n">solution</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">step</span><span class="p">)</span> <span class="o">=</span> <span class="n">step</span> <span class="o">*</span> <span class="n">Dt</span>
+        <span class="n">solution</span><span class="p">(</span><span class="mi">1</span><span class="p">:</span><span class="n">space_dimension</span><span class="p">,</span> <span class="n">step</span><span class="p">)</span> <span class="o">=</span> <span class="n">attractor</span><span class="p">%</span><span class="n">output</span><span class="p">()</span>
+      <span class="n">enddo</span>
+      <span class="k">call </span><span class="n">save_results</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="n">title</span><span class="p">,</span> <span class="n">basename</span><span class="o">=</span><span class="n">output</span><span class="o">//</span><span class="s1">&#39;-&#39;</span><span class="o">//</span><span class="nb">trim</span><span class="p">(</span><span class="n">str</span><span class="p">(.</span><span class="n">true</span><span class="p">.,</span> <span class="n">s</span><span class="p">)))</span>
+      <span class="n">ab_errors</span><span class="p">(:,</span> <span class="n">s</span><span class="p">,</span> <span class="n">d</span><span class="p">)</span> <span class="o">=</span> <span class="n">compute_errors</span><span class="p">()</span>
+    <span class="n">enddo</span>
+  <span class="n">enddo</span>
+  <span class="k">do </span><span class="n">s</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">ab_steps</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">s</span><span class="o">==</span><span class="mi">1</span><span class="p">)</span> <span class="k">cycle</span> <span class="c">! 1st order scheme surely not stable for this test</span>
+    <span class="k">do </span><span class="n">d</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">NDt</span><span class="o">-</span><span class="mi">1</span>
+      <span class="n">ab_orders</span><span class="p">(:,</span> <span class="n">s</span><span class="p">,</span> <span class="n">d</span><span class="p">)</span> <span class="o">=</span> <span class="n">estimate_orders</span><span class="p">(</span><span class="n">solver_error</span><span class="o">=</span><span class="n">ab_errors</span><span class="p">(:,</span> <span class="n">s</span><span class="p">,</span> <span class="n">d</span><span class="p">:</span><span class="n">d</span><span class="o">+</span><span class="mi">1</span><span class="p">),</span> <span class="n">Dt_used</span><span class="o">=</span><span class="n">time_steps</span><span class="p">(</span><span class="n">d</span><span class="p">:</span><span class="n">d</span><span class="o">+</span><span class="mi">1</span><span class="p">))</span>
+    <span class="n">enddo</span>
+  <span class="n">enddo</span>
+  <span class="c">! Analyze errors of leapfrog solver</span>
+  <span class="k">do </span><span class="n">d</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">NDt</span> <span class="c">! loop over exercised time steps</span>
+    <span class="n">Dt</span> <span class="o">=</span> <span class="n">time_steps</span><span class="p">(</span><span class="n">d</span><span class="p">)</span>
+    <span class="n">solver</span> <span class="o">=</span> <span class="s1">&#39;leapfrog&#39;</span>
+    <span class="k">call </span><span class="n">init</span>
+    <span class="n">title</span> <span class="o">=</span> <span class="s1">&#39;Oscillation equation integration, leapfrog (RAW filtered), t=&#39;</span><span class="o">//</span><span class="n">str</span><span class="p">(</span><span class="n">n</span><span class="o">=</span><span class="n">t_final</span><span class="p">)</span>
+    <span class="k">call </span><span class="n">lf_integrator</span><span class="p">%</span><span class="n">init</span><span class="p">()</span>
+    <span class="k">call </span><span class="n">rk_integrator</span><span class="p">%</span><span class="n">init</span><span class="p">(</span><span class="n">stages</span><span class="o">=</span><span class="n">rk_stages</span><span class="p">)</span>
+    <span class="k">call </span><span class="n">attractor</span><span class="p">%</span><span class="n">init</span><span class="p">(</span><span class="n">initial_state</span><span class="o">=</span><span class="n">initial_state</span><span class="p">,</span> <span class="n">f</span><span class="o">=</span><span class="n">f</span><span class="p">,</span> <span class="n">steps</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+    <span class="n">solution</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span> <span class="o">=</span> <span class="mf">0._R_P</span>
+    <span class="n">solution</span><span class="p">(</span><span class="mi">1</span><span class="p">:</span><span class="n">space_dimension</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span> <span class="o">=</span> <span class="n">attractor</span><span class="p">%</span><span class="n">output</span><span class="p">()</span>
+    <span class="n">step</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="k">do while</span><span class="p">(</span><span class="n">solution</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">step</span><span class="p">)</span><span class="o">&lt;</span><span class="n">t_final</span><span class="p">)</span>
+      <span class="n">step</span> <span class="o">=</span> <span class="n">step</span> <span class="o">+</span> <span class="mi">1</span>
+      <span class="k">if</span> <span class="p">(</span><span class="mi">2</span><span class="o">&gt;=</span><span class="n">step</span><span class="p">)</span> <span class="k">then</span>
+        <span class="c">! the time steps from 1 to 2 must be computed with other scheme...</span>
+        <span class="k">call </span><span class="n">rk_integrator</span><span class="p">%</span><span class="n">integrate</span><span class="p">(</span><span class="n">field</span><span class="o">=</span><span class="n">attractor</span><span class="p">,</span> <span class="n">stage</span><span class="o">=</span><span class="n">rk_stage</span><span class="p">,</span> <span class="n">Dt</span><span class="o">=</span><span class="n">Dt</span><span class="p">,</span> <span class="n">t</span><span class="o">=</span><span class="n">solution</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">step</span><span class="p">))</span>
+      <span class="k">else</span>
+<span class="k">        call </span><span class="n">lf_integrator</span><span class="p">%</span><span class="n">integrate</span><span class="p">(</span><span class="n">field</span><span class="o">=</span><span class="n">attractor</span><span class="p">,</span> <span class="n">filter</span><span class="o">=</span><span class="n">filter</span><span class="p">,</span> <span class="n">Dt</span><span class="o">=</span><span class="n">Dt</span><span class="p">,</span> <span class="n">t</span><span class="o">=</span><span class="n">solution</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">step</span><span class="p">))</span>
+      <span class="n">endif</span>
+      <span class="n">solution</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">step</span><span class="p">)</span> <span class="o">=</span> <span class="n">step</span> <span class="o">*</span> <span class="n">Dt</span>
+      <span class="n">solution</span><span class="p">(</span><span class="mi">1</span><span class="p">:</span><span class="n">space_dimension</span><span class="p">,</span> <span class="n">step</span><span class="p">)</span> <span class="o">=</span> <span class="n">attractor</span><span class="p">%</span><span class="n">output</span><span class="p">()</span>
+    <span class="n">enddo</span>
+    <span class="k">call </span><span class="n">save_results</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="n">title</span><span class="p">,</span> <span class="n">basename</span><span class="o">=</span><span class="n">output</span><span class="p">)</span>
+    <span class="n">lf_errors</span><span class="p">(:,</span> <span class="n">d</span><span class="p">)</span> <span class="o">=</span> <span class="n">compute_errors</span><span class="p">()</span>
+  <span class="n">enddo</span>
+  <span class="k">do </span><span class="n">d</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">NDt</span><span class="o">-</span><span class="mi">1</span>
+    <span class="n">lf_orders</span><span class="p">(:,</span> <span class="n">d</span><span class="p">)</span> <span class="o">=</span> <span class="n">estimate_orders</span><span class="p">(</span><span class="n">solver_error</span><span class="o">=</span><span class="n">lf_errors</span><span class="p">(:,</span> <span class="n">d</span><span class="p">:</span><span class="n">d</span><span class="o">+</span><span class="mi">1</span><span class="p">),</span> <span class="n">Dt_used</span><span class="o">=</span><span class="n">time_steps</span><span class="p">(</span><span class="n">d</span><span class="p">:</span><span class="n">d</span><span class="o">+</span><span class="mi">1</span><span class="p">))</span>
+  <span class="n">enddo</span>
+  <span class="c">! Analyze errors of low storage Runge-Kutta solvers</span>
+  <span class="k">do </span><span class="n">d</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">NDt</span> <span class="c">! loop over exercised time steps</span>
+    <span class="n">Dt</span> <span class="o">=</span> <span class="n">time_steps</span><span class="p">(</span><span class="n">d</span><span class="p">)</span>
+    <span class="n">solver</span> <span class="o">=</span> <span class="s1">&#39;ls-runge-kutta&#39;</span>
+    <span class="k">call </span><span class="n">init</span>
+    <span class="k">do </span><span class="n">s</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">rk_stages</span>
+      <span class="k">if</span> <span class="p">(</span><span class="n">s</span><span class="o">==</span><span class="mi">1</span><span class="p">)</span> <span class="k">cycle</span> <span class="c">! 1st order scheme surely not stable for this test</span>
+      <span class="k">if</span> <span class="p">(</span><span class="n">s</span><span class="o">==</span><span class="mi">2</span><span class="p">)</span> <span class="k">cycle</span> <span class="c">! 2 stages not yet implemented</span>
+      <span class="k">if</span> <span class="p">(</span><span class="n">s</span><span class="o">==</span><span class="mi">3</span><span class="p">)</span> <span class="k">cycle</span> <span class="c">! 3 stages not yet implemented</span>
+      <span class="k">if</span> <span class="p">(</span><span class="n">s</span><span class="o">==</span><span class="mi">4</span><span class="p">)</span> <span class="k">cycle</span> <span class="c">! 4 stages not yet implemented</span>
+      <span class="n">title</span> <span class="o">=</span> <span class="s1">&#39;Oscillation equation integration, explicit low storage Runge-Kutta, t=&#39;</span><span class="o">//</span><span class="n">str</span><span class="p">(</span><span class="n">n</span><span class="o">=</span><span class="n">t_final</span><span class="p">)</span><span class="o">//</span><span class="p">&amp;</span>
+        <span class="s1">&#39; steps=&#39;</span><span class="o">//</span><span class="nb">trim</span><span class="p">(</span><span class="n">str</span><span class="p">(.</span><span class="n">true</span><span class="p">.,</span> <span class="n">s</span><span class="p">))</span>
+      <span class="k">call </span><span class="n">ls_integrator</span><span class="p">%</span><span class="n">init</span><span class="p">(</span><span class="n">stages</span><span class="o">=</span><span class="n">s</span><span class="p">)</span>
+      <span class="k">call </span><span class="n">attractor</span><span class="p">%</span><span class="n">init</span><span class="p">(</span><span class="n">initial_state</span><span class="o">=</span><span class="n">initial_state</span><span class="p">,</span> <span class="n">f</span><span class="o">=</span><span class="n">f</span><span class="p">)</span>
+      <span class="n">solution</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span> <span class="o">=</span> <span class="mf">0._R_P</span>
+      <span class="n">solution</span><span class="p">(</span><span class="mi">1</span><span class="p">:</span><span class="n">space_dimension</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span> <span class="o">=</span> <span class="n">attractor</span><span class="p">%</span><span class="n">output</span><span class="p">()</span>
+      <span class="n">step</span> <span class="o">=</span> <span class="mi">0</span>
+      <span class="k">do while</span><span class="p">(</span><span class="n">solution</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">step</span><span class="p">)</span><span class="o">&lt;</span><span class="n">t_final</span><span class="p">)</span>
+        <span class="n">step</span> <span class="o">=</span> <span class="n">step</span> <span class="o">+</span> <span class="mi">1</span>
+        <span class="k">call </span><span class="n">ls_integrator</span><span class="p">%</span><span class="n">integrate</span><span class="p">(</span><span class="n">field</span><span class="o">=</span><span class="n">attractor</span><span class="p">,</span> <span class="n">stage</span><span class="o">=</span><span class="n">rk_stage</span><span class="p">,</span> <span class="n">Dt</span><span class="o">=</span><span class="n">Dt</span><span class="p">,</span> <span class="n">t</span><span class="o">=</span><span class="n">solution</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">step</span><span class="p">))</span>
+        <span class="n">solution</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">step</span><span class="p">)</span> <span class="o">=</span> <span class="n">step</span> <span class="o">*</span> <span class="n">Dt</span>
+        <span class="n">solution</span><span class="p">(</span><span class="mi">1</span><span class="p">:</span><span class="n">space_dimension</span><span class="p">,</span> <span class="n">step</span><span class="p">)</span> <span class="o">=</span> <span class="n">attractor</span><span class="p">%</span><span class="n">output</span><span class="p">()</span>
+      <span class="n">enddo</span>
+      <span class="k">call </span><span class="n">save_results</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="n">title</span><span class="p">,</span> <span class="n">basename</span><span class="o">=</span><span class="n">output</span><span class="o">//</span><span class="s1">&#39;-&#39;</span><span class="o">//</span><span class="nb">trim</span><span class="p">(</span><span class="n">str</span><span class="p">(.</span><span class="n">true</span><span class="p">.,</span> <span class="n">s</span><span class="p">)))</span>
+      <span class="n">ls_errors</span><span class="p">(:,</span> <span class="n">s</span><span class="p">,</span> <span class="n">d</span><span class="p">)</span> <span class="o">=</span> <span class="n">compute_errors</span><span class="p">()</span>
+    <span class="n">enddo</span>
+  <span class="n">enddo</span>
+  <span class="k">do </span><span class="n">s</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">rk_stages</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">s</span><span class="o">==</span><span class="mi">1</span><span class="p">)</span> <span class="k">cycle</span> <span class="c">! 1st order scheme surely not stable for this test</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">s</span><span class="o">==</span><span class="mi">2</span><span class="p">)</span> <span class="k">cycle</span> <span class="c">! 2 stages not yet implemented</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">s</span><span class="o">==</span><span class="mi">3</span><span class="p">)</span> <span class="k">cycle</span> <span class="c">! 3 stages not yet implemented</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">s</span><span class="o">==</span><span class="mi">4</span><span class="p">)</span> <span class="k">cycle</span> <span class="c">! 4 stages not yet implemented</span>
+    <span class="k">do </span><span class="n">d</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">NDt</span><span class="o">-</span><span class="mi">1</span>
+      <span class="n">ls_orders</span><span class="p">(:,</span> <span class="n">s</span><span class="p">,</span> <span class="n">d</span><span class="p">)</span> <span class="o">=</span> <span class="n">estimate_orders</span><span class="p">(</span><span class="n">solver_error</span><span class="o">=</span><span class="n">ls_errors</span><span class="p">(:,</span> <span class="n">s</span><span class="p">,</span> <span class="n">d</span><span class="p">:</span><span class="n">d</span><span class="o">+</span><span class="mi">1</span><span class="p">),</span> <span class="n">Dt_used</span><span class="o">=</span><span class="n">time_steps</span><span class="p">(</span><span class="n">d</span><span class="p">:</span><span class="n">d</span><span class="o">+</span><span class="mi">1</span><span class="p">))</span>
+    <span class="n">enddo</span>
+  <span class="n">enddo</span>
+  <span class="c">! Analyze errors of TVD/SSP Runge-Kutta solvers</span>
+  <span class="k">do </span><span class="n">d</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">NDt</span> <span class="c">! loop over exercised time steps</span>
+    <span class="n">Dt</span> <span class="o">=</span> <span class="n">time_steps</span><span class="p">(</span><span class="n">d</span><span class="p">)</span>
+    <span class="n">solver</span> <span class="o">=</span> <span class="s1">&#39;tvd-runge-kutta&#39;</span>
+    <span class="k">call </span><span class="n">init</span>
+    <span class="k">do </span><span class="n">s</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">rk_stages</span>
+      <span class="k">if</span> <span class="p">(</span><span class="n">s</span><span class="o">==</span><span class="mi">1</span><span class="p">)</span> <span class="k">cycle</span> <span class="c">! 1st order scheme surely not stable for this test</span>
+      <span class="k">if</span> <span class="p">(</span><span class="n">s</span><span class="o">==</span><span class="mi">4</span><span class="p">)</span> <span class="k">cycle</span> <span class="c">! 4 stages not yet implemented</span>
+      <span class="n">title</span> <span class="o">=</span> <span class="s1">&#39;Oscillation equation integration, explicit TVD/SSP Runge-Kutta, t=&#39;</span><span class="o">//</span><span class="n">str</span><span class="p">(</span><span class="n">n</span><span class="o">=</span><span class="n">t_final</span><span class="p">)</span><span class="o">//</span><span class="s1">&#39; steps=&#39;</span><span class="o">//</span><span class="nb">trim</span><span class="p">(</span><span class="n">str</span><span class="p">(.</span><span class="n">true</span><span class="p">.,</span> <span class="n">s</span><span class="p">))</span>
+      <span class="k">call </span><span class="n">rk_integrator</span><span class="p">%</span><span class="n">init</span><span class="p">(</span><span class="n">stages</span><span class="o">=</span><span class="n">s</span><span class="p">)</span>
+      <span class="k">call </span><span class="n">attractor</span><span class="p">%</span><span class="n">init</span><span class="p">(</span><span class="n">initial_state</span><span class="o">=</span><span class="n">initial_state</span><span class="p">,</span> <span class="n">f</span><span class="o">=</span><span class="n">f</span><span class="p">)</span>
+      <span class="n">solution</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span> <span class="o">=</span> <span class="mf">0._R_P</span>
+      <span class="n">solution</span><span class="p">(</span><span class="mi">1</span><span class="p">:</span><span class="n">space_dimension</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span> <span class="o">=</span> <span class="n">attractor</span><span class="p">%</span><span class="n">output</span><span class="p">()</span>
+      <span class="n">step</span> <span class="o">=</span> <span class="mi">0</span>
+      <span class="k">do while</span><span class="p">(</span><span class="n">solution</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">step</span><span class="p">)</span><span class="o">&lt;</span><span class="n">t_final</span><span class="p">)</span>
+        <span class="n">step</span> <span class="o">=</span> <span class="n">step</span> <span class="o">+</span> <span class="mi">1</span>
+        <span class="k">call </span><span class="n">rk_integrator</span><span class="p">%</span><span class="n">integrate</span><span class="p">(</span><span class="n">field</span><span class="o">=</span><span class="n">attractor</span><span class="p">,</span> <span class="n">stage</span><span class="o">=</span><span class="n">rk_stage</span><span class="p">(</span><span class="mi">1</span><span class="p">:</span><span class="n">s</span><span class="p">),</span> <span class="n">Dt</span><span class="o">=</span><span class="n">Dt</span><span class="p">,</span> <span class="n">t</span><span class="o">=</span><span class="n">solution</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">step</span><span class="p">))</span>
+        <span class="n">solution</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">step</span><span class="p">)</span> <span class="o">=</span> <span class="n">step</span> <span class="o">*</span> <span class="n">Dt</span>
+        <span class="n">solution</span><span class="p">(</span><span class="mi">1</span><span class="p">:</span><span class="n">space_dimension</span><span class="p">,</span> <span class="n">step</span><span class="p">)</span> <span class="o">=</span> <span class="n">attractor</span><span class="p">%</span><span class="n">output</span><span class="p">()</span>
+      <span class="n">enddo</span>
+      <span class="k">call </span><span class="n">save_results</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="n">title</span><span class="p">,</span> <span class="n">basename</span><span class="o">=</span><span class="n">output</span><span class="o">//</span><span class="s1">&#39;-&#39;</span><span class="o">//</span><span class="nb">trim</span><span class="p">(</span><span class="n">str</span><span class="p">(.</span><span class="n">true</span><span class="p">.,</span> <span class="n">s</span><span class="p">)))</span>
+      <span class="n">rk_errors</span><span class="p">(:,</span> <span class="n">s</span><span class="p">,</span> <span class="n">d</span><span class="p">)</span> <span class="o">=</span> <span class="n">compute_errors</span><span class="p">()</span>
+    <span class="n">enddo</span>
+  <span class="n">enddo</span>
+  <span class="k">do </span><span class="n">s</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">rk_stages</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">s</span><span class="o">==</span><span class="mi">1</span><span class="p">)</span> <span class="k">cycle</span> <span class="c">! 1st order scheme surely not stable for this test</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">s</span><span class="o">==</span><span class="mi">4</span><span class="p">)</span> <span class="k">cycle</span> <span class="c">! 4 stages not yet implemented</span>
+    <span class="k">do </span><span class="n">d</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">NDt</span><span class="o">-</span><span class="mi">1</span>
+      <span class="n">rk_orders</span><span class="p">(:,</span> <span class="n">s</span><span class="p">,</span> <span class="n">d</span><span class="p">)</span> <span class="o">=</span> <span class="n">estimate_orders</span><span class="p">(</span><span class="n">solver_error</span><span class="o">=</span><span class="n">rk_errors</span><span class="p">(:,</span> <span class="n">s</span><span class="p">,</span> <span class="n">d</span><span class="p">:</span><span class="n">d</span><span class="o">+</span><span class="mi">1</span><span class="p">),</span> <span class="n">Dt_used</span><span class="o">=</span><span class="n">time_steps</span><span class="p">(</span><span class="n">d</span><span class="p">:</span><span class="n">d</span><span class="o">+</span><span class="mi">1</span><span class="p">))</span>
+    <span class="n">enddo</span>
+  <span class="n">enddo</span>
+  <span class="k">call </span><span class="n">print_analysis</span><span class="p">(</span><span class="n">ab_steps</span><span class="o">=</span><span class="n">ab_steps</span><span class="p">,</span> <span class="n">rk_stages</span><span class="o">=</span><span class="n">rk_stages</span><span class="p">,</span> <span class="n">NDt</span><span class="o">=</span><span class="n">NDt</span><span class="p">,</span> <span class="n">time_steps</span><span class="o">=</span><span class="n">time_steps</span><span class="p">,</span> <span class="p">&amp;</span>
+                      <span class="n">ab_errors</span><span class="o">=</span><span class="n">ab_errors</span><span class="p">,</span> <span class="n">lf_errors</span><span class="o">=</span><span class="n">lf_errors</span><span class="p">,</span> <span class="n">ls_errors</span><span class="o">=</span><span class="n">ls_errors</span><span class="p">,</span> <span class="n">rk_errors</span><span class="o">=</span><span class="n">rk_errors</span><span class="p">,</span> <span class="p">&amp;</span>
+                      <span class="n">ab_orders</span><span class="o">=</span><span class="n">ab_orders</span><span class="p">,</span> <span class="n">lf_orders</span><span class="o">=</span><span class="n">lf_orders</span><span class="p">,</span> <span class="n">ls_orders</span><span class="o">=</span><span class="n">ls_orders</span><span class="p">,</span> <span class="n">rk_orders</span><span class="o">=</span><span class="n">rk_orders</span><span class="p">)</span>
+
+  <span class="k">return</span>
+  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+  <span class="n">endsubroutine</span> <span class="n">perform_errors_analysis</span>
+</pre></div>
+
+    </section>
+    <br>
+    
+    
+    </div>
+  </div>
+
+    <hr>
+    <footer>
+        <div class="row">
+        <div class="col-md-6">&copy; 2015 FOODiE was written by Fortran-FOSS-Programmers Group. </div>
+        <div class="col-md-6"><span class="pull-right">Documentation generated by <a href="https://github.com/cmacmackin/ford">FORD</a>.</span></div>
+        </div>
+        <br>
+    </footer>
+    </div> <!-- /container -->
+
+
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+<!--
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+-->
+    <script src="../js/bootstrap.min.js"></script>
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+    <script src="../js/ie10-viewport-bug-workaround.js"></script>
+
+    <!-- MathJax JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        TeX: { extensions: ['AMSmath.js','AMSsymbols.js','noErrors.js','noUndefined.js'], equationNumbers: { autoNumber: 'AMS' } },
+        jax: ['input/TeX','input/MathML','output/HTML-CSS'],
+        extensions: ['tex2jax.js','mml2jax.js','MathMenu.js','MathZoom.js'],
+        'HTML-CSS': { 
+           styles: { '.MathJax_Display, .MathJax .mo, .MathJax .mi, .MathJax .mn': {color: '#000000 ! important'} }
+        }
+      });
+    </script>
+    <script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+  </body>
+</html>
