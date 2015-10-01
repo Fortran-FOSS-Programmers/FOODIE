@@ -143,11 +143,11 @@ The prototype of IVP can be expressed as:
 \begin{equation}
   \begin{matrix}
   U_t = R(t,U) \\
-  U_0 = F(t_0)
+  U_0 = U(t_0)
   \end{matrix}
 \label{eq:IVP}
 \end{equation}
-where $U(t)$ is the vector of state variables being a function of the time-like independent variable $t$, $U_t = \frac{dU}{dt} = R(t,U)$ is the (vectorial) residual function and $F$ is the (vectorial) initial conditions function evaluated at the initial time $t_0$. In general, the residual function $R$ is a function of the state variable $U$ through which it is a function of time, but it can be also a direct function of time, thus in general $R=R(t,U(t))$ holds.
+where $U(t)$ is the vector of state variables being a function of the time-like independent variable $t$, $U_t = \frac{dU}{dt} = R(t,U)$ is the (vectorial) residual function and $U(t_0)$ is the (vectorial) initial conditions, namely the state variables function evaluated at the initial time $t_0$. In general, the residual function $R$ is a function of the state variable $U$ through which it is a function of time, but it can be also a direct function of time, thus in general $R=R(t,U(t))$ holds.
 
 The problem prototype \ref{eq:IVP} is ubiquitous in the mathematical modelling of physical problems: essentially whenever an \emph{evolutionary} phenomenon is considered the prevision (simulation) of the future solutions involves the solution of an IVP. As a matter of facts, many physical problems (fluid dynamics, chemistry, biology, evolutionary-anthropology, etc...) are described by means of an IVP.
 
@@ -190,21 +190,59 @@ The abstract calculus pattern provides a simple solution for the connection betw
 
 Is is worth noting that this ACP emancipates the solvers implementations from any low-level problem-dependent details: the ODE solvers developed with this pattern are extremely concise, clear, maintainable and less errors-prone with respect a low-level (non abstract) pattern. Moreover, the FOODiE clients can use solvers being extremely robust: as a matter of facts, FOODiE solvers are expressed in a formulation very close to the mathematical one and are tested on an extremely varying family of problems. As shown in the following, such a great flexibility does not compromise the computational efficiency.
 
+The present paper is organized as following: in section \ref{sec:MNmodels} a brief description of the mathematical and numerical methods currently implemented into FOODiE is presented; in section \ref{sec:API} a detailed discussion on the implementation specifications is provided by means of an analytical code-listings review; in section \ref{sec:Tests} a verification analysis on the results of FOODiE applications is presented; finally, in section \ref{sec:conclusions} concluding remarks and perspectives are depicted.
+
 {\color{red} Add citations to Fortran standards, OOP, TDD, free software, ACP, ADT, Rouson's book references.}
 
 \section{Mathematical and Numerical Models}\label{sec:MNmodels}
 
-In this section the mathematical and numerical models of the currently implemented FOODiE solvers are described.
+In many (most) circumstances, the solution of equation \ref{eq:IVP} cannot be computed in a closed, exact form (even if it exists and is unique) due to the complexity and nature of the residual functions, that is often non linear. Consequently, the problem is often solved relying on a numerical approach: the solution of system \ref{eq:IVP} at a time $t^n$, namely $U(t^n)$, is approximated by a subsequent time-marching approximations $U_0=u_0 \rightarrow u_1 \rightarrow u_2 \rightarrow ... \rightarrow u_N\approx U(t^n)$ where the relation $u_i \rightarrow u_{i+1}$ implies a \emph{stepping, numerical integration} from the time $t^i$ to time $t^{i+1}$ and $N$ is the total number of numerical time steps necessary to evolve the initial conditions toward the searched solution $U(t^n)$. To this aim, many numerical schemes have been devised. Notably, the numerical schemes of practical usefulness must posses some necessary proprieties such as \emph{consistency} and \emph{stability} to ensure that the numerical approximation \emph{converges} to the exact solution as the numerical time step tends to zero. A detailed discussion of these details is out the scope of the present work and is omitted. Here, we briefly recall some classifications necessary to introduce the schemes implemented into the FOODiE library.
+
+A non comprehensive classification of the most widely used schemes could distinguish between \emph{multi-step} versus \emph{one-step} schemes and between \emph{explicit} versus \emph{implicit} schemes.
+
+Essentially, the multi-step schemes have been developed to obtain an accurate approximation of the subsequent numerical steps using the informations contained into the previously computed steps, thus this approach relates the next step approximation to a set of the previously computed steps. On the contrary, a one-step scheme evolves the solution toward the next step using only the information coming from the current time approximation. In the framework of one-step schemes family an equivalent accurate approximation can be obtained by means of a multi-stage approach as the one due to Runge-Kutta. The current version of FOODiE provides schemes belonging to both these families.
+
+The other ODE solvers classification concerns with explicit or implicit nature of the schemes employed. Briefly, an explicit scheme computes the next step approximation using the previously computed steps at most to the current time, whereas an implicit scheme uses also the next step approximation (that is the unknown), thus it requires extra computations. The implicit approach is of practical use for \emph{stiff} systems where the usage of explicit schemes could require an extremely small time step to evolve in a \emph{stable} way the solution. Currently, FOODiE provides only explicit solvers.
+
+FOODiE currently implements the following ODE schemes:
+
+\begin{itemize}
+  \item one-step schemes:
+    \begin{itemize}
+      \item explicit forward Euler scheme, it being $1^{st}$ order accurate;
+      \item explicit Runge-Kutta schemes:
+        \begin{itemize}
+          \item low storage Runge-Kutta schemes:
+            \begin{itemize}
+              \item 5-stages 2N registers schemes, it being $4^{th}$ order accurate;
+              \end{itemize}
+          \item TVD/SSP Runge-Kutta schemes:
+            \begin{itemize}
+              \item 2-stages, it being $2^{nd}$ order accurate;
+              \item 3-stages, it being $3^{rd}$ order accurate;
+              \item 5-stages, it being $4^{th}$ order accurate;
+              \end{itemize}
+          \end{itemize}
+      \end{itemize}
+  \item multi-step schemes:
+    \begin{itemize}
+      \item Adams-Bashforth schemes:
+        \begin{itemize}
+          \item 2-steps, it being $2^{nd}$ order accurate;
+          \item 3-steps, it being $3^{rd}$ order accurate;
+          \end{itemize}
+      \item Leapfrog schemes:
+        \begin{itemize}
+          \item 2-steps unfiltered, it being $2^{nd}$ order accurate, but mostly \emph{unstable};
+          \item 2-steps Robert-Asselin filtered, it being $1^{st}$ order accurate;
+          \item 2-steps Robert-Asselin-Williams filtered, it being $3^{rd}$ order accurate;
+          \end{itemize}
+      \end{itemize}
+  \end{itemize}
+
+{\color{red} Add citations to all solvers reference papers.}
 
 \subsection{The explicit forward Euler scheme}
-
-{\color{red} To be written.}
-
-\subsection{The explicit Adams-Bashforth class of schemes}
-
-{\color{red} To be written.}
-
-\subsection{The leapfrog solver}
 
 {\color{red} To be written.}
 
@@ -213,6 +251,14 @@ In this section the mathematical and numerical models of the currently implement
 {\color{red} To be written.}
 
 \subsection{The explicit TVD/SSP Runge-Kutta class of schemes}
+
+{\color{red} To be written.}
+
+\subsection{The explicit Adams-Bashforth class of schemes}
+
+{\color{red} To be written.}
+
+\subsection{The leapfrog solver}
 
 {\color{red} To be written.}
 
@@ -563,9 +609,9 @@ Table \ref{tab:oscillation} summarizes the errors analysis.
 
 \clearpage
 
-\section{Ongoing Development Activities}\label{sec:ongoing}
+% \section{Ongoing Development Activities}\label{sec:ongoing}
 
-{\color{red} To be written.}
+% {\color{red} To be written.}
 
 \section{Concluding Remarks and Perspectives}\label{sec:conclusions}
 
