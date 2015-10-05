@@ -130,7 +130,7 @@ contains
   integer, parameter               :: rk_stages=5           !< Runge-Kutta stages number.
   type(lorenz)                     :: rk_stage(1:rk_stages) !< Runge-Kutta stages.
   type(adams_bashforth_integrator) :: ab_integrator         !< Adams-Bashforth integrator.
-  integer, parameter               :: ab_steps=3            !< Adams-Bashforth steps number.
+  integer, parameter               :: ab_steps=4            !< Adams-Bashforth steps number.
   integer(I_P)                     :: s                     !< AB steps counter.
   integer                          :: step                  !< Time steps counter.
   !---------------------------------------------------------------------------------------------------------------------------------
@@ -140,16 +140,21 @@ contains
   do s=1, ab_steps
     print "(A)", ' AB-'//trim(str(.true.,s))
     call ab_integrator%init(steps=s)
-    call rk_integrator%init(stages=s)
+    select case(s)
+    case(1, 2, 3)
+      call rk_integrator%init(stages=s)
+    case(4)
+      call rk_integrator%init(stages=5)
+    endselect
     call attractor%init(initial_state=initial_state, sigma=sigma, rho=rho, beta=beta, steps=s)
     solution(0, 0) = 0._R_P
     solution(1:space_dimension, 0) = attractor%output()
     do step = 1, num_steps
       if (s>=step) then
         ! the time steps from 1 to s - 1 must be computed with other scheme...
-        call rk_integrator%integrate(field=attractor, stage=rk_stage(1:s), dt=dt, t=solution(0, step))
+        call rk_integrator%integrate(U=attractor, stage=rk_stage(1:s), dt=dt, t=solution(0, step))
       else
-        call ab_integrator%integrate(field=attractor, dt=dt, t=solution(0, step-s:step-1))
+        call ab_integrator%integrate(U=attractor, dt=dt, t=solution(0, step-s:step-1))
       endif
       solution(0, step) = step * dt
       solution(1:space_dimension, step) = attractor%output()
@@ -176,7 +181,7 @@ contains
   solution(0, 0) = 0._R_P
   solution(1:space_dimension, 0) = attractor%output()
   do step = 1, num_steps
-    call euler_integrator%integrate(field=attractor, dt=dt, t=solution(0, step))
+    call euler_integrator%integrate(U=attractor, dt=dt, t=solution(0, step))
     solution(0, step) = step * dt
     solution(1:space_dimension, step) = attractor%output()
   enddo
@@ -209,9 +214,9 @@ contains
   do step = 1, num_steps
     if (2>=step) then
       ! the time steps from 1 to 2 must be computed with other scheme...
-      call rk_integrator%integrate(field=attractor, stage=rk_stage, dt=dt, t=solution(0, step))
+      call rk_integrator%integrate(U=attractor, stage=rk_stage, dt=dt, t=solution(0, step))
     else
-      call lf_integrator%integrate(field=attractor, filter=filter, dt=dt, t=solution(0, step))
+      call lf_integrator%integrate(U=attractor, filter=filter, dt=dt, t=solution(0, step))
     endif
     solution(0, step) = step * dt
     solution(1:space_dimension, step) = attractor%output()
@@ -247,7 +252,7 @@ contains
     solution(0, 0) = 0._R_P
     solution(1:space_dimension, 0) = attractor%output()
     do step = 1, num_steps
-      call rk_integrator%integrate(field=attractor, stage=rk_stage, dt=dt, t=solution(0, step))
+      call rk_integrator%integrate(U=attractor, stage=rk_stage, dt=dt, t=solution(0, step))
       solution(0, step) = step * dt
       solution(1:space_dimension, step) = attractor%output()
     enddo
@@ -280,7 +285,7 @@ contains
     solution(0, 0) = 0._R_P
     solution(1:space_dimension, 0) = attractor%output()
     do step = 1, num_steps
-      call rk_integrator%integrate(field=attractor, stage=rk_stage(1:s), dt=dt, t=solution(0, step))
+      call rk_integrator%integrate(U=attractor, stage=rk_stage(1:s), dt=dt, t=solution(0, step))
       solution(0, step) = step * dt
       solution(1:space_dimension, step) = attractor%output()
     enddo

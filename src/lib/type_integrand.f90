@@ -29,14 +29,13 @@ type, abstract :: integrand
     procedure(symmetric_operator),   pass(lhs),  deferred, public :: add                          !< Integrand + integrand oprator.
     procedure(symmetric_operator),   pass(lhs),  deferred, public :: sub                          !< Integrand - integrand oprator.
     procedure(assignment_integrand), pass(lhs),  deferred, public :: assign_integrand             !< Integrand = integrand.
-    procedure(assignment_real),      pass(lhs),  deferred, public :: assign_real                  !< Integrand = real.
     ! operators overloading
     generic, public :: operator(+) => add                              !< Overloading + operator.
     generic, public :: operator(-) => sub                              !< Overloading - operator.
     generic, public :: operator(*) => integrand_multiply_integrand, &
                                       real_multiply_integrand, &
                                       integrand_multiply_real          !< Overloading * operator.
-    generic, public :: assignment(=) => assign_integrand, assign_real  !< Overloading = assignament.
+    generic, public :: assignment(=) => assign_integrand               !< Overloading = assignament.
 endtype integrand
 
 abstract interface
@@ -117,16 +116,6 @@ abstract interface
   class(integrand), intent(IN)    :: rhs !< Right hand side.
   !---------------------------------------------------------------------------------------------------------------------------------
   endsubroutine assignment_integrand
-
-  subroutine assignment_real(lhs, rhs)
-  !---------------------------------------------------------------------------------------------------------------------------------
-  !< Asymmetric assignment integrand = real.
-  !---------------------------------------------------------------------------------------------------------------------------------
-  import :: integrand, R_P
-  class(integrand), intent(INOUT) :: lhs !< Left hand side.
-  real(R_P),        intent(IN)    :: rhs !< Right hand side.
-  !---------------------------------------------------------------------------------------------------------------------------------
-  endsubroutine assignment_real
 endinterface
 !-----------------------------------------------------------------------------------------------------------------------------------
 endmodule type_integrand

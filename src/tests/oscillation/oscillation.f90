@@ -19,7 +19,7 @@ use pyplot_module, only :  pyplot
 !-----------------------------------------------------------------------------------------------------------------------------------
 implicit none
 type(Type_Command_Line_Interface) :: cli                                               !< Command line interface handler.
-type(oscillation)                 :: attractor                                         !< Oscillation field.
+type(oscillation)                 :: oscillator                                        !< Oscillation field.
 integer,   parameter              :: space_dimension=2                                 !< Space dimensions.
 real(R_P), parameter              :: initial_state(1:space_dimension)=[0._R_P, 1._R_P] !< Initial state.
 real(R_P)                         :: f                                                 !< Oscillation frequency.
@@ -190,7 +190,7 @@ contains
   integer, parameter               :: rk_stages=3           !< Runge-Kutta stages number.
   type(oscillation)                :: rk_stage(1:rk_stages) !< Runge-Kutta stages.
   type(adams_bashforth_integrator) :: ab_integrator         !< Adams-Bashforth integrator.
-  integer, parameter               :: ab_steps=3            !< Adams-Bashforth steps number.
+  integer, parameter               :: ab_steps=4            !< Adams-Bashforth steps number.
   integer                          :: step                  !< Time steps counter.
   integer(I_P)                     :: s                     !< AB steps counter.
   integer(I_P)                     :: steps_range(1:2)      !< Steps used.
@@ -204,21 +204,26 @@ contains
     print "(A)", ' AB-'//trim(str(.true.,s))
     title = 'Oscillation equation integration, explicit Adams-Bashforth, t='//str(n=t_final)//' steps='//trim(str(.true., s))
     call ab_integrator%init(steps=s)
-    call rk_integrator%init(stages=s)
-    call attractor%init(initial_state=initial_state, f=f, steps=s)
+    select case(s)
+    case(1, 2, 3)
+      call rk_integrator%init(stages=s)
+    case(4)
+      call rk_integrator%init(stages=5)
+    endselect
+    call oscillator%init(initial_state=initial_state, f=f, steps=s)
     solution(0, 0) = 0._R_P
-    solution(1:space_dimension, 0) = attractor%output()
+    solution(1:space_dimension, 0) = oscillator%output()
     step = 0
     do while(solution(0, step)<t_final)
       step = step + 1
       if (s>=step) then
         ! the time steps from 1 to s - 1 must be computed with other scheme...
-        call rk_integrator%integrate(field=attractor, stage=rk_stage(1:s), Dt=Dt, t=solution(0, step))
+        call rk_integrator%integrate(U=oscillator, stage=rk_stage(1:s), Dt=Dt, t=solution(0, step))
       else
-        call ab_integrator%integrate(field=attractor, Dt=Dt, t=solution(0, step-s:step-1))
+        call ab_integrator%integrate(U=oscillator, Dt=Dt, t=solution(0, step-s:step-1))
       endif
       solution(0, step) = step * Dt
-      solution(1:space_dimension, step) = attractor%output()
+      solution(1:space_dimension, step) = oscillator%output()
     enddo
     call save_results(title=title, basename=output//'-'//trim(str(.true., s)))
   enddo
@@ -239,15 +244,15 @@ contains
   !---------------------------------------------------------------------------------------------------------------------------------
   print "(A)", 'Integrating Oscillation equations by means of explicit Euler solver'
   title = 'Oscillation equation integration, explicit Euler, t='//str(n=t_final)
-  call attractor%init(initial_state=initial_state, f=f)
+  call oscillator%init(initial_state=initial_state, f=f)
   solution(0, 0) = 0._R_P
-  solution(1:space_dimension, 0) = attractor%output()
+  solution(1:space_dimension, 0) = oscillator%output()
   step = 0
   do while(solution(0, step)<t_final)
     step = step + 1
-    call euler_integrator%integrate(field=attractor, Dt=Dt, t=solution(0, step))
+    call euler_integrator%integrate(U=oscillator, Dt=Dt, t=solution(0, step))
     solution(0, step) = step * Dt
-    solution(1:space_dimension, step) = attractor%output()
+    solution(1:space_dimension, step) = oscillator%output()
   enddo
   call save_results(title=title, basename=output)
   print "(A)", 'Finish!'
@@ -273,20 +278,20 @@ contains
   title = 'Oscillation equation integration, leapfrog (RAW filtered), t='//str(n=t_final)
   call lf_integrator%init()
   call rk_integrator%init(stages=rk_stages)
-  call attractor%init(initial_state=initial_state, f=f, steps=2)
+  call oscillator%init(initial_state=initial_state, f=f, steps=2)
   solution(0, 0) = 0._R_P
-  solution(1:space_dimension, 0) = attractor%output()
+  solution(1:space_dimension, 0) = oscillator%output()
   step = 0
   do while(solution(0, step)<t_final)
     step = step + 1
     if (2>=step) then
       ! the time steps from 1 to 2 must be computed with other scheme...
-      call rk_integrator%integrate(field=attractor, stage=rk_stage, Dt=Dt, t=solution(0, step))
+      call rk_integrator%integrate(U=oscillator, stage=rk_stage, Dt=Dt, t=solution(0, step))
     else
-      call lf_integrator%integrate(field=attractor, filter=filter, Dt=Dt, t=solution(0, step))
+      call lf_integrator%integrate(U=oscillator, filter=filter, Dt=Dt, t=solution(0, step))
     endif
     solution(0, step) = step * Dt
-    solution(1:space_dimension, step) = attractor%output()
+    solution(1:space_dimension, step) = oscillator%output()
   enddo
   call save_results(title=title, basename=output)
   print "(A)", 'Finish!'
@@ -319,15 +324,15 @@ contains
     title = 'Oscillation equation integration, explicit low storage Runge-Kutta, t='//str(n=t_final)//&
       ' steps='//trim(str(.true., s))
     call rk_integrator%init(stages=s)
-    call attractor%init(initial_state=initial_state, f=f)
+    call oscillator%init(initial_state=initial_state, f=f)
     solution(0, 0) = 0._R_P
-    solution(1:space_dimension, 0) = attractor%output()
+    solution(1:space_dimension, 0) = oscillator%output()
     step = 0
     do while(solution(0, step)<t_final)
       step = step + 1
-      call rk_integrator%integrate(field=attractor, stage=rk_stage, Dt=Dt, t=solution(0, step))
+      call rk_integrator%integrate(U=oscillator, stage=rk_stage, Dt=Dt, t=solution(0, step))
       solution(0, step) = step * Dt
-      solution(1:space_dimension, step) = attractor%output()
+      solution(1:space_dimension, step) = oscillator%output()
     enddo
     call save_results(title=title, basename=output//'-'//trim(str(.true., s)))
   enddo
@@ -357,15 +362,15 @@ contains
     print "(A)", ' RK-'//trim(str(.true.,s))
     title = 'Oscillation equation integration, explicit TVD/SSP Runge-Kutta, t='//str(n=t_final)//' steps='//trim(str(.true., s))
     call rk_integrator%init(stages=s)
-    call attractor%init(initial_state=initial_state, f=f)
+    call oscillator%init(initial_state=initial_state, f=f)
     solution(0, 0) = 0._R_P
-    solution(1:space_dimension, 0) = attractor%output()
+    solution(1:space_dimension, 0) = oscillator%output()
     step = 0
     do while(solution(0, step)<t_final)
       step = step + 1
-      call rk_integrator%integrate(field=attractor, stage=rk_stage(1:s), Dt=Dt, t=solution(0, step))
+      call rk_integrator%integrate(U=oscillator, stage=rk_stage(1:s), Dt=Dt, t=solution(0, step))
       solution(0, step) = step * Dt
-      solution(1:space_dimension, step) = attractor%output()
+      solution(1:space_dimension, step) = oscillator%output()
     enddo
     call save_results(title=title, basename=output//'-'//trim(str(.true., s)))
   enddo
@@ -408,7 +413,7 @@ contains
   type(leapfrog_integrator)        :: lf_integrator                !< Leapfrog integrator.
   type(ls_runge_kutta_integrator)  :: ls_integrator                !< Low storage Runge-Kutta integrator.
   type(tvd_runge_kutta_integrator) :: rk_integrator                !< TVD/SSP Runge-Kutta integrator.
-  integer, parameter               :: ab_steps=3                   !< Adams-Bashforth steps number.
+  integer, parameter               :: ab_steps=4                   !< Adams-Bashforth steps number.
   integer, parameter               :: rk_stages=5                  !< Runge-Kutta stages number.
   type(oscillation)                :: rk_stage(1:rk_stages)        !< Runge-Kutta stages.
   type(oscillation)                :: filter                       !< Filter displacement.
@@ -451,21 +456,26 @@ contains
       if (s==1) cycle ! 1st order scheme surely not stable for this test
       title = 'Oscillation equation integration, explicit Adams-Bashforth, t='//str(n=t_final)//' steps='//trim(str(.true., s))
       call ab_integrator%init(steps=s)
-      call rk_integrator%init(stages=s)
-      call attractor%init(initial_state=initial_state, f=f, steps=s)
+      select case(s)
+      case(1, 2, 3)
+        call rk_integrator%init(stages=s)
+      case(4)
+        call rk_integrator%init(stages=5)
+      endselect
+      call oscillator%init(initial_state=initial_state, f=f, steps=s)
       solution(0, 0) = 0._R_P
-      solution(1:space_dimension, 0) = attractor%output()
+      solution(1:space_dimension, 0) = oscillator%output()
       step = 0
       do while(solution(0, step)<t_final)
         step = step + 1
         if (s>=step) then
           ! the time steps from 1 to s - 1 must be computed with other scheme...
-          call rk_integrator%integrate(field=attractor, stage=rk_stage(1:s), Dt=Dt, t=solution(0, step))
+          call rk_integrator%integrate(U=oscillator, stage=rk_stage(1:s), Dt=Dt, t=solution(0, step))
         else
-          call ab_integrator%integrate(field=attractor, Dt=Dt, t=solution(0, step-s:step-1))
+          call ab_integrator%integrate(U=oscillator, Dt=Dt, t=solution(0, step-s:step-1))
         endif
         solution(0, step) = step * Dt
-        solution(1:space_dimension, step) = attractor%output()
+        solution(1:space_dimension, step) = oscillator%output()
       enddo
       call save_results(title=title, basename=output//'-'//trim(str(.true., s)))
       ab_errors(:, s, d) = compute_errors()
@@ -485,20 +495,20 @@ contains
     title = 'Oscillation equation integration, leapfrog (RAW filtered), t='//str(n=t_final)
     call lf_integrator%init()
     call rk_integrator%init(stages=rk_stages)
-    call attractor%init(initial_state=initial_state, f=f, steps=2)
+    call oscillator%init(initial_state=initial_state, f=f, steps=2)
     solution(0, 0) = 0._R_P
-    solution(1:space_dimension, 0) = attractor%output()
+    solution(1:space_dimension, 0) = oscillator%output()
     step = 0
     do while(solution(0, step)<t_final)
       step = step + 1
       if (2>=step) then
         ! the time steps from 1 to 2 must be computed with other scheme...
-        call rk_integrator%integrate(field=attractor, stage=rk_stage, Dt=Dt, t=solution(0, step))
+        call rk_integrator%integrate(U=oscillator, stage=rk_stage, Dt=Dt, t=solution(0, step))
       else
-        call lf_integrator%integrate(field=attractor, filter=filter, Dt=Dt, t=solution(0, step))
+        call lf_integrator%integrate(U=oscillator, filter=filter, Dt=Dt, t=solution(0, step))
       endif
       solution(0, step) = step * Dt
-      solution(1:space_dimension, step) = attractor%output()
+      solution(1:space_dimension, step) = oscillator%output()
     enddo
     call save_results(title=title, basename=output)
     lf_errors(:, d) = compute_errors()
@@ -519,15 +529,15 @@ contains
       title = 'Oscillation equation integration, explicit low storage Runge-Kutta, t='//str(n=t_final)//&
         ' steps='//trim(str(.true., s))
       call ls_integrator%init(stages=s)
-      call attractor%init(initial_state=initial_state, f=f)
+      call oscillator%init(initial_state=initial_state, f=f)
       solution(0, 0) = 0._R_P
-      solution(1:space_dimension, 0) = attractor%output()
+      solution(1:space_dimension, 0) = oscillator%output()
       step = 0
       do while(solution(0, step)<t_final)
         step = step + 1
-        call ls_integrator%integrate(field=attractor, stage=rk_stage, Dt=Dt, t=solution(0, step))
+        call ls_integrator%integrate(U=oscillator, stage=rk_stage, Dt=Dt, t=solution(0, step))
         solution(0, step) = step * Dt
-        solution(1:space_dimension, step) = attractor%output()
+        solution(1:space_dimension, step) = oscillator%output()
       enddo
       call save_results(title=title, basename=output//'-'//trim(str(.true., s)))
       ls_errors(:, s, d) = compute_errors()
@@ -552,15 +562,15 @@ contains
       if (s==4) cycle ! 4 stages not yet implemented
       title = 'Oscillation equation integration, explicit TVD/SSP Runge-Kutta, t='//str(n=t_final)//' steps='//trim(str(.true., s))
       call rk_integrator%init(stages=s)
-      call attractor%init(initial_state=initial_state, f=f)
+      call oscillator%init(initial_state=initial_state, f=f)
       solution(0, 0) = 0._R_P
-      solution(1:space_dimension, 0) = attractor%output()
+      solution(1:space_dimension, 0) = oscillator%output()
       step = 0
       do while(solution(0, step)<t_final)
         step = step + 1
-        call rk_integrator%integrate(field=attractor, stage=rk_stage(1:s), Dt=Dt, t=solution(0, step))
+        call rk_integrator%integrate(U=oscillator, stage=rk_stage(1:s), Dt=Dt, t=solution(0, step))
         solution(0, step) = step * Dt
-        solution(1:space_dimension, step) = attractor%output()
+        solution(1:space_dimension, step) = oscillator%output()
       enddo
       call save_results(title=title, basename=output//'-'//trim(str(.true., s)))
       rk_errors(:, s, d) = compute_errors()

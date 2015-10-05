@@ -190,14 +190,14 @@ contains
   !---------------------------------------------------------------------------------------------------------------------------------
   endsubroutine destroy
 
-  subroutine integrate(self, field, stage, Dt, t)
+  subroutine integrate(self, U, stage, Dt, t)
   !---------------------------------------------------------------------------------------------------------------------------------
   !< Integrate field with explicit TVD (or SSP) Runge-Kutta scheme.
   !<
   !< @note This method can be used **after** the integrator is created (i.e. the RK coeficients are initialized).
   !---------------------------------------------------------------------------------------------------------------------------------
   class(tvd_runge_kutta_integrator), intent(IN)    :: self      !< Actual RK integrator.
-  class(integrand),                  intent(INOUT) :: field     !< Field to be integrated.
+  class(integrand),                  intent(INOUT) :: U         !< Field to be integrated.
   class(integrand),                  intent(INOUT) :: stage(1:) !< Runge-Kutta stages [1:stages].
   real(R_P),                         intent(IN)    :: Dt        !< Time step.
   real(R_P),                         intent(IN)    :: t         !< Time.
@@ -210,7 +210,7 @@ contains
   class is(integrand)
     ! computing stages
     do s=1, self%stages
-      stage(s) = field
+      stage(s) = U
       do ss=1, s - 1
         stage(s) = stage(s) + stage(ss) * (Dt * self%alph(s, ss))
       enddo
@@ -218,7 +218,7 @@ contains
     enddo
     ! computing new time step
     do s=1, self%stages
-      field = field +  stage(s) * (Dt * self%beta(s))
+      U = U +  stage(s) * (Dt * self%beta(s))
     enddo
   endselect
   return

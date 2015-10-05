@@ -15,6 +15,7 @@ if [ -x "$tecplot" ] ; then
   ln -fs ../utilities/lay_export* .
   ./lay_export_all_f errors_analysis-oscillation-adams-bashforth-2.lay
   ./lay_export_all_f errors_analysis-oscillation-adams-bashforth-3.lay
+  ./lay_export_all_f errors_analysis-oscillation-adams-bashforth-4.lay
   ./lay_export_all_f errors_analysis-oscillation-leapfrog.lay
   ./lay_export_all_f errors_analysis-oscillation-ls-runge-kutta-5.lay
   ./lay_export_all_f errors_analysis-oscillation-tvd-runge-kutta-2.lay

@@ -338,7 +338,7 @@ contains
   integer, parameter               :: rk_stages=5           !< Runge-Kutta stages number.
   type(euler_1D)                   :: rk_stage(1:rk_stages) !< Runge-Kutta stages.
   type(adams_bashforth_integrator) :: ab_integrator         !< Adams-Bashforth integrator.
-  integer, parameter               :: ab_steps=3            !< Adams-Bashforth steps number.
+  integer, parameter               :: ab_steps=4            !< Adams-Bashforth steps number.
   integer                          :: step                  !< Time steps counter.
   real(R_P)                        :: dt                    !< Time step.
   real(R_P)                        :: t(1:ab_steps)         !< Times.
@@ -355,14 +355,16 @@ contains
     print "(A)", ' AB-'//trim(str(.true.,s))
     title = '1D Euler equations integration, explicit Adams-Bashforth, t='//str(n=t_final)//trim(str(.true., s))//' steps'
     call ab_integrator%init(steps=s)
-    call rk_integrator%init(stages=s)
     select case(s)
     case(1)
       call domain%init(Ni=Ni, Ns=Ns, Dx=Dx, BC_L=BC_L, BC_R=BC_R, initial_state=initial_state, cp0=cp0, cv0=cv0, steps=s, ord=1)
+      call rk_integrator%init(stages=s)
     case(2, 3)
       call domain%init(Ni=Ni, Ns=Ns, Dx=Dx, BC_L=BC_L, BC_R=BC_R, initial_state=initial_state, cp0=cp0, cv0=cv0, steps=s, ord=3)
-    case(5)
+      call rk_integrator%init(stages=s)
+    case(4, 5)
       call domain%init(Ni=Ni, Ns=Ns, Dx=Dx, BC_L=BC_L, BC_R=BC_R, initial_state=initial_state, cp0=cp0, cv0=cv0, steps=s, ord=7)
+      call rk_integrator%init(stages=5)
     endselect
     t = 0._R_P
     call save_time_serie(title=title, filename=output//'-'//trim(str(.true., s))//'-time_serie.dat', t=t(s))
@@ -372,14 +374,14 @@ contains
       dt = domain%dt(Nmax=0, Tmax=t_final, t=t(s), CFL=0.1_R_P*CFL)
       if (s>=step) then
         ! the time steps from 1 to s - 1 must be computed with other scheme...
-        call rk_integrator%integrate(field=domain, stage=rk_stage(1:s), dt=dt, t=t(s))
+        call rk_integrator%integrate(U=domain, stage=rk_stage(1:s), dt=dt, t=t(s))
         if (step>1) then
           t(step) = t(step-1) + dt
         else
           t(step) = dt
         endif
       else
-        call ab_integrator%integrate(field=domain, dt=dt, t=t)
+        call ab_integrator%integrate(U=domain, dt=dt, t=t)
         do ss=1, s-1
           t(ss) = t(ss + 1)
         enddo
@@ -415,7 +417,7 @@ contains
   do while(t<t_final)
     if (verbose) print "(A)", '  Time step: '//str(n=dt)//', Time: '//str(n=t)
     dt = domain%dt(Nmax=0, Tmax=t_final, t=t, CFL=CFL)
-    call euler_integrator%integrate(field=domain, dt=dt, t=t)
+    call euler_integrator%integrate(U=domain, dt=dt, t=t)
     t = t + dt
     call save_time_serie(t=t)
   enddo
@@ -455,9 +457,9 @@ contains
     dt = domain%dt(Nmax=0, Tmax=t_final, t=t, CFL=0.1_R_P*CFL)
     if (2>=step) then
       ! the time steps from 1 to s - 1 must be computed with other scheme...
-      call rk_integrator%integrate(field=domain, stage=rk_stage, dt=dt, t=t)
+      call rk_integrator%integrate(U=domain, stage=rk_stage, dt=dt, t=t)
     else
-      call lf_integrator%integrate(field=domain, filter=filter, dt=dt, t=t)
+      call lf_integrator%integrate(U=domain, filter=filter, dt=dt, t=t)
     endif
     t = t + dt
     step = step + 1
@@ -508,7 +510,7 @@ contains
     do while(t<t_final)
       if (verbose) print "(A)", '    Time step: '//str(n=dt)//', Time: '//str(n=t)
       dt = domain%dt(Nmax=0, Tmax=t_final, t=t, CFL=CFL)
-      call rk_integrator%integrate(field=domain, stage=rk_stage, dt=dt, t=t)
+      call rk_integrator%integrate(U=domain, stage=rk_stage, dt=dt, t=t)
       t = t + dt
       call save_time_serie(t=t)
     enddo
@@ -556,7 +558,7 @@ contains
     do while(t<t_final)
       if (verbose) print "(A)", '    Time step: '//str(n=dt)//', Time: '//str(n=t)
       dt = domain%dt(Nmax=0, Tmax=t_final, t=t, CFL=CFL)
-      call rk_integrator%integrate(field=domain, stage=rk_stage(1:s), dt=dt, t=t)
+      call rk_integrator%integrate(U=domain, stage=rk_stage(1:s), dt=dt, t=t)
       t = t + dt
       call save_time_serie(t=t)
     enddo
