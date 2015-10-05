@@ -108,7 +108,7 @@ do while(t<t_final)
   if (verbose) print "(A)", '    Time step: '//str(n=dt)//', Time: '//str(n=t)
   dt = domain%dt(Nmax=0, Tmax=t_final, t=t, CFL=CFL)
   call system_clock(profiling(1), count_rate)
-  call rk_integrator%integrate(field=domain, stage=rk_stage, dt=dt, t=t)
+  call rk_integrator%integrate(U=domain, stage=rk_stage, dt=dt, t=t)
   call system_clock(profiling(2), count_rate)
   system_clocks = system_clocks + real(profiling(2) - profiling(1), kind=R_P)/count_rate
   t = t + dt

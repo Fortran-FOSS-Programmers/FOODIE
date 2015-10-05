@@ -36,17 +36,17 @@ type :: euler_explicit_integrator
 endtype euler_explicit_integrator
 !-----------------------------------------------------------------------------------------------------------------------------------
 contains
-  subroutine integrate(field, Dt, t)
+  subroutine integrate(U, Dt, t)
   !---------------------------------------------------------------------------------------------------------------------------------
   !< Integrate field with explicit Euler scheme, 1st order.
   !---------------------------------------------------------------------------------------------------------------------------------
-  class(integrand), intent(INOUT) :: field !< Field to be integrated.
-  real(R_P),        intent(in)    :: Dt    !< Time step.
-  real(R_P),        intent(IN)    :: t     !< Time.
+  class(integrand),    intent(INOUT) :: U  !< Field to be integrated.
+  real(R_P),           intent(IN)    :: Dt !< Time step.
+  real(R_P), optional, intent(IN)    :: t  !< Time.
   !---------------------------------------------------------------------------------------------------------------------------------
 
   !---------------------------------------------------------------------------------------------------------------------------------
-  field = field + field%t(t=t) * Dt
+  U = U + U%t(t=t) * Dt
   return
   !---------------------------------------------------------------------------------------------------------------------------------
   endsubroutine integrate

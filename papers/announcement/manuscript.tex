@@ -190,7 +190,7 @@ The abstract calculus pattern provides a simple solution for the connection betw
 
 Is is worth noting that this ACP emancipates the solvers implementations from any low-level problem-dependent details: the ODE solvers developed with this pattern are extremely concise, clear, maintainable and less errors-prone with respect a low-level (non abstract) pattern. Moreover, the FOODiE clients can use solvers being extremely robust: as a matter of facts, FOODiE solvers are expressed in a formulation very close to the mathematical one and are tested on an extremely varying family of problems. As shown in the following, such a great flexibility does not compromise the computational efficiency.
 
-The present paper is organized as following: in section \ref{sec:MNmodels} a brief description of the mathematical and numerical methods currently implemented into FOODiE is presented; in section \ref{sec:API} a detailed discussion on the implementation specifications is provided by means of an analytical code-listings review; in section \ref{sec:Tests} a verification analysis on the results of FOODiE applications is presented; finally, in section \ref{sec:conclusions} concluding remarks and perspectives are depicted.
+The present paper is organized as following: in section \ref{sec:MNmodels} a brief description of the mathematical and numerical methods currently implemented into FOODiE is presented; in section \ref{sec:API} a detailed discussion on the implementation specifications is provided by means of an analytical code-listings review; in section \ref{sec:Tests} a verification analysis on the results of FOODiE applications is presented; section \ref{sec:parallel} provides an analysis of FOODiE performances under parallel frameworks scenario like the OpenMP and MPI paradigms; finally, in section \ref{sec:conclusions} concluding remarks and perspectives are depicted.
 
 {\color{red} Add citations to Fortran standards, OOP, TDD, free software, ACP, ADT, Rouson's book references.}
 
@@ -212,15 +212,15 @@ FOODiE currently implements the following ODE schemes:
       \item explicit forward Euler scheme, it being $1^{st}$ order accurate;
       \item explicit Runge-Kutta schemes:
         \begin{itemize}
-          \item low storage Runge-Kutta schemes:
-            \begin{itemize}
-              \item 5-stages 2N registers schemes, it being $4^{th}$ order accurate;
-              \end{itemize}
           \item TVD/SSP Runge-Kutta schemes:
             \begin{itemize}
               \item 2-stages, it being $2^{nd}$ order accurate;
               \item 3-stages, it being $3^{rd}$ order accurate;
               \item 5-stages, it being $4^{th}$ order accurate;
+              \end{itemize}
+          \item low storage Runge-Kutta schemes:
+            \begin{itemize}
+              \item 5-stages 2N registers schemes, it being $4^{th}$ order accurate;
               \end{itemize}
           \end{itemize}
       \end{itemize}
@@ -230,12 +230,13 @@ FOODiE currently implements the following ODE schemes:
         \begin{itemize}
           \item 2-steps, it being $2^{nd}$ order accurate;
           \item 3-steps, it being $3^{rd}$ order accurate;
+          \item 4-steps, it being $4^{th}$ order accurate;
           \end{itemize}
-      \item Leapfrog schemes:
+        \item Leapfrog schemes\footnote{Leapfrog method is a 2-steps solver being, in general $2^{nd}$ order accurate, but mostly \emph{unstable}. It is well suited for periodic/oscillatory problems, thus the error is generally categorized accordingly to the phase and amplitude errors: the unfiltered scheme provides a $2^{nd}$ order error on phase approximation while the amplitude error is null. However, the unfiltered scheme is mostly unstable, thus many filters have been devised. In general, the filters retain the accuracy on the phase error, while affect the amplitude one.}:
         \begin{itemize}
           \item 2-steps unfiltered, it being $2^{nd}$ order accurate, but mostly \emph{unstable};
-          \item 2-steps Robert-Asselin filtered, it being $1^{st}$ order accurate;
-          \item 2-steps Robert-Asselin-Williams filtered, it being $3^{rd}$ order accurate;
+          \item 2-steps Robert-Asselin filtered, it being $1^{st}$ order accurate (on \emph{amplitude error});
+          \item 2-steps Robert-Asselin-Williams filtered, it being $3^{rd}$ order accurate (on \emph{amplitude error});
           \end{itemize}
       \end{itemize}
   \end{itemize}
@@ -244,23 +245,194 @@ FOODiE currently implements the following ODE schemes:
 
 \subsection{The explicit forward Euler scheme}
 
-{\color{red} To be written.}
+The explicit forward Euler scheme for ODE integration is probably the simplest solver ever devised. Considering the system \ref{eq:IVP}, the solution (approximation) of the state vector $U$ at the time $t^{n+1}=t^n+\Delta t$ assuming to known the solution at time $t^n$ is:
 
-\subsection{The explicit low storage Runge-Kutta class of schemes}
+\begin{equation}
+  U\left(t^{n+1}\right) = U\left(t^n\right) +\Delta t \cdot R\left[t^n, U\left(t^n\right)\right]
+\label{eq:solver-euler}
+\end{equation}
+where the solution at the new time step is computed by means of only the current time solution, thus this is an explicit scheme. The solution is an approximation of $1^{st}$ order, the local truncation error being $O(Dt^2)$. As well known, this scheme has an absolute (linear) stability locus equals to $|1+\Delta t \lambda|\le 1$ where $\lambda$ contains the eigenvalues of the linear (or linearized) Jacobian matrix of the system.
 
-{\color{red} To be written.}
+This scheme is Total Variation Diminishing (TVD), thus satisfies the maximum principle (or the equivalent positivity preserving property).
+
+{\color{red} Add citations.}
 
 \subsection{The explicit TVD/SSP Runge-Kutta class of schemes}
 
-{\color{red} To be written.}
+Runge-Kutta methods belong to the more general multi-stage family of schemes. This kind of schemes has been designed to achieve a more accurate solution than the $1^{st}$ Euler scheme, but without increasing the number of time steps used, as it is done with the multi-step schemes. Essentially, the high order of accuracy is obtained by means of \emph{intermediate values} (the stages) of the solution and its derivative are generated and used within a single time step. This commonly implies the allocation of some auxiliary memory registers for storing the intermediate stages.
+
+Notably, the multi-stage schemes class has the attractive property to be \emph{self-starting}: the high order accurate solution can be obtained directly from the previous one, without the necessity to compute \emph{before} a certain number of previous steps, as it happens for the multi-step schemes. Moreover, one-step multi-stage methods are suitable for adaptively-varying time-step size (that is also possible for multi-step schemes, but at a cost of more complexity) and for discontinuous solutions, namely discontinued solutions happening at a certain time $t*$ (that in a multi-step framework can involve an overall accuracy degradation).
+
+In general, the TVD/SSP Runge-Kutta schemes provided by FOODiE library are written by means of the following algorithm:
+\begin{equation}
+  U^{n+1} = U^{n} + \Delta t \cdot\sum\limits_{s=1}^{N_{s}}{\beta_s K_s}
+\label{eq:RK}
+\end{equation}
+where $N_s$ is the number of Runge-Kutta stages used and $K_s$ is the $s^{th}$ stage defined as:
+\begin{equation}
+  K_s = R\left(t^n + \gamma_s \Delta t, U^n+\Delta t\sum\limits_{l=1}^{s-1}{\alpha_{s,l} K_l} \right)
+\label{eq:RK-stage}
+\end{equation}
+It is worth noting that the equations \ref{eq:RK} and \ref{eq:RK-stage} contain also implicit schemes. A scheme belonging to this family is operative once the coefficients $\alpha,\, \beta,\, \gamma$ are provided. We represent these coefficients using the Butcher's table, that for an explicit scheme where $\gamma_1=\alpha_{1,*}=\alpha_{i,i}=0$ has the form reported in table \ref{tab:butcher-table}.
+
+\begin{table}[!ht]
+\caption{Butcher's table for explicit Runge-Kutta schemes}\label{tab:butcher-table}
+\centering
+\resizebox{0.40\textwidth}{!}{%
+\begin{tabular}{c|ccccc}
+ $\gamma_2$     & $\alpha_{2,1}$   &                  &          &                      &              \\
+ $\gamma_3$     & $\alpha_{3,1}$   & $\alpha_{3,2}$   &          &                      &              \\
+ $\vdots$       & $\vdots$         &                  & $\ddots$ &                      &              \\
+ $\gamma_{N_s}$ & $\alpha_{N_s,1}$ & $\alpha_{N_s,2}$ & $\cdots$ & $\alpha_{N_s,N_s-1}$ &              \\
+ \hline
+                & $\beta_1$        & $\beta_2$        & $\cdots$ & $\beta_{N_s-1}$      & $\beta_{N_s}$\\
+\end{tabular}}
+\end{table}
+
+The equations \ref{eq:RK} and \ref{eq:RK-stage} show that Runge-Kutta methods do not require any additional differentiations of the ODE system for achieving high order accuracy, rather they require additional evaluations of the residual function $R$.
+
+The nature of the scheme and the properties of the solutions obtained depend on the number of stages and on the value of the coefficients selected. Currently, FOODiE provides 3 Runge-Kutta schemes having TVD or Strong Stability Preserving (SSP) propriety (thus they being suitable for ODE systems involving rapidly changing non linear dynamics) the Butcher's coefficients of which are reported in tables \ref{tab:RK-TVD-butcher-2}, \ref{tab:RK-SSP-butcher-3}, \ref{tab:RK-SSP-butcher-5}.
+
+\begin{table}[!ht]
+  \centering
+  \caption{Butcher's table of 2 stages, $2^{nd}$ order, Runge-Kutta TVD scheme\label{tab:RK-TVD-butcher-2}}
+  \resizebox{0.15\textwidth}{!}{%
+  \begin{tabular}{c|cc}
+   1 & 1 & 0       \\
+   \hline
+       & 1/2 & 1/2   \\
+  \end{tabular}}
+\end{table}
+
+\begin{table}[!ht]
+  \centering
+  \caption{Butcher's table of 3 stages, $3^{rd}$ order, Runge-Kutta SSP scheme\label{tab:RK-SSP-butcher-3}}
+  \resizebox{0.20\textwidth}{!}{%
+  \begin{tabular}{c|ccc}
+   1   & 1   &     &      \\
+   1/2 & 1/4 & 1/4 &      \\
+   \hline
+       & 1/6 & 1/6 & 2/3  \\
+  \end{tabular}}
+\end{table}
+
+\begin{table}[!ht]
+  \centering
+  \caption{Butcher's table of 5 stages, $4^{th}$ order accurate, Runge-Kutta SSP scheme\label{tab:RK-SSP-butcher-5}}
+  \resizebox{0.99\textwidth}{!}{%
+  \begin{tabular}{c|ccccc}
+   0.39175222700392 & 0.39175222700392 &                  &                  &                  &                  \\
+   0.58607968896779 & 0.21766909633821 & 0.36841059262959 &                  &                  &                  \\
+   0.47454236302687 & 0.08269208670950 & 0.13995850206999 & 0.25189177424738 &                  &                  \\
+   0.93501063100924 & 0.06796628370320 & 0.11503469844438 & 0.20703489864929 & 0.54497475021237 &                  \\
+   \hline
+                    & 0.14681187618661 & 0.24848290924556 & 0.10425883036650 & 0.27443890091960 & 0.22600748319395 \\
+  \end{tabular}}
+\end{table}
+The absolute stability locus depends on the coefficients selected, however, as a general principle, we can assume that greater is the stages number and wider is the stability locus on equal accuracy orders.
+
+It is worth noting that FODDiE also provides a one-stage TVD Runge-Kutta solver that reverts back to the explicit forward Euler scheme: it can be used, for example, into a Recursive Order Reduction (ROR) framework that automatically checks some properties of the solution and, in case, reduces the order of the Runge-Kutta solver until those properties are obtained.
+
+{\color{red} Add citations.}
+
+\subsection{The explicit low storage Runge-Kutta class of schemes}
+
+As aforementioned, standard Runge-Kutta schemes have the drawback to require $N_S$ auxiliary memory registers to store the necessary stages data. In order to make an efficient use of the available limited computer memory, the class of low storage Runge-Kutta scheme was devised. Essentially, the standard Runge-Kutta class (under some specific conditions) can be reformulated allowing a more efficient memory management. Currently FOODiE provides a class of \emph{2N registers} storage Runge-Kutta schemes, meaning that the storage of all stages requires only 2 registers of memory with a \emph{word} length $N$ (namely the length of the state vector) in contrast to the standard formulation where $N_s$ registers of the same length $N$ are required. This is a dramatic improvement of memory efficiency especially for schemes using a high number of stages ($N_s \ge 4$) where the memory necessary is an half with respect the original formulation. Unfortunately, not all standard Runge-Kutta schemes can be reformulated as a low storage one.
+
+Following the Williamson's approach the standard coefficients are reformulated to the coefficients vectors $A$, $B$ and $C$ and the Runge-Kutta algorithm becomes:
+
+\begin{equation}
+\begin{matrix}
+  K_1 = U\left(t^n\right) \\
+  K_2 = 0 \\
+  \left.\begin{matrix}
+    K_2 = A_s K_2 + \Delta t \cdot R\left(t^n + C_s \Delta t, K_1\right) \\
+    K_1 = K_1 + B_s K_2
+  \end{matrix}\right\} s=1,2,...N_s\\
+  U\left(t^{n+1}\right) = K_1
+  \end{matrix}
+\label{eq:RK-ls}
+\end{equation}
+
+Currently FOODiE provides only one 5 stages, $4^{th}$ order, 2N registers explicit scheme, the coefficients of which are listed in table \ref{tab:RK-ls-5}.
+
+\begin{table}[!ht]
+  \centering
+  \caption{Williamson's table of 5 stages, $4^{th}$ order, Runge-Kutta low storage scheme\label{tab:RK-ls-5}}
+  \resizebox{0.40\textwidth}{!}{%
+  \begin{tabular}{ccc}
+       $A$                                    & $B$                                    & $C$                                   \\
+    \hline
+       $ 0                                  $ & $\frac{1432997174477}{9575080441755 }$ & $ 0                                 $ \\
+       $-\frac{567301805773 }{1357537059087}$ & $\frac{5161836677717}{13612068292357}$ & $\frac{1432997174477}{9575080441755}$ \\
+       $-\frac{2404267990393}{2016746695238}$ & $\frac{1720146321549}{2090206949498 }$ & $\frac{2526269341429}{6820363962896}$ \\
+       $-\frac{3550918686646}{2091501179385}$ & $\frac{3134564353537}{4481467310338 }$ & $\frac{2006345519317}{3224310063776}$ \\
+       $-\frac{1275806237668}{842570457699 }$ & $\frac{2277821191437}{14882151754819}$ & $\frac{2802321613138}{2924317926251}$ \\
+  \end{tabular}}
+\end{table}
+
+Similarly to the TVD/SSP Runge-Kutta class, the low storage class also provides a fail-safe one-stage solver reverting back to the explicit forward Euler solver, that is useful for ROR-like frameworks.
+
+{\color{red} Add citations.}
 
 \subsection{The explicit Adams-Bashforth class of schemes}
 
-{\color{red} To be written.}
+Adams-Bashforth methods belong to the more general (linear) multi-step family of schemes. This kind of schemes has been designed to achieve a more accurate solution than the $1^{st}$ Euler scheme using the information coming from the solutions already computed at previous time steps. Typically only one new residual function $R$ evaluation is required at each time step, whereas Runge-Kutta schemes require many of them.
+
+In general, the Adams-Bashforth schemes provided by FOODiE library are written by means of the following algorithm (for only explicit schemes):
+
+\begin{equation}
+U\left(t^{n+N_s}\right) = U\left(t^{n+N_s-1}\right) +\Delta t \sum_{s=1}^{n+N_s}{ b_s \cdot R\left[t^{n+s-1}, U\left(t^{n+s-1}\right)\right]}
+\label{eq:AB}
+\end{equation}
+where $N_s$ is the number of time steps considered and $b_s$ are the linear coefficients selected.
+
+Currently FOODiE provides 2, 3, and 4 steps schemes having $2^{nd}$, $3^{rd}$ and $4^{th}$ formal order of accuracy, respectively. The $b_s$ coefficients are reported in table \ref{tab:AB-coeff}.
+
+\begin{table}[!ht]
+  \centering
+  \caption{Explicit Adams-Bashforth coefficients\label{tab:AB-coeff}}
+  \resizebox{0.30\textwidth}{!}{%
+  \begin{tabular}{c|cccc}
+    $N_s$ & $b_1$           & $b_2$            & $b_3$            & $b_4$           \\
+    \hline
+    2     & $-\frac{1}{2}$  & $\frac{3}{2}$    &       /          &       /         \\
+    3     & $\frac{5}{12}$  & $-\frac{16}{12}$ & $\frac{23}{12}$  &       /         \\
+    4     & $-\frac{9}{24}$ & $\frac{37}{24}$  & $-\frac{59}{24}$ & $\frac{55}{24}$ \\
+  \end{tabular}}
+\end{table}
+
+Similarly to the Runge-Kutta classes, the Adams-Bashforth class also provides a fail-safe one-step solver reverting back to the explicit forward Euler solver, that is useful for ROR-like frameworks.
+
+It is worth noting that for $N_s>1$ the Adams-Bashforth class of solvers is not \emph{self-starting}: the values of $U\left(t^{1}\right)$, $U\left(t^{2}\right)$, \dots, $U\left(t^{N_s-1}\right)$ must be provided. To this aim, a lower order multi-step scheme or an equivalent order one-step multi-stage scheme can be used.
+
+{\color{red} Add citations.}
 
 \subsection{The leapfrog solver}
 
-{\color{red} To be written.}
+The \emph{leapfrog} scheme belongs to the multi-step family, it being formally a centered second order approximation in time. The leapfrog method (in its original formulation) is mostly unstable, however it is well suited for periodic-oscillatory problems providing a null error on the amplitude value and a formal second order error on the phase one, under the satisfaction of the time-step size stable limit. Commonly, the leapfrog methods are said to provide a $2 \Delta t$ computational mode that can generate unphysical, unstable solutions. As consequence, the original leapfrog scheme is generally \emph{filtered} in order to suppress these computational modes.
+
+The unfiltered leapfrog scheme provided by FOODiE is:
+\begin{equation}
+  U\left(t^{n+2}\right) = U\left(t^{n}\right) + 2\Delta t \cdot R\left[t^{n+1}, U\left(t^{n+1}\right)\right]
+\label{eq:leapfrog}
+\end{equation}
+
+FOODiE provides, in a \emph{seamless} API, also filtered leapfrog schemes. A widely used filter is due to Robert and Asselin, that suppress the computational modes at the cost of accuracy reduction resulting into a $1^{st}$ order error in amplitude value. A more accurate filter, able to provide a $3^{rd}$ order error on amplitude, is a modification of the Robert-Asselin filter due to Williams known as Robert-Asselin-Williams (RAW) filter, that filters the approximation of $U\left(t^{n+1}\right)$ and $U\left(t^{n+2}\right)$ by the following scalar coefficient:
+
+\begin{equation}
+  \begin{matrix}
+    U\left(t^{n+1}\right) = U\left(t^{n+1}\right) + \Delta * \alpha     \\
+    U\left(t^{n+2}\right) = U\left(t^{n+2}\right) + \Delta * (\alpha-1) \\
+    where \\
+    \Delta = \frac{\nu}{2}(U^{n} - 2 U^{n+1} + U^{n+2})
+  \end{matrix}
+\label{eq:leapfrog-RAW}
+\end{equation}
+
+The filter coefficients should be taken as $\nu \in [0,1]$ and $\alpha \in [0.5,1]$. If $\alpha=0.5$ the filters of time $t^{n+1}$ and $t^{n+2}$ have the same amplitude and opposite sign thus allowing to the optimal $3^{rd}$ order error on amplitude. The default values of the FOODiE provided scheme are $\nu=0.01$ $\alpha=0.5$, but they can be customized at runtime.
+
+{\color{red} Add citations.}
 
 \clearpage
 
@@ -268,8 +440,26 @@ FOODiE currently implements the following ODE schemes:
 
 In this section we review the FOODiE API providing a detailed discussion of the implementation choices.
 
-\subsection{The main FOODiE Abstract Data Type: the integrand type}
-Our ACP is based on one main ADT, the \emph{integrand} type, the definition of which is shown in listing \ref{list:type_integrand}.
+As aforementioned, the programming language used is the Fortran 2008 standard, that is a minor revision of the previous Fortran 2003 standard. Such a new Fortran idioms provide (among other useful features) an almost complete support for OOP, in particular for ADT concept. Fortran 2003 has introduced the \emph{abstract derived type}: it is a derived type suitable to serve as \emph{contract} for concrete type-extensions that has not any actual implementations, rather it provides a well-defined set of type bound procedures interfaces, that in Fortran nomenclature are called \emph{deferred} procedures. Using such an abstract definition, we can implement algorithms operating on only this abstract type and on \emph{all its concrete extensions}. This is the key feature of FOODiE library: all the above described ODE solvers are implemented on the knowledge of \emph{only one abstract type}, allowing an implementation-style based on a very high-level syntax. In the meanwhile, client codes must implement their own IVPs extending only one simple abstract type.
+
+In the subsection \ref{subsec:type_integrand} a review of the FOODiE main ADT, the \emph{integrand} type, is provided, while subsections \ref{subsec:solver_euler}, \ref{subsec:solver_tvd_rk}, \ref{subsec:solver_ls_rk}, \ref{subsec:solver_ab} and \ref{subsec:solver_leapfrog} cover the API of the currently implemented solvers.
+
+It is worth noting that all FOODiE public \emph{entities} (ADT and solvers) must be accessed by the FOODiE module, see listing \ref{list:main_module} for an example on how access to all public FOODiE entities.
+
+\begin{lstlisting}[firstnumber=1,style=code,caption={usage example importing all public entities of FOODiE main module},label={list:main_module}]
+use foodie, only: integrand, &
+                  adams_bashforth_integrator, &
+                  euler_explicit_integrator, &
+                  leapfrog_integrator, &
+                  ls_runge_kutta_integrator, &
+                  tvd_runge_kutta_integrator
+! or simply
+use foodie
+\end{lstlisting}
+
+\subsection{The main FOODiE Abstract Data Type: the integrand type}\label{subsec:type_integrand}
+
+The implemented ACP is based on one main ADT, the \emph{integrand} type, the definition of which is shown in listing~\ref{list:type_integrand}.
 
 \begin{lstlisting}[firstnumber=1,style=code,caption={integrand type definition},label={list:type_integrand}]
 type, abstract :: integrand
@@ -296,7 +486,9 @@ type, abstract :: integrand
 endtype integrand
 \end{lstlisting}
 
-The \emph{integrand} type does not implement any actual integrand field, it being and abstract type. It only specifies which deferred procedures are necessary for implementing an actual concrete integrand type that can use a FOODiE solver. Listing \ref{list:type_integrand} specifies the deferred type bound procedures that clients must implement into their own concrete extension of the \emph{integrand} ADT. These procedures are analyzed in the following paragraphs.
+The \emph{integrand} type does not implement any actual integrand field, it being and abstract type. It only specifies which deferred procedures are necessary for implementing an actual concrete integrand type that can use a FOODiE solver.
+
+As shown in listing \ref{list:type_integrand}, the number of the deferred type bound procedures that clients must implement into their own concrete extension of the \emph{integrand} ADT is very limited: essentially, there are 3 ODE-specific procedures plus some operators definition constituted by symmetric operators between 2 integrand objects, asymmetric operators between integrand and real numbers (and viceversa) and an assignment statement for the creation of new integrand objects. These procedures are analyzed in the following paragraphs.
 
 \subsubsection{Time derivative procedure, the residual function}
 
@@ -312,7 +504,7 @@ class(integrand), allocatable      :: dState_dt !< Result of the time derivative
 endfunction time_derivative
 \end{lstlisting}
 
-This procedure-function takes three arguments, the first passed as a \emph{type bounded} argument, while the latter are optional, and returns an integrand object. The passed dummy argument, \emph{self}, is a polymorphic argument that could be any extensions of the \emph{integrand} ADT. The optional argument \emph{n} indicated the \emph{time level} at which the residual function must be evaluated: this argument is necessary for multi-level (often referred as multi-step) solvers such as the Adams-Bashforth or leapfrog ones, but it can be omitted for other classes of solvers such the one-step multi-stages family. The optional argument \emph{t} is the {time} at which the residual function must be computed: it can be omitted in the case the residual function does not depend directly from time.
+This procedure-function takes three arguments, the first passed as a \emph{type bounded} argument, while the latter are optionals, and it returns an integrand object. The passed dummy argument, \emph{self}, is a polymorphic argument that could be any extensions of the \emph{integrand} ADT. The optional argument \emph{n} indicates the \emph{time level} at which the residual function must be evaluated: this argument is necessary for multi-step (often referred as multi-level) solvers such as the Adams-Bashforth or leapfrog ones, but it can be omitted for other classes of solvers such the one-step multi-stages family. The optional argument \emph{t} is the \emph{time} at which the residual function must be computed: it can be omitted in the case the residual function does not depend directly on time.
 
 Commonly, into the concrete implementation of this deferred abstract procedure clients embed the actual ODE equations being solved. As an example, for the Burgers equation, that is a Partial Differential Equations (PDE) system involving also a boundary value problem, this procedure embeds the spatial operator that convert the PDE to a system of algebraic ODE. As a consequence, the eventual concrete implementation of this procedure can be very complex and errors-prone. Nevertheless, the FOODiE solvers are implemented only on the above abstract interface, thus emancipating the solvers implementation from any concrete complexity.
 
@@ -331,7 +523,32 @@ real(R_P),        optional, intent(IN)    :: weights(:) !< Weights for filtering
 endsubroutine update_previous_steps
 \end{lstlisting}
 
-{\color{red} To be completed.}
+This procedure is a necessary complement for using multi-step solvers. As its name suggests, it updates the previous time steps solutions (that must be stored on the care of the clients code). It takes three arguments, the first passed as a \emph{type bounded} argument, while the latter are optionals, and it returns nothing it being a subroutine directly modifying the passed argument. The passed dummy argument, \emph{self}, is a polymorphic argument that could be any extensions of the \emph{integrand} ADT. The optional argument \emph{filter} indicates a \emph{displacement} for filtering the field while the last optional argument \emph{weights} specifies the weights that must applied to the displacement for each time steps filtered.
+
+Let us consider the multi-step scheme expressed by the equation \ref{eq:AB}. Once the solution at time $t^{n+N_s}$ has been computed the previous $N_s-1$ steps must be updated, e.g. an unfiltered update can read as:
+\begin{equation}
+U\left(t^{n+s}\right) = U\left(t^{n+s+1}\right)\quad s=1,..,N_s-1
+\label{eq:previous-steps-update}
+\end{equation}
+and a filtered update can read as:
+\begin{equation}
+U\left(t^{n+s}\right) = \Delta * U\left(t^{n+s+1}\right) \omega_s\quad s=1,..,N_s-1
+\label{eq:previous-steps-update-filtered}
+\end{equation}
+where $\Delta$ is the filter displacement and $\omega_s$ the weight of the step $s-th$. This interface implies that the previous time steps must be embedded into the client \emph{integrand} extension. This procedure is automatically called by each multi-step solver after the new step $t^{n+N_s}$ has been computed, thus alleviating client codes from its explicit call.
+
+In the case the client codes will use only one-step solvers this procedure can be defined as simple \emph{empty} subroutine as shown in listing \ref{list:empty_update_previous_time_steps}.
+
+\begin{lstlisting}[firstnumber=1,style=code,caption={empty implementation of the update previous time steps procedure},label={list:empty_update_previous_time_steps}]
+subroutine update_previous_steps(self, filter, weights)
+class(my_integrand),        intent(INOUT) :: self       !< Integrand field.
+class(integrand), optional, intent(IN)    :: filter     !< Filter field displacement.
+real(R_P),        optional, intent(IN)    :: weights(:) !< Weights for filtering the steps.
+! do nothing
+return
+endsubroutine update_previous_steps
+\end{lstlisting}
+where \emph{my\_integrand} is a concrete (valid) extension of \emph{integrand} ADT.
 
 \subsubsection{Previous step procedure}
 
@@ -346,7 +563,22 @@ class(integrand), allocatable :: previous !< Selected previous time integrand fi
 endfunction previous_step
 \end{lstlisting}
 
-{\color{red} To be completed.}
+This procedure is a necessary complement for using multi-step solvers. It returns the integrand solution at the specified previous time step (level). It takes two arguments and it returns an integrand object. The first argument passed as a \emph{type bounded} argument is the current instance of the integrand field object. The second argument, named \emph{n}, indicates the \emph{time level} at which the solution must be returned.
+
+This procedure is used in multi-step methods like the leapfrog where there is an explicit dependency on also the solution at previous time steps.
+
+For the case in which multi-step solvers are not used, this procedure can have a concrete implementation that does nothing as shown in listing \ref{list:empty_previous_step}.
+
+\begin{lstlisting}[firstnumber=1,style=code,caption={empty implementation of the previous step procedure},label={list:empty_previous_step}]
+function previous_step(self, n) result(previous)
+class(my_integrand), intent(IN)  :: self     !< Integrand field.
+integer(I_P),        intent(IN)  :: n        !< Time level.
+class(integrand), allocatable    :: previous !< Selected previous time integrand field.
+! do nothing
+return
+endfunction previous_step
+\end{lstlisting}
+where \emph{my\_integrand} is a concrete (valid) extension of \emph{integrand} ADT. Note that, in this case, the returned result is not allocated.
 
 \subsubsection{Symmetric operators procedures}
 
@@ -361,7 +593,7 @@ class(integrand), allocatable :: operator_result !< Operator result.
 endfunction symmetric_operator
 \end{lstlisting}
 
-{\color{red} To be completed.}
+This interface defines a class of procedures operating on 2 \emph{integrand} objects, namely it is used for the definition of the operators \emph{multiplication}, \emph{summation} and \emph{subtraction} of integrand objects. These operators are used into the above described ODE solvers, for example see equations \ref{eq:solver-euler}, \ref{eq:RK}, \ref{eq:AB} or \ref{eq:leapfrog}. The implementation details of such a procedures class are strictly dependent on the concrete extension of the integrand type. From the FOODiE solvers point of view, we need to known only that first argument passed as bounded one, the left-hand-side of the operator, and the second argument, the right-hand-side of the operator, are two integrand object and the returned object is still an integrand one.
 
 \subsubsection{Integrand/real and real/integrand operators procedures}
 
@@ -383,7 +615,7 @@ class(integrand), allocatable :: operator_result !< Operator result.
 endfunction real_op_integrand
 \end{lstlisting}
 
-{\color{red} To be completed.}
+These two interfaces are necessary in order to complete the \emph{algebra} operating on the integrand object class, allowing the multiplication of an integrand object for a real number, circumstance that happens in all solvers, see equations \ref{eq:solver-euler}, \ref{eq:RK}, \ref{eq:AB} or \ref{eq:leapfrog}. The implementation details of these procedures are strictly dependent on the concrete extension of the integrand type. From the FOODiE solvers point of view, we need to known only that first argument passed as bounded one, the left-hand-side of the operator, and the second argument, the right-hand-side of the operator, are an integrand object and real number of viceversa and the returned object is still an integrand one.
 
 \subsubsection{Integrand assignment procedure}
 
@@ -397,27 +629,152 @@ class(integrand), intent(IN)    :: rhs !< Right hand side.
 endsubroutine assignment_integrand
 \end{lstlisting}
 
-{\color{red} To be completed.}
+The assignment statement is necessary in order to complete the \emph{algebra} operating on the integrand object class, allowing the assignment of an integrand object by another one, circumstance that happens in all solvers, see equations \ref{eq:solver-euler}, \ref{eq:RK}, \ref{eq:AB} or \ref{eq:leapfrog}. The implementation details of this assignment is strictly dependent on the concrete extension of the integrand type. From the FOODiE solvers point of view, we need to known only that first argument passed as bounded one, the left-hand-side of the assignment, and the second argument, the right-hand-side of the assignment, are two integrand objects.
 
 \clearpage
 
-\subsection{The explicit forward Euler solver}
+\subsection{The explicit forward Euler solver}\label{subsec:solver_euler}
+
+The explicit forward Euler solver is exposed (by the FOODiE main module that must imported, see listing \ref{list:main_module}) as a single derived type (that is a standard convention for all FOODiE solvers) named \emph{euler\_explicit\_integrator}. It provides the type bound procedure (also referred as \emph{method}) \emph{integrate} for integrating in time an \emph{integrand} object, or any of its polymorphic concrete extensions. Consequently, for using such a solver it must be previously defined as an instance of the exposed FOODiE integrator type, see listing \ref{list:define_euler_solver}.
+
+\begin{lstlisting}[firstnumber=1,style=code,caption={definition of an explicit forward Euler integrator},label={list:define_euler_solver}]
+use FOODiE, only: euler_explicit_integrator
+type(euler_explicit_integrator) :: integrator
+\end{lstlisting}
+
+Once an integrator of this type has been instantiated, it can be directly used without any initialization, for example see listing \ref{list:use_euler_solver}.
+
+\begin{lstlisting}[firstnumber=1,style=code,caption={example of usage of an explicit forward Euler integrator},label={list:use_euler_solver}]
+type(my_integrand) :: my_field
+call integrator%integrate(U=my_field, Dt=0.1)
+\end{lstlisting}
+where \emph{my\_integrand} is a concrete (valid) extension of \emph{integrand} ADT.
+
+The complete implementation of the \emph{integrate} method of the explicit forward Euler solver is reported in listing \ref{list:euler_integrate}.
+
+\begin{lstlisting}[firstnumber=1,style=code,caption={implementation of the \emph{integrate} method of Euler solver},label={list:euler_integrate}]
+subroutine integrate(U, Dt, t)
+class(integrand),    intent(INOUT) :: U  !< Field to be integrated.
+real(R_P),           intent(IN)    :: Dt !< Time step.
+real(R_P), optional, intent(IN)    :: t  !< Time.
+U = U + U%t(t=t) * Dt
+return
+endsubroutine integrate
+\end{lstlisting}
+This method takes three arguments, the first argument is an integrand class, it being the integrand field that must integrated one-step-over in time, the second is the time step used and the third, that is optional, is the current time value that is passed to the residual function for taking into account the cases where the time derivative explicitly depends on time. The time step is not automatically computed (for example inspecting the passed integrand field), thus its value must be externally computed and passed to the \emph{integrate} method.
+
+As shown from listing \ref{list:euler_integrate} the \emph{integrand} ADT has allowed a very high-level implementation of the Euler scheme. For example let us compare the implementation instructions with the Euler's scheme equation \ref{eq:solver-euler}:
+
+$$
+U\left(t^{n+1}\right) = U\left(t^n\right) +\Delta t \cdot R\left[t^n, U\left(t^n\right)\right] \rightarrow U = U + U\%t(t=t) * Dt
+$$
+
+As shown, the Fortran implementation is almost equivalent to the rigorous mathematical formulation. This aspect directly implies that the implementation of Euler's scheme (as of all other schemes) is very clear, concise and less-errors-prone than an \emph{hard-coded} implementation where the Euler's solver must be implemented for each specific definition of the integrand $U$.
+
+\subsection{The explicit TVD/SSP Runge-Kutta class of solvers}\label{subsec:solver_tvd_rk}
+
+The TVD/SSP Runge-Kutta class of solvers is exposed as a single derived type named \emph{tvd\_runge\_kutta\_integrator}. This type provides three methods:
+
+\begin{itemize}
+  \item \emph{init}: initialize the integrator among the possibilities offered by the class of solvers;
+  \item \emph{destroy}: destroy the integrator previously initialized, eventually freeing the allocated dynamic memory registers;
+  \item \emph{integrate}: integrate integrand field one-step-over in time.
+  \end{itemize}
+
+As common for FOODiE solvers, for using such a solver it must be previously defined as an instance of the exposed FOODiE integrator type, see listing \ref{list:define_tvd_rk_solver}.
+
+\begin{lstlisting}[firstnumber=1,style=code,caption={definition of an explicit TVD/SSP Runge-Kutta integrator},label={list:define_tvd_rk_solver}]
+use FOODiE, only: tvd_runge_kutta_integrator
+type(tvd_runge_kutta_integrator) :: integrator
+\end{lstlisting}
+
+Once an integrator of this type has been instantiated, it must be initialized before used, for example see listing \ref{list:init_tvd_rk_solver}.
+
+\begin{lstlisting}[firstnumber=1,style=code,caption={example of initialization of an explicit TVD/SSP Runge-Kutta integrator},label={list:init_tvd_rk_solver}]
+call integrator%init(stages=3)
+\end{lstlisting}
+
+In the listing \ref{list:init_tvd_rk_solver} a 3-stages solver has been initialized. As a matter of facts, from the equations \ref{eq:RK} and \ref{eq:RK-stage} a solver belonging to this class is completely defined once the number of stages adopted has been chosen. The complete definition of the \emph{tvd\_runge\_kutta\_integrator} type is reported into listing \ref{list:tvd_rk_solver}. As shown, the Butcher's coefficients are stored as allocatable arrays the values of which are initialized by the \emph{init} method.
+
+\begin{lstlisting}[firstnumber=1,style=code,caption={definition of \emph{tvd\_runge\_kutta\_integrator} type},label={list:tvd_rk_solver}]
+type :: tvd_runge_kutta_integrator
+  integer(I_P)           :: stages=0  ! Number of stages.
+  real(R_P), allocatable :: alph(:,:) ! alpha Butcher's coefficients.
+  real(R_P), allocatable :: beta(:)   ! beta Butcher's coefficients.
+  real(R_P), allocatable :: gamm(:)   ! gamma Butcher's coefficients.
+  contains
+    procedure, pass(self), public :: destroy   ! Destroy the integrator.
+    procedure, pass(self), public :: init      ! Initialize (create) the integrator.
+    procedure, pass(self), public :: integrate ! Integrate integrand field.
+    final                         :: finalize  ! Finalize object.
+endtype tvd_runge_kutta_integrator
+\end{lstlisting}
+
+After the solver has been initialized it can used for integrating an integrand field, as shown in listing \ref{list:use_tvd_rk_solver}.
+
+\begin{lstlisting}[firstnumber=1,style=code,caption={example of usage of a TVD/SSP Runge-Kutta integrator},label={list:use_tvd_rk_solver}]
+type(my_integrand) :: my_field
+type(my_integrand) :: my_stages(1:3)
+call integrator%integrate(U=my_field, stage=my_stage, Dt=0.1)
+\end{lstlisting}
+where \emph{my\_integrand} is a concrete (valid) extension of \emph{integrand} ADT. Listing \ref{list:use_tvd_rk_solver} shows that the memory registers necessary for storing the Runge-Kutta stages must be supplied by the client code.
+
+The complete implementation of the \emph{integrate} method of the explicit TVD/SSP Runge-Kutta class of solvers is reported in listing \ref{list:tvd_rk_integrate}.
+
+\begin{lstlisting}[firstnumber=1,style=code,caption={implementation of the \emph{integrate} method of TVD/SSP Runge-Kutta class},label={list:tvd_rk_integrate}]
+subroutine integrate(self, U, stage, Dt, t)
+class(tvd_runge_kutta_integrator), intent(IN)    :: self      !< Actual RK integrator.
+class(integrand),                  intent(INOUT) :: U         !< Field to be integrated.
+class(integrand),                  intent(INOUT) :: stage(1:) !< Runge-Kutta stages [1:stages].
+real(R_P),                         intent(IN)    :: Dt        !< Time step.
+real(R_P),                         intent(IN)    :: t         !< Time.
+integer(I_P)                                     :: s         !< First stages counter.
+integer(I_P)                                     :: ss        !< Second stages counter.
+select type(stage)
+class is(integrand)
+  do s=1, self%stages
+    stage(s) = U
+    do ss=1, s - 1
+      stage(s) = stage(s) + stage(ss) * (Dt * self%alph(s, ss))
+    enddo
+    stage(s) = stage(s)%t(t=t + self%gamm(s) * Dt)
+  enddo
+  do s=1, self%stages
+    U = U +  stage(s) * (Dt * self%beta(s))
+  enddo
+endselect
+return
+endsubroutine integrate
+\end{lstlisting}
+
+This method takes five arguments, the first argument is passed as bounded argument and it is the solver itself, the second is of an integrand class, it being the integrand field that must integrated one-step-over in time, the third is the stages array for storing the stages computations, the fourth is the time step used and the fifth, that is optional, is the current time value that is passed to the residual function for taking into account the cases where the time derivative explicitly depends on time. The time step is not automatically computed (for example inspecting the passed integrand field), thus its value must be externally computed and passed to the \emph{integrate} method.
+
+It is worth noting that the stages memory registers, namely the array \emph{stage}, must be passed as argument because it is defined as a \emph{not-passed} polymorphic argument, thus we are not allowed to define it as an automatic array of the \emph{integrate} method.
+
+As it happens for the Euler's scheme, the \emph{integrand} ADT greatly simplifies the Runge-Kutta algorithm implementation. For example let us compare the implementation instructions with the Runge-Kutta equations \ref{eq:RK} and \ref{eq:RK-stage}:
+
+$$
+\begin{matrix}
+  K_s = R\left(t^n + \gamma_s \Delta t, U^n+\Delta t\sum\limits_{l=1}^{s-1}{\alpha_{s,l} K_l} \right) \\
+  U^{n+1} = U^{n} + \Delta t \cdot\sum\limits_{s=1}^{N_{s}}{\beta_s K_s}
+\end{matrix}
+\rightarrow
+\begin{matrix}
+  stage(s) = stage(s) + stage(ss) * (Dt * self\%alph(s, ss)) \\
+  U = U +  stage(s) * (Dt * self\%beta(s))
+\end{matrix}
+$$
+where the syntax "$(s)$" and "$(ss)$" imply the summation operation. As for the Euler's scheme, the Fortran implementation is almost equivalent to the rigorous mathematical formulation.
+
+\subsection{The explicit low storage Runge-Kutta class of solvers}\label{subsec:solver_ls_rk}
 
 {\color{red} To be written.}
 
-\subsection{The explicit Adams-Bashforth class of solvers}
+\subsection{The explicit Adams-Bashforth class of solvers}\label{subsec:solver_ab}
 
 {\color{red} To be written.}
 
-\subsection{The leapfrog solver}
-
-{\color{red} To be written.}
-
-\subsection{The explicit low storage Runge-Kutta class of solvers}
-
-{\color{red} To be written.}
-
-\subsection{The explicit TVD/SSP Runge-Kutta class of solvers}
+\subsection{The leapfrog solver}\label{subsec:solver_leapfrog}
 
 {\color{red} To be written.}
 
@@ -609,9 +966,17 @@ Table \ref{tab:oscillation} summarizes the errors analysis.
 
 \clearpage
 
-% \section{Ongoing Development Activities}\label{sec:ongoing}
+\section{Benchmarks on parallel frameworks}\label{sec:parallel}
 
-% {\color{red} To be written.}
+{\color{red} To be written.}
+
+\subsection{OpenMP benchmark}\label{subsec:openmp}
+
+{\color{red} To be written.}
+
+\subsection{MPI benchmark}\label{subsec:mpi}
+
+{\color{red} To be written.}
 
 \section{Concluding Remarks and Perspectives}\label{sec:conclusions}
 
