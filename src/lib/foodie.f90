@@ -1,3 +1,4 @@
+!< FOODiE, Fortran Object oriented Ordinary Differential Equations integration library.
 module foodie
 !-----------------------------------------------------------------------------------------------------------------------------------
 !< FOODiE, Fortran Object oriented Ordinary Differential Equations integration library.

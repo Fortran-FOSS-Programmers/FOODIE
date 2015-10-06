@@ -10,7 +10,7 @@ OBJS = type_integrand.o \
        foodie_integrator_low_storage_runge_kutta.o \
        foodie_integrator_tvd_runge_kutta.o \
        Data_Type_Command_Line_Interface.o \
-       IR_Precision.o \
+       foodie_kinds.o \
        pyplot_module.o
 
 .f90.o:
@@ -29,13 +29,13 @@ all:
 foodie: foodie.o
 
 foodie.o: foodie.f90 $(OBJS)
-foodie_integrator_adams_bashforth.o: foodie_integrator_adams_bashforth.f90 type_integrand.o IR_Precision.o
-foodie_integrator_euler_explicit.o: foodie_integrator_euler_explicit.f90 type_integrand.o IR_Precision.o
-foodie_integrator_leapfrog.o: foodie_integrator_leapfrog.f90 type_integrand.o IR_Precision.o
-foodie_integrator_low_storage_runge_kutta.o: foodie_integrator_low_storage_runge_kutta.f90 type_integrand.o IR_Precision.o
-foodie_integrator_tvd_runge_kutta.o: foodie_integrator_tvd_runge_kutta.f90 type_integrand.o IR_Precision.o
-type_integrand.o: type_integrand.f90 IR_Precision.o
-IR_precision.o: IR_Precision.f90
+foodie_integrator_adams_bashforth.o: foodie_integrator_adams_bashforth.f90 type_integrand.o foodie_kinds.o
+foodie_integrator_euler_explicit.o: foodie_integrator_euler_explicit.f90 type_integrand.o foodie_kinds.o
+foodie_integrator_leapfrog.o: foodie_integrator_leapfrog.f90 type_integrand.o foodie_kinds.o
+foodie_integrator_low_storage_runge_kutta.o: foodie_integrator_low_storage_runge_kutta.f90 type_integrand.o foodie_kinds.o
+foodie_integrator_tvd_runge_kutta.o: foodie_integrator_tvd_runge_kutta.f90 type_integrand.o foodie_kinds.o
+type_integrand.o: type_integrand.f90 foodie_kinds.o
+foodie_kinds.o: foodie_kinds.f90
 pyplot_module.o: pyplot_module.f90
 Data_Type_Command_Line_Interface.o: Data_Type_Command_Line_Interface.F90
 
