@@ -374,7 +374,7 @@ contains
       dt = domain%dt(Nmax=0, Tmax=t_final, t=t(s), CFL=0.1_R_P*CFL)
       if (s>=step) then
         ! the time steps from 1 to s - 1 must be computed with other scheme...
-        call rk_integrator%integrate(U=domain, stage=rk_stage(1:s), dt=dt, t=t(s))
+        call rk_integrator%integrate(U=domain, stage=rk_stage, dt=dt, t=t(s))
         if (step>1) then
           t(step) = t(step-1) + dt
         else

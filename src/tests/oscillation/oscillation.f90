@@ -187,7 +187,7 @@ contains
   !< Test explicit Adams-Bashforth class of ODE solvers.
   !---------------------------------------------------------------------------------------------------------------------------------
   type(tvd_runge_kutta_integrator) :: rk_integrator         !< Runge-Kutta integrator.
-  integer, parameter               :: rk_stages=3           !< Runge-Kutta stages number.
+  integer, parameter               :: rk_stages=5           !< Runge-Kutta stages number.
   type(oscillation)                :: rk_stage(1:rk_stages) !< Runge-Kutta stages.
   type(adams_bashforth_integrator) :: ab_integrator         !< Adams-Bashforth integrator.
   integer, parameter               :: ab_steps=4            !< Adams-Bashforth steps number.
@@ -218,7 +218,7 @@ contains
       step = step + 1
       if (s>=step) then
         ! the time steps from 1 to s - 1 must be computed with other scheme...
-        call rk_integrator%integrate(U=oscillator, stage=rk_stage(1:s), Dt=Dt, t=solution(0, step))
+        call rk_integrator%integrate(U=oscillator, stage=rk_stage, Dt=Dt, t=solution(0, step))
       else
         call ab_integrator%integrate(U=oscillator, Dt=Dt, t=solution(0, step-s:step-1))
       endif

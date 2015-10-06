@@ -152,7 +152,7 @@ contains
     do step = 1, num_steps
       if (s>=step) then
         ! the time steps from 1 to s - 1 must be computed with other scheme...
-        call rk_integrator%integrate(U=attractor, stage=rk_stage(1:s), dt=dt, t=solution(0, step))
+        call rk_integrator%integrate(U=attractor, stage=rk_stage, dt=dt, t=solution(0, step))
       else
         call ab_integrator%integrate(U=attractor, dt=dt, t=solution(0, step-s:step-1))
       endif
