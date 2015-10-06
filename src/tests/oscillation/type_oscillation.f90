@@ -48,11 +48,11 @@ type, extends(integrand) :: oscillation
   !<#### State variables organization
   !< State variables are organized as an array (rank 1) of reals of *dims* elements, in this case 2 elements.
   private
-  integer(I_P)                           :: dims=0     !< Space dimensions.
-  integer(I_P)                           :: steps=0    !< Number of time steps stored.
-  real(R_P), dimension(:),   allocatable :: U          !< Integrand (state) variables, [1:dims].
-  real(R_P), dimension(:,:), allocatable :: previous   !< Previous time steps states, [1:dims,1:steps].
-  real(R_P)                              :: f = 0._R_P !< Oscillation frequency (Hz).
+  integer(I_P)                           :: dims=0   !< Space dimensions.
+  real(R_P)                              :: f=0._R_P !< Oscillation frequency (Hz).
+  real(R_P), dimension(:),   allocatable :: U        !< Integrand (state) variables, [1:dims].
+  integer(I_P)                           :: steps=0  !< Number of time steps stored.
+  real(R_P), dimension(:,:), allocatable :: previous !< Previous time steps states, [1:dims,1:steps].
   contains
     ! auxiliary methods
     procedure, pass(self), public :: init   !< Init field.

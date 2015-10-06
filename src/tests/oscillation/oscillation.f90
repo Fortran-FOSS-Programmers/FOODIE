@@ -654,30 +654,30 @@ contains
   !---------------------------------------------------------------------------------------------------------------------------------
 
   !---------------------------------------------------------------------------------------------------------------------------------
-  print "(A)", "Solver & Time Step & Error X & Error Y & Observed Order of Accuracy X & Observed Order of Accuracy Y"
+  print "(A)", "Solver & Time Step & f*Dt & Error X & Error Y & Observed Order of Accuracy X & Observed Order of Accuracy Y"
   do s=1, ab_steps
     if (s==1) cycle ! 1st order scheme surely not stable for this test
     print "(A)", "Adams-Bashforth, "//trim(str(.true.,s))//" steps"
     do d=1, NDt
       if (d==1) then
-        print "(A,F8.1,A,E10.3,A,E10.3,A)", "  & ", time_steps(d), " & ", &
-                                         ab_errors(1, s, d), " & " , ab_errors(2, s, d), " & / & /"
+        print "(A,F8.1,A,F10.3,A,E10.3,A,E10.3,A)", "  & ", time_steps(d), " & ", f*time_steps(d), " & ", &
+                                                 ab_errors(1, s, d), " & " , ab_errors(2, s, d), " & / & /"
       else
-        print "(A,F8.1,A,E10.3,A,E10.3,A,F9.2,A,F9.2)", "  & ", time_steps(d), " & ", &
-                                                        ab_errors(1, s, d), " & " , ab_errors(2, s, d), " & ", &
-                                                        ab_orders(1, s, d-1), " & " , ab_orders(2, s, d-1)
+        print "(A,F8.1,A,F10.3,A,E10.3,A,E10.3,A,F9.2,A,F9.2)", "  & ", time_steps(d), " & ", f*time_steps(d), " & ", &
+                                                            ab_errors(1, s, d), " & " , ab_errors(2, s, d), " & ", &
+                                                            ab_orders(1, s, d-1), " & " , ab_orders(2, s, d-1)
       endif
     enddo
   enddo
   print "(A)", "Leapfrog 2 steps"
   do d=1, NDt
     if (d==1) then
-      print "(A,F8.1,A,E10.3,A,E10.3,A)", "  & ", time_steps(d), " & ", &
-                                          lf_errors(1, d), " & " , lf_errors(2, d), " & / & /"
+      print "(A,F8.1,A,F10.3,A,E10.3,A,E10.3,A)", "  & ", time_steps(d), " & ", f*time_steps(d), " & ", &
+                                              lf_errors(1, d), " & " , lf_errors(2, d), " & / & /"
     else
-      print "(A,F8.1,A,E10.3,A,E10.3,A,F9.2,A,F9.2)", "  & ", time_steps(d), " & ", &
-                                                      lf_errors(1, d), " & " , lf_errors(2, d), " & ", &
-                                                      lf_orders(1, d-1), " & " , lf_orders(2, d-1)
+      print "(A,F8.1,A,F10.3,A,E10.3,A,E10.3,A,F9.2,A,F9.2)", "  & ", time_steps(d), " & ", f*time_steps(d), " & ", &
+                                                          lf_errors(1, d), " & " , lf_errors(2, d), " & ", &
+                                                          lf_orders(1, d-1), " & " , lf_orders(2, d-1)
     endif
   enddo
   do s=1, rk_stages
@@ -688,12 +688,12 @@ contains
     print "(A)", "Low Storage Runge-Kutta, "//trim(str(.true.,s))//" stages"
     do d=1, NDt
       if (d==1) then
-        print "(A,F8.1,A,E10.3,A,E10.3,A)", "  & ", time_steps(d), " & ", &
-                                            ls_errors(1, s, d), " & " , ls_errors(2, s, d), " & / & /"
+        print "(A,F8.1,A,F10.3,A,E10.3,A,E10.3,A)", "  & ", time_steps(d), " & ", f*time_steps(d), " & ", &
+                                                ls_errors(1, s, d), " & " , ls_errors(2, s, d), " & / & /"
       else
-        print "(A,F8.1,A,E10.3,A,E10.3,A,F9.2,A,F9.2)", "  & ", time_steps(d), " & ", &
-                                                        ls_errors(1, s, d), " & " , ls_errors(2, s, d), " & ", &
-                                                        ls_orders(1, s, d-1), " & " , ls_orders(2, s, d-1)
+        print "(A,F8.1,A,F10.3,A,E10.3,A,E10.3,A,F9.2,A,F9.2)", "  & ", time_steps(d), " & ", f*time_steps(d), " & ", &
+                                                            ls_errors(1, s, d), " & " , ls_errors(2, s, d), " & ", &
+                                                            ls_orders(1, s, d-1), " & " , ls_orders(2, s, d-1)
       endif
     enddo
   enddo
@@ -703,12 +703,12 @@ contains
     print "(A)", "TVD/SSP Runge-Kutta, "//trim(str(.true.,s))//" stages"
     do d=1, NDt
       if (d==1) then
-        print "(A,F8.1,A,E10.3,A,E10.3,A)", "  & ", time_steps(d), " & ", &
-                                             rk_errors(1, s, d), " & " , rk_errors(2, s, d), " & / & /"
+        print "(A,F8.1,A,F10.3,A,E10.3,A,E10.3,A)", "  & ", time_steps(d), " & ", f*time_steps(d), " & ", &
+                                                rk_errors(1, s, d), " & " , rk_errors(2, s, d), " & / & /"
       else
-        print "(A,F8.1,A,E10.3,A,E10.3,A,F9.2,A,F9.2)", "  & ", time_steps(d), " & ", &
-                                                        rk_errors(1, s, d), " & " , rk_errors(2, s, d), " & ", &
-                                                        rk_orders(1, s, d-1), " & " , rk_orders(2, s, d-1)
+        print "(A,F8.1,A,F10.3,A,E10.3,A,E10.3,A,F9.2,A,F9.2)", "  & ", time_steps(d), " & ", f*time_steps(d), " & ", &
+                                                            rk_errors(1, s, d), " & " , rk_errors(2, s, d), " & ", &
+                                                            rk_orders(1, s, d-1), " & " , rk_orders(2, s, d-1)
       endif
     enddo
   enddo

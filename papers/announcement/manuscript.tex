@@ -147,11 +147,11 @@ The prototype of IVP can be expressed as:
   \end{matrix}
 \label{eq:IVP}
 \end{equation}
-where $U(t)$ is the vector of state variables being a function of the time-like independent variable $t$, $U_t = \frac{dU}{dt} = R(t,U)$ is the (vectorial) residual function and $U(t_0)$ is the (vectorial) initial conditions, namely the state variables function evaluated at the initial time $t_0$. In general, the residual function $R$ is a function of the state variable $U$ through which it is a function of time, but it can be also a direct function of time, thus in general $R=R(t,U(t))$ holds.
+where $U(t)$ is the vector of state variables being a function of the time-like independent variable $t$, $U_t = \frac{dU}{dt} = R(t,U)$ is the (vectorial) residuals function and $U(t_0)$ is the (vectorial) initial conditions, namely the state variables function evaluated at the initial time $t_0$. In general, the residuals function $R$ is a function of the state variable $U$ through which it is a function of time, but it can be also a direct function of time, thus in general $R=R(t,U(t))$ holds.
 
 The problem prototype \ref{eq:IVP} is ubiquitous in the mathematical modelling of physical problems: essentially whenever an \emph{evolutionary} phenomenon is considered the prevision (simulation) of the future solutions involves the solution of an IVP. As a matter of facts, many physical problems (fluid dynamics, chemistry, biology, evolutionary-anthropology, etc...) are described by means of an IVP.
 
-It is worth noting that the state vector variables $U$ and its corresponding residual function $U_t = \frac{dU}{dt} = R(t,U)$ are \emph{problem dependent}: the number and the meaning of the state variables as well as the equations governing their evolution (that are embedded into the residual function) are different for the Navier-Stokes conservation laws with respect the Burgers one, as an example. Nevertheless, the \emph{solvers} used for the prediction of the Navier-Stokes equations evolution (hereafter the \emph{solution}) are the same that are used for Burgers equations time-integration. As a consequence, the solution of the IVP model prototype can be generalized, allowing the application of the same solver to many different problems, thus eliminating the necessity to re-implement the same solver for each different problem.
+It is worth noting that the state vector variables $U$ and its corresponding residuals function $U_t = \frac{dU}{dt} = R(t,U)$ are \emph{problem dependent}: the number and the meaning of the state variables as well as the equations governing their evolution (that are embedded into the residuals function) are different for the Navier-Stokes conservation laws with respect the Burgers one, as an example. Nevertheless, the \emph{solvers} used for the prediction of the Navier-Stokes equations evolution (hereafter the \emph{solution}) are the same that are used for Burgers equations time-integration. As a consequence, the solution of the IVP model prototype can be generalized, allowing the application of the same solver to many different problems, thus eliminating the necessity to re-implement the same solver for each different problem.
 
 FOODiE library is designed for solving the generalized IVP \ref{eq:IVP}, it being completely unaware of the actual problem's definition. FOODiE library provides a high-level, well-documented, simple Application Program Interface (API) for many well-known ODE integration solvers, its aims being twofold:
 
@@ -196,7 +196,7 @@ The present paper is organized as following: in section \ref{sec:MNmodels} a bri
 
 \section{Mathematical and Numerical Models}\label{sec:MNmodels}
 
-In many (most) circumstances, the solution of equation \ref{eq:IVP} cannot be computed in a closed, exact form (even if it exists and is unique) due to the complexity and nature of the residual functions, that is often non linear. Consequently, the problem is often solved relying on a numerical approach: the solution of system \ref{eq:IVP} at a time $t^n$, namely $U(t^n)$, is approximated by a subsequent time-marching approximations $U_0=u_0 \rightarrow u_1 \rightarrow u_2 \rightarrow ... \rightarrow u_N\approx U(t^n)$ where the relation $u_i \rightarrow u_{i+1}$ implies a \emph{stepping, numerical integration} from the time $t^i$ to time $t^{i+1}$ and $N$ is the total number of numerical time steps necessary to evolve the initial conditions toward the searched solution $U(t^n)$. To this aim, many numerical schemes have been devised. Notably, the numerical schemes of practical usefulness must posses some necessary proprieties such as \emph{consistency} and \emph{stability} to ensure that the numerical approximation \emph{converges} to the exact solution as the numerical time step tends to zero. A detailed discussion of these details is out the scope of the present work and is omitted. Here, we briefly recall some classifications necessary to introduce the schemes implemented into the FOODiE library.
+In many (most) circumstances, the solution of equation \ref{eq:IVP} cannot be computed in a closed, exact form (even if it exists and is unique) due to the complexity and nature of the residuals functions, that is often non linear. Consequently, the problem is often solved relying on a numerical approach: the solution of system \ref{eq:IVP} at a time $t^n$, namely $U(t^n)$, is approximated by a subsequent time-marching approximations $U_0=u_0 \rightarrow u_1 \rightarrow u_2 \rightarrow ... \rightarrow u_N\approx U(t^n)$ where the relation $u_i \rightarrow u_{i+1}$ implies a \emph{stepping, numerical integration} from the time $t^i$ to time $t^{i+1}$ and $N$ is the total number of numerical time steps necessary to evolve the initial conditions toward the searched solution $U(t^n)$. To this aim, many numerical schemes have been devised. Notably, the numerical schemes of practical usefulness must posses some necessary proprieties such as \emph{consistency} and \emph{stability} to ensure that the numerical approximation \emph{converges} to the exact solution as the numerical time step tends to zero. A detailed discussion of these details is out the scope of the present work and is omitted. Here, we briefly recall some classifications necessary to introduce the schemes implemented into the FOODiE library.
 
 A non comprehensive classification of the most widely used schemes could distinguish between \emph{multi-step} versus \emph{one-step} schemes and between \emph{explicit} versus \emph{implicit} schemes.
 
@@ -289,7 +289,7 @@ It is worth noting that the equations \ref{eq:RK} and \ref{eq:RK-stage} contain 
 \end{tabular}}
 \end{table}
 
-The equations \ref{eq:RK} and \ref{eq:RK-stage} show that Runge-Kutta methods do not require any additional differentiations of the ODE system for achieving high order accuracy, rather they require additional evaluations of the residual function $R$.
+The equations \ref{eq:RK} and \ref{eq:RK-stage} show that Runge-Kutta methods do not require any additional differentiations of the ODE system for achieving high order accuracy, rather they require additional evaluations of the residuals function $R$.
 
 The nature of the scheme and the properties of the solutions obtained depend on the number of stages and on the value of the coefficients selected. Currently, FOODiE provides 3 Runge-Kutta schemes having TVD or Strong Stability Preserving (SSP) propriety (thus they being suitable for ODE systems involving rapidly changing non linear dynamics) the Butcher's coefficients of which are reported in tables \ref{tab:RK-TVD-butcher-2}, \ref{tab:RK-SSP-butcher-3}, \ref{tab:RK-SSP-butcher-5}.
 
@@ -377,7 +377,7 @@ Similarly to the TVD/SSP Runge-Kutta class, the low storage class also provides 
 
 \subsection{The explicit Adams-Bashforth class of schemes}
 
-Adams-Bashforth methods belong to the more general (linear) multi-step family of schemes. This kind of schemes has been designed to achieve a more accurate solution than the $1^{st}$ Euler scheme using the information coming from the solutions already computed at previous time steps. Typically only one new residual function $R$ evaluation is required at each time step, whereas Runge-Kutta schemes require many of them.
+Adams-Bashforth methods belong to the more general (linear) multi-step family of schemes. This kind of schemes has been designed to achieve a more accurate solution than the $1^{st}$ Euler scheme using the information coming from the solutions already computed at previous time steps. Typically only one new residuals function $R$ evaluation is required at each time step, whereas Runge-Kutta schemes require many of them.
 
 In general, the Adams-Bashforth schemes provided by FOODiE library are written by means of the following algorithm (for only explicit schemes):
 
@@ -490,7 +490,7 @@ The \emph{integrand} type does not implement any actual integrand field, it bein
 
 As shown in listing \ref{list:type_integrand}, the number of the deferred type bound procedures that clients must implement into their own concrete extension of the \emph{integrand} ADT is very limited: essentially, there are 3 ODE-specific procedures plus some operators definition constituted by symmetric operators between 2 integrand objects, asymmetric operators between integrand and real numbers (and viceversa) and an assignment statement for the creation of new integrand objects. These procedures are analyzed in the following paragraphs.
 
-\subsubsection{Time derivative procedure, the residual function}
+\subsubsection{Time derivative procedure, the residuals function}
 
 The abstract interface of the time derivative procedure \emph{t} is shown in listing \ref{list:time_derivative}.
 
@@ -504,7 +504,7 @@ class(integrand), allocatable      :: dState_dt !< Result of the time derivative
 endfunction time_derivative
 \end{lstlisting}
 
-This procedure-function takes three arguments, the first passed as a \emph{type bounded} argument, while the latter are optionals, and it returns an integrand object. The passed dummy argument, \emph{self}, is a polymorphic argument that could be any extensions of the \emph{integrand} ADT. The optional argument \emph{n} indicates the \emph{time level} at which the residual function must be evaluated: this argument is necessary for multi-step (often referred as multi-level) solvers such as the Adams-Bashforth or leapfrog ones, but it can be omitted for other classes of solvers such the one-step multi-stages family. The optional argument \emph{t} is the \emph{time} at which the residual function must be computed: it can be omitted in the case the residual function does not depend directly on time.
+This procedure-function takes three arguments, the first passed as a \emph{type bounded} argument, while the latter are optionals, and it returns an integrand object. The passed dummy argument, \emph{self}, is a polymorphic argument that could be any extensions of the \emph{integrand} ADT. The optional argument \emph{n} indicates the \emph{time level} at which the residuals function must be evaluated: this argument is necessary for multi-step (often referred as multi-level) solvers such as the Adams-Bashforth or leapfrog ones, but it can be omitted for other classes of solvers such the one-step multi-stages family. The optional argument \emph{t} is the \emph{time} at which the residuals function must be computed: it can be omitted in the case the residuals function does not depend directly on time.
 
 Commonly, into the concrete implementation of this deferred abstract procedure clients embed the actual ODE equations being solved. As an example, for the Burgers equation, that is a Partial Differential Equations (PDE) system involving also a boundary value problem, this procedure embeds the spatial operator that convert the PDE to a system of algebraic ODE. As a consequence, the eventual concrete implementation of this procedure can be very complex and errors-prone. Nevertheless, the FOODiE solvers are implemented only on the above abstract interface, thus emancipating the solvers implementation from any concrete complexity.
 
@@ -661,22 +661,14 @@ U = U + U%t(t=t) * Dt
 return
 endsubroutine integrate
 \end{lstlisting}
-This method takes three arguments, the first argument is an integrand class, it being the integrand field that must integrated one-step-over in time, the second is the time step used and the third, that is optional, is the current time value that is passed to the residual function for taking into account the cases where the time derivative explicitly depends on time. The time step is not automatically computed (for example inspecting the passed integrand field), thus its value must be externally computed and passed to the \emph{integrate} method.
-
-As shown from listing \ref{list:euler_integrate} the \emph{integrand} ADT has allowed a very high-level implementation of the Euler scheme. For example let us compare the implementation instructions with the Euler's scheme equation \ref{eq:solver-euler}:
-
-$$
-U\left(t^{n+1}\right) = U\left(t^n\right) +\Delta t \cdot R\left[t^n, U\left(t^n\right)\right] \rightarrow U = U + U\%t(t=t) * Dt
-$$
-
-As shown, the Fortran implementation is almost equivalent to the rigorous mathematical formulation. This aspect directly implies that the implementation of Euler's scheme (as of all other schemes) is very clear, concise and less-errors-prone than an \emph{hard-coded} implementation where the Euler's solver must be implemented for each specific definition of the integrand $U$.
+This method takes three arguments, the first argument is an integrand class, it being the integrand field that must integrated one-step-over in time, the second is the time step used and the third, that is optional, is the current time value that is passed to the residuals function for taking into account the cases where the time derivative explicitly depends on time. The time step is not automatically computed (for example inspecting the passed integrand field), thus its value must be externally computed and passed to the \emph{integrate} method.
 
 \subsection{The explicit TVD/SSP Runge-Kutta class of solvers}\label{subsec:solver_tvd_rk}
 
 The TVD/SSP Runge-Kutta class of solvers is exposed as a single derived type named \emph{tvd\_runge\_kutta\_integrator}. This type provides three methods:
 
 \begin{itemize}
-  \item \emph{init}: initialize the integrator among the possibilities offered by the class of solvers;
+  \item \emph{init}: initialize the integrator accordingly the possibilities offered by the class of solvers;
   \item \emph{destroy}: destroy the integrator previously initialized, eventually freeing the allocated dynamic memory registers;
   \item \emph{integrate}: integrate integrand field one-step-over in time.
   \end{itemize}
@@ -703,14 +695,14 @@ type :: tvd_runge_kutta_integrator
   real(R_P), allocatable :: beta(:)   ! beta Butcher's coefficients.
   real(R_P), allocatable :: gamm(:)   ! gamma Butcher's coefficients.
   contains
-    procedure, pass(self), public :: destroy   ! Destroy the integrator.
-    procedure, pass(self), public :: init      ! Initialize (create) the integrator.
-    procedure, pass(self), public :: integrate ! Integrate integrand field.
-    final                         :: finalize  ! Finalize object.
+    procedure, pass(self), public :: destroy
+    procedure, pass(self), public :: init
+    procedure, pass(self), public :: integrate
+    final                         :: finalize
 endtype tvd_runge_kutta_integrator
 \end{lstlisting}
 
-After the solver has been initialized it can used for integrating an integrand field, as shown in listing \ref{list:use_tvd_rk_solver}.
+After the solver has been initialized it can be used for integrating an integrand field, as shown in listing \ref{list:use_tvd_rk_solver}.
 
 \begin{lstlisting}[firstnumber=1,style=code,caption={example of usage of a TVD/SSP Runge-Kutta integrator},label={list:use_tvd_rk_solver}]
 type(my_integrand) :: my_field
@@ -721,15 +713,15 @@ where \emph{my\_integrand} is a concrete (valid) extension of \emph{integrand} A
 
 The complete implementation of the \emph{integrate} method of the explicit TVD/SSP Runge-Kutta class of solvers is reported in listing \ref{list:tvd_rk_integrate}.
 
-\begin{lstlisting}[firstnumber=1,style=code,caption={implementation of the \emph{integrate} method of TVD/SSP Runge-Kutta class},label={list:tvd_rk_integrate}]
+\begin{lstlisting}[firstnumber=1,style=code,caption={implementation of the \emph{integrate} method of explicit TVD/SSP Runge-Kutta class},label={list:tvd_rk_integrate}]
 subroutine integrate(self, U, stage, Dt, t)
-class(tvd_runge_kutta_integrator), intent(IN)    :: self      !< Actual RK integrator.
-class(integrand),                  intent(INOUT) :: U         !< Field to be integrated.
-class(integrand),                  intent(INOUT) :: stage(1:) !< Runge-Kutta stages [1:stages].
-real(R_P),                         intent(IN)    :: Dt        !< Time step.
-real(R_P),                         intent(IN)    :: t         !< Time.
-integer(I_P)                                     :: s         !< First stages counter.
-integer(I_P)                                     :: ss        !< Second stages counter.
+class(tvd_runge_kutta_integrator), intent(IN)    :: self      ! Actual RK integrator.
+class(integrand),                  intent(INOUT) :: U         ! Field to be integrated.
+class(integrand),                  intent(INOUT) :: stage(1:) ! Runge-Kutta stages [1:stages].
+real(R_P),                         intent(IN)    :: Dt        ! Time step.
+real(R_P),                         intent(IN)    :: t         ! Time.
+integer(I_P)                                     :: s         ! First stages counter.
+integer(I_P)                                     :: ss        ! Second stages counter.
 select type(stage)
 class is(integrand)
   do s=1, self%stages
@@ -747,46 +739,270 @@ return
 endsubroutine integrate
 \end{lstlisting}
 
-This method takes five arguments, the first argument is passed as bounded argument and it is the solver itself, the second is of an integrand class, it being the integrand field that must integrated one-step-over in time, the third is the stages array for storing the stages computations, the fourth is the time step used and the fifth, that is optional, is the current time value that is passed to the residual function for taking into account the cases where the time derivative explicitly depends on time. The time step is not automatically computed (for example inspecting the passed integrand field), thus its value must be externally computed and passed to the \emph{integrate} method.
+This method takes five arguments, the first argument is passed as bounded argument and it is the solver itself, the second is of an integrand class, it being the integrand field that must integrated one-step-over in time, the third is the stages array for storing the stages computations, the fourth is the time step used and the fifth, that is optional, is the current time value that is passed to the residuals function for taking into account the cases where the time derivative explicitly depends on time. The time step is not automatically computed (for example inspecting the passed integrand field), thus its value must be externally computed and passed to the \emph{integrate} method.
 
 It is worth noting that the stages memory registers, namely the array \emph{stage}, must be passed as argument because it is defined as a \emph{not-passed} polymorphic argument, thus we are not allowed to define it as an automatic array of the \emph{integrate} method.
 
-As it happens for the Euler's scheme, the \emph{integrand} ADT greatly simplifies the Runge-Kutta algorithm implementation. For example let us compare the implementation instructions with the Runge-Kutta equations \ref{eq:RK} and \ref{eq:RK-stage}:
-
-$$
-\begin{matrix}
-  K_s = R\left(t^n + \gamma_s \Delta t, U^n+\Delta t\sum\limits_{l=1}^{s-1}{\alpha_{s,l} K_l} \right) \\
-  U^{n+1} = U^{n} + \Delta t \cdot\sum\limits_{s=1}^{N_{s}}{\beta_s K_s}
-\end{matrix}
-\rightarrow
-\begin{matrix}
-  stage(s) = stage(s) + stage(ss) * (Dt * self\%alph(s, ss)) \\
-  U = U +  stage(s) * (Dt * self\%beta(s))
-\end{matrix}
-$$
-where the syntax "$(s)$" and "$(ss)$" imply the summation operation. As for the Euler's scheme, the Fortran implementation is almost equivalent to the rigorous mathematical formulation.
-
 \subsection{The explicit low storage Runge-Kutta class of solvers}\label{subsec:solver_ls_rk}
 
-{\color{red} To be written.}
+The low storage variant of Runge-Kutta class of solvers is exposed as a single derived type named \emph{ls\_runge\_kutta\_integrator}. This type provides three methods:
+
+\begin{itemize}
+  \item \emph{init}: initialize the integrator accordingly the possibilities offered by the class of solvers;
+  \item \emph{destroy}: destroy the integrator previously initialized, eventually freeing the allocated dynamic memory registers;
+  \item \emph{integrate}: integrate integrand field one-step-over in time.
+  \end{itemize}
+
+As common for FOODiE solvers, for using such a solver it must be previously defined as an instance of the exposed FOODiE integrator type, see listing \ref{list:define_ls_rk_solver}.
+
+\begin{lstlisting}[firstnumber=1,style=code,caption={definition of an explicit low storage Runge-Kutta integrator},label={list:define_ls_rk_solver}]
+use FOODiE, only: ls_runge_kutta_integrator
+type(ls_runge_kutta_integrator) :: integrator
+\end{lstlisting}
+
+Once an integrator of this type has been instantiated, it must be initialized before used, for example see listing \ref{list:init_ls_rk_solver}.
+
+\begin{lstlisting}[firstnumber=1,style=code,caption={example of initialization of an explicit low storage Runge-Kutta integrator},label={list:init_ls_rk_solver}]
+call integrator%init(stages=5)
+\end{lstlisting}
+
+In the listing \ref{list:init_ls_rk_solver} a 5-stages solver has been initialized. As a matter of facts, from the equation \ref{eq:RK-ls} a solver belonging to this class is completely defined once the number of stages adopted has been chosen. The complete definition of the \emph{ls\_runge\_kutta\_integrator} type is reported into listing \ref{list:ls_rk_solver}. As shown, the Williamson's coefficients are stored as allocatable arrays the values of which are initialized by the \emph{init} method.
+
+\begin{lstlisting}[firstnumber=1,style=code,caption={definition of \emph{ls\_runge\_kutta\_integrator} type},label={list:ls_rk_solver}]
+type :: ls_runge_kutta_integrator
+  integer(I_P)           :: stages=0 ! Number of stages.
+  real(R_P), allocatable :: A(:)     ! Low storage *A* coefficients.
+  real(R_P), allocatable :: B(:)     ! Low storage *B* coefficients.
+  real(R_P), allocatable :: C(:)     ! Low storage *C* coefficients.
+  contains
+    procedure, pass(self), public :: destroy
+    procedure, pass(self), public :: init
+    procedure, pass(self), public :: integrate
+    final                         :: finalize
+endtype ls_runge_kutta_integrator
+\end{lstlisting}
+
+After the solver has been initialized it can be used for integrating an integrand field, as shown in listing \ref{list:use_ls_rk_solver}.
+
+\begin{lstlisting}[firstnumber=1,style=code,caption={example of usage of a low storage Runge-Kutta integrator},label={list:use_ls_rk_solver}]
+type(my_integrand) :: my_field
+type(my_integrand) :: my_stages(1:2)
+call integrator%integrate(U=my_field, stage=my_stage, Dt=0.1)
+\end{lstlisting}
+where \emph{my\_integrand} is a concrete (valid) extension of \emph{integrand} ADT. Listing \ref{list:use_ls_rk_solver} shows that the memory registers necessary for storing the Runge-Kutta stages must be supplied by the client code, as it happens of the TVD/SSP Runge-Kutta class. However, now the registers necessary is always 2, independently on the number of stages used, that in the example considered are 5.
+
+The complete implementation of the \emph{integrate} method of the explicit low storage Runge-Kutta class of solvers is reported in listing \ref{list:ls_rk_integrate}.
+
+\begin{lstlisting}[firstnumber=1,style=code,caption={implementation of the \emph{integrate} method of explicit low storage Runge-Kutta class},label={list:ls_rk_integrate}]
+subroutine integrate(self, U, stage, Dt, t)
+class(ls_runge_kutta_integrator), intent(IN)    :: self       ! Actual RK integrator.
+class(integrand),                 intent(INOUT) :: U          ! Field to be integrated.
+class(integrand),                 intent(INOUT) :: stage(1:2) ! Runge-Kutta registers [1:2].
+real(R_P),                        intent(IN)    :: Dt         ! Time step.
+real(R_P),                        intent(IN)    :: t          ! Time.
+integer(I_P)                                    :: s          ! First stages counter.
+select type(stage)
+class is(integrand)
+  stage(1) = U
+  stage(2) = U*0._R_P
+  do s=1, self%stages
+    stage(2) = stage(2) * self%A(s) + stage(1)%t(t=t + self%C(s) * Dt) * Dt
+    stage(1) = stage(1) + stage(2) * self%B(s)
+  enddo
+  U = stage(1)
+endselect
+return
+endsubroutine integrate
+\end{lstlisting}
+
+This method takes five arguments, the first argument is passed as bounded argument and it is the solver itself, the second is of an integrand class, it being the integrand field that must integrated one-step-over in time, the third is the stages array for storing the stages computations, the fourth is the time step used and the fifth, that is optional, is the current time value that is passed to the residuals function for taking into account the cases where the time derivative explicitly depends on time. The time step is not automatically computed (for example inspecting the passed integrand field), thus its value must be externally computed and passed to the \emph{integrate} method.
+
+It is worth noting that the stages memory registers, namely the array \emph{stage}, must be passed as argument because it is defined as a \emph{not-passed} polymorphic argument, thus we are not allowed to define it as an automatic array of the \emph{integrate} method.
 
 \subsection{The explicit Adams-Bashforth class of solvers}\label{subsec:solver_ab}
 
-{\color{red} To be written.}
+The explicit Adams-Bashforth class of solvers is exposed as a single derived type named \emph{adams\_bashforth\_integrator}. This type provides three methods:
+
+\begin{itemize}
+  \item \emph{init}: initialize the integrator accordingly the possibilities offered by the class of solvers;
+  \item \emph{destroy}: destroy the integrator previously initialized, eventually freeing the allocated dynamic memory registers;
+  \item \emph{integrate}: integrate integrand field one-step-over in time.
+  \end{itemize}
+
+As common for FOODiE solvers, for using such a solver it must be previously defined as an instance of the exposed FOODiE integrator type, see listing \ref{list:define_ab_solver}.
+
+\begin{lstlisting}[firstnumber=1,style=code,caption={definition of an explicit Adams-Bashforth integrator},label={list:define_ab_solver}]
+use FOODiE, only: adams_bashforth_integrator
+type(adams_bashforth_integrator) :: integrator
+\end{lstlisting}
+
+Once an integrator of this type has been instantiated, it must be initialized before used, for example see listing \ref{list:init_ab_solver}.
+
+\begin{lstlisting}[firstnumber=1,style=code,caption={example of initialization of an explicit Adams-Bashforth integrator},label={list:init_ab_solver}]
+call integrator%init(steps=4)
+\end{lstlisting}
+
+In the listing \ref{list:init_ab_solver} a 4-steps solver has been initialized. As a matter of facts, from the equation \ref{eq:AB} a solver belonging to this class is completely defined once the number of time steps adopted has been chosen. The complete definition of the \emph{adams\_bashforth\_integrator} type is reported into listing \ref{list:ab_solver}. As shown, the linear coefficients are stored as allocatable arrays the values of which are initialized by the \emph{init} method.
+
+\begin{lstlisting}[firstnumber=1,style=code,caption={definition of \emph{adams\_bashforth\_integrator} type},label={list:ab_solver}]
+type :: adams_bashforth_integrator
+  private
+  integer(I_P)           :: steps=0 ! Number of time steps.
+  real(R_P), allocatable :: b(:)    ! \(b\) coefficients.
+  contains
+    procedure, pass(self), public :: destroy
+    procedure, pass(self), public :: init
+    procedure, pass(self), public :: integrate
+    final                         :: finalize
+endtype adams_bashforth_integrator
+\end{lstlisting}
+
+After the solver has been initialized it can be used for integrating an integrand field, as shown in listing \ref{list:use_ab_solver}.
+
+\begin{lstlisting}[firstnumber=1,style=code,caption={example of usage of an Adams-Bashforth integrator},label={list:use_ab_solver}]
+real               :: times(1:4)
+type(my_integrand) :: my_field
+call integrator%integrate(U=my_field, Dt=Dt, t=times)
+\end{lstlisting}
+where \emph{my\_integrand} is a concrete (valid) extension of \emph{integrand} ADT and \emph{times} are the time at each 4 steps considered for the current one-step-over integration.
+
+The complete implementation of the \emph{integrate} method of the explicit Adams-Bashforth class of solvers is reported in listing \ref{list:ab_integrate}.
+
+\begin{lstlisting}[firstnumber=1,style=code,caption={implementation of the \emph{integrate} method of explicit Adams-Bashforth class},label={list:ab_integrate}]
+subroutine integrate(self, U, Dt, t)
+class(adams_bashforth_integrator), intent(IN)    :: self ! Actual AB integrator.
+class(integrand),                  intent(INOUT) :: U    ! Field to be integrated.
+real(R_P),                         intent(IN)    :: Dt   ! Time steps.
+real(R_P),                         intent(IN)    :: t(:) ! Times.
+integer(I_P)                                     :: s    ! Steps counter.
+do s=1, self%steps
+  U = U + U%t(n=s, t=t(s)) * (Dt * self%b(s))
+enddo
+call U%update_previous_steps
+return
+endsubroutine integrate
+\end{lstlisting}
+
+This method takes four arguments, the first argument is passed as bounded argument and it is the solver itself, the second is of an integrand class, it being the integrand field that must integrated one-step-over in time, the third is the time step used and the fourth is an array of the time values of the steps considered for the current one-step-over integration that are passed to the residuals function for taking into account the cases where the time derivative explicitly depends on time. The time step is not automatically computed (for example inspecting the passed integrand field), thus its value must be externally computed and passed to the \emph{integrate} method.
+
+It is worth noting that there is an explicit call to the method \emph{update\_previous\_steps} for updating the values of the previously computed steps.
 
 \subsection{The leapfrog solver}\label{subsec:solver_leapfrog}
 
-{\color{red} To be written.}
+The explicit Leapfrog class of solvers is exposed as a single derived type named \emph{leapfrog\_integrator}. This type provides three methods:
+
+\begin{itemize}
+  \item \emph{init}: initialize the integrator accordingly the possibilities offered by the class of solvers;
+  \item \emph{integrate}: integrate integrand field one-step-over in time.
+  \end{itemize}
+
+As common for FOODiE solvers, for using such a solver it must be previously defined as an instance of the exposed FOODiE integrator type, see listing \ref{list:define_lf_solver}.
+
+\begin{lstlisting}[firstnumber=1,style=code,caption={definition of an explicit Leapfrog integrator},label={list:define_lf_solver}]
+use FOODiE, only: leapfrog_integrator
+type(leapfrog_integrator) :: integrator
+\end{lstlisting}
+
+Once an integrator of this type has been instantiated, it must be initialized before used, for example see listing \ref{list:init_lf_solver}.
+
+\begin{lstlisting}[firstnumber=1,style=code,caption={example of initialization of an explicit Leapfrog integrator},label={list:init_lf_solver}]
+! default coefficients nu=0.01, alpha=0.5
+call integrator%init()
+! custom coefficients
+call integrator%init(nu=0.015, alpha=0.6)
+\end{lstlisting}
+
+The complete definition of the \emph{leapfrog\_integrator} type is reported into listing \ref{list:lf_solver}. As shown, the filter coefficients are initialized to zero, suitable values are initialized by the \emph{init} method.
+
+\begin{lstlisting}[firstnumber=1,style=code,caption={definition of \emph{leapfrog\_integrator} type},label={list:lf_solver}]
+type :: leapfrog_integrator
+  private
+  real(R_P) :: nu=0.01_R_P   ! Robert-Asselin filter coefficient.
+  real(R_P) :: alpha=0.5_R_P ! Robert-Asselin-Williams filter coefficient.
+  contains
+    procedure, pass(self), public :: init
+    procedure, pass(self), public :: integrate
+endtype leapfrog_integrator
+\end{lstlisting}
+
+After the solver has been initialized it can be used for integrating an integrand field, as shown in listing \ref{list:use_lf_solver}.
+
+\begin{lstlisting}[firstnumber=1,style=code,caption={example of usage of a Leapfrog integrator},label={list:use_lf_solver}]
+real               :: times(1:2)
+type(my_integrand) :: filter_displacement
+type(my_integrand) :: my_field
+call integrator%integrate(U=my_field, filter=filter_displacement, Dt=Dt, t=times)
+\end{lstlisting}
+where \emph{my\_integrand} is a concrete (valid) extension of \emph{integrand} ADT, \emph{filter\_displacement} is the register necessary for computing the eventual displacement of the applied filter and \emph{times} are the time at each 2 steps considered for the current one-step-over integration.
+
+The complete implementation of the \emph{integrate} method of the explicit Leapfrog class of solvers is reported in listing \ref{list:lf_integrate}.
+
+\begin{lstlisting}[firstnumber=1,style=code,caption={implementation of the \emph{integrate} method of explicit Leapfrog class},label={list:lf_integrate}]
+subroutine integrate(self, U, filter, Dt, t)
+class(leapfrog_integrator), intent(IN)    :: self   ! LF integrator.
+class(integrand),           intent(INOUT) :: U      ! Field to be integrated.
+class(integrand), optional, intent(INOUT) :: filter ! Filter field displacement.
+real(R_P),                  intent(in)    :: Dt     ! Time step.
+real(R_P),                  intent(IN)    :: t      ! Time.
+U = U%previous_step(n=1) + U%t(n=2, t=t) * (Dt * 2._R_P)
+if (present(filter)) then
+  filter = (U%previous_step(n=1) - U%previous_step(n=2) * 2._R_P + U) * self%nu * 0.5_R_P
+endif
+call U%update_previous_steps(filter=filter, weights=[self%alpha, self%alpha - 1._R_P])
+return
+endsubroutine integrate
+\end{lstlisting}
+
+This method takes five arguments, the first argument is passed as bounded argument and it is the solver itself, the second is of an integrand class, it being the integrand field that must integrated one-step-over in time, the third is the optional filter-displacement-register, the fourth is the time step used and the fifth is an array of the time values of the steps considered for the current one-step-over integration that are passed to the residuals function for taking into account the cases where the time derivative explicitly depends on time. The time step is not automatically computed (for example inspecting the passed integrand field), thus its value must be externally computed and passed to the \emph{integrate} method. It is worth noting that if the filter displacement argument is not passed, the solver reverts back to the standard unfiltered Leapfrog method.
+
+It is worth noting that there is an explicit call to the method \emph{update\_previous\_steps} for updating the values of the previously computed steps.
+
+\subsection{General Remarks}\label{subsec:API-remarks}
+
+Table \ref{tab:foodie-vs-math} presents a comparison of the relevant parts of equations \ref{eq:solver-euler}, \ref{eq:RK}, \ref{eq:RK-stage}, \ref{eq:RK-ls}, \ref{eq:AB} and \ref{eq:leapfrog} with the corresponding FOODiE implementations reported in listings \ref{list:euler_integrate}, \ref{list:tvd_rk_integrate}, \ref{list:ls_rk_integrate}, \ref{list:ab_integrate} and \ref{list:lf_integrate}, respectively. This comparison proves that the \emph{integrand} ADT has allowed a very high-level implementation syntax. The Fortran implementation is almost equivalent to the rigorous mathematical formulation. This aspect directly implies that the implementation of a ODE solver into the FOODiE library is very clear, concise and less-errors-prone than an \emph{hard-coded} implementation where the solvers must be implemented for each specific definition of the integrand type, it being not abstract.
+
+\begin{table}[!ht]
+  \centering
+  \caption{Comparison between rigorous mathematical formulation and FOODiE high-level implementation; the syntax "$(s)$" and "$(ss)$" imply the summation operation}\label{tab:foodie-vs-math}
+  \resizebox{0.99\textwidth}{!}{%
+  \begin{tabular}{c|cc}
+    \toprule
+    {\sc Solver} & {\sc Mathematical formulation} & {\sc FOODiE implementation} \\
+    \hline
+    explicit forward Euler & $U\left(t^{n+1}\right) = U\left(t^n\right) +\Delta t \cdot R\left[t^n, U\left(t^n\right)\right]$ & $U = U + U\%t(t=t) * Dt$\\
+    \hline
+    TVD/SSP Runge-Kutta & $\begin{matrix}
+  K_s = R\left(t^n + \gamma_s \Delta t, U^n+\Delta t\sum\limits_{l=1}^{s-1}{\alpha_{s,l} K_l} \right) \\
+  U^{n+1} = U^{n} + \Delta t \cdot\sum\limits_{s=1}^{N_{s}}{\beta_s K_s}
+\end{matrix}$ & $\begin{matrix}
+  stage(s) = stage(s) + stage(ss) * (Dt * self\%alph(s, ss)) \\
+  U = U +  stage(s) * (Dt * self\%beta(s))
+\end{matrix}$\\
+    \hline
+    low storage Runge-Kutta & $\begin{matrix}
+  K_2 = A_s K_2 + \Delta t \cdot R\left(t^n + C_s \Delta t, K_1\right) \\
+  K_1 = K_1 + B_s K_2
+\end{matrix}$ & $\begin{matrix}
+  stage(2) = stage(2) * self\%A(s) + \\ + stage(1)\%t(t=t + self\%C(s) * Dt) * Dt \\
+  stage(1) = stage(1) + stage(2) * self\%B(s)
+\end{matrix}$\\
+    \hline
+  explicit Adams-Bashforth & $\begin{matrix}U\left(t^{n+N_s}\right) = U\left(t^{n+N_s-1}\right) + \\ +\Delta t \sum_{s=1}^{n+N_s}{ b_s \cdot R\left[t^{n+s-1}, U\left(t^{n+s-1}\right)\right]}\end{matrix}$ & $U = U + U\%t(n=s, t=t(s)) * (Dt * self\%b(s))$\\
+    \hline
+    explicit Leapfrog & $ U\left(t^{n+2}\right) = U\left(t^{n}\right) + 2\Delta t \cdot R\left[t^{n+1}, U\left(t^{n+1}\right)\right]$ & $U = U\%previous\_step(n=1) + U\%t(n=2, t=t) * (Dt * 2.)$\\
+
+  \end{tabular}}
+\end{table}
+
+\clearpage
 
 \section{Tests and Examples}\label{sec:Tests}
 
 {\color{red} To be written.}
 
-\clearpage
-
 \subsection{Oscillation equations test}
 
-{\color{red} To be completed.}
+Let us consider the \emph{oscillation} problem, it being a simple, yet interesting IVP. Briefly, the oscillation problem is a prototype problem of non dissipative, oscillatory phenomena. For example, let us consider a pendulum subjected to the Coriolis accelerations without dissipation, the motion equations of which can be described by the ODE system \ref{eq:oscillation}.
 
 \begin{equation}
 \begin{matrix}
@@ -802,7 +1018,6 @@ f x
 \end{matrix}
 \label{eq:oscillation}
 \end{equation}
-
 where the frequency is chosen as $f=10^4$. The ODE system \ref{eq:oscillation} is completed by the following initial conditions:
 
 \begin{equation}
@@ -812,8 +1027,9 @@ where the frequency is chosen as $f=10^4$. The ODE system \ref{eq:oscillation} i
 \end{matrix}
 \label{eq:oscillation-ic}
 \end{equation}
+where $t_0=0$ is the initial time considered.
 
-where $t_0=0$ is the initial time considered. The exact solution is:
+The IVP constituted by equations \ref{eq:oscillation} and \ref{eq:oscillation-ic} is (apparently) simple and its exact solution is known:
 
 \begin{equation}
 \begin{matrix}
@@ -822,19 +1038,138 @@ where $t_0=0$ is the initial time considered. The exact solution is:
 \end{matrix}
 \label{eq:oscillation-exact}
 \end{equation}
-
 where $\Delta t$ is an arbitrary time step.
 
-\subsubsection{Errors Analysis}
+This problem is only apparently simple. As a matter of facts, in a non dissipative oscillatory problem the eventual errors in the amplitude approximation can rapidly drive the subsequent series of approximations to an unphysical solution. This is of particular relevance if the solution (that is numerically approximated) constitutes a \emph{prediction} far from the initial conditions, that is the common case in weather forecasting.
 
-For the analysis of the accuracy of each solvers implemented into FOODiE library, we have integrated the Oscillation equations \ref{eq:oscillation} with different, decreasing time steps in the range $[5000, 2500, 1250, 625, 320, 100]$.
+\subsubsection{FOODiE aware implementation of an oscillation numerical solver}
+The IVP \ref{eq:oscillation} can be easily solved by means of FOODiE library. The first block of a FOODiE aware solution consists to define an \emph{oscillation integrand field} defining a concrete extension of the FOODiE \emph{integrand} type. Listing \ref{list:oscillation_type} reports the implementation of such an integrand field that is contained into the tests suite shipped within the FOODiE library.
 
-The error is estimated by the L2 norm of the difference between the exact ($U_e$) and the numerical ($U_{\Delta t}$) solutions for each time step:
+\begin{lstlisting}[firstnumber=1,style=code,caption={implementation of the \emph{oscillation integrand} type},label={list:oscillation_type}]
+type, extends(integrand) :: oscillation
+  private
+  integer(I_P)                           :: dims=0   ! Space dimensions.
+  real(R_P)                              :: f=0._R_P ! Oscillation frequency (Hz).
+  real(R_P), dimension(:),   allocatable :: U        ! Integrand (state) variables, [1:dims].
+  integer(I_P)                           :: steps=0  ! Number of time steps stored.
+  real(R_P), dimension(:,:), allocatable :: previous ! Previous time steps states, [1:dims,1:steps].
+  contains
+    ! auxiliary methods
+    procedure, pass(self), public :: init
+    procedure, pass(self), public :: output
+    ! type\_integrand deferred methods
+    procedure, pass(self), public :: t => dOscillation_dt
+    procedure, pass(self), public :: update_previous_steps
+    procedure, pass(self), public :: previous_step
+    procedure, pass(lhs),  public :: integrand_multiply_integrand => &
+                                     oscillation_multiply_oscillation
+    procedure, pass(lhs),  public :: integrand_multiply_real => oscillation_multiply_real
+    procedure, pass(rhs),  public :: real_multiply_integrand => real_multiply_oscillation
+    procedure, pass(lhs),  public :: add => add_oscillation
+    procedure, pass(lhs),  public :: sub => sub_oscillation
+    procedure, pass(lhs),  public :: assign_integrand => oscillation_assign_oscillation
+    procedure, pass(lhs),  public :: assign_real => oscillation_assign_real
+endtype oscillation
+\end{lstlisting}
+
+The \emph{oscillation} field extends the \emph{integrand} ADT making it a concrete type. This derived type is very simple: it has 5 data members for storing the state vector and some auxiliary variables, and it implements all the deferred methods necessary for defining a valid concrete extension of the \emph{integrand} ADT (plus 2 auxiliary methods that are not relevant for our discussion). The key point is here constituted by the implementation of the deferred methods: the \emph{integrand} ADT does not impose any structure for the data members, that are consequently free to be customized by the client code. In this example the data members have a very simple, clean and concise structure:
+\begin{itemize}
+  \item $dims$ is the number of space dimensions; in the case of equation \ref{eq:oscillation} we have $dims=2$, however the test implementation has been kept more general parametrizing this dimension in order to easily allow future modification of the test-program itself;
+  \item $f$ stores the frequency of the oscillatory problem solved, that is here set to $10^{4}$, but it can be changed at runtime in the test-program;
+  \item $U$ is the state vector corresponding directly to the state vector of equation \ref{eq:oscillation};
+  \item $steps$ and $previous$ are two auxiliary data members used only in case the oscillation field is integrated by means of a multi-step solver (thus they could be omitted in case of one-step solver usage):
+    \begin{itemize}
+      \item $steps$ is the number of previous time steps used for computing the next one-step-over integration with respect the current time;
+      \item $previous$ is an array where previously computed time step solutions are stored.
+      \end{itemize}
+  \end{itemize}
+
+As the listing \ref{list:oscillation_type} shows, the FOODiE implementation strictly corresponds to the mathematical formulation embracing all the relevant mathematical aspects into one derived type, a single \emph{object}. Here we not review the implementation of all deferred methods, this being out of the scope of the present work: the interested reader can see the tests suite sources shipped within the FOODiE library. However, some of these methods are relevant for our discussion, thus they are reviewed.
+
+\paragraph{dOscillation\_dt, the oscillation residuals function}
+
+Probably, the most important methods for an IVP solver is the residuals function. As a matter of facts, the ODE equations are implemented into the residuals function. However, the FOODiE ADT strongly alleviates the subtle problems that could arise when the ODE solver is hard-implemented within the specific ODE equations. As a matter of facts, the \emph{integrand} ADT specifies the precise interface the residuals function must have: if the client code implements a compliant interface, the FOODiE solvers will work as expected, reducing the possible errors location into the ODE equations, having designed the solvers on the ADT and not on the concrete type.
+
+\begin{lstlisting}[firstnumber=1,style=code,caption={implementation of the \emph{oscillation integrand} residuals function},label={list:oscillation_t}]
+function dOscillation_dt(self, n, t) result(dState_dt)
+class(oscillation),     intent(IN) :: self      ! Oscillation field.
+integer(I_P), optional, intent(IN) :: n         ! Time level.
+real(R_P),    optional, intent(IN) :: t         ! Time.
+class(integrand),  allocatable     :: dState_dt ! Oscillation field time derivative.
+integer(I_P)                       :: dn        ! Time level, dummy variable.
+allocate(oscillation :: dState_dt)
+select type(dState_dt)
+class is(oscillation)
+  dState_dt = self
+  if (self%steps>=2) then ! self\%previous should be used
+    dn = self%steps ; if (present(n)) dn = n
+    dState_dt%U(1) = -self%f * self%previous(2, dn)
+    dState_dt%U(2) =  self%f * self%previous(1, dn)
+  else ! self\%previous should not be used, use directly self\%U
+    dState_dt%U(1) = -self%f * self%U(2)
+    dState_dt%U(2) =  self%f * self%U(1)
+  endif
+endselect
+return
+endfunction dOscillation_dt
+\end{lstlisting}
+
+Listing \ref{list:oscillation_t} reports the implementation of the oscillation residuals function: it is very clear and concise. Moreover, comparing this listing with the equation \ref{eq:oscillation} the close correspondence between the mathematical formulation and Fortran implementation is evident.
+
+\paragraph{add method, an example of oscillation symmetric operator}
+
+As a prototype of the operators overloading let us consider the \emph{add} operator, it being a prototype of symmetric operators, the implementation of which is presented in listing \ref{list:oscillation_add}.
+
+\begin{lstlisting}[firstnumber=1,style=code,caption={implementation of the \emph{oscillation integrand} add operator},label={list:oscillation_add}]
+function add_oscillation(lhs, rhs) result(opr)
+class(oscillation), intent(IN) :: lhs ! Left hand side.
+class(integrand),   intent(IN) :: rhs ! Right hand side.
+class(integrand), allocatable  :: opr ! Operator result.
+allocate(oscillation :: opr)
+select type(opr)
+class is(oscillation)
+  opr = lhs
+  select type(rhs)
+  class is (oscillation)
+    opr%U = lhs%U + rhs%U
+  endselect
+endselect
+return
+endfunction add_Oscillation
+\end{lstlisting}
+It is very simple and clear: firstly all the auxiliary data are copied into the operator result, then the state vector of the result is populated with the addiction between the state vectors of the left-hand-side and right-hand-side. This is very intuitive from the mathematical point of view and it helps to reduce implementation errors. Similar implementations are possible for all the other operators necessary to define a valid \emph{intregrand} ADT concrete extension.
+
+\paragraph{assignment of an oscillation object}
+
+The assignment overloading of the \emph{oscillation} type is the last key-method that enforces the conciseness of the FOODiE aware implementation. Listing \ref{list:oscillation_assign} reports the implementation of the assignment overloading. Essentially, to all the data members of the left-hand-side are assigned the values of the corresponding right-hand-side. Notably, for the assignment of the state vector and of the previous time steps solution array we take advantage of the automatic re-allocation of the left-hand-side variables when they are not allocated or allocated differently from the right-hand-side, that is a Fortran 2003 feature. In spite its simplicity, the assignment overloading is a key-method enabling the usage of FOODiE solver: effectively, the assignment between two \emph{integrand} ADT variables is ubiquitous into the solvers implementations, see equation \ref{eq:RK} for example.
+
+\begin{lstlisting}[firstnumber=1,style=code,caption={implementation of the \emph{oscillation integrand} assignment},label={list:oscillation_assign}]
+subroutine oscillation_assign_oscillation(lhs, rhs)
+class(oscillation), intent(INOUT) :: lhs ! Left hand side.
+class(integrand),   intent(IN)    :: rhs ! Right hand side.
+select type(rhs)
+class is (oscillation)
+  lhs%dims = rhs%dims
+  lhs%steps = rhs%steps
+  if (allocated(rhs%U)) lhs%U = rhs%U
+  if (allocated(rhs%previous)) lhs%previous = rhs%previous
+  lhs%f = rhs%f
+endselect
+return
+endsubroutine oscillation_assign_oscillation
+\end{lstlisting}
+
+\subsubsection{Errors Analysis of the FOODiE Oscillation test results}
+
+We use the Oscillation test program (shipped with FOODiE tests suite) for the testing the above described implementation and assessing the provided solvers accuracy for this IVP.
+
+For the analysis of the accuracy of each solver, we have integrated the Oscillation equations \ref{eq:oscillation} with different, decreasing time steps in the range $[5000, 2500, 1250, 625, 320, 100]$. The error is estimated by the L2 norm of the difference between the exact ($U_e$) and the numerical ($U_{\Delta t}$) solutions for each time step:
 
 \begin{equation}
   \varepsilon (\Delta t) = || U_e - U_{\Delta t} ||_2 = \sqrt{ \sum_{s=1}^{N_s} { \left(U_e(t_0 + s * \Delta t) - U_{\Delta t}(t_0 + s * \Delta t) \right)^2 }}
 \label{eq:oscillation-error}
 \end{equation}
+where $N_s$ is the total number of time steps performed to reach the final integration time.
 
 Using two pairs of subsequent-decreasing time steps solution is possible to estimate the order of accuracy of the solver employed computing the \emph{observed order} of accuracy:
 
@@ -850,7 +1185,7 @@ Table \ref{tab:oscillation} summarizes the errors analysis.
 \begin{table}[!ht]
   \centering
   \caption{Oscillation test errors analysis}\label{tab:oscillation}
-  \resizebox{0.80\textwidth}{!}{%
+  \resizebox{0.75\textwidth}{!}{%
   \begin{tabular}{cccccc}
     \toprule
     {\sc Solver} & {\sc Time Step} & {\sc Error X} & {\sc Error Y} & {\sc Order X} & {\sc Order Y} \\
@@ -864,68 +1199,94 @@ Table \ref{tab:oscillation} summarizes the errors analysis.
                  &    100.0        &  0.171E+00    &  0.173E+00    & 1.50          & 1.50          \\
     \cmidrule{2-6}
     \multirow{6}{*}{Adams-Bashforth 3 steps}
-                 &   5000.0        &  0.816E+01    &  0.809E+01     & /            & /             \\
-                 &   2500.0        &  0.266E+01    &  0.264E+01     & 1.62         & 1.62          \\
-                 &   1250.0        &  0.120E+01    &  0.120E+01     & 1.15         & 1.14          \\
-                 &    625.0        &  0.545E+00    &  0.543E+00     & 1.14         & 1.14          \\
-                 &    320.0        &  0.223E+00    &  0.222E+00     & 1.34         & 1.34          \\
-                 &    100.0        &  0.418E-01    &  0.416E-01     & 1.44         & 1.44          \\
+                 &   5000.0        &  0.816E+01    &  0.809E+01    & /             & /             \\
+                 &   2500.0        &  0.266E+01    &  0.264E+01    & 1.62          & 1.62          \\
+                 &   1250.0        &  0.120E+01    &  0.120E+01    & 1.15          & 1.14          \\
+                 &    625.0        &  0.545E+00    &  0.543E+00    & 1.14          & 1.14          \\
+                 &    320.0        &  0.223E+00    &  0.222E+00    & 1.34          & 1.34          \\
+                 &    100.0        &  0.418E-01    &  0.416E-01    & 1.44          & 1.44          \\
+    \cmidrule{2-6}
+    \multirow{6}{*}{Adams-Bashforth 4 steps}
+                 &   5000.0        &  0.384E+09    &  0.380E+09    & /             & /             \\
+                 &   2500.0        &  0.871E+01    &  0.869E+01    & 25.39         & 25.38         \\
+                 &   1250.0        &  0.314E+01    &  0.312E+01    &  1.47         &  1.48         \\
+                 &    625.0        &  0.111E+01    &  0.111E+01    &  1.49         &  1.49         \\
+                 &    320.0        &  0.409E+00    &  0.407E+00    &  1.50         &  1.50         \\
+                 &    100.0        &  0.714E-01    &  0.711E-01    &  1.50         &  1.50         \\
+
     \cmidrule{2-6}
     \multirow{6}{*}{leapfrog 2 steps}
-                 &   5000.0        &  0.151E+02    &  0.152E+02     & /            & /             \\
-                 &   2500.0        &  0.500E+01    &  0.504E+01     & 1.60         & 1.59          \\
-                 &   1250.0        &  0.190E+01    &  0.193E+01     & 1.40         & 1.39          \\
-                 &    625.0        &  0.181E+01    &  0.181E+01     & 0.07         & 0.09          \\
-                 &    320.0        &  0.157E+01    &  0.157E+01     & 0.21         & 0.21          \\
-                 &    100.0        &  0.100E+01    &  0.100E+01     & 0.39         & 0.39          \\
+                 &   5000.0        &  0.151E+02    &  0.152E+02    & /             & /             \\
+                 &   2500.0        &  0.500E+01    &  0.504E+01    & 1.60          & 1.59          \\
+                 &   1250.0        &  0.190E+01    &  0.193E+01    & 1.40          & 1.39          \\
+                 &    625.0        &  0.181E+01    &  0.181E+01    & 0.07          & 0.09          \\
+                 &    320.0        &  0.157E+01    &  0.157E+01    & 0.21          & 0.21          \\
+                 &    100.0        &  0.100E+01    &  0.100E+01    & 0.39          & 0.39          \\
     \cmidrule{2-6}
     \multirow{6}{*}{low storage Runge-Kutta 5 stages}
-                 &   5000.0        &  0.120E+00    &  0.122E+00     & /            & /             \\
-                 &   2500.0        &  0.106E-01    &  0.107E-01     & 3.51         & 3.51          \\
-                 &   1250.0        &  0.935E-03    &  0.947E-03     & 3.50         & 3.50          \\
-                 &    625.0        &  0.826E-04    &  0.836E-04     & 3.50         & 3.50          \\
-                 &    320.0        &  0.793E-05    &  0.803E-05     & 3.50         & 3.50          \\
-                 &    100.0        &  0.135E-06    &  0.137E-06     & 3.50         & 3.50          \\
+                 &   5000.0        &  0.120E+00    &  0.122E+00    & /             & /             \\
+                 &   2500.0        &  0.106E-01    &  0.107E-01    & 3.51          & 3.51          \\
+                 &   1250.0        &  0.935E-03    &  0.947E-03    & 3.50          & 3.50          \\
+                 &    625.0        &  0.826E-04    &  0.836E-04    & 3.50          & 3.50          \\
+                 &    320.0        &  0.793E-05    &  0.803E-05    & 3.50          & 3.50          \\
+                 &    100.0        &  0.135E-06    &  0.137E-06    & 3.50          & 3.50          \\
     \cmidrule{2-6}
     \multirow{6}{*}{TVD/SSP Runge-Kutta 2 stages}
-                 &   5000.0        &  0.316E+02    &  0.319E+02     & /            & /             \\
-                 &   2500.0        &  0.892E+01    &  0.894E+01     & 1.83         & 1.84          \\
-                 &   1250.0        &  0.301E+01    &  0.305E+01     & 1.57         & 1.55          \\
-                 &    625.0        &  0.106E+01    &  0.107E+01     & 1.51         & 1.51          \\
-                 &    320.0        &  0.387E+00    &  0.392E+00     & 1.50         & 1.50          \\
-                 &    100.0        &  0.676E-01    &  0.685E-01     & 1.50         & 1.50          \\
+                 &   5000.0        &  0.316E+02    &  0.319E+02    & /             & /             \\
+                 &   2500.0        &  0.892E+01    &  0.894E+01    & 1.83          & 1.84          \\
+                 &   1250.0        &  0.301E+01    &  0.305E+01    & 1.57          & 1.55          \\
+                 &    625.0        &  0.106E+01    &  0.107E+01    & 1.51          & 1.51          \\
+                 &    320.0        &  0.387E+00    &  0.392E+00    & 1.50          & 1.50          \\
+                 &    100.0        &  0.676E-01    &  0.685E-01    & 1.50          & 1.50          \\
     \cmidrule{2-6}
     \multirow{6}{*}{TVD/SSP Runge-Kutta 3 stages}
-                 &   5000.0        &  0.255E+01    &  0.252E+01     & /            & /             \\
-                 &   2500.0        &  0.523E+00    &  0.516E+00     & 2.28         & 2.29          \\
-                 &   1250.0        &  0.944E-01    &  0.931E-01     & 2.47         & 2.47          \\
-                 &    625.0        &  0.167E-01    &  0.165E-01     & 2.50         & 2.50          \\
-                 &    320.0        &  0.314E-02    &  0.310E-02     & 2.50         & 2.50          \\
-                 &    100.0        &  0.171E-03    &  0.169E-03     & 2.50         & 2.50          \\
+                 &   5000.0        &  0.255E+01    &  0.252E+01    & /             & /             \\
+                 &   2500.0        &  0.523E+00    &  0.516E+00    & 2.28          & 2.29          \\
+                 &   1250.0        &  0.944E-01    &  0.931E-01    & 2.47          & 2.47          \\
+                 &    625.0        &  0.167E-01    &  0.165E-01    & 2.50          & 2.50          \\
+                 &    320.0        &  0.314E-02    &  0.310E-02    & 2.50          & 2.50          \\
+                 &    100.0        &  0.171E-03    &  0.169E-03    & 2.50          & 2.50          \\
     \cmidrule{2-6}
     \multirow{6}{*}{TVD/SSP Runge-Kutta 5 stages}
-                 &   5000.0        &  0.139E+00    &  0.141E+00     & /            & /             \\
-                 &   2500.0        &  0.122E-01    &  0.124E-01     & 3.50         & 3.50          \\
-                 &   1250.0        &  0.108E-02    &  0.110E-02     & 3.50         & 3.50          \\
-                 &    625.0        &  0.956E-04    &  0.969E-04     & 3.50         & 3.50          \\
-                 &    320.0        &  0.937E-05    &  0.949E-05     & 3.47         & 3.47          \\
-                 &    100.0        &  0.512E-06    &  0.519E-06     & 2.50         & 2.50          \\
+                 &   5000.0        &  0.139E+00    &  0.141E+00    & /             & /             \\
+                 &   2500.0        &  0.122E-01    &  0.124E-01    & 3.50          & 3.50          \\
+                 &   1250.0        &  0.108E-02    &  0.110E-02    & 3.50          & 3.50          \\
+                 &    625.0        &  0.956E-04    &  0.969E-04    & 3.50          & 3.50          \\
+                 &    320.0        &  0.937E-05    &  0.949E-05    & 3.47          & 3.47          \\
+                 &    100.0        &  0.512E-06    &  0.519E-06    & 2.50          & 2.50          \\
     \bottomrule
   \end{tabular}}
 \end{table}
 
 \paragraph{Adams-Bashforth}
 
-\begin{figure}[!ht]
-  \centering
-  \includegraphics[width=0.70\textwidth]{errors-analysis/oscillation/errors_analysis-oscillation-adams-bashforth-2.png}
-  \caption{Oscillation equations solutions computed by means of Adams-Bashforth 2 steps solver}\label{fig:results-oscillation-adams-bashforth-2}
-\end{figure}
+{\color{red}This class of solvers does not behaves as expected.
+
+The expected observed orders of accuracy should tend to 2, 3 and 4 for the corresponding Adams-Bashforth 2, 3 and 4 steps, but the observed accuracy tend to 1.5 for all solvers. Is there a bug? Is the Adams-Bashforth not suited for the Oscillation test?
+
+Figure \ref{fig:results-oscillation-adams-bashforth} emphasizes instability generation for some pairs scheme-$\Delta t$: odd-even phase/amplitude phenomena are present. A deep insight from whom is familiar with multi-step method is welcome.
+
+Note that in the summary.log file into error analysis directory I have computed also the product of $f*\Delta t$ in order to verify when the instability arises: for AB-2 and AB-4 the solution with $\Delta t=5000 \rightarrow f*\Delta t=0.5$ results to be unstable while for AB-3 it is stable, but the amplitude is dumped resulting into large errors. This is consistent with Duran results, where AB-3 is said to be unstable for $ f*\Delta t>0.724$.
+}
 
 \begin{figure}[!ht]
   \centering
-  \includegraphics[width=0.70\textwidth]{errors-analysis/oscillation/errors_analysis-oscillation-adams-bashforth-3.png}
-  \caption{Oscillation equations solutions computed by means of Adams-Bashforth 3 steps solver}\label{fig:results-oscillation-adams-bashforth-3}
+  \begin{subfigure}[b]{0.45\textwidth}
+    \centering
+    \includegraphics[width=1.00\textwidth]{errors-analysis/oscillation/errors_analysis-oscillation-adams-bashforth-2.png}
+    \caption{Adams-Bashforth 2 steps solution}\label{fig:results-oscillation-adams-bashforth-2}
+  \end{subfigure}\quad%
+  \begin{subfigure}[b]{0.45\textwidth}
+    \centering
+    \includegraphics[width=1.00\textwidth]{errors-analysis/oscillation/errors_analysis-oscillation-adams-bashforth-3.png}
+    \caption{Adams-Bashforth 3 steps solution}\label{fig:results-oscillation-adams-bashforth-3}
+  \end{subfigure}\\
+  \begin{subfigure}[b]{0.45\textwidth}
+    \centering
+    \includegraphics[width=1.00\textwidth]{errors-analysis/oscillation/errors_analysis-oscillation-adams-bashforth-4.png}
+    \caption{Adams-Bashforth 4 steps solution}\label{fig:results-oscillation-adams-bashforth-4}
+  \end{subfigure}
+  \caption{Oscillation equations solutions computed by means of Adams-Bashforth solvers}\label{fig:results-oscillation-adams-bashforth}
 \end{figure}
 
 \paragraph{Leapfrog}
