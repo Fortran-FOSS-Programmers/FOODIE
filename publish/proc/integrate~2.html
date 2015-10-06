@@ -451,7 +451,7 @@
     
     <div class="col-lg-9" id='text'>
     <h2>
-private subroutine integrate(field, Dt, t)
+private subroutine integrate(U, Dt, t)
     
     
     
@@ -479,12 +479,12 @@ private subroutine integrate(field, Dt, t)
   
 <tr>
   
-  <td><span class="anchor" id="variable-field%7E2"></span>class(<a href='../type/integrand.html'>integrand</a>),</td>
+  <td><span class="anchor" id="variable-u%7E7"></span>class(<a href='../type/integrand.html'>integrand</a>),</td>
   <td>intent(inout)</td>
   <td></td>
   
   <td></td><td>::</td>
-  <td><strong>field</strong></td><td><p>Field to be integrated.</p></td>
+  <td><strong>U</strong></td><td><p>Field to be integrated.</p></td>
   
 </tr>
 
@@ -510,8 +510,8 @@ private subroutine integrate(field, Dt, t)
 <tr>
   
   <td><span class="anchor" id="variable-t%7E9"></span>real(kind=R_P),</td>
-  <td>intent(in)</td>
-  <td></td>
+  <td>intent(in),</td>
+  <td>optional</td>
   
   <td></td><td>::</td>
   <td><strong>t</strong></td><td><p>Time.</p></td>
@@ -548,17 +548,17 @@ private subroutine integrate(field, Dt, t)
     
     <section>
     <h2><span class="anchor" id="src"></span>Source Code</h2>
-    <div class="highlight"><pre>  <span class="k">subroutine </span><span class="n">integrate</span><span class="p">(</span><span class="n">field</span><span class="p">,</span> <span class="n">Dt</span><span class="p">,</span> <span class="n">t</span><span class="p">)</span>
+    <div class="highlight"><pre>  <span class="k">subroutine </span><span class="n">integrate</span><span class="p">(</span><span class="n">U</span><span class="p">,</span> <span class="n">Dt</span><span class="p">,</span> <span class="n">t</span><span class="p">)</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
   <span class="c">!&lt; Integrate field with explicit Euler scheme, 1st order.</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
-  <span class="k">class</span><span class="p">(</span><span class="n">integrand</span><span class="p">),</span> <span class="k">intent</span><span class="p">(</span><span class="n">INOUT</span><span class="p">)</span> <span class="kd">::</span> <span class="n">field</span> <span class="c">!&lt; Field to be integrated.</span>
-  <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">),</span>        <span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span>    <span class="kd">::</span> <span class="n">Dt</span>    <span class="c">!&lt; Time step.</span>
-  <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">),</span>        <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span>    <span class="kd">::</span> <span class="n">t</span>     <span class="c">!&lt; Time.</span>
+  <span class="k">class</span><span class="p">(</span><span class="n">integrand</span><span class="p">),</span>    <span class="k">intent</span><span class="p">(</span><span class="n">INOUT</span><span class="p">)</span> <span class="kd">::</span> <span class="n">U</span>  <span class="c">!&lt; Field to be integrated.</span>
+  <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">),</span>           <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span>    <span class="kd">::</span> <span class="n">Dt</span> <span class="c">!&lt; Time step.</span>
+  <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">),</span> <span class="k">optional</span><span class="p">,</span> <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span>    <span class="kd">::</span> <span class="n">t</span>  <span class="c">!&lt; Time.</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
 
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
-  <span class="n">field</span> <span class="o">=</span> <span class="n">field</span> <span class="o">+</span> <span class="n">field</span><span class="p">%</span><span class="n">t</span><span class="p">(</span><span class="n">t</span><span class="o">=</span><span class="n">t</span><span class="p">)</span> <span class="o">*</span> <span class="n">Dt</span>
+  <span class="n">U</span> <span class="o">=</span> <span class="n">U</span> <span class="o">+</span> <span class="n">U</span><span class="p">%</span><span class="n">t</span><span class="p">(</span><span class="n">t</span><span class="o">=</span><span class="n">t</span><span class="p">)</span> <span class="o">*</span> <span class="n">Dt</span>
   <span class="k">return</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
   <span class="n">endsubroutine</span> <span class="n">integrate</span>

@@ -164,8 +164,6 @@
       
       <a class="list-group-item" href="../type/integrand.html#boundprocedure-assign_integrand">assign_integrand</a>
       
-      <a class="list-group-item" href="../type/integrand.html#boundprocedure-assign_real">assign_real</a>
-      
       <a class="list-group-item" href="../type/integrand.html#boundprocedure-operator%28%2B%29">operator(+)</a>
       
       <a class="list-group-item" href="../type/integrand.html#boundprocedure-operator%28-%29">operator(-)</a>
@@ -1178,100 +1176,6 @@ subroutine <a href='../interface/assignment_integrand.html'>assignment_integrand
     
 	   
 <div class="panel panel-default">
-  <div class="panel-heading codesum"><span class="anchor" id="boundprocedure-assign_real"></span><h3>procedure(<a href='../interface/assignment_real.html'>assignment_real</a>), public, pass(lhs), deferred :: <strong>assign_real</strong>  
-    
-  </h3></div>
-  
-  <div class="panel-body">
-    
-
-
-    <p>Integrand = real.</p>
-  </div>
-  
-  <ul class="list-group">
-    
-      <li class="list-group-item">
-      
-         
-            
-    
-    <h3>
-subroutine <a href='../interface/assignment_real.html'>assignment_real</a>(lhs, rhs)
-    
-    
-    
-<small>Prototype</small></h3>
-    
-    <h4>Arguments</h4>
-    
-      
-      
-<table class="table table-striped varlist">
-<thead><tr><th>Type</th>
-<th>Intent</th><th>Optional</th>
-<th>Attributes</th><th></th><th>Name</th><th></th></thead>
-
-
-
-<tbody>
-
-  
-  
-  
-  
-<tr>
-  
-  <td><span class="anchor" ></span>class(<a href='../type/integrand.html'>integrand</a>),</td>
-  <td>intent(inout)</td>
-  <td></td>
-  
-  <td></td><td>::</td>
-  <td><strong>lhs</strong></td><td><p>Left hand side.</p></td>
-  
-</tr>
-
-  
-  
-  
-  
-<tr>
-  
-  <td><span class="anchor" ></span>real(kind=R_P),</td>
-  <td>intent(in)</td>
-  <td></td>
-  
-  <td></td><td>::</td>
-  <td><strong>rhs</strong></td><td><p>Right hand side.</p></td>
-  
-</tr>
-
-</tbody>
-</table>
-
-      
-    
-    
-    
-    <h4>Description</h4>
-       
-       
-
-
-       
-       <p>Asymmetric assignment integrand = real.</p>
-        
-
-         
-      
-      </li>
-    
-  </ul>
-</div>
-
-    
-	   
-<div class="panel panel-default">
   <div class="panel-heading codesum"><span class="anchor" id="boundprocedure-operator%28%2B%29"></span><h3>generic, public :: <strong>operator(+)</strong>  => <a href='../type/integrand.html#boundprocedure-add'>add</a> 
     
   </h3></div>
@@ -1474,7 +1378,7 @@ pass(lhs) deferred <a href='../type/integrand.html#boundprocedure-integrand_mult
     
 	   
 <div class="panel panel-default">
-  <div class="panel-heading codesum"><span class="anchor" id="boundprocedure-assignment%28%3D%29"></span><h3>generic, public :: <strong>assignment(=)</strong>  => <a href='../type/integrand.html#boundprocedure-assign_integrand'>assign_integrand</a>, <a href='../type/integrand.html#boundprocedure-assign_real'>assign_real</a> 
+  <div class="panel-heading codesum"><span class="anchor" id="boundprocedure-assignment%28%3D%29"></span><h3>generic, public :: <strong>assignment(=)</strong>  => <a href='../type/integrand.html#boundprocedure-assign_integrand'>assign_integrand</a> 
     
   </h3></div>
   
@@ -1516,35 +1420,6 @@ pass(lhs) deferred <a href='../type/integrand.html#boundprocedure-assign_integra
       
       </li>
     
-      <li class="list-group-item">
-      
-         
-    
-    <h3>
-pass(lhs) deferred <a href='../type/integrand.html#boundprocedure-assign_real'>assign_real</a>()
-    
-    
-    
-</h3>
-    
-    <h4>Arguments</h4>
-    
-      <em>None</em>
-    
-    
-    
-    <h4>Description</h4>
-       
-       
-
-
-       
-       <p>Integrand = real.</p>
-        
-
-      
-      </li>
-    
   </ul>
 </div>
 
@@ -1569,14 +1444,13 @@ pass(lhs) deferred <a href='../type/integrand.html#boundprocedure-assign_real'>a
     <span class="k">procedure</span><span class="p">(</span><span class="n">symmetric_operator</span><span class="p">),</span>   <span class="k">pass</span><span class="p">(</span><span class="n">lhs</span><span class="p">),</span>  <span class="k">deferred</span><span class="p">,</span> <span class="k">public</span> <span class="kd">::</span> <span class="n">add</span>                          <span class="c">!&lt; Integrand + integrand oprator.</span>
     <span class="k">procedure</span><span class="p">(</span><span class="n">symmetric_operator</span><span class="p">),</span>   <span class="k">pass</span><span class="p">(</span><span class="n">lhs</span><span class="p">),</span>  <span class="k">deferred</span><span class="p">,</span> <span class="k">public</span> <span class="kd">::</span> <span class="n">sub</span>                          <span class="c">!&lt; Integrand - integrand oprator.</span>
     <span class="k">procedure</span><span class="p">(</span><span class="n">assignment_integrand</span><span class="p">),</span> <span class="k">pass</span><span class="p">(</span><span class="n">lhs</span><span class="p">),</span>  <span class="k">deferred</span><span class="p">,</span> <span class="k">public</span> <span class="kd">::</span> <span class="n">assign_integrand</span>             <span class="c">!&lt; Integrand = integrand.</span>
-    <span class="k">procedure</span><span class="p">(</span><span class="n">assignment_real</span><span class="p">),</span>      <span class="k">pass</span><span class="p">(</span><span class="n">lhs</span><span class="p">),</span>  <span class="k">deferred</span><span class="p">,</span> <span class="k">public</span> <span class="kd">::</span> <span class="n">assign_real</span>                  <span class="c">!&lt; Integrand = real.</span>
     <span class="c">! operators overloading</span>
     <span class="k">generic</span><span class="p">,</span> <span class="k">public</span> <span class="kd">::</span> <span class="n">operator</span><span class="p">(</span><span class="o">+</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="n">add</span>                              <span class="c">!&lt; Overloading + operator.</span>
     <span class="k">generic</span><span class="p">,</span> <span class="k">public</span> <span class="kd">::</span> <span class="n">operator</span><span class="p">(</span><span class="o">-</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="n">sub</span>                              <span class="c">!&lt; Overloading - operator.</span>
     <span class="k">generic</span><span class="p">,</span> <span class="k">public</span> <span class="kd">::</span> <span class="n">operator</span><span class="p">(</span><span class="o">*</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="n">integrand_multiply_integrand</span><span class="p">,</span> <span class="p">&amp;</span>
                                       <span class="n">real_multiply_integrand</span><span class="p">,</span> <span class="p">&amp;</span>
                                       <span class="n">integrand_multiply_real</span>          <span class="c">!&lt; Overloading * operator.</span>
-    <span class="k">generic</span><span class="p">,</span> <span class="k">public</span> <span class="kd">::</span> <span class="n">assignment</span><span class="p">(</span><span class="o">=</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="n">assign_integrand</span><span class="p">,</span> <span class="n">assign_real</span>  <span class="c">!&lt; Overloading = assignament.</span>
+    <span class="k">generic</span><span class="p">,</span> <span class="k">public</span> <span class="kd">::</span> <span class="n">assignment</span><span class="p">(</span><span class="o">=</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="n">assign_integrand</span>               <span class="c">!&lt; Overloading = assignament.</span>
 <span class="n">endtype</span> <span class="n">integrand</span>
 </pre></div>
 

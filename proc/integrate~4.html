@@ -461,7 +461,7 @@
     
     <div class="col-lg-9" id='text'>
     <h2>
-private subroutine integrate(self, field, stage, Dt, t)
+private subroutine integrate(self, U, stage, Dt, t)
     
     
     
@@ -504,12 +504,12 @@ private subroutine integrate(self, field, stage, Dt, t)
   
 <tr>
   
-  <td><span class="anchor" id="variable-field%7E4"></span>class(<a href='../type/integrand.html'>integrand</a>),</td>
+  <td><span class="anchor" id="variable-u%7E9"></span>class(<a href='../type/integrand.html'>integrand</a>),</td>
   <td>intent(inout)</td>
   <td></td>
   
   <td></td><td>::</td>
-  <td><strong>field</strong></td><td><p>Field to be integrated.</p></td>
+  <td><strong>U</strong></td><td><p>Field to be integrated.</p></td>
   
 </tr>
 
@@ -621,14 +621,14 @@ private subroutine integrate(self, field, stage, Dt, t)
     
     <section>
     <h2><span class="anchor" id="src"></span>Source Code</h2>
-    <div class="highlight"><pre>  <span class="k">subroutine </span><span class="n">integrate</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">field</span><span class="p">,</span> <span class="n">stage</span><span class="p">,</span> <span class="n">Dt</span><span class="p">,</span> <span class="n">t</span><span class="p">)</span>
+    <div class="highlight"><pre>  <span class="k">subroutine </span><span class="n">integrate</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">U</span><span class="p">,</span> <span class="n">stage</span><span class="p">,</span> <span class="n">Dt</span><span class="p">,</span> <span class="n">t</span><span class="p">)</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
   <span class="c">!&lt; Integrate field with explicit low storage Runge-Kutta scheme.</span>
   <span class="c">!&lt;</span>
   <span class="c">!&lt; @note This method can be used **after** the integrator is created (i.e. the RK coeficients are initialized).</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
   <span class="k">class</span><span class="p">(</span><span class="n">ls_runge_kutta_integrator</span><span class="p">),</span> <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span>    <span class="kd">::</span> <span class="n">self</span>       <span class="c">!&lt; Actual RK integrator.</span>
-  <span class="k">class</span><span class="p">(</span><span class="n">integrand</span><span class="p">),</span>                 <span class="k">intent</span><span class="p">(</span><span class="n">INOUT</span><span class="p">)</span> <span class="kd">::</span> <span class="n">field</span>      <span class="c">!&lt; Field to be integrated.</span>
+  <span class="k">class</span><span class="p">(</span><span class="n">integrand</span><span class="p">),</span>                 <span class="k">intent</span><span class="p">(</span><span class="n">INOUT</span><span class="p">)</span> <span class="kd">::</span> <span class="n">U</span>          <span class="c">!&lt; Field to be integrated.</span>
   <span class="k">class</span><span class="p">(</span><span class="n">integrand</span><span class="p">),</span>                 <span class="k">intent</span><span class="p">(</span><span class="n">INOUT</span><span class="p">)</span> <span class="kd">::</span> <span class="n">stage</span><span class="p">(</span><span class="mi">1</span><span class="p">:</span><span class="mi">2</span><span class="p">)</span> <span class="c">!&lt; Runge-Kutta registers [1:2].</span>
   <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">),</span>                        <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span>    <span class="kd">::</span> <span class="n">Dt</span>         <span class="c">!&lt; Time step.</span>
   <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">),</span>                        <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span>    <span class="kd">::</span> <span class="n">t</span>          <span class="c">!&lt; Time.</span>
@@ -639,13 +639,13 @@ private subroutine integrate(self, field, stage, Dt, t)
   <span class="k">select type</span><span class="p">(</span><span class="n">stage</span><span class="p">)</span>
   <span class="k">class is</span><span class="p">(</span><span class="n">integrand</span><span class="p">)</span>
     <span class="c">! computing stages</span>
-    <span class="n">stage</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">=</span> <span class="n">field</span>
-    <span class="n">stage</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span> <span class="o">=</span> <span class="n">field</span><span class="o">*</span><span class="mf">0._R_P</span>
+    <span class="n">stage</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">=</span> <span class="n">U</span>
+    <span class="n">stage</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span> <span class="o">=</span> <span class="n">U</span><span class="o">*</span><span class="mf">0._R_P</span>
     <span class="k">do </span><span class="n">s</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">self</span><span class="p">%</span><span class="n">stages</span>
       <span class="n">stage</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span> <span class="o">=</span> <span class="n">stage</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span> <span class="o">*</span> <span class="n">self</span><span class="p">%</span><span class="n">A</span><span class="p">(</span><span class="n">s</span><span class="p">)</span> <span class="o">+</span> <span class="n">stage</span><span class="p">(</span><span class="mi">1</span><span class="p">)%</span><span class="n">t</span><span class="p">(</span><span class="n">t</span><span class="o">=</span><span class="n">t</span> <span class="o">+</span> <span class="n">self</span><span class="p">%</span><span class="n">C</span><span class="p">(</span><span class="n">s</span><span class="p">)</span> <span class="o">*</span> <span class="n">Dt</span><span class="p">)</span> <span class="o">*</span> <span class="n">Dt</span>
       <span class="n">stage</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">=</span> <span class="n">stage</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">+</span> <span class="n">stage</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span> <span class="o">*</span> <span class="n">self</span><span class="p">%</span><span class="n">B</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
     <span class="n">enddo</span>
-    <span class="n">field</span> <span class="o">=</span> <span class="n">stage</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">U</span> <span class="o">=</span> <span class="n">stage</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
   <span class="n">endselect</span>
   <span class="k">return</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>

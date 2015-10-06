@@ -72,7 +72,7 @@ module foodie_integrator_low_storage_runge_kutta
 !-----------------------------------------------------------------------------------------------------------------------------------
 
 !-----------------------------------------------------------------------------------------------------------------------------------
-use IR_Precision, only : R_P, I_P, I8P
+use foodie_kinds, only : R_P, I_P, I8P
 use type_integrand, only : integrand
 !-----------------------------------------------------------------------------------------------------------------------------------
 
@@ -158,14 +158,14 @@ contains
   !---------------------------------------------------------------------------------------------------------------------------------
   endsubroutine destroy
 
-  subroutine integrate(self, field, stage, Dt, t)
+  subroutine integrate(self, U, stage, Dt, t)
   !---------------------------------------------------------------------------------------------------------------------------------
   !< Integrate field with explicit low storage Runge-Kutta scheme.
   !<
   !< @note This method can be used **after** the integrator is created (i.e. the RK coeficients are initialized).
   !---------------------------------------------------------------------------------------------------------------------------------
   class(ls_runge_kutta_integrator), intent(IN)    :: self       !< Actual RK integrator.
-  class(integrand),                 intent(INOUT) :: field      !< Field to be integrated.
+  class(integrand),                 intent(INOUT) :: U          !< Field to be integrated.
   class(integrand),                 intent(INOUT) :: stage(1:2) !< Runge-Kutta registers [1:2].
   real(R_P),                        intent(IN)    :: Dt         !< Time step.
   real(R_P),                        intent(IN)    :: t          !< Time.
@@ -176,13 +176,13 @@ contains
   select type(stage)
   class is(integrand)
     ! computing stages
-    stage(1) = field
-    stage(2) = field*0._R_P
+    stage(1) = U
+    stage(2) = U*0._R_P
     do s=1, self%stages
       stage(2) = stage(2) * self%A(s) + stage(1)%t(t=t + self%C(s) * Dt) * Dt
       stage(1) = stage(1) + stage(2) * self%B(s)
     enddo
-    field = stage(1)
+    U = stage(1)
   endselect
   return
   !---------------------------------------------------------------------------------------------------------------------------------

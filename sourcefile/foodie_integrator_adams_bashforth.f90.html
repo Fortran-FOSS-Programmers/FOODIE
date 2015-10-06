@@ -180,6 +180,8 @@
       
       <a class="list-group-item" href="../sourcefile/foodie_integrator_tvd_runge_kutta.f90.html">foodie_integrator_tvd_runge_kutta.f90</a>
       
+      <a class="list-group-item" href="../sourcefile/foodie_kinds.f90.html">foodie_kinds.f90</a>
+      
       <a class="list-group-item" href="../sourcefile/lorenz.f90.html">lorenz.f90</a>
       
       <a class="list-group-item" href="../sourcefile/oscillation.f90.html">oscillation.f90</a>
@@ -218,14 +220,16 @@
 <span class="c">!&lt; where \(U_t = \frac{dU}{dt}\), *U* is the vector of *state* variables being a function of the time-like independent variable</span>
 <span class="c">!&lt; *t*, *R* is the (vectorial) residual function, the Adams-Bashforth class scheme implemented is:</span>
 <span class="c">!&lt;</span>
-<span class="c">!&lt; $$ U^{n+s} = U^{n+s-1} +\Delta t \left[ \sum_{i=1}^{n+s}{ b_i \cdot R(t^{n+i-1}, U^{n+i-1}) } \right] $$</span>
+<span class="c">!&lt; $$ U^{n+N_s} = U^{n+N_s-1} +\Delta t \left[ \sum_{s=1}^{n+N_s}{ b_s \cdot R(t^{n+s-1}, U^{n+s-1}) } \right] $$</span>
+<span class="c">!&lt;</span>
+<span class="c">!&lt;where \(N_s\) is the number of previous steps considered.</span>
 <span class="c">!&lt;</span>
 <span class="c">!&lt; @note The value of \(\Delta t\) must be provided, it not being computed by the integrator.</span>
 <span class="c">!&lt;</span>
-<span class="c">!&lt; The schemes are explicit. The coefficients \(\b\) define the actual scheme, that is selected accordingly to the number of</span>
+<span class="c">!&lt; The schemes are explicit. The coefficients \(b_s\) define the actual scheme, that is selected accordingly to the number of</span>
 <span class="c">!&lt; **steps** used.</span>
 <span class="c">!&lt;</span>
-<span class="c">!&lt; Currently the following schemes are available:</span>
+<span class="c">!&lt; Currently, the following schemes are available:</span>
 <span class="c">!&lt;##### 1 step, Explicit Forward Euler, 1st order</span>
 <span class="c">!&lt; This scheme is TVD and reverts to Explicit Forward Euler, it being 1st order.</span>
 <span class="c">!&lt; The *b* coefficient is:</span>
@@ -250,12 +254,21 @@
 <span class="c">!&lt; $$ U^{n+3} = U^{n+2} +\Delta t \left[ \frac{23}{12}R(t^{n+2}, U^{n+2}) - \frac{4}{3}R(t^{n+1}, U^{n+1})</span>
 <span class="c">!&lt; +\frac{5}{12} R(t^{n}, U^{n})  \right] $$</span>
 <span class="c">!&lt;</span>
+<span class="c">!&lt;##### 4 steps</span>
+<span class="c">!&lt; This scheme is 4th order.</span>
+<span class="c">!&lt; The *b* coefficients are:</span>
+<span class="c">!&lt; $$b = \left[ {\begin{array}{*{20}{c}} b_1 &amp; b_2 &amp; b_3 &amp; b_4 \end{array}} \right] =</span>
+<span class="c">!&lt;       \left[ {\begin{array}{*{20}{c}} -\frac{9}{24} &amp; \frac{37}{24} &amp; -\frac{59}{24} &amp; \frac{55}{24} \end{array}} \right]$$</span>
+<span class="c">!&lt; The scheme is:</span>
+<span class="c">!&lt; $$ U^{n+4} = U^{n+3} +\Delta t \left[ \frac{55}{24}R(t^{n+3}, U^{n+3}) - \frac{59}{24}R(t^{n+2}, U^{n+2})</span>
+<span class="c">!&lt; +\frac{37}{24} R(t^{n+1}, U^{n+1}) - \frac{9}{24} R(t^{n}, U^{n}) \right] $$</span>
+<span class="c">!&lt;</span>
 <span class="c">!&lt;#### Bibliography</span>
 <span class="c">!&lt;</span>
 <span class="c">!-----------------------------------------------------------------------------------------------------------------------------------</span>
 
 <span class="c">!-----------------------------------------------------------------------------------------------------------------------------------</span>
-<span class="k">use </span><span class="n">IR_Precision</span><span class="p">,</span> <span class="n">only</span> <span class="p">:</span> <span class="n">R_P</span><span class="p">,</span> <span class="n">I_P</span>
+<span class="k">use </span><span class="n">foodie_kinds</span><span class="p">,</span> <span class="n">only</span> <span class="p">:</span> <span class="n">R_P</span><span class="p">,</span> <span class="n">I_P</span>
 <span class="k">use </span><span class="n">type_integrand</span><span class="p">,</span> <span class="n">only</span> <span class="p">:</span> <span class="n">integrand</span>
 <span class="c">!-----------------------------------------------------------------------------------------------------------------------------------</span>
 
@@ -306,6 +319,12 @@
     <span class="n">self</span><span class="p">%</span><span class="n">b</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">=</span>  <span class="mf">5._R_P</span><span class="o">/</span><span class="mi">1</span><span class="mf">2._R_P</span>
     <span class="n">self</span><span class="p">%</span><span class="n">b</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span> <span class="o">=</span> <span class="o">-</span><span class="mf">4._R_P</span><span class="o">/</span><span class="mf">3._R_P</span>
     <span class="n">self</span><span class="p">%</span><span class="n">b</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span> <span class="o">=</span> <span class="mi">2</span><span class="mf">3._R_P</span><span class="o">/</span><span class="mi">1</span><span class="mf">2._R_P</span>
+  <span class="k">case</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span>
+    <span class="c">! AB(4)</span>
+    <span class="n">self</span><span class="p">%</span><span class="n">b</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">=</span>  <span class="o">-</span><span class="mf">9._R_P</span><span class="o">/</span><span class="mi">2</span><span class="mf">4._R_P</span>
+    <span class="n">self</span><span class="p">%</span><span class="n">b</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span> <span class="o">=</span>  <span class="mi">3</span><span class="mf">7._R_P</span><span class="o">/</span><span class="mi">2</span><span class="mf">4._R_P</span>
+    <span class="n">self</span><span class="p">%</span><span class="n">b</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span> <span class="o">=</span> <span class="o">-</span><span class="mi">5</span><span class="mf">9._R_P</span><span class="o">/</span><span class="mi">2</span><span class="mf">4._R_P</span>
+    <span class="n">self</span><span class="p">%</span><span class="n">b</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span> <span class="o">=</span>  <span class="mi">5</span><span class="mf">5._R_P</span><span class="o">/</span><span class="mi">2</span><span class="mf">4._R_P</span>
   <span class="n">endselect</span>
   <span class="k">return</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
@@ -325,22 +344,22 @@
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
   <span class="n">endsubroutine</span> <span class="n">destroy</span>
 
-  <span class="k">subroutine </span><span class="n">integrate</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">field</span><span class="p">,</span> <span class="n">Dt</span><span class="p">,</span> <span class="n">t</span><span class="p">)</span>
+  <span class="k">subroutine </span><span class="n">integrate</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">U</span><span class="p">,</span> <span class="n">Dt</span><span class="p">,</span> <span class="n">t</span><span class="p">)</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
   <span class="c">!&lt; Integrate field with Adams-Bashforth class scheme.</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
-  <span class="k">class</span><span class="p">(</span><span class="n">adams_bashforth_integrator</span><span class="p">),</span> <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span>    <span class="kd">::</span> <span class="n">self</span>  <span class="c">!&lt; Actual AB integrator.</span>
-  <span class="k">class</span><span class="p">(</span><span class="n">integrand</span><span class="p">),</span>                  <span class="k">intent</span><span class="p">(</span><span class="n">INOUT</span><span class="p">)</span> <span class="kd">::</span> <span class="n">field</span> <span class="c">!&lt; Field to be integrated.</span>
-  <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">),</span>                         <span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span>    <span class="kd">::</span> <span class="n">Dt</span>    <span class="c">!&lt; Time steps.</span>
-  <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">),</span>                         <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span>    <span class="kd">::</span> <span class="n">t</span><span class="p">(:)</span>  <span class="c">!&lt; Times.</span>
-  <span class="kt">integer</span><span class="p">(</span><span class="n">I_P</span><span class="p">)</span>                                     <span class="kd">::</span> <span class="n">s</span>     <span class="c">!&lt; Steps counter.</span>
+  <span class="k">class</span><span class="p">(</span><span class="n">adams_bashforth_integrator</span><span class="p">),</span> <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span>    <span class="kd">::</span> <span class="n">self</span> <span class="c">!&lt; Actual AB integrator.</span>
+  <span class="k">class</span><span class="p">(</span><span class="n">integrand</span><span class="p">),</span>                  <span class="k">intent</span><span class="p">(</span><span class="n">INOUT</span><span class="p">)</span> <span class="kd">::</span> <span class="n">U</span>    <span class="c">!&lt; Field to be integrated.</span>
+  <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">),</span>                         <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span>    <span class="kd">::</span> <span class="n">Dt</span>   <span class="c">!&lt; Time steps.</span>
+  <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">),</span>                         <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span>    <span class="kd">::</span> <span class="n">t</span><span class="p">(:)</span> <span class="c">!&lt; Times.</span>
+  <span class="kt">integer</span><span class="p">(</span><span class="n">I_P</span><span class="p">)</span>                                     <span class="kd">::</span> <span class="n">s</span>    <span class="c">!&lt; Steps counter.</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
 
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
   <span class="k">do </span><span class="n">s</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">self</span><span class="p">%</span><span class="n">steps</span>
-    <span class="n">field</span> <span class="o">=</span> <span class="n">field</span> <span class="o">+</span> <span class="n">field</span><span class="p">%</span><span class="n">t</span><span class="p">(</span><span class="n">n</span><span class="o">=</span><span class="n">s</span><span class="p">,</span> <span class="n">t</span><span class="o">=</span><span class="n">t</span><span class="p">(</span><span class="n">s</span><span class="p">))</span> <span class="o">*</span> <span class="p">(</span><span class="n">Dt</span> <span class="o">*</span> <span class="n">self</span><span class="p">%</span><span class="n">b</span><span class="p">(</span><span class="n">s</span><span class="p">))</span>
+    <span class="n">U</span> <span class="o">=</span> <span class="n">U</span> <span class="o">+</span> <span class="n">U</span><span class="p">%</span><span class="n">t</span><span class="p">(</span><span class="n">n</span><span class="o">=</span><span class="n">s</span><span class="p">,</span> <span class="n">t</span><span class="o">=</span><span class="n">t</span><span class="p">(</span><span class="n">s</span><span class="p">))</span> <span class="o">*</span> <span class="p">(</span><span class="n">Dt</span> <span class="o">*</span> <span class="n">self</span><span class="p">%</span><span class="n">b</span><span class="p">(</span><span class="n">s</span><span class="p">))</span>
   <span class="n">enddo</span>
-  <span class="k">call </span><span class="n">field</span><span class="p">%</span><span class="n">update_previous_steps</span>
+  <span class="k">call </span><span class="n">U</span><span class="p">%</span><span class="n">update_previous_steps</span>
   <span class="k">return</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
   <span class="n">endsubroutine</span> <span class="n">integrate</span>

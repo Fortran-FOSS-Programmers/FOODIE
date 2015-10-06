@@ -141,7 +141,7 @@ contains
   integer, parameter               :: rk_stages=5           !< Runge-Kutta stages number.
   type(burgers)                    :: rk_stage(1:rk_stages) !< Runge-Kutta stages.
   type(adams_bashforth_integrator) :: ab_integrator         !< Adams-Bashforth integrator.
-  integer, parameter               :: ab_steps=3            !< Adams-Bashforth steps number.
+  integer, parameter               :: ab_steps=4            !< Adams-Bashforth steps number.
   integer                          :: step                  !< Time steps counter.
   real(R_P)                        :: dt                    !< Time step.
   real(R_P)                        :: t(1:ab_steps)         !< Times.
@@ -154,7 +154,12 @@ contains
   do s=1, ab_steps
     print "(A)", ' AB-'//trim(str(.true.,s))
     call ab_integrator%init(steps=s)
-    call rk_integrator%init(stages=s)
+    select case(s)
+    case(1, 2, 3)
+      call rk_integrator%init(stages=s)
+    case(4)
+      call rk_integrator%init(stages=5)
+    endselect
     call domain%init(initial_state=initial_state, Ni=Ni, h=h, nu=nu, steps=s)
     dt = domain%dt(CFL=CFL)
     t = 0._R_P
@@ -162,14 +167,14 @@ contains
     do while(t(s)<t_final)
       if (s>=step) then
         ! the time steps from 1 to s - 1 must be computed with other scheme...
-        call rk_integrator%integrate(field=domain, stage=rk_stage(1:s), dt=dt, t=t(s))
+        call rk_integrator%integrate(U=domain, stage=rk_stage, dt=dt, t=t(s))
         if (step>1) then
           t(step) = t(step-1) + dt
         else
           t(step) = dt
         endif
       else
-        call ab_integrator%integrate(field=domain, dt=dt, t=t)
+        call ab_integrator%integrate(U=domain, dt=dt, t=t)
         do ss=1, s-1
           t(ss) = t(ss + 1)
         enddo
@@ -202,7 +207,7 @@ contains
   dt = domain%dt(CFL=CFL)
   t = 0._R_P
   do while(t<t_final)
-    call euler_integrator%integrate(field=domain, dt=dt, t=t)
+    call euler_integrator%integrate(U=domain, dt=dt, t=t)
     t = t + dt
   enddo
   final_state = domain%output()
@@ -238,9 +243,9 @@ contains
   do while(t<t_final)
     if (2>=step) then
       ! the time steps from 1 to 2 must be computed with other scheme...
-      call rk_integrator%integrate(field=domain, stage=rk_stage, dt=dt, t=t)
+      call rk_integrator%integrate(U=domain, stage=rk_stage, dt=dt, t=t)
     else
-      call lf_integrator%integrate(field=domain, filter=filter, dt=dt, t=t)
+      call lf_integrator%integrate(U=domain, filter=filter, dt=dt, t=t)
     endif
     t = t + dt
     step = step + 1
@@ -278,7 +283,7 @@ contains
     dt = domain%dt(CFL=CFL)
     t = 0._R_P
     do while(t<t_final)
-      call rk_integrator%integrate(field=domain, stage=rk_stage, dt=dt, t=t)
+      call rk_integrator%integrate(U=domain, stage=rk_stage, dt=dt, t=t)
       t = t + dt
     enddo
     final_state = domain%output()
@@ -313,7 +318,7 @@ contains
     dt = domain%dt(CFL=CFL)
     t = 0._R_P
     do while(t<t_final)
-      call rk_integrator%integrate(field=domain, stage=rk_stage(1:s), dt=dt, t=t)
+      call rk_integrator%integrate(U=domain, stage=rk_stage(1:s), dt=dt, t=t)
       t = t + dt
     enddo
     final_state = domain%output()

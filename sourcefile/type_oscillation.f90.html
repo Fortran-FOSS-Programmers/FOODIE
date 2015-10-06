@@ -180,6 +180,8 @@
       
       <a class="list-group-item" href="../sourcefile/foodie_integrator_tvd_runge_kutta.f90.html">foodie_integrator_tvd_runge_kutta.f90</a>
       
+      <a class="list-group-item" href="../sourcefile/foodie_kinds.f90.html">foodie_kinds.f90</a>
+      
       <a class="list-group-item" href="../sourcefile/lorenz.f90.html">lorenz.f90</a>
       
       <a class="list-group-item" href="../sourcefile/oscillation.f90.html">oscillation.f90</a>
@@ -256,11 +258,11 @@
   <span class="c">!&lt;#### State variables organization</span>
   <span class="c">!&lt; State variables are organized as an array (rank 1) of reals of *dims* elements, in this case 2 elements.</span>
   <span class="k">private</span>
-<span class="k">  </span><span class="kt">integer</span><span class="p">(</span><span class="n">I_P</span><span class="p">)</span>                           <span class="kd">::</span> <span class="n">dims</span><span class="o">=</span><span class="mi">0</span>     <span class="c">!&lt; Space dimensions.</span>
-  <span class="kt">integer</span><span class="p">(</span><span class="n">I_P</span><span class="p">)</span>                           <span class="kd">::</span> <span class="n">steps</span><span class="o">=</span><span class="mi">0</span>    <span class="c">!&lt; Number of time steps stored.</span>
-  <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">),</span> <span class="k">dimension</span><span class="p">(:),</span>   <span class="k">allocatable</span> <span class="kd">::</span> <span class="n">U</span>          <span class="c">!&lt; Integrand (state) variables, [1:dims].</span>
-  <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">),</span> <span class="k">dimension</span><span class="p">(:,:),</span> <span class="k">allocatable</span> <span class="kd">::</span> <span class="n">previous</span>   <span class="c">!&lt; Previous time steps states, [1:dims,1:steps].</span>
-  <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">)</span>                              <span class="kd">::</span> <span class="n">f</span> <span class="o">=</span> <span class="mf">0._R_P</span> <span class="c">!&lt; Oscillation frequency (Hz).</span>
+<span class="k">  </span><span class="kt">integer</span><span class="p">(</span><span class="n">I_P</span><span class="p">)</span>                           <span class="kd">::</span> <span class="n">dims</span><span class="o">=</span><span class="mi">0</span>   <span class="c">!&lt; Space dimensions.</span>
+  <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">)</span>                              <span class="kd">::</span> <span class="n">f</span><span class="o">=</span><span class="mf">0._R_P</span> <span class="c">!&lt; Oscillation frequency (Hz).</span>
+  <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">),</span> <span class="k">dimension</span><span class="p">(:),</span>   <span class="k">allocatable</span> <span class="kd">::</span> <span class="n">U</span>        <span class="c">!&lt; Integrand (state) variables, [1:dims].</span>
+  <span class="kt">integer</span><span class="p">(</span><span class="n">I_P</span><span class="p">)</span>                           <span class="kd">::</span> <span class="n">steps</span><span class="o">=</span><span class="mi">0</span>  <span class="c">!&lt; Number of time steps stored.</span>
+  <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">),</span> <span class="k">dimension</span><span class="p">(:,:),</span> <span class="k">allocatable</span> <span class="kd">::</span> <span class="n">previous</span> <span class="c">!&lt; Previous time steps states, [1:dims,1:steps].</span>
   <span class="k">contains</span>
     <span class="c">! auxiliary methods</span>
     <span class="k">procedure</span><span class="p">,</span> <span class="k">pass</span><span class="p">(</span><span class="n">self</span><span class="p">),</span> <span class="k">public</span> <span class="kd">::</span> <span class="n">init</span>   <span class="c">!&lt; Init field.</span>

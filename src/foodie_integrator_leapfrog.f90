@@ -37,7 +37,7 @@ module foodie_integrator_leapfrog
 !-----------------------------------------------------------------------------------------------------------------------------------
 
 !-----------------------------------------------------------------------------------------------------------------------------------
-use IR_Precision, only : R_P, I_P
+use foodie_kinds, only : R_P, I_P
 use type_integrand, only : integrand
 !-----------------------------------------------------------------------------------------------------------------------------------
 
@@ -81,23 +81,23 @@ contains
   !---------------------------------------------------------------------------------------------------------------------------------
   endsubroutine init
 
-  subroutine integrate(self, field, filter, Dt, t)
+  subroutine integrate(self, U, filter, Dt, t)
   !---------------------------------------------------------------------------------------------------------------------------------
   !< Integrate field with leapfrog class scheme.
   !---------------------------------------------------------------------------------------------------------------------------------
   class(leapfrog_integrator), intent(IN)    :: self   !< LF integrator.
-  class(integrand),           intent(INOUT) :: field  !< Field to be integrated.
+  class(integrand),           intent(INOUT) :: U      !< Field to be integrated.
   class(integrand), optional, intent(INOUT) :: filter !< Filter field displacement.
   real(R_P),                  intent(in)    :: Dt     !< Time step.
   real(R_P),                  intent(IN)    :: t      !< Time.
   !---------------------------------------------------------------------------------------------------------------------------------
 
   !---------------------------------------------------------------------------------------------------------------------------------
-  field = field%previous_step(n=1) + field%t(n=2, t=t) * (Dt * 2._R_P)
+  U = U%previous_step(n=1) + U%t(n=2, t=t) * (Dt * 2._R_P)
   if (present(filter)) then
-    filter = (field%previous_step(n=1) - field%previous_step(n=2) * 2._R_P + field) * self%nu * 0.5_R_P
+    filter = (U%previous_step(n=1) - U%previous_step(n=2) * 2._R_P + U) * self%nu * 0.5_R_P
   endif
-  call field%update_previous_steps(filter=filter, weights=[self%alpha, self%alpha - 1._R_P])
+  call U%update_previous_steps(filter=filter, weights=[self%alpha, self%alpha - 1._R_P])
   return
   !---------------------------------------------------------------------------------------------------------------------------------
   endsubroutine integrate

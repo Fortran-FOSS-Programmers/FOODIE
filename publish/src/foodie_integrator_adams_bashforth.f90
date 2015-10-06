@@ -10,14 +10,16 @@ module foodie_integrator_adams_bashforth
 !< where \(U_t = \frac{dU}{dt}\), *U* is the vector of *state* variables being a function of the time-like independent variable
 !< *t*, *R* is the (vectorial) residual function, the Adams-Bashforth class scheme implemented is:
 !<
-!< $$ U^{n+s} = U^{n+s-1} +\Delta t \left[ \sum_{i=1}^{n+s}{ b_i \cdot R(t^{n+i-1}, U^{n+i-1}) } \right] $$
+!< $$ U^{n+N_s} = U^{n+N_s-1} +\Delta t \left[ \sum_{s=1}^{n+N_s}{ b_s \cdot R(t^{n+s-1}, U^{n+s-1}) } \right] $$
+!<
+!<where \(N_s\) is the number of previous steps considered.
 !<
 !< @note The value of \(\Delta t\) must be provided, it not being computed by the integrator.
 !<
-!< The schemes are explicit. The coefficients \(\b\) define the actual scheme, that is selected accordingly to the number of
+!< The schemes are explicit. The coefficients \(b_s\) define the actual scheme, that is selected accordingly to the number of
 !< **steps** used.
 !<
-!< Currently the following schemes are available:
+!< Currently, the following schemes are available:
 !<##### 1 step, Explicit Forward Euler, 1st order
 !< This scheme is TVD and reverts to Explicit Forward Euler, it being 1st order.
 !< The *b* coefficient is:
@@ -42,12 +44,21 @@ module foodie_integrator_adams_bashforth
 !< $$ U^{n+3} = U^{n+2} +\Delta t \left[ \frac{23}{12}R(t^{n+2}, U^{n+2}) - \frac{4}{3}R(t^{n+1}, U^{n+1})
 !< +\frac{5}{12} R(t^{n}, U^{n})  \right] $$
 !<
+!<##### 4 steps
+!< This scheme is 4th order.
+!< The *b* coefficients are:
+!< $$b = \left[ {\begin{array}{*{20}{c}} b_1 & b_2 & b_3 & b_4 \end{array}} \right] =
+!<       \left[ {\begin{array}{*{20}{c}} -\frac{9}{24} & \frac{37}{24} & -\frac{59}{24} & \frac{55}{24} \end{array}} \right]$$
+!< The scheme is:
+!< $$ U^{n+4} = U^{n+3} +\Delta t \left[ \frac{55}{24}R(t^{n+3}, U^{n+3}) - \frac{59}{24}R(t^{n+2}, U^{n+2})
+!< +\frac{37}{24} R(t^{n+1}, U^{n+1}) - \frac{9}{24} R(t^{n}, U^{n}) \right] $$
+!<
 !<#### Bibliography
 !<
 !-----------------------------------------------------------------------------------------------------------------------------------
 
 !-----------------------------------------------------------------------------------------------------------------------------------
-use IR_Precision, only : R_P, I_P
+use foodie_kinds, only : R_P, I_P
 use type_integrand, only : integrand
 !-----------------------------------------------------------------------------------------------------------------------------------
 
@@ -98,6 +109,12 @@ contains
     self%b(1) =  5._R_P/12._R_P
     self%b(2) = -4._R_P/3._R_P
     self%b(3) = 23._R_P/12._R_P
+  case(4)
+    ! AB(4)
+    self%b(1) =  -9._R_P/24._R_P
+    self%b(2) =  37._R_P/24._R_P
+    self%b(3) = -59._R_P/24._R_P
+    self%b(4) =  55._R_P/24._R_P
   endselect
   return
   !---------------------------------------------------------------------------------------------------------------------------------
@@ -117,22 +134,22 @@ contains
   !---------------------------------------------------------------------------------------------------------------------------------
   endsubroutine destroy
 
-  subroutine integrate(self, field, Dt, t)
+  subroutine integrate(self, U, Dt, t)
   !---------------------------------------------------------------------------------------------------------------------------------
   !< Integrate field with Adams-Bashforth class scheme.
   !---------------------------------------------------------------------------------------------------------------------------------
-  class(adams_bashforth_integrator), intent(IN)    :: self  !< Actual AB integrator.
-  class(integrand),                  intent(INOUT) :: field !< Field to be integrated.
-  real(R_P),                         intent(in)    :: Dt    !< Time steps.
-  real(R_P),                         intent(IN)    :: t(:)  !< Times.
-  integer(I_P)                                     :: s     !< Steps counter.
+  class(adams_bashforth_integrator), intent(IN)    :: self !< Actual AB integrator.
+  class(integrand),                  intent(INOUT) :: U    !< Field to be integrated.
+  real(R_P),                         intent(IN)    :: Dt   !< Time steps.
+  real(R_P),                         intent(IN)    :: t(:) !< Times.
+  integer(I_P)                                     :: s    !< Steps counter.
   !---------------------------------------------------------------------------------------------------------------------------------
 
   !---------------------------------------------------------------------------------------------------------------------------------
   do s=1, self%steps
-    field = field + field%t(n=s, t=t(s)) * (Dt * self%b(s))
+    U = U + U%t(n=s, t=t(s)) * (Dt * self%b(s))
   enddo
-  call field%update_previous_steps
+  call U%update_previous_steps
   return
   !---------------------------------------------------------------------------------------------------------------------------------
   endsubroutine integrate
