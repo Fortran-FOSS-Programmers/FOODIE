@@ -19,19 +19,16 @@ use pyplot_module, only :  pyplot
 !-----------------------------------------------------------------------------------------------------------------------------------
 implicit none
 type(Type_Command_Line_Interface) :: cli                                               !< Command line interface handler.
-type(oscillation)                 :: oscillator                                        !< Oscillation field.
 integer,   parameter              :: space_dimension=2                                 !< Space dimensions.
 real(R_P), parameter              :: initial_state(1:space_dimension)=[0._R_P, 1._R_P] !< Initial state.
 real(R_P)                         :: f                                                 !< Oscillation frequency.
 real(R_P)                         :: t_final                                           !< Final time.
 real(R_P)                         :: Dt                                                !< Time step.
-real(R_P), allocatable            :: solution(:,:)                                     !< Solution at each time step.
 integer(I_P)                      :: error                                             !< Error handler.
 integer(I_P)                      :: stages_steps                                      !< Number of stages/steps used.
 character(99)                     :: solver                                            !< Solver used.
 logical                           :: plots                                             !< Flag for activating plots saving.
 logical                           :: results                                           !< Flag for activating results saving.
-character(len=:), allocatable     :: output                                            !< Output files basename.
 character(99)                     :: output_cli                                        !< Output files basename.
 logical                           :: errors_analysis                                   !< Flag for activating errors analysis.
 !-----------------------------------------------------------------------------------------------------------------------------------
@@ -69,25 +66,23 @@ call cli%get(switch='--errors_analysis', val=errors_analysis, error=error) ; if 
 if (errors_analysis) then
   call perform_errors_analysis
 else
-  ! Integrate Oscillation equations
-  call init
   select case(trim(adjustl(solver)))
   case('adams-bashforth')
-    call test_ab
+    call test_ab(steps=stages_steps)
   case('euler')
     call test_euler
   case('leapfrog')
     call test_leapfrog
   case('ls-runge-kutta')
-    call test_ls_rk
+    call test_ls_rk(stages=stages_steps)
   case('tvd-runge-kutta')
-    call test_tvd_rk
+    call test_tvd_rk(stages=stages_steps)
   case('all')
-    call test_ab
+    call test_ab(steps=stages_steps)
     call test_euler
     call test_leapfrog
-    call test_ls_rk
-    call test_tvd_rk
+    call test_ls_rk(stages=stages_steps)
+    call test_tvd_rk(stages=stages_steps)
   case default
     print "(A)", 'Error: unknown solver "'//trim(adjustl(solver))//'"'
     print "(A)", 'Valid solver names are:'
@@ -102,9 +97,12 @@ endif
 stop
 !-----------------------------------------------------------------------------------------------------------------------------------
 contains
-  subroutine init()
+  subroutine init(output, solution)
   !---------------------------------------------------------------------------------------------------------------------------------
-  !< Initialize the integration variables.
+  !< Initialize solver local variable from global variables.
+  !---------------------------------------------------------------------------------------------------------------------------------
+  character(len=:), allocatable, intent(OUT) :: output        !< Output files basename.
+  real(R_P),        allocatable, intent(OUT) :: solution(:,:) !< Solution at each time step.
   !---------------------------------------------------------------------------------------------------------------------------------
 
   !---------------------------------------------------------------------------------------------------------------------------------
@@ -114,12 +112,12 @@ contains
     print "(A)", 'Time step: '//str(.true.,Dt)
     stop
   endif
-  if (allocated(solution)) deallocate(solution) ; allocate(solution(0:space_dimension, 0:int(t_final/Dt)))
   if (trim(adjustl(output_cli))/='unset') then
     output = trim(adjustl(output_cli))//'-'//trim(strz(10,int(t_final/Dt)))//'-time_steps'//'-'//trim(adjustl(solver))
   else
     output = 'oscillation_integration-'//trim(strz(10,int(t_final/Dt)))//'-time_steps'//'-'//trim(adjustl(solver))
   endif
+  if (allocated(solution)) deallocate(solution) ; allocate(solution(0:space_dimension, 0:int(t_final/Dt)))
   return
   !---------------------------------------------------------------------------------------------------------------------------------
   endsubroutine init
@@ -139,12 +137,13 @@ contains
   !---------------------------------------------------------------------------------------------------------------------------------
   endfunction exact_solution
 
-  subroutine save_results(title, basename)
+  subroutine save_results(title, basename, solution)
   !---------------------------------------------------------------------------------------------------------------------------------
   !< Save plots of results.
   !---------------------------------------------------------------------------------------------------------------------------------
   character(*), intent(IN) :: title                     !< Plot title.
   character(*), intent(IN) :: basename                  !< Output files basename.
+  real(R_P),    intent(IN) :: solution(0:,0:)           !< Solution at each time step.
   integer(I_P)             :: rawfile                   !< Raw file unit for saving results.
   real(R_P)                :: ex_sol(1:space_dimension) !< Exact solution.
   type(pyplot)             :: plt                       !< Plot file handler.
@@ -182,50 +181,29 @@ contains
   !---------------------------------------------------------------------------------------------------------------------------------
   endsubroutine save_results
 
-  subroutine test_ab()
+  subroutine test_ab(steps)
   !---------------------------------------------------------------------------------------------------------------------------------
   !< Test explicit Adams-Bashforth class of ODE solvers.
   !---------------------------------------------------------------------------------------------------------------------------------
-  type(tvd_runge_kutta_integrator) :: rk_integrator         !< Runge-Kutta integrator.
-  integer, parameter               :: rk_stages=5           !< Runge-Kutta stages number.
-  type(oscillation)                :: rk_stage(1:rk_stages) !< Runge-Kutta stages.
-  type(adams_bashforth_integrator) :: ab_integrator         !< Adams-Bashforth integrator.
-  integer, parameter               :: ab_steps=4            !< Adams-Bashforth steps number.
-  integer                          :: step                  !< Time steps counter.
-  integer(I_P)                     :: s                     !< AB steps counter.
-  integer(I_P)                     :: steps_range(1:2)      !< Steps used.
-  character(len=:), allocatable    :: title                 !< Output files title.
+  integer(I_P), intent(IN)      :: steps            !< Number of steps used: if negative all AB solvers are used.
+  integer, parameter            :: ab_steps=4       !< Adams-Bashforth steps number.
+  real(R_P), allocatable        :: solution(:,:)    !< Solution at each time step.
+  integer(I_P)                  :: s                !< AB steps counter.
+  integer(I_P)                  :: steps_range(1:2) !< Steps used.
+  character(len=:), allocatable :: output           !< Output files basename.
+  character(len=:), allocatable :: title            !< Output files title.
   !---------------------------------------------------------------------------------------------------------------------------------
 
   !---------------------------------------------------------------------------------------------------------------------------------
+  solver = 'adams-bashforth'
+  call init(output=output, solution=solution)
   print "(A)", 'Integrating Oscillation equations by means of Adams-Bashforth class of solvers'
-  steps_range = [1, ab_steps] ; if (stages_steps>0) steps_range = [stages_steps, stages_steps]
+  steps_range = [1, ab_steps] ; if (steps>0) steps_range = [steps, steps]
   do s=steps_range(1), steps_range(2)
     print "(A)", ' AB-'//trim(str(.true.,s))
     title = 'Oscillation equation integration, explicit Adams-Bashforth, t='//str(n=t_final)//' steps='//trim(str(.true., s))
-    call ab_integrator%init(steps=s)
-    select case(s)
-    case(1, 2, 3)
-      call rk_integrator%init(stages=s)
-    case(4)
-      call rk_integrator%init(stages=5)
-    endselect
-    call oscillator%init(initial_state=initial_state, f=f, steps=s)
-    solution(0, 0) = 0._R_P
-    solution(1:space_dimension, 0) = oscillator%output()
-    step = 0
-    do while(solution(0, step)<t_final)
-      step = step + 1
-      if (s>=step) then
-        ! the time steps from 1 to s - 1 must be computed with other scheme...
-        call rk_integrator%integrate(U=oscillator, stage=rk_stage, Dt=Dt, t=solution(0, step))
-      else
-        call ab_integrator%integrate(U=oscillator, Dt=Dt, t=solution(0, step-s:step-1))
-      endif
-      solution(0, step) = step * Dt
-      solution(1:space_dimension, step) = oscillator%output()
-    enddo
-    call save_results(title=title, basename=output//'-'//trim(str(.true., s)))
+    call ab_solver(steps=s, solution=solution)
+    call save_results(title=title, basename=output//'-'//trim(str(.true., s)), solution=solution)
   enddo
   print "(A)", 'Finish!'
   return
@@ -236,25 +214,18 @@ contains
   !---------------------------------------------------------------------------------------------------------------------------------
   !< Test explicit forward Euler ODE solver.
   !---------------------------------------------------------------------------------------------------------------------------------
-  type(euler_explicit_integrator) :: euler_integrator !< Euler integrator.
-  integer(I_P)                    :: step             !< Time steps counter.
-  character(len=:), allocatable   :: title            !< Output files title.
+  real(R_P), allocatable        :: solution(:,:) !< Solution at each time step.
+  character(len=:), allocatable :: output        !< Output files basename.
+  character(len=:), allocatable :: title         !< Output files title.
   !---------------------------------------------------------------------------------------------------------------------------------
 
   !---------------------------------------------------------------------------------------------------------------------------------
+  solver = 'euler'
+  call init(output=output, solution=solution)
   print "(A)", 'Integrating Oscillation equations by means of explicit Euler solver'
   title = 'Oscillation equation integration, explicit Euler, t='//str(n=t_final)
-  call oscillator%init(initial_state=initial_state, f=f)
-  solution(0, 0) = 0._R_P
-  solution(1:space_dimension, 0) = oscillator%output()
-  step = 0
-  do while(solution(0, step)<t_final)
-    step = step + 1
-    call euler_integrator%integrate(U=oscillator, Dt=Dt, t=solution(0, step))
-    solution(0, step) = step * Dt
-    solution(1:space_dimension, step) = oscillator%output()
-  enddo
-  call save_results(title=title, basename=output)
+  call euler_solver(solution=solution)
+  call save_results(title=title, basename=output, solution=solution)
   print "(A)", 'Finish!'
   return
   !---------------------------------------------------------------------------------------------------------------------------------
@@ -264,58 +235,41 @@ contains
   !---------------------------------------------------------------------------------------------------------------------------------
   !< Test explicit leapfrog class of ODE solvers.
   !---------------------------------------------------------------------------------------------------------------------------------
-  type(tvd_runge_kutta_integrator) :: rk_integrator         !< Runge-Kutta integrator.
-  integer, parameter               :: rk_stages=5           !< Runge-Kutta stages number.
-  type(oscillation)                :: rk_stage(1:rk_stages) !< Runge-Kutta stages.
-  type(oscillation)                :: filter                !< Filter displacement.
-  type(leapfrog_integrator)        :: lf_integrator         !< Leapfrog integrator.
-  integer                          :: step                  !< Time steps counter.
-  character(len=:), allocatable    :: title                 !< Output files title.
+  real(R_P), allocatable        :: solution(:,:) !< Solution at each time step.
+  character(len=:), allocatable :: output        !< Output files basename.
+  character(len=:), allocatable :: title         !< Output files title.
   !---------------------------------------------------------------------------------------------------------------------------------
 
   !---------------------------------------------------------------------------------------------------------------------------------
+  solver = 'leapfrog'
+  call init(output=output, solution=solution)
   print "(A)", 'Integrating Oscillation equations by means of leapfrog (RAW filtered) class of solvers'
   title = 'Oscillation equation integration, leapfrog (RAW filtered), t='//str(n=t_final)
-  call lf_integrator%init()
-  call rk_integrator%init(stages=rk_stages)
-  call oscillator%init(initial_state=initial_state, f=f, steps=2)
-  solution(0, 0) = 0._R_P
-  solution(1:space_dimension, 0) = oscillator%output()
-  step = 0
-  do while(solution(0, step)<t_final)
-    step = step + 1
-    if (2>=step) then
-      ! the time steps from 1 to 2 must be computed with other scheme...
-      call rk_integrator%integrate(U=oscillator, stage=rk_stage, Dt=Dt, t=solution(0, step))
-    else
-      call lf_integrator%integrate(U=oscillator, filter=filter, Dt=Dt, t=solution(0, step))
-    endif
-    solution(0, step) = step * Dt
-    solution(1:space_dimension, step) = oscillator%output()
-  enddo
-  call save_results(title=title, basename=output)
+  call leapfrog_solver(solution=solution)
+  call save_results(title=title, basename=output, solution=solution)
   print "(A)", 'Finish!'
   return
   !---------------------------------------------------------------------------------------------------------------------------------
   endsubroutine test_leapfrog
 
-  subroutine test_ls_rk()
+  subroutine test_ls_rk(stages)
   !---------------------------------------------------------------------------------------------------------------------------------
   !< Test explicit low storage Runge-Kutta class of ODE solvers.
   !---------------------------------------------------------------------------------------------------------------------------------
-  type(ls_runge_kutta_integrator) :: rk_integrator         !< Runge-Kutta integrator.
-  integer, parameter              :: rk_stages=5           !< Runge-Kutta stages number.
-  integer, parameter              :: registers=2           !< Runge-Kutta stages number.
-  type(oscillation)               :: rk_stage(1:registers) !< Runge-Kutta registers.
-  integer(I_P)                    :: s                     !< RK stages counter.
-  integer(I_P)                    :: step                  !< Time steps counter.
-  integer(I_P)                    :: stages_range(1:2)     !< Stages used.
-  character(len=:), allocatable   :: title                 !< Output files title.
+  integer(I_P), intent(IN)      :: stages            !< Number of stages used: if negative all RK solvers are used.
+  integer, parameter            :: rk_stages=5       !< Runge-Kutta stages number.
+  real(R_P), allocatable        :: solution(:,:)     !< Solution at each time step.
+  integer(I_P)                  :: s                 !< RK stages counter.
+  integer(I_P)                  :: stages_range(1:2) !< Stages used.
+  character(len=:), allocatable :: output            !< Output files basename.
+  character(len=:), allocatable :: title             !< Output files title.
   !---------------------------------------------------------------------------------------------------------------------------------
 
   !---------------------------------------------------------------------------------------------------------------------------------
+  solver = 'ls-runge-kutta'
+  call init(output=output, solution=solution)
   print "(A)", 'Integrating Oscillation equations by means of low storage (2N) Runge-Kutta class of solvers'
-  stages_range = [1, rk_stages] ; if (stages_steps>0) stages_range = [stages_steps, stages_steps]
+  stages_range = [1, rk_stages] ; if (stages>0) stages_range = [stages, stages]
   do s=stages_range(1), stages_range(2)
     if (s==2) cycle ! 2 stages not yet implemented
     if (s==3) cycle ! 3 stages not yet implemented
@@ -323,61 +277,206 @@ contains
     print "(A)", ' RK-'//trim(str(.true.,s))
     title = 'Oscillation equation integration, explicit low storage Runge-Kutta, t='//str(n=t_final)//&
       ' steps='//trim(str(.true., s))
-    call rk_integrator%init(stages=s)
-    call oscillator%init(initial_state=initial_state, f=f)
-    solution(0, 0) = 0._R_P
-    solution(1:space_dimension, 0) = oscillator%output()
-    step = 0
-    do while(solution(0, step)<t_final)
-      step = step + 1
-      call rk_integrator%integrate(U=oscillator, stage=rk_stage, Dt=Dt, t=solution(0, step))
-      solution(0, step) = step * Dt
-      solution(1:space_dimension, step) = oscillator%output()
-    enddo
-    call save_results(title=title, basename=output//'-'//trim(str(.true., s)))
+    call ls_rk_solver(stages=s, solution=solution)
+    call save_results(title=title, basename=output//'-'//trim(str(.true., s)), solution=solution)
   enddo
   print "(A)", 'Finish!'
   return
   !---------------------------------------------------------------------------------------------------------------------------------
   endsubroutine test_ls_rk
 
-  subroutine test_tvd_rk()
+  subroutine test_tvd_rk(stages)
   !---------------------------------------------------------------------------------------------------------------------------------
   !< Test explicit TVD/SSP Runge-Kutta class of ODE solvers.
   !---------------------------------------------------------------------------------------------------------------------------------
-  type(tvd_runge_kutta_integrator) :: rk_integrator         !< Runge-Kutta integrator.
-  integer, parameter               :: rk_stages=5           !< Runge-Kutta stages number.
-  type(oscillation)                :: rk_stage(1:rk_stages) !< Runge-Kutta stages.
-  integer(I_P)                     :: s                     !< RK stages counter.
-  integer(I_P)                     :: step                  !< Time steps counter.
-  integer(I_P)                     :: stages_range(1:2)     !< Stages used.
-  character(len=:), allocatable    :: title                 !< Output files title.
+  integer(I_P), intent(IN)      :: stages            !< Number of stages used: if negative all RK solvers are used.
+  integer, parameter            :: rk_stages=5       !< Runge-Kutta stages number.
+  real(R_P), allocatable        :: solution(:,:)     !< Solution at each time step.
+  integer(I_P)                  :: s                 !< RK stages counter.
+  integer(I_P)                  :: stages_range(1:2) !< Stages used.
+  character(len=:), allocatable :: output            !< Output files basename.
+  character(len=:), allocatable :: title             !< Output files title.
   !---------------------------------------------------------------------------------------------------------------------------------
 
   !---------------------------------------------------------------------------------------------------------------------------------
+  solver = 'tvd-runge-kutta'
+  call init(output=output, solution=solution)
   print "(A)", 'Integrating Oscillation equations by means of TVD/SSP Runge-Kutta class of solvers'
-  stages_range = [1, rk_stages] ; if (stages_steps>0) stages_range = [stages_steps, stages_steps]
+  stages_range = [1, rk_stages] ; if (stages>0) stages_range = [stages, stages]
   do s=stages_range(1), stages_range(2)
     if (s==4) cycle ! 4 stages not yet implemented
     print "(A)", ' RK-'//trim(str(.true.,s))
     title = 'Oscillation equation integration, explicit TVD/SSP Runge-Kutta, t='//str(n=t_final)//' steps='//trim(str(.true., s))
-    call rk_integrator%init(stages=s)
-    call oscillator%init(initial_state=initial_state, f=f)
-    solution(0, 0) = 0._R_P
-    solution(1:space_dimension, 0) = oscillator%output()
-    step = 0
-    do while(solution(0, step)<t_final)
-      step = step + 1
-      call rk_integrator%integrate(U=oscillator, stage=rk_stage(1:s), Dt=Dt, t=solution(0, step))
-      solution(0, step) = step * Dt
-      solution(1:space_dimension, step) = oscillator%output()
-    enddo
-    call save_results(title=title, basename=output//'-'//trim(str(.true., s)))
+    call tvd_rk_solver(stages=s, solution=solution)
+    call save_results(title=title, basename=output//'-'//trim(str(.true., s)), solution=solution)
   enddo
   print "(A)", 'Finish!'
   return
   !---------------------------------------------------------------------------------------------------------------------------------
   endsubroutine test_tvd_rk
+
+  subroutine ab_solver(steps, solution)
+  !---------------------------------------------------------------------------------------------------------------------------------
+  !< Solve problem with explicit Adams-Bashforth class of ODE solvers.
+  !---------------------------------------------------------------------------------------------------------------------------------
+  integer(I_P), intent(IN)         :: steps                 !< Number of steps used: if negative all AB solvers are used.
+  real(R_P),    intent(OUT)        :: solution(0:,0:)       !< Solution at each time step.
+  type(tvd_runge_kutta_integrator) :: rk_integrator         !< Runge-Kutta integrator.
+  integer, parameter               :: rk_stages=5           !< Runge-Kutta stages number.
+  type(oscillation)                :: rk_stage(1:rk_stages) !< Runge-Kutta stages.
+  type(adams_bashforth_integrator) :: ab_integrator         !< Adams-Bashforth integrator.
+  type(oscillation)                :: previous(1:steps)     !< Previous time steps solutions.
+  type(oscillation)                :: oscillator            !< Oscillation field.
+  integer                          :: step                  !< Time steps counter.
+  !---------------------------------------------------------------------------------------------------------------------------------
+
+  !---------------------------------------------------------------------------------------------------------------------------------
+  call ab_integrator%init(steps=steps)
+  select case(steps)
+  case(1, 2, 3)
+    call rk_integrator%init(stages=steps)
+  case(4)
+    call rk_integrator%init(stages=5)
+  endselect
+  call oscillator%init(initial_state=initial_state, f=f)
+  solution = 0._R_P
+  solution(1:space_dimension, 0) = oscillator%output()
+  step = 0
+  do while(solution(0, step)<t_final)
+    step = step + 1
+    if (steps>=step) then
+      ! time steps from 1 to s - 1 must be computed with other scheme
+      call rk_integrator%integrate(U=oscillator, stage=rk_stage, Dt=Dt, t=solution(0, step))
+      previous(step) = oscillator
+    else
+      call ab_integrator%integrate(U=oscillator, previous=previous, Dt=Dt, t=solution(0, step-steps:step-1))
+    endif
+    solution(0, step) = step * Dt
+    solution(1:space_dimension, step) = oscillator%output()
+  enddo
+  return
+  !---------------------------------------------------------------------------------------------------------------------------------
+  endsubroutine ab_solver
+
+  subroutine euler_solver(solution)
+  !---------------------------------------------------------------------------------------------------------------------------------
+  !< Solve problem with explicit forward Euler ODE solver.
+  !---------------------------------------------------------------------------------------------------------------------------------
+  real(R_P), intent(OUT)          :: solution(0:,0:)  !< Solution at each time step.
+  type(euler_explicit_integrator) :: euler_integrator !< Euler integrator.
+  type(oscillation)               :: oscillator       !< Oscillation field.
+  integer(I_P)                    :: step             !< Time steps counter.
+  !---------------------------------------------------------------------------------------------------------------------------------
+
+  !---------------------------------------------------------------------------------------------------------------------------------
+  call oscillator%init(initial_state=initial_state, f=f)
+  solution = 0._R_P
+  solution(1:space_dimension, 0) = oscillator%output()
+  step = 0
+  do while(solution(0, step)<t_final)
+    step = step + 1
+    call euler_integrator%integrate(U=oscillator, Dt=Dt, t=solution(0, step))
+    solution(0, step) = step * Dt
+    solution(1:space_dimension, step) = oscillator%output()
+  enddo
+  return
+  !---------------------------------------------------------------------------------------------------------------------------------
+  endsubroutine euler_solver
+
+  subroutine leapfrog_solver(solution)
+  !---------------------------------------------------------------------------------------------------------------------------------
+  !< Solve problem with explicit leapfrog class of ODE solvers.
+  !---------------------------------------------------------------------------------------------------------------------------------
+  real(R_P), intent(OUT)           :: solution(0:,0:)       !< Solution at each time step.
+  type(tvd_runge_kutta_integrator) :: rk_integrator         !< Runge-Kutta integrator.
+  integer, parameter               :: rk_stages=5           !< Runge-Kutta stages number.
+  type(oscillation)                :: rk_stage(1:rk_stages) !< Runge-Kutta stages.
+  type(leapfrog_integrator)        :: lf_integrator         !< Leapfrog integrator.
+  type(oscillation)                :: previous(1:2)         !< Previous time steps solutions.
+  type(oscillation)                :: filter                !< Filter displacement.
+  type(oscillation)                :: oscillator            !< Oscillation field.
+  integer                          :: step                  !< Time steps counter.
+  !---------------------------------------------------------------------------------------------------------------------------------
+
+  !---------------------------------------------------------------------------------------------------------------------------------
+  call lf_integrator%init()
+  call rk_integrator%init(stages=rk_stages)
+  call oscillator%init(initial_state=initial_state, f=f)
+  solution = 0._R_P
+  solution(1:space_dimension, 0) = oscillator%output()
+  step = 0
+  do while(solution(0, step)<t_final)
+    step = step + 1
+    if (2>=step) then
+      ! time steps from 1 to 2 must be computed with other scheme
+      call rk_integrator%integrate(U=oscillator, stage=rk_stage, Dt=Dt, t=solution(0, step))
+      previous(step) = oscillator
+    else
+      call lf_integrator%integrate(U=oscillator, previous=previous, Dt=Dt, t=solution(0, step), filter=filter)
+    endif
+    solution(0, step) = step * Dt
+    solution(1:space_dimension, step) = oscillator%output()
+  enddo
+  return
+  !---------------------------------------------------------------------------------------------------------------------------------
+  endsubroutine leapfrog_solver
+
+  subroutine ls_rk_solver(stages, solution)
+  !---------------------------------------------------------------------------------------------------------------------------------
+  !< Solve problem with explicit low storage Runge-Kutta class of ODE solvers.
+  !---------------------------------------------------------------------------------------------------------------------------------
+  integer(I_P), intent(IN)        :: stages                !< Number of stages used: if negative all RK solvers are used.
+  real(R_P),    intent(OUT)       :: solution(0:,0:)       !< Solution at each time step.
+  type(ls_runge_kutta_integrator) :: rk_integrator         !< Runge-Kutta integrator.
+  integer, parameter              :: registers=2           !< Runge-Kutta stages registers number.
+  type(oscillation)               :: rk_stage(1:registers) !< Runge-Kutta registers.
+  type(oscillation)               :: oscillator            !< Oscillation field.
+  integer(I_P)                    :: step                  !< Time steps counter.
+  !---------------------------------------------------------------------------------------------------------------------------------
+
+  !---------------------------------------------------------------------------------------------------------------------------------
+  call rk_integrator%init(stages=stages)
+  call oscillator%init(initial_state=initial_state, f=f)
+  solution = 0._R_P
+  solution(1:space_dimension, 0) = oscillator%output()
+  step = 0
+  do while(solution(0, step)<t_final)
+    step = step + 1
+    call rk_integrator%integrate(U=oscillator, stage=rk_stage, Dt=Dt, t=solution(0, step))
+    solution(0, step) = step * Dt
+    solution(1:space_dimension, step) = oscillator%output()
+  enddo
+  return
+  !---------------------------------------------------------------------------------------------------------------------------------
+  endsubroutine ls_rk_solver
+
+  subroutine tvd_rk_solver(stages, solution)
+  !---------------------------------------------------------------------------------------------------------------------------------
+  !< Solve problem with explicit TVD/SSP Runge-Kutta class of ODE solvers.
+  !---------------------------------------------------------------------------------------------------------------------------------
+  integer(I_P), intent(IN)         :: stages             !< Number of stages used: if negative all RK solvers are used.
+  real(R_P),    intent(OUT)        :: solution(0:,0:)    !< Solution at each time step.
+  type(tvd_runge_kutta_integrator) :: rk_integrator      !< Runge-Kutta integrator.
+  type(oscillation)                :: rk_stage(1:stages) !< Runge-Kutta stages.
+  type(oscillation)                :: oscillator         !< Oscillation field.
+  integer(I_P)                     :: step               !< Time steps counter.
+  !---------------------------------------------------------------------------------------------------------------------------------
+
+  !---------------------------------------------------------------------------------------------------------------------------------
+  call rk_integrator%init(stages=stages)
+  call oscillator%init(initial_state=initial_state, f=f)
+  solution = 0._R_P
+  solution(1:space_dimension, 0) = oscillator%output()
+  step = 0
+  do while(solution(0, step)<t_final)
+    step = step + 1
+    call rk_integrator%integrate(U=oscillator, stage=rk_stage, Dt=Dt, t=solution(0, step))
+    solution(0, step) = step * Dt
+    solution(1:space_dimension, step) = oscillator%output()
+  enddo
+  return
+  !---------------------------------------------------------------------------------------------------------------------------------
+  endsubroutine tvd_rk_solver
 
   subroutine perform_errors_analysis()
   !---------------------------------------------------------------------------------------------------------------------------------
@@ -409,14 +508,8 @@ contains
                                                          625._R_P,  &
                                                          320._R_P,  &
                                                          100._R_P] !< Time steps exercised.
-  type(adams_bashforth_integrator) :: ab_integrator                !< Adams-Bashforth integrator.
-  type(leapfrog_integrator)        :: lf_integrator                !< Leapfrog integrator.
-  type(ls_runge_kutta_integrator)  :: ls_integrator                !< Low storage Runge-Kutta integrator.
-  type(tvd_runge_kutta_integrator) :: rk_integrator                !< TVD/SSP Runge-Kutta integrator.
   integer, parameter               :: ab_steps=4                   !< Adams-Bashforth steps number.
   integer, parameter               :: rk_stages=5                  !< Runge-Kutta stages number.
-  type(oscillation)                :: rk_stage(1:rk_stages)        !< Runge-Kutta stages.
-  type(oscillation)                :: filter                       !< Filter displacement.
   real(R_P)                        :: ab_errors(1:space_dimension,&
                                                 1:ab_steps,       &
                                                 1:NDt)             !< Adams-Bashforth errors.
@@ -439,46 +532,27 @@ contains
   real(R_P)                        :: rk_orders(1:space_dimension,&
                                                 1:rk_stages,      &
                                                 1:NDt-1)           !< TVD/SSP Runge-Kutta orders.
-  integer                          :: step                         !< Time steps counter.
+  real(R_P), allocatable           :: solution(:,:)                !< Solution at each time step.
   integer(I_P)                     :: s                            !< Steps/stages counter.
   integer(I_P)                     :: d                            !< Time steps-exercised counter.
+  character(len=:), allocatable    :: output                       !< Output files basename.
   character(len=:), allocatable    :: title                        !< Output files title.
   !---------------------------------------------------------------------------------------------------------------------------------
 
   !---------------------------------------------------------------------------------------------------------------------------------
+  if (allocated(solution)) deallocate(solution) ; allocate(solution(0:space_dimension, 0:int(t_final/Dt)))
   results = .true. ! activate results saving
   ! Analyze errors of Adams-Bashforth solvers
   do d=1, NDt ! loop over exercised time steps
     Dt = time_steps(d)
     solver = 'adams-bashforth'
-    call init
+    call init(output=output, solution=solution)
     do s=1, ab_steps
       if (s==1) cycle ! 1st order scheme surely not stable for this test
       title = 'Oscillation equation integration, explicit Adams-Bashforth, t='//str(n=t_final)//' steps='//trim(str(.true., s))
-      call ab_integrator%init(steps=s)
-      select case(s)
-      case(1, 2, 3)
-        call rk_integrator%init(stages=s)
-      case(4)
-        call rk_integrator%init(stages=5)
-      endselect
-      call oscillator%init(initial_state=initial_state, f=f, steps=s)
-      solution(0, 0) = 0._R_P
-      solution(1:space_dimension, 0) = oscillator%output()
-      step = 0
-      do while(solution(0, step)<t_final)
-        step = step + 1
-        if (s>=step) then
-          ! the time steps from 1 to s - 1 must be computed with other scheme...
-          call rk_integrator%integrate(U=oscillator, stage=rk_stage(1:s), Dt=Dt, t=solution(0, step))
-        else
-          call ab_integrator%integrate(U=oscillator, Dt=Dt, t=solution(0, step-s:step-1))
-        endif
-        solution(0, step) = step * Dt
-        solution(1:space_dimension, step) = oscillator%output()
-      enddo
-      call save_results(title=title, basename=output//'-'//trim(str(.true., s)))
-      ab_errors(:, s, d) = compute_errors()
+      call ab_solver(steps=s, solution=solution)
+      call save_results(title=title, basename=output//'-'//trim(str(.true., s)), solution=solution)
+      ab_errors(:, s, d) = compute_errors(solution=solution)
     enddo
   enddo
   do s=1, ab_steps
@@ -491,27 +565,11 @@ contains
   do d=1, NDt ! loop over exercised time steps
     Dt = time_steps(d)
     solver = 'leapfrog'
-    call init
+    call init(output=output, solution=solution)
     title = 'Oscillation equation integration, leapfrog (RAW filtered), t='//str(n=t_final)
-    call lf_integrator%init()
-    call rk_integrator%init(stages=rk_stages)
-    call oscillator%init(initial_state=initial_state, f=f, steps=2)
-    solution(0, 0) = 0._R_P
-    solution(1:space_dimension, 0) = oscillator%output()
-    step = 0
-    do while(solution(0, step)<t_final)
-      step = step + 1
-      if (2>=step) then
-        ! the time steps from 1 to 2 must be computed with other scheme...
-        call rk_integrator%integrate(U=oscillator, stage=rk_stage, Dt=Dt, t=solution(0, step))
-      else
-        call lf_integrator%integrate(U=oscillator, filter=filter, Dt=Dt, t=solution(0, step))
-      endif
-      solution(0, step) = step * Dt
-      solution(1:space_dimension, step) = oscillator%output()
-    enddo
-    call save_results(title=title, basename=output)
-    lf_errors(:, d) = compute_errors()
+    call leapfrog_solver(solution=solution)
+    call save_results(title=title, basename=output, solution=solution)
+    lf_errors(:, d) = compute_errors(solution=solution)
   enddo
   do d=1, NDt-1
     lf_orders(:, d) = estimate_orders(solver_error=lf_errors(:, d:d+1), Dt_used=time_steps(d:d+1))
@@ -520,7 +578,7 @@ contains
   do d=1, NDt ! loop over exercised time steps
     Dt = time_steps(d)
     solver = 'ls-runge-kutta'
-    call init
+    call init(output=output, solution=solution)
     do s=1, rk_stages
       if (s==1) cycle ! 1st order scheme surely not stable for this test
       if (s==2) cycle ! 2 stages not yet implemented
@@ -528,19 +586,9 @@ contains
       if (s==4) cycle ! 4 stages not yet implemented
       title = 'Oscillation equation integration, explicit low storage Runge-Kutta, t='//str(n=t_final)//&
         ' steps='//trim(str(.true., s))
-      call ls_integrator%init(stages=s)
-      call oscillator%init(initial_state=initial_state, f=f)
-      solution(0, 0) = 0._R_P
-      solution(1:space_dimension, 0) = oscillator%output()
-      step = 0
-      do while(solution(0, step)<t_final)
-        step = step + 1
-        call ls_integrator%integrate(U=oscillator, stage=rk_stage, Dt=Dt, t=solution(0, step))
-        solution(0, step) = step * Dt
-        solution(1:space_dimension, step) = oscillator%output()
-      enddo
-      call save_results(title=title, basename=output//'-'//trim(str(.true., s)))
-      ls_errors(:, s, d) = compute_errors()
+      call ls_rk_solver(stages=s, solution=solution)
+      call save_results(title=title, basename=output//'-'//trim(str(.true., s)), solution=solution)
+      ls_errors(:, s, d) = compute_errors(solution=solution)
     enddo
   enddo
   do s=1, rk_stages
@@ -556,24 +604,14 @@ contains
   do d=1, NDt ! loop over exercised time steps
     Dt = time_steps(d)
     solver = 'tvd-runge-kutta'
-    call init
+    call init(output=output, solution=solution)
     do s=1, rk_stages
       if (s==1) cycle ! 1st order scheme surely not stable for this test
       if (s==4) cycle ! 4 stages not yet implemented
       title = 'Oscillation equation integration, explicit TVD/SSP Runge-Kutta, t='//str(n=t_final)//' steps='//trim(str(.true., s))
-      call rk_integrator%init(stages=s)
-      call oscillator%init(initial_state=initial_state, f=f)
-      solution(0, 0) = 0._R_P
-      solution(1:space_dimension, 0) = oscillator%output()
-      step = 0
-      do while(solution(0, step)<t_final)
-        step = step + 1
-        call rk_integrator%integrate(U=oscillator, stage=rk_stage(1:s), Dt=Dt, t=solution(0, step))
-        solution(0, step) = step * Dt
-        solution(1:space_dimension, step) = oscillator%output()
-      enddo
-      call save_results(title=title, basename=output//'-'//trim(str(.true., s)))
-      rk_errors(:, s, d) = compute_errors()
+      call tvd_rk_solver(stages=s, solution=solution)
+      call save_results(title=title, basename=output//'-'//trim(str(.true., s)), solution=solution)
+      rk_errors(:, s, d) = compute_errors(solution=solution)
     enddo
   enddo
   do s=1, rk_stages
@@ -586,19 +624,19 @@ contains
   call print_analysis(ab_steps=ab_steps, rk_stages=rk_stages, NDt=NDt, time_steps=time_steps, &
                       ab_errors=ab_errors, lf_errors=lf_errors, ls_errors=ls_errors, rk_errors=rk_errors, &
                       ab_orders=ab_orders, lf_orders=lf_orders, ls_orders=ls_orders, rk_orders=rk_orders)
-
   return
   !---------------------------------------------------------------------------------------------------------------------------------
   endsubroutine perform_errors_analysis
 
-  function compute_errors() result(error_L2)
+  function compute_errors(solution) result(error_L2)
   !---------------------------------------------------------------------------------------------------------------------------------
   !< Compute the L2 norm of numerical error with respect the exact solution.
   !---------------------------------------------------------------------------------------------------------------------------------
-  real(R_P)    :: error_L2(1:space_dimension) !< L2 norm of the numerical error.
-  real(R_P)    :: ex_sol(1:space_dimension)   !< Exact solution.
-  integer(I_P) :: s                           !< Steps/stages counter.
-  integer(I_P) :: v                           !< Variables counter.
+  real(R_P), intent(IN) :: solution(0:,0:)             !< Solution at each time step.
+  real(R_P)             :: error_L2(1:space_dimension) !< L2 norm of the numerical error.
+  real(R_P)             :: ex_sol(1:space_dimension)   !< Exact solution.
+  integer(I_P)          :: s                           !< Steps/stages counter.
+  integer(I_P)          :: v                           !< Variables counter.
   !---------------------------------------------------------------------------------------------------------------------------------
 
   !---------------------------------------------------------------------------------------------------------------------------------

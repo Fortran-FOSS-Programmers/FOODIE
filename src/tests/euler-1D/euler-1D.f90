@@ -339,6 +339,7 @@ contains
   type(euler_1D)                   :: rk_stage(1:rk_stages) !< Runge-Kutta stages.
   type(adams_bashforth_integrator) :: ab_integrator         !< Adams-Bashforth integrator.
   integer, parameter               :: ab_steps=4            !< Adams-Bashforth steps number.
+  type(euler_1D)                   :: previous(1:ab_steps)  !< Previous time steps solutions.
   integer                          :: step                  !< Time steps counter.
   real(R_P)                        :: dt                    !< Time step.
   real(R_P)                        :: t(1:ab_steps)         !< Times.
@@ -375,13 +376,14 @@ contains
       if (s>=step) then
         ! the time steps from 1 to s - 1 must be computed with other scheme...
         call rk_integrator%integrate(U=domain, stage=rk_stage, dt=dt, t=t(s))
+        previous(step) = domain
         if (step>1) then
           t(step) = t(step-1) + dt
         else
           t(step) = dt
         endif
       else
-        call ab_integrator%integrate(U=domain, dt=dt, t=t)
+        call ab_integrator%integrate(U=domain, previous=previous(1:s), dt=dt, t=t)
         do ss=1, s-1
           t(ss) = t(ss + 1)
         enddo
@@ -433,10 +435,11 @@ contains
   !< Test explicit leapfrog class of ODE solvers.
   !---------------------------------------------------------------------------------------------------------------------------------
   type(tvd_runge_kutta_integrator) :: rk_integrator         !< Runge-Kutta integrator.
-  integer, parameter               :: rk_stages=5           !< Runge-Kutta stages number.
+  integer, parameter               :: rk_stages=2           !< Runge-Kutta stages number.
   type(euler_1D)                   :: rk_stage(1:rk_stages) !< Runge-Kutta stages.
   type(euler_1D)                   :: filter                !< Filter displacement.
   type(leapfrog_integrator)        :: lf_integrator         !< Leapfrog integrator.
+  type(euler_1D)                   :: previous(1:2)         !< Previous time steps solutions.
   integer                          :: step                  !< Time steps counter.
   real(R_P)                        :: dt                    !< Time step.
   real(R_P)                        :: t                     !< Time.
@@ -458,8 +461,9 @@ contains
     if (2>=step) then
       ! the time steps from 1 to s - 1 must be computed with other scheme...
       call rk_integrator%integrate(U=domain, stage=rk_stage, dt=dt, t=t)
+      previous(step) = domain
     else
-      call lf_integrator%integrate(U=domain, filter=filter, dt=dt, t=t)
+      call lf_integrator%integrate(U=domain, previous=previous, dt=dt, t=t, filter=filter)
     endif
     t = t + dt
     step = step + 1

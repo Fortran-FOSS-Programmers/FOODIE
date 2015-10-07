@@ -134,22 +134,26 @@ contains
   !---------------------------------------------------------------------------------------------------------------------------------
   endsubroutine destroy
 
-  subroutine integrate(self, U, Dt, t)
+  subroutine integrate(self, U, previous, Dt, t)
   !---------------------------------------------------------------------------------------------------------------------------------
   !< Integrate field with Adams-Bashforth class scheme.
   !---------------------------------------------------------------------------------------------------------------------------------
-  class(adams_bashforth_integrator), intent(IN)    :: self !< Actual AB integrator.
-  class(integrand),                  intent(INOUT) :: U    !< Field to be integrated.
-  real(R_P),                         intent(IN)    :: Dt   !< Time steps.
-  real(R_P),                         intent(IN)    :: t(:) !< Times.
-  integer(I_P)                                     :: s    !< Steps counter.
+  class(adams_bashforth_integrator), intent(IN)    :: self         !< Actual AB integrator.
+  class(integrand),                  intent(INOUT) :: U            !< Field to be integrated.
+  class(integrand),                  intent(INOUT) :: previous(1:) !< Previous time steps solutions of integrand field.
+  real(R_P),                         intent(IN)    :: Dt           !< Time steps.
+  real(R_P),                         intent(IN)    :: t(:)         !< Times.
+  integer(I_P)                                     :: s            !< Steps counter.
   !---------------------------------------------------------------------------------------------------------------------------------
 
   !---------------------------------------------------------------------------------------------------------------------------------
   do s=1, self%steps
-    U = U + U%t(n=s, t=t(s)) * (Dt * self%b(s))
+    U = U + previous(s)%t() * (Dt * self%b(s))
   enddo
-  call U%update_previous_steps
+  do s=1, self%steps - 1
+    previous(s) = previous(s + 1)
+  enddo
+  previous(self%steps) = U
   return
   !---------------------------------------------------------------------------------------------------------------------------------
   endsubroutine integrate
