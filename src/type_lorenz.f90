@@ -136,12 +136,11 @@ contains
   endfunction output
 
   ! type_integrand deferred methods
-  function dLorenz_dt(self, n, t) result(dState_dt)
+  function dLorenz_dt(self, t) result(dState_dt)
   !---------------------------------------------------------------------------------------------------------------------------------
   !< Time derivative of Lorenz field.
   !---------------------------------------------------------------------------------------------------------------------------------
   class(lorenz),          intent(IN) :: self      !< Lorenz field.
-  integer(I_P), optional, intent(IN) :: n         !< Time level.
   real(R_P),    optional, intent(IN) :: t         !< Time.
   class(integrand), allocatable      :: dState_dt !< Lorenz field time derivative.
   integer(I_P)                       :: dn        !< Time level, dummy variable.
@@ -152,16 +151,9 @@ contains
   select type(dState_dt)
   class is(lorenz)
     dState_dt = self
-    if (self%steps>=2) then ! self%previous should be used
-      dn = self%steps ; if (present(n)) dn = n
-      dState_dt%U(1) = self%sigma * (self%previous(2, dn) - self%previous(1, dn))
-      dState_dt%U(2) = self%previous(1, dn) * (self%rho - self%previous(3, dn)) - self%previous(2, dn)
-      dState_dt%U(3) = self%previous(1, dn) * self%previous(2, dn) - self%beta * self%previous(3, dn)
-    else ! self%previous should not be used, use directly self%U
-      dState_dt%U(1) = self%sigma * (self%U(2) - self%U(1))
-      dState_dt%U(2) = self%U(1) * (self%rho - self%U(3)) - self%U(2)
-      dState_dt%U(3) = self%U(1) * self%U(2) - self%beta * self%U(3)
-    endif
+    dState_dt%U(1) = self%sigma * (self%U(2) - self%U(1))
+    dState_dt%U(2) = self%U(1) * (self%rho - self%U(3)) - self%U(2)
+    dState_dt%U(3) = self%U(1) * self%U(2) - self%beta * self%U(3)
   endselect
   return
   !---------------------------------------------------------------------------------------------------------------------------------

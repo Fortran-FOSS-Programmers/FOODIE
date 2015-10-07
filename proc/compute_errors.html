@@ -175,6 +175,8 @@
       
       <a class="list-group-item" href="../proc/a%7E2.html">a</a>
       
+      <a class="list-group-item" href="../proc/ab_solver.html">ab_solver</a>
+      
       <a class="list-group-item" href="../proc/add_burgers.html">add_burgers</a>
       
       <a class="list-group-item" href="../proc/add_euler.html">add_euler</a>
@@ -257,6 +259,8 @@
       
       <a class="list-group-item" href="../proc/euler_multiply_real%7E2.html">euler_multiply_real</a>
       
+      <a class="list-group-item" href="../proc/euler_solver.html">euler_solver</a>
+      
       <a class="list-group-item" href="../proc/exact_solution.html">exact_solution</a>
       
       <a class="list-group-item" href="../proc/finalize.html">finalize</a>
@@ -313,6 +317,8 @@
       
       <a class="list-group-item" href="../proc/integrate%7E5.html">integrate</a>
       
+      <a class="list-group-item" href="../proc/leapfrog_solver.html">leapfrog_solver</a>
+      
       <a class="list-group-item" href="../proc/lorenz_assign_lorenz.html">lorenz_assign_lorenz</a>
       
       <a class="list-group-item" href="../proc/lorenz_assign_real.html">lorenz_assign_real</a>
@@ -321,9 +327,9 @@
       
       <a class="list-group-item" href="../proc/lorenz_multiply_real.html">lorenz_multiply_real</a>
       
-      <a class="list-group-item" href="../proc/oscillation_assign_oscillation.html">oscillation_assign_oscillation</a>
+      <a class="list-group-item" href="../proc/ls_rk_solver.html">ls_rk_solver</a>
       
-      <a class="list-group-item" href="../proc/oscillation_assign_real.html">oscillation_assign_real</a>
+      <a class="list-group-item" href="../proc/oscillation_assign_oscillation.html">oscillation_assign_oscillation</a>
       
       <a class="list-group-item" href="../proc/oscillation_multiply_oscillation.html">oscillation_multiply_oscillation</a>
       
@@ -352,8 +358,6 @@
       <a class="list-group-item" href="../proc/previous_step%7E3.html">previous_step</a>
       
       <a class="list-group-item" href="../proc/previous_step%7E4.html">previous_step</a>
-      
-      <a class="list-group-item" href="../proc/previous_step%7E5.html">previous_step</a>
       
       <a class="list-group-item" href="../proc/primitive2conservative.html">primitive2conservative</a>
       
@@ -447,6 +451,8 @@
       
       <a class="list-group-item" href="../proc/test_tvd_rk%7E4.html">test_tvd_rk</a>
       
+      <a class="list-group-item" href="../proc/tvd_rk_solver.html">tvd_rk_solver</a>
+      
       <a class="list-group-item" href="../proc/update_previous_steps.html">update_previous_steps</a>
       
       <a class="list-group-item" href="../proc/update_previous_steps%7E2.html">update_previous_steps</a>
@@ -454,8 +460,6 @@
       <a class="list-group-item" href="../proc/update_previous_steps%7E3.html">update_previous_steps</a>
       
       <a class="list-group-item" href="../proc/update_previous_steps%7E4.html">update_previous_steps</a>
-      
-      <a class="list-group-item" href="../proc/update_previous_steps%7E5.html">update_previous_steps</a>
       
     </div>
   </div>
@@ -465,7 +469,7 @@
     
     <div class="col-lg-9" id='text'>
     <h2>
-function compute_errors() result(error_L2)
+function compute_errors(solution) result(error_L2)
     
     
     
@@ -477,7 +481,34 @@ function compute_errors() result(error_L2)
 
     <h3>Arguments</h3>
     
-      <em>None</em>
+      
+<table class="table table-striped varlist">
+<thead><tr><th>Type</th>
+<th>Intent</th><th>Optional</th>
+<th>Attributes</th><th></th><th>Name</th><th></th></thead>
+
+
+
+<tbody>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-solution"></span>real(kind=R_P),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>solution</strong>(0:,0:)</td><td><p>Solution at each time step.</p></td>
+  
+</tr>
+
+</tbody>
+</table>
+
     
     
     
@@ -834,14 +865,15 @@ implementation in a submodule of an interface in a parent module.</p>
     
     <section>
     <h2><span class="anchor" id="src"></span>Source Code</h2>
-    <div class="highlight"><pre>  <span class="k">function </span><span class="n">compute_errors</span><span class="p">()</span> <span class="k">result</span><span class="p">(</span><span class="n">error_L2</span><span class="p">)</span>
+    <div class="highlight"><pre>  <span class="k">function </span><span class="n">compute_errors</span><span class="p">(</span><span class="n">solution</span><span class="p">)</span> <span class="k">result</span><span class="p">(</span><span class="n">error_L2</span><span class="p">)</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
   <span class="c">!&lt; Compute the L2 norm of numerical error with respect the exact solution.</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
-  <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">)</span>    <span class="kd">::</span> <span class="n">error_L2</span><span class="p">(</span><span class="mi">1</span><span class="p">:</span><span class="n">space_dimension</span><span class="p">)</span> <span class="c">!&lt; L2 norm of the numerical error.</span>
-  <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">)</span>    <span class="kd">::</span> <span class="n">ex_sol</span><span class="p">(</span><span class="mi">1</span><span class="p">:</span><span class="n">space_dimension</span><span class="p">)</span>   <span class="c">!&lt; Exact solution.</span>
-  <span class="kt">integer</span><span class="p">(</span><span class="n">I_P</span><span class="p">)</span> <span class="kd">::</span> <span class="n">s</span>                           <span class="c">!&lt; Steps/stages counter.</span>
-  <span class="kt">integer</span><span class="p">(</span><span class="n">I_P</span><span class="p">)</span> <span class="kd">::</span> <span class="n">v</span>                           <span class="c">!&lt; Variables counter.</span>
+  <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">),</span> <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span> <span class="kd">::</span> <span class="n">solution</span><span class="p">(</span><span class="mi">0</span><span class="p">:,</span><span class="mi">0</span><span class="p">:)</span>             <span class="c">!&lt; Solution at each time step.</span>
+  <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">)</span>             <span class="kd">::</span> <span class="n">error_L2</span><span class="p">(</span><span class="mi">1</span><span class="p">:</span><span class="n">space_dimension</span><span class="p">)</span> <span class="c">!&lt; L2 norm of the numerical error.</span>
+  <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">)</span>             <span class="kd">::</span> <span class="n">ex_sol</span><span class="p">(</span><span class="mi">1</span><span class="p">:</span><span class="n">space_dimension</span><span class="p">)</span>   <span class="c">!&lt; Exact solution.</span>
+  <span class="kt">integer</span><span class="p">(</span><span class="n">I_P</span><span class="p">)</span>          <span class="kd">::</span> <span class="n">s</span>                           <span class="c">!&lt; Steps/stages counter.</span>
+  <span class="kt">integer</span><span class="p">(</span><span class="n">I_P</span><span class="p">)</span>          <span class="kd">::</span> <span class="n">v</span>                           <span class="c">!&lt; Variables counter.</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
 
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>

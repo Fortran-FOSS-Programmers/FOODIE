@@ -141,6 +141,8 @@
       
       <a class="list-group-item" href="../proc/test_ab%7E2.html#variable-ab_steps%7E2">ab_steps</a>
       
+      <a class="list-group-item" href="../proc/test_ab%7E2.html#variable-previous%7E11">previous</a>
+      
       <a class="list-group-item" href="../proc/test_ab%7E2.html#variable-step%7E3">step</a>
       
       <a class="list-group-item" href="../proc/test_ab%7E2.html#variable-dt%7E10">dt</a>
@@ -192,6 +194,8 @@
       <a class="list-group-item" href="../proc/a.html">a</a>
       
       <a class="list-group-item" href="../proc/a%7E2.html">a</a>
+      
+      <a class="list-group-item" href="../proc/ab_solver.html">ab_solver</a>
       
       <a class="list-group-item" href="../proc/add_burgers.html">add_burgers</a>
       
@@ -275,6 +279,8 @@
       
       <a class="list-group-item" href="../proc/euler_multiply_real%7E2.html">euler_multiply_real</a>
       
+      <a class="list-group-item" href="../proc/euler_solver.html">euler_solver</a>
+      
       <a class="list-group-item" href="../proc/exact_solution.html">exact_solution</a>
       
       <a class="list-group-item" href="../proc/finalize.html">finalize</a>
@@ -331,6 +337,8 @@
       
       <a class="list-group-item" href="../proc/integrate%7E5.html">integrate</a>
       
+      <a class="list-group-item" href="../proc/leapfrog_solver.html">leapfrog_solver</a>
+      
       <a class="list-group-item" href="../proc/lorenz_assign_lorenz.html">lorenz_assign_lorenz</a>
       
       <a class="list-group-item" href="../proc/lorenz_assign_real.html">lorenz_assign_real</a>
@@ -339,9 +347,9 @@
       
       <a class="list-group-item" href="../proc/lorenz_multiply_real.html">lorenz_multiply_real</a>
       
-      <a class="list-group-item" href="../proc/oscillation_assign_oscillation.html">oscillation_assign_oscillation</a>
+      <a class="list-group-item" href="../proc/ls_rk_solver.html">ls_rk_solver</a>
       
-      <a class="list-group-item" href="../proc/oscillation_assign_real.html">oscillation_assign_real</a>
+      <a class="list-group-item" href="../proc/oscillation_assign_oscillation.html">oscillation_assign_oscillation</a>
       
       <a class="list-group-item" href="../proc/oscillation_multiply_oscillation.html">oscillation_multiply_oscillation</a>
       
@@ -370,8 +378,6 @@
       <a class="list-group-item" href="../proc/previous_step%7E3.html">previous_step</a>
       
       <a class="list-group-item" href="../proc/previous_step%7E4.html">previous_step</a>
-      
-      <a class="list-group-item" href="../proc/previous_step%7E5.html">previous_step</a>
       
       <a class="list-group-item" href="../proc/primitive2conservative.html">primitive2conservative</a>
       
@@ -465,6 +471,8 @@
       
       <a class="list-group-item" href="../proc/test_tvd_rk%7E4.html">test_tvd_rk</a>
       
+      <a class="list-group-item" href="../proc/tvd_rk_solver.html">tvd_rk_solver</a>
+      
       <a class="list-group-item" href="../proc/update_previous_steps.html">update_previous_steps</a>
       
       <a class="list-group-item" href="../proc/update_previous_steps%7E2.html">update_previous_steps</a>
@@ -472,8 +480,6 @@
       <a class="list-group-item" href="../proc/update_previous_steps%7E3.html">update_previous_steps</a>
       
       <a class="list-group-item" href="../proc/update_previous_steps%7E4.html">update_previous_steps</a>
-      
-      <a class="list-group-item" href="../proc/update_previous_steps%7E5.html">update_previous_steps</a>
       
     </div>
   </div>
@@ -886,6 +892,20 @@ implementation in a submodule of an interface in a parent module.</p>
   
 <tr>
   
+  <td><span class="anchor" id="variable-previous%7E11"></span>type(euler_1D),</td>
+  
+  <td>public</td>
+  <td></td><td>::</td>
+  <td><strong>previous</strong>(1:ab_steps)</td><td></td><td></td><td><p>Previous time steps solutions.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
   <td><span class="anchor" id="variable-step%7E3"></span>integer,</td>
   
   <td>public</td>
@@ -1010,6 +1030,7 @@ implementation in a submodule of an interface in a parent module.</p>
   <span class="k">type</span><span class="p">(</span><span class="n">euler_1D</span><span class="p">)</span>                   <span class="kd">::</span> <span class="n">rk_stage</span><span class="p">(</span><span class="mi">1</span><span class="p">:</span><span class="n">rk_stages</span><span class="p">)</span> <span class="c">!&lt; Runge-Kutta stages.</span>
   <span class="k">type</span><span class="p">(</span><span class="n">adams_bashforth_integrator</span><span class="p">)</span> <span class="kd">::</span> <span class="n">ab_integrator</span>         <span class="c">!&lt; Adams-Bashforth integrator.</span>
   <span class="kt">integer</span><span class="p">,</span> <span class="k">parameter</span>               <span class="kd">::</span> <span class="n">ab_steps</span><span class="o">=</span><span class="mi">4</span>            <span class="c">!&lt; Adams-Bashforth steps number.</span>
+  <span class="k">type</span><span class="p">(</span><span class="n">euler_1D</span><span class="p">)</span>                   <span class="kd">::</span> <span class="n">previous</span><span class="p">(</span><span class="mi">1</span><span class="p">:</span><span class="n">ab_steps</span><span class="p">)</span>  <span class="c">!&lt; Previous time steps solutions.</span>
   <span class="kt">integer</span>                          <span class="kd">::</span> <span class="n">step</span>                  <span class="c">!&lt; Time steps counter.</span>
   <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">)</span>                        <span class="kd">::</span> <span class="n">dt</span>                    <span class="c">!&lt; Time step.</span>
   <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">)</span>                        <span class="kd">::</span> <span class="n">t</span><span class="p">(</span><span class="mi">1</span><span class="p">:</span><span class="n">ab_steps</span><span class="p">)</span>         <span class="c">!&lt; Times.</span>
@@ -1046,13 +1067,14 @@ implementation in a submodule of an interface in a parent module.</p>
       <span class="k">if</span> <span class="p">(</span><span class="n">s</span><span class="o">&gt;=</span><span class="n">step</span><span class="p">)</span> <span class="k">then</span>
         <span class="c">! the time steps from 1 to s - 1 must be computed with other scheme...</span>
         <span class="k">call </span><span class="n">rk_integrator</span><span class="p">%</span><span class="n">integrate</span><span class="p">(</span><span class="n">U</span><span class="o">=</span><span class="n">domain</span><span class="p">,</span> <span class="n">stage</span><span class="o">=</span><span class="n">rk_stage</span><span class="p">,</span> <span class="n">dt</span><span class="o">=</span><span class="n">dt</span><span class="p">,</span> <span class="n">t</span><span class="o">=</span><span class="n">t</span><span class="p">(</span><span class="n">s</span><span class="p">))</span>
+        <span class="n">previous</span><span class="p">(</span><span class="n">step</span><span class="p">)</span> <span class="o">=</span> <span class="n">domain</span>
         <span class="k">if</span> <span class="p">(</span><span class="n">step</span><span class="o">&gt;</span><span class="mi">1</span><span class="p">)</span> <span class="k">then</span>
 <span class="k">          </span><span class="n">t</span><span class="p">(</span><span class="n">step</span><span class="p">)</span> <span class="o">=</span> <span class="n">t</span><span class="p">(</span><span class="n">step</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="o">+</span> <span class="n">dt</span>
         <span class="k">else</span>
 <span class="k">          </span><span class="n">t</span><span class="p">(</span><span class="n">step</span><span class="p">)</span> <span class="o">=</span> <span class="n">dt</span>
         <span class="n">endif</span>
       <span class="k">else</span>
-<span class="k">        call </span><span class="n">ab_integrator</span><span class="p">%</span><span class="n">integrate</span><span class="p">(</span><span class="n">U</span><span class="o">=</span><span class="n">domain</span><span class="p">,</span> <span class="n">dt</span><span class="o">=</span><span class="n">dt</span><span class="p">,</span> <span class="n">t</span><span class="o">=</span><span class="n">t</span><span class="p">)</span>
+<span class="k">        call </span><span class="n">ab_integrator</span><span class="p">%</span><span class="n">integrate</span><span class="p">(</span><span class="n">U</span><span class="o">=</span><span class="n">domain</span><span class="p">,</span> <span class="n">previous</span><span class="o">=</span><span class="n">previous</span><span class="p">(</span><span class="mi">1</span><span class="p">:</span><span class="n">s</span><span class="p">),</span> <span class="n">dt</span><span class="o">=</span><span class="n">dt</span><span class="p">,</span> <span class="n">t</span><span class="o">=</span><span class="n">t</span><span class="p">)</span>
         <span class="k">do </span><span class="n">ss</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">s</span><span class="o">-</span><span class="mi">1</span>
           <span class="n">t</span><span class="p">(</span><span class="n">ss</span><span class="p">)</span> <span class="o">=</span> <span class="n">t</span><span class="p">(</span><span class="n">ss</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
         <span class="n">enddo</span>

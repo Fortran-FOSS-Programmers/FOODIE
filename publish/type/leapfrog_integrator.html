@@ -254,7 +254,7 @@
   
   <td>private</td>
   <td></td><td>::</td>
-  <td><strong>alpha</strong></td><td> =</td><td>0.5_R_P</td><td><p>Robert-Asselin-Williams filter coefficient.</p></td>
+  <td><strong>alpha</strong></td><td> =</td><td>0.53_R_P</td><td><p>Robert-Asselin-Williams filter coefficient.</p></td>
   
 </tr>
 
@@ -400,7 +400,7 @@ private elementalsubroutine <a href='../proc/init%7E2.html'>init</a>(self, nu, a
          
     
     <h3>
-private subroutine <a href='../proc/integrate%7E3.html'>integrate</a>(self, U, filter, Dt, t)
+private subroutine <a href='../proc/integrate%7E3.html'>integrate</a>(self, U, previous, Dt, t, filter)
     
     
     
@@ -456,11 +456,11 @@ private subroutine <a href='../proc/integrate%7E3.html'>integrate</a>(self, U, f
 <tr>
   
   <td><span class="anchor" ></span>class(<a href='../type/integrand.html'>integrand</a>),</td>
-  <td>intent(inout),</td>
-  <td>optional</td>
+  <td>intent(inout)</td>
+  <td></td>
   
   <td></td><td>::</td>
-  <td><strong>filter</strong></td><td><p>Filter field displacement.</p></td>
+  <td><strong>previous</strong>(1:2)</td><td><p>Previous time steps solutions of integrand field.</p></td>
   
 </tr>
 
@@ -491,6 +491,21 @@ private subroutine <a href='../proc/integrate%7E3.html'>integrate</a>(self, U, f
   
   <td></td><td>::</td>
   <td><strong>t</strong></td><td><p>Time.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>class(<a href='../type/integrand.html'>integrand</a>),</td>
+  <td>intent(inout),</td>
+  <td>optional</td>
+  
+  <td></td><td>::</td>
+  <td><strong>filter</strong></td><td><p>Filter field displacement.</p></td>
   
 </tr>
 
@@ -529,8 +544,8 @@ private subroutine <a href='../proc/integrate%7E3.html'>integrate</a>(self, U, f
   <span class="c">!&lt; @note The integrator could be used without initialialization (initialize the time filter coefficients) if the defulat values</span>
   <span class="c">!&lt; are suitable for the problem.</span>
   <span class="k">private</span>
-<span class="k">  </span><span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">)</span> <span class="kd">::</span> <span class="n">nu</span><span class="o">=</span><span class="mf">0.01_R_P</span>   <span class="c">!&lt; Robert-Asselin filter coefficient.</span>
-  <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">)</span> <span class="kd">::</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.5_R_P</span> <span class="c">!&lt; Robert-Asselin-Williams filter coefficient.</span>
+<span class="k">  </span><span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">)</span> <span class="kd">::</span> <span class="n">nu</span><span class="o">=</span><span class="mf">0.01_R_P</span>    <span class="c">!&lt; Robert-Asselin filter coefficient.</span>
+  <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">)</span> <span class="kd">::</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.53_R_P</span> <span class="c">!&lt; Robert-Asselin-Williams filter coefficient.</span>
   <span class="k">contains</span>
 <span class="k">    procedure</span><span class="p">,</span> <span class="k">pass</span><span class="p">(</span><span class="n">self</span><span class="p">),</span> <span class="k">public</span> <span class="kd">::</span> <span class="n">init</span>      <span class="c">!&lt; Initialize (create) the integrator.</span>
     <span class="k">procedure</span><span class="p">,</span> <span class="k">pass</span><span class="p">(</span><span class="n">self</span><span class="p">),</span> <span class="k">public</span> <span class="kd">::</span> <span class="n">integrate</span> <span class="c">!&lt; Integrate integrand field.</span>

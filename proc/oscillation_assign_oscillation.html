@@ -161,6 +161,8 @@
       
       <a class="list-group-item" href="../proc/a%7E2.html">a</a>
       
+      <a class="list-group-item" href="../proc/ab_solver.html">ab_solver</a>
+      
       <a class="list-group-item" href="../proc/add_burgers.html">add_burgers</a>
       
       <a class="list-group-item" href="../proc/add_euler.html">add_euler</a>
@@ -243,6 +245,8 @@
       
       <a class="list-group-item" href="../proc/euler_multiply_real%7E2.html">euler_multiply_real</a>
       
+      <a class="list-group-item" href="../proc/euler_solver.html">euler_solver</a>
+      
       <a class="list-group-item" href="../proc/exact_solution.html">exact_solution</a>
       
       <a class="list-group-item" href="../proc/finalize.html">finalize</a>
@@ -299,6 +303,8 @@
       
       <a class="list-group-item" href="../proc/integrate%7E5.html">integrate</a>
       
+      <a class="list-group-item" href="../proc/leapfrog_solver.html">leapfrog_solver</a>
+      
       <a class="list-group-item" href="../proc/lorenz_assign_lorenz.html">lorenz_assign_lorenz</a>
       
       <a class="list-group-item" href="../proc/lorenz_assign_real.html">lorenz_assign_real</a>
@@ -307,9 +313,9 @@
       
       <a class="list-group-item" href="../proc/lorenz_multiply_real.html">lorenz_multiply_real</a>
       
-      <a class="list-group-item" href="../proc/oscillation_assign_oscillation.html">oscillation_assign_oscillation</a>
+      <a class="list-group-item" href="../proc/ls_rk_solver.html">ls_rk_solver</a>
       
-      <a class="list-group-item" href="../proc/oscillation_assign_real.html">oscillation_assign_real</a>
+      <a class="list-group-item" href="../proc/oscillation_assign_oscillation.html">oscillation_assign_oscillation</a>
       
       <a class="list-group-item" href="../proc/oscillation_multiply_oscillation.html">oscillation_multiply_oscillation</a>
       
@@ -338,8 +344,6 @@
       <a class="list-group-item" href="../proc/previous_step%7E3.html">previous_step</a>
       
       <a class="list-group-item" href="../proc/previous_step%7E4.html">previous_step</a>
-      
-      <a class="list-group-item" href="../proc/previous_step%7E5.html">previous_step</a>
       
       <a class="list-group-item" href="../proc/primitive2conservative.html">primitive2conservative</a>
       
@@ -433,6 +437,8 @@
       
       <a class="list-group-item" href="../proc/test_tvd_rk%7E4.html">test_tvd_rk</a>
       
+      <a class="list-group-item" href="../proc/tvd_rk_solver.html">tvd_rk_solver</a>
+      
       <a class="list-group-item" href="../proc/update_previous_steps.html">update_previous_steps</a>
       
       <a class="list-group-item" href="../proc/update_previous_steps%7E2.html">update_previous_steps</a>
@@ -440,8 +446,6 @@
       <a class="list-group-item" href="../proc/update_previous_steps%7E3.html">update_previous_steps</a>
       
       <a class="list-group-item" href="../proc/update_previous_steps%7E4.html">update_previous_steps</a>
-      
-      <a class="list-group-item" href="../proc/update_previous_steps%7E5.html">update_previous_steps</a>
       
     </div>
   </div>
@@ -545,10 +549,8 @@ private subroutine oscillation_assign_oscillation(lhs, rhs)
   <span class="k">select type</span><span class="p">(</span><span class="n">rhs</span><span class="p">)</span>
   <span class="k">class is</span> <span class="p">(</span><span class="n">oscillation</span><span class="p">)</span>
     <span class="n">lhs</span><span class="p">%</span><span class="n">dims</span> <span class="o">=</span> <span class="n">rhs</span><span class="p">%</span><span class="n">dims</span>
-    <span class="n">lhs</span><span class="p">%</span><span class="n">steps</span> <span class="o">=</span> <span class="n">rhs</span><span class="p">%</span><span class="n">steps</span>
-    <span class="k">if</span> <span class="p">(</span><span class="nb">allocated</span><span class="p">(</span><span class="n">rhs</span><span class="p">%</span><span class="n">U</span><span class="p">))</span> <span class="n">lhs</span><span class="p">%</span><span class="n">U</span> <span class="o">=</span> <span class="n">rhs</span><span class="p">%</span><span class="n">U</span>
-    <span class="k">if</span> <span class="p">(</span><span class="nb">allocated</span><span class="p">(</span><span class="n">rhs</span><span class="p">%</span><span class="n">previous</span><span class="p">))</span> <span class="n">lhs</span><span class="p">%</span><span class="n">previous</span> <span class="o">=</span> <span class="n">rhs</span><span class="p">%</span><span class="n">previous</span>
     <span class="n">lhs</span><span class="p">%</span><span class="n">f</span> <span class="o">=</span> <span class="n">rhs</span><span class="p">%</span><span class="n">f</span>
+    <span class="k">if</span> <span class="p">(</span><span class="nb">allocated</span><span class="p">(</span><span class="n">rhs</span><span class="p">%</span><span class="n">U</span><span class="p">))</span> <span class="n">lhs</span><span class="p">%</span><span class="n">U</span> <span class="o">=</span> <span class="n">rhs</span><span class="p">%</span><span class="n">U</span>
   <span class="n">endselect</span>
   <span class="k">return</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>

@@ -148,10 +148,6 @@
       
       <a class="list-group-item" href="../type/integrand.html#boundprocedure-t">t</a>
       
-      <a class="list-group-item" href="../type/integrand.html#boundprocedure-update_previous_steps">update_previous_steps</a>
-      
-      <a class="list-group-item" href="../type/integrand.html#boundprocedure-previous_step">previous_step</a>
-      
       <a class="list-group-item" href="../type/integrand.html#boundprocedure-integrand_multiply_integrand">integrand_multiply_integrand</a>
       
       <a class="list-group-item" href="../type/integrand.html#boundprocedure-integrand_multiply_real">integrand_multiply_real</a>
@@ -256,7 +252,7 @@
             
     
     <h3>
-function <a href='../interface/time_derivative.html'>time_derivative</a>(self, n, t) result(dState_dt)
+function <a href='../interface/time_derivative.html'>time_derivative</a>(self, t) result(dState_dt)
     
     
     
@@ -287,21 +283,6 @@ function <a href='../interface/time_derivative.html'>time_derivative</a>(self, n
   
   <td></td><td>::</td>
   <td><strong>self</strong></td><td><p>Integrand field.</p></td>
-  
-</tr>
-
-  
-  
-  
-  
-<tr>
-  
-  <td><span class="anchor" ></span>integer(kind=I_P),</td>
-  <td>intent(in),</td>
-  <td>optional</td>
-  
-  <td></td><td>::</td>
-  <td><strong>n</strong></td><td><p>Time level.</p></td>
   
 </tr>
 
@@ -343,218 +324,6 @@ function <a href='../interface/time_derivative.html'>time_derivative</a>(self, n
 
        
        <p>Time derivative function of integrand class, i.e. the residuals function.</p>
-        
-
-         
-      
-      </li>
-    
-  </ul>
-</div>
-
-    
-	   
-<div class="panel panel-default">
-  <div class="panel-heading codesum"><span class="anchor" id="boundprocedure-update_previous_steps"></span><h3>procedure(<a href='../interface/update_previous_steps.html'>update_previous_steps</a>), public, pass(self), deferred :: <strong>update_previous_steps</strong>  
-    
-  </h3></div>
-  
-  <div class="panel-body">
-    
-
-
-    <p>Update the previous time steps.</p>
-  </div>
-  
-  <ul class="list-group">
-    
-      <li class="list-group-item">
-      
-         
-            
-    
-    <h3>
-subroutine <a href='../interface/update_previous_steps.html'>update_previous_steps</a>(self, filter, weights)
-    
-    
-    
-<small>Prototype</small></h3>
-    
-    <h4>Arguments</h4>
-    
-      
-      
-<table class="table table-striped varlist">
-<thead><tr><th>Type</th>
-<th>Intent</th><th>Optional</th>
-<th>Attributes</th><th></th><th>Name</th><th></th></thead>
-
-
-
-<tbody>
-
-  
-  
-  
-  
-<tr>
-  
-  <td><span class="anchor" ></span>class(<a href='../type/integrand.html'>integrand</a>),</td>
-  <td>intent(inout)</td>
-  <td></td>
-  
-  <td></td><td>::</td>
-  <td><strong>self</strong></td><td><p>Integrand field.</p></td>
-  
-</tr>
-
-  
-  
-  
-  
-<tr>
-  
-  <td><span class="anchor" ></span>class(<a href='../type/integrand.html'>integrand</a>),</td>
-  <td>intent(in),</td>
-  <td>optional</td>
-  
-  <td></td><td>::</td>
-  <td><strong>filter</strong></td><td><p>Filter field displacement.</p></td>
-  
-</tr>
-
-  
-  
-  
-  
-<tr>
-  
-  <td><span class="anchor" ></span>real(kind=R_P),</td>
-  <td>intent(in),</td>
-  <td>optional</td>
-  
-  <td></td><td>::</td>
-  <td><strong>weights</strong>(:)</td><td><p>Weights for filtering the steps.</p></td>
-  
-</tr>
-
-</tbody>
-</table>
-
-      
-    
-    
-    
-    <h4>Description</h4>
-       
-       
-
-
-       
-       <p>Update the previous time steps (of integrand field) for multi-step(level) ODE solvers.</p>
-        
-
-         
-      
-      </li>
-    
-  </ul>
-</div>
-
-    
-	   
-<div class="panel panel-default">
-  <div class="panel-heading codesum"><span class="anchor" id="boundprocedure-previous_step"></span><h3>procedure(<a href='../interface/previous_step.html'>previous_step</a>), public, pass(self), deferred :: <strong>previous_step</strong>  
-    
-  </h3></div>
-  
-  <div class="panel-body">
-    
-
-
-    <p>Get a previous time step.</p>
-  </div>
-  
-  <ul class="list-group">
-    
-      <li class="list-group-item">
-      
-         
-            
-    
-    <h3>
-function <a href='../interface/previous_step.html'>previous_step</a>(self, n) result(previous)
-    
-    
-    
-<small>Prototype</small></h3>
-    
-    <h4>Arguments</h4>
-    
-      
-      
-<table class="table table-striped varlist">
-<thead><tr><th>Type</th>
-<th>Intent</th><th>Optional</th>
-<th>Attributes</th><th></th><th>Name</th><th></th></thead>
-
-
-
-<tbody>
-
-  
-  
-  
-  
-<tr>
-  
-  <td><span class="anchor" ></span>class(<a href='../type/integrand.html'>integrand</a>),</td>
-  <td>intent(in)</td>
-  <td></td>
-  
-  <td></td><td>::</td>
-  <td><strong>self</strong></td><td><p>Integrand field.</p></td>
-  
-</tr>
-
-  
-  
-  
-  
-<tr>
-  
-  <td><span class="anchor" ></span>integer(kind=I_P),</td>
-  <td>intent(in)</td>
-  <td></td>
-  
-  <td></td><td>::</td>
-  <td><strong>n</strong></td><td><p>Time level.</p></td>
-  
-</tr>
-
-</tbody>
-</table>
-
-      
-    
-    
-
-  
-  
-  
-  
-     <h4>Return Value <small>class(<a href='../type/integrand.html'>integrand</a>),
-  allocatable</small></h4>
-  <p>Selected previous time integrand field.</p>
-    
-    
-    <h4>Description</h4>
-       
-       
-
-
-       
-       <p>Get a previous time steps (of integrand field) for multi-step(level) ODE solvers.</p>
         
 
          
@@ -1434,9 +1203,7 @@ pass(lhs) deferred <a href='../type/integrand.html#boundprocedure-assign_integra
   <span class="c">!&lt; Abstract type for building FOODiE ODE integrators.</span>
   <span class="k">contains</span>
     <span class="c">! public deferred procedures that concrete integrand-field must implement</span>
-    <span class="k">procedure</span><span class="p">(</span><span class="n">time_derivative</span><span class="p">),</span>       <span class="k">pass</span><span class="p">(</span><span class="n">self</span><span class="p">),</span> <span class="k">deferred</span><span class="p">,</span> <span class="k">public</span> <span class="kd">::</span> <span class="n">t</span>                     <span class="c">!&lt; Time derivative, residuals.</span>
-    <span class="k">procedure</span><span class="p">(</span><span class="n">update_previous_steps</span><span class="p">),</span> <span class="k">pass</span><span class="p">(</span><span class="n">self</span><span class="p">),</span> <span class="k">deferred</span><span class="p">,</span> <span class="k">public</span> <span class="kd">::</span> <span class="n">update_previous_steps</span> <span class="c">!&lt; Update the previous time steps.</span>
-    <span class="k">procedure</span><span class="p">(</span><span class="n">previous_step</span><span class="p">),</span>         <span class="k">pass</span><span class="p">(</span><span class="n">self</span><span class="p">),</span> <span class="k">deferred</span><span class="p">,</span> <span class="k">public</span> <span class="kd">::</span> <span class="n">previous_step</span>         <span class="c">!&lt; Get a previous time step.</span>
+    <span class="k">procedure</span><span class="p">(</span><span class="n">time_derivative</span><span class="p">),</span>      <span class="k">pass</span><span class="p">(</span><span class="n">self</span><span class="p">),</span> <span class="k">deferred</span><span class="p">,</span> <span class="k">public</span> <span class="kd">::</span> <span class="n">t</span> <span class="c">!&lt; Time derivative, residuals.</span>
     <span class="c">! operators</span>
     <span class="k">procedure</span><span class="p">(</span><span class="n">symmetric_operator</span><span class="p">),</span>   <span class="k">pass</span><span class="p">(</span><span class="n">lhs</span><span class="p">),</span>  <span class="k">deferred</span><span class="p">,</span> <span class="k">public</span> <span class="kd">::</span> <span class="n">integrand_multiply_integrand</span> <span class="c">!&lt; Integrand * integrand operator.</span>
     <span class="k">procedure</span><span class="p">(</span><span class="n">integrand_op_real</span><span class="p">),</span>    <span class="k">pass</span><span class="p">(</span><span class="n">lhs</span><span class="p">),</span>  <span class="k">deferred</span><span class="p">,</span> <span class="k">public</span> <span class="kd">::</span> <span class="n">integrand_multiply_real</span>      <span class="c">!&lt; Integrand * real operator.</span>

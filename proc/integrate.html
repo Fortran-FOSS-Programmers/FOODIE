@@ -171,6 +171,8 @@
       
       <a class="list-group-item" href="../proc/a%7E2.html">a</a>
       
+      <a class="list-group-item" href="../proc/ab_solver.html">ab_solver</a>
+      
       <a class="list-group-item" href="../proc/add_burgers.html">add_burgers</a>
       
       <a class="list-group-item" href="../proc/add_euler.html">add_euler</a>
@@ -253,6 +255,8 @@
       
       <a class="list-group-item" href="../proc/euler_multiply_real%7E2.html">euler_multiply_real</a>
       
+      <a class="list-group-item" href="../proc/euler_solver.html">euler_solver</a>
+      
       <a class="list-group-item" href="../proc/exact_solution.html">exact_solution</a>
       
       <a class="list-group-item" href="../proc/finalize.html">finalize</a>
@@ -309,6 +313,8 @@
       
       <a class="list-group-item" href="../proc/integrate%7E5.html">integrate</a>
       
+      <a class="list-group-item" href="../proc/leapfrog_solver.html">leapfrog_solver</a>
+      
       <a class="list-group-item" href="../proc/lorenz_assign_lorenz.html">lorenz_assign_lorenz</a>
       
       <a class="list-group-item" href="../proc/lorenz_assign_real.html">lorenz_assign_real</a>
@@ -317,9 +323,9 @@
       
       <a class="list-group-item" href="../proc/lorenz_multiply_real.html">lorenz_multiply_real</a>
       
-      <a class="list-group-item" href="../proc/oscillation_assign_oscillation.html">oscillation_assign_oscillation</a>
+      <a class="list-group-item" href="../proc/ls_rk_solver.html">ls_rk_solver</a>
       
-      <a class="list-group-item" href="../proc/oscillation_assign_real.html">oscillation_assign_real</a>
+      <a class="list-group-item" href="../proc/oscillation_assign_oscillation.html">oscillation_assign_oscillation</a>
       
       <a class="list-group-item" href="../proc/oscillation_multiply_oscillation.html">oscillation_multiply_oscillation</a>
       
@@ -348,8 +354,6 @@
       <a class="list-group-item" href="../proc/previous_step%7E3.html">previous_step</a>
       
       <a class="list-group-item" href="../proc/previous_step%7E4.html">previous_step</a>
-      
-      <a class="list-group-item" href="../proc/previous_step%7E5.html">previous_step</a>
       
       <a class="list-group-item" href="../proc/primitive2conservative.html">primitive2conservative</a>
       
@@ -443,6 +447,8 @@
       
       <a class="list-group-item" href="../proc/test_tvd_rk%7E4.html">test_tvd_rk</a>
       
+      <a class="list-group-item" href="../proc/tvd_rk_solver.html">tvd_rk_solver</a>
+      
       <a class="list-group-item" href="../proc/update_previous_steps.html">update_previous_steps</a>
       
       <a class="list-group-item" href="../proc/update_previous_steps%7E2.html">update_previous_steps</a>
@@ -450,8 +456,6 @@
       <a class="list-group-item" href="../proc/update_previous_steps%7E3.html">update_previous_steps</a>
       
       <a class="list-group-item" href="../proc/update_previous_steps%7E4.html">update_previous_steps</a>
-      
-      <a class="list-group-item" href="../proc/update_previous_steps%7E5.html">update_previous_steps</a>
       
     </div>
   </div>
@@ -461,7 +465,7 @@
     
     <div class="col-lg-9" id='text'>
     <h2>
-private subroutine integrate(self, U, Dt, t)
+private subroutine integrate(self, U, previous, Dt, t)
     
     
     
@@ -489,7 +493,7 @@ private subroutine integrate(self, U, Dt, t)
   
 <tr>
   
-  <td><span class="anchor" id="variable-self%7E6"></span>class(<a href='../type/adams_bashforth_integrator.html'>adams_bashforth_integrator</a>),</td>
+  <td><span class="anchor" id="variable-self%7E4"></span>class(<a href='../type/adams_bashforth_integrator.html'>adams_bashforth_integrator</a>),</td>
   <td>intent(in)</td>
   <td></td>
   
@@ -510,6 +514,21 @@ private subroutine integrate(self, U, Dt, t)
   
   <td></td><td>::</td>
   <td><strong>U</strong></td><td><p>Field to be integrated.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-previous%7E5"></span>class(<a href='../type/integrand.html'>integrand</a>),</td>
+  <td>intent(inout)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>previous</strong>(1:)</td><td><p>Previous time steps solutions of integrand field.</p></td>
   
 </tr>
 
@@ -605,22 +624,26 @@ private subroutine integrate(self, U, Dt, t)
     
     <section>
     <h2><span class="anchor" id="src"></span>Source Code</h2>
-    <div class="highlight"><pre>  <span class="k">subroutine </span><span class="n">integrate</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">U</span><span class="p">,</span> <span class="n">Dt</span><span class="p">,</span> <span class="n">t</span><span class="p">)</span>
+    <div class="highlight"><pre>  <span class="k">subroutine </span><span class="n">integrate</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">U</span><span class="p">,</span> <span class="n">previous</span><span class="p">,</span> <span class="n">Dt</span><span class="p">,</span> <span class="n">t</span><span class="p">)</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
   <span class="c">!&lt; Integrate field with Adams-Bashforth class scheme.</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
-  <span class="k">class</span><span class="p">(</span><span class="n">adams_bashforth_integrator</span><span class="p">),</span> <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span>    <span class="kd">::</span> <span class="n">self</span> <span class="c">!&lt; Actual AB integrator.</span>
-  <span class="k">class</span><span class="p">(</span><span class="n">integrand</span><span class="p">),</span>                  <span class="k">intent</span><span class="p">(</span><span class="n">INOUT</span><span class="p">)</span> <span class="kd">::</span> <span class="n">U</span>    <span class="c">!&lt; Field to be integrated.</span>
-  <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">),</span>                         <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span>    <span class="kd">::</span> <span class="n">Dt</span>   <span class="c">!&lt; Time steps.</span>
-  <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">),</span>                         <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span>    <span class="kd">::</span> <span class="n">t</span><span class="p">(:)</span> <span class="c">!&lt; Times.</span>
-  <span class="kt">integer</span><span class="p">(</span><span class="n">I_P</span><span class="p">)</span>                                     <span class="kd">::</span> <span class="n">s</span>    <span class="c">!&lt; Steps counter.</span>
+  <span class="k">class</span><span class="p">(</span><span class="n">adams_bashforth_integrator</span><span class="p">),</span> <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span>    <span class="kd">::</span> <span class="n">self</span>         <span class="c">!&lt; Actual AB integrator.</span>
+  <span class="k">class</span><span class="p">(</span><span class="n">integrand</span><span class="p">),</span>                  <span class="k">intent</span><span class="p">(</span><span class="n">INOUT</span><span class="p">)</span> <span class="kd">::</span> <span class="n">U</span>            <span class="c">!&lt; Field to be integrated.</span>
+  <span class="k">class</span><span class="p">(</span><span class="n">integrand</span><span class="p">),</span>                  <span class="k">intent</span><span class="p">(</span><span class="n">INOUT</span><span class="p">)</span> <span class="kd">::</span> <span class="n">previous</span><span class="p">(</span><span class="mi">1</span><span class="p">:)</span> <span class="c">!&lt; Previous time steps solutions of integrand field.</span>
+  <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">),</span>                         <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span>    <span class="kd">::</span> <span class="n">Dt</span>           <span class="c">!&lt; Time steps.</span>
+  <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">),</span>                         <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span>    <span class="kd">::</span> <span class="n">t</span><span class="p">(:)</span>         <span class="c">!&lt; Times.</span>
+  <span class="kt">integer</span><span class="p">(</span><span class="n">I_P</span><span class="p">)</span>                                     <span class="kd">::</span> <span class="n">s</span>            <span class="c">!&lt; Steps counter.</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
 
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
   <span class="k">do </span><span class="n">s</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">self</span><span class="p">%</span><span class="n">steps</span>
-    <span class="n">U</span> <span class="o">=</span> <span class="n">U</span> <span class="o">+</span> <span class="n">U</span><span class="p">%</span><span class="n">t</span><span class="p">(</span><span class="n">n</span><span class="o">=</span><span class="n">s</span><span class="p">,</span> <span class="n">t</span><span class="o">=</span><span class="n">t</span><span class="p">(</span><span class="n">s</span><span class="p">))</span> <span class="o">*</span> <span class="p">(</span><span class="n">Dt</span> <span class="o">*</span> <span class="n">self</span><span class="p">%</span><span class="n">b</span><span class="p">(</span><span class="n">s</span><span class="p">))</span>
+    <span class="n">U</span> <span class="o">=</span> <span class="n">U</span> <span class="o">+</span> <span class="n">previous</span><span class="p">(</span><span class="n">s</span><span class="p">)%</span><span class="n">t</span><span class="p">()</span> <span class="o">*</span> <span class="p">(</span><span class="n">Dt</span> <span class="o">*</span> <span class="n">self</span><span class="p">%</span><span class="n">b</span><span class="p">(</span><span class="n">s</span><span class="p">))</span>
   <span class="n">enddo</span>
-  <span class="k">call </span><span class="n">U</span><span class="p">%</span><span class="n">update_previous_steps</span>
+  <span class="k">do </span><span class="n">s</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">self</span><span class="p">%</span><span class="n">steps</span> <span class="o">-</span> <span class="mi">1</span>
+    <span class="n">previous</span><span class="p">(</span><span class="n">s</span><span class="p">)</span> <span class="o">=</span> <span class="n">previous</span><span class="p">(</span><span class="n">s</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+  <span class="n">enddo</span>
+  <span class="n">previous</span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">steps</span><span class="p">)</span> <span class="o">=</span> <span class="n">U</span>
   <span class="k">return</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
   <span class="n">endsubroutine</span> <span class="n">integrate</span>

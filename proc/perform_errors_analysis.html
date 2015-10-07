@@ -135,21 +135,9 @@
       
       <a class="list-group-item" href="../proc/perform_errors_analysis.html#variable-time_steps">time_steps</a>
       
-      <a class="list-group-item" href="../proc/perform_errors_analysis.html#variable-ab_integrator%7E5">ab_integrator</a>
-      
-      <a class="list-group-item" href="../proc/perform_errors_analysis.html#variable-lf_integrator%7E5">lf_integrator</a>
-      
-      <a class="list-group-item" href="../proc/perform_errors_analysis.html#variable-ls_integrator">ls_integrator</a>
-      
-      <a class="list-group-item" href="../proc/perform_errors_analysis.html#variable-rk_integrator%7E17">rk_integrator</a>
-      
       <a class="list-group-item" href="../proc/perform_errors_analysis.html#variable-ab_steps%7E5">ab_steps</a>
       
       <a class="list-group-item" href="../proc/perform_errors_analysis.html#variable-rk_stages%7E17">rk_stages</a>
-      
-      <a class="list-group-item" href="../proc/perform_errors_analysis.html#variable-rk_stage%7E17">rk_stage</a>
-      
-      <a class="list-group-item" href="../proc/perform_errors_analysis.html#variable-filter%7E11">filter</a>
       
       <a class="list-group-item" href="../proc/perform_errors_analysis.html#variable-ab_errors">ab_errors</a>
       
@@ -167,11 +155,13 @@
       
       <a class="list-group-item" href="../proc/perform_errors_analysis.html#variable-rk_orders">rk_orders</a>
       
-      <a class="list-group-item" href="../proc/perform_errors_analysis.html#variable-step%7E15">step</a>
+      <a class="list-group-item" href="../proc/perform_errors_analysis.html#variable-solution%7E14">solution</a>
       
       <a class="list-group-item" href="../proc/perform_errors_analysis.html#variable-s%7E28">s</a>
       
       <a class="list-group-item" href="../proc/perform_errors_analysis.html#variable-d">d</a>
+      
+      <a class="list-group-item" href="../proc/perform_errors_analysis.html#variable-output%7E12">output</a>
       
       <a class="list-group-item" href="../proc/perform_errors_analysis.html#variable-title%7E18">title</a>
       
@@ -212,6 +202,8 @@
       <a class="list-group-item" href="../proc/a.html">a</a>
       
       <a class="list-group-item" href="../proc/a%7E2.html">a</a>
+      
+      <a class="list-group-item" href="../proc/ab_solver.html">ab_solver</a>
       
       <a class="list-group-item" href="../proc/add_burgers.html">add_burgers</a>
       
@@ -295,6 +287,8 @@
       
       <a class="list-group-item" href="../proc/euler_multiply_real%7E2.html">euler_multiply_real</a>
       
+      <a class="list-group-item" href="../proc/euler_solver.html">euler_solver</a>
+      
       <a class="list-group-item" href="../proc/exact_solution.html">exact_solution</a>
       
       <a class="list-group-item" href="../proc/finalize.html">finalize</a>
@@ -351,6 +345,8 @@
       
       <a class="list-group-item" href="../proc/integrate%7E5.html">integrate</a>
       
+      <a class="list-group-item" href="../proc/leapfrog_solver.html">leapfrog_solver</a>
+      
       <a class="list-group-item" href="../proc/lorenz_assign_lorenz.html">lorenz_assign_lorenz</a>
       
       <a class="list-group-item" href="../proc/lorenz_assign_real.html">lorenz_assign_real</a>
@@ -359,9 +355,9 @@
       
       <a class="list-group-item" href="../proc/lorenz_multiply_real.html">lorenz_multiply_real</a>
       
-      <a class="list-group-item" href="../proc/oscillation_assign_oscillation.html">oscillation_assign_oscillation</a>
+      <a class="list-group-item" href="../proc/ls_rk_solver.html">ls_rk_solver</a>
       
-      <a class="list-group-item" href="../proc/oscillation_assign_real.html">oscillation_assign_real</a>
+      <a class="list-group-item" href="../proc/oscillation_assign_oscillation.html">oscillation_assign_oscillation</a>
       
       <a class="list-group-item" href="../proc/oscillation_multiply_oscillation.html">oscillation_multiply_oscillation</a>
       
@@ -390,8 +386,6 @@
       <a class="list-group-item" href="../proc/previous_step%7E3.html">previous_step</a>
       
       <a class="list-group-item" href="../proc/previous_step%7E4.html">previous_step</a>
-      
-      <a class="list-group-item" href="../proc/previous_step%7E5.html">previous_step</a>
       
       <a class="list-group-item" href="../proc/primitive2conservative.html">primitive2conservative</a>
       
@@ -485,6 +479,8 @@
       
       <a class="list-group-item" href="../proc/test_tvd_rk%7E4.html">test_tvd_rk</a>
       
+      <a class="list-group-item" href="../proc/tvd_rk_solver.html">tvd_rk_solver</a>
+      
       <a class="list-group-item" href="../proc/update_previous_steps.html">update_previous_steps</a>
       
       <a class="list-group-item" href="../proc/update_previous_steps%7E2.html">update_previous_steps</a>
@@ -492,8 +488,6 @@
       <a class="list-group-item" href="../proc/update_previous_steps%7E3.html">update_previous_steps</a>
       
       <a class="list-group-item" href="../proc/update_previous_steps%7E4.html">update_previous_steps</a>
-      
-      <a class="list-group-item" href="../proc/update_previous_steps%7E5.html">update_previous_steps</a>
       
     </div>
   </div>
@@ -545,122 +539,170 @@ $$</p>
 <!-- Generated by graphviz version 2.26.3 (20100126.1600)
  -->
 <!-- Title: proc~~perform_errors_analysis~~CallsGraph Pages: 1 -->
-<svg id="procperform_errors_analysisCallsGraph" width="382pt" height="227pt"
- viewBox="0.00 0.00 382.00 227.22" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-<g id="proc~~perform_errors_analysis~~CallsGraph" class="graph" transform="scale(1 1) rotate(0) translate(4 223.223)">
+<svg id="procperform_errors_analysisCallsGraph" width="382pt" height="424pt"
+ viewBox="0.00 0.00 382.00 424.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="proc~~perform_errors_analysis~~CallsGraph" class="graph" transform="scale(1 1) rotate(0) translate(4 420)">
 <title>proc~~perform_errors_analysis~~CallsGraph</title>
-<polygon fill="white" stroke="white" points="-4,5 -4,-223.223 379,-223.223 379,5 -4,5"/>
+<polygon fill="white" stroke="white" points="-4,5 -4,-420 379,-420 379,5 -4,5"/>
 <!-- proc~perform_errors_analysis -->
 <g id="node1" class="node"><title>proc~perform_errors_analysis</title>
-<polygon fill="none" stroke="black" points="129,-136 1,-136 1,-110 129,-110 129,-136"/>
-<text text-anchor="middle" x="65" y="-120.55" font-family="Helvetica,sans-Serif" font-size="10.50">perform_errors_analysis</text>
+<polygon fill="none" stroke="black" points="129,-218 1,-218 1,-192 129,-192 129,-218"/>
+<text text-anchor="middle" x="65" y="-202.55" font-family="Helvetica,sans-Serif" font-size="10.50">perform_errors_analysis</text>
 </g>
 <!-- proc~print_analysis -->
 <g id="node2" class="node"><title>proc~print_analysis</title>
 <a xlink:href="../proc/print_analysis.html" xlink:title="print_analysis">
-<polygon fill="#d9534f" stroke="#d9534f" points="250,-202 172,-202 172,-176 250,-176 250,-202"/>
-<text text-anchor="middle" x="211" y="-186.55" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">print_analysis</text>
+<polygon fill="#d9534f" stroke="#d9534f" points="250,-70 172,-70 172,-44 250,-44 250,-70"/>
+<text text-anchor="middle" x="211" y="-54.55" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">print_analysis</text>
 </a>
 </g>
 <!-- proc~perform_errors_analysis&#45;&gt;proc~print_analysis -->
 <g id="edge12" class="edge"><title>proc~perform_errors_analysis&#45;&gt;proc~print_analysis</title>
-<path fill="none" stroke="black" d="M93.8449,-136.039C116.441,-146.254 148.079,-160.556 172.782,-171.723"/>
-<polygon fill="black" stroke="black" points="171.661,-175.058 182.215,-175.988 174.545,-168.679 171.661,-175.058"/>
-</g>
-<!-- proc~save_results~5 -->
-<g id="node3" class="node"><title>proc~save_results~5</title>
-<a xlink:href="../proc/save_results%7E5.html" xlink:title="save_results">
-<polygon fill="#d9534f" stroke="#d9534f" points="247,-114 175,-114 175,-88 247,-88 247,-114"/>
-<text text-anchor="middle" x="211" y="-98.55" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">save_results</text>
-</a>
-</g>
-<!-- proc~perform_errors_analysis&#45;&gt;proc~save_results~5 -->
-<g id="edge14" class="edge"><title>proc~perform_errors_analysis&#45;&gt;proc~save_results~5</title>
-<path fill="none" stroke="black" d="M129.888,-113.222C141.431,-111.483 153.247,-109.702 164.164,-108.057"/>
-<polygon fill="black" stroke="black" points="164.95,-111.479 174.317,-106.528 163.907,-104.557 164.95,-111.479"/>
-</g>
-<!-- str -->
-<g id="node4" class="node"><title>str</title>
-<polygon fill="#777777" stroke="#777777" points="360,-202 306,-202 306,-176 360,-176 360,-202"/>
-<text text-anchor="middle" x="333" y="-186.55" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">str</text>
-</g>
-<!-- proc~perform_errors_analysis&#45;&gt;str -->
-<g id="edge16" class="edge"><title>proc~perform_errors_analysis&#45;&gt;str</title>
-<path fill="none" stroke="black" d="M74.6997,-136.07C90.9052,-156.673 125.708,-195.909 166,-211 208.747,-227.01 261.452,-215.317 296.079,-203.752"/>
-<polygon fill="black" stroke="black" points="297.495,-206.965 305.778,-200.358 295.183,-200.358 297.495,-206.965"/>
+<path fill="none" stroke="black" d="M73.8015,-191.76C89.9972,-168.082 126.499,-117.804 166,-84 169.442,-81.0548 173.244,-78.2351 177.137,-75.6034"/>
+<polygon fill="black" stroke="black" points="179.133,-78.4817 185.699,-70.1664 175.381,-72.5724 179.133,-78.4817"/>
 </g>
 <!-- proc~compute_errors -->
-<g id="node5" class="node"><title>proc~compute_errors</title>
+<g id="node3" class="node"><title>proc~compute_errors</title>
 <a xlink:href="../proc/compute_errors.html" xlink:title="compute_errors">
-<polygon fill="#d94e8f" stroke="#d94e8f" points="255,-70 167,-70 167,-44 255,-44 255,-70"/>
-<text text-anchor="middle" x="211" y="-54.55" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">compute_errors</text>
+<polygon fill="#d94e8f" stroke="#d94e8f" points="255,-416 167,-416 167,-390 255,-390 255,-416"/>
+<text text-anchor="middle" x="211" y="-400.55" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">compute_errors</text>
 </a>
 </g>
 <!-- proc~perform_errors_analysis&#45;&gt;proc~compute_errors -->
-<g id="edge18" class="edge"><title>proc~perform_errors_analysis&#45;&gt;proc~compute_errors</title>
-<path fill="none" stroke="black" d="M93.8449,-109.961C116.441,-99.7458 148.079,-85.4439 172.782,-74.2768"/>
-<polygon fill="black" stroke="black" points="174.545,-77.3209 182.215,-70.0124 171.661,-70.9424 174.545,-77.3209"/>
+<g id="edge14" class="edge"><title>proc~perform_errors_analysis&#45;&gt;proc~compute_errors</title>
+<path fill="none" stroke="black" d="M69.4804,-218.224C80.8704,-250.098 113.784,-332.134 166,-381 167.111,-382.04 168.281,-383.04 169.495,-384.002"/>
+<polygon fill="black" stroke="black" points="167.788,-387.073 178.029,-389.791 171.718,-381.28 167.788,-387.073"/>
+</g>
+<!-- proc~ls_rk_solver -->
+<g id="node4" class="node"><title>proc~ls_rk_solver</title>
+<a xlink:href="../proc/ls_rk_solver.html" xlink:title="ls_rk_solver">
+<polygon fill="#d9534f" stroke="#d9534f" points="246,-328 176,-328 176,-302 246,-302 246,-328"/>
+<text text-anchor="middle" x="211" y="-312.55" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">ls_rk_solver</text>
+</a>
+</g>
+<!-- proc~perform_errors_analysis&#45;&gt;proc~ls_rk_solver -->
+<g id="edge16" class="edge"><title>proc~perform_errors_analysis&#45;&gt;proc~ls_rk_solver</title>
+<path fill="none" stroke="black" d="M77.8077,-218.157C96.1492,-236.51 131.503,-270.116 166,-293 168.092,-294.388 170.285,-295.743 172.53,-297.054"/>
+<polygon fill="black" stroke="black" points="170.882,-300.143 181.335,-301.876 174.245,-294.003 170.882,-300.143"/>
+</g>
+<!-- proc~tvd_rk_solver -->
+<g id="node5" class="node"><title>proc~tvd_rk_solver</title>
+<a xlink:href="../proc/tvd_rk_solver.html" xlink:title="tvd_rk_solver">
+<polygon fill="#d9534f" stroke="#d9534f" points="249,-284 173,-284 173,-258 249,-258 249,-284"/>
+<text text-anchor="middle" x="211" y="-268.55" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">tvd_rk_solver</text>
+</a>
+</g>
+<!-- proc~perform_errors_analysis&#45;&gt;proc~tvd_rk_solver -->
+<g id="edge18" class="edge"><title>proc~perform_errors_analysis&#45;&gt;proc~tvd_rk_solver</title>
+<path fill="none" stroke="black" d="M93.8449,-218.039C116.441,-228.254 148.079,-242.556 172.782,-253.723"/>
+<polygon fill="black" stroke="black" points="171.661,-257.058 182.215,-257.988 174.545,-250.679 171.661,-257.058"/>
 </g>
 <!-- proc~estimate_orders -->
 <g id="node6" class="node"><title>proc~estimate_orders</title>
 <a xlink:href="../proc/estimate_orders.html" xlink:title="estimate_orders">
-<polygon fill="#d94e8f" stroke="#d94e8f" points="256,-26 166,-26 166,-1.24345e-14 256,-3.55271e-15 256,-26"/>
-<text text-anchor="middle" x="211" y="-10.55" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">estimate_orders</text>
+<polygon fill="#d94e8f" stroke="#d94e8f" points="256,-240 166,-240 166,-214 256,-214 256,-240"/>
+<text text-anchor="middle" x="211" y="-224.55" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">estimate_orders</text>
 </a>
 </g>
 <!-- proc~perform_errors_analysis&#45;&gt;proc~estimate_orders -->
 <g id="edge20" class="edge"><title>proc~perform_errors_analysis&#45;&gt;proc~estimate_orders</title>
-<path fill="none" stroke="black" d="M77.8077,-109.843C96.1492,-91.4896 131.503,-57.8843 166,-35 168.092,-33.6119 170.285,-32.2571 172.53,-30.9456"/>
-<polygon fill="black" stroke="black" points="174.245,-33.997 181.335,-26.124 170.882,-27.8572 174.245,-33.997"/>
+<path fill="none" stroke="black" d="M129.888,-214.778C138.551,-216.083 147.368,-217.412 155.844,-218.689"/>
+<polygon fill="black" stroke="black" points="155.569,-222.187 165.979,-220.216 156.612,-215.265 155.569,-222.187"/>
+</g>
+<!-- proc~ab_solver -->
+<g id="node7" class="node"><title>proc~ab_solver</title>
+<a xlink:href="../proc/ab_solver.html" xlink:title="ab_solver">
+<polygon fill="#d9534f" stroke="#d9534f" points="240,-196 182,-196 182,-170 240,-170 240,-196"/>
+<text text-anchor="middle" x="211" y="-180.55" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">ab_solver</text>
+</a>
+</g>
+<!-- proc~perform_errors_analysis&#45;&gt;proc~ab_solver -->
+<g id="edge22" class="edge"><title>proc~perform_errors_analysis&#45;&gt;proc~ab_solver</title>
+<path fill="none" stroke="black" d="M129.888,-195.222C143.93,-193.106 158.377,-190.93 171.116,-189.01"/>
+<polygon fill="black" stroke="black" points="172.003,-192.416 181.37,-187.465 170.96,-185.494 172.003,-192.416"/>
+</g>
+<!-- proc~leapfrog_solver -->
+<g id="node8" class="node"><title>proc~leapfrog_solver</title>
+<a xlink:href="../proc/leapfrog_solver.html" xlink:title="leapfrog_solver">
+<polygon fill="#d9534f" stroke="#d9534f" points="254,-152 168,-152 168,-126 254,-126 254,-152"/>
+<text text-anchor="middle" x="211" y="-136.55" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">leapfrog_solver</text>
+</a>
+</g>
+<!-- proc~perform_errors_analysis&#45;&gt;proc~leapfrog_solver -->
+<g id="edge24" class="edge"><title>proc~perform_errors_analysis&#45;&gt;proc~leapfrog_solver</title>
+<path fill="none" stroke="black" d="M93.8449,-191.961C116.441,-181.746 148.079,-167.444 172.782,-156.277"/>
+<polygon fill="black" stroke="black" points="174.545,-159.321 182.215,-152.012 171.661,-152.942 174.545,-159.321"/>
 </g>
 <!-- proc~init~12 -->
-<g id="node7" class="node"><title>proc~init~12</title>
+<g id="node9" class="node"><title>proc~init~12</title>
 <a xlink:href="../proc/init%7E12.html" xlink:title="init">
-<polygon fill="#d9534f" stroke="#d9534f" points="238,-158 184,-158 184,-132 238,-132 238,-158"/>
-<text text-anchor="middle" x="211" y="-142.55" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">init</text>
+<polygon fill="#d9534f" stroke="#d9534f" points="238,-26 184,-26 184,-1.24345e-14 238,-3.55271e-15 238,-26"/>
+<text text-anchor="middle" x="211" y="-10.55" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">init</text>
 </a>
 </g>
 <!-- proc~perform_errors_analysis&#45;&gt;proc~init~12 -->
-<g id="edge22" class="edge"><title>proc~perform_errors_analysis&#45;&gt;proc~init~12</title>
-<path fill="none" stroke="black" d="M129.888,-132.778C144.911,-135.041 160.399,-137.375 173.763,-139.389"/>
-<polygon fill="black" stroke="black" points="173.565,-142.899 183.975,-140.928 174.608,-135.977 173.565,-142.899"/>
+<g id="edge26" class="edge"><title>proc~perform_errors_analysis&#45;&gt;proc~init~12</title>
+<path fill="none" stroke="black" d="M69.7798,-191.773C81.6045,-160.674 115.011,-82.0003 166,-35 168.718,-32.4951 171.773,-30.2155 174.979,-28.1555"/>
+<polygon fill="black" stroke="black" points="176.721,-31.1915 183.69,-23.2115 173.266,-25.1036 176.721,-31.1915"/>
+</g>
+<!-- proc~save_results~5 -->
+<g id="node10" class="node"><title>proc~save_results~5</title>
+<a xlink:href="../proc/save_results%7E5.html" xlink:title="save_results">
+<polygon fill="#d9534f" stroke="#d9534f" points="247,-372 175,-372 175,-346 247,-346 247,-372"/>
+<text text-anchor="middle" x="211" y="-356.55" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">save_results</text>
+</a>
+</g>
+<!-- proc~perform_errors_analysis&#45;&gt;proc~save_results~5 -->
+<g id="edge28" class="edge"><title>proc~perform_errors_analysis&#45;&gt;proc~save_results~5</title>
+<path fill="none" stroke="black" d="M72.282,-218.236C87.0197,-244.015 122.691,-301.531 166,-337 167.514,-338.24 169.109,-339.431 170.76,-340.574"/>
+<polygon fill="black" stroke="black" points="169.007,-343.605 179.356,-345.873 172.68,-337.646 169.007,-343.605"/>
+</g>
+<!-- str -->
+<g id="node11" class="node"><title>str</title>
+<polygon fill="#777777" stroke="#777777" points="360,-70 306,-70 306,-44 360,-44 360,-70"/>
+<text text-anchor="middle" x="333" y="-54.55" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">str</text>
+</g>
+<!-- proc~perform_errors_analysis&#45;&gt;str -->
+<g id="edge30" class="edge"><title>proc~perform_errors_analysis&#45;&gt;str</title>
+<path fill="none" stroke="black" d="M76.8741,-191.941C94.6318,-173.089 129.898,-138.192 166,-117 188.506,-103.789 254.363,-81.7857 296.337,-68.4136"/>
+<polygon fill="black" stroke="black" points="297.46,-71.7292 305.936,-65.3729 295.346,-65.056 297.46,-71.7292"/>
 </g>
 <!-- proc~print_analysis&#45;&gt;str -->
 <g id="edge2" class="edge"><title>proc~print_analysis&#45;&gt;str</title>
-<path fill="none" stroke="black" d="M250.273,-189C264.847,-189 281.324,-189 295.715,-189"/>
-<polygon fill="black" stroke="black" points="295.768,-192.5 305.768,-189 295.768,-185.5 295.768,-192.5"/>
+<path fill="none" stroke="black" d="M250.273,-57C264.847,-57 281.324,-57 295.715,-57"/>
+<polygon fill="black" stroke="black" points="295.768,-60.5001 305.768,-57 295.768,-53.5001 295.768,-60.5001"/>
 </g>
 <!-- proc~exact_solution -->
-<g id="node9" class="node"><title>proc~exact_solution</title>
+<g id="node13" class="node"><title>proc~exact_solution</title>
 <a xlink:href="../proc/exact_solution.html" xlink:title="exact_solution">
-<polygon fill="#d94e8f" stroke="#d94e8f" points="373,-92 293,-92 293,-66 373,-66 373,-92"/>
-<text text-anchor="middle" x="333" y="-76.55" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">exact_solution</text>
+<polygon fill="#d94e8f" stroke="#d94e8f" points="373,-394 293,-394 293,-368 373,-368 373,-394"/>
+<text text-anchor="middle" x="333" y="-378.55" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">exact_solution</text>
 </a>
 </g>
-<!-- proc~save_results~5&#45;&gt;proc~exact_solution -->
-<g id="edge4" class="edge"><title>proc~save_results~5&#45;&gt;proc~exact_solution</title>
-<path fill="none" stroke="black" d="M247.604,-94.3993C258.461,-92.4414 270.553,-90.261 282.142,-88.1712"/>
-<polygon fill="black" stroke="black" points="282.933,-91.585 292.153,-86.3658 281.691,-84.6961 282.933,-91.585"/>
-</g>
 <!-- proc~compute_errors&#45;&gt;proc~exact_solution -->
-<g id="edge6" class="edge"><title>proc~compute_errors&#45;&gt;proc~exact_solution</title>
-<path fill="none" stroke="black" d="M255.045,-64.9425C263.872,-66.5343 273.213,-68.2188 282.246,-69.8477"/>
-<polygon fill="black" stroke="black" points="281.807,-73.3249 292.27,-71.6552 283.05,-66.436 281.807,-73.3249"/>
+<g id="edge4" class="edge"><title>proc~compute_errors&#45;&gt;proc~exact_solution</title>
+<path fill="none" stroke="black" d="M255.045,-395.057C263.872,-393.466 273.213,-391.781 282.246,-390.152"/>
+<polygon fill="black" stroke="black" points="283.05,-393.564 292.27,-388.345 281.807,-386.675 283.05,-393.564"/>
 </g>
 <!-- proc~init~12&#45;&gt;str -->
-<g id="edge10" class="edge"><title>proc~init~12&#45;&gt;str</title>
-<path fill="none" stroke="black" d="M238.076,-154.765C255.292,-160.974 277.795,-169.09 296.57,-175.861"/>
-<polygon fill="black" stroke="black" points="295.406,-179.162 306,-179.262 297.78,-172.577 295.406,-179.162"/>
+<g id="edge8" class="edge"><title>proc~init~12&#45;&gt;str</title>
+<path fill="none" stroke="black" d="M238.076,-22.765C255.292,-28.9742 277.795,-37.09 296.57,-43.8612"/>
+<polygon fill="black" stroke="black" points="295.406,-47.162 306,-47.2623 297.78,-40.5771 295.406,-47.162"/>
 </g>
 <!-- strz -->
-<g id="node12" class="node"><title>strz</title>
-<polygon fill="#777777" stroke="#777777" points="360,-158 306,-158 306,-132 360,-132 360,-158"/>
-<text text-anchor="middle" x="333" y="-142.55" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">strz</text>
+<g id="node15" class="node"><title>strz</title>
+<polygon fill="#777777" stroke="#777777" points="360,-26 306,-26 306,-1.24345e-14 360,-3.55271e-15 360,-26"/>
+<text text-anchor="middle" x="333" y="-10.55" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">strz</text>
 </g>
 <!-- proc~init~12&#45;&gt;strz -->
-<g id="edge8" class="edge"><title>proc~init~12&#45;&gt;strz</title>
-<path fill="none" stroke="black" d="M238.076,-145C255.055,-145 277.177,-145 295.792,-145"/>
-<polygon fill="black" stroke="black" points="296,-148.5 306,-145 296,-141.5 296,-148.5"/>
+<g id="edge6" class="edge"><title>proc~init~12&#45;&gt;strz</title>
+<path fill="none" stroke="black" d="M238.076,-13C255.055,-13 277.177,-13 295.792,-13"/>
+<polygon fill="black" stroke="black" points="296,-16.5001 306,-13 296,-9.5001 296,-16.5001"/>
+</g>
+<!-- proc~save_results~5&#45;&gt;proc~exact_solution -->
+<g id="edge10" class="edge"><title>proc~save_results~5&#45;&gt;proc~exact_solution</title>
+<path fill="none" stroke="black" d="M247.604,-365.601C258.461,-367.559 270.553,-369.739 282.142,-371.829"/>
+<polygon fill="black" stroke="black" points="281.691,-375.304 292.153,-373.634 282.933,-368.415 281.691,-375.304"/>
 </g>
 </g>
 </svg>
@@ -929,62 +971,6 @@ implementation in a submodule of an interface in a parent module.</p>
   
 <tr>
   
-  <td><span class="anchor" id="variable-ab_integrator%7E5"></span>type(<a href='../type/adams_bashforth_integrator.html'>adams_bashforth_integrator</a>),</td>
-  
-  <td>public</td>
-  <td></td><td>::</td>
-  <td><strong>ab_integrator</strong></td><td></td><td></td><td><p>Adams-Bashforth integrator.</p></td>
-  
-</tr>
-
-  
-  
-  
-  
-<tr>
-  
-  <td><span class="anchor" id="variable-lf_integrator%7E5"></span>type(<a href='../type/leapfrog_integrator.html'>leapfrog_integrator</a>),</td>
-  
-  <td>public</td>
-  <td></td><td>::</td>
-  <td><strong>lf_integrator</strong></td><td></td><td></td><td><p>Leapfrog integrator.</p></td>
-  
-</tr>
-
-  
-  
-  
-  
-<tr>
-  
-  <td><span class="anchor" id="variable-ls_integrator"></span>type(<a href='../type/ls_runge_kutta_integrator.html'>ls_runge_kutta_integrator</a>),</td>
-  
-  <td>public</td>
-  <td></td><td>::</td>
-  <td><strong>ls_integrator</strong></td><td></td><td></td><td><p>Low storage Runge-Kutta integrator.</p></td>
-  
-</tr>
-
-  
-  
-  
-  
-<tr>
-  
-  <td><span class="anchor" id="variable-rk_integrator%7E17"></span>type(<a href='../type/tvd_runge_kutta_integrator.html'>tvd_runge_kutta_integrator</a>),</td>
-  
-  <td>public</td>
-  <td></td><td>::</td>
-  <td><strong>rk_integrator</strong></td><td></td><td></td><td><p>TVD/SSP Runge-Kutta integrator.</p></td>
-  
-</tr>
-
-  
-  
-  
-  
-<tr>
-  
   <td><span class="anchor" id="variable-ab_steps%7E5"></span>integer,</td>
   
   <td>public,</td>
@@ -1004,34 +990,6 @@ implementation in a submodule of an interface in a parent module.</p>
   <td>public,</td>
   <td>parameter</td><td>::</td>
   <td><strong>rk_stages</strong></td><td> =</td><td>5</td><td><p>Runge-Kutta stages number.</p></td>
-  
-</tr>
-
-  
-  
-  
-  
-<tr>
-  
-  <td><span class="anchor" id="variable-rk_stage%7E17"></span>type(<a href='../type/oscillation.html'>oscillation</a>),</td>
-  
-  <td>public</td>
-  <td></td><td>::</td>
-  <td><strong>rk_stage</strong>(1:rk_stages)</td><td></td><td></td><td><p>Runge-Kutta stages.</p></td>
-  
-</tr>
-
-  
-  
-  
-  
-<tr>
-  
-  <td><span class="anchor" id="variable-filter%7E11"></span>type(<a href='../type/oscillation.html'>oscillation</a>),</td>
-  
-  <td>public</td>
-  <td></td><td>::</td>
-  <td><strong>filter</strong></td><td></td><td></td><td><p>Filter displacement.</p></td>
   
 </tr>
 
@@ -1153,11 +1111,11 @@ implementation in a submodule of an interface in a parent module.</p>
   
 <tr>
   
-  <td><span class="anchor" id="variable-step%7E15"></span>integer,</td>
+  <td><span class="anchor" id="variable-solution%7E14"></span>real(kind=R_P),</td>
   
-  <td>public</td>
-  <td></td><td>::</td>
-  <td><strong>step</strong></td><td></td><td></td><td><p>Time steps counter.</p></td>
+  <td>public,</td>
+  <td>allocatable</td><td>::</td>
+  <td><strong>solution</strong>(:,:)</td><td></td><td></td><td><p>Solution at each time step.</p></td>
   
 </tr>
 
@@ -1186,6 +1144,20 @@ implementation in a submodule of an interface in a parent module.</p>
   <td>public</td>
   <td></td><td>::</td>
   <td><strong>d</strong></td><td></td><td></td><td><p>Time steps-exercised counter.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-output%7E12"></span>character(len=:),</td>
+  
+  <td>public,</td>
+  <td>allocatable</td><td>::</td>
+  <td><strong>output</strong></td><td></td><td></td><td><p>Output files basename.</p></td>
   
 </tr>
 
@@ -1256,14 +1228,8 @@ implementation in a submodule of an interface in a parent module.</p>
                                                          <span class="mi">62</span><span class="mf">5._R_P</span><span class="p">,</span>  <span class="p">&amp;</span>
                                                          <span class="mi">32</span><span class="mf">0._R_P</span><span class="p">,</span>  <span class="p">&amp;</span>
                                                          <span class="mi">10</span><span class="mf">0._R_P</span><span class="p">]</span> <span class="c">!&lt; Time steps exercised.</span>
-  <span class="k">type</span><span class="p">(</span><span class="n">adams_bashforth_integrator</span><span class="p">)</span> <span class="kd">::</span> <span class="n">ab_integrator</span>                <span class="c">!&lt; Adams-Bashforth integrator.</span>
-  <span class="k">type</span><span class="p">(</span><span class="n">leapfrog_integrator</span><span class="p">)</span>        <span class="kd">::</span> <span class="n">lf_integrator</span>                <span class="c">!&lt; Leapfrog integrator.</span>
-  <span class="k">type</span><span class="p">(</span><span class="n">ls_runge_kutta_integrator</span><span class="p">)</span>  <span class="kd">::</span> <span class="n">ls_integrator</span>                <span class="c">!&lt; Low storage Runge-Kutta integrator.</span>
-  <span class="k">type</span><span class="p">(</span><span class="n">tvd_runge_kutta_integrator</span><span class="p">)</span> <span class="kd">::</span> <span class="n">rk_integrator</span>                <span class="c">!&lt; TVD/SSP Runge-Kutta integrator.</span>
   <span class="kt">integer</span><span class="p">,</span> <span class="k">parameter</span>               <span class="kd">::</span> <span class="n">ab_steps</span><span class="o">=</span><span class="mi">4</span>                   <span class="c">!&lt; Adams-Bashforth steps number.</span>
   <span class="kt">integer</span><span class="p">,</span> <span class="k">parameter</span>               <span class="kd">::</span> <span class="n">rk_stages</span><span class="o">=</span><span class="mi">5</span>                  <span class="c">!&lt; Runge-Kutta stages number.</span>
-  <span class="k">type</span><span class="p">(</span><span class="n">oscillation</span><span class="p">)</span>                <span class="kd">::</span> <span class="n">rk_stage</span><span class="p">(</span><span class="mi">1</span><span class="p">:</span><span class="n">rk_stages</span><span class="p">)</span>        <span class="c">!&lt; Runge-Kutta stages.</span>
-  <span class="k">type</span><span class="p">(</span><span class="n">oscillation</span><span class="p">)</span>                <span class="kd">::</span> <span class="n">filter</span>                       <span class="c">!&lt; Filter displacement.</span>
   <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">)</span>                        <span class="kd">::</span> <span class="n">ab_errors</span><span class="p">(</span><span class="mi">1</span><span class="p">:</span><span class="n">space_dimension</span><span class="p">,&amp;</span>
                                                 <span class="mi">1</span><span class="p">:</span><span class="n">ab_steps</span><span class="p">,</span>       <span class="p">&amp;</span>
                                                 <span class="mi">1</span><span class="p">:</span><span class="n">NDt</span><span class="p">)</span>             <span class="c">!&lt; Adams-Bashforth errors.</span>
@@ -1286,46 +1252,27 @@ implementation in a submodule of an interface in a parent module.</p>
   <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">)</span>                        <span class="kd">::</span> <span class="n">rk_orders</span><span class="p">(</span><span class="mi">1</span><span class="p">:</span><span class="n">space_dimension</span><span class="p">,&amp;</span>
                                                 <span class="mi">1</span><span class="p">:</span><span class="n">rk_stages</span><span class="p">,</span>      <span class="p">&amp;</span>
                                                 <span class="mi">1</span><span class="p">:</span><span class="n">NDt</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>           <span class="c">!&lt; TVD/SSP Runge-Kutta orders.</span>
-  <span class="kt">integer</span>                          <span class="kd">::</span> <span class="n">step</span>                         <span class="c">!&lt; Time steps counter.</span>
+  <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">),</span> <span class="k">allocatable</span>           <span class="kd">::</span> <span class="n">solution</span><span class="p">(:,:)</span>                <span class="c">!&lt; Solution at each time step.</span>
   <span class="kt">integer</span><span class="p">(</span><span class="n">I_P</span><span class="p">)</span>                     <span class="kd">::</span> <span class="n">s</span>                            <span class="c">!&lt; Steps/stages counter.</span>
   <span class="kt">integer</span><span class="p">(</span><span class="n">I_P</span><span class="p">)</span>                     <span class="kd">::</span> <span class="n">d</span>                            <span class="c">!&lt; Time steps-exercised counter.</span>
+  <span class="kt">character</span><span class="p">(</span><span class="nb">len</span><span class="o">=</span><span class="p">:),</span> <span class="k">allocatable</span>    <span class="kd">::</span> <span class="n">output</span>                       <span class="c">!&lt; Output files basename.</span>
   <span class="kt">character</span><span class="p">(</span><span class="nb">len</span><span class="o">=</span><span class="p">:),</span> <span class="k">allocatable</span>    <span class="kd">::</span> <span class="n">title</span>                        <span class="c">!&lt; Output files title.</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
 
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+  <span class="k">if</span> <span class="p">(</span><span class="nb">allocated</span><span class="p">(</span><span class="n">solution</span><span class="p">))</span> <span class="k">deallocate</span><span class="p">(</span><span class="n">solution</span><span class="p">)</span> <span class="p">;</span> <span class="k">allocate</span><span class="p">(</span><span class="n">solution</span><span class="p">(</span><span class="mi">0</span><span class="p">:</span><span class="n">space_dimension</span><span class="p">,</span> <span class="mi">0</span><span class="p">:</span><span class="nb">int</span><span class="p">(</span><span class="n">t_final</span><span class="o">/</span><span class="n">Dt</span><span class="p">)))</span>
   <span class="n">results</span> <span class="o">=</span> <span class="p">.</span><span class="n">true</span><span class="p">.</span> <span class="c">! activate results saving</span>
   <span class="c">! Analyze errors of Adams-Bashforth solvers</span>
   <span class="k">do </span><span class="n">d</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">NDt</span> <span class="c">! loop over exercised time steps</span>
     <span class="n">Dt</span> <span class="o">=</span> <span class="n">time_steps</span><span class="p">(</span><span class="n">d</span><span class="p">)</span>
     <span class="n">solver</span> <span class="o">=</span> <span class="s1">&#39;adams-bashforth&#39;</span>
-    <span class="k">call </span><span class="n">init</span>
+    <span class="k">call </span><span class="n">init</span><span class="p">(</span><span class="n">output</span><span class="o">=</span><span class="n">output</span><span class="p">,</span> <span class="n">solution</span><span class="o">=</span><span class="n">solution</span><span class="p">)</span>
     <span class="k">do </span><span class="n">s</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">ab_steps</span>
       <span class="k">if</span> <span class="p">(</span><span class="n">s</span><span class="o">==</span><span class="mi">1</span><span class="p">)</span> <span class="k">cycle</span> <span class="c">! 1st order scheme surely not stable for this test</span>
       <span class="n">title</span> <span class="o">=</span> <span class="s1">&#39;Oscillation equation integration, explicit Adams-Bashforth, t=&#39;</span><span class="o">//</span><span class="n">str</span><span class="p">(</span><span class="n">n</span><span class="o">=</span><span class="n">t_final</span><span class="p">)</span><span class="o">//</span><span class="s1">&#39; steps=&#39;</span><span class="o">//</span><span class="nb">trim</span><span class="p">(</span><span class="n">str</span><span class="p">(.</span><span class="n">true</span><span class="p">.,</span> <span class="n">s</span><span class="p">))</span>
-      <span class="k">call </span><span class="n">ab_integrator</span><span class="p">%</span><span class="n">init</span><span class="p">(</span><span class="n">steps</span><span class="o">=</span><span class="n">s</span><span class="p">)</span>
-      <span class="k">select case</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
-      <span class="k">case</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
-        <span class="k">call </span><span class="n">rk_integrator</span><span class="p">%</span><span class="n">init</span><span class="p">(</span><span class="n">stages</span><span class="o">=</span><span class="n">s</span><span class="p">)</span>
-      <span class="k">case</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span>
-        <span class="k">call </span><span class="n">rk_integrator</span><span class="p">%</span><span class="n">init</span><span class="p">(</span><span class="n">stages</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
-      <span class="n">endselect</span>
-      <span class="k">call </span><span class="n">oscillator</span><span class="p">%</span><span class="n">init</span><span class="p">(</span><span class="n">initial_state</span><span class="o">=</span><span class="n">initial_state</span><span class="p">,</span> <span class="n">f</span><span class="o">=</span><span class="n">f</span><span class="p">,</span> <span class="n">steps</span><span class="o">=</span><span class="n">s</span><span class="p">)</span>
-      <span class="n">solution</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span> <span class="o">=</span> <span class="mf">0._R_P</span>
-      <span class="n">solution</span><span class="p">(</span><span class="mi">1</span><span class="p">:</span><span class="n">space_dimension</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span> <span class="o">=</span> <span class="n">oscillator</span><span class="p">%</span><span class="n">output</span><span class="p">()</span>
-      <span class="n">step</span> <span class="o">=</span> <span class="mi">0</span>
-      <span class="k">do while</span><span class="p">(</span><span class="n">solution</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">step</span><span class="p">)</span><span class="o">&lt;</span><span class="n">t_final</span><span class="p">)</span>
-        <span class="n">step</span> <span class="o">=</span> <span class="n">step</span> <span class="o">+</span> <span class="mi">1</span>
-        <span class="k">if</span> <span class="p">(</span><span class="n">s</span><span class="o">&gt;=</span><span class="n">step</span><span class="p">)</span> <span class="k">then</span>
-          <span class="c">! the time steps from 1 to s - 1 must be computed with other scheme...</span>
-          <span class="k">call </span><span class="n">rk_integrator</span><span class="p">%</span><span class="n">integrate</span><span class="p">(</span><span class="n">U</span><span class="o">=</span><span class="n">oscillator</span><span class="p">,</span> <span class="n">stage</span><span class="o">=</span><span class="n">rk_stage</span><span class="p">(</span><span class="mi">1</span><span class="p">:</span><span class="n">s</span><span class="p">),</span> <span class="n">Dt</span><span class="o">=</span><span class="n">Dt</span><span class="p">,</span> <span class="n">t</span><span class="o">=</span><span class="n">solution</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">step</span><span class="p">))</span>
-        <span class="k">else</span>
-<span class="k">          call </span><span class="n">ab_integrator</span><span class="p">%</span><span class="n">integrate</span><span class="p">(</span><span class="n">U</span><span class="o">=</span><span class="n">oscillator</span><span class="p">,</span> <span class="n">Dt</span><span class="o">=</span><span class="n">Dt</span><span class="p">,</span> <span class="n">t</span><span class="o">=</span><span class="n">solution</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">step</span><span class="o">-</span><span class="n">s</span><span class="p">:</span><span class="n">step</span><span class="o">-</span><span class="mi">1</span><span class="p">))</span>
-        <span class="n">endif</span>
-        <span class="n">solution</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">step</span><span class="p">)</span> <span class="o">=</span> <span class="n">step</span> <span class="o">*</span> <span class="n">Dt</span>
-        <span class="n">solution</span><span class="p">(</span><span class="mi">1</span><span class="p">:</span><span class="n">space_dimension</span><span class="p">,</span> <span class="n">step</span><span class="p">)</span> <span class="o">=</span> <span class="n">oscillator</span><span class="p">%</span><span class="n">output</span><span class="p">()</span>
-      <span class="n">enddo</span>
-      <span class="k">call </span><span class="n">save_results</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="n">title</span><span class="p">,</span> <span class="n">basename</span><span class="o">=</span><span class="n">output</span><span class="o">//</span><span class="s1">&#39;-&#39;</span><span class="o">//</span><span class="nb">trim</span><span class="p">(</span><span class="n">str</span><span class="p">(.</span><span class="n">true</span><span class="p">.,</span> <span class="n">s</span><span class="p">)))</span>
-      <span class="n">ab_errors</span><span class="p">(:,</span> <span class="n">s</span><span class="p">,</span> <span class="n">d</span><span class="p">)</span> <span class="o">=</span> <span class="n">compute_errors</span><span class="p">()</span>
+      <span class="k">call </span><span class="n">ab_solver</span><span class="p">(</span><span class="n">steps</span><span class="o">=</span><span class="n">s</span><span class="p">,</span> <span class="n">solution</span><span class="o">=</span><span class="n">solution</span><span class="p">)</span>
+      <span class="k">call </span><span class="n">save_results</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="n">title</span><span class="p">,</span> <span class="n">basename</span><span class="o">=</span><span class="n">output</span><span class="o">//</span><span class="s1">&#39;-&#39;</span><span class="o">//</span><span class="nb">trim</span><span class="p">(</span><span class="n">str</span><span class="p">(.</span><span class="n">true</span><span class="p">.,</span> <span class="n">s</span><span class="p">)),</span> <span class="n">solution</span><span class="o">=</span><span class="n">solution</span><span class="p">)</span>
+      <span class="n">ab_errors</span><span class="p">(:,</span> <span class="n">s</span><span class="p">,</span> <span class="n">d</span><span class="p">)</span> <span class="o">=</span> <span class="n">compute_errors</span><span class="p">(</span><span class="n">solution</span><span class="o">=</span><span class="n">solution</span><span class="p">)</span>
     <span class="n">enddo</span>
   <span class="n">enddo</span>
   <span class="k">do </span><span class="n">s</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">ab_steps</span>
@@ -1338,27 +1285,11 @@ implementation in a submodule of an interface in a parent module.</p>
   <span class="k">do </span><span class="n">d</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">NDt</span> <span class="c">! loop over exercised time steps</span>
     <span class="n">Dt</span> <span class="o">=</span> <span class="n">time_steps</span><span class="p">(</span><span class="n">d</span><span class="p">)</span>
     <span class="n">solver</span> <span class="o">=</span> <span class="s1">&#39;leapfrog&#39;</span>
-    <span class="k">call </span><span class="n">init</span>
+    <span class="k">call </span><span class="n">init</span><span class="p">(</span><span class="n">output</span><span class="o">=</span><span class="n">output</span><span class="p">,</span> <span class="n">solution</span><span class="o">=</span><span class="n">solution</span><span class="p">)</span>
     <span class="n">title</span> <span class="o">=</span> <span class="s1">&#39;Oscillation equation integration, leapfrog (RAW filtered), t=&#39;</span><span class="o">//</span><span class="n">str</span><span class="p">(</span><span class="n">n</span><span class="o">=</span><span class="n">t_final</span><span class="p">)</span>
-    <span class="k">call </span><span class="n">lf_integrator</span><span class="p">%</span><span class="n">init</span><span class="p">()</span>
-    <span class="k">call </span><span class="n">rk_integrator</span><span class="p">%</span><span class="n">init</span><span class="p">(</span><span class="n">stages</span><span class="o">=</span><span class="n">rk_stages</span><span class="p">)</span>
-    <span class="k">call </span><span class="n">oscillator</span><span class="p">%</span><span class="n">init</span><span class="p">(</span><span class="n">initial_state</span><span class="o">=</span><span class="n">initial_state</span><span class="p">,</span> <span class="n">f</span><span class="o">=</span><span class="n">f</span><span class="p">,</span> <span class="n">steps</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
-    <span class="n">solution</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span> <span class="o">=</span> <span class="mf">0._R_P</span>
-    <span class="n">solution</span><span class="p">(</span><span class="mi">1</span><span class="p">:</span><span class="n">space_dimension</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span> <span class="o">=</span> <span class="n">oscillator</span><span class="p">%</span><span class="n">output</span><span class="p">()</span>
-    <span class="n">step</span> <span class="o">=</span> <span class="mi">0</span>
-    <span class="k">do while</span><span class="p">(</span><span class="n">solution</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">step</span><span class="p">)</span><span class="o">&lt;</span><span class="n">t_final</span><span class="p">)</span>
-      <span class="n">step</span> <span class="o">=</span> <span class="n">step</span> <span class="o">+</span> <span class="mi">1</span>
-      <span class="k">if</span> <span class="p">(</span><span class="mi">2</span><span class="o">&gt;=</span><span class="n">step</span><span class="p">)</span> <span class="k">then</span>
-        <span class="c">! the time steps from 1 to 2 must be computed with other scheme...</span>
-        <span class="k">call </span><span class="n">rk_integrator</span><span class="p">%</span><span class="n">integrate</span><span class="p">(</span><span class="n">U</span><span class="o">=</span><span class="n">oscillator</span><span class="p">,</span> <span class="n">stage</span><span class="o">=</span><span class="n">rk_stage</span><span class="p">,</span> <span class="n">Dt</span><span class="o">=</span><span class="n">Dt</span><span class="p">,</span> <span class="n">t</span><span class="o">=</span><span class="n">solution</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">step</span><span class="p">))</span>
-      <span class="k">else</span>
-<span class="k">        call </span><span class="n">lf_integrator</span><span class="p">%</span><span class="n">integrate</span><span class="p">(</span><span class="n">U</span><span class="o">=</span><span class="n">oscillator</span><span class="p">,</span> <span class="n">filter</span><span class="o">=</span><span class="n">filter</span><span class="p">,</span> <span class="n">Dt</span><span class="o">=</span><span class="n">Dt</span><span class="p">,</span> <span class="n">t</span><span class="o">=</span><span class="n">solution</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">step</span><span class="p">))</span>
-      <span class="n">endif</span>
-      <span class="n">solution</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">step</span><span class="p">)</span> <span class="o">=</span> <span class="n">step</span> <span class="o">*</span> <span class="n">Dt</span>
-      <span class="n">solution</span><span class="p">(</span><span class="mi">1</span><span class="p">:</span><span class="n">space_dimension</span><span class="p">,</span> <span class="n">step</span><span class="p">)</span> <span class="o">=</span> <span class="n">oscillator</span><span class="p">%</span><span class="n">output</span><span class="p">()</span>
-    <span class="n">enddo</span>
-    <span class="k">call </span><span class="n">save_results</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="n">title</span><span class="p">,</span> <span class="n">basename</span><span class="o">=</span><span class="n">output</span><span class="p">)</span>
-    <span class="n">lf_errors</span><span class="p">(:,</span> <span class="n">d</span><span class="p">)</span> <span class="o">=</span> <span class="n">compute_errors</span><span class="p">()</span>
+    <span class="k">call </span><span class="n">leapfrog_solver</span><span class="p">(</span><span class="n">solution</span><span class="o">=</span><span class="n">solution</span><span class="p">)</span>
+    <span class="k">call </span><span class="n">save_results</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="n">title</span><span class="p">,</span> <span class="n">basename</span><span class="o">=</span><span class="n">output</span><span class="p">,</span> <span class="n">solution</span><span class="o">=</span><span class="n">solution</span><span class="p">)</span>
+    <span class="n">lf_errors</span><span class="p">(:,</span> <span class="n">d</span><span class="p">)</span> <span class="o">=</span> <span class="n">compute_errors</span><span class="p">(</span><span class="n">solution</span><span class="o">=</span><span class="n">solution</span><span class="p">)</span>
   <span class="n">enddo</span>
   <span class="k">do </span><span class="n">d</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">NDt</span><span class="o">-</span><span class="mi">1</span>
     <span class="n">lf_orders</span><span class="p">(:,</span> <span class="n">d</span><span class="p">)</span> <span class="o">=</span> <span class="n">estimate_orders</span><span class="p">(</span><span class="n">solver_error</span><span class="o">=</span><span class="n">lf_errors</span><span class="p">(:,</span> <span class="n">d</span><span class="p">:</span><span class="n">d</span><span class="o">+</span><span class="mi">1</span><span class="p">),</span> <span class="n">Dt_used</span><span class="o">=</span><span class="n">time_steps</span><span class="p">(</span><span class="n">d</span><span class="p">:</span><span class="n">d</span><span class="o">+</span><span class="mi">1</span><span class="p">))</span>
@@ -1367,7 +1298,7 @@ implementation in a submodule of an interface in a parent module.</p>
   <span class="k">do </span><span class="n">d</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">NDt</span> <span class="c">! loop over exercised time steps</span>
     <span class="n">Dt</span> <span class="o">=</span> <span class="n">time_steps</span><span class="p">(</span><span class="n">d</span><span class="p">)</span>
     <span class="n">solver</span> <span class="o">=</span> <span class="s1">&#39;ls-runge-kutta&#39;</span>
-    <span class="k">call </span><span class="n">init</span>
+    <span class="k">call </span><span class="n">init</span><span class="p">(</span><span class="n">output</span><span class="o">=</span><span class="n">output</span><span class="p">,</span> <span class="n">solution</span><span class="o">=</span><span class="n">solution</span><span class="p">)</span>
     <span class="k">do </span><span class="n">s</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">rk_stages</span>
       <span class="k">if</span> <span class="p">(</span><span class="n">s</span><span class="o">==</span><span class="mi">1</span><span class="p">)</span> <span class="k">cycle</span> <span class="c">! 1st order scheme surely not stable for this test</span>
       <span class="k">if</span> <span class="p">(</span><span class="n">s</span><span class="o">==</span><span class="mi">2</span><span class="p">)</span> <span class="k">cycle</span> <span class="c">! 2 stages not yet implemented</span>
@@ -1375,19 +1306,9 @@ implementation in a submodule of an interface in a parent module.</p>
       <span class="k">if</span> <span class="p">(</span><span class="n">s</span><span class="o">==</span><span class="mi">4</span><span class="p">)</span> <span class="k">cycle</span> <span class="c">! 4 stages not yet implemented</span>
       <span class="n">title</span> <span class="o">=</span> <span class="s1">&#39;Oscillation equation integration, explicit low storage Runge-Kutta, t=&#39;</span><span class="o">//</span><span class="n">str</span><span class="p">(</span><span class="n">n</span><span class="o">=</span><span class="n">t_final</span><span class="p">)</span><span class="o">//</span><span class="p">&amp;</span>
         <span class="s1">&#39; steps=&#39;</span><span class="o">//</span><span class="nb">trim</span><span class="p">(</span><span class="n">str</span><span class="p">(.</span><span class="n">true</span><span class="p">.,</span> <span class="n">s</span><span class="p">))</span>
-      <span class="k">call </span><span class="n">ls_integrator</span><span class="p">%</span><span class="n">init</span><span class="p">(</span><span class="n">stages</span><span class="o">=</span><span class="n">s</span><span class="p">)</span>
-      <span class="k">call </span><span class="n">oscillator</span><span class="p">%</span><span class="n">init</span><span class="p">(</span><span class="n">initial_state</span><span class="o">=</span><span class="n">initial_state</span><span class="p">,</span> <span class="n">f</span><span class="o">=</span><span class="n">f</span><span class="p">)</span>
-      <span class="n">solution</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span> <span class="o">=</span> <span class="mf">0._R_P</span>
-      <span class="n">solution</span><span class="p">(</span><span class="mi">1</span><span class="p">:</span><span class="n">space_dimension</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span> <span class="o">=</span> <span class="n">oscillator</span><span class="p">%</span><span class="n">output</span><span class="p">()</span>
-      <span class="n">step</span> <span class="o">=</span> <span class="mi">0</span>
-      <span class="k">do while</span><span class="p">(</span><span class="n">solution</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">step</span><span class="p">)</span><span class="o">&lt;</span><span class="n">t_final</span><span class="p">)</span>
-        <span class="n">step</span> <span class="o">=</span> <span class="n">step</span> <span class="o">+</span> <span class="mi">1</span>
-        <span class="k">call </span><span class="n">ls_integrator</span><span class="p">%</span><span class="n">integrate</span><span class="p">(</span><span class="n">U</span><span class="o">=</span><span class="n">oscillator</span><span class="p">,</span> <span class="n">stage</span><span class="o">=</span><span class="n">rk_stage</span><span class="p">,</span> <span class="n">Dt</span><span class="o">=</span><span class="n">Dt</span><span class="p">,</span> <span class="n">t</span><span class="o">=</span><span class="n">solution</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">step</span><span class="p">))</span>
-        <span class="n">solution</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">step</span><span class="p">)</span> <span class="o">=</span> <span class="n">step</span> <span class="o">*</span> <span class="n">Dt</span>
-        <span class="n">solution</span><span class="p">(</span><span class="mi">1</span><span class="p">:</span><span class="n">space_dimension</span><span class="p">,</span> <span class="n">step</span><span class="p">)</span> <span class="o">=</span> <span class="n">oscillator</span><span class="p">%</span><span class="n">output</span><span class="p">()</span>
-      <span class="n">enddo</span>
-      <span class="k">call </span><span class="n">save_results</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="n">title</span><span class="p">,</span> <span class="n">basename</span><span class="o">=</span><span class="n">output</span><span class="o">//</span><span class="s1">&#39;-&#39;</span><span class="o">//</span><span class="nb">trim</span><span class="p">(</span><span class="n">str</span><span class="p">(.</span><span class="n">true</span><span class="p">.,</span> <span class="n">s</span><span class="p">)))</span>
-      <span class="n">ls_errors</span><span class="p">(:,</span> <span class="n">s</span><span class="p">,</span> <span class="n">d</span><span class="p">)</span> <span class="o">=</span> <span class="n">compute_errors</span><span class="p">()</span>
+      <span class="k">call </span><span class="n">ls_rk_solver</span><span class="p">(</span><span class="n">stages</span><span class="o">=</span><span class="n">s</span><span class="p">,</span> <span class="n">solution</span><span class="o">=</span><span class="n">solution</span><span class="p">)</span>
+      <span class="k">call </span><span class="n">save_results</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="n">title</span><span class="p">,</span> <span class="n">basename</span><span class="o">=</span><span class="n">output</span><span class="o">//</span><span class="s1">&#39;-&#39;</span><span class="o">//</span><span class="nb">trim</span><span class="p">(</span><span class="n">str</span><span class="p">(.</span><span class="n">true</span><span class="p">.,</span> <span class="n">s</span><span class="p">)),</span> <span class="n">solution</span><span class="o">=</span><span class="n">solution</span><span class="p">)</span>
+      <span class="n">ls_errors</span><span class="p">(:,</span> <span class="n">s</span><span class="p">,</span> <span class="n">d</span><span class="p">)</span> <span class="o">=</span> <span class="n">compute_errors</span><span class="p">(</span><span class="n">solution</span><span class="o">=</span><span class="n">solution</span><span class="p">)</span>
     <span class="n">enddo</span>
   <span class="n">enddo</span>
   <span class="k">do </span><span class="n">s</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">rk_stages</span>
@@ -1403,24 +1324,14 @@ implementation in a submodule of an interface in a parent module.</p>
   <span class="k">do </span><span class="n">d</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">NDt</span> <span class="c">! loop over exercised time steps</span>
     <span class="n">Dt</span> <span class="o">=</span> <span class="n">time_steps</span><span class="p">(</span><span class="n">d</span><span class="p">)</span>
     <span class="n">solver</span> <span class="o">=</span> <span class="s1">&#39;tvd-runge-kutta&#39;</span>
-    <span class="k">call </span><span class="n">init</span>
+    <span class="k">call </span><span class="n">init</span><span class="p">(</span><span class="n">output</span><span class="o">=</span><span class="n">output</span><span class="p">,</span> <span class="n">solution</span><span class="o">=</span><span class="n">solution</span><span class="p">)</span>
     <span class="k">do </span><span class="n">s</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">rk_stages</span>
       <span class="k">if</span> <span class="p">(</span><span class="n">s</span><span class="o">==</span><span class="mi">1</span><span class="p">)</span> <span class="k">cycle</span> <span class="c">! 1st order scheme surely not stable for this test</span>
       <span class="k">if</span> <span class="p">(</span><span class="n">s</span><span class="o">==</span><span class="mi">4</span><span class="p">)</span> <span class="k">cycle</span> <span class="c">! 4 stages not yet implemented</span>
       <span class="n">title</span> <span class="o">=</span> <span class="s1">&#39;Oscillation equation integration, explicit TVD/SSP Runge-Kutta, t=&#39;</span><span class="o">//</span><span class="n">str</span><span class="p">(</span><span class="n">n</span><span class="o">=</span><span class="n">t_final</span><span class="p">)</span><span class="o">//</span><span class="s1">&#39; steps=&#39;</span><span class="o">//</span><span class="nb">trim</span><span class="p">(</span><span class="n">str</span><span class="p">(.</span><span class="n">true</span><span class="p">.,</span> <span class="n">s</span><span class="p">))</span>
-      <span class="k">call </span><span class="n">rk_integrator</span><span class="p">%</span><span class="n">init</span><span class="p">(</span><span class="n">stages</span><span class="o">=</span><span class="n">s</span><span class="p">)</span>
-      <span class="k">call </span><span class="n">oscillator</span><span class="p">%</span><span class="n">init</span><span class="p">(</span><span class="n">initial_state</span><span class="o">=</span><span class="n">initial_state</span><span class="p">,</span> <span class="n">f</span><span class="o">=</span><span class="n">f</span><span class="p">)</span>
-      <span class="n">solution</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span> <span class="o">=</span> <span class="mf">0._R_P</span>
-      <span class="n">solution</span><span class="p">(</span><span class="mi">1</span><span class="p">:</span><span class="n">space_dimension</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span> <span class="o">=</span> <span class="n">oscillator</span><span class="p">%</span><span class="n">output</span><span class="p">()</span>
-      <span class="n">step</span> <span class="o">=</span> <span class="mi">0</span>
-      <span class="k">do while</span><span class="p">(</span><span class="n">solution</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">step</span><span class="p">)</span><span class="o">&lt;</span><span class="n">t_final</span><span class="p">)</span>
-        <span class="n">step</span> <span class="o">=</span> <span class="n">step</span> <span class="o">+</span> <span class="mi">1</span>
-        <span class="k">call </span><span class="n">rk_integrator</span><span class="p">%</span><span class="n">integrate</span><span class="p">(</span><span class="n">U</span><span class="o">=</span><span class="n">oscillator</span><span class="p">,</span> <span class="n">stage</span><span class="o">=</span><span class="n">rk_stage</span><span class="p">(</span><span class="mi">1</span><span class="p">:</span><span class="n">s</span><span class="p">),</span> <span class="n">Dt</span><span class="o">=</span><span class="n">Dt</span><span class="p">,</span> <span class="n">t</span><span class="o">=</span><span class="n">solution</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">step</span><span class="p">))</span>
-        <span class="n">solution</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">step</span><span class="p">)</span> <span class="o">=</span> <span class="n">step</span> <span class="o">*</span> <span class="n">Dt</span>
-        <span class="n">solution</span><span class="p">(</span><span class="mi">1</span><span class="p">:</span><span class="n">space_dimension</span><span class="p">,</span> <span class="n">step</span><span class="p">)</span> <span class="o">=</span> <span class="n">oscillator</span><span class="p">%</span><span class="n">output</span><span class="p">()</span>
-      <span class="n">enddo</span>
-      <span class="k">call </span><span class="n">save_results</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="n">title</span><span class="p">,</span> <span class="n">basename</span><span class="o">=</span><span class="n">output</span><span class="o">//</span><span class="s1">&#39;-&#39;</span><span class="o">//</span><span class="nb">trim</span><span class="p">(</span><span class="n">str</span><span class="p">(.</span><span class="n">true</span><span class="p">.,</span> <span class="n">s</span><span class="p">)))</span>
-      <span class="n">rk_errors</span><span class="p">(:,</span> <span class="n">s</span><span class="p">,</span> <span class="n">d</span><span class="p">)</span> <span class="o">=</span> <span class="n">compute_errors</span><span class="p">()</span>
+      <span class="k">call </span><span class="n">tvd_rk_solver</span><span class="p">(</span><span class="n">stages</span><span class="o">=</span><span class="n">s</span><span class="p">,</span> <span class="n">solution</span><span class="o">=</span><span class="n">solution</span><span class="p">)</span>
+      <span class="k">call </span><span class="n">save_results</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="n">title</span><span class="p">,</span> <span class="n">basename</span><span class="o">=</span><span class="n">output</span><span class="o">//</span><span class="s1">&#39;-&#39;</span><span class="o">//</span><span class="nb">trim</span><span class="p">(</span><span class="n">str</span><span class="p">(.</span><span class="n">true</span><span class="p">.,</span> <span class="n">s</span><span class="p">)),</span> <span class="n">solution</span><span class="o">=</span><span class="n">solution</span><span class="p">)</span>
+      <span class="n">rk_errors</span><span class="p">(:,</span> <span class="n">s</span><span class="p">,</span> <span class="n">d</span><span class="p">)</span> <span class="o">=</span> <span class="n">compute_errors</span><span class="p">(</span><span class="n">solution</span><span class="o">=</span><span class="n">solution</span><span class="p">)</span>
     <span class="n">enddo</span>
   <span class="n">enddo</span>
   <span class="k">do </span><span class="n">s</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">rk_stages</span>
@@ -1433,7 +1344,6 @@ implementation in a submodule of an interface in a parent module.</p>
   <span class="k">call </span><span class="n">print_analysis</span><span class="p">(</span><span class="n">ab_steps</span><span class="o">=</span><span class="n">ab_steps</span><span class="p">,</span> <span class="n">rk_stages</span><span class="o">=</span><span class="n">rk_stages</span><span class="p">,</span> <span class="n">NDt</span><span class="o">=</span><span class="n">NDt</span><span class="p">,</span> <span class="n">time_steps</span><span class="o">=</span><span class="n">time_steps</span><span class="p">,</span> <span class="p">&amp;</span>
                       <span class="n">ab_errors</span><span class="o">=</span><span class="n">ab_errors</span><span class="p">,</span> <span class="n">lf_errors</span><span class="o">=</span><span class="n">lf_errors</span><span class="p">,</span> <span class="n">ls_errors</span><span class="o">=</span><span class="n">ls_errors</span><span class="p">,</span> <span class="n">rk_errors</span><span class="o">=</span><span class="n">rk_errors</span><span class="p">,</span> <span class="p">&amp;</span>
                       <span class="n">ab_orders</span><span class="o">=</span><span class="n">ab_orders</span><span class="p">,</span> <span class="n">lf_orders</span><span class="o">=</span><span class="n">lf_orders</span><span class="p">,</span> <span class="n">ls_orders</span><span class="o">=</span><span class="n">ls_orders</span><span class="p">,</span> <span class="n">rk_orders</span><span class="o">=</span><span class="n">rk_orders</span><span class="p">)</span>
-
   <span class="k">return</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
   <span class="n">endsubroutine</span> <span class="n">perform_errors_analysis</span>

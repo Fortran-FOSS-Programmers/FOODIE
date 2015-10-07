@@ -17,9 +17,10 @@ module foodie_integrator_leapfrog
 !< $$ U^{n+1} = U^{n+1} + \Delta * \alpha $$
 !< $$ U^{n+2} = U^{n+2} + \Delta * (\alpha-1) $$
 !< Note that for \(\alpha=1\) the filter reverts back to the standard Robert-Asselin scheme.
-!< The filter coefficients should be taken as \(\nu \in [0,1]\) and \(\alpha \in [0.5,1]\). The default values are
-!<+ \(\nu=0.01)\)
-!<+ \(\alpha=0.5)\)
+!< The filter coefficients should be taken as \(\nu \in (0,1]\) and \(\alpha \in (0.5,1]\). The default values are
+!<
+!<  + \(\nu=0.01\)
+!<  + \(\alpha=0.53\)
 !<
 !< @note The value of \(\Delta t\) must be provided, it not being computed by the integrator.
 !<
@@ -54,8 +55,8 @@ type :: leapfrog_integrator
   !< @note The integrator could be used without initialialization (initialize the time filter coefficients) if the defulat values
   !< are suitable for the problem.
   private
-  real(R_P) :: nu=0.01_R_P   !< Robert-Asselin filter coefficient.
-  real(R_P) :: alpha=0.5_R_P !< Robert-Asselin-Williams filter coefficient.
+  real(R_P) :: nu=0.01_R_P    !< Robert-Asselin filter coefficient.
+  real(R_P) :: alpha=0.53_R_P !< Robert-Asselin-Williams filter coefficient.
   contains
     procedure, pass(self), public :: init      !< Initialize (create) the integrator.
     procedure, pass(self), public :: integrate !< Integrate integrand field.
@@ -74,30 +75,34 @@ contains
 
   !---------------------------------------------------------------------------------------------------------------------------------
   self%nu = 0.01_R_P
-  self%alpha = 0.5_R_P
+  self%alpha = 0.53_R_P
   if (present(nu)) self%nu = nu
   if (present(alpha)) self%alpha = alpha
   return
   !---------------------------------------------------------------------------------------------------------------------------------
   endsubroutine init
 
-  subroutine integrate(self, U, filter, Dt, t)
+  subroutine integrate(self, U, previous, Dt, t, filter)
   !---------------------------------------------------------------------------------------------------------------------------------
   !< Integrate field with leapfrog class scheme.
   !---------------------------------------------------------------------------------------------------------------------------------
-  class(leapfrog_integrator), intent(IN)    :: self   !< LF integrator.
-  class(integrand),           intent(INOUT) :: U      !< Field to be integrated.
-  class(integrand), optional, intent(INOUT) :: filter !< Filter field displacement.
-  real(R_P),                  intent(in)    :: Dt     !< Time step.
-  real(R_P),                  intent(IN)    :: t      !< Time.
+  class(leapfrog_integrator), intent(IN)    :: self          !< LF integrator.
+  class(integrand),           intent(INOUT) :: U             !< Field to be integrated.
+  class(integrand),           intent(INOUT) :: previous(1:2) !< Previous time steps solutions of integrand field.
+  real(R_P),                  intent(in)    :: Dt            !< Time step.
+  real(R_P),                  intent(IN)    :: t             !< Time.
+  class(integrand), optional, intent(INOUT) :: filter        !< Filter field displacement.
   !---------------------------------------------------------------------------------------------------------------------------------
 
   !---------------------------------------------------------------------------------------------------------------------------------
-  U = U%previous_step(n=1) + U%t(n=2, t=t) * (Dt * 2._R_P)
+  U = previous(1) + previous(2)%t(t=t) * (Dt * 2._R_P)
   if (present(filter)) then
-    filter = (U%previous_step(n=1) - U%previous_step(n=2) * 2._R_P + U) * self%nu * 0.5_R_P
+    filter = (previous(1) - previous(2) * 2._R_P + U) * self%nu * 0.5_R_P
+    previous(2) = previous(2) + filter * self%alpha
+    U = U + filter * (self%alpha - 1._R_P)
   endif
-  call U%update_previous_steps(filter=filter, weights=[self%alpha, self%alpha - 1._R_P])
+  previous(1) = previous(2)
+  previous(2) = U
   return
   !---------------------------------------------------------------------------------------------------------------------------------
   endsubroutine integrate

@@ -136,12 +136,11 @@ contains
   endfunction compute_dt
 
   ! type_integrand deferred methods
-  function dBurgers_dt(self, n, t) result(dState_dt)
+  function dBurgers_dt(self, t) result(dState_dt)
   !---------------------------------------------------------------------------------------------------------------------------------
   !< Time derivative of Burgers field, residuals function.
   !---------------------------------------------------------------------------------------------------------------------------------
   class(burgers),         intent(IN) :: self      !< Burgers field.
-  integer(I_P), optional, intent(IN) :: n         !< Time level.
   real(R_P),    optional, intent(IN) :: t         !< Time.
   class(integrand), allocatable      :: dState_dt !< Burgers field time derivative.
   !---------------------------------------------------------------------------------------------------------------------------------
@@ -151,8 +150,8 @@ contains
   select type(dState_dt)
   class is(burgers)
     dState_dt = self
-    dState_dt = self%xx(n=n) * self%nu
-    dState_dt = dState_dt - self * self%x(n=n)
+    dState_dt = self%xx() * self%nu
+    dState_dt = dState_dt - self * self%x()
   endselect
   return
   !---------------------------------------------------------------------------------------------------------------------------------
@@ -354,65 +353,42 @@ contains
   endsubroutine burgers_assign_real
 
   ! private methods
-  function dBurgers_dx(self, n) result(derivative)
+  function dBurgers_dx(self) result(derivative)
   !---------------------------------------------------------------------------------------------------------------------------------
   !< Compute the first order spatial derivative of Burgers field.
   !---------------------------------------------------------------------------------------------------------------------------------
   class(burgers),    intent(IN) :: self       !< Burgers field.
-  integer, optional, intent(IN) :: n          !< Time level.
   type(burgers)                 :: derivative !< Burgers field derivative.
   integer(I_P)                  :: i          !< Counter.
-  integer                       :: dn         !< Time level, dummy variable.
   !---------------------------------------------------------------------------------------------------------------------------------
 
   !---------------------------------------------------------------------------------------------------------------------------------
   derivative = self
-  if (self%steps>=2) then ! self%previous should be used
-    dn = self%steps ; if (present(n)) dn = n
-    do i=2, self%Ni - 1
-      derivative%U(i) = (self%previous(i+1, dn) - self%previous(i-1, dn))/(2._R_P * self%h)
-    enddo
-    derivative%U(1) = (self%previous(2, dn) - self%previous(self%Ni, dn))/(2._R_P * self%h)
-    derivative%U(self%Ni) = (self%previous(1, dn) - self%previous(self%Ni-1, dn))/(2._R_P * self%h)
-  else ! self%previous should not be used, use directly self%U
-    do i=2, self%Ni - 1
-      derivative%U(i) = (self%U(i+1) - self%U(i-1))/(2._R_P * self%h)
-    enddo
-    derivative%U(1) = (self%U(2) - self%U(self%Ni))/(2._R_P * self%h)
-    derivative%U(self%Ni) = (self%U(1) - self%U(self%Ni-1))/(2._R_P * self%h)
-  endif
+  do i=2, self%Ni - 1
+    derivative%U(i) = (self%U(i+1) - self%U(i-1))/(2._R_P * self%h)
+  enddo
+  derivative%U(1) = (self%U(2) - self%U(self%Ni))/(2._R_P * self%h)
+  derivative%U(self%Ni) = (self%U(1) - self%U(self%Ni-1))/(2._R_P * self%h)
   return
   !---------------------------------------------------------------------------------------------------------------------------------
   endfunction
 
-  function d2Burgers_dx2(self, n) result(derivative)
+  function d2Burgers_dx2(self) result(derivative)
   !---------------------------------------------------------------------------------------------------------------------------------
   !< Compute the second order spatial derivative of Burgers field.
   !---------------------------------------------------------------------------------------------------------------------------------
   class(burgers),    intent(IN) :: self       !< Burgers field.
-  integer, optional, intent(IN) :: n          !< Time level.
   type(burgers)                 :: derivative !< Burgers field derivative.
   integer(I_P)                  :: i          !< Counter.
-  integer                       :: dn         !< Time level, dummy variable.
   !---------------------------------------------------------------------------------------------------------------------------------
 
   !---------------------------------------------------------------------------------------------------------------------------------
   derivative = self
-  if (self%steps>=2) then ! self%previous should be used
-    dn = self%steps ; if (present(n)) dn = n
-    do i=2, self%Ni - 1
-      derivative%U(i) = (self%previous(i+1, dn) - 2._R_P * self%previous(i, dn) + self%previous(i-1, dn))/(self%h**2)
-    enddo
-    derivative%U(1) = (self%previous(2, dn) - 2._R_P * self%previous(1, dn) + self%previous(self%Ni, dn))/(self%h**2)
-    derivative%U(self%Ni) = (self%previous(1, dn) - 2._R_P * self%previous(self%Ni, dn) + self%previous(self%Ni-1, dn))/&
-                                (self%h**2)
-  else ! self%previous should not be used, use directly self%U
-    do i=2, self%Ni - 1
-      derivative%U(i) = (self%U(i+1) - 2._R_P * self%U(i) + self%U(i-1))/(self%h**2)
-    enddo
-    derivative%U(1) = (self%U(2) - 2._R_P * self%U(1) + self%U(self%Ni))/(self%h**2)
-    derivative%U(self%Ni) = (self%U(1) - 2._R_P * self%U(self%Ni) + self%U(self%Ni-1))/(self%h**2)
-  endif
+  do i=2, self%Ni - 1
+    derivative%U(i) = (self%U(i+1) - 2._R_P * self%U(i) + self%U(i-1))/(self%h**2)
+  enddo
+  derivative%U(1) = (self%U(2) - 2._R_P * self%U(1) + self%U(self%Ni))/(self%h**2)
+  derivative%U(self%Ni) = (self%U(1) - 2._R_P * self%U(self%Ni) + self%U(self%Ni-1))/(self%h**2)
   return
   !---------------------------------------------------------------------------------------------------------------------------------
   endfunction

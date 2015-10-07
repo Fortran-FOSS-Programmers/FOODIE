@@ -10,7 +10,7 @@
     <meta name="author" content="Chris MacMackin" >
     <link rel="icon" href="../favicon.png">
 
-    <title>update_previous_steps &ndash; FOODiE</title>
+    <title>euler_solver &ndash; FOODiE</title>
 
     <link href="../css/bootstrap.min.css" rel="stylesheet">
     <link href="../css/pygments.css" rel="stylesheet">
@@ -89,7 +89,7 @@
     
   
   <div class="row">
-    <h1>update_previous_steps
+    <h1>euler_solver
     <small>Subroutine</small>
     
     </h1>
@@ -104,16 +104,16 @@
      
     
     
-    <li><i class="fa fa-code"></i><a href="../src/type_oscillation.f90"> Source File</a></li>
+    <li><i class="fa fa-code"></i><a href="../src/oscillation.f90"> Source File</a></li>
      
   </ul>
   <ol class="breadcrumb in-well text-right">
   
-     <li><a href='../sourcefile/type_oscillation.f90.html'>type_oscillation.f90</a></li>
+     <li><a href='../sourcefile/oscillation.f90.html'>oscillation.f90</a></li>
   
-     <li><a href='../module/type_oscillation.html'>type_oscillation</a></li>
+     <li><a href='../program/integrate_oscillation.html'>integrate_oscillation</a></li>
   
-     <li class="active">update_previous_steps</li>
+     <li class="active">euler_solver</li>
   </ol>
 </div>
 </div>
@@ -131,7 +131,11 @@
     <div class="panel-heading text-left"><h3 class="panel-title">Variables</h3></div>
     <div class="list-group">
       
-      <a class="list-group-item" href="../proc/update_previous_steps%7E5.html#variable-s%7E31">s</a>
+      <a class="list-group-item" href="../proc/euler_solver.html#variable-euler_integrator%7E4">euler_integrator</a>
+      
+      <a class="list-group-item" href="../proc/euler_solver.html#variable-oscillator%7E2">oscillator</a>
+      
+      <a class="list-group-item" href="../proc/euler_solver.html#variable-step%7E11">step</a>
       
     </div>
   </div>
@@ -157,7 +161,7 @@
   <div class="panel panel-primary">
     <div class="panel-heading text-left"><h3 class="panel-title">Source Code</h3></div>
     <div class="list-group">
-      <a class="list-group-item" href="../proc/update_previous_steps%7E5.html#src">update_previous_steps</a>
+      <a class="list-group-item" href="../proc/euler_solver.html#src">euler_solver</a>
     </div>
   </div>
   
@@ -170,6 +174,8 @@
       <a class="list-group-item" href="../proc/a.html">a</a>
       
       <a class="list-group-item" href="../proc/a%7E2.html">a</a>
+      
+      <a class="list-group-item" href="../proc/ab_solver.html">ab_solver</a>
       
       <a class="list-group-item" href="../proc/add_burgers.html">add_burgers</a>
       
@@ -253,6 +259,8 @@
       
       <a class="list-group-item" href="../proc/euler_multiply_real%7E2.html">euler_multiply_real</a>
       
+      <a class="list-group-item" href="../proc/euler_solver.html">euler_solver</a>
+      
       <a class="list-group-item" href="../proc/exact_solution.html">exact_solution</a>
       
       <a class="list-group-item" href="../proc/finalize.html">finalize</a>
@@ -309,6 +317,8 @@
       
       <a class="list-group-item" href="../proc/integrate%7E5.html">integrate</a>
       
+      <a class="list-group-item" href="../proc/leapfrog_solver.html">leapfrog_solver</a>
+      
       <a class="list-group-item" href="../proc/lorenz_assign_lorenz.html">lorenz_assign_lorenz</a>
       
       <a class="list-group-item" href="../proc/lorenz_assign_real.html">lorenz_assign_real</a>
@@ -317,9 +327,9 @@
       
       <a class="list-group-item" href="../proc/lorenz_multiply_real.html">lorenz_multiply_real</a>
       
-      <a class="list-group-item" href="../proc/oscillation_assign_oscillation.html">oscillation_assign_oscillation</a>
+      <a class="list-group-item" href="../proc/ls_rk_solver.html">ls_rk_solver</a>
       
-      <a class="list-group-item" href="../proc/oscillation_assign_real.html">oscillation_assign_real</a>
+      <a class="list-group-item" href="../proc/oscillation_assign_oscillation.html">oscillation_assign_oscillation</a>
       
       <a class="list-group-item" href="../proc/oscillation_multiply_oscillation.html">oscillation_multiply_oscillation</a>
       
@@ -348,8 +358,6 @@
       <a class="list-group-item" href="../proc/previous_step%7E3.html">previous_step</a>
       
       <a class="list-group-item" href="../proc/previous_step%7E4.html">previous_step</a>
-      
-      <a class="list-group-item" href="../proc/previous_step%7E5.html">previous_step</a>
       
       <a class="list-group-item" href="../proc/primitive2conservative.html">primitive2conservative</a>
       
@@ -443,6 +451,8 @@
       
       <a class="list-group-item" href="../proc/test_tvd_rk%7E4.html">test_tvd_rk</a>
       
+      <a class="list-group-item" href="../proc/tvd_rk_solver.html">tvd_rk_solver</a>
+      
       <a class="list-group-item" href="../proc/update_previous_steps.html">update_previous_steps</a>
       
       <a class="list-group-item" href="../proc/update_previous_steps%7E2.html">update_previous_steps</a>
@@ -450,8 +460,6 @@
       <a class="list-group-item" href="../proc/update_previous_steps%7E3.html">update_previous_steps</a>
       
       <a class="list-group-item" href="../proc/update_previous_steps%7E4.html">update_previous_steps</a>
-      
-      <a class="list-group-item" href="../proc/update_previous_steps%7E5.html">update_previous_steps</a>
       
     </div>
   </div>
@@ -461,7 +469,7 @@
     
     <div class="col-lg-9" id='text'>
     <h2>
-private subroutine update_previous_steps(self, filter, weights)
+subroutine euler_solver(solution)
     
     
     
@@ -489,42 +497,12 @@ private subroutine update_previous_steps(self, filter, weights)
   
 <tr>
   
-  <td><span class="anchor" id="variable-self%7E61"></span>class(<a href='../type/oscillation.html'>oscillation</a>),</td>
-  <td>intent(inout)</td>
+  <td><span class="anchor" id="variable-solution%7E10"></span>real(kind=R_P),</td>
+  <td>intent(out)</td>
   <td></td>
   
   <td></td><td>::</td>
-  <td><strong>self</strong></td><td><p>Oscillation field.</p></td>
-  
-</tr>
-
-  
-  
-  
-  
-<tr>
-  
-  <td><span class="anchor" id="variable-filter%7E12"></span>class(<a href='../type/integrand.html'>integrand</a>),</td>
-  <td>intent(in),</td>
-  <td>optional</td>
-  
-  <td></td><td>::</td>
-  <td><strong>filter</strong></td><td><p>Filter field displacement.</p></td>
-  
-</tr>
-
-  
-  
-  
-  
-<tr>
-  
-  <td><span class="anchor" id="variable-weights%7E6"></span>real(kind=R_P),</td>
-  <td>intent(in),</td>
-  <td>optional</td>
-  
-  <td></td><td>::</td>
-  <td><strong>weights</strong>(:)</td><td><p>Weights for filtering the steps.</p></td>
+  <td><strong>solution</strong>(0:,0:)</td><td><p>Solution at each time step.</p></td>
   
 </tr>
 
@@ -535,9 +513,145 @@ private subroutine update_previous_steps(self, filter, weights)
     
     
     <h3>Description</h3>
-    <p>Update previous time steps.</p>
+    <p>Solve problem with explicit forward Euler ODE solver.</p>
     
     
+     
+     <h3>Called By</h3>
+     
+                <div class="depgraph"><?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.26.3 (20100126.1600)
+ -->
+<!-- Title: proc~~euler_solver~~CalledByGraph Pages: 1 -->
+<svg id="proceuler_solverCalledByGraph" width="320pt" height="34pt"
+ viewBox="0.00 0.00 320.00 34.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="proc~~euler_solver~~CalledByGraph" class="graph" transform="scale(1 1) rotate(0) translate(4 30)">
+<title>proc~~euler_solver~~CalledByGraph</title>
+<polygon fill="white" stroke="white" points="-4,5 -4,-30 317,-30 317,5 -4,5"/>
+<!-- proc~euler_solver -->
+<g id="node1" class="node"><title>proc~euler_solver</title>
+<polygon fill="none" stroke="black" points="311,-26 241,-26 241,-1.24345e-14 311,-3.55271e-15 311,-26"/>
+<text text-anchor="middle" x="276" y="-10.55" font-family="Helvetica,sans-Serif" font-size="10.50">euler_solver</text>
+</g>
+<!-- proc~test_euler~4 -->
+<g id="node2" class="node"><title>proc~test_euler~4</title>
+<a xlink:href="../proc/test_euler%7E4.html" xlink:title="test_euler">
+<polygon fill="#d9534f" stroke="#d9534f" points="204,-26 144,-26 144,-1.24345e-14 204,-3.55271e-15 204,-26"/>
+<text text-anchor="middle" x="174" y="-10.55" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">test_euler</text>
+</a>
+</g>
+<!-- proc~test_euler~4&#45;&gt;proc~euler_solver -->
+<g id="edge4" class="edge"><title>proc~test_euler~4&#45;&gt;proc~euler_solver</title>
+<path fill="none" stroke="black" d="M204.052,-13C212.246,-13 221.313,-13 230.17,-13"/>
+<polygon fill="black" stroke="black" points="230.406,-16.5001 240.406,-13 230.406,-9.5001 230.406,-16.5001"/>
+</g>
+<!-- program~integrate_oscillation -->
+<g id="node3" class="node"><title>program~integrate_oscillation</title>
+<a xlink:href="../program/integrate_oscillation.html" xlink:title="integrate_oscillation">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="107,-26 1,-26 1,-1.24345e-14 107,-3.55271e-15 107,-26"/>
+<text text-anchor="middle" x="54" y="-10.55" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">integrate_oscillation</text>
+</a>
+</g>
+<!-- program~integrate_oscillation&#45;&gt;proc~test_euler~4 -->
+<g id="edge2" class="edge"><title>program~integrate_oscillation&#45;&gt;proc~test_euler~4</title>
+<path fill="none" stroke="black" d="M107.682,-13C116.37,-13 125.236,-13 133.542,-13"/>
+<polygon fill="black" stroke="black" points="133.707,-16.5001 143.707,-13 133.707,-9.5001 133.707,-16.5001"/>
+</g>
+</g>
+</svg>
+</div>
+                <div><a type="button" class="graph-help" data-toggle="modal" href="#graph-help-text">Help</a></div>
+                <div class="modal fade" id="graph-help-text" tabindex="-1" role="dialog">
+                  <div class="modal-dialog modal-lg" role="document">
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title" id="-graph-help-label">Graph Key</h4>
+                      </div>
+                      <div class="modal-body">
+                        
+Nodes of different colours represent the following:
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.26.3 (20100126.1600)
+ -->
+<!-- Title: Graph Key Pages: 1 -->
+<svg width="641pt" height="28pt"
+ viewBox="0.00 0.00 641.00 27.80" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="graph1" class="graph" transform="scale(0.817602 0.817602) rotate(0) translate(4 30)">
+<title>Graph Key</title>
+<polygon fill="white" stroke="white" points="-4,5 -4,-30 781,-30 781,5 -4,5"/>
+<!-- Module -->
+<g id="node1" class="node"><title>Module</title>
+<polygon fill="#337ab7" stroke="#337ab7" points="54,-26 2.13163e-14,-26 0,-1.24345e-14 54,-3.55271e-15 54,-26"/>
+<text text-anchor="middle" x="27" y="-10.55" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Module</text>
+</g>
+<!-- Submodule -->
+<g id="node2" class="node"><title>Submodule</title>
+<polygon fill="#5bc0de" stroke="#5bc0de" points="138,-26 72,-26 72,-1.24345e-14 138,-3.55271e-15 138,-26"/>
+<text text-anchor="middle" x="105" y="-10.55" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Submodule</text>
+</g>
+<!-- Type -->
+<g id="node3" class="node"><title>Type</title>
+<polygon fill="#5cb85c" stroke="#5cb85c" points="210,-26 156,-26 156,-1.24345e-14 210,-3.55271e-15 210,-26"/>
+<text text-anchor="middle" x="183" y="-10.55" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Type</text>
+</g>
+<!-- Subroutine -->
+<g id="node4" class="node"><title>Subroutine</title>
+<polygon fill="#d9534f" stroke="#d9534f" points="292,-26 228,-26 228,-1.24345e-14 292,-3.55271e-15 292,-26"/>
+<text text-anchor="middle" x="260" y="-10.55" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Subroutine</text>
+</g>
+<!-- Function -->
+<g id="node5" class="node"><title>Function</title>
+<polygon fill="#d94e8f" stroke="#d94e8f" points="364,-26 310,-26 310,-1.24345e-14 364,-3.55271e-15 364,-26"/>
+<text text-anchor="middle" x="337" y="-10.55" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Function</text>
+</g>
+<!-- Interface -->
+<g id="node6" class="node"><title>Interface</title>
+<polygon fill="#a7506f" stroke="#a7506f" points="436,-26 382,-26 382,-1.24345e-14 436,-3.55271e-15 436,-26"/>
+<text text-anchor="middle" x="409" y="-10.55" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Interface</text>
+</g>
+<!-- Unknown Procedure Type -->
+<g id="node7" class="node"><title>Unknown Procedure Type</title>
+<polygon fill="#777777" stroke="#777777" points="590,-26 454,-26 454,-1.24345e-14 590,-3.55271e-15 590,-26"/>
+<text text-anchor="middle" x="522" y="-10.55" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Unknown Procedure Type</text>
+</g>
+<!-- Program -->
+<g id="node8" class="node"><title>Program</title>
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="662,-26 608,-26 608,-1.24345e-14 662,-3.55271e-15 662,-26"/>
+<text text-anchor="middle" x="635" y="-10.55" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Program</text>
+</g>
+<!-- This Page&#39;s Entity -->
+<g id="node9" class="node"><title>This Page&#39;s Entity</title>
+<polygon fill="none" stroke="black" points="776,-26 680,-26 680,-1.24345e-14 776,-3.55271e-15 776,-26"/>
+<text text-anchor="middle" x="728" y="-10.55" font-family="Helvetica,sans-Serif" font-size="10.50">This Page&#39;s Entity</text>
+</g>
+</g>
+</svg>
+
+<h5>Module Graph</h5>
+<p>Solid arrows point from a parent (sub)module to the submodule which is
+descended from it. Dashed arrows point from a module being used to the
+module using it.</p>
+<h5>Type Graph</h5>
+<p>Solid arrows point from one derived type to another which extends
+(inherits from) it. Dashed arrows point from a derived type to another
+type containing it as a components, with a label listing the name(s) of
+said component(s).</p>
+<h5>Call Graph</h5>
+<p>Solid arrows point from a procedure to one which it calls. Dashed 
+arrows point from an interface to procedures which implement that interface.
+This could include the module procedures in a generic interface or the
+implementation in a submodule of an interface in a parent module.</p>
+
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                
      
     <br>
     
@@ -559,11 +673,39 @@ private subroutine update_previous_steps(self, filter, weights)
   
 <tr>
   
-  <td><span class="anchor" id="variable-s%7E31"></span>integer,</td>
+  <td><span class="anchor" id="variable-euler_integrator%7E4"></span>type(<a href='../type/euler_explicit_integrator.html'>euler_explicit_integrator</a>),</td>
   
   <td>public</td>
   <td></td><td>::</td>
-  <td><strong>s</strong></td><td></td><td></td><td><p>Time steps counter.</p></td>
+  <td><strong>euler_integrator</strong></td><td></td><td></td><td><p>Euler integrator.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-oscillator%7E2"></span>type(<a href='../type/oscillation.html'>oscillation</a>),</td>
+  
+  <td>public</td>
+  <td></td><td>::</td>
+  <td><strong>oscillator</strong></td><td></td><td></td><td><p>Oscillation field.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-step%7E11"></span>integer(kind=I_P),</td>
+  
+  <td>public</td>
+  <td></td><td>::</td>
+  <td><strong>step</strong></td><td></td><td></td><td><p>Time steps counter.</p></td>
   
 </tr>
 
@@ -590,34 +732,30 @@ private subroutine update_previous_steps(self, filter, weights)
     
     <section>
     <h2><span class="anchor" id="src"></span>Source Code</h2>
-    <div class="highlight"><pre>  <span class="k">subroutine </span><span class="n">update_previous_steps</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">filter</span><span class="p">,</span> <span class="n">weights</span><span class="p">)</span>
+    <div class="highlight"><pre>  <span class="k">subroutine </span><span class="n">euler_solver</span><span class="p">(</span><span class="n">solution</span><span class="p">)</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
-  <span class="c">!&lt; Update previous time steps.</span>
+  <span class="c">!&lt; Solve problem with explicit forward Euler ODE solver.</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
-  <span class="k">class</span><span class="p">(</span><span class="n">oscillation</span><span class="p">),</span>         <span class="k">intent</span><span class="p">(</span><span class="n">INOUT</span><span class="p">)</span> <span class="kd">::</span> <span class="n">self</span>       <span class="c">!&lt; Oscillation field.</span>
-  <span class="k">class</span><span class="p">(</span><span class="n">integrand</span><span class="p">),</span> <span class="k">optional</span><span class="p">,</span> <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span>    <span class="kd">::</span> <span class="n">filter</span>     <span class="c">!&lt; Filter field displacement.</span>
-  <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">),</span>        <span class="k">optional</span><span class="p">,</span> <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span>    <span class="kd">::</span> <span class="n">weights</span><span class="p">(:)</span> <span class="c">!&lt; Weights for filtering the steps.</span>
-  <span class="kt">integer</span>                                   <span class="kd">::</span> <span class="n">s</span>          <span class="c">!&lt; Time steps counter.</span>
+  <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">),</span> <span class="k">intent</span><span class="p">(</span><span class="n">OUT</span><span class="p">)</span>          <span class="kd">::</span> <span class="n">solution</span><span class="p">(</span><span class="mi">0</span><span class="p">:,</span><span class="mi">0</span><span class="p">:)</span>  <span class="c">!&lt; Solution at each time step.</span>
+  <span class="k">type</span><span class="p">(</span><span class="n">euler_explicit_integrator</span><span class="p">)</span> <span class="kd">::</span> <span class="n">euler_integrator</span> <span class="c">!&lt; Euler integrator.</span>
+  <span class="k">type</span><span class="p">(</span><span class="n">oscillation</span><span class="p">)</span>               <span class="kd">::</span> <span class="n">oscillator</span>       <span class="c">!&lt; Oscillation field.</span>
+  <span class="kt">integer</span><span class="p">(</span><span class="n">I_P</span><span class="p">)</span>                    <span class="kd">::</span> <span class="n">step</span>             <span class="c">!&lt; Time steps counter.</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
 
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
-  <span class="k">if</span> <span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">steps</span><span class="o">&gt;</span><span class="mi">0</span><span class="p">)</span> <span class="k">then</span>
-<span class="k">    do </span><span class="n">s</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">self</span><span class="p">%</span><span class="n">steps</span> <span class="o">-</span> <span class="mi">1</span>
-      <span class="n">self</span><span class="p">%</span><span class="n">previous</span><span class="p">(:,</span> <span class="n">s</span><span class="p">)</span> <span class="o">=</span> <span class="n">self</span><span class="p">%</span><span class="n">previous</span><span class="p">(:,</span> <span class="n">s</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
-    <span class="n">enddo</span>
-    <span class="n">self</span><span class="p">%</span><span class="n">previous</span><span class="p">(:,</span> <span class="n">self</span><span class="p">%</span><span class="n">steps</span><span class="p">)</span> <span class="o">=</span> <span class="n">self</span><span class="p">%</span><span class="n">U</span>
-  <span class="n">endif</span>
-  <span class="k">if</span> <span class="p">(</span><span class="nb">present</span><span class="p">(</span><span class="n">filter</span><span class="p">).</span><span class="nb">and</span><span class="p">.</span><span class="nb">present</span><span class="p">(</span><span class="n">weights</span><span class="p">))</span> <span class="k">then</span>
-<span class="k">    select type</span><span class="p">(</span><span class="n">filter</span><span class="p">)</span>
-    <span class="k">class is</span><span class="p">(</span><span class="n">oscillation</span><span class="p">)</span>
-      <span class="k">do </span><span class="n">s</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">self</span><span class="p">%</span><span class="n">steps</span>
-        <span class="n">self</span><span class="p">%</span><span class="n">previous</span><span class="p">(:,</span> <span class="n">s</span><span class="p">)</span> <span class="o">=</span> <span class="n">self</span><span class="p">%</span><span class="n">previous</span><span class="p">(:,</span> <span class="n">s</span><span class="p">)</span> <span class="o">+</span> <span class="n">filter</span><span class="p">%</span><span class="n">U</span> <span class="o">*</span> <span class="n">weights</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
-      <span class="n">enddo</span>
-    <span class="n">endselect</span>
-  <span class="n">endif</span>
+  <span class="k">call </span><span class="n">oscillator</span><span class="p">%</span><span class="n">init</span><span class="p">(</span><span class="n">initial_state</span><span class="o">=</span><span class="n">initial_state</span><span class="p">,</span> <span class="n">f</span><span class="o">=</span><span class="n">f</span><span class="p">)</span>
+  <span class="n">solution</span> <span class="o">=</span> <span class="mf">0._R_P</span>
+  <span class="n">solution</span><span class="p">(</span><span class="mi">1</span><span class="p">:</span><span class="n">space_dimension</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span> <span class="o">=</span> <span class="n">oscillator</span><span class="p">%</span><span class="n">output</span><span class="p">()</span>
+  <span class="n">step</span> <span class="o">=</span> <span class="mi">0</span>
+  <span class="k">do while</span><span class="p">(</span><span class="n">solution</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">step</span><span class="p">)</span><span class="o">&lt;</span><span class="n">t_final</span><span class="p">)</span>
+    <span class="n">step</span> <span class="o">=</span> <span class="n">step</span> <span class="o">+</span> <span class="mi">1</span>
+    <span class="k">call </span><span class="n">euler_integrator</span><span class="p">%</span><span class="n">integrate</span><span class="p">(</span><span class="n">U</span><span class="o">=</span><span class="n">oscillator</span><span class="p">,</span> <span class="n">Dt</span><span class="o">=</span><span class="n">Dt</span><span class="p">,</span> <span class="n">t</span><span class="o">=</span><span class="n">solution</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">step</span><span class="p">))</span>
+    <span class="n">solution</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">step</span><span class="p">)</span> <span class="o">=</span> <span class="n">step</span> <span class="o">*</span> <span class="n">Dt</span>
+    <span class="n">solution</span><span class="p">(</span><span class="mi">1</span><span class="p">:</span><span class="n">space_dimension</span><span class="p">,</span> <span class="n">step</span><span class="p">)</span> <span class="o">=</span> <span class="n">oscillator</span><span class="p">%</span><span class="n">output</span><span class="p">()</span>
+  <span class="n">enddo</span>
   <span class="k">return</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
-  <span class="n">endsubroutine</span> <span class="n">update_previous_steps</span>
+  <span class="n">endsubroutine</span> <span class="n">euler_solver</span>
 </pre></div>
 
     </section>

@@ -301,18 +301,16 @@ contains
   endfunction compute_dt
 
   ! type_integrand deferred methods
-  function dEuler_dt(self, n, t) result(dState_dt)
+  function dEuler_dt(self, t) result(dState_dt)
   !---------------------------------------------------------------------------------------------------------------------------------
   !< Time derivative of Euler field, the residuals function.
   !---------------------------------------------------------------------------------------------------------------------------------
   class(euler_1D),        intent(IN) :: self      !< Euler field.
-  integer(I_P), optional, intent(IN) :: n         !< Time level.
   real(R_P),    optional, intent(IN) :: t         !< Time.
   class(integrand), allocatable      :: dState_dt !< Euler field time derivative.
   real(R_P), allocatable             :: F(:,:)    !< Fluxes of conservative variables.
   real(R_P), allocatable             :: P(:,:)    !< Primitive variables.
   real(R_P), allocatable             :: PR(:,:,:) !< Left (1) and right (2) (reconstructed) interface values of primitive variables.
-  integer(I_P)                       :: dn        !< Time level, dummy variable.
   integer(I_P)                       :: i         !< Counter.
   !---------------------------------------------------------------------------------------------------------------------------------
 
@@ -323,16 +321,9 @@ contains
     allocate(P(1:Np, 1-Ng:Ni+Ng)) ; P = 0._R_P
     allocate(PR(1:Np, 1:2, 0:Ni+1)) ; PR = 0._R_P
     ! compute primitive variables
-    if (self%steps>=2) then ! self%previous should be used, multi-step time integration
-      dn = self%steps ; if (present(n)) dn = n
-      do i=1, Ni
-        P(:, i) = self%conservative2primitive(previous(:, i, dn))
-      enddo
-    else ! self%U should be used, single-step time integration
-      do i=1, Ni
-        P(:, i) = self%conservative2primitive(U(:, i))
-      enddo
-    endif
+    do i=1, Ni
+      P(:, i) = self%conservative2primitive(U(:, i))
+    enddo
     call self%impose_boundary_conditions(primitive=P)
     call self%reconstruct_interfaces_states(primitive=P, r_primitive=PR)
     ! compute fluxes by solving Rimeann Problems at each interface

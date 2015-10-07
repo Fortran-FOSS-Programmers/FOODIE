@@ -179,6 +179,8 @@
       
       <a class="list-group-item" href="../proc/a%7E2.html">a</a>
       
+      <a class="list-group-item" href="../proc/ab_solver.html">ab_solver</a>
+      
       <a class="list-group-item" href="../proc/add_burgers.html">add_burgers</a>
       
       <a class="list-group-item" href="../proc/add_euler.html">add_euler</a>
@@ -261,6 +263,8 @@
       
       <a class="list-group-item" href="../proc/euler_multiply_real%7E2.html">euler_multiply_real</a>
       
+      <a class="list-group-item" href="../proc/euler_solver.html">euler_solver</a>
+      
       <a class="list-group-item" href="../proc/exact_solution.html">exact_solution</a>
       
       <a class="list-group-item" href="../proc/finalize.html">finalize</a>
@@ -317,6 +321,8 @@
       
       <a class="list-group-item" href="../proc/integrate%7E5.html">integrate</a>
       
+      <a class="list-group-item" href="../proc/leapfrog_solver.html">leapfrog_solver</a>
+      
       <a class="list-group-item" href="../proc/lorenz_assign_lorenz.html">lorenz_assign_lorenz</a>
       
       <a class="list-group-item" href="../proc/lorenz_assign_real.html">lorenz_assign_real</a>
@@ -325,9 +331,9 @@
       
       <a class="list-group-item" href="../proc/lorenz_multiply_real.html">lorenz_multiply_real</a>
       
-      <a class="list-group-item" href="../proc/oscillation_assign_oscillation.html">oscillation_assign_oscillation</a>
+      <a class="list-group-item" href="../proc/ls_rk_solver.html">ls_rk_solver</a>
       
-      <a class="list-group-item" href="../proc/oscillation_assign_real.html">oscillation_assign_real</a>
+      <a class="list-group-item" href="../proc/oscillation_assign_oscillation.html">oscillation_assign_oscillation</a>
       
       <a class="list-group-item" href="../proc/oscillation_multiply_oscillation.html">oscillation_multiply_oscillation</a>
       
@@ -356,8 +362,6 @@
       <a class="list-group-item" href="../proc/previous_step%7E3.html">previous_step</a>
       
       <a class="list-group-item" href="../proc/previous_step%7E4.html">previous_step</a>
-      
-      <a class="list-group-item" href="../proc/previous_step%7E5.html">previous_step</a>
       
       <a class="list-group-item" href="../proc/primitive2conservative.html">primitive2conservative</a>
       
@@ -451,6 +455,8 @@
       
       <a class="list-group-item" href="../proc/test_tvd_rk%7E4.html">test_tvd_rk</a>
       
+      <a class="list-group-item" href="../proc/tvd_rk_solver.html">tvd_rk_solver</a>
+      
       <a class="list-group-item" href="../proc/update_previous_steps.html">update_previous_steps</a>
       
       <a class="list-group-item" href="../proc/update_previous_steps%7E2.html">update_previous_steps</a>
@@ -458,8 +464,6 @@
       <a class="list-group-item" href="../proc/update_previous_steps%7E3.html">update_previous_steps</a>
       
       <a class="list-group-item" href="../proc/update_previous_steps%7E4.html">update_previous_steps</a>
-      
-      <a class="list-group-item" href="../proc/update_previous_steps%7E5.html">update_previous_steps</a>
       
     </div>
   </div>
@@ -469,7 +473,7 @@
     
     <div class="col-lg-9" id='text'>
     <h2>
-subroutine save_results(title, basename)
+subroutine save_results(title, basename, solution)
     
     
     
@@ -518,6 +522,21 @@ subroutine save_results(title, basename)
   
   <td></td><td>::</td>
   <td><strong>basename</strong></td><td><p>Output files basename.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-solution%7E3"></span>real(kind=R_P),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>solution</strong>(0:,0:)</td><td><p>Solution at each time step.</p></td>
   
 </tr>
 
@@ -674,28 +693,28 @@ implementation in a submodule of an interface in a parent module.</p>
 <polygon fill="none" stroke="black" points="383,-136 311,-136 311,-110 383,-110 383,-136"/>
 <text text-anchor="middle" x="347" y="-120.55" font-family="Helvetica,sans-Serif" font-size="10.50">save_results</text>
 </g>
-<!-- proc~test_leapfrog~4 -->
-<g id="node2" class="node"><title>proc~test_leapfrog~4</title>
-<a xlink:href="../proc/test_leapfrog%7E4.html" xlink:title="test_leapfrog">
-<polygon fill="#d9534f" stroke="#d9534f" points="246,-246 172,-246 172,-220 246,-220 246,-246"/>
-<text text-anchor="middle" x="209" y="-230.55" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">test_leapfrog</text>
+<!-- proc~test_tvd_rk~4 -->
+<g id="node2" class="node"><title>proc~test_tvd_rk~4</title>
+<a xlink:href="../proc/test_tvd_rk%7E4.html" xlink:title="test_tvd_rk">
+<polygon fill="#d9534f" stroke="#d9534f" points="241,-246 177,-246 177,-220 241,-220 241,-246"/>
+<text text-anchor="middle" x="209" y="-230.55" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">test_tvd_rk</text>
 </a>
 </g>
-<!-- proc~test_leapfrog~4&#45;&gt;proc~save_results~5 -->
-<g id="edge14" class="edge"><title>proc~test_leapfrog~4&#45;&gt;proc~save_results~5</title>
-<path fill="none" stroke="black" d="M246.769,-224.114C256.155,-220.884 265.852,-216.602 274,-211 299.417,-193.524 320.874,-164.841 333.814,-144.995"/>
+<!-- proc~test_tvd_rk~4&#45;&gt;proc~save_results~5 -->
+<g id="edge14" class="edge"><title>proc~test_tvd_rk~4&#45;&gt;proc~save_results~5</title>
+<path fill="none" stroke="black" d="M241.722,-225.763C252.599,-222.389 264.379,-217.615 274,-211 299.417,-193.524 320.874,-164.841 333.814,-144.995"/>
 <polygon fill="black" stroke="black" points="336.919,-146.633 339.303,-136.31 331.002,-142.893 336.919,-146.633"/>
 </g>
-<!-- proc~test_ls_rk~4 -->
-<g id="node3" class="node"><title>proc~test_ls_rk~4</title>
-<a xlink:href="../proc/test_ls_rk%7E4.html" xlink:title="test_ls_rk">
-<polygon fill="#d9534f" stroke="#d9534f" points="238,-202 180,-202 180,-176 238,-176 238,-202"/>
-<text text-anchor="middle" x="209" y="-186.55" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">test_ls_rk</text>
+<!-- proc~test_ab~4 -->
+<g id="node3" class="node"><title>proc~test_ab~4</title>
+<a xlink:href="../proc/test_ab%7E4.html" xlink:title="test_ab">
+<polygon fill="#d9534f" stroke="#d9534f" points="236,-202 182,-202 182,-176 236,-176 236,-202"/>
+<text text-anchor="middle" x="209" y="-186.55" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">test_ab</text>
 </a>
 </g>
-<!-- proc~test_ls_rk~4&#45;&gt;proc~save_results~5 -->
-<g id="edge16" class="edge"><title>proc~test_ls_rk~4&#45;&gt;proc~save_results~5</title>
-<path fill="none" stroke="black" d="M238.322,-180.562C249.679,-176.912 262.653,-172.265 274,-167 289.487,-159.815 305.842,-150.169 319.137,-141.74"/>
+<!-- proc~test_ab~4&#45;&gt;proc~save_results~5 -->
+<g id="edge16" class="edge"><title>proc~test_ab~4&#45;&gt;proc~save_results~5</title>
+<path fill="none" stroke="black" d="M236.073,-181.279C247.942,-177.529 261.896,-172.616 274,-167 289.487,-159.815 305.842,-150.169 319.137,-141.74"/>
 <polygon fill="black" stroke="black" points="321.302,-144.509 327.804,-136.144 317.505,-138.628 321.302,-144.509"/>
 </g>
 <!-- proc~test_euler~4 -->
@@ -710,17 +729,17 @@ implementation in a submodule of an interface in a parent module.</p>
 <path fill="none" stroke="black" d="M239.285,-140.172C257.203,-137.315 280.272,-133.638 300.462,-130.419"/>
 <polygon fill="black" stroke="black" points="301.085,-133.864 310.409,-128.833 299.983,-126.951 301.085,-133.864"/>
 </g>
-<!-- proc~test_tvd_rk~4 -->
-<g id="node5" class="node"><title>proc~test_tvd_rk~4</title>
-<a xlink:href="../proc/test_tvd_rk%7E4.html" xlink:title="test_tvd_rk">
-<polygon fill="#d9534f" stroke="#d9534f" points="241,-114 177,-114 177,-88 241,-88 241,-114"/>
-<text text-anchor="middle" x="209" y="-98.55" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">test_tvd_rk</text>
+<!-- proc~test_ls_rk~4 -->
+<g id="node5" class="node"><title>proc~test_ls_rk~4</title>
+<a xlink:href="../proc/test_ls_rk%7E4.html" xlink:title="test_ls_rk">
+<polygon fill="#d9534f" stroke="#d9534f" points="238,-114 180,-114 180,-88 238,-88 238,-114"/>
+<text text-anchor="middle" x="209" y="-98.55" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">test_ls_rk</text>
 </a>
 </g>
-<!-- proc~test_tvd_rk~4&#45;&gt;proc~save_results~5 -->
-<g id="edge20" class="edge"><title>proc~test_tvd_rk~4&#45;&gt;proc~save_results~5</title>
-<path fill="none" stroke="black" d="M241.704,-106.214C259.135,-108.993 280.886,-112.46 300.086,-115.521"/>
-<polygon fill="black" stroke="black" points="299.725,-119.008 310.152,-117.126 300.827,-112.095 299.725,-119.008"/>
+<!-- proc~test_ls_rk~4&#45;&gt;proc~save_results~5 -->
+<g id="edge20" class="edge"><title>proc~test_ls_rk~4&#45;&gt;proc~save_results~5</title>
+<path fill="none" stroke="black" d="M238.266,-105.666C256.27,-108.536 279.749,-112.279 300.279,-115.552"/>
+<polygon fill="black" stroke="black" points="299.966,-119.046 310.392,-117.164 301.068,-112.133 299.966,-119.046"/>
 </g>
 <!-- proc~perform_errors_analysis -->
 <g id="node6" class="node"><title>proc~perform_errors_analysis</title>
@@ -734,16 +753,16 @@ implementation in a submodule of an interface in a parent module.</p>
 <path fill="none" stroke="black" d="M251.826,-70.0228C259.328,-72.7185 266.975,-75.7409 274,-79 289.487,-86.1853 305.842,-95.8311 319.137,-104.26"/>
 <polygon fill="black" stroke="black" points="317.505,-107.372 327.804,-109.856 321.302,-101.491 317.505,-107.372"/>
 </g>
-<!-- proc~test_ab~4 -->
-<g id="node7" class="node"><title>proc~test_ab~4</title>
-<a xlink:href="../proc/test_ab%7E4.html" xlink:title="test_ab">
-<polygon fill="#d9534f" stroke="#d9534f" points="236,-26 182,-26 182,-1.24345e-14 236,-3.55271e-15 236,-26"/>
-<text text-anchor="middle" x="209" y="-10.55" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">test_ab</text>
+<!-- proc~test_leapfrog~4 -->
+<g id="node7" class="node"><title>proc~test_leapfrog~4</title>
+<a xlink:href="../proc/test_leapfrog%7E4.html" xlink:title="test_leapfrog">
+<polygon fill="#d9534f" stroke="#d9534f" points="246,-26 172,-26 172,-1.24345e-14 246,-3.55271e-15 246,-26"/>
+<text text-anchor="middle" x="209" y="-10.55" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">test_leapfrog</text>
 </a>
 </g>
-<!-- proc~test_ab~4&#45;&gt;proc~save_results~5 -->
-<g id="edge24" class="edge"><title>proc~test_ab~4&#45;&gt;proc~save_results~5</title>
-<path fill="none" stroke="black" d="M236.16,-18.6058C248.447,-22.0099 262.71,-27.2378 274,-35 299.417,-52.4758 320.874,-81.1591 333.814,-101.005"/>
+<!-- proc~test_leapfrog~4&#45;&gt;proc~save_results~5 -->
+<g id="edge24" class="edge"><title>proc~test_leapfrog~4&#45;&gt;proc~save_results~5</title>
+<path fill="none" stroke="black" d="M246.769,-21.8864C256.155,-25.1155 265.852,-29.3977 274,-35 299.417,-52.4758 320.874,-81.1591 333.814,-101.005"/>
 <polygon fill="black" stroke="black" points="331.002,-103.107 339.303,-109.69 336.919,-99.3668 331.002,-103.107"/>
 </g>
 <!-- program~integrate_oscillation -->
@@ -753,35 +772,35 @@ implementation in a submodule of an interface in a parent module.</p>
 <text text-anchor="middle" x="54" y="-120.55" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">integrate_oscillation</text>
 </a>
 </g>
-<!-- program~integrate_oscillation&#45;&gt;proc~test_leapfrog~4 -->
-<g id="edge2" class="edge"><title>program~integrate_oscillation&#45;&gt;proc~test_leapfrog~4</title>
-<path fill="none" stroke="black" d="M64.2215,-136.224C79.5976,-155.281 110.471,-190.431 144,-211 149.465,-214.352 155.504,-217.267 161.635,-219.781"/>
-<polygon fill="black" stroke="black" points="160.683,-223.162 171.275,-223.405 163.147,-216.61 160.683,-223.162"/>
+<!-- program~integrate_oscillation&#45;&gt;proc~test_tvd_rk~4 -->
+<g id="edge2" class="edge"><title>program~integrate_oscillation&#45;&gt;proc~test_tvd_rk~4</title>
+<path fill="none" stroke="black" d="M64.2215,-136.224C79.5976,-155.281 110.471,-190.431 144,-211 151.003,-215.296 158.95,-218.874 166.824,-221.809"/>
+<polygon fill="black" stroke="black" points="165.729,-225.134 176.324,-225.075 168.005,-218.514 165.729,-225.134"/>
 </g>
-<!-- program~integrate_oscillation&#45;&gt;proc~test_ls_rk~4 -->
-<g id="edge4" class="edge"><title>program~integrate_oscillation&#45;&gt;proc~test_ls_rk~4</title>
-<path fill="none" stroke="black" d="M78.4398,-136.008C96.324,-145.265 121.323,-157.664 144,-167 152.404,-170.46 161.572,-173.812 170.302,-176.812"/>
-<polygon fill="black" stroke="black" points="169.314,-180.172 179.908,-180.037 171.542,-173.536 169.314,-180.172"/>
+<!-- program~integrate_oscillation&#45;&gt;proc~test_ab~4 -->
+<g id="edge4" class="edge"><title>program~integrate_oscillation&#45;&gt;proc~test_ab~4</title>
+<path fill="none" stroke="black" d="M78.4398,-136.008C96.324,-145.265 121.323,-157.664 144,-167 152.98,-170.697 162.832,-174.27 172.09,-177.424"/>
+<polygon fill="black" stroke="black" points="171.239,-180.829 181.833,-180.667 173.45,-174.188 171.239,-180.829"/>
 </g>
 <!-- program~integrate_oscillation&#45;&gt;proc~test_euler~4 -->
 <g id="edge6" class="edge"><title>program~integrate_oscillation&#45;&gt;proc~test_euler~4</title>
 <path fill="none" stroke="black" d="M107.776,-130.633C127.843,-133.481 150.258,-136.662 168.885,-139.306"/>
 <polygon fill="black" stroke="black" points="168.411,-142.774 178.804,-140.714 169.395,-135.844 168.411,-142.774"/>
 </g>
-<!-- program~integrate_oscillation&#45;&gt;proc~test_tvd_rk~4 -->
-<g id="edge8" class="edge"><title>program~integrate_oscillation&#45;&gt;proc~test_tvd_rk~4</title>
-<path fill="none" stroke="black" d="M107.776,-115.367C126.869,-112.657 148.088,-109.646 166.146,-107.082"/>
-<polygon fill="black" stroke="black" points="166.687,-110.541 176.096,-105.67 165.703,-103.61 166.687,-110.541"/>
+<!-- program~integrate_oscillation&#45;&gt;proc~test_ls_rk~4 -->
+<g id="edge8" class="edge"><title>program~integrate_oscillation&#45;&gt;proc~test_ls_rk~4</title>
+<path fill="none" stroke="black" d="M107.776,-115.367C128.138,-112.477 150.918,-109.244 169.704,-106.577"/>
+<polygon fill="black" stroke="black" points="170.28,-110.031 179.689,-105.16 169.296,-103.1 170.28,-110.031"/>
 </g>
 <!-- program~integrate_oscillation&#45;&gt;proc~perform_errors_analysis -->
 <g id="edge10" class="edge"><title>program~integrate_oscillation&#45;&gt;proc~perform_errors_analysis</title>
 <path fill="none" stroke="black" d="M78.4398,-109.992C96.324,-100.735 121.323,-88.3357 144,-79 148.513,-77.1419 153.247,-75.3151 158.014,-73.5572"/>
 <polygon fill="black" stroke="black" points="159.554,-76.7236 167.789,-70.0575 157.194,-70.1333 159.554,-76.7236"/>
 </g>
-<!-- program~integrate_oscillation&#45;&gt;proc~test_ab~4 -->
-<g id="edge12" class="edge"><title>program~integrate_oscillation&#45;&gt;proc~test_ab~4</title>
-<path fill="none" stroke="black" d="M64.2215,-109.776C79.5976,-90.7186 110.471,-55.5688 144,-35 152.592,-29.7291 162.605,-25.5391 172.161,-22.2914"/>
-<polygon fill="black" stroke="black" points="173.382,-25.5765 181.875,-19.2422 171.286,-18.8978 173.382,-25.5765"/>
+<!-- program~integrate_oscillation&#45;&gt;proc~test_leapfrog~4 -->
+<g id="edge12" class="edge"><title>program~integrate_oscillation&#45;&gt;proc~test_leapfrog~4</title>
+<path fill="none" stroke="black" d="M64.2215,-109.776C79.5976,-90.7186 110.471,-55.5688 144,-35 149.465,-31.6476 155.504,-28.7325 161.635,-26.219"/>
+<polygon fill="black" stroke="black" points="163.147,-29.3899 171.275,-22.5946 160.683,-22.8377 163.147,-29.3899"/>
 </g>
 </g>
 </svg>
@@ -984,12 +1003,13 @@ implementation in a submodule of an interface in a parent module.</p>
     
     <section>
     <h2><span class="anchor" id="src"></span>Source Code</h2>
-    <div class="highlight"><pre>  <span class="k">subroutine </span><span class="n">save_results</span><span class="p">(</span><span class="n">title</span><span class="p">,</span> <span class="n">basename</span><span class="p">)</span>
+    <div class="highlight"><pre>  <span class="k">subroutine </span><span class="n">save_results</span><span class="p">(</span><span class="n">title</span><span class="p">,</span> <span class="n">basename</span><span class="p">,</span> <span class="n">solution</span><span class="p">)</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
   <span class="c">!&lt; Save plots of results.</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
   <span class="kt">character</span><span class="p">(</span><span class="o">*</span><span class="p">),</span> <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span> <span class="kd">::</span> <span class="n">title</span>                     <span class="c">!&lt; Plot title.</span>
   <span class="kt">character</span><span class="p">(</span><span class="o">*</span><span class="p">),</span> <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span> <span class="kd">::</span> <span class="n">basename</span>                  <span class="c">!&lt; Output files basename.</span>
+  <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">),</span>    <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span> <span class="kd">::</span> <span class="n">solution</span><span class="p">(</span><span class="mi">0</span><span class="p">:,</span><span class="mi">0</span><span class="p">:)</span>           <span class="c">!&lt; Solution at each time step.</span>
   <span class="kt">integer</span><span class="p">(</span><span class="n">I_P</span><span class="p">)</span>             <span class="kd">::</span> <span class="n">rawfile</span>                   <span class="c">!&lt; Raw file unit for saving results.</span>
   <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">)</span>                <span class="kd">::</span> <span class="n">ex_sol</span><span class="p">(</span><span class="mi">1</span><span class="p">:</span><span class="n">space_dimension</span><span class="p">)</span> <span class="c">!&lt; Exact solution.</span>
   <span class="k">type</span><span class="p">(</span><span class="n">pyplot</span><span class="p">)</span>             <span class="kd">::</span> <span class="n">plt</span>                       <span class="c">!&lt; Plot file handler.</span>

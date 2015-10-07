@@ -541,7 +541,7 @@ private elementalsubroutine <a href='../proc/init.html'>init</a>(self, steps)
          
     
     <h3>
-private subroutine <a href='../proc/integrate.html'>integrate</a>(self, U, Dt, t)
+private subroutine <a href='../proc/integrate.html'>integrate</a>(self, U, previous, Dt, t)
     
     
     
@@ -587,6 +587,21 @@ private subroutine <a href='../proc/integrate.html'>integrate</a>(self, U, Dt, t
   
   <td></td><td>::</td>
   <td><strong>U</strong></td><td><p>Field to be integrated.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>class(<a href='../type/integrand.html'>integrand</a>),</td>
+  <td>intent(inout)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>previous</strong>(1:)</td><td><p>Previous time steps solutions of integrand field.</p></td>
   
 </tr>
 
