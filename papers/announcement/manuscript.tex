@@ -1159,6 +1159,34 @@ return
 endsubroutine oscillation_assign_oscillation
 \end{lstlisting}
 
+\paragraph{FOODiE numerical integration}
+
+Using the above discussed \emph{oscillation} type it is very easy to solve IVP \ref{eq:oscillation} by means of FOODiE library. Listing \ref{list:oscillation_leapfrog} presents the numerical integration of system \ref{eq:oscillation} by means of the Leapfrog RAW-filtered method. In the example, the integration is performed with $10^4$ steps with a fixed $\Delta t=10^2$ until the time $t=10^6$ is reached. The example shows also that for starting a multi-step scheme such as the Leapfrog one a lower-oder or equivalent order one-scheme is necessary: in the example the first 2 steps are computed by means of one-step TVD/SSP Runge-Kutta 2-stages schemes. Note that the memory registers for storing the Runge-Kutta stages and the RAW filter displacement must be handled by the client code. Listing \ref{list:oscillation_leapfrog} demonstrates how it is simple, clear and concise to solve a IVP by FOODiE solvers. Moreover, it proves how it is simple and effective to apply different solvers in a coupled algorithm, that greatly simplify the development of new hybrid solvers for self-adaptive time step size.
+
+\begin{lstlisting}[firstnumber=1,style=code,caption={numerical integration of the \emph{oscillation} system by means of Leapfrog RAW-filtered method},label={list:oscillation_leapfrog}]
+use foodie, only: leapfrog_integrator, tvd_runge_kutta_integrator
+type(leapfrog_integrator)        :: lf_integrator ! Leapfrog integrator.
+type(tvd_runge_kutta_integrator) :: rk_integrator ! Runge-Kutta integrator.
+type(oscillation)                :: rk_stage(1:2) ! Runge-Kutta stages.
+type(oscillation)                :: oscillator    ! Oscillation field.
+type(oscillation)                :: filter        ! Filter displacement.
+integer                          :: step          ! Time steps counter.
+real                             :: Dt            ! Time step.
+call lf_integrator%init()
+call rk_integrator%init(stages=2)
+call oscillator%init(initial_state=[0.0,1.0], f=10e4, steps=2)
+Dt = 100.0
+do step=1, 10000
+  if (2>=step) then
+    call rk_integrator%integrate(U=oscillator, stage=rk_stage, Dt=Dt, t=step*Dt)
+  else
+    call lf_integrator%integrate(U=oscillator, filter=filter, Dt=Dt, t=step*Dt)
+  endif
+enddo
+call print_results(U=oscillator)
+\end{lstlisting}
+
+\paragraph{FOODiE integration}
 \subsubsection{Errors Analysis of the FOODiE Oscillation test results}
 
 We use the Oscillation test program (shipped with FOODiE tests suite) for the testing the above described implementation and assessing the provided solvers accuracy for this IVP.
@@ -1215,7 +1243,7 @@ Table \ref{tab:oscillation} summarizes the errors analysis.
                  &    100.0        &  0.714E-01    &  0.711E-01    &  1.50         &  1.50         \\
 
     \cmidrule{2-6}
-    \multirow{6}{*}{leapfrog 2 steps}
+    \multirow{6}{*}{Leapfrog RAW-filtered}
                  &   5000.0        &  0.151E+02    &  0.152E+02    & /             & /             \\
                  &   2500.0        &  0.500E+01    &  0.504E+01    & 1.60          & 1.59          \\
                  &   1250.0        &  0.190E+01    &  0.193E+01    & 1.40          & 1.39          \\
@@ -1266,7 +1294,11 @@ The expected observed orders of accuracy should tend to 2, 3 and 4 for the corre
 
 Figure \ref{fig:results-oscillation-adams-bashforth} emphasizes instability generation for some pairs scheme-$\Delta t$: odd-even phase/amplitude phenomena are present. A deep insight from whom is familiar with multi-step method is welcome.
 
-Note that in the summary.log file into error analysis directory I have computed also the product of $f*\Delta t$ in order to verify when the instability arises: for AB-2 and AB-4 the solution with $\Delta t=5000 \rightarrow f*\Delta t=0.5$ results to be unstable while for AB-3 it is stable, but the amplitude is dumped resulting into large errors. This is consistent with Duran results, where AB-3 is said to be unstable for $ f*\Delta t>0.724$.
+Note that in the summary.log file into error analysis directory I have computed also the product of $f*\Delta t$ in order to verify when the instability arises.
+
+For AB-2 and AB-4 the solution with $\Delta t=5000 \rightarrow f*\Delta t=0.5$ results to be unstable (the computational modes are not dumped) while for AB-3 it is stable, but the (physical mode) amplitude is dumped resulting into large errors. This is consistent with Duran results, where AB-3 is said to be unstable for $ f*\Delta t>0.724$.
+
+The AB-2 and AB-4 solutions show a phase error that decreases as the time resolution increases. The AB-3 has no phase error and the computational modes are dumped for all $\Delta t$ exercised.
 }
 
 \begin{figure}[!ht]
@@ -1294,7 +1326,7 @@ Note that in the summary.log file into error analysis directory I have computed 
 \begin{figure}[!ht]
   \centering
   \includegraphics[width=0.70\textwidth]{errors-analysis/oscillation/errors_analysis-oscillation-leapfrog.png}
-  \caption{Oscillation equations solutions computed by means of leapfrog 2 steps solver}\label{fig:results-oscillation-leapfrog}
+  \caption{Oscillation equations solutions computed by means of Leapfrog RAW-filtered solver}\label{fig:results-oscillation-leapfrog}
 \end{figure}
 
 \paragraph{Low Storage Runge-Kutta}

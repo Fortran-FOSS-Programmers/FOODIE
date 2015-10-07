@@ -17,9 +17,10 @@ module foodie_integrator_leapfrog
 !< $$ U^{n+1} = U^{n+1} + \Delta * \alpha $$
 !< $$ U^{n+2} = U^{n+2} + \Delta * (\alpha-1) $$
 !< Note that for \(\alpha=1\) the filter reverts back to the standard Robert-Asselin scheme.
-!< The filter coefficients should be taken as \(\nu \in [0,1]\) and \(\alpha \in [0.5,1]\). The default values are
-!<+ \(\nu=0.01)\)
-!<+ \(\alpha=0.5)\)
+!< The filter coefficients should be taken as \(\nu \in (0,1]\) and \(\alpha \in (0.5,1]\). The default values are
+!<
+!<  + \(\nu=0.01\)
+!<  + \(\alpha=0.53\)
 !<
 !< @note The value of \(\Delta t\) must be provided, it not being computed by the integrator.
 !<
@@ -54,8 +55,8 @@ type :: leapfrog_integrator
   !< @note The integrator could be used without initialialization (initialize the time filter coefficients) if the defulat values
   !< are suitable for the problem.
   private
-  real(R_P) :: nu=0.01_R_P   !< Robert-Asselin filter coefficient.
-  real(R_P) :: alpha=0.5_R_P !< Robert-Asselin-Williams filter coefficient.
+  real(R_P) :: nu=0.01_R_P    !< Robert-Asselin filter coefficient.
+  real(R_P) :: alpha=0.53_R_P !< Robert-Asselin-Williams filter coefficient.
   contains
     procedure, pass(self), public :: init      !< Initialize (create) the integrator.
     procedure, pass(self), public :: integrate !< Integrate integrand field.
@@ -74,7 +75,7 @@ contains
 
   !---------------------------------------------------------------------------------------------------------------------------------
   self%nu = 0.01_R_P
-  self%alpha = 0.5_R_P
+  self%alpha = 0.53_R_P
   if (present(nu)) self%nu = nu
   if (present(alpha)) self%alpha = alpha
   return
