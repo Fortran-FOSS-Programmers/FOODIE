@@ -82,23 +82,27 @@ contains
   !---------------------------------------------------------------------------------------------------------------------------------
   endsubroutine init
 
-  subroutine integrate(self, U, filter, Dt, t)
+  subroutine integrate(self, U, previous, Dt, t, filter)
   !---------------------------------------------------------------------------------------------------------------------------------
   !< Integrate field with leapfrog class scheme.
   !---------------------------------------------------------------------------------------------------------------------------------
-  class(leapfrog_integrator), intent(IN)    :: self   !< LF integrator.
-  class(integrand),           intent(INOUT) :: U      !< Field to be integrated.
-  class(integrand), optional, intent(INOUT) :: filter !< Filter field displacement.
-  real(R_P),                  intent(in)    :: Dt     !< Time step.
-  real(R_P),                  intent(IN)    :: t      !< Time.
+  class(leapfrog_integrator), intent(IN)    :: self          !< LF integrator.
+  class(integrand),           intent(INOUT) :: U             !< Field to be integrated.
+  class(integrand),           intent(INOUT) :: previous(1:2) !< Previous time steps solutions of integrand field.
+  real(R_P),                  intent(in)    :: Dt            !< Time step.
+  real(R_P),                  intent(IN)    :: t             !< Time.
+  class(integrand), optional, intent(INOUT) :: filter        !< Filter field displacement.
   !---------------------------------------------------------------------------------------------------------------------------------
 
   !---------------------------------------------------------------------------------------------------------------------------------
-  U = U%previous_step(n=1) + U%t(n=2, t=t) * (Dt * 2._R_P)
+  U = previous(1) + previous(2)%t(t=t) * (Dt * 2._R_P)
   if (present(filter)) then
-    filter = (U%previous_step(n=1) - U%previous_step(n=2) * 2._R_P + U) * self%nu * 0.5_R_P
+    filter = (previous(1) - previous(2) * 2._R_P + U) * self%nu * 0.5_R_P
+    previous(2) = previous(2) + filter * self%alpha
+    U = U + filter * (self%alpha - 1._R_P)
   endif
-  call U%update_previous_steps(filter=filter, weights=[self%alpha, self%alpha - 1._R_P])
+  previous(1) = previous(2)
+  previous(2) = U
   return
   !---------------------------------------------------------------------------------------------------------------------------------
   endsubroutine integrate

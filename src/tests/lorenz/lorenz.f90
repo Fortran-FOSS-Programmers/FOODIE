@@ -131,6 +131,7 @@ contains
   type(lorenz)                     :: rk_stage(1:rk_stages) !< Runge-Kutta stages.
   type(adams_bashforth_integrator) :: ab_integrator         !< Adams-Bashforth integrator.
   integer, parameter               :: ab_steps=4            !< Adams-Bashforth steps number.
+  type(lorenz)                     :: previous(1:ab_steps)  !< Previous time steps solutions.
   integer(I_P)                     :: s                     !< AB steps counter.
   integer                          :: step                  !< Time steps counter.
   !---------------------------------------------------------------------------------------------------------------------------------
@@ -153,8 +154,9 @@ contains
       if (s>=step) then
         ! the time steps from 1 to s - 1 must be computed with other scheme...
         call rk_integrator%integrate(U=attractor, stage=rk_stage, dt=dt, t=solution(0, step))
+        previous(step) = attractor
       else
-        call ab_integrator%integrate(U=attractor, dt=dt, t=solution(0, step-s:step-1))
+        call ab_integrator%integrate(U=attractor, previous=previous(1:s), dt=dt, t=solution(0, step-s:step-1))
       endif
       solution(0, step) = step * dt
       solution(1:space_dimension, step) = attractor%output()
@@ -201,6 +203,7 @@ contains
   type(lorenz)                     :: rk_stage(1:rk_stages) !< Runge-Kutta stages.
   type(lorenz)                     :: filter                !< Filter displacement.
   type(leapfrog_integrator)        :: lf_integrator         !< Leapfrog integrator.
+  type(lorenz)                     :: previous(1:2)         !< Previous time steps solutions.
   integer                          :: step                  !< Time steps counter.
   !---------------------------------------------------------------------------------------------------------------------------------
 
@@ -215,8 +218,9 @@ contains
     if (2>=step) then
       ! the time steps from 1 to 2 must be computed with other scheme...
       call rk_integrator%integrate(U=attractor, stage=rk_stage, dt=dt, t=solution(0, step))
+      previous(step) = attractor
     else
-      call lf_integrator%integrate(U=attractor, filter=filter, dt=dt, t=solution(0, step))
+      call lf_integrator%integrate(U=attractor, previous=previous, dt=dt, t=solution(0, step), filter=filter)
     endif
     solution(0, step) = step * dt
     solution(1:space_dimension, step) = attractor%output()
