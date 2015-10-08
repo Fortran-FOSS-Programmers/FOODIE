@@ -147,6 +147,8 @@
       
       <a class="list-group-item" href="../proc/leapfrog_solver.html#variable-step%7E12">step</a>
       
+      <a class="list-group-item" href="../proc/leapfrog_solver.html#variable-filtered">filtered</a>
+      
     </div>
   </div>
   
@@ -479,7 +481,7 @@
     
     <div class="col-lg-9" id='text'>
     <h2>
-subroutine leapfrog_solver(solution)
+subroutine leapfrog_solver(solution, raw)
     
     
     
@@ -516,6 +518,21 @@ subroutine leapfrog_solver(solution)
   
 </tr>
 
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-raw%7E2"></span>logical,</td>
+  <td>intent(in),</td>
+  <td>optional</td>
+  
+  <td></td><td>::</td>
+  <td><strong>raw</strong></td><td><p>Activate RAW filter.</p></td>
+  
+</tr>
+
 </tbody>
 </table>
 
@@ -545,29 +562,29 @@ subroutine leapfrog_solver(solution)
 <polygon fill="none" stroke="black" points="396,-48 310,-48 310,-22 396,-22 396,-48"/>
 <text text-anchor="middle" x="353" y="-32.55" font-family="Helvetica,sans-Serif" font-size="10.50">leapfrog_solver</text>
 </g>
-<!-- proc~perform_errors_analysis -->
-<g id="node2" class="node"><title>proc~perform_errors_analysis</title>
-<a xlink:href="../proc/perform_errors_analysis.html" xlink:title="perform_errors_analysis">
-<polygon fill="#d9534f" stroke="#d9534f" points="273,-70 145,-70 145,-44 273,-44 273,-70"/>
-<text text-anchor="middle" x="209" y="-54.55" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">perform_errors_analysis</text>
-</a>
-</g>
-<!-- proc~perform_errors_analysis&#45;&gt;proc~leapfrog_solver -->
-<g id="edge6" class="edge"><title>proc~perform_errors_analysis&#45;&gt;proc~leapfrog_solver</title>
-<path fill="none" stroke="black" d="M273.839,-47.0941C282.543,-45.7643 291.387,-44.413 299.858,-43.119"/>
-<polygon fill="black" stroke="black" points="300.612,-46.5444 309.969,-41.5742 299.555,-39.6247 300.612,-46.5444"/>
-</g>
 <!-- proc~test_leapfrog~4 -->
-<g id="node3" class="node"><title>proc~test_leapfrog~4</title>
+<g id="node2" class="node"><title>proc~test_leapfrog~4</title>
 <a xlink:href="../proc/test_leapfrog%7E4.html" xlink:title="test_leapfrog">
-<polygon fill="#d9534f" stroke="#d9534f" points="246,-26 172,-26 172,-1.24345e-14 246,-3.55271e-15 246,-26"/>
-<text text-anchor="middle" x="209" y="-10.55" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">test_leapfrog</text>
+<polygon fill="#d9534f" stroke="#d9534f" points="246,-70 172,-70 172,-44 246,-44 246,-70"/>
+<text text-anchor="middle" x="209" y="-54.55" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">test_leapfrog</text>
 </a>
 </g>
 <!-- proc~test_leapfrog~4&#45;&gt;proc~leapfrog_solver -->
-<g id="edge8" class="edge"><title>proc~test_leapfrog~4&#45;&gt;proc~leapfrog_solver</title>
-<path fill="none" stroke="black" d="M246.834,-18.7802C262.995,-21.2492 282.145,-24.175 299.702,-26.8572"/>
-<polygon fill="black" stroke="black" points="299.406,-30.3525 309.82,-28.403 300.463,-23.4328 299.406,-30.3525"/>
+<g id="edge6" class="edge"><title>proc~test_leapfrog~4&#45;&gt;proc~leapfrog_solver</title>
+<path fill="none" stroke="black" d="M246.834,-51.2198C262.995,-48.7508 282.145,-45.825 299.702,-43.1428"/>
+<polygon fill="black" stroke="black" points="300.463,-46.5672 309.82,-41.597 299.406,-39.6475 300.463,-46.5672"/>
+</g>
+<!-- proc~perform_errors_analysis -->
+<g id="node3" class="node"><title>proc~perform_errors_analysis</title>
+<a xlink:href="../proc/perform_errors_analysis.html" xlink:title="perform_errors_analysis">
+<polygon fill="#d9534f" stroke="#d9534f" points="273,-26 145,-26 145,-1.24345e-14 273,-3.55271e-15 273,-26"/>
+<text text-anchor="middle" x="209" y="-10.55" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">perform_errors_analysis</text>
+</a>
+</g>
+<!-- proc~perform_errors_analysis&#45;&gt;proc~leapfrog_solver -->
+<g id="edge8" class="edge"><title>proc~perform_errors_analysis&#45;&gt;proc~leapfrog_solver</title>
+<path fill="none" stroke="black" d="M273.839,-22.9059C282.543,-24.2357 291.387,-25.587 299.858,-26.881"/>
+<polygon fill="black" stroke="black" points="299.555,-30.3753 309.969,-28.4258 300.612,-23.4556 299.555,-30.3753"/>
 </g>
 <!-- program~integrate_oscillation -->
 <g id="node4" class="node"><title>program~integrate_oscillation</title>
@@ -576,15 +593,15 @@ subroutine leapfrog_solver(solution)
 <text text-anchor="middle" x="54" y="-32.55" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">integrate_oscillation</text>
 </a>
 </g>
-<!-- program~integrate_oscillation&#45;&gt;proc~perform_errors_analysis -->
-<g id="edge2" class="edge"><title>program~integrate_oscillation&#45;&gt;proc~perform_errors_analysis</title>
-<path fill="none" stroke="black" d="M107.776,-42.6328C116.353,-43.8501 125.358,-45.1282 134.313,-46.3993"/>
-<polygon fill="black" stroke="black" points="133.984,-49.8876 144.377,-47.8277 134.968,-42.9571 133.984,-49.8876"/>
-</g>
 <!-- program~integrate_oscillation&#45;&gt;proc~test_leapfrog~4 -->
-<g id="edge4" class="edge"><title>program~integrate_oscillation&#45;&gt;proc~test_leapfrog~4</title>
-<path fill="none" stroke="black" d="M107.776,-27.3672C125.155,-24.9006 144.294,-22.1841 161.208,-19.7833"/>
-<polygon fill="black" stroke="black" points="162.008,-23.205 171.417,-18.3344 161.024,-16.2744 162.008,-23.205"/>
+<g id="edge2" class="edge"><title>program~integrate_oscillation&#45;&gt;proc~test_leapfrog~4</title>
+<path fill="none" stroke="black" d="M107.776,-42.6328C125.155,-45.0994 144.294,-47.8159 161.208,-50.2167"/>
+<polygon fill="black" stroke="black" points="161.024,-53.7256 171.417,-51.6656 162.008,-46.795 161.024,-53.7256"/>
+</g>
+<!-- program~integrate_oscillation&#45;&gt;proc~perform_errors_analysis -->
+<g id="edge4" class="edge"><title>program~integrate_oscillation&#45;&gt;proc~perform_errors_analysis</title>
+<path fill="none" stroke="black" d="M107.776,-27.3672C116.353,-26.1499 125.358,-24.8718 134.313,-23.6007"/>
+<polygon fill="black" stroke="black" points="134.968,-27.0429 144.377,-22.1723 133.984,-20.1124 134.968,-27.0429"/>
 </g>
 </g>
 </svg>
@@ -806,6 +823,20 @@ implementation in a submodule of an interface in a parent module.</p>
   
 </tr>
 
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-filtered"></span>logical,</td>
+  
+  <td>public</td>
+  <td></td><td>::</td>
+  <td><strong>filtered</strong></td><td></td><td></td><td><p>Activate RAW filter.</p></td>
+  
+</tr>
+
 </tbody>
 </table>
 
@@ -829,11 +860,12 @@ implementation in a submodule of an interface in a parent module.</p>
     
     <section>
     <h2><span class="anchor" id="src"></span>Source Code</h2>
-    <div class="highlight"><pre>  <span class="k">subroutine </span><span class="n">leapfrog_solver</span><span class="p">(</span><span class="n">solution</span><span class="p">)</span>
+    <div class="highlight"><pre>  <span class="k">subroutine </span><span class="n">leapfrog_solver</span><span class="p">(</span><span class="n">solution</span><span class="p">,</span> <span class="n">raw</span><span class="p">)</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
   <span class="c">!&lt; Solve problem with explicit leapfrog class of ODE solvers.</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
-  <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">),</span> <span class="k">intent</span><span class="p">(</span><span class="n">OUT</span><span class="p">)</span>           <span class="kd">::</span> <span class="n">solution</span><span class="p">(</span><span class="mi">0</span><span class="p">:,</span><span class="mi">0</span><span class="p">:)</span>       <span class="c">!&lt; Solution at each time step.</span>
+  <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">),</span>        <span class="k">intent</span><span class="p">(</span><span class="n">OUT</span><span class="p">)</span>    <span class="kd">::</span> <span class="n">solution</span><span class="p">(</span><span class="mi">0</span><span class="p">:,</span><span class="mi">0</span><span class="p">:)</span>       <span class="c">!&lt; Solution at each time step.</span>
+  <span class="kt">logical</span><span class="p">,</span> <span class="k">optional</span><span class="p">,</span> <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span>    <span class="kd">::</span> <span class="n">raw</span>                   <span class="c">!&lt; Activate RAW filter.</span>
   <span class="k">type</span><span class="p">(</span><span class="n">tvd_runge_kutta_integrator</span><span class="p">)</span> <span class="kd">::</span> <span class="n">rk_integrator</span>         <span class="c">!&lt; Runge-Kutta integrator.</span>
   <span class="kt">integer</span><span class="p">,</span> <span class="k">parameter</span>               <span class="kd">::</span> <span class="n">rk_stages</span><span class="o">=</span><span class="mi">5</span>           <span class="c">!&lt; Runge-Kutta stages number.</span>
   <span class="k">type</span><span class="p">(</span><span class="n">oscillation</span><span class="p">)</span>                <span class="kd">::</span> <span class="n">rk_stage</span><span class="p">(</span><span class="mi">1</span><span class="p">:</span><span class="n">rk_stages</span><span class="p">)</span> <span class="c">!&lt; Runge-Kutta stages.</span>
@@ -842,9 +874,11 @@ implementation in a submodule of an interface in a parent module.</p>
   <span class="k">type</span><span class="p">(</span><span class="n">oscillation</span><span class="p">)</span>                <span class="kd">::</span> <span class="n">filter</span>                <span class="c">!&lt; Filter displacement.</span>
   <span class="k">type</span><span class="p">(</span><span class="n">oscillation</span><span class="p">)</span>                <span class="kd">::</span> <span class="n">oscillator</span>            <span class="c">!&lt; Oscillation field.</span>
   <span class="kt">integer</span>                          <span class="kd">::</span> <span class="n">step</span>                  <span class="c">!&lt; Time steps counter.</span>
+  <span class="kt">logical</span>                          <span class="kd">::</span> <span class="n">filtered</span>              <span class="c">!&lt; Activate RAW filter.</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
 
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+  <span class="n">filtered</span> <span class="o">=</span> <span class="p">.</span><span class="n">false</span><span class="p">.</span> <span class="p">;</span> <span class="k">if</span> <span class="p">(</span><span class="nb">present</span><span class="p">(</span><span class="n">raw</span><span class="p">))</span> <span class="n">filtered</span> <span class="o">=</span> <span class="n">raw</span>
   <span class="k">call </span><span class="n">lf_integrator</span><span class="p">%</span><span class="n">init</span><span class="p">()</span>
   <span class="k">call </span><span class="n">rk_integrator</span><span class="p">%</span><span class="n">init</span><span class="p">(</span><span class="n">stages</span><span class="o">=</span><span class="n">rk_stages</span><span class="p">)</span>
   <span class="k">call </span><span class="n">oscillator</span><span class="p">%</span><span class="n">init</span><span class="p">(</span><span class="n">initial_state</span><span class="o">=</span><span class="n">initial_state</span><span class="p">,</span> <span class="n">f</span><span class="o">=</span><span class="n">f</span><span class="p">)</span>
@@ -858,7 +892,11 @@ implementation in a submodule of an interface in a parent module.</p>
       <span class="k">call </span><span class="n">rk_integrator</span><span class="p">%</span><span class="n">integrate</span><span class="p">(</span><span class="n">U</span><span class="o">=</span><span class="n">oscillator</span><span class="p">,</span> <span class="n">stage</span><span class="o">=</span><span class="n">rk_stage</span><span class="p">,</span> <span class="n">Dt</span><span class="o">=</span><span class="n">Dt</span><span class="p">,</span> <span class="n">t</span><span class="o">=</span><span class="n">solution</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">step</span><span class="p">))</span>
       <span class="n">previous</span><span class="p">(</span><span class="n">step</span><span class="p">)</span> <span class="o">=</span> <span class="n">oscillator</span>
     <span class="k">else</span>
-<span class="k">      call </span><span class="n">lf_integrator</span><span class="p">%</span><span class="n">integrate</span><span class="p">(</span><span class="n">U</span><span class="o">=</span><span class="n">oscillator</span><span class="p">,</span> <span class="n">previous</span><span class="o">=</span><span class="n">previous</span><span class="p">,</span> <span class="n">Dt</span><span class="o">=</span><span class="n">Dt</span><span class="p">,</span> <span class="n">t</span><span class="o">=</span><span class="n">solution</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">step</span><span class="p">),</span> <span class="n">filter</span><span class="o">=</span><span class="n">filter</span><span class="p">)</span>
+<span class="k">      if</span> <span class="p">(</span><span class="n">filtered</span><span class="p">)</span> <span class="k">then</span>
+<span class="k">        call </span><span class="n">lf_integrator</span><span class="p">%</span><span class="n">integrate</span><span class="p">(</span><span class="n">U</span><span class="o">=</span><span class="n">oscillator</span><span class="p">,</span> <span class="n">previous</span><span class="o">=</span><span class="n">previous</span><span class="p">,</span> <span class="n">Dt</span><span class="o">=</span><span class="n">Dt</span><span class="p">,</span> <span class="n">t</span><span class="o">=</span><span class="n">solution</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">step</span><span class="p">),</span> <span class="n">filter</span><span class="o">=</span><span class="n">filter</span><span class="p">)</span>
+      <span class="k">else</span>
+<span class="k">        call </span><span class="n">lf_integrator</span><span class="p">%</span><span class="n">integrate</span><span class="p">(</span><span class="n">U</span><span class="o">=</span><span class="n">oscillator</span><span class="p">,</span> <span class="n">previous</span><span class="o">=</span><span class="n">previous</span><span class="p">,</span> <span class="n">Dt</span><span class="o">=</span><span class="n">Dt</span><span class="p">,</span> <span class="n">t</span><span class="o">=</span><span class="n">solution</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">step</span><span class="p">))</span>
+      <span class="n">endif</span>
     <span class="n">endif</span>
     <span class="n">solution</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">step</span><span class="p">)</span> <span class="o">=</span> <span class="n">step</span> <span class="o">*</span> <span class="n">Dt</span>
     <span class="n">solution</span><span class="p">(</span><span class="mi">1</span><span class="p">:</span><span class="n">space_dimension</span><span class="p">,</span> <span class="n">step</span><span class="p">)</span> <span class="o">=</span> <span class="n">oscillator</span><span class="p">%</span><span class="n">output</span><span class="p">()</span>
