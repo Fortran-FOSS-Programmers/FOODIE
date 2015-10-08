@@ -73,6 +73,8 @@ else
     call test_euler
   case('leapfrog')
     call test_leapfrog
+  case('leapfrog-raw')
+    call test_leapfrog(raw=.true.)
   case('ls-runge-kutta')
     call test_ls_rk(stages=stages_steps)
   case('tvd-runge-kutta')
@@ -89,6 +91,7 @@ else
     print "(A)", '  + adams-bashforth'
     print "(A)", '  + euler'
     print "(A)", '  + leapfrog'
+    print "(A)", '  + leapfrog-raw'
     print "(A)", '  + ls-runge-kutta'
     print "(A)", '  + tvd-runge-kutta'
     print "(A)", '  + all'
@@ -231,10 +234,11 @@ contains
   !---------------------------------------------------------------------------------------------------------------------------------
   endsubroutine test_euler
 
-  subroutine test_leapfrog()
+  subroutine test_leapfrog(raw)
   !---------------------------------------------------------------------------------------------------------------------------------
   !< Test explicit leapfrog class of ODE solvers.
   !---------------------------------------------------------------------------------------------------------------------------------
+  logical, optional, intent(IN) :: raw           !< Activate RAW filter.
   real(R_P), allocatable        :: solution(:,:) !< Solution at each time step.
   character(len=:), allocatable :: output        !< Output files basename.
   character(len=:), allocatable :: title         !< Output files title.
@@ -245,7 +249,7 @@ contains
   call init(output=output, solution=solution)
   print "(A)", 'Integrating Oscillation equations by means of leapfrog (RAW filtered) class of solvers'
   title = 'Oscillation equation integration, leapfrog (RAW filtered), t='//str(n=t_final)
-  call leapfrog_solver(solution=solution)
+  call leapfrog_solver(solution=solution, raw=raw)
   call save_results(title=title, basename=output, solution=solution)
   print "(A)", 'Finish!'
   return
@@ -383,11 +387,12 @@ contains
   !---------------------------------------------------------------------------------------------------------------------------------
   endsubroutine euler_solver
 
-  subroutine leapfrog_solver(solution)
+  subroutine leapfrog_solver(solution, raw)
   !---------------------------------------------------------------------------------------------------------------------------------
   !< Solve problem with explicit leapfrog class of ODE solvers.
   !---------------------------------------------------------------------------------------------------------------------------------
-  real(R_P), intent(OUT)           :: solution(0:,0:)       !< Solution at each time step.
+  real(R_P),        intent(OUT)    :: solution(0:,0:)       !< Solution at each time step.
+  logical, optional, intent(IN)    :: raw                   !< Activate RAW filter.
   type(tvd_runge_kutta_integrator) :: rk_integrator         !< Runge-Kutta integrator.
   integer, parameter               :: rk_stages=5           !< Runge-Kutta stages number.
   type(oscillation)                :: rk_stage(1:rk_stages) !< Runge-Kutta stages.
@@ -396,9 +401,11 @@ contains
   type(oscillation)                :: filter                !< Filter displacement.
   type(oscillation)                :: oscillator            !< Oscillation field.
   integer                          :: step                  !< Time steps counter.
+  logical                          :: filtered              !< Activate RAW filter.
   !---------------------------------------------------------------------------------------------------------------------------------
 
   !---------------------------------------------------------------------------------------------------------------------------------
+  filtered = .false. ; if (present(raw)) filtered = raw
   call lf_integrator%init()
   call rk_integrator%init(stages=rk_stages)
   call oscillator%init(initial_state=initial_state, f=f)
@@ -412,7 +419,11 @@ contains
       call rk_integrator%integrate(U=oscillator, stage=rk_stage, Dt=Dt, t=solution(0, step))
       previous(step) = oscillator
     else
-      call lf_integrator%integrate(U=oscillator, previous=previous, Dt=Dt, t=solution(0, step), filter=filter)
+      if (filtered) then
+        call lf_integrator%integrate(U=oscillator, previous=previous, Dt=Dt, t=solution(0, step), filter=filter)
+      else
+        call lf_integrator%integrate(U=oscillator, previous=previous, Dt=Dt, t=solution(0, step))
+      endif
     endif
     solution(0, step) = step * Dt
     solution(1:space_dimension, step) = oscillator%output()
@@ -514,6 +525,7 @@ contains
                                                 1:ab_steps,       &
                                                 1:NDt)             !< Adams-Bashforth errors.
   real(R_P)                        :: lf_errors(1:space_dimension,&
+                                                1:2,              &! unfiltered and RAW-filtered
                                                 1:NDt)             !< Leapfrog errors.
   real(R_P)                        :: ls_errors(1:space_dimension,&
                                                 1:rk_stages,      &
@@ -525,6 +537,7 @@ contains
                                                 1:ab_steps,       &
                                                 1:NDt-1)           !< Adams-Bashforth orders.
   real(R_P)                        :: lf_orders(1:space_dimension,&
+                                                1:2,              &! unfiltered and RAW-filtered
                                                 1:NDt-1)           !< Leapfrog orders.
   real(R_P)                        :: ls_orders(1:space_dimension,&
                                                 1:rk_stages,      &
@@ -548,7 +561,6 @@ contains
     solver = 'adams-bashforth'
     call init(output=output, solution=solution)
     do s=1, ab_steps
-      if (s==1) cycle ! 1st order scheme surely not stable for this test
       title = 'Oscillation equation integration, explicit Adams-Bashforth, t='//str(n=t_final)//' steps='//trim(str(.true., s))
       call ab_solver(steps=s, solution=solution)
       call save_results(title=title, basename=output//'-'//trim(str(.true., s)), solution=solution)
@@ -556,7 +568,6 @@ contains
     enddo
   enddo
   do s=1, ab_steps
-    if (s==1) cycle ! 1st order scheme surely not stable for this test
     do d=1, NDt-1
       ab_orders(:, s, d) = estimate_orders(solver_error=ab_errors(:, s, d:d+1), Dt_used=time_steps(d:d+1))
     enddo
@@ -566,13 +577,21 @@ contains
     Dt = time_steps(d)
     solver = 'leapfrog'
     call init(output=output, solution=solution)
-    title = 'Oscillation equation integration, leapfrog (RAW filtered), t='//str(n=t_final)
+    title = 'Oscillation equation integration, leapfrog (unfiltered), t='//str(n=t_final)
     call leapfrog_solver(solution=solution)
     call save_results(title=title, basename=output, solution=solution)
-    lf_errors(:, d) = compute_errors(solution=solution)
+    lf_errors(:, 1, d) = compute_errors(solution=solution)
+    Dt = time_steps(d)
+    solver = 'leapfrog'
+    call init(output=output, solution=solution)
+    title = 'Oscillation equation integration, leapfrog (RAW filtered), t='//str(n=t_final)
+    call leapfrog_solver(solution=solution, raw=.true.)
+    call save_results(title=title, basename=output//'-raw', solution=solution)
+    lf_errors(:, 2, d) = compute_errors(solution=solution)
   enddo
   do d=1, NDt-1
-    lf_orders(:, d) = estimate_orders(solver_error=lf_errors(:, d:d+1), Dt_used=time_steps(d:d+1))
+    lf_orders(:, 1, d) = estimate_orders(solver_error=lf_errors(:, 1, d:d+1), Dt_used=time_steps(d:d+1))
+    lf_orders(:, 2, d) = estimate_orders(solver_error=lf_errors(:, 2, d:d+1), Dt_used=time_steps(d:d+1))
   enddo
   ! Analyze errors of low storage Runge-Kutta solvers
   do d=1, NDt ! loop over exercised time steps
@@ -580,7 +599,6 @@ contains
     solver = 'ls-runge-kutta'
     call init(output=output, solution=solution)
     do s=1, rk_stages
-      if (s==1) cycle ! 1st order scheme surely not stable for this test
       if (s==2) cycle ! 2 stages not yet implemented
       if (s==3) cycle ! 3 stages not yet implemented
       if (s==4) cycle ! 4 stages not yet implemented
@@ -592,7 +610,6 @@ contains
     enddo
   enddo
   do s=1, rk_stages
-    if (s==1) cycle ! 1st order scheme surely not stable for this test
     if (s==2) cycle ! 2 stages not yet implemented
     if (s==3) cycle ! 3 stages not yet implemented
     if (s==4) cycle ! 4 stages not yet implemented
@@ -606,7 +623,6 @@ contains
     solver = 'tvd-runge-kutta'
     call init(output=output, solution=solution)
     do s=1, rk_stages
-      if (s==1) cycle ! 1st order scheme surely not stable for this test
       if (s==4) cycle ! 4 stages not yet implemented
       title = 'Oscillation equation integration, explicit TVD/SSP Runge-Kutta, t='//str(n=t_final)//' steps='//trim(str(.true., s))
       call tvd_rk_solver(stages=s, solution=solution)
@@ -615,7 +631,6 @@ contains
     enddo
   enddo
   do s=1, rk_stages
-    if (s==1) cycle ! 1st order scheme surely not stable for this test
     if (s==4) cycle ! 4 stages not yet implemented
     do d=1, NDt-1
       rk_orders(:, s, d) = estimate_orders(solver_error=rk_errors(:, s, d:d+1), Dt_used=time_steps(d:d+1))
@@ -680,11 +695,11 @@ contains
   integer(I_P), intent(IN) :: NDt              !< Number of time steps exercised.
   real(R_P),    intent(IN) :: time_steps(:)    !< Time steps exercised.
   real(R_P),    intent(IN) :: ab_errors(:,:,:) !< Adams-Bashforth errors.
-  real(R_P),    intent(IN) :: lf_errors(:,:)   !< Leapfrog errors.
+  real(R_P),    intent(IN) :: lf_errors(:,:,:) !< Leapfrog errors.
   real(R_P),    intent(IN) :: ls_errors(:,:,:) !< Low storage Runge-Kutta errors.
   real(R_P),    intent(IN) :: rk_errors(:,:,:) !< TVD/SSP Runge-Kutta errors.
   real(R_P),    intent(IN) :: ab_orders(:,:,:) !< Adams-Bashforth orders.
-  real(R_P),    intent(IN) :: lf_orders(:,:)   !< Leapfrog orders.
+  real(R_P),    intent(IN) :: lf_orders(:,:,:) !< Leapfrog orders.
   real(R_P),    intent(IN) :: ls_orders(:,:,:) !< Low storage Runge-Kutta orders.
   real(R_P),    intent(IN) :: rk_orders(:,:,:) !< TVD/SSP Runge-Kutta orders.
   integer(I_P)             :: s                !< Steps/stages counter.
@@ -694,7 +709,6 @@ contains
   !---------------------------------------------------------------------------------------------------------------------------------
   print "(A)", "Solver & Time Step & f*Dt & Error X & Error Y & Observed Order of Accuracy X & Observed Order of Accuracy Y"
   do s=1, ab_steps
-    if (s==1) cycle ! 1st order scheme surely not stable for this test
     print "(A)", "Adams-Bashforth, "//trim(str(.true.,s))//" steps"
     do d=1, NDt
       if (d==1) then
@@ -702,24 +716,34 @@ contains
                                                  ab_errors(1, s, d), " & " , ab_errors(2, s, d), " & / & /"
       else
         print "(A,F8.1,A,F10.3,A,E10.3,A,E10.3,A,F9.2,A,F9.2)", "  & ", time_steps(d), " & ", f*time_steps(d), " & ", &
-                                                            ab_errors(1, s, d), " & " , ab_errors(2, s, d), " & ", &
-                                                            ab_orders(1, s, d-1), " & " , ab_orders(2, s, d-1)
+                                                             ab_errors(1, s, d), " & " , ab_errors(2, s, d), " & ", &
+                                                             ab_orders(1, s, d-1), " & " , ab_orders(2, s, d-1)
       endif
     enddo
   enddo
-  print "(A)", "Leapfrog 2 steps"
+  print "(A)", "Leapfrog unfiltered"
   do d=1, NDt
     if (d==1) then
       print "(A,F8.1,A,F10.3,A,E10.3,A,E10.3,A)", "  & ", time_steps(d), " & ", f*time_steps(d), " & ", &
-                                              lf_errors(1, d), " & " , lf_errors(2, d), " & / & /"
+                                               lf_errors(1, 1, d), " & " , lf_errors(2, 1, d), " & / & /"
     else
       print "(A,F8.1,A,F10.3,A,E10.3,A,E10.3,A,F9.2,A,F9.2)", "  & ", time_steps(d), " & ", f*time_steps(d), " & ", &
-                                                          lf_errors(1, d), " & " , lf_errors(2, d), " & ", &
-                                                          lf_orders(1, d-1), " & " , lf_orders(2, d-1)
+                                                           lf_errors(1, 1, d), " & " , lf_errors(2, 1, d), " & ", &
+                                                           lf_orders(1, 1, d-1), " & " , lf_orders(2, 1, d-1)
+    endif
+  enddo
+  print "(A)", "Leapfrog RAW-filtered"
+  do d=1, NDt
+    if (d==1) then
+      print "(A,F8.1,A,F10.3,A,E10.3,A,E10.3,A)", "  & ", time_steps(d), " & ", f*time_steps(d), " & ", &
+                                               lf_errors(1, 2, d), " & " , lf_errors(2, 2, d), " & / & /"
+    else
+      print "(A,F8.1,A,F10.3,A,E10.3,A,E10.3,A,F9.2,A,F9.2)", "  & ", time_steps(d), " & ", f*time_steps(d), " & ", &
+                                                           lf_errors(1, 2, d), " & " , lf_errors(2, 2, d), " & ", &
+                                                           lf_orders(1, 2, d-1), " & " , lf_orders(2, 2, d-1)
     endif
   enddo
   do s=1, rk_stages
-    if (s==1) cycle ! 1st order scheme surely not stable for this test
     if (s==2) cycle ! 2 stages not yet implemented
     if (s==3) cycle ! 3 stages not yet implemented
     if (s==4) cycle ! 4 stages not yet implemented
@@ -727,26 +751,25 @@ contains
     do d=1, NDt
       if (d==1) then
         print "(A,F8.1,A,F10.3,A,E10.3,A,E10.3,A)", "  & ", time_steps(d), " & ", f*time_steps(d), " & ", &
-                                                ls_errors(1, s, d), " & " , ls_errors(2, s, d), " & / & /"
+                                                 ls_errors(1, s, d), " & " , ls_errors(2, s, d), " & / & /"
       else
         print "(A,F8.1,A,F10.3,A,E10.3,A,E10.3,A,F9.2,A,F9.2)", "  & ", time_steps(d), " & ", f*time_steps(d), " & ", &
-                                                            ls_errors(1, s, d), " & " , ls_errors(2, s, d), " & ", &
-                                                            ls_orders(1, s, d-1), " & " , ls_orders(2, s, d-1)
+                                                             ls_errors(1, s, d), " & " , ls_errors(2, s, d), " & ", &
+                                                             ls_orders(1, s, d-1), " & " , ls_orders(2, s, d-1)
       endif
     enddo
   enddo
   do s=1, rk_stages
-    if (s==1) cycle ! 1st order scheme surely not stable for this test
     if (s==4) cycle ! 4 stages not yet implemented
     print "(A)", "TVD/SSP Runge-Kutta, "//trim(str(.true.,s))//" stages"
     do d=1, NDt
       if (d==1) then
         print "(A,F8.1,A,F10.3,A,E10.3,A,E10.3,A)", "  & ", time_steps(d), " & ", f*time_steps(d), " & ", &
-                                                rk_errors(1, s, d), " & " , rk_errors(2, s, d), " & / & /"
+                                                 rk_errors(1, s, d), " & " , rk_errors(2, s, d), " & / & /"
       else
         print "(A,F8.1,A,F10.3,A,E10.3,A,E10.3,A,F9.2,A,F9.2)", "  & ", time_steps(d), " & ", f*time_steps(d), " & ", &
-                                                            rk_errors(1, s, d), " & " , rk_errors(2, s, d), " & ", &
-                                                            rk_orders(1, s, d-1), " & " , rk_orders(2, s, d-1)
+                                                             rk_errors(1, s, d), " & " , rk_errors(2, s, d), " & ", &
+                                                             rk_orders(1, s, d-1), " & " , rk_orders(2, s, d-1)
       endif
     enddo
   enddo
