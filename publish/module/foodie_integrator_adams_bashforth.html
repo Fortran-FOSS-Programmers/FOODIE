@@ -155,6 +155,8 @@
       
       <a class="list-group-item" href="../module/foodie_integrator_adams_bashforth.html#proc-integrate">integrate</a>
       
+      <a class="list-group-item" href="../module/foodie_integrator_adams_bashforth.html#proc-update_previous">update_previous</a>
+      
       <a class="list-group-item" href="../module/foodie_integrator_adams_bashforth.html#proc-finalize">finalize</a>
       
     </div>
@@ -176,6 +178,10 @@
       <a class="list-group-item" href="../module/foodie.html">foodie</a>
       
       <a class="list-group-item" href="../module/foodie_integrator_adams_bashforth.html">foodie_integrator_adams_bashforth</a>
+      
+      <a class="list-group-item" href="../module/foodie_integrator_adams_bashforth_moulton.html">foodie_integrator_adams_bashforth_moulton</a>
+      
+      <a class="list-group-item" href="../module/foodie_integrator_adams_moulton.html">foodie_integrator_adams_moulton</a>
       
       <a class="list-group-item" href="../module/foodie_integrator_euler_explicit.html">foodie_integrator_euler_explicit</a>
       
@@ -236,34 +242,34 @@
 <polygon fill="none" stroke="black" points="413,-46 231,-46 231,-20 413,-20 413,-46"/>
 <text text-anchor="middle" x="322" y="-30.55" font-family="Helvetica,sans-Serif" font-size="10.50">foodie_integrator_adams_bashforth</text>
 </g>
-<!-- module~type_integrand -->
-<g id="node2" class="node"><title>module~type_integrand</title>
-<a xlink:href="../module/type_integrand.html" xlink:title="type_integrand">
-<polygon fill="#337ab7" stroke="#337ab7" points="194,-26 110,-26 110,-1.24345e-14 194,-3.55271e-15 194,-26"/>
-<text text-anchor="middle" x="152" y="-10.55" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">type_integrand</text>
-</a>
-</g>
-<!-- module~type_integrand&#45;&gt;module~foodie_integrator_adams_bashforth -->
-<g id="edge4" class="edge"><title>module~type_integrand&#45;&gt;module~foodie_integrator_adams_bashforth</title>
-<path fill="none" stroke="black" stroke-dasharray="5,2" d="M194.022,-17.9438C202.182,-18.9037 211.058,-19.948 220.205,-21.0241"/>
-<polygon fill="black" stroke="black" points="219.874,-24.5093 230.215,-22.2017 220.692,-17.5572 219.874,-24.5093"/>
-</g>
 <!-- module~foodie_kinds -->
-<g id="node3" class="node"><title>module~foodie_kinds</title>
+<g id="node2" class="node"><title>module~foodie_kinds</title>
 <a xlink:href="../module/foodie_kinds.html" xlink:title="foodie_kinds">
 <polygon fill="#337ab7" stroke="#337ab7" points="73,-46 1,-46 1,-20 73,-20 73,-46"/>
 <text text-anchor="middle" x="37" y="-30.55" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">foodie_kinds</text>
 </a>
 </g>
 <!-- module~foodie_kinds&#45;&gt;module~foodie_integrator_adams_bashforth -->
-<g id="edge6" class="edge"><title>module~foodie_kinds&#45;&gt;module~foodie_integrator_adams_bashforth</title>
+<g id="edge4" class="edge"><title>module~foodie_kinds&#45;&gt;module~foodie_integrator_adams_bashforth</title>
 <path fill="none" stroke="black" stroke-dasharray="5,2" d="M73.7585,-34.2035C85.3524,-34.5304 98.2102,-34.8385 110,-35 145.926,-35.492 185.278,-35.3181 220.219,-34.9144"/>
 <polygon fill="black" stroke="black" points="220.474,-38.4116 230.431,-34.7886 220.388,-31.4122 220.474,-38.4116"/>
+</g>
+<!-- module~type_integrand -->
+<g id="node3" class="node"><title>module~type_integrand</title>
+<a xlink:href="../module/type_integrand.html" xlink:title="type_integrand">
+<polygon fill="#337ab7" stroke="#337ab7" points="194,-26 110,-26 110,-1.24345e-14 194,-3.55271e-15 194,-26"/>
+<text text-anchor="middle" x="152" y="-10.55" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">type_integrand</text>
+</a>
 </g>
 <!-- module~foodie_kinds&#45;&gt;module~type_integrand -->
 <g id="edge2" class="edge"><title>module~foodie_kinds&#45;&gt;module~type_integrand</title>
 <path fill="none" stroke="black" stroke-dasharray="5,2" d="M73.7029,-26.6169C81.9237,-25.1872 90.8,-23.6435 99.521,-22.1268"/>
 <polygon fill="black" stroke="black" points="100.386,-25.5289 109.639,-20.3672 99.187,-18.6324 100.386,-25.5289"/>
+</g>
+<!-- module~type_integrand&#45;&gt;module~foodie_integrator_adams_bashforth -->
+<g id="edge6" class="edge"><title>module~type_integrand&#45;&gt;module~foodie_integrator_adams_bashforth</title>
+<path fill="none" stroke="black" stroke-dasharray="5,2" d="M194.022,-17.9438C202.182,-18.9037 211.058,-19.948 220.205,-21.0241"/>
+<polygon fill="black" stroke="black" points="219.874,-24.5093 230.215,-22.2017 220.692,-17.5572 219.874,-24.5093"/>
 </g>
 </g>
 </svg>
@@ -359,12 +365,12 @@ implementation in a submodule of an interface in a parent module.</p>
                 </div>
                 
     
-    <p>FOODiE integrator: provide an explicit class of Adams-Bashforth multi-step schemes, from 1st to 3rd order accutate.</p>
+    <p>FOODiE integrator: provide an explicit class of Adams-Bashforth multi-step schemes, from 1st to 4rd order accutate.</p>
 <p>Considering the following ODE system:</p>
 <p>$$ U_t = R(t,U) $$</p>
 <p>where \(U_t = \frac{dU}{dt}\), <em>U</em> is the vector of <em>state</em> variables being a function of the time-like independent variable
  <em>t</em>, <em>R</em> is the (vectorial) residual function, the Adams-Bashforth class scheme implemented is:</p>
-<p>$$ U^{n+N_s} = U^{n+N_s-1} +\Delta t \left[ \sum_{s=1}^{n+N_s}{ b_s \cdot R(t^{n+s-1}, U^{n+s-1}) } \right] $$</p>
+<p>$$ U^{n+N_s} = U^{n+N_s-1} +\Delta t \left[ \sum_{s=1}^{N_s}{ b_s \cdot R(t^{n+s-1}, U^{n+s-1}) } \right] $$</p>
 <p>where \(N_s\) is the number of previous steps considered.</p>
 <p></p><div class="alert alert-info" role="alert"><h4>Note</h4>The value of \(\Delta t\) must be provided, it not being computed by the integrator.</div>
 <p>The schemes are explicit. The coefficients \(b_s\) define the actual scheme, that is selected accordingly to the number of
@@ -373,7 +379,7 @@ implementation in a submodule of an interface in a parent module.</p>
 <h5 id="1-step-explicit-forward-euler-1st-order"><a class="toclink" href="#1-step-explicit-forward-euler-1st-order">1 step, Explicit Forward Euler, 1st order</a></h5>
 <p>This scheme is TVD and reverts to Explicit Forward Euler, it being 1st order.
  The <em>b</em> coefficient is:
- $$b = \left[1\right]$$
+ $$b = \left[b_1\right] = \left[1\right]$$
  The scheme is:
  $$ U^{n+1} = U^n + \Delta t R(t^n,U^n) $$</p>
 <h5 id="2-steps"><a class="toclink" href="#2-steps">2 steps</a></h5>
@@ -410,177 +416,201 @@ implementation in a submodule of an interface in a parent module.</p>
 <!-- Generated by graphviz version 2.26.3 (20100126.1600)
  -->
 <!-- Title: module~~foodie_integrator_adams_bashforth~~UsedByGraph Pages: 1 -->
-<svg id="modulefoodie_integrator_adams_bashforthUsedByGraph" width="632pt" height="362pt"
- viewBox="0.00 0.00 632.00 362.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-<g id="module~~foodie_integrator_adams_bashforth~~UsedByGraph" class="graph" transform="scale(1 1) rotate(0) translate(4 358)">
+<svg id="modulefoodie_integrator_adams_bashforthUsedByGraph" width="641pt" height="232pt"
+ viewBox="0.00 0.00 641.00 231.79" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="module~~foodie_integrator_adams_bashforth~~UsedByGraph" class="graph" transform="scale(0.715402 0.715402) rotate(0) translate(4 320)">
 <title>module~~foodie_integrator_adams_bashforth~~UsedByGraph</title>
-<polygon fill="white" stroke="white" points="-4,5 -4,-358 629,-358 629,5 -4,5"/>
+<polygon fill="white" stroke="white" points="-4,5 -4,-320 893,-320 893,5 -4,5"/>
 <!-- module~foodie_integrator_adams_bashforth -->
 <g id="node1" class="node"><title>module~foodie_integrator_adams_bashforth</title>
-<polygon fill="none" stroke="black" points="183,-190 1,-190 1,-164 183,-164 183,-190"/>
-<text text-anchor="middle" x="92" y="-174.55" font-family="Helvetica,sans-Serif" font-size="10.50">foodie_integrator_adams_bashforth</text>
+<polygon fill="none" stroke="black" points="183,-169 1,-169 1,-143 183,-143 183,-169"/>
+<text text-anchor="middle" x="92" y="-153.55" font-family="Helvetica,sans-Serif" font-size="10.50">foodie_integrator_adams_bashforth</text>
+</g>
+<!-- module~foodie_integrator_adams_bashforth_moulton -->
+<g id="node2" class="node"><title>module~foodie_integrator_adams_bashforth_moulton</title>
+<a xlink:href="../module/foodie_integrator_adams_bashforth_moulton.html" xlink:title="foodie_integrator_adams_bashforth_moulton">
+<polygon fill="#337ab7" stroke="#337ab7" points="447,-190 221,-190 221,-164 447,-164 447,-190"/>
+<text text-anchor="middle" x="334" y="-174.55" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">foodie_integrator_adams_bashforth_moulton</text>
+</a>
+</g>
+<!-- module~foodie_integrator_adams_bashforth&#45;&gt;module~foodie_integrator_adams_bashforth_moulton -->
+<g id="edge34" class="edge"><title>module~foodie_integrator_adams_bashforth&#45;&gt;module~foodie_integrator_adams_bashforth_moulton</title>
+<path fill="none" stroke="black" stroke-dasharray="5,2" d="M183.835,-163.969C192.481,-164.719 201.339,-165.488 210.216,-166.258"/>
+<polygon fill="black" stroke="black" points="209.972,-169.75 220.238,-167.128 210.578,-162.777 209.972,-169.75"/>
 </g>
 <!-- module~foodie -->
-<g id="node2" class="node"><title>module~foodie</title>
+<g id="node3" class="node"><title>module~foodie</title>
 <a xlink:href="../module/foodie.html" xlink:title="foodie">
-<polygon fill="#337ab7" stroke="#337ab7" points="274,-190 220,-190 220,-164 274,-164 274,-190"/>
-<text text-anchor="middle" x="247" y="-174.55" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">foodie</text>
+<polygon fill="#337ab7" stroke="#337ab7" points="538,-169 484,-169 484,-143 538,-143 538,-169"/>
+<text text-anchor="middle" x="511" y="-153.55" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">foodie</text>
 </a>
 </g>
 <!-- module~foodie_integrator_adams_bashforth&#45;&gt;module~foodie -->
-<g id="edge32" class="edge"><title>module~foodie_integrator_adams_bashforth&#45;&gt;module~foodie</title>
-<path fill="none" stroke="black" stroke-dasharray="5,2" d="M183.508,-177C192.714,-177 201.647,-177 209.764,-177"/>
-<polygon fill="black" stroke="black" points="209.919,-180.5 219.919,-177 209.919,-173.5 209.919,-180.5"/>
+<g id="edge36" class="edge"><title>module~foodie_integrator_adams_bashforth&#45;&gt;module~foodie</title>
+<path fill="none" stroke="black" stroke-dasharray="5,2" d="M183.832,-155.2C255.723,-154.706 358.23,-154.288 448,-155 456.23,-155.065 465.063,-155.179 473.435,-155.306"/>
+<polygon fill="black" stroke="black" points="473.657,-158.81 483.712,-155.472 473.77,-151.811 473.657,-158.81"/>
 </g>
-<!-- module~type_burgers -->
-<g id="node3" class="node"><title>module~type_burgers</title>
-<a xlink:href="../module/type_burgers.html" xlink:title="type_burgers">
-<polygon fill="#337ab7" stroke="#337ab7" points="412,-354 336,-354 336,-328 412,-328 412,-354"/>
-<text text-anchor="middle" x="374" y="-338.55" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">type_burgers</text>
-</a>
-</g>
-<!-- module~foodie&#45;&gt;module~type_burgers -->
-<g id="edge12" class="edge"><title>module~foodie&#45;&gt;module~type_burgers</title>
-<path fill="none" stroke="black" stroke-dasharray="5,2" d="M249.686,-190.166C255.795,-216.958 273.145,-278.299 310,-314 314.83,-318.679 320.593,-322.601 326.653,-325.873"/>
-<polygon fill="black" stroke="black" points="325.142,-329.03 335.67,-330.215 328.179,-322.723 325.142,-329.03"/>
-</g>
-<!-- module~type_oscillation -->
-<g id="node4" class="node"><title>module~type_oscillation</title>
-<a xlink:href="../module/type_oscillation.html" xlink:title="type_oscillation">
-<polygon fill="#337ab7" stroke="#337ab7" points="416,-272 332,-272 332,-246 416,-246 416,-272"/>
-<text text-anchor="middle" x="374" y="-256.55" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">type_oscillation</text>
-</a>
-</g>
-<!-- module~foodie&#45;&gt;module~type_oscillation -->
-<g id="edge14" class="edge"><title>module~foodie&#45;&gt;module~type_oscillation</title>
-<path fill="none" stroke="black" stroke-dasharray="5,2" d="M259.536,-190.127C271.599,-202.2 290.791,-219.998 310,-232 315.703,-235.563 321.959,-238.856 328.255,-241.826"/>
-<polygon fill="black" stroke="black" points="326.893,-245.05 337.45,-245.941 329.752,-238.661 326.893,-245.05"/>
+<!-- module~foodie_integrator_adams_bashforth_moulton&#45;&gt;module~foodie -->
+<g id="edge2" class="edge"><title>module~foodie_integrator_adams_bashforth_moulton&#45;&gt;module~foodie</title>
+<path fill="none" stroke="black" stroke-dasharray="5,2" d="M443.579,-163.999C454.254,-162.733 464.494,-161.518 473.628,-160.434"/>
+<polygon fill="black" stroke="black" points="474.285,-163.881 483.803,-159.227 473.46,-156.929 474.285,-163.881"/>
 </g>
 <!-- module~type_lorenz -->
 <g id="node5" class="node"><title>module~type_lorenz</title>
 <a xlink:href="../module/type_lorenz.html" xlink:title="type_lorenz">
-<polygon fill="#337ab7" stroke="#337ab7" points="408,-190 340,-190 340,-164 408,-164 408,-190"/>
-<text text-anchor="middle" x="374" y="-174.55" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">type_lorenz</text>
+<polygon fill="#337ab7" stroke="#337ab7" points="672,-316 604,-316 604,-290 672,-290 672,-316"/>
+<text text-anchor="middle" x="638" y="-300.55" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">type_lorenz</text>
 </a>
 </g>
 <!-- module~foodie&#45;&gt;module~type_lorenz -->
-<g id="edge16" class="edge"><title>module~foodie&#45;&gt;module~type_lorenz</title>
-<path fill="none" stroke="black" stroke-dasharray="5,2" d="M274.245,-177C290.282,-177 310.959,-177 329.326,-177"/>
-<polygon fill="black" stroke="black" points="329.534,-180.5 339.534,-177 329.534,-173.5 329.534,-180.5"/>
+<g id="edge14" class="edge"><title>module~foodie&#45;&gt;module~type_lorenz</title>
+<path fill="none" stroke="black" stroke-dasharray="5,2" d="M514.607,-169.018C521.932,-193.214 540.738,-245.428 574,-276 579.931,-281.451 587.124,-285.896 594.517,-289.488"/>
+<polygon fill="black" stroke="black" points="593.343,-292.795 603.908,-293.594 596.147,-286.381 593.343,-292.795"/>
 </g>
-<!-- program~integrate_lorenz -->
-<g id="node6" class="node"><title>program~integrate_lorenz</title>
-<a xlink:href="../program/integrate_lorenz.html" xlink:title="integrate_lorenz">
-<polygon fill="#f0ad4e" stroke="#f0ad4e" points="594,-169 504,-169 504,-143 594,-143 594,-169"/>
-<text text-anchor="middle" x="549" y="-153.55" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">integrate_lorenz</text>
+<!-- program~integrate_euler_1d_openmp -->
+<g id="node6" class="node"><title>program~integrate_euler_1d_openmp</title>
+<a xlink:href="../program/integrate_euler_1d_openmp.html" xlink:title="integrate_euler_1D_openmp">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="887,-234 739,-234 739,-208 887,-208 887,-234"/>
+<text text-anchor="middle" x="813" y="-218.55" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">integrate_euler_1D_openmp</text>
 </a>
 </g>
-<!-- module~foodie&#45;&gt;program~integrate_lorenz -->
-<g id="edge18" class="edge"><title>module~foodie&#45;&gt;program~integrate_lorenz</title>
-<path fill="none" stroke="black" stroke-dasharray="5,2" d="M274.071,-165.307C285.01,-161.178 297.893,-157.053 310,-155 372.254,-144.443 444.948,-146.79 493.672,-150.431"/>
-<polygon fill="black" stroke="black" points="493.448,-153.924 503.693,-151.223 494,-146.946 493.448,-153.924"/>
+<!-- module~foodie&#45;&gt;program~integrate_euler_1d_openmp -->
+<g id="edge16" class="edge"><title>module~foodie&#45;&gt;program~integrate_euler_1d_openmp</title>
+<path fill="none" stroke="black" stroke-dasharray="5,2" d="M516.961,-169.003C526.368,-188.077 546.457,-223.489 574,-243 598.212,-260.151 609.599,-253.411 638,-262"/>
+<path fill="none" stroke="black" stroke-dasharray="5,2" d="M638,-262C649.572,-265.5 711.268,-249.736 758.158,-236.75"/>
+<polygon fill="black" stroke="black" points="759.224,-240.087 767.916,-234.029 757.344,-233.344 759.224,-240.087"/>
+</g>
+<!-- module~type_oscillation -->
+<g id="node7" class="node"><title>module~type_oscillation</title>
+<a xlink:href="../module/type_oscillation.html" xlink:title="type_oscillation">
+<polygon fill="#337ab7" stroke="#337ab7" points="680,-190 596,-190 596,-164 680,-164 680,-190"/>
+<text text-anchor="middle" x="638" y="-174.55" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">type_oscillation</text>
+</a>
+</g>
+<!-- module~foodie&#45;&gt;module~type_oscillation -->
+<g id="edge18" class="edge"><title>module~foodie&#45;&gt;module~type_oscillation</title>
+<path fill="none" stroke="black" stroke-dasharray="5,2" d="M538.245,-160.505C552.006,-162.781 569.184,-165.621 585.387,-168.3"/>
+<polygon fill="black" stroke="black" points="584.874,-171.763 595.311,-169.941 586.016,-164.857 584.874,-171.763"/>
 </g>
 <!-- module~type_euler_1d_openmp -->
-<g id="node7" class="node"><title>module~type_euler_1d_openmp</title>
+<g id="node8" class="node"><title>module~type_euler_1d_openmp</title>
 <a xlink:href="../module/type_euler_1d_openmp.html" xlink:title="type_euler_1D_openmp">
-<polygon fill="#337ab7" stroke="#337ab7" points="437,-108 311,-108 311,-82 437,-82 437,-108"/>
-<text text-anchor="middle" x="374" y="-92.55" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">type_euler_1D_openmp</text>
+<polygon fill="#337ab7" stroke="#337ab7" points="701,-234 575,-234 575,-208 701,-208 701,-234"/>
+<text text-anchor="middle" x="638" y="-218.55" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">type_euler_1D_openmp</text>
 </a>
 </g>
 <!-- module~foodie&#45;&gt;module~type_euler_1d_openmp -->
 <g id="edge20" class="edge"><title>module~foodie&#45;&gt;module~type_euler_1d_openmp</title>
-<path fill="none" stroke="black" stroke-dasharray="5,2" d="M259.536,-163.873C271.599,-151.8 290.791,-134.002 310,-122 315.703,-118.437 321.959,-115.144 328.255,-112.174"/>
-<polygon fill="black" stroke="black" points="329.752,-115.339 337.45,-108.059 326.893,-108.95 329.752,-115.339"/>
+<path fill="none" stroke="black" stroke-dasharray="5,2" d="M527.614,-169.167C539.894,-178.433 557.311,-190.627 574,-199 577.561,-200.786 581.301,-202.486 585.111,-204.089"/>
+<polygon fill="black" stroke="black" points="584.075,-207.443 594.661,-207.874 586.654,-200.936 584.075,-207.443"/>
 </g>
-<!-- program~integrate_euler_1d_openmp -->
-<g id="node8" class="node"><title>program~integrate_euler_1d_openmp</title>
-<a xlink:href="../program/integrate_euler_1d_openmp.html" xlink:title="integrate_euler_1D_openmp">
-<polygon fill="#f0ad4e" stroke="#f0ad4e" points="623,-70 475,-70 475,-44 623,-44 623,-70"/>
-<text text-anchor="middle" x="549" y="-54.55" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">integrate_euler_1D_openmp</text>
+<!-- program~integrate_lorenz -->
+<g id="node9" class="node"><title>program~integrate_lorenz</title>
+<a xlink:href="../program/integrate_lorenz.html" xlink:title="integrate_lorenz">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="858,-278 768,-278 768,-252 858,-252 858,-278"/>
+<text text-anchor="middle" x="813" y="-262.55" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">integrate_lorenz</text>
 </a>
 </g>
-<!-- module~foodie&#45;&gt;program~integrate_euler_1d_openmp -->
-<g id="edge22" class="edge"><title>module~foodie&#45;&gt;program~integrate_euler_1d_openmp</title>
-<path fill="none" stroke="black" stroke-dasharray="5,2" d="M374,-54C407.654,-38.2066 449.11,-38.1939 483.225,-42.4856"/>
-<polygon fill="black" stroke="black" points="483.169,-46.0122 493.559,-43.943 484.146,-39.0808 483.169,-46.0122"/>
-</g>
-<!-- program~integrate_euler_1d -->
-<g id="node9" class="node"><title>program~integrate_euler_1d</title>
-<a xlink:href="../program/integrate_euler_1d.html" xlink:title="integrate_euler_1D">
-<polygon fill="#f0ad4e" stroke="#f0ad4e" points="601,-26 497,-26 497,-1.24345e-14 601,-3.55271e-15 601,-26"/>
-<text text-anchor="middle" x="549" y="-10.55" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">integrate_euler_1D</text>
-</a>
-</g>
-<!-- module~foodie&#45;&gt;program~integrate_euler_1d -->
-<g id="edge24" class="edge"><title>module~foodie&#45;&gt;program~integrate_euler_1d</title>
-<path fill="none" stroke="black" stroke-dasharray="5,2" d="M251.453,-163.664C259.539,-141.496 278.751,-97.121 310,-73 333.488,-54.8697 347.139,-66.6053 374,-54"/>
-<path fill="none" stroke="black" stroke-dasharray="5,2" d="M374,-54C393.941,-44.642 445.112,-33.1359 487.003,-24.6971"/>
-<polygon fill="black" stroke="black" points="487.754,-28.1162 496.878,-22.7294 486.386,-21.2512 487.754,-28.1162"/>
+<!-- module~foodie&#45;&gt;program~integrate_lorenz -->
+<g id="edge22" class="edge"><title>module~foodie&#45;&gt;program~integrate_lorenz</title>
+<path fill="none" stroke="black" stroke-dasharray="5,2" d="M638,-262C676.782,-273.729 722.64,-274.053 757.681,-271.672"/>
+<polygon fill="black" stroke="black" points="758.024,-275.156 767.725,-270.896 757.485,-268.177 758.024,-275.156"/>
 </g>
 <!-- program~integrate_oscillation -->
 <g id="node10" class="node"><title>program~integrate_oscillation</title>
 <a xlink:href="../program/integrate_oscillation.html" xlink:title="integrate_oscillation">
-<polygon fill="#f0ad4e" stroke="#f0ad4e" points="602,-251 496,-251 496,-225 602,-225 602,-251"/>
-<text text-anchor="middle" x="549" y="-235.55" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">integrate_oscillation</text>
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="866,-152 760,-152 760,-126 866,-126 866,-152"/>
+<text text-anchor="middle" x="813" y="-136.55" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">integrate_oscillation</text>
 </a>
 </g>
 <!-- module~foodie&#45;&gt;program~integrate_oscillation -->
-<g id="edge26" class="edge"><title>module~foodie&#45;&gt;program~integrate_oscillation</title>
-<path fill="none" stroke="black" stroke-dasharray="5,2" d="M274.282,-187.693C285.251,-191.684 298.098,-195.975 310,-199 368.583,-213.888 436.747,-224.354 485.253,-230.67"/>
-<polygon fill="black" stroke="black" points="484.931,-234.157 495.295,-231.954 485.82,-227.213 484.931,-234.157"/>
+<g id="edge24" class="edge"><title>module~foodie&#45;&gt;program~integrate_oscillation</title>
+<path fill="none" stroke="black" stroke-dasharray="5,2" d="M638,-136C674.579,-131.137 715.833,-131.563 749.096,-133.354"/>
+<polygon fill="black" stroke="black" points="748.959,-136.852 759.148,-133.949 749.373,-129.864 748.959,-136.852"/>
+</g>
+<!-- program~integrate_euler_1d -->
+<g id="node11" class="node"><title>program~integrate_euler_1d</title>
+<a xlink:href="../program/integrate_euler_1d.html" xlink:title="integrate_euler_1D">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="865,-108 761,-108 761,-82 865,-82 865,-108"/>
+<text text-anchor="middle" x="813" y="-92.55" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">integrate_euler_1D</text>
+</a>
+</g>
+<!-- module~foodie&#45;&gt;program~integrate_euler_1d -->
+<g id="edge26" class="edge"><title>module~foodie&#45;&gt;program~integrate_euler_1d</title>
+<path fill="none" stroke="black" stroke-dasharray="5,2" d="M538.196,-151.33C563.874,-147.012 603.484,-140.589 638,-136"/>
+<path fill="none" stroke="black" stroke-dasharray="5,2" d="M638,-136C678.822,-130.573 724.063,-119.845 758.318,-110.724"/>
+<polygon fill="black" stroke="black" points="759.384,-114.062 768.126,-108.077 757.56,-107.304 759.384,-114.062"/>
 </g>
 <!-- program~integrate_burgers -->
-<g id="node11" class="node"><title>program~integrate_burgers</title>
+<g id="node12" class="node"><title>program~integrate_burgers</title>
 <a xlink:href="../program/integrate_burgers.html" xlink:title="integrate_burgers">
-<polygon fill="#f0ad4e" stroke="#f0ad4e" points="597,-333 501,-333 501,-307 597,-307 597,-333"/>
-<text text-anchor="middle" x="549" y="-317.55" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">integrate_burgers</text>
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="861,-45 765,-45 765,-19 861,-19 861,-45"/>
+<text text-anchor="middle" x="813" y="-29.55" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">integrate_burgers</text>
 </a>
 </g>
 <!-- module~foodie&#45;&gt;program~integrate_burgers -->
 <g id="edge28" class="edge"><title>module~foodie&#45;&gt;program~integrate_burgers</title>
-<path fill="none" stroke="black" stroke-dasharray="5,2" d="M250.893,-190.054C258.354,-212.626 276.935,-258.672 310,-281 338.655,-300.35 429.153,-310.935 490.194,-316.03"/>
-<polygon fill="black" stroke="black" points="490.226,-319.544 500.475,-316.86 490.789,-312.566 490.226,-319.544"/>
+<path fill="none" stroke="black" stroke-dasharray="5,2" d="M517.001,-142.867C526.328,-124.069 546.167,-89.9012 574,-73 603.509,-55.0811 693.307,-43.2936 754.03,-37.1361"/>
+<polygon fill="black" stroke="black" points="754.653,-40.5916 764.26,-36.1238 753.964,-33.6257 754.653,-40.5916"/>
 </g>
 <!-- module~type_euler_1d -->
-<g id="node12" class="node"><title>module~type_euler_1d</title>
+<g id="node13" class="node"><title>module~type_euler_1d</title>
 <a xlink:href="../module/type_euler_1d.html" xlink:title="type_euler_1D">
-<polygon fill="#337ab7" stroke="#337ab7" points="415,-26 333,-26 333,-1.24345e-14 415,-3.55271e-15 415,-26"/>
-<text text-anchor="middle" x="374" y="-10.55" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">type_euler_1D</text>
+<polygon fill="#337ab7" stroke="#337ab7" points="679,-108 597,-108 597,-82 679,-82 679,-108"/>
+<text text-anchor="middle" x="638" y="-92.55" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">type_euler_1D</text>
 </a>
 </g>
 <!-- module~foodie&#45;&gt;module~type_euler_1d -->
 <g id="edge30" class="edge"><title>module~foodie&#45;&gt;module~type_euler_1d</title>
-<path fill="none" stroke="black" stroke-dasharray="5,2" d="M249.686,-163.834C255.795,-137.042 273.145,-75.7009 310,-40 314.006,-36.1193 318.654,-32.7596 323.58,-29.8592"/>
-<polygon fill="black" stroke="black" points="325.42,-32.847 332.67,-25.1213 322.185,-26.6395 325.42,-32.847"/>
+<path fill="none" stroke="black" stroke-dasharray="5,2" d="M534.063,-142.867C545.868,-136.321 560.551,-128.448 574,-122 581.111,-118.591 588.765,-115.162 596.22,-111.945"/>
+<polygon fill="black" stroke="black" points="597.667,-115.134 605.502,-108.002 594.93,-108.691 597.667,-115.134"/>
 </g>
-<!-- module~type_burgers&#45;&gt;program~integrate_burgers -->
-<g id="edge2" class="edge"><title>module~type_burgers&#45;&gt;program~integrate_burgers</title>
-<path fill="none" stroke="black" stroke-dasharray="5,2" d="M412.404,-336.391C435.232,-333.652 464.651,-330.122 490.337,-327.04"/>
-<polygon fill="black" stroke="black" points="490.833,-330.505 500.344,-325.839 489.999,-323.555 490.833,-330.505"/>
+<!-- module~type_burgers -->
+<g id="node14" class="node"><title>module~type_burgers</title>
+<a xlink:href="../module/type_burgers.html" xlink:title="type_burgers">
+<polygon fill="#337ab7" stroke="#337ab7" points="676,-26 600,-26 600,-1.24345e-14 676,-3.55271e-15 676,-26"/>
+<text text-anchor="middle" x="638" y="-10.55" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">type_burgers</text>
+</a>
 </g>
-<!-- module~type_oscillation&#45;&gt;program~integrate_oscillation -->
-<g id="edge4" class="edge"><title>module~type_oscillation&#45;&gt;program~integrate_oscillation</title>
-<path fill="none" stroke="black" stroke-dasharray="5,2" d="M416.81,-253.863C437.436,-251.388 462.59,-248.369 485.399,-245.632"/>
-<polygon fill="black" stroke="black" points="485.836,-249.105 495.348,-244.438 485.002,-242.155 485.836,-249.105"/>
+<!-- module~foodie&#45;&gt;module~type_burgers -->
+<g id="edge32" class="edge"><title>module~foodie&#45;&gt;module~type_burgers</title>
+<path fill="none" stroke="black" stroke-dasharray="5,2" d="M514.969,-142.675C522.66,-118.974 541.735,-69.2394 574,-40 578.983,-35.4841 584.832,-31.6544 590.934,-28.4263"/>
+<polygon fill="black" stroke="black" points="592.458,-31.577 599.982,-24.1173 589.448,-25.2571 592.458,-31.577"/>
 </g>
 <!-- module~type_lorenz&#45;&gt;program~integrate_lorenz -->
-<g id="edge6" class="edge"><title>module~type_lorenz&#45;&gt;program~integrate_lorenz</title>
-<path fill="none" stroke="black" stroke-dasharray="5,2" d="M408.157,-172.901C432.519,-169.978 465.803,-165.984 493.898,-162.612"/>
-<polygon fill="black" stroke="black" points="494.476,-166.068 503.987,-161.402 493.642,-159.118 494.476,-166.068"/>
+<g id="edge4" class="edge"><title>module~type_lorenz&#45;&gt;program~integrate_lorenz</title>
+<path fill="none" stroke="black" stroke-dasharray="5,2" d="M672.157,-295.583C696.519,-290.293 729.803,-283.066 757.898,-276.965"/>
+<polygon fill="black" stroke="black" points="758.958,-280.317 767.987,-274.774 757.472,-273.476 758.958,-280.317"/>
+</g>
+<!-- module~type_oscillation&#45;&gt;program~integrate_oscillation -->
+<g id="edge6" class="edge"><title>module~type_oscillation&#45;&gt;program~integrate_oscillation</title>
+<path fill="none" stroke="black" stroke-dasharray="5,2" d="M680.81,-167.704C701.436,-163.225 726.59,-157.763 749.399,-152.811"/>
+<polygon fill="black" stroke="black" points="750.318,-156.193 759.348,-150.65 748.833,-149.352 750.318,-156.193"/>
 </g>
 <!-- module~type_euler_1d_openmp&#45;&gt;program~integrate_euler_1d_openmp -->
 <g id="edge8" class="edge"><title>module~type_euler_1d_openmp&#45;&gt;program~integrate_euler_1d_openmp</title>
-<path fill="none" stroke="black" stroke-dasharray="5,2" d="M434.225,-81.9226C448.604,-78.8002 464.076,-75.4407 478.858,-72.2308"/>
-<polygon fill="black" stroke="black" points="479.931,-75.5795 488.96,-70.0372 478.445,-68.7389 479.931,-75.5795"/>
+<path fill="none" stroke="black" stroke-dasharray="5,2" d="M701.674,-221C710.337,-221 719.337,-221 728.297,-221"/>
+<polygon fill="black" stroke="black" points="728.378,-224.5 738.378,-221 728.378,-217.5 728.378,-224.5"/>
 </g>
 <!-- module~type_euler_1d&#45;&gt;program~integrate_euler_1d -->
 <g id="edge10" class="edge"><title>module~type_euler_1d&#45;&gt;program~integrate_euler_1d</title>
-<path fill="none" stroke="black" stroke-dasharray="5,2" d="M415.03,-13C436.422,-13 463.034,-13 486.89,-13"/>
-<polygon fill="black" stroke="black" points="486.922,-16.5001 496.922,-13 486.922,-9.5001 486.922,-16.5001"/>
+<path fill="none" stroke="black" stroke-dasharray="5,2" d="M679.03,-95C700.422,-95 727.034,-95 750.89,-95"/>
+<polygon fill="black" stroke="black" points="750.922,-98.5001 760.922,-95 750.922,-91.5001 750.922,-98.5001"/>
+</g>
+<!-- module~type_burgers&#45;&gt;program~integrate_burgers -->
+<g id="edge12" class="edge"><title>module~type_burgers&#45;&gt;program~integrate_burgers</title>
+<path fill="none" stroke="black" stroke-dasharray="5,2" d="M676.404,-17.1696C699.232,-19.648 728.651,-22.8421 754.337,-25.6309"/>
+<polygon fill="black" stroke="black" points="754.025,-29.1175 764.344,-26.7174 754.781,-22.1584 754.025,-29.1175"/>
 </g>
 </g>
 </svg>
 </div>
+                <script>var panmodulefoodie_integrator_adams_bashforthUsedByGraph = svgPanZoom('#modulefoodie_integrator_adams_bashforthUsedByGraph', {
+                    zoomEnabled: true,
+                    controlIconsEnabled: true,
+                    fit: true,
+                    center: true,});
+                    </script>
                 <div><a type="button" class="graph-help" data-toggle="modal" href="#graph-help-text">Help</a></div>
                 <div class="modal fade" id="graph-help-text" tabindex="-1" role="dialog">
                   <div class="modal-dialog modal-lg" role="document">
@@ -761,13 +791,16 @@ implementation in a submodule of an interface in a parent module.</p>
        <tr><td>procedure, public, pass(self) :: <strong>integrate</strong>  </td>
        <td><p>Integrate integrand field.</p></td></tr>
       
+       <tr><td>procedure, public, pass(self) :: <strong>update_previous</strong>  </td>
+       <td><p>Cyclic update previous time steps.</p></td></tr>
+      
        </tbody>
        </table>
      
      
      <h4>Description</h4>
        
-       <p>FOODiE integrator: provide an explicit class of Adams-Bashforth multi-step schemes, from 1st to 3rd order accutate.</p>
+       <p>FOODiE integrator: provide an explicit class of Adams-Bashforth multi-step schemes, from 1st to 4rd order accurate.</p>
      
   </div>
 </div>
@@ -919,7 +952,7 @@ private elementalsubroutine <a href='../proc/destroy.html'>destroy</a>(self)
     
   <div class="panel panel-default">
   <div class="panel-heading codesum"><span class="anchor" id="proc-integrate"></span><h3>
-private subroutine <a href='../proc/integrate.html'>integrate</a>(self, U, previous, Dt, t)
+private subroutine <a href='../proc/integrate.html'>integrate</a>(self, U, previous, Dt, t, autoupdate)
     
     
     
@@ -1015,6 +1048,21 @@ private subroutine <a href='../proc/integrate.html'>integrate</a>(self, U, previ
   
 </tr>
 
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>logical,</td>
+  <td>intent(in),</td>
+  <td>optional</td>
+  
+  <td></td><td>::</td>
+  <td><strong>autoupdate</strong></td><td><p>Perform cyclic autoupdate of previous time steps.</p></td>
+  
+</tr>
+
 </tbody>
 </table>
 
@@ -1029,6 +1077,95 @@ private subroutine <a href='../proc/integrate.html'>integrate</a>(self, U, previ
 
        
        <p>Integrate field with Adams-Bashforth class scheme.</p>
+        
+
+  </div>
+  </div>
+
+    
+    
+  <div class="panel panel-default">
+  <div class="panel-heading codesum"><span class="anchor" id="proc-update_previous"></span><h3>
+private subroutine <a href='../proc/update_previous.html'>update_previous</a>(self, U, previous)
+    
+    
+    
+</h3></div>
+  <div class="panel-body">
+       
+    
+    <h4>Arguments</h4>
+    
+      
+      
+<table class="table table-striped varlist">
+<thead><tr><th>Type</th>
+<th>Intent</th><th>Optional</th>
+<th>Attributes</th><th></th><th>Name</th><th></th></thead>
+
+
+
+<tbody>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>class(<a href='../type/adams_bashforth_integrator.html'>adams_bashforth_integrator</a>),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>self</strong></td><td><p>Actual AB integrator.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>class(<a href='../type/integrand.html'>integrand</a>),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>U</strong></td><td><p>Field to be integrated.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>class(<a href='../type/integrand.html'>integrand</a>),</td>
+  <td>intent(inout)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>previous</strong>(1:)</td><td><p>Previous time steps solutions of integrand field.</p></td>
+  
+</tr>
+
+</tbody>
+</table>
+
+      
+    
+    
+    
+    <h4>Description</h4>
+       
+       
+
+
+       
+       <p>Cyclic update previous time steps.</p>
         
 
   </div>

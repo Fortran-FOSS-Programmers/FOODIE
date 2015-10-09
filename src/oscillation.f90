@@ -9,6 +9,7 @@ use IR_Precision, only : R_P, I_P, FR_P, str, strz
 use type_oscillation, only : oscillation
 use Data_Type_Command_Line_Interface, only : Type_Command_Line_Interface
 use foodie, only : adams_bashforth_integrator, &
+                   adams_bashforth_moulton_integrator, &
                    euler_explicit_integrator, &
                    leapfrog_integrator, &
                    ls_runge_kutta_integrator, &
@@ -69,6 +70,8 @@ else
   select case(trim(adjustl(solver)))
   case('adams-bashforth')
     call test_ab(steps=stages_steps)
+  case('adams-bashforth-moulton')
+    call test_abm(steps=stages_steps)
   case('euler')
     call test_euler
   case('leapfrog')
@@ -81,6 +84,7 @@ else
     call test_tvd_rk(stages=stages_steps)
   case('all')
     call test_ab(steps=stages_steps)
+    call test_abm(steps=stages_steps)
     call test_euler
     call test_leapfrog
     call test_ls_rk(stages=stages_steps)
@@ -89,6 +93,7 @@ else
     print "(A)", 'Error: unknown solver "'//trim(adjustl(solver))//'"'
     print "(A)", 'Valid solver names are:'
     print "(A)", '  + adams-bashforth'
+    print "(A)", '  + adams-bashforth-moulton'
     print "(A)", '  + euler'
     print "(A)", '  + leapfrog'
     print "(A)", '  + leapfrog-raw'
@@ -212,6 +217,36 @@ contains
   return
   !---------------------------------------------------------------------------------------------------------------------------------
   endsubroutine test_ab
+
+  subroutine test_abm(steps)
+  !---------------------------------------------------------------------------------------------------------------------------------
+  !< Test predictor-corrector Adams-Bashforth-Moulton class of ODE solvers.
+  !---------------------------------------------------------------------------------------------------------------------------------
+  integer(I_P), intent(IN)      :: steps            !< Number of steps used: if negative all AB solvers are used.
+  integer, parameter            :: abm_steps=4      !< Adams-Bashforth-Moulton steps number.
+  real(R_P), allocatable        :: solution(:,:)    !< Solution at each time step.
+  integer(I_P)                  :: s                !< AB steps counter.
+  integer(I_P)                  :: steps_range(1:2) !< Steps used.
+  character(len=:), allocatable :: output           !< Output files basename.
+  character(len=:), allocatable :: title            !< Output files title.
+  !---------------------------------------------------------------------------------------------------------------------------------
+
+  !---------------------------------------------------------------------------------------------------------------------------------
+  solver = 'adams-bashforth-moulton'
+  call init(output=output, solution=solution)
+  print "(A)", 'Integrating Oscillation equations by means of Adams-Bashforth-Moulton class of solvers'
+  steps_range = [1, abm_steps] ; if (steps>0) steps_range = [steps, steps]
+  do s=steps_range(1), steps_range(2)
+    print "(A)", ' ABM-'//trim(str(.true.,s))
+    title = 'Oscillation equation integration, predictor/corrector Adams-Bashforth-Moulton, t='//str(n=t_final)//&
+            ' steps='//trim(str(.true., s))
+    call abm_solver(steps=s, solution=solution)
+    call save_results(title=title, basename=output//'-'//trim(str(.true., s)), solution=solution)
+  enddo
+  print "(A)", 'Finish!'
+  return
+  !---------------------------------------------------------------------------------------------------------------------------------
+  endsubroutine test_abm
 
   subroutine test_euler()
   !---------------------------------------------------------------------------------------------------------------------------------
@@ -361,6 +396,49 @@ contains
   return
   !---------------------------------------------------------------------------------------------------------------------------------
   endsubroutine ab_solver
+
+  subroutine abm_solver(steps, solution)
+  !---------------------------------------------------------------------------------------------------------------------------------
+  !< Solve problem with predictor-corrector Adams-Bashforth-Moulton class of ODE solvers.
+  !---------------------------------------------------------------------------------------------------------------------------------
+  integer(I_P), intent(IN)                 :: steps                 !< Number of steps used: if negative all AB solvers are used.
+  real(R_P),    intent(OUT)                :: solution(0:,0:)       !< Solution at each time step.
+  type(tvd_runge_kutta_integrator)         :: rk_integrator         !< Runge-Kutta integrator.
+  integer, parameter                       :: rk_stages=5           !< Runge-Kutta stages number.
+  type(oscillation)                        :: rk_stage(1:rk_stages) !< Runge-Kutta stages.
+  type(adams_bashforth_moulton_integrator) :: abm_integrator        !< Adams-Bashforth-Moulton integrator.
+  type(oscillation)                        :: previous(1:steps)     !< Previous time steps solutions.
+  type(oscillation)                        :: oscillator            !< Oscillation field.
+  integer                                  :: step                  !< Time steps counter.
+  !---------------------------------------------------------------------------------------------------------------------------------
+
+  !---------------------------------------------------------------------------------------------------------------------------------
+  call abm_integrator%init(steps=steps)
+  select case(steps)
+  case(1, 2, 3)
+    call rk_integrator%init(stages=steps)
+  case(4)
+    call rk_integrator%init(stages=5)
+  endselect
+  call oscillator%init(initial_state=initial_state, f=f)
+  solution = 0._R_P
+  solution(1:space_dimension, 0) = oscillator%output()
+  step = 0
+  do while(solution(0, step)<t_final)
+    step = step + 1
+    if (steps>=step) then
+      ! time steps from 1 to s - 1 must be computed with other scheme
+      call rk_integrator%integrate(U=oscillator, stage=rk_stage, Dt=Dt, t=solution(0, step))
+      previous(step) = oscillator
+    else
+      call abm_integrator%integrate(U=oscillator, previous=previous, Dt=Dt, t=solution(0, step-steps:step-1))
+    endif
+    solution(0, step) = step * Dt
+    solution(1:space_dimension, step) = oscillator%output()
+  enddo
+  return
+  !---------------------------------------------------------------------------------------------------------------------------------
+  endsubroutine abm_solver
 
   subroutine euler_solver(solution)
   !---------------------------------------------------------------------------------------------------------------------------------
@@ -524,6 +602,9 @@ contains
   real(R_P)                        :: ab_errors(1:space_dimension,&
                                                 1:ab_steps,       &
                                                 1:NDt)             !< Adams-Bashforth errors.
+  real(R_P)                        :: abm_errors(1:space_dimension,&
+                                                 1:ab_steps,       &
+                                                 1:NDt)            !< Adams-Bashforth-Moulton errors.
   real(R_P)                        :: lf_errors(1:space_dimension,&
                                                 1:2,              &! unfiltered and RAW-filtered
                                                 1:NDt)             !< Leapfrog errors.
@@ -536,6 +617,9 @@ contains
   real(R_P)                        :: ab_orders(1:space_dimension,&
                                                 1:ab_steps,       &
                                                 1:NDt-1)           !< Adams-Bashforth orders.
+  real(R_P)                        :: abm_orders(1:space_dimension,&
+                                                 1:ab_steps,       &
+                                                 1:NDt-1)           !< Adams-Bashforth-Moulton orders.
   real(R_P)                        :: lf_orders(1:space_dimension,&
                                                 1:2,              &! unfiltered and RAW-filtered
                                                 1:NDt-1)           !< Leapfrog orders.
@@ -570,6 +654,24 @@ contains
   do s=1, ab_steps
     do d=1, NDt-1
       ab_orders(:, s, d) = estimate_orders(solver_error=ab_errors(:, s, d:d+1), Dt_used=time_steps(d:d+1))
+    enddo
+  enddo
+  ! Analyze errors of Adams-Bashforth-Moulton solvers
+  do d=1, NDt ! loop over exercised time steps
+    Dt = time_steps(d)
+    solver = 'adams-bashforth-moulton'
+    call init(output=output, solution=solution)
+    do s=1, ab_steps
+      title = 'Oscillation equation integration, predictor-corrector Adams-Bashforth-Moulton, t='//str(n=t_final)//&
+              ' steps='//trim(str(.true., s))
+      call abm_solver(steps=s, solution=solution)
+      call save_results(title=title, basename=output//'-'//trim(str(.true., s)), solution=solution)
+      abm_errors(:, s, d) = compute_errors(solution=solution)
+    enddo
+  enddo
+  do s=1, ab_steps
+    do d=1, NDt-1
+      abm_orders(:, s, d) = estimate_orders(solver_error=abm_errors(:, s, d:d+1), Dt_used=time_steps(d:d+1))
     enddo
   enddo
   ! Analyze errors of leapfrog solver
@@ -637,8 +739,8 @@ contains
     enddo
   enddo
   call print_analysis(ab_steps=ab_steps, rk_stages=rk_stages, NDt=NDt, time_steps=time_steps, &
-                      ab_errors=ab_errors, lf_errors=lf_errors, ls_errors=ls_errors, rk_errors=rk_errors, &
-                      ab_orders=ab_orders, lf_orders=lf_orders, ls_orders=ls_orders, rk_orders=rk_orders)
+                      ab_errors=ab_errors, abm_errors=abm_errors, lf_errors=lf_errors, ls_errors=ls_errors, rk_errors=rk_errors, &
+                      ab_orders=ab_orders, abm_orders=abm_orders, lf_orders=lf_orders, ls_orders=ls_orders, rk_orders=rk_orders)
   return
   !---------------------------------------------------------------------------------------------------------------------------------
   endsubroutine perform_errors_analysis
@@ -686,24 +788,27 @@ contains
   endfunction estimate_orders
 
   subroutine print_analysis(ab_steps, rk_stages, NDt, time_steps, &
-                            ab_errors, lf_errors, ls_errors, rk_errors, ab_orders, lf_orders, ls_orders, rk_orders)
+                            ab_errors, abm_errors, lf_errors, ls_errors, rk_errors, &
+                            ab_orders, abm_orders, lf_orders, ls_orders, rk_orders)
   !---------------------------------------------------------------------------------------------------------------------------------
   !< Print summary of the error analysis.
   !---------------------------------------------------------------------------------------------------------------------------------
-  integer(I_P), intent(IN) :: ab_steps         !< Adams-Bashforth steps number.
-  integer(I_P), intent(IN) :: rk_stages        !< Runge-Kutta stages number.
-  integer(I_P), intent(IN) :: NDt              !< Number of time steps exercised.
-  real(R_P),    intent(IN) :: time_steps(:)    !< Time steps exercised.
-  real(R_P),    intent(IN) :: ab_errors(:,:,:) !< Adams-Bashforth errors.
-  real(R_P),    intent(IN) :: lf_errors(:,:,:) !< Leapfrog errors.
-  real(R_P),    intent(IN) :: ls_errors(:,:,:) !< Low storage Runge-Kutta errors.
-  real(R_P),    intent(IN) :: rk_errors(:,:,:) !< TVD/SSP Runge-Kutta errors.
-  real(R_P),    intent(IN) :: ab_orders(:,:,:) !< Adams-Bashforth orders.
-  real(R_P),    intent(IN) :: lf_orders(:,:,:) !< Leapfrog orders.
-  real(R_P),    intent(IN) :: ls_orders(:,:,:) !< Low storage Runge-Kutta orders.
-  real(R_P),    intent(IN) :: rk_orders(:,:,:) !< TVD/SSP Runge-Kutta orders.
-  integer(I_P)             :: s                !< Steps/stages counter.
-  integer(I_P)             :: d                !< Time steps-exercised counter.
+  integer(I_P), intent(IN) :: ab_steps          !< Adams-Bashforth steps number.
+  integer(I_P), intent(IN) :: rk_stages         !< Runge-Kutta stages number.
+  integer(I_P), intent(IN) :: NDt               !< Number of time steps exercised.
+  real(R_P),    intent(IN) :: time_steps(:)     !< Time steps exercised.
+  real(R_P),    intent(IN) :: ab_errors(:,:,:)  !< Adams-Bashforth errors.
+  real(R_P),    intent(IN) :: abm_errors(:,:,:) !< Adams-Bashforth-Moulton errors.
+  real(R_P),    intent(IN) :: lf_errors(:,:,:)  !< Leapfrog errors.
+  real(R_P),    intent(IN) :: ls_errors(:,:,:)  !< Low storage Runge-Kutta errors.
+  real(R_P),    intent(IN) :: rk_errors(:,:,:)  !< TVD/SSP Runge-Kutta errors.
+  real(R_P),    intent(IN) :: ab_orders(:,:,:)  !< Adams-Bashforth orders.
+  real(R_P),    intent(IN) :: abm_orders(:,:,:) !< Adams-Bashforth-Moulton orders.
+  real(R_P),    intent(IN) :: lf_orders(:,:,:)  !< Leapfrog orders.
+  real(R_P),    intent(IN) :: ls_orders(:,:,:)  !< Low storage Runge-Kutta orders.
+  real(R_P),    intent(IN) :: rk_orders(:,:,:)  !< TVD/SSP Runge-Kutta orders.
+  integer(I_P)             :: s                 !< Steps/stages counter.
+  integer(I_P)             :: d                 !< Time steps-exercised counter.
   !---------------------------------------------------------------------------------------------------------------------------------
 
   !---------------------------------------------------------------------------------------------------------------------------------
@@ -718,6 +823,19 @@ contains
         print "(A,F8.1,A,F10.3,A,E10.3,A,E10.3,A,F9.2,A,F9.2)", "  & ", time_steps(d), " & ", f*time_steps(d), " & ", &
                                                              ab_errors(1, s, d), " & " , ab_errors(2, s, d), " & ", &
                                                              ab_orders(1, s, d-1), " & " , ab_orders(2, s, d-1)
+      endif
+    enddo
+  enddo
+  do s=1, ab_steps
+    print "(A)", "Adams-Bashforth-Moulton, "//trim(str(.true.,s))//" steps"
+    do d=1, NDt
+      if (d==1) then
+        print "(A,F8.1,A,F10.3,A,E10.3,A,E10.3,A)", "  & ", time_steps(d), " & ", f*time_steps(d), " & ", &
+                                                 abm_errors(1, s, d), " & " , abm_errors(2, s, d), " & / & /"
+      else
+        print "(A,F8.1,A,F10.3,A,E10.3,A,E10.3,A,F9.2,A,F9.2)", "  & ", time_steps(d), " & ", f*time_steps(d), " & ", &
+                                                             abm_errors(1, s, d), " & " , abm_errors(2, s, d), " & ", &
+                                                             abm_orders(1, s, d-1), " & " , abm_orders(2, s, d-1)
       endif
     enddo
   enddo

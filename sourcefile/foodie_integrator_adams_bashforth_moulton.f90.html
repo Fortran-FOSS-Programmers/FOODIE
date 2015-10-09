@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+	 
+	 <meta name="description" content="Fortran Object oriented Ordinary Differential Equations integration library">
+    
+    <meta name="author" content="Chris MacMackin" >
+    <link rel="icon" href="../favicon.png">
+
+    <title>foodie_integrator_adams_bashforth_moulton.f90 &ndash; FOODiE</title>
+
+    <link href="../css/bootstrap.min.css" rel="stylesheet">
+    <link href="../css/pygments.css" rel="stylesheet">
+    <link href="../css/font-awesome.min.css" rel="stylesheet">
+    <link href="../css/local.css" rel="stylesheet">
+    
+
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+    
+    <script src="../js/jquery-2.1.3.min.js"></script>
+    <script src="../js/svg-pan-zoom.min.js"></script>
+
+    
+    <script src="../tipuesearch/tipuesearch_content.js"></script>
+    <link  href="../tipuesearch/tipuesearch.css" rel="stylesheet">
+    <script src="../tipuesearch/tipuesearch_set.js"></script>
+    <script src="../tipuesearch/tipuesearch.js"></script>
+    
+
+  </head>
+
+  <body>
+
+    <!-- Fixed navbar -->
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="../index.html">FOODiE </a>
+        </div>
+        <div id="navbar" class="navbar-collapse collapse">
+          <ul class="nav navbar-nav">
+				
+                
+            <li><a href="../lists/files.html">Source Files</a></li>
+				
+				
+            <li><a href="../lists/modules.html">Modules</a></li>
+				
+				
+            <li><a href="../lists/procedures.html">Procedures</a></li>
+				
+				
+            <li><a href="../lists/absint.html">Abstract Interfaces</a></li>
+								
+            <li><a href="../lists/types.html">Derived Types</a></li>
+				
+				
+            <li><a href="../lists/programs.html">Programs</a></li>
+				
+          </ul>
+        
+        <form action="../search.html" class="navbar-form navbar-right" role="search">
+        <div class="form-group">
+          <input type="text" class="form-control" placeholder="Search" name="q" id="tipue_search_input" autocomplete="off" required>
+        </div>
+<!--
+        <button type="submit" class="btn btn-default">Submit</button>
+-->
+        </form>
+        
+        </div><!--/.nav-collapse -->
+      </div>
+    </nav>
+
+    <div class="container">
+    
+  
+  <div class="row">
+    <h1>foodie_integrator_adams_bashforth_moulton.f90
+    <small>Source File</small>
+    
+    </h1>
+	 
+<div class="row">
+<div class="col-lg-12">
+<div class="well well-sm">
+  <ul class="list-inline" style="margin-bottom:0px;display:inline">
+     
+     
+     
+     
+    
+    
+    <li><i class="fa fa-code"></i><a href="../src/foodie_integrator_adams_bashforth_moulton.f90"> Source File</a></li>
+     
+  </ul>
+  <ol class="breadcrumb in-well text-right">
+  
+     <li class="active">foodie_integrator_adams_bashforth_moulton.f90</li>
+  </ol>
+</div>
+</div>
+</div>
+    
+  </div>
+  <div class="row">
+    <div class="col-lg-3">
+    
+  
+  
+  
+  
+  
+  
+  
+  <div class="panel panel-primary">
+    <div class="panel-heading text-left"><h3 class="panel-title">Modules</h3></div>
+    <div class="list-group">
+      
+      <a class="list-group-item" href="../module/foodie_integrator_adams_bashforth_moulton.html">foodie_integrator_adams_bashforth_moulton</a>
+      
+    </div>
+  </div>
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  <div class="panel panel-primary">
+    <div class="panel-heading text-left"><h3 class="panel-title">Source Code</h3></div>
+    <div class="list-group">
+      <a class="list-group-item" href="../sourcefile/foodie_integrator_adams_bashforth_moulton.f90.html#src">foodie_integrator_adams_bashforth_moulton.f90</a>
+    </div>
+  </div>
+  
+  <hr>
+  
+  <div class="panel panel-default">
+    <div class="panel-heading text-left"><h3 class="panel-title">All Source Files</h3></div>
+    <div class="list-group">
+      
+      <a class="list-group-item" href="../sourcefile/burgers.f90.html">burgers.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/euler-1d-openmp.f90.html">euler-1D-openmp.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/euler-1d.f90.html">euler-1D.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/foodie.f90.html">foodie.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/foodie_integrator_adams_bashforth.f90.html">foodie_integrator_adams_bashforth.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/foodie_integrator_adams_bashforth_moulton.f90.html">foodie_integrator_adams_bashforth_moulton.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/foodie_integrator_adams_moulton.f90.html">foodie_integrator_adams_moulton.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/foodie_integrator_euler_explicit.f90.html">foodie_integrator_euler_explicit.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/foodie_integrator_leapfrog.f90.html">foodie_integrator_leapfrog.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/foodie_integrator_low_storage_runge_kutta.f90.html">foodie_integrator_low_storage_runge_kutta.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/foodie_integrator_tvd_runge_kutta.f90.html">foodie_integrator_tvd_runge_kutta.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/foodie_kinds.f90.html">foodie_kinds.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/lorenz.f90.html">lorenz.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/oscillation.f90.html">oscillation.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/type_burgers.f90.html">type_burgers.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/type_euler-1d-openmp.f90.html">type_euler-1D-openmp.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/type_euler-1d.f90.html">type_euler-1D.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/type_integrand.f90.html">type_integrand.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/type_lorenz.f90.html">type_lorenz.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/type_oscillation.f90.html">type_oscillation.f90</a>
+      
+    </div>
+  </div>
+  
+  
+    </div>
+    <div class="col-lg-9" id='text'>
+    <p>FOODiE integrator: provide a predictor-corrector class of Adams-Bashforth-Moutlon multi-step schemes, from 1st to 4rd order
+ accutate.</p>
+    <br>
+    <section>
+    <h2><span class="anchor" id="src"></span>Source Code</h2>
+    <div class="highlight"><pre><span class="c">!&lt; FOODiE integrator: provide a predictor-corrector class of Adams-Bashforth-Moutlon multi-step schemes, from 1st to 4rd order</span>
+<span class="c">!&lt; accutate.</span>
+<span class="k">module </span><span class="n">foodie_integrator_adams_bashforth_moulton</span>
+<span class="c">!-----------------------------------------------------------------------------------------------------------------------------------</span>
+<span class="c">!&lt; FOODiE integrator: provide a predictor-corrector class of Adams-Bashforth-Moutlon multi-step schemes, from 1st to 4rd order</span>
+<span class="c">!&lt; accutate.</span>
+<span class="c">!&lt;</span>
+<span class="c">!&lt; Considering the following ODE system:</span>
+<span class="c">!&lt;</span>
+<span class="c">!&lt; $$ U_t = R(t,U) $$</span>
+<span class="c">!&lt;</span>
+<span class="c">!&lt; where \(U_t = \frac{dU}{dt}\), *U* is the vector of *state* variables being a function of the time-like independent variable</span>
+<span class="c">!&lt; *t*, *R* is the (vectorial) residual function, the Adams-Bashforth-Moulton class scheme implemented is:</span>
+<span class="c">!&lt;</span>
+<span class="c">!&lt;##### predictor</span>
+<span class="c">!&lt; $$ U^{n+N_s^p} = U^{n+N_s^p-1} +\Delta t \left[ \sum_{s=1}^{N_s^p}{ b_s^p \cdot R(t^{n+s-1}, U^{n+s-1}) } \right] $$</span>
+<span class="c">!&lt;##### corrector</span>
+<span class="c">!&lt; $$ U^{n+N_s^c} = U^{n+N_s^c-1} +\Delta t \left[ \sum_{s=0}^{N_s^c}{ b_s^c \cdot R(t^{n+s}, U^{n+s}) } \right] $$</span>
+<span class="c">!&lt;</span>
+<span class="c">!&lt;where \(N_s^p\) is the number of previous steps considered for the predictor and \(N_s^c\) is the number of previous steps</span>
+<span class="c">!&lt;considered for the corrector.</span>
+<span class="c">!&lt;</span>
+<span class="c">!&lt; @note The value of \(\Delta t\) must be provided, it not being computed by the integrator.</span>
+<span class="c">!&lt;</span>
+<span class="c">!&lt; The coefficients \(b_s^{p,c}\) define the actual scheme, that is selected accordingly to the number of</span>
+<span class="c">!&lt; **steps** used. The predictor and corrector schemes should have the same formal order of accuracy, thus \(N_s^p=N_s^c+1\)</span>
+<span class="c">!&lt; should hold.</span>
+<span class="c">!&lt;</span>
+<span class="c">!&lt; Currently, the following schemes are available:</span>
+<span class="c">!&lt;##### P=AB(1)-C=AM(0) step, Explicit/Implicit Farward/Backward Euler, 1st order</span>
+<span class="c">!&lt; This scheme is TVD and reverts to Explicit/Implicit Farward/Backward Euler, it being 1st order.</span>
+<span class="c">!&lt; The *b* coefficient is:</span>
+<span class="c">!&lt; $$b^p = \left[b_1\right] = \left[1\right]$$</span>
+<span class="c">!&lt; $$b^c = \left[b_0\right] = \left[1\right]$$</span>
+<span class="c">!&lt; The scheme is:</span>
+<span class="c">!&lt; $$ U^{n+1,p} = U^{n} + \Delta t R(t^{n},U^{n}) $$</span>
+<span class="c">!&lt; $$ U^{n+1,c} = U^{n} + \Delta t R(t^{n+1},U^{n+1,p}) $$</span>
+<span class="c">!&lt;</span>
+<span class="c">!&lt;##### P=AB(2)-C=AM(1) steps</span>
+<span class="c">!&lt; This scheme is 2nd order.</span>
+<span class="c">!&lt; The *b* coefficients are:</span>
+<span class="c">!&lt; $$b^p = \left[ {\begin{array}{*{20}{c}} b_1 &amp; b_2 \end{array}} \right] =</span>
+<span class="c">!&lt;         \left[ {\begin{array}{*{20}{c}} -\frac{1}{2} &amp; \frac{3}{2} \end{array}} \right]$$</span>
+<span class="c">!&lt; $$b^c = \left[ {\begin{array}{*{20}{c}} b_0 &amp; b_1 \end{array}} \right] =</span>
+<span class="c">!&lt;         \left[ {\begin{array}{*{20}{c}} \frac{1}{2} &amp; \frac{1}{2} \end{array}} \right]$$</span>
+<span class="c">!&lt; The scheme is:</span>
+<span class="c">!&lt; $$ U^{n+2,p} = U^{n+1} +\Delta t \left[ \frac{3}{2} R(t^{n+1}, U^{n+1})-\frac{1}{2} R(t^{n}, U^{n})  \right] $$</span>
+<span class="c">!&lt; $$ U^{n+2,c} = U^{n+1} +\Delta t \left[ \frac{1}{2} R(t^{n+2,p}, U^{n+2})+\frac{1}{2} R(t^{n+1}, U^{n+1}) \right] $$</span>
+<span class="c">!&lt;</span>
+<span class="c">!&lt;##### P=AB(3)-C=AM(2) steps</span>
+<span class="c">!&lt; This scheme is 3rd order.</span>
+<span class="c">!&lt; The *b* coefficients are:</span>
+<span class="c">!&lt; $$b^p = \left[ {\begin{array}{*{20}{c}} b_1 &amp; b_2 &amp; b_3 \end{array}} \right] =</span>
+<span class="c">!&lt;         \left[ {\begin{array}{*{20}{c}} \frac{5}{12} &amp; -\frac{4}{3} &amp; \frac{23}{12} \end{array}} \right]$$</span>
+<span class="c">!&lt; $$b^c = \left[ {\begin{array}{*{20}{c}} b_0 &amp; b_1 &amp; b_2 \end{array}} \right] =</span>
+<span class="c">!&lt;         \left[ {\begin{array}{*{20}{c}} -\frac{1}{12} &amp; \frac{2}{3} &amp; \frac{5}{12} \end{array}} \right]$$</span>
+<span class="c">!&lt; The scheme is:</span>
+<span class="c">!&lt; $$ U^{n+3,p} = U^{n+2} +\Delta t \left[ \frac{23}{12}R(t^{n+2}, U^{n+2}) - \frac{4}{3}R(t^{n+1}, U^{n+1})</span>
+<span class="c">!&lt; +\frac{5}{12} R(t^{n}, U^{n})  \right] $$</span>
+<span class="c">!&lt; $$ U^{n+3,c} = U^{n+2} +\Delta t \left[ \frac{5}{12}R(t^{n+3}, U^{n+3,p}) + \frac{2}{3}R(t^{n+2}, U^{n+2})</span>
+<span class="c">!&lt; -\frac{1}{12} R(t^{n+1}, U^{n+1})  \right] $$</span>
+<span class="c">!&lt;</span>
+<span class="c">!&lt;##### P=AB(4)-C=AM(3) steps</span>
+<span class="c">!&lt; This scheme is 4th order.</span>
+<span class="c">!&lt; The *b* coefficients are:</span>
+<span class="c">!&lt; $$b^p = \left[ {\begin{array}{*{20}{c}} b_1 &amp; b_2 &amp; b_3 &amp; b_4 \end{array}} \right] =</span>
+<span class="c">!&lt;         \left[ {\begin{array}{*{20}{c}} -\frac{9}{24} &amp; \frac{37}{24} &amp; -\frac{59}{24} &amp; \frac{55}{24} \end{array}} \right]$$</span>
+<span class="c">!&lt; $$b^c = \left[ {\begin{array}{*{20}{c}} b_0 &amp; b_1 &amp; b_2 &amp; b_3 \end{array}} \right] =</span>
+<span class="c">!&lt;         \left[ {\begin{array}{*{20}{c}} \frac{1}{24} &amp; -\frac{5}{24} &amp; \frac{19}{24} &amp; \frac{9}{24} \end{array}} \right]$$</span>
+<span class="c">!&lt; The scheme is:</span>
+<span class="c">!&lt; $$ U^{n+4,p} = U^{n+3} +\Delta t \left[ \frac{55}{24}R(t^{n+3}, U^{n+3}) - \frac{59}{24}R(t^{n+2}, U^{n+2})</span>
+<span class="c">!&lt; +\frac{37}{24} R(t^{n+1}, U^{n+1}) - \frac{9}{24} R(t^{n}, U^{n}) \right] $$</span>
+<span class="c">!&lt; $$ U^{n+4,c} = U^{n+3} +\Delta t \left[ \frac{9}{24}R(t^{n+4}, U^{n+4,p}) + \frac{19}{24}R(t^{n+3}, U^{n+3})</span>
+<span class="c">!&lt; -\frac{5}{24} R(t^{n+2}, U^{n+2}) + \frac{1}{24} R(t^{n+1}, U^{n+1}) \right] $$</span>
+<span class="c">!&lt;</span>
+<span class="c">!&lt;#### Bibliography</span>
+<span class="c">!&lt;</span>
+<span class="c">!-----------------------------------------------------------------------------------------------------------------------------------</span>
+
+<span class="c">!-----------------------------------------------------------------------------------------------------------------------------------</span>
+<span class="k">use </span><span class="n">foodie_kinds</span><span class="p">,</span> <span class="n">only</span> <span class="p">:</span> <span class="n">R_P</span><span class="p">,</span> <span class="n">I_P</span>
+<span class="k">use </span><span class="n">type_integrand</span><span class="p">,</span> <span class="n">only</span> <span class="p">:</span> <span class="n">integrand</span>
+<span class="k">use </span><span class="n">foodie_integrator_adams_bashforth</span><span class="p">,</span> <span class="n">only</span> <span class="p">:</span> <span class="n">adams_bashforth_integrator</span>
+<span class="k">use </span><span class="n">foodie_integrator_adams_moulton</span><span class="p">,</span> <span class="n">only</span> <span class="p">:</span> <span class="n">adams_moulton_integrator</span>
+<span class="c">!-----------------------------------------------------------------------------------------------------------------------------------</span>
+
+<span class="c">!-----------------------------------------------------------------------------------------------------------------------------------</span>
+<span class="k">implicit none</span>
+<span class="k">private</span>
+<span class="k">public</span> <span class="kd">::</span> <span class="n">adams_bashforth_moulton_integrator</span>
+<span class="c">!-----------------------------------------------------------------------------------------------------------------------------------</span>
+
+<span class="c">!-----------------------------------------------------------------------------------------------------------------------------------</span>
+<span class="k">type</span> <span class="kd">::</span> <span class="n">adams_bashforth_moulton_integrator</span>
+  <span class="c">!&lt; FOODiE integrator: provide an explicit class of Adams-Bashforth-Moulton multi-step schemes, from 1st to 4rd order accurate.</span>
+  <span class="c">!&lt;</span>
+  <span class="c">!&lt; @note The integrator must be created or initialized (predictor and corrector schemes selection) before used.</span>
+  <span class="k">private</span>
+<span class="k">  </span><span class="kt">integer</span><span class="p">(</span><span class="n">I_P</span><span class="p">)</span>                     <span class="kd">::</span> <span class="n">steps</span><span class="o">=-</span><span class="mi">1</span>  <span class="c">!&lt; Number of time steps.</span>
+  <span class="k">type</span><span class="p">(</span><span class="n">adams_bashforth_integrator</span><span class="p">)</span> <span class="kd">::</span> <span class="n">predictor</span> <span class="c">!&lt; Predictor solver.</span>
+  <span class="k">type</span><span class="p">(</span><span class="n">adams_moulton_integrator</span><span class="p">)</span>   <span class="kd">::</span> <span class="n">corrector</span> <span class="c">!&lt; Corrector solver.</span>
+  <span class="k">contains</span>
+<span class="k">    procedure</span><span class="p">,</span> <span class="k">pass</span><span class="p">(</span><span class="n">self</span><span class="p">),</span> <span class="k">public</span> <span class="kd">::</span> <span class="n">destroy</span>   <span class="c">!&lt; Destroy the integrator.</span>
+    <span class="k">procedure</span><span class="p">,</span> <span class="k">pass</span><span class="p">(</span><span class="n">self</span><span class="p">),</span> <span class="k">public</span> <span class="kd">::</span> <span class="n">init</span>      <span class="c">!&lt; Initialize (create) the integrator.</span>
+    <span class="k">procedure</span><span class="p">,</span> <span class="k">pass</span><span class="p">(</span><span class="n">self</span><span class="p">),</span> <span class="k">public</span> <span class="kd">::</span> <span class="n">integrate</span> <span class="c">!&lt; Integrate integrand field.</span>
+    <span class="k">final</span>                         <span class="kd">::</span> <span class="n">finalize</span>  <span class="c">!&lt; Finalize object.</span>
+<span class="n">endtype</span> <span class="n">adams_bashforth_moulton_integrator</span>
+<span class="c">!-----------------------------------------------------------------------------------------------------------------------------------</span>
+<span class="k">contains</span>
+  <span class="c">! public methods</span>
+  <span class="k">elemental subroutine </span><span class="n">init</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">steps</span><span class="p">)</span>
+  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+  <span class="c">!&lt; Create the actual Adams-Bashforth-Moulton integrator: initialize the *b* coefficients.</span>
+  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+  <span class="k">class</span><span class="p">(</span><span class="n">adams_bashforth_moulton_integrator</span><span class="p">),</span> <span class="k">intent</span><span class="p">(</span><span class="n">INOUT</span><span class="p">)</span> <span class="kd">::</span> <span class="n">self</span>  <span class="c">!&lt; AB integrator.</span>
+  <span class="kt">integer</span><span class="p">(</span><span class="n">I_P</span><span class="p">),</span> <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span>                                 <span class="kd">::</span> <span class="n">steps</span> <span class="c">!&lt; Number of time steps used.</span>
+  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+
+  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+  <span class="n">self</span><span class="p">%</span><span class="n">steps</span> <span class="o">=</span> <span class="n">steps</span>
+  <span class="k">call </span><span class="n">self</span><span class="p">%</span><span class="n">predictor</span><span class="p">%</span><span class="n">init</span><span class="p">(</span><span class="n">steps</span><span class="o">=</span><span class="n">steps</span><span class="p">)</span>
+  <span class="k">call </span><span class="n">self</span><span class="p">%</span><span class="n">corrector</span><span class="p">%</span><span class="n">init</span><span class="p">(</span><span class="n">steps</span><span class="o">=</span><span class="n">steps</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+  <span class="k">return</span>
+  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+  <span class="n">endsubroutine</span> <span class="n">init</span>
+
+  <span class="k">elemental subroutine </span><span class="n">destroy</span><span class="p">(</span><span class="n">self</span><span class="p">)</span>
+  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+  <span class="c">!&lt; Destoy the integrator.</span>
+  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+  <span class="k">class</span><span class="p">(</span><span class="n">adams_bashforth_moulton_integrator</span><span class="p">),</span> <span class="k">intent</span><span class="p">(</span><span class="n">INOUT</span><span class="p">)</span> <span class="kd">::</span> <span class="n">self</span> <span class="c">!&lt; AB integrator.</span>
+  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+
+  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+  <span class="n">self</span><span class="p">%</span><span class="n">steps</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>
+  <span class="k">call </span><span class="n">self</span><span class="p">%</span><span class="n">predictor</span><span class="p">%</span><span class="n">destroy</span>
+  <span class="k">call </span><span class="n">self</span><span class="p">%</span><span class="n">corrector</span><span class="p">%</span><span class="n">destroy</span>
+  <span class="k">return</span>
+  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+  <span class="n">endsubroutine</span> <span class="n">destroy</span>
+
+  <span class="k">subroutine </span><span class="n">integrate</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">U</span><span class="p">,</span> <span class="n">previous</span><span class="p">,</span> <span class="n">Dt</span><span class="p">,</span> <span class="n">t</span><span class="p">)</span>
+  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+  <span class="c">!&lt; Integrate field with Adams-Bashforth_Moulton class scheme.</span>
+  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+  <span class="k">class</span><span class="p">(</span><span class="n">adams_bashforth_moulton_integrator</span><span class="p">),</span> <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span>    <span class="kd">::</span> <span class="n">self</span>         <span class="c">!&lt; Actual AB integrator.</span>
+  <span class="k">class</span><span class="p">(</span><span class="n">integrand</span><span class="p">),</span>                          <span class="k">intent</span><span class="p">(</span><span class="n">INOUT</span><span class="p">)</span> <span class="kd">::</span> <span class="n">U</span>            <span class="c">!&lt; Field to be integrated.</span>
+  <span class="k">class</span><span class="p">(</span><span class="n">integrand</span><span class="p">),</span>                          <span class="k">intent</span><span class="p">(</span><span class="n">INOUT</span><span class="p">)</span> <span class="kd">::</span> <span class="n">previous</span><span class="p">(</span><span class="mi">1</span><span class="p">:)</span> <span class="c">!&lt; Previous time steps solutions of integrand field.</span>
+  <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">),</span>                                 <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span>    <span class="kd">::</span> <span class="n">Dt</span>           <span class="c">!&lt; Time steps.</span>
+  <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">),</span>                                 <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span>    <span class="kd">::</span> <span class="n">t</span><span class="p">(:)</span>         <span class="c">!&lt; Times.</span>
+  <span class="kt">integer</span><span class="p">(</span><span class="n">I_P</span><span class="p">)</span>                                             <span class="kd">::</span> <span class="n">s</span>            <span class="c">!&lt; Steps counter.</span>
+  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+
+  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+  <span class="k">call </span><span class="n">self</span><span class="p">%</span><span class="n">predictor</span><span class="p">%</span><span class="n">integrate</span><span class="p">(</span><span class="n">U</span><span class="o">=</span><span class="n">U</span><span class="p">,</span> <span class="n">previous</span><span class="o">=</span><span class="n">previous</span><span class="p">,</span> <span class="n">Dt</span><span class="o">=</span><span class="n">Dt</span><span class="p">,</span> <span class="n">t</span><span class="o">=</span><span class="n">t</span><span class="p">,</span> <span class="n">autoupdate</span><span class="o">=</span><span class="p">.</span><span class="n">false</span><span class="p">.)</span>
+  <span class="k">call </span><span class="n">self</span><span class="p">%</span><span class="n">corrector</span><span class="p">%</span><span class="n">integrate</span><span class="p">(</span><span class="n">U</span><span class="o">=</span><span class="n">U</span><span class="p">,</span> <span class="n">previous</span><span class="o">=</span><span class="n">previous</span><span class="p">(</span><span class="mi">2</span><span class="p">:),</span> <span class="n">Dt</span><span class="o">=</span><span class="n">Dt</span><span class="p">,</span> <span class="n">t</span><span class="o">=</span><span class="n">t</span><span class="p">,</span> <span class="n">autoupdate</span><span class="o">=</span><span class="p">.</span><span class="n">false</span><span class="p">.)</span>
+  <span class="k">call </span><span class="n">self</span><span class="p">%</span><span class="n">predictor</span><span class="p">%</span><span class="n">update_previous</span><span class="p">(</span><span class="n">U</span><span class="o">=</span><span class="n">U</span><span class="p">,</span> <span class="n">previous</span><span class="o">=</span><span class="n">previous</span><span class="p">)</span>
+  <span class="k">return</span>
+  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+  <span class="n">endsubroutine</span> <span class="n">integrate</span>
+
+  <span class="c">! private methods</span>
+  <span class="k">elemental subroutine </span><span class="n">finalize</span><span class="p">(</span><span class="n">self</span><span class="p">)</span>
+  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+  <span class="c">!&lt; Finalize object.</span>
+  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+  <span class="k">type</span><span class="p">(</span><span class="n">adams_bashforth_moulton_integrator</span><span class="p">),</span> <span class="k">intent</span><span class="p">(</span><span class="n">INOUT</span><span class="p">)</span> <span class="kd">::</span> <span class="n">self</span> <span class="c">!&lt; AB integrator.</span>
+  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+
+  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+  <span class="k">call </span><span class="n">self</span><span class="p">%</span><span class="n">destroy</span>
+  <span class="k">return</span>
+  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+  <span class="n">endsubroutine</span> <span class="n">finalize</span>
+<span class="n">endmodule</span> <span class="n">foodie_integrator_adams_bashforth_moulton</span>
+</pre></div>
+
+    </section>
+    </div>
+  </div>
+
+    <hr>
+    <footer>
+        <div class="row">
+        <div class="col-md-6">&copy; 2015 FOODiE was written by Fortran-FOSS-Programmers Group. </div>
+        <div class="col-md-6"><span class="pull-right">Documentation generated by <a href="https://github.com/cmacmackin/ford">FORD</a>.</span></div>
+        </div>
+        <br>
+    </footer>
+    </div> <!-- /container -->
+
+
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+<!--
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+-->
+    <script src="../js/bootstrap.min.js"></script>
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+    <script src="../js/ie10-viewport-bug-workaround.js"></script>
+
+    <!-- MathJax JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        TeX: { extensions: ['AMSmath.js','AMSsymbols.js','noErrors.js','noUndefined.js'], equationNumbers: { autoNumber: 'AMS' } },
+        jax: ['input/TeX','input/MathML','output/HTML-CSS'],
+        extensions: ['tex2jax.js','mml2jax.js','MathMenu.js','MathZoom.js'],
+        'HTML-CSS': { 
+           styles: { '.MathJax_Display, .MathJax .mo, .MathJax .mi, .MathJax .mn': {color: '#000000 ! important'} }
+        }
+      });
+    </script>
+    <script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+  </body>
+</html>

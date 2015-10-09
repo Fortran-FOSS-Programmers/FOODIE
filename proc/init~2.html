@@ -104,14 +104,14 @@
      
     
     
-    <li><i class="fa fa-code"></i><a href="../src/foodie_integrator_leapfrog.f90"> Source File</a></li>
+    <li><i class="fa fa-code"></i><a href="../src/foodie_integrator_adams_bashforth_moulton.f90"> Source File</a></li>
      
   </ul>
   <ol class="breadcrumb in-well text-right">
   
-     <li><a href='../sourcefile/foodie_integrator_leapfrog.f90.html'>foodie_integrator_leapfrog.f90</a></li>
+     <li><a href='../sourcefile/foodie_integrator_adams_bashforth_moulton.f90.html'>foodie_integrator_adams_bashforth_moulton.f90</a></li>
   
-     <li><a href='../module/foodie_integrator_leapfrog.html'>foodie_integrator_leapfrog</a></li>
+     <li><a href='../module/foodie_integrator_adams_bashforth_moulton.html'>foodie_integrator_adams_bashforth_moulton</a></li>
   
      <li class="active">init</li>
   </ol>
@@ -162,6 +162,8 @@
       <a class="list-group-item" href="../proc/a%7E2.html">a</a>
       
       <a class="list-group-item" href="../proc/ab_solver.html">ab_solver</a>
+      
+      <a class="list-group-item" href="../proc/abm_solver.html">abm_solver</a>
       
       <a class="list-group-item" href="../proc/add_burgers.html">add_burgers</a>
       
@@ -215,6 +217,10 @@
       
       <a class="list-group-item" href="../proc/destroy%7E5.html">destroy</a>
       
+      <a class="list-group-item" href="../proc/destroy%7E6.html">destroy</a>
+      
+      <a class="list-group-item" href="../proc/destroy%7E7.html">destroy</a>
+      
       <a class="list-group-item" href="../proc/deuler_dt.html">dEuler_dt</a>
       
       <a class="list-group-item" href="../proc/deuler_dt%7E2.html">dEuler_dt</a>
@@ -259,6 +265,10 @@
       
       <a class="list-group-item" href="../proc/finalize%7E5.html">finalize</a>
       
+      <a class="list-group-item" href="../proc/finalize%7E6.html">finalize</a>
+      
+      <a class="list-group-item" href="../proc/finalize%7E7.html">finalize</a>
+      
       <a class="list-group-item" href="../proc/h.html">H</a>
       
       <a class="list-group-item" href="../proc/h%7E2.html">H</a>
@@ -293,6 +303,10 @@
       
       <a class="list-group-item" href="../proc/init%7E13.html">init</a>
       
+      <a class="list-group-item" href="../proc/init%7E14.html">init</a>
+      
+      <a class="list-group-item" href="../proc/init%7E15.html">init</a>
+      
       <a class="list-group-item" href="../proc/integrate.html">integrate</a>
       
       <a class="list-group-item" href="../proc/integrate%7E2.html">integrate</a>
@@ -302,6 +316,10 @@
       <a class="list-group-item" href="../proc/integrate%7E4.html">integrate</a>
       
       <a class="list-group-item" href="../proc/integrate%7E5.html">integrate</a>
+      
+      <a class="list-group-item" href="../proc/integrate%7E6.html">integrate</a>
+      
+      <a class="list-group-item" href="../proc/integrate%7E7.html">integrate</a>
       
       <a class="list-group-item" href="../proc/leapfrog_solver.html">leapfrog_solver</a>
       
@@ -405,6 +423,8 @@
       
       <a class="list-group-item" href="../proc/test_ab%7E4.html">test_ab</a>
       
+      <a class="list-group-item" href="../proc/test_abm.html">test_abm</a>
+      
       <a class="list-group-item" href="../proc/test_euler.html">test_euler</a>
       
       <a class="list-group-item" href="../proc/test_euler%7E2.html">test_euler</a>
@@ -439,6 +459,10 @@
       
       <a class="list-group-item" href="../proc/tvd_rk_solver.html">tvd_rk_solver</a>
       
+      <a class="list-group-item" href="../proc/update_previous.html">update_previous</a>
+      
+      <a class="list-group-item" href="../proc/update_previous%7E2.html">update_previous</a>
+      
       <a class="list-group-item" href="../proc/update_previous_steps.html">update_previous_steps</a>
       
       <a class="list-group-item" href="../proc/update_previous_steps%7E2.html">update_previous_steps</a>
@@ -455,7 +479,7 @@
     
     <div class="col-lg-9" id='text'>
     <h2>
-private elementalsubroutine init(self, nu, alpha)
+private elementalsubroutine init(self, steps)
     
     
     
@@ -483,12 +507,12 @@ private elementalsubroutine init(self, nu, alpha)
   
 <tr>
   
-  <td><span class="anchor" id="variable-self%7E6"></span>class(<a href='../type/leapfrog_integrator.html'>leapfrog_integrator</a>),</td>
+  <td><span class="anchor" id="variable-self%7E7"></span>class(<a href='../type/adams_bashforth_moulton_integrator.html'>adams_bashforth_moulton_integrator</a>),</td>
   <td>intent(inout)</td>
   <td></td>
   
   <td></td><td>::</td>
-  <td><strong>self</strong></td><td><p>LF integrator.</p></td>
+  <td><strong>self</strong></td><td><p>AB integrator.</p></td>
   
 </tr>
 
@@ -498,27 +522,12 @@ private elementalsubroutine init(self, nu, alpha)
   
 <tr>
   
-  <td><span class="anchor" id="variable-nu%7E3"></span>real(kind=R_P),</td>
-  <td>intent(in),</td>
-  <td>optional</td>
+  <td><span class="anchor" id="variable-steps%7E9"></span>integer(kind=I_P),</td>
+  <td>intent(in)</td>
+  <td></td>
   
   <td></td><td>::</td>
-  <td><strong>nu</strong></td><td><p>Williams-Robert-Asselin filter coefficient.</p></td>
-  
-</tr>
-
-  
-  
-  
-  
-<tr>
-  
-  <td><span class="anchor" id="variable-alpha%7E2"></span>real(kind=R_P),</td>
-  <td>intent(in),</td>
-  <td>optional</td>
-  
-  <td></td><td>::</td>
-  <td><strong>alpha</strong></td><td><p>Robert-Asselin filter coefficient.</p></td>
+  <td><strong>steps</strong></td><td><p>Number of time steps used.</p></td>
   
 </tr>
 
@@ -529,7 +538,7 @@ private elementalsubroutine init(self, nu, alpha)
     
     
     <h3>Description</h3>
-    <p>Create the actual leapfrog integrator: initialize the filter coefficient.</p>
+    <p>Create the actual Adams-Bashforth-Moulton integrator: initialize the <em>b</em> coefficients.</p>
     
     
      
@@ -552,20 +561,18 @@ private elementalsubroutine init(self, nu, alpha)
     
     <section>
     <h2><span class="anchor" id="src"></span>Source Code</h2>
-    <div class="highlight"><pre>  <span class="k">elemental subroutine </span><span class="n">init</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">nu</span><span class="p">,</span> <span class="n">alpha</span><span class="p">)</span>
+    <div class="highlight"><pre>  <span class="k">elemental subroutine </span><span class="n">init</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">steps</span><span class="p">)</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
-  <span class="c">!&lt; Create the actual leapfrog integrator: initialize the filter coefficient.</span>
+  <span class="c">!&lt; Create the actual Adams-Bashforth-Moulton integrator: initialize the *b* coefficients.</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
-  <span class="k">class</span><span class="p">(</span><span class="n">leapfrog_integrator</span><span class="p">),</span> <span class="k">intent</span><span class="p">(</span><span class="n">INOUT</span><span class="p">)</span> <span class="kd">::</span> <span class="n">self</span>  <span class="c">!&lt; LF integrator.</span>
-  <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">),</span> <span class="k">optional</span><span class="p">,</span>        <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span>    <span class="kd">::</span> <span class="n">nu</span>    <span class="c">!&lt; Williams-Robert-Asselin filter coefficient.</span>
-  <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">),</span> <span class="k">optional</span><span class="p">,</span>        <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span>    <span class="kd">::</span> <span class="n">alpha</span> <span class="c">!&lt; Robert-Asselin filter coefficient.</span>
+  <span class="k">class</span><span class="p">(</span><span class="n">adams_bashforth_moulton_integrator</span><span class="p">),</span> <span class="k">intent</span><span class="p">(</span><span class="n">INOUT</span><span class="p">)</span> <span class="kd">::</span> <span class="n">self</span>  <span class="c">!&lt; AB integrator.</span>
+  <span class="kt">integer</span><span class="p">(</span><span class="n">I_P</span><span class="p">),</span> <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span>                                 <span class="kd">::</span> <span class="n">steps</span> <span class="c">!&lt; Number of time steps used.</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
 
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
-  <span class="n">self</span><span class="p">%</span><span class="n">nu</span> <span class="o">=</span> <span class="mf">0.01_R_P</span>
-  <span class="n">self</span><span class="p">%</span><span class="n">alpha</span> <span class="o">=</span> <span class="mf">0.53_R_P</span>
-  <span class="k">if</span> <span class="p">(</span><span class="nb">present</span><span class="p">(</span><span class="n">nu</span><span class="p">))</span> <span class="n">self</span><span class="p">%</span><span class="n">nu</span> <span class="o">=</span> <span class="n">nu</span>
-  <span class="k">if</span> <span class="p">(</span><span class="nb">present</span><span class="p">(</span><span class="n">alpha</span><span class="p">))</span> <span class="n">self</span><span class="p">%</span><span class="n">alpha</span> <span class="o">=</span> <span class="n">alpha</span>
+  <span class="n">self</span><span class="p">%</span><span class="n">steps</span> <span class="o">=</span> <span class="n">steps</span>
+  <span class="k">call </span><span class="n">self</span><span class="p">%</span><span class="n">predictor</span><span class="p">%</span><span class="n">init</span><span class="p">(</span><span class="n">steps</span><span class="o">=</span><span class="n">steps</span><span class="p">)</span>
+  <span class="k">call </span><span class="n">self</span><span class="p">%</span><span class="n">corrector</span><span class="p">%</span><span class="n">init</span><span class="p">(</span><span class="n">steps</span><span class="o">=</span><span class="n">steps</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
   <span class="k">return</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
   <span class="n">endsubroutine</span> <span class="n">init</span>

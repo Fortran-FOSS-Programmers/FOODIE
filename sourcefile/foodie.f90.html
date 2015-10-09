@@ -172,6 +172,10 @@
       
       <a class="list-group-item" href="../sourcefile/foodie_integrator_adams_bashforth.f90.html">foodie_integrator_adams_bashforth.f90</a>
       
+      <a class="list-group-item" href="../sourcefile/foodie_integrator_adams_bashforth_moulton.f90.html">foodie_integrator_adams_bashforth_moulton.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/foodie_integrator_adams_moulton.f90.html">foodie_integrator_adams_moulton.f90</a>
+      
       <a class="list-group-item" href="../sourcefile/foodie_integrator_euler_explicit.f90.html">foodie_integrator_euler_explicit.f90</a>
       
       <a class="list-group-item" href="../sourcefile/foodie_integrator_leapfrog.f90.html">foodie_integrator_leapfrog.f90</a>
@@ -225,14 +229,15 @@
 <span class="c">!&lt; FOODiE is aimed to the time-like integration of the above system of ODE. To this aim, different numerical schemes are provided:</span>
 <span class="c">!&lt;</span>
 <span class="c">!&lt;+ *explicit Adams-Bashforth* class of schemes:</span>
-<span class="c">!&lt;    + 1 step, namely the forward explicit Euler scheme, 1st order accurate;</span>
-<span class="c">!&lt;    + 2 steps, 2nd accurate;</span>
-<span class="c">!&lt;    + 3 steps, 3rd accurate;</span>
+<span class="c">!&lt;    + 1 step, namely the explicit forward Euler scheme, 1st order accurate;</span>
+<span class="c">!&lt;    + 2 steps, 2nd order accurate;</span>
+<span class="c">!&lt;    + 3 steps, 3rd order accurate;</span>
+<span class="c">!&lt;    + 4 steps, 4th order accurate;</span>
 <span class="c">!&lt;+ *forward explicit Euler* scheme, a 1st order accurate;</span>
 <span class="c">!&lt;+ *explicit Leapfrog*:</span>
-<span class="c">!&lt;    + Unfiltered, 2st order accurate, (mostly) unstable;</span>
+<span class="c">!&lt;    + Unfiltered, 2nd order accurate, (mostly) unstable;</span>
 <span class="c">!&lt;    + Robert-Asselin filtered, 1st order accurate;</span>
-<span class="c">!&lt;    + Robert-Asselin-Williams filter, 3rd order accurate;</span>
+<span class="c">!&lt;    + Robert-Asselin-Williams filter, 2nd order accurate;</span>
 <span class="c">!&lt;+ *explicit low storage Runge-Kutta 2N* class schemes:</span>
 <span class="c">!&lt;    + LS(1,1): 1 stage, 1st order accurate, namely the forward explicit Euler one;</span>
 <span class="c">!&lt;    + LS(5,4): 5 stages, 4th order accurate;</span>
@@ -241,6 +246,16 @@
 <span class="c">!&lt;    + SSP(2,2): 2 stages, 2nd order accurate;</span>
 <span class="c">!&lt;    + SSP(3,3): 3 stages, 3rd order accurate;</span>
 <span class="c">!&lt;    + SSP(5,4): 5 stages, 4th order accurate;</span>
+<span class="c">!&lt;+ *implicit Adams-Moulton* class of schemes:</span>
+<span class="c">!&lt;    + 0 step, namely the implicit backward Euler scheme, 1st order accurate;</span>
+<span class="c">!&lt;    + 1 step, 2nd order accurate;</span>
+<span class="c">!&lt;    + 2 steps, 3rd order accurate;</span>
+<span class="c">!&lt;    + 3 steps, 4th order accurate;</span>
+<span class="c">!&lt;+ *predictor-corrector Adams-Bashforth-Moulton* class of schemes:</span>
+<span class="c">!&lt;    + P=AB(1)-C=AM(0) step, namely the explicit/implicit forward/backward Euler scheme, 1st order accurate;</span>
+<span class="c">!&lt;    + P=AB(2)-C=AM(1) step, 2nd order accurate;</span>
+<span class="c">!&lt;    + P=AB(3)-C=AM(2) steps, 3rd order accurate;</span>
+<span class="c">!&lt;    + P=AB(4)-C=AM(3) steps, 4th order accurate;</span>
 <span class="c">!&lt;</span>
 <span class="c">!&lt;### Usage</span>
 <span class="c">!&lt;</span>
@@ -292,6 +307,8 @@
 <span class="c">!-----------------------------------------------------------------------------------------------------------------------------------</span>
 <span class="k">use </span><span class="n">type_integrand</span><span class="p">,</span> <span class="n">only</span> <span class="p">:</span> <span class="n">integrand</span>
 <span class="k">use </span><span class="n">foodie_integrator_adams_bashforth</span><span class="p">,</span> <span class="n">only</span> <span class="p">:</span> <span class="n">adams_bashforth_integrator</span>
+<span class="k">use </span><span class="n">foodie_integrator_adams_bashforth_moulton</span><span class="p">,</span> <span class="n">only</span> <span class="p">:</span> <span class="n">adams_bashforth_moulton_integrator</span>
+<span class="k">use </span><span class="n">foodie_integrator_adams_moulton</span><span class="p">,</span> <span class="n">only</span> <span class="p">:</span> <span class="n">adams_moulton_integrator</span>
 <span class="k">use </span><span class="n">foodie_integrator_euler_explicit</span><span class="p">,</span> <span class="n">only</span> <span class="p">:</span> <span class="n">euler_explicit_integrator</span>
 <span class="k">use </span><span class="n">foodie_integrator_leapfrog</span><span class="p">,</span> <span class="n">only</span> <span class="p">:</span> <span class="n">leapfrog_integrator</span>
 <span class="k">use </span><span class="n">foodie_integrator_low_storage_runge_kutta</span><span class="p">,</span> <span class="n">only</span> <span class="p">:</span> <span class="n">ls_runge_kutta_integrator</span>
@@ -303,6 +320,8 @@
 <span class="k">private</span>
 <span class="k">public</span> <span class="kd">::</span> <span class="n">integrand</span>
 <span class="k">public</span> <span class="kd">::</span> <span class="n">adams_bashforth_integrator</span>
+<span class="k">public</span> <span class="kd">::</span> <span class="n">adams_bashforth_moulton_integrator</span>
+<span class="k">public</span> <span class="kd">::</span> <span class="n">adams_moulton_integrator</span>
 <span class="k">public</span> <span class="kd">::</span> <span class="n">euler_explicit_integrator</span>
 <span class="k">public</span> <span class="kd">::</span> <span class="n">leapfrog_integrator</span>
 <span class="k">public</span> <span class="kd">::</span> <span class="n">ls_runge_kutta_integrator</span>
