@@ -15,14 +15,15 @@ module foodie
 !< FOODiE is aimed to the time-like integration of the above system of ODE. To this aim, different numerical schemes are provided:
 !<
 !<+ *explicit Adams-Bashforth* class of schemes:
-!<    + 1 step, namely the forward explicit Euler scheme, 1st order accurate;
-!<    + 2 steps, 2nd accurate;
-!<    + 3 steps, 3rd accurate;
+!<    + 1 step, namely the explicit forward Euler scheme, 1st order accurate;
+!<    + 2 steps, 2nd order accurate;
+!<    + 3 steps, 3rd order accurate;
+!<    + 4 steps, 4th order accurate;
 !<+ *forward explicit Euler* scheme, a 1st order accurate;
 !<+ *explicit Leapfrog*:
-!<    + Unfiltered, 2st order accurate, (mostly) unstable;
+!<    + Unfiltered, 2nd order accurate, (mostly) unstable;
 !<    + Robert-Asselin filtered, 1st order accurate;
-!<    + Robert-Asselin-Williams filter, 3rd order accurate;
+!<    + Robert-Asselin-Williams filter, 2nd order accurate;
 !<+ *explicit low storage Runge-Kutta 2N* class schemes:
 !<    + LS(1,1): 1 stage, 1st order accurate, namely the forward explicit Euler one;
 !<    + LS(5,4): 5 stages, 4th order accurate;
@@ -31,6 +32,16 @@ module foodie
 !<    + SSP(2,2): 2 stages, 2nd order accurate;
 !<    + SSP(3,3): 3 stages, 3rd order accurate;
 !<    + SSP(5,4): 5 stages, 4th order accurate;
+!<+ *implicit Adams-Moulton* class of schemes:
+!<    + 0 step, namely the implicit backward Euler scheme, 1st order accurate;
+!<    + 1 step, 2nd order accurate;
+!<    + 2 steps, 3rd order accurate;
+!<    + 3 steps, 4th order accurate;
+!<+ *predictor-corrector Adams-Bashforth-Moulton* class of schemes:
+!<    + P=AB(1)-C=AM(0) step, namely the explicit/implicit forward/backward Euler scheme, 1st order accurate;
+!<    + P=AB(2)-C=AM(1) step, 2nd order accurate;
+!<    + P=AB(3)-C=AM(2) steps, 3rd order accurate;
+!<    + P=AB(4)-C=AM(3) steps, 4th order accurate;
 !<
 !<### Usage
 !<
@@ -82,6 +93,8 @@ module foodie
 !-----------------------------------------------------------------------------------------------------------------------------------
 use type_integrand, only : integrand
 use foodie_integrator_adams_bashforth, only : adams_bashforth_integrator
+use foodie_integrator_adams_bashforth_moulton, only : adams_bashforth_moulton_integrator
+use foodie_integrator_adams_moulton, only : adams_moulton_integrator
 use foodie_integrator_euler_explicit, only : euler_explicit_integrator
 use foodie_integrator_leapfrog, only : leapfrog_integrator
 use foodie_integrator_low_storage_runge_kutta, only : ls_runge_kutta_integrator
@@ -93,6 +106,8 @@ implicit none
 private
 public :: integrand
 public :: adams_bashforth_integrator
+public :: adams_bashforth_moulton_integrator
+public :: adams_moulton_integrator
 public :: euler_explicit_integrator
 public :: leapfrog_integrator
 public :: ls_runge_kutta_integrator

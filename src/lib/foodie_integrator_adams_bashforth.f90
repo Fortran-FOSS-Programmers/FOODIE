@@ -1,7 +1,7 @@
-!< FOODiE integrator: provide an explicit class of Adams-Bashforth multi-step schemes, from 1st to 3rd order accutate.
+!< FOODiE integrator: provide an explicit class of Adams-Bashforth multi-step schemes, from 1st to 4rd order accutate.
 module foodie_integrator_adams_bashforth
 !-----------------------------------------------------------------------------------------------------------------------------------
-!< FOODiE integrator: provide an explicit class of Adams-Bashforth multi-step schemes, from 1st to 3rd order accutate.
+!< FOODiE integrator: provide an explicit class of Adams-Bashforth multi-step schemes, from 1st to 4rd order accutate.
 !<
 !< Considering the following ODE system:
 !<
@@ -10,7 +10,7 @@ module foodie_integrator_adams_bashforth
 !< where \(U_t = \frac{dU}{dt}\), *U* is the vector of *state* variables being a function of the time-like independent variable
 !< *t*, *R* is the (vectorial) residual function, the Adams-Bashforth class scheme implemented is:
 !<
-!< $$ U^{n+N_s} = U^{n+N_s-1} +\Delta t \left[ \sum_{s=1}^{n+N_s}{ b_s \cdot R(t^{n+s-1}, U^{n+s-1}) } \right] $$
+!< $$ U^{n+N_s} = U^{n+N_s-1} +\Delta t \left[ \sum_{s=1}^{N_s}{ b_s \cdot R(t^{n+s-1}, U^{n+s-1}) } \right] $$
 !<
 !<where \(N_s\) is the number of previous steps considered.
 !<
@@ -23,7 +23,7 @@ module foodie_integrator_adams_bashforth
 !<##### 1 step, Explicit Forward Euler, 1st order
 !< This scheme is TVD and reverts to Explicit Forward Euler, it being 1st order.
 !< The *b* coefficient is:
-!< $$b = \left[1\right]$$
+!< $$b = \left[b_1\right] = \left[1\right]$$
 !< The scheme is:
 !< $$ U^{n+1} = U^n + \Delta t R(t^n,U^n) $$
 !<
@@ -70,17 +70,18 @@ public :: adams_bashforth_integrator
 
 !-----------------------------------------------------------------------------------------------------------------------------------
 type :: adams_bashforth_integrator
-  !< FOODiE integrator: provide an explicit class of Adams-Bashforth multi-step schemes, from 1st to 3rd order accutate.
+  !< FOODiE integrator: provide an explicit class of Adams-Bashforth multi-step schemes, from 1st to 4rd order accurate.
   !<
-  !< @note The integrator must be created or initialized (initialize the *b* coeficients) before used.
+  !< @note The integrator must be created or initialized (initialize the *b* coefficients) before used.
   private
   integer(I_P)           :: steps=0 !< Number of time steps.
   real(R_P), allocatable :: b(:)    !< \(b\) coefficients.
   contains
-    procedure, pass(self), public :: destroy   !< Destroy the integrator.
-    procedure, pass(self), public :: init      !< Initialize (create) the integrator.
-    procedure, pass(self), public :: integrate !< Integrate integrand field.
-    final                         :: finalize  !< Finalize object.
+    procedure, pass(self), public :: destroy         !< Destroy the integrator.
+    procedure, pass(self), public :: init            !< Initialize (create) the integrator.
+    procedure, pass(self), public :: integrate       !< Integrate integrand field.
+    procedure, pass(self), public :: update_previous !< Cyclic update previous time steps.
+    final                         :: finalize        !< Finalize object.
 endtype adams_bashforth_integrator
 !-----------------------------------------------------------------------------------------------------------------------------------
 contains
@@ -111,7 +112,7 @@ contains
     self%b(3) = 23._R_P/12._R_P
   case(4)
     ! AB(4)
-    self%b(1) =  -9._R_P/24._R_P
+    self%b(1) =  -3._R_P/8._R_P
     self%b(2) =  37._R_P/24._R_P
     self%b(3) = -59._R_P/24._R_P
     self%b(4) =  55._R_P/24._R_P
@@ -134,7 +135,7 @@ contains
   !---------------------------------------------------------------------------------------------------------------------------------
   endsubroutine destroy
 
-  subroutine integrate(self, U, previous, Dt, t)
+  subroutine integrate(self, U, previous, Dt, t, autoupdate)
   !---------------------------------------------------------------------------------------------------------------------------------
   !< Integrate field with Adams-Bashforth class scheme.
   !---------------------------------------------------------------------------------------------------------------------------------
@@ -143,20 +144,39 @@ contains
   class(integrand),                  intent(INOUT) :: previous(1:) !< Previous time steps solutions of integrand field.
   real(R_P),                         intent(IN)    :: Dt           !< Time steps.
   real(R_P),                         intent(IN)    :: t(:)         !< Times.
+  logical, optional,                 intent(IN)    :: autoupdate   !< Perform cyclic autoupdate of previous time steps.
+  logical                                          :: autoupdate_  !< Perform cyclic autoupdate of previous time steps, dummy var.
   integer(I_P)                                     :: s            !< Steps counter.
   !---------------------------------------------------------------------------------------------------------------------------------
 
   !---------------------------------------------------------------------------------------------------------------------------------
+  autoupdate_ = .true. ; if (present(autoupdate)) autoupdate_ = autoupdate
   do s=1, self%steps
-    U = U + previous(s)%t() * (Dt * self%b(s))
+    U = U + previous(s)%t(t=t(s)) * (Dt * self%b(s))
   enddo
+  if (autoupdate_) call self%update_previous(U=U, previous=previous)
+  return
+  !---------------------------------------------------------------------------------------------------------------------------------
+  endsubroutine integrate
+
+  subroutine update_previous(self, U, previous)
+  !---------------------------------------------------------------------------------------------------------------------------------
+  !< Cyclic update previous time steps.
+  !---------------------------------------------------------------------------------------------------------------------------------
+  class(adams_bashforth_integrator), intent(IN)    :: self         !< Actual AB integrator.
+  class(integrand),                  intent(IN)    :: U            !< Field to be integrated.
+  class(integrand),                  intent(INOUT) :: previous(1:) !< Previous time steps solutions of integrand field.
+  integer(I_P)                                     :: s            !< Steps counter.
+  !---------------------------------------------------------------------------------------------------------------------------------
+
+  !---------------------------------------------------------------------------------------------------------------------------------
   do s=1, self%steps - 1
     previous(s) = previous(s + 1)
   enddo
   previous(self%steps) = U
   return
   !---------------------------------------------------------------------------------------------------------------------------------
-  endsubroutine integrate
+  endsubroutine update_previous
 
   ! private methods
   elemental subroutine finalize(self)
