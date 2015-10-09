@@ -22,7 +22,7 @@ OBJS = type_integrand.o \
 all:
 	ln -sfv ../../external/IR_Precision/src/IR_Precision.f90 .
 	ln -sfv ../../external/pyplot-fortran/src/pyplot_module.f90 .
-	ln -sfv ../../external/FLAP/src/Data_Type_Command_Line_Interface.F90 .
+	ln -sfv ../../external/FLAP/src/lib/Data_Type_Command_Line_Interface.F90 .
 	$(MAKE) foodie
 	ar ruv libfoodie.a $(OBJS)
 
@@ -40,4 +40,4 @@ pyplot_module.o: pyplot_module.f90
 Data_Type_Command_Line_Interface.o: Data_Type_Command_Line_Interface.F90
 
 clean:
-	rm -f *.o *.mod
+	rm -f *.o *.mod *.a
