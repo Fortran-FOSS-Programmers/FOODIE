@@ -1,15 +1,18 @@
 # FOODiE Makefile
 
-INCLUDE = ../../lib
-LIB     = ../../lib
+INCLUDE  = ../../lib
+EXTERNAL = ../../../external/FLAP
+LIB      = ../../lib
+
+OBJS = oscillation.o type_oscillation.o
 
 .SUFFIXES: .f90 .o
 
 .f90.o:
-	$(FC) -c $(FCFLAGS) -I$(INCLUDE) $<
+	$(FC) -c $(FCFLAGS) -I$(INCLUDE) -I$(EXTERNAL) $<
 
 oscillation: oscillation.o
-	$(FC) oscillation.f90 type_oscillation.o $(FCFLAGS) -I$(INCLUDE) -L$(LIB) -lfoodie -o $@
+	$(FC) $(OBJS) $(FCFLAGS) -L$(EXTERNAL) -lexternal -L$(LIB) -lfoodie -o $@
 
 oscillation.o: oscillation.f90 type_oscillation.o
 type_oscillation.o: type_oscillation.f90
