@@ -296,7 +296,7 @@ contains
   !< Test explicit low storage Runge-Kutta class of ODE solvers.
   !---------------------------------------------------------------------------------------------------------------------------------
   integer(I_P), intent(IN)      :: stages            !< Number of stages used: if negative all RK solvers are used.
-  integer, parameter            :: rk_stages=5       !< Runge-Kutta stages number.
+  integer, parameter            :: rk_stages=7       !< Runge-Kutta stages number.
   real(R_P), allocatable        :: solution(:,:)     !< Solution at each time step.
   integer(I_P)                  :: s                 !< RK stages counter.
   integer(I_P)                  :: stages_range(1:2) !< Stages used.
@@ -590,53 +590,40 @@ contains
   !<
   !<where \(\frac{\Delta t_1}{\Delta t_2}>1\).
   !---------------------------------------------------------------------------------------------------------------------------------
-  integer(I_P), parameter          :: NDt=6                        !< Number of time steps exercised.
-  real(R_P),    parameter          :: time_steps(1:NDt)=[5000._R_P, &
-                                                         2500._R_P, &
-                                                         1250._R_P, &
-                                                         625._R_P,  &
-                                                         320._R_P,  &
-                                                         100._R_P] !< Time steps exercised.
-  integer, parameter               :: ab_steps=4                   !< Adams-Bashforth steps number.
-  integer, parameter               :: rk_stages=5                  !< Runge-Kutta stages number.
-  real(R_P)                        :: ab_errors(1:space_dimension,&
-                                                1:ab_steps,       &
-                                                1:NDt)             !< Adams-Bashforth errors.
-  real(R_P)                        :: abm_errors(1:space_dimension,&
-                                                 1:ab_steps,       &
-                                                 1:NDt)            !< Adams-Bashforth-Moulton errors.
-  real(R_P)                        :: lf_errors(1:space_dimension,&
-                                                1:2,              &! unfiltered and RAW-filtered
-                                                1:NDt)             !< Leapfrog errors.
-  real(R_P)                        :: ls_errors(1:space_dimension,&
-                                                1:rk_stages,      &
-                                                1:NDt)             !< Low storage Runge-Kutta errors.
-  real(R_P)                        :: rk_errors(1:space_dimension,&
-                                                1:rk_stages,      &
-                                                1:NDt)             !< TVD/SSP Runge-Kutta errors.
-  real(R_P)                        :: ab_orders(1:space_dimension,&
-                                                1:ab_steps,       &
-                                                1:NDt-1)           !< Adams-Bashforth orders.
-  real(R_P)                        :: abm_orders(1:space_dimension,&
-                                                 1:ab_steps,       &
-                                                 1:NDt-1)           !< Adams-Bashforth-Moulton orders.
-  real(R_P)                        :: lf_orders(1:space_dimension,&
-                                                1:2,              &! unfiltered and RAW-filtered
-                                                1:NDt-1)           !< Leapfrog orders.
-  real(R_P)                        :: ls_orders(1:space_dimension,&
-                                                1:rk_stages,      &
-                                                1:NDt-1)           !< Low storage Runge-Kutta orders.
-  real(R_P)                        :: rk_orders(1:space_dimension,&
-                                                1:rk_stages,      &
-                                                1:NDt-1)           !< TVD/SSP Runge-Kutta orders.
-  real(R_P), allocatable           :: solution(:,:)                !< Solution at each time step.
-  integer(I_P)                     :: s                            !< Steps/stages counter.
-  integer(I_P)                     :: d                            !< Time steps-exercised counter.
-  character(len=:), allocatable    :: output                       !< Output files basename.
-  character(len=:), allocatable    :: title                        !< Output files title.
+  integer(I_P), parameter       :: NDt=6                        !< Number of time steps exercised.
+  real(R_P),    parameter       :: time_steps(1:NDt)=[5000._R_P, &
+                                                      2500._R_P, &
+                                                      1250._R_P, &
+                                                      625._R_P,  &
+                                                      320._R_P,  &
+                                                      100._R_P] !< Time steps exercised.
+  integer, parameter            :: ab_steps=4                   !< Adams-Bashforth steps number.
+  integer, parameter            :: tvd_rk_stages=5              !< TVD/SSP Runge-Kutta stages number.
+  integer, parameter            :: ls_rk_stages=7               !< Low storage Runge-Kutta stages number.
+  integer(I_P)                  :: s                            !< Steps/stages counter.
+  integer(I_P)                  :: d                            !< Time steps-exercised counter.
+  character(len=:), allocatable :: output                       !< Output files basename.
+  character(len=:), allocatable :: title                        !< Output files title.
+  real(R_P), allocatable        :: solution(:,:)                !< Solution at each time step.
+  ! errors and orders
+  real(R_P) :: ab_errors(1:space_dimension, 1:ab_steps, 1:NDt)            !< Adams-Bashforth errors.
+  real(R_P) :: abm_errors(1:space_dimension, 1:ab_steps, 1:NDt)           !< Adams-Bashforth-Moulton errors.
+  real(R_P) :: lf_errors(1:space_dimension, 1:2, 1:NDt)                   !< Leapfrog errors.
+  real(R_P) :: ls_rk_errors(1:space_dimension, 1:ls_rk_stages, 1:NDt)     !< Low storage Runge-Kutta errors.
+  real(R_P) :: tvd_rk_errors(1:space_dimension, 1:tvd_rk_stages, 1:NDt)   !< TVD/SSP Runge-Kutta errors.
+  real(R_P) :: ab_orders(1:space_dimension, 1:ab_steps, 1:NDt-1)          !< Adams-Bashforth orders.
+  real(R_P) :: abm_orders(1:space_dimension, 1:ab_steps, 1:NDt-1)         !< Adams-Bashforth-Moulton orders.
+  real(R_P) :: lf_orders(1:space_dimension, 1:2, 1:NDt-1)                 !< Leapfrog orders.
+  real(R_P) :: ls_rk_orders(1:space_dimension, 1:ls_rk_stages, 1:NDt-1)   !< Low storage Runge-Kutta orders.
+  real(R_P) :: tvd_rk_orders(1:space_dimension, 1:tvd_rk_stages, 1:NDt-1) !< TVD/SSP Runge-Kutta orders.
   !---------------------------------------------------------------------------------------------------------------------------------
 
   !---------------------------------------------------------------------------------------------------------------------------------
+  ab_errors = 0._R_P     ; ab_orders = 0._R_P
+  abm_errors = 0._R_P    ; abm_orders = 0._R_P
+  lf_errors = 0._R_P     ; lf_orders = 0._R_P
+  ls_rk_errors = 0._R_P  ; ls_rk_orders = 0._R_P
+  tvd_rk_errors = 0._R_P ; tvd_rk_orders = 0._R_P
   if (allocated(solution)) deallocate(solution) ; allocate(solution(0:space_dimension, 0:int(t_final/Dt)))
   results = .true. ! activate results saving
   ! Analyze errors of Adams-Bashforth solvers
@@ -700,7 +687,7 @@ contains
     Dt = time_steps(d)
     solver = 'ls-runge-kutta'
     call init(output=output, solution=solution)
-    do s=1, rk_stages
+    do s=1, ls_rk_stages
       if (s==2) cycle ! 2 stages not yet implemented
       if (s==3) cycle ! 3 stages not yet implemented
       if (s==4) cycle ! 4 stages not yet implemented
@@ -708,15 +695,15 @@ contains
         ' steps='//trim(str(.true., s))
       call ls_rk_solver(stages=s, solution=solution)
       call save_results(title=title, basename=output//'-'//trim(str(.true., s)), solution=solution)
-      ls_errors(:, s, d) = compute_errors(solution=solution)
+      ls_rk_errors(:, s, d) = compute_errors(solution=solution)
     enddo
   enddo
-  do s=1, rk_stages
+  do s=1, ls_rk_stages
     if (s==2) cycle ! 2 stages not yet implemented
     if (s==3) cycle ! 3 stages not yet implemented
     if (s==4) cycle ! 4 stages not yet implemented
     do d=1, NDt-1
-      ls_orders(:, s, d) = estimate_orders(solver_error=ls_errors(:, s, d:d+1), Dt_used=time_steps(d:d+1))
+      ls_rk_orders(:, s, d) = estimate_orders(solver_error=ls_rk_errors(:, s, d:d+1), Dt_used=time_steps(d:d+1))
     enddo
   enddo
   ! Analyze errors of TVD/SSP Runge-Kutta solvers
@@ -724,23 +711,26 @@ contains
     Dt = time_steps(d)
     solver = 'tvd-runge-kutta'
     call init(output=output, solution=solution)
-    do s=1, rk_stages
+    do s=1, tvd_rk_stages
       if (s==4) cycle ! 4 stages not yet implemented
       title = 'Oscillation equation integration, explicit TVD/SSP Runge-Kutta, t='//str(n=t_final)//' steps='//trim(str(.true., s))
       call tvd_rk_solver(stages=s, solution=solution)
       call save_results(title=title, basename=output//'-'//trim(str(.true., s)), solution=solution)
-      rk_errors(:, s, d) = compute_errors(solution=solution)
+      tvd_rk_errors(:, s, d) = compute_errors(solution=solution)
     enddo
   enddo
-  do s=1, rk_stages
+  do s=1, tvd_rk_stages
     if (s==4) cycle ! 4 stages not yet implemented
     do d=1, NDt-1
-      rk_orders(:, s, d) = estimate_orders(solver_error=rk_errors(:, s, d:d+1), Dt_used=time_steps(d:d+1))
+      tvd_rk_orders(:, s, d) = estimate_orders(solver_error=tvd_rk_errors(:, s, d:d+1), Dt_used=time_steps(d:d+1))
     enddo
   enddo
-  call print_analysis(ab_steps=ab_steps, rk_stages=rk_stages, NDt=NDt, time_steps=time_steps, &
-                      ab_errors=ab_errors, abm_errors=abm_errors, lf_errors=lf_errors, ls_errors=ls_errors, rk_errors=rk_errors, &
-                      ab_orders=ab_orders, abm_orders=abm_orders, lf_orders=lf_orders, ls_orders=ls_orders, rk_orders=rk_orders)
+  print "(A)", "Solver & Time Step & f*Dt & Error X & Error Y & Observed Order of Accuracy X & Observed Order of Accuracy Y"
+  call print_analysis(solver='adams-bashforth', time_steps=time_steps, errors=ab_errors, orders=ab_orders)
+  call print_analysis(solver='adams-bashforth-moulton', time_steps=time_steps, errors=abm_errors, orders=abm_orders)
+  call print_analysis(solver='leapfrog', time_steps=time_steps, errors=lf_errors, orders=lf_orders)
+  call print_analysis(solver='ls-runge-kutta', time_steps=time_steps, errors=ls_rk_errors, orders=ls_rk_orders)
+  call print_analysis(solver='tvd-runge-kutta', time_steps=time_steps, errors=tvd_rk_errors, orders=tvd_rk_orders)
   return
   !---------------------------------------------------------------------------------------------------------------------------------
   endsubroutine perform_errors_analysis
@@ -787,107 +777,29 @@ contains
   !---------------------------------------------------------------------------------------------------------------------------------
   endfunction estimate_orders
 
-  subroutine print_analysis(ab_steps, rk_stages, NDt, time_steps, &
-                            ab_errors, abm_errors, lf_errors, ls_errors, rk_errors, &
-                            ab_orders, abm_orders, lf_orders, ls_orders, rk_orders)
+  subroutine print_analysis(solver, time_steps, errors, orders)
   !---------------------------------------------------------------------------------------------------------------------------------
   !< Print summary of the error analysis.
   !---------------------------------------------------------------------------------------------------------------------------------
-  integer(I_P), intent(IN) :: ab_steps          !< Adams-Bashforth steps number.
-  integer(I_P), intent(IN) :: rk_stages         !< Runge-Kutta stages number.
-  integer(I_P), intent(IN) :: NDt               !< Number of time steps exercised.
-  real(R_P),    intent(IN) :: time_steps(:)     !< Time steps exercised.
-  real(R_P),    intent(IN) :: ab_errors(:,:,:)  !< Adams-Bashforth errors.
-  real(R_P),    intent(IN) :: abm_errors(:,:,:) !< Adams-Bashforth-Moulton errors.
-  real(R_P),    intent(IN) :: lf_errors(:,:,:)  !< Leapfrog errors.
-  real(R_P),    intent(IN) :: ls_errors(:,:,:)  !< Low storage Runge-Kutta errors.
-  real(R_P),    intent(IN) :: rk_errors(:,:,:)  !< TVD/SSP Runge-Kutta errors.
-  real(R_P),    intent(IN) :: ab_orders(:,:,:)  !< Adams-Bashforth orders.
-  real(R_P),    intent(IN) :: abm_orders(:,:,:) !< Adams-Bashforth-Moulton orders.
-  real(R_P),    intent(IN) :: lf_orders(:,:,:)  !< Leapfrog orders.
-  real(R_P),    intent(IN) :: ls_orders(:,:,:)  !< Low storage Runge-Kutta orders.
-  real(R_P),    intent(IN) :: rk_orders(:,:,:)  !< TVD/SSP Runge-Kutta orders.
-  integer(I_P)             :: s                 !< Steps/stages counter.
-  integer(I_P)             :: d                 !< Time steps-exercised counter.
+  character(*), intent(IN) :: solver        !< Solver name.
+  real(R_P),    intent(IN) :: time_steps(:) !< Time steps exercised.
+  real(R_P),    intent(IN) :: errors(:,:,:) !< Errors of the solver.
+  real(R_P),    intent(IN) :: orders(:,:,:) !< Observed orders of the solver.
+  integer(I_P)             :: s             !< Solver index.
+  integer(I_P)             :: d             !< Time steps-exercised counter.
   !---------------------------------------------------------------------------------------------------------------------------------
 
   !---------------------------------------------------------------------------------------------------------------------------------
-  print "(A)", "Solver & Time Step & f*Dt & Error X & Error Y & Observed Order of Accuracy X & Observed Order of Accuracy Y"
-  do s=1, ab_steps
-    print "(A)", "Adams-Bashforth, "//trim(str(.true.,s))//" steps"
-    do d=1, NDt
+  do s=1, size(errors, dim=2)
+    print "(A)", solver//'-'//trim(str(.true.,s))
+    do d=1, size(errors, dim=3)
       if (d==1) then
         print "(A,F8.1,A,F10.3,A,E10.3,A,E10.3,A)", "  & ", time_steps(d), " & ", f*time_steps(d), " & ", &
-                                                 ab_errors(1, s, d), " & " , ab_errors(2, s, d), " & / & /"
+                                                 errors(1, s, d), " & " , errors(2, s, d), " & / & /"
       else
         print "(A,F8.1,A,F10.3,A,E10.3,A,E10.3,A,F9.2,A,F9.2)", "  & ", time_steps(d), " & ", f*time_steps(d), " & ", &
-                                                             ab_errors(1, s, d), " & " , ab_errors(2, s, d), " & ", &
-                                                             ab_orders(1, s, d-1), " & " , ab_orders(2, s, d-1)
-      endif
-    enddo
-  enddo
-  do s=1, ab_steps
-    print "(A)", "Adams-Bashforth-Moulton, "//trim(str(.true.,s))//" steps"
-    do d=1, NDt
-      if (d==1) then
-        print "(A,F8.1,A,F10.3,A,E10.3,A,E10.3,A)", "  & ", time_steps(d), " & ", f*time_steps(d), " & ", &
-                                                 abm_errors(1, s, d), " & " , abm_errors(2, s, d), " & / & /"
-      else
-        print "(A,F8.1,A,F10.3,A,E10.3,A,E10.3,A,F9.2,A,F9.2)", "  & ", time_steps(d), " & ", f*time_steps(d), " & ", &
-                                                             abm_errors(1, s, d), " & " , abm_errors(2, s, d), " & ", &
-                                                             abm_orders(1, s, d-1), " & " , abm_orders(2, s, d-1)
-      endif
-    enddo
-  enddo
-  print "(A)", "Leapfrog unfiltered"
-  do d=1, NDt
-    if (d==1) then
-      print "(A,F8.1,A,F10.3,A,E10.3,A,E10.3,A)", "  & ", time_steps(d), " & ", f*time_steps(d), " & ", &
-                                               lf_errors(1, 1, d), " & " , lf_errors(2, 1, d), " & / & /"
-    else
-      print "(A,F8.1,A,F10.3,A,E10.3,A,E10.3,A,F9.2,A,F9.2)", "  & ", time_steps(d), " & ", f*time_steps(d), " & ", &
-                                                           lf_errors(1, 1, d), " & " , lf_errors(2, 1, d), " & ", &
-                                                           lf_orders(1, 1, d-1), " & " , lf_orders(2, 1, d-1)
-    endif
-  enddo
-  print "(A)", "Leapfrog RAW-filtered"
-  do d=1, NDt
-    if (d==1) then
-      print "(A,F8.1,A,F10.3,A,E10.3,A,E10.3,A)", "  & ", time_steps(d), " & ", f*time_steps(d), " & ", &
-                                               lf_errors(1, 2, d), " & " , lf_errors(2, 2, d), " & / & /"
-    else
-      print "(A,F8.1,A,F10.3,A,E10.3,A,E10.3,A,F9.2,A,F9.2)", "  & ", time_steps(d), " & ", f*time_steps(d), " & ", &
-                                                           lf_errors(1, 2, d), " & " , lf_errors(2, 2, d), " & ", &
-                                                           lf_orders(1, 2, d-1), " & " , lf_orders(2, 2, d-1)
-    endif
-  enddo
-  do s=1, rk_stages
-    if (s==2) cycle ! 2 stages not yet implemented
-    if (s==3) cycle ! 3 stages not yet implemented
-    if (s==4) cycle ! 4 stages not yet implemented
-    print "(A)", "Low Storage Runge-Kutta, "//trim(str(.true.,s))//" stages"
-    do d=1, NDt
-      if (d==1) then
-        print "(A,F8.1,A,F10.3,A,E10.3,A,E10.3,A)", "  & ", time_steps(d), " & ", f*time_steps(d), " & ", &
-                                                 ls_errors(1, s, d), " & " , ls_errors(2, s, d), " & / & /"
-      else
-        print "(A,F8.1,A,F10.3,A,E10.3,A,E10.3,A,F9.2,A,F9.2)", "  & ", time_steps(d), " & ", f*time_steps(d), " & ", &
-                                                             ls_errors(1, s, d), " & " , ls_errors(2, s, d), " & ", &
-                                                             ls_orders(1, s, d-1), " & " , ls_orders(2, s, d-1)
-      endif
-    enddo
-  enddo
-  do s=1, rk_stages
-    if (s==4) cycle ! 4 stages not yet implemented
-    print "(A)", "TVD/SSP Runge-Kutta, "//trim(str(.true.,s))//" stages"
-    do d=1, NDt
-      if (d==1) then
-        print "(A,F8.1,A,F10.3,A,E10.3,A,E10.3,A)", "  & ", time_steps(d), " & ", f*time_steps(d), " & ", &
-                                                 rk_errors(1, s, d), " & " , rk_errors(2, s, d), " & / & /"
-      else
-        print "(A,F8.1,A,F10.3,A,E10.3,A,E10.3,A,F9.2,A,F9.2)", "  & ", time_steps(d), " & ", f*time_steps(d), " & ", &
-                                                             rk_errors(1, s, d), " & " , rk_errors(2, s, d), " & ", &
-                                                             rk_orders(1, s, d-1), " & " , rk_orders(2, s, d-1)
+                                                             errors(1, s, d), " & " , errors(2, s, d), " & ", &
+                                                             orders(1, s, d-1), " & " , orders(2, s, d-1)
       endif
     enddo
   enddo
