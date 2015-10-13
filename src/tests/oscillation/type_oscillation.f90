@@ -55,7 +55,7 @@ type, extends(integrand) :: oscillation
     ! auxiliary methods
     procedure, pass(self), public :: init   !< Init field.
     procedure, pass(self), public :: output !< Extract Oscillation field.
-    ! type_integrand deferred methods
+    ! ADT integrand deferred methods
     procedure, pass(self), public :: t => dOscillation_dt                                             !< Time derivative, residuals.
     procedure, pass(lhs),  public :: integrand_multiply_integrand => oscillation_multiply_oscillation !< Oscillation * oscillation.
     procedure, pass(lhs),  public :: integrand_multiply_real => oscillation_multiply_real             !< Oscillation * real.
@@ -98,7 +98,7 @@ contains
   !---------------------------------------------------------------------------------------------------------------------------------
   endfunction output
 
-    ! type_integrand deferred methods
+    ! ADT integrand deferred methods
   function dOscillation_dt(self, t) result(dState_dt)
   !---------------------------------------------------------------------------------------------------------------------------------
   !< Time derivative of Oscillation field.

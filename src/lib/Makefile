@@ -3,7 +3,7 @@
 .SUFFIXES: .F90 .f90 .o
 .PHONY: all foodie clean
 
-OBJS = type_integrand.o \
+OBJS = foodie_adt_integrand.o \
        foodie_integrator_adams_bashforth.o \
        foodie_integrator_adams_bashforth_moulton.o \
        foodie_integrator_adams_moulton.o \
@@ -28,14 +28,14 @@ all:
 foodie: foodie.o
 
 foodie.o: foodie.f90 $(OBJS)
-foodie_integrator_adams_bashforth.o: foodie_integrator_adams_bashforth.f90 type_integrand.o foodie_kinds.o
-foodie_integrator_adams_bashforth_moulton.o: foodie_integrator_adams_bashforth_moulton.f90 foodie_integrator_adams_bashforth.o foodie_integrator_adams_moulton.o type_integrand.o foodie_kinds.o
-foodie_integrator_adams_moulton.o: foodie_integrator_adams_moulton.f90 type_integrand.o foodie_kinds.o
-foodie_integrator_euler_explicit.o: foodie_integrator_euler_explicit.f90 type_integrand.o foodie_kinds.o
-foodie_integrator_leapfrog.o: foodie_integrator_leapfrog.f90 type_integrand.o foodie_kinds.o
-foodie_integrator_low_storage_runge_kutta.o: foodie_integrator_low_storage_runge_kutta.f90 type_integrand.o foodie_kinds.o
-foodie_integrator_tvd_runge_kutta.o: foodie_integrator_tvd_runge_kutta.f90 type_integrand.o foodie_kinds.o
-type_integrand.o: type_integrand.f90 foodie_kinds.o
+foodie_integrator_adams_bashforth.o: foodie_integrator_adams_bashforth.f90 foodie_adt_integrand.o foodie_kinds.o
+foodie_integrator_adams_bashforth_moulton.o: foodie_integrator_adams_bashforth_moulton.f90 foodie_integrator_adams_bashforth.o foodie_integrator_adams_moulton.o foodie_adt_integrand.o foodie_kinds.o
+foodie_integrator_adams_moulton.o: foodie_integrator_adams_moulton.f90 foodie_adt_integrand.o foodie_kinds.o
+foodie_integrator_euler_explicit.o: foodie_integrator_euler_explicit.f90 foodie_adt_integrand.o foodie_kinds.o
+foodie_integrator_leapfrog.o: foodie_integrator_leapfrog.f90 foodie_adt_integrand.o foodie_kinds.o
+foodie_integrator_low_storage_runge_kutta.o: foodie_integrator_low_storage_runge_kutta.f90 foodie_adt_integrand.o foodie_kinds.o
+foodie_integrator_tvd_runge_kutta.o: foodie_integrator_tvd_runge_kutta.f90 foodie_adt_integrand.o foodie_kinds.o
+foodie_adt_integrand.o: foodie_adt_integrand.f90 foodie_kinds.o
 foodie_kinds.o: foodie_kinds.f90
 pyplot_module.o: pyplot_module.f90
 

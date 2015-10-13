@@ -79,7 +79,7 @@ module foodie_integrator_adams_bashforth_moulton
 
 !-----------------------------------------------------------------------------------------------------------------------------------
 use foodie_kinds, only : R_P, I_P
-use type_integrand, only : integrand
+use foodie_adt_integrand, only : integrand
 use foodie_integrator_adams_bashforth, only : adams_bashforth_integrator
 use foodie_integrator_adams_moulton, only : adams_moulton_integrator
 !-----------------------------------------------------------------------------------------------------------------------------------

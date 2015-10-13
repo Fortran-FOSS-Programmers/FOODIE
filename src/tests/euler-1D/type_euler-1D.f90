@@ -147,7 +147,7 @@ type, extends(integrand) :: euler_1D
     procedure, pass(self), public :: destroy          !< Destroy field.
     procedure, pass(self), public :: output           !< Extract Euler field.
     procedure, pass(self), public :: dt => compute_dt !< Compute the current time step, by means of CFL condition.
-    ! type_integrand deferred methods
+    ! ADT integrand deferred methods
     procedure, pass(self), public :: t => dEuler_dt                                       !< Time derivative, residuals function.
     procedure, pass(self), public :: update_previous_steps                                !< Update previous time steps.
     procedure, pass(self), public :: previous_step                                        !< Get a previous time step.
@@ -300,7 +300,7 @@ contains
   !--------------------------------------------------------------------------------------------------------------------------------
   endfunction compute_dt
 
-  ! type_integrand deferred methods
+  ! ADT integrand deferred methods
   function dEuler_dt(self, t) result(dState_dt)
   !---------------------------------------------------------------------------------------------------------------------------------
   !< Time derivative of Euler field, the residuals function.

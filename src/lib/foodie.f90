@@ -45,11 +45,11 @@ module foodie
 !<
 !<### Usage
 !<
-!< FOODiE schemes must be applied to only subclass extensions of the abstract class *type_integrand*.
+!< FOODiE schemes must be applied to only subclass extensions of the abstract class *integrand*.
 !<
 !< To use FOODiE you must:
 !<
-!<#### extend type_integrand abstract class provided by FOODiE implementing your concrete integrand field
+!<#### extend integrand abstract class provided by FOODiE implementing your concrete integrand field
 !<
 !< For example for the Lorenz' ODE system
 !<
@@ -91,7 +91,7 @@ module foodie
 !-----------------------------------------------------------------------------------------------------------------------------------
 
 !-----------------------------------------------------------------------------------------------------------------------------------
-use type_integrand, only : integrand
+use foodie_adt_integrand, only : integrand
 use foodie_integrator_adams_bashforth, only : adams_bashforth_integrator
 use foodie_integrator_adams_bashforth_moulton, only : adams_bashforth_moulton_integrator
 use foodie_integrator_adams_moulton, only : adams_moulton_integrator

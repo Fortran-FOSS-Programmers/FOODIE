@@ -73,7 +73,7 @@ type, extends(integrand) :: lorenz
     ! auxiliary methods
     procedure, pass(self), public :: init   !< Init field.
     procedure, pass(self), public :: output !< Extract Lorenz field.
-    ! type_integrand deferred methods
+    ! ADT integrand deferred methods
     procedure, pass(self), public :: t => dLorenz_dt                                        !< Time derivative, residuals function.
     procedure, pass(self), public :: update_previous_steps                                  !< Update previous time steps.
     procedure, pass(self), public :: previous_step                                          !< Get a previous time step.
@@ -135,7 +135,7 @@ contains
   !---------------------------------------------------------------------------------------------------------------------------------
   endfunction output
 
-  ! type_integrand deferred methods
+  ! ADT integrand deferred methods
   function dLorenz_dt(self, t) result(dState_dt)
   !---------------------------------------------------------------------------------------------------------------------------------
   !< Time derivative of Lorenz field.
