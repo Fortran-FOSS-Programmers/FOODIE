@@ -296,7 +296,7 @@ contains
   !< Test explicit low storage Runge-Kutta class of ODE solvers.
   !---------------------------------------------------------------------------------------------------------------------------------
   integer(I_P), intent(IN)      :: stages            !< Number of stages used: if negative all RK solvers are used.
-  integer, parameter            :: rk_stages=7       !< Runge-Kutta stages number.
+  integer, parameter            :: rk_stages=14      !< Runge-Kutta stages number.
   real(R_P), allocatable        :: solution(:,:)     !< Solution at each time step.
   integer(I_P)                  :: s                 !< RK stages counter.
   integer(I_P)                  :: stages_range(1:2) !< Stages used.
@@ -313,6 +313,10 @@ contains
     if (s==2) cycle ! 2 stages not yet implemented
     if (s==3) cycle ! 3 stages not yet implemented
     if (s==4) cycle ! 4 stages not yet implemented
+    if (s==8) cycle ! 8 stages not yet implemented
+    if (s==9) cycle ! 9 stages not yet implemented
+    if (s==10) cycle ! 10 stages not yet implemented
+    if (s==11) cycle ! 11 stages not yet implemented
     print "(A)", ' RK-'//trim(str(.true.,s))
     title = 'Oscillation equation integration, explicit low storage Runge-Kutta, t='//str(n=t_final)//&
       ' steps='//trim(str(.true., s))
@@ -599,7 +603,7 @@ contains
                                                       100._R_P] !< Time steps exercised.
   integer, parameter            :: ab_steps=4                   !< Adams-Bashforth steps number.
   integer, parameter            :: tvd_rk_stages=5              !< TVD/SSP Runge-Kutta stages number.
-  integer, parameter            :: ls_rk_stages=7               !< Low storage Runge-Kutta stages number.
+  integer, parameter            :: ls_rk_stages=14              !< Low storage Runge-Kutta stages number.
   integer(I_P)                  :: s                            !< Steps/stages counter.
   integer(I_P)                  :: d                            !< Time steps-exercised counter.
   character(len=:), allocatable :: output                       !< Output files basename.
@@ -691,6 +695,10 @@ contains
       if (s==2) cycle ! 2 stages not yet implemented
       if (s==3) cycle ! 3 stages not yet implemented
       if (s==4) cycle ! 4 stages not yet implemented
+      if (s==8) cycle ! 8 stages not yet implemented
+      if (s==9) cycle ! 9 stages not yet implemented
+      if (s==10) cycle ! 10 stages not yet implemented
+      if (s==11) cycle ! 11 stages not yet implemented
       title = 'Oscillation equation integration, explicit low storage Runge-Kutta, t='//str(n=t_final)//&
         ' steps='//trim(str(.true., s))
       call ls_rk_solver(stages=s, solution=solution)
@@ -702,6 +710,10 @@ contains
     if (s==2) cycle ! 2 stages not yet implemented
     if (s==3) cycle ! 3 stages not yet implemented
     if (s==4) cycle ! 4 stages not yet implemented
+    if (s==8) cycle ! 8 stages not yet implemented
+    if (s==9) cycle ! 9 stages not yet implemented
+    if (s==10) cycle ! 10 stages not yet implemented
+    if (s==11) cycle ! 11 stages not yet implemented
     do d=1, NDt-1
       ls_rk_orders(:, s, d) = estimate_orders(solver_error=ls_rk_errors(:, s, d:d+1), Dt_used=time_steps(d:d+1))
     enddo
