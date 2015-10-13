@@ -61,6 +61,11 @@ FOODiE is aimed to be a KISS-pure-Fortran library for integrating Ordinary Diffe
                 + [ ] 3 stages;
                 + [ ] 4 stages;
                 + [x] 5 stages, 4th order accurate, 2N registers, see [3];
+                + [x] 6 stages, 4th order accurate, 2N registers, see [9];
+                + [x] 7 stages, 4th order accurate, 2N registers, see [9];
+                + [x] 12 stages, 4th order accurate, 2N registers, see [10];
+                + [x] 13 stages, 4th order accurate, 2N registers, see [10];
+                + [x] 14 stages, 4th order accurate, 2N registers, see [10];
             + [ ] [TVD/SSP](http://fortran-foss-programmers.github.io/FOODiE/module/foodie_integrator_tvd_runge_kutta.html) schemes, see [1]:
                 + [x] 1 stage, namely the forward explicit Euler scheme, 1st order accurate;
                 + [x] 2 stages, 2nd order accurate;
@@ -69,6 +74,12 @@ FOODiE is aimed to be a KISS-pure-Fortran library for integrating Ordinary Diffe
                 + [x] 5 stages, 4th order accurate;
     + [ ] implicit schemes:
         + [ ] Runge-Kutta schemes;
+    + [ ] predictor-corrector schemes:
+        + [x] Adams-Bashforth-Moulton schemes:
+            + [x] 1 step, AB(1)-AM(0), 1st order accurate;
+            + [x] 2 steps, AB(2)-AM(1), 2nd accurate;
+            + [x] 3 steps, AB(3)-AM(2), 3rd accurate;
+            + [x] 4 steps, AB(4)-AM(3), 4th accurate;
 + [ ] efficient:
     + [ ] high scalability on parallel architectures:
         + [ ] support for shared memory multi/many cores architecture;
@@ -102,11 +113,15 @@ Any feature request is welcome.
 
 [8] *Scientific Software Design: The Object-Oriented Way*, Rouson, Damian and Xia, Jim and Xu, Xiaofeng, 2011, ISBN 9780521888134, Cambridge University Press, New York, NY, USA.
 
+[9] *High-accuracy large-step explicit Runge–Kutta (HALE-RK) schemes for computational aeroacoustics*, Vasanth Allampalli and Ray Hixon and M. Nallasamy and Scott D. Sawyer, Journal of Computational Physics, vol. 228, 2009, pp. 3837--3850.
+
+[10] *Efficient low-storage Runge–Kutta schemes with optimized stability regions*, Jens Niegemann and Richard Diehl and Kurt Busch, Journal of Computational Physics, vol. 231, 2012, pp. 364--372.
+
 Go to [Top](#top)
 
 ## Status [![Status](https://img.shields.io/badge/status-beta-orange.svg)]()
 
-FOODiE project is young, but developed with love. A bunch of integrators have been implemented using the Rouson's Abstract Data Type Pattern and tested with complex problems, but the library API is not yet stable. Nevertheless, FOODiE is already proven to be able to integrate a wide range of different ODE problems, from pure ODEs (Lorenz and inertial oscillations equations) to complex PDEs (Burgers and Euler equations), see the documentation.
+FOODiE project is young, but developed with love. Many integrators have been implemented using the Rouson's Abstract Data Type Pattern and tested with complex problems, but the library API is still in beta testing status. Nevertheless, FOODiE is already proven to be able to integrate a wide range of different ODE problems, from pure ODEs (Lorenz and inertial oscillations equations) to complex PDEs (Burgers and Euler equations), see the documentation.
 
 We are searching for Fortraners enthusiast joining our team!
 
