@@ -491,7 +491,7 @@
     
     <div class="col-lg-9" id='text'>
     <h2>
-subroutine print_analysis(ab_steps, rk_stages, NDt, time_steps, ab_errors, abm_errors, lf_errors, ls_errors, rk_errors, ab_orders, abm_orders, lf_orders, ls_orders, rk_orders)
+subroutine print_analysis(solver, time_steps, errors, orders)
     
     
     
@@ -519,42 +519,12 @@ subroutine print_analysis(ab_steps, rk_stages, NDt, time_steps, ab_errors, abm_e
   
 <tr>
   
-  <td><span class="anchor" id="variable-ab_steps%7E6"></span>integer(kind=I_P),</td>
+  <td><span class="anchor" id="variable-solver"></span>character(len=*),</td>
   <td>intent(in)</td>
   <td></td>
   
   <td></td><td>::</td>
-  <td><strong>ab_steps</strong></td><td><p>Adams-Bashforth steps number.</p></td>
-  
-</tr>
-
-  
-  
-  
-  
-<tr>
-  
-  <td><span class="anchor" id="variable-rk_stages%7E19"></span>integer(kind=I_P),</td>
-  <td>intent(in)</td>
-  <td></td>
-  
-  <td></td><td>::</td>
-  <td><strong>rk_stages</strong></td><td><p>Runge-Kutta stages number.</p></td>
-  
-</tr>
-
-  
-  
-  
-  
-<tr>
-  
-  <td><span class="anchor" id="variable-ndt%7E2"></span>integer(kind=I_P),</td>
-  <td>intent(in)</td>
-  <td></td>
-  
-  <td></td><td>::</td>
-  <td><strong>NDt</strong></td><td><p>Number of time steps exercised.</p></td>
+  <td><strong>solver</strong></td><td><p>Solver name.</p></td>
   
 </tr>
 
@@ -579,12 +549,12 @@ subroutine print_analysis(ab_steps, rk_stages, NDt, time_steps, ab_errors, abm_e
   
 <tr>
   
-  <td><span class="anchor" id="variable-ab_errors%7E2"></span>real(kind=R_P),</td>
+  <td><span class="anchor" id="variable-errors"></span>real(kind=R_P),</td>
   <td>intent(in)</td>
   <td></td>
   
   <td></td><td>::</td>
-  <td><strong>ab_errors</strong>(:,:,:)</td><td><p>Adams-Bashforth errors.</p></td>
+  <td><strong>errors</strong>(:,:,:)</td><td><p>Errors of the solver.</p></td>
   
 </tr>
 
@@ -594,132 +564,12 @@ subroutine print_analysis(ab_steps, rk_stages, NDt, time_steps, ab_errors, abm_e
   
 <tr>
   
-  <td><span class="anchor" id="variable-abm_errors%7E2"></span>real(kind=R_P),</td>
+  <td><span class="anchor" id="variable-orders"></span>real(kind=R_P),</td>
   <td>intent(in)</td>
   <td></td>
   
   <td></td><td>::</td>
-  <td><strong>abm_errors</strong>(:,:,:)</td><td><p>Adams-Bashforth-Moulton errors.</p></td>
-  
-</tr>
-
-  
-  
-  
-  
-<tr>
-  
-  <td><span class="anchor" id="variable-lf_errors%7E2"></span>real(kind=R_P),</td>
-  <td>intent(in)</td>
-  <td></td>
-  
-  <td></td><td>::</td>
-  <td><strong>lf_errors</strong>(:,:,:)</td><td><p>Leapfrog errors.</p></td>
-  
-</tr>
-
-  
-  
-  
-  
-<tr>
-  
-  <td><span class="anchor" id="variable-ls_errors%7E2"></span>real(kind=R_P),</td>
-  <td>intent(in)</td>
-  <td></td>
-  
-  <td></td><td>::</td>
-  <td><strong>ls_errors</strong>(:,:,:)</td><td><p>Low storage Runge-Kutta errors.</p></td>
-  
-</tr>
-
-  
-  
-  
-  
-<tr>
-  
-  <td><span class="anchor" id="variable-rk_errors%7E2"></span>real(kind=R_P),</td>
-  <td>intent(in)</td>
-  <td></td>
-  
-  <td></td><td>::</td>
-  <td><strong>rk_errors</strong>(:,:,:)</td><td><p>TVD/SSP Runge-Kutta errors.</p></td>
-  
-</tr>
-
-  
-  
-  
-  
-<tr>
-  
-  <td><span class="anchor" id="variable-ab_orders%7E2"></span>real(kind=R_P),</td>
-  <td>intent(in)</td>
-  <td></td>
-  
-  <td></td><td>::</td>
-  <td><strong>ab_orders</strong>(:,:,:)</td><td><p>Adams-Bashforth orders.</p></td>
-  
-</tr>
-
-  
-  
-  
-  
-<tr>
-  
-  <td><span class="anchor" id="variable-abm_orders%7E2"></span>real(kind=R_P),</td>
-  <td>intent(in)</td>
-  <td></td>
-  
-  <td></td><td>::</td>
-  <td><strong>abm_orders</strong>(:,:,:)</td><td><p>Adams-Bashforth-Moulton orders.</p></td>
-  
-</tr>
-
-  
-  
-  
-  
-<tr>
-  
-  <td><span class="anchor" id="variable-lf_orders%7E2"></span>real(kind=R_P),</td>
-  <td>intent(in)</td>
-  <td></td>
-  
-  <td></td><td>::</td>
-  <td><strong>lf_orders</strong>(:,:,:)</td><td><p>Leapfrog orders.</p></td>
-  
-</tr>
-
-  
-  
-  
-  
-<tr>
-  
-  <td><span class="anchor" id="variable-ls_orders%7E2"></span>real(kind=R_P),</td>
-  <td>intent(in)</td>
-  <td></td>
-  
-  <td></td><td>::</td>
-  <td><strong>ls_orders</strong>(:,:,:)</td><td><p>Low storage Runge-Kutta orders.</p></td>
-  
-</tr>
-
-  
-  
-  
-  
-<tr>
-  
-  <td><span class="anchor" id="variable-rk_orders%7E2"></span>real(kind=R_P),</td>
-  <td>intent(in)</td>
-  <td></td>
-  
-  <td></td><td>::</td>
-  <td><strong>rk_orders</strong>(:,:,:)</td><td><p>TVD/SSP Runge-Kutta orders.</p></td>
+  <td><strong>orders</strong>(:,:,:)</td><td><p>Observed orders of the solver.</p></td>
   
 </tr>
 
@@ -1016,7 +866,7 @@ implementation in a submodule of an interface in a parent module.</p>
   
   <td>public</td>
   <td></td><td>::</td>
-  <td><strong>s</strong></td><td></td><td></td><td><p>Steps/stages counter.</p></td>
+  <td><strong>s</strong></td><td></td><td></td><td><p>Solver index.</p></td>
   
 </tr>
 
@@ -1057,107 +907,29 @@ implementation in a submodule of an interface in a parent module.</p>
     
     <section>
     <h2><span class="anchor" id="src"></span>Source Code</h2>
-    <div class="highlight"><pre>  <span class="k">subroutine </span><span class="n">print_analysis</span><span class="p">(</span><span class="n">ab_steps</span><span class="p">,</span> <span class="n">rk_stages</span><span class="p">,</span> <span class="n">NDt</span><span class="p">,</span> <span class="n">time_steps</span><span class="p">,</span> <span class="p">&amp;</span>
-                            <span class="n">ab_errors</span><span class="p">,</span> <span class="n">abm_errors</span><span class="p">,</span> <span class="n">lf_errors</span><span class="p">,</span> <span class="n">ls_errors</span><span class="p">,</span> <span class="n">rk_errors</span><span class="p">,</span> <span class="p">&amp;</span>
-                            <span class="n">ab_orders</span><span class="p">,</span> <span class="n">abm_orders</span><span class="p">,</span> <span class="n">lf_orders</span><span class="p">,</span> <span class="n">ls_orders</span><span class="p">,</span> <span class="n">rk_orders</span><span class="p">)</span>
+    <div class="highlight"><pre>  <span class="k">subroutine </span><span class="n">print_analysis</span><span class="p">(</span><span class="n">solver</span><span class="p">,</span> <span class="n">time_steps</span><span class="p">,</span> <span class="n">errors</span><span class="p">,</span> <span class="n">orders</span><span class="p">)</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
   <span class="c">!&lt; Print summary of the error analysis.</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
-  <span class="kt">integer</span><span class="p">(</span><span class="n">I_P</span><span class="p">),</span> <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span> <span class="kd">::</span> <span class="n">ab_steps</span>          <span class="c">!&lt; Adams-Bashforth steps number.</span>
-  <span class="kt">integer</span><span class="p">(</span><span class="n">I_P</span><span class="p">),</span> <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span> <span class="kd">::</span> <span class="n">rk_stages</span>         <span class="c">!&lt; Runge-Kutta stages number.</span>
-  <span class="kt">integer</span><span class="p">(</span><span class="n">I_P</span><span class="p">),</span> <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span> <span class="kd">::</span> <span class="n">NDt</span>               <span class="c">!&lt; Number of time steps exercised.</span>
-  <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">),</span>    <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span> <span class="kd">::</span> <span class="n">time_steps</span><span class="p">(:)</span>     <span class="c">!&lt; Time steps exercised.</span>
-  <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">),</span>    <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span> <span class="kd">::</span> <span class="n">ab_errors</span><span class="p">(:,:,:)</span>  <span class="c">!&lt; Adams-Bashforth errors.</span>
-  <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">),</span>    <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span> <span class="kd">::</span> <span class="n">abm_errors</span><span class="p">(:,:,:)</span> <span class="c">!&lt; Adams-Bashforth-Moulton errors.</span>
-  <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">),</span>    <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span> <span class="kd">::</span> <span class="n">lf_errors</span><span class="p">(:,:,:)</span>  <span class="c">!&lt; Leapfrog errors.</span>
-  <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">),</span>    <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span> <span class="kd">::</span> <span class="n">ls_errors</span><span class="p">(:,:,:)</span>  <span class="c">!&lt; Low storage Runge-Kutta errors.</span>
-  <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">),</span>    <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span> <span class="kd">::</span> <span class="n">rk_errors</span><span class="p">(:,:,:)</span>  <span class="c">!&lt; TVD/SSP Runge-Kutta errors.</span>
-  <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">),</span>    <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span> <span class="kd">::</span> <span class="n">ab_orders</span><span class="p">(:,:,:)</span>  <span class="c">!&lt; Adams-Bashforth orders.</span>
-  <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">),</span>    <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span> <span class="kd">::</span> <span class="n">abm_orders</span><span class="p">(:,:,:)</span> <span class="c">!&lt; Adams-Bashforth-Moulton orders.</span>
-  <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">),</span>    <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span> <span class="kd">::</span> <span class="n">lf_orders</span><span class="p">(:,:,:)</span>  <span class="c">!&lt; Leapfrog orders.</span>
-  <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">),</span>    <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span> <span class="kd">::</span> <span class="n">ls_orders</span><span class="p">(:,:,:)</span>  <span class="c">!&lt; Low storage Runge-Kutta orders.</span>
-  <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">),</span>    <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span> <span class="kd">::</span> <span class="n">rk_orders</span><span class="p">(:,:,:)</span>  <span class="c">!&lt; TVD/SSP Runge-Kutta orders.</span>
-  <span class="kt">integer</span><span class="p">(</span><span class="n">I_P</span><span class="p">)</span>             <span class="kd">::</span> <span class="n">s</span>                 <span class="c">!&lt; Steps/stages counter.</span>
-  <span class="kt">integer</span><span class="p">(</span><span class="n">I_P</span><span class="p">)</span>             <span class="kd">::</span> <span class="n">d</span>                 <span class="c">!&lt; Time steps-exercised counter.</span>
+  <span class="kt">character</span><span class="p">(</span><span class="o">*</span><span class="p">),</span> <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span> <span class="kd">::</span> <span class="n">solver</span>        <span class="c">!&lt; Solver name.</span>
+  <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">),</span>    <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span> <span class="kd">::</span> <span class="n">time_steps</span><span class="p">(:)</span> <span class="c">!&lt; Time steps exercised.</span>
+  <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">),</span>    <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span> <span class="kd">::</span> <span class="n">errors</span><span class="p">(:,:,:)</span> <span class="c">!&lt; Errors of the solver.</span>
+  <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">),</span>    <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span> <span class="kd">::</span> <span class="n">orders</span><span class="p">(:,:,:)</span> <span class="c">!&lt; Observed orders of the solver.</span>
+  <span class="kt">integer</span><span class="p">(</span><span class="n">I_P</span><span class="p">)</span>             <span class="kd">::</span> <span class="n">s</span>             <span class="c">!&lt; Solver index.</span>
+  <span class="kt">integer</span><span class="p">(</span><span class="n">I_P</span><span class="p">)</span>             <span class="kd">::</span> <span class="n">d</span>             <span class="c">!&lt; Time steps-exercised counter.</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
 
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
-  <span class="k">print</span> <span class="s2">&quot;(A)&quot;</span><span class="p">,</span> <span class="s2">&quot;Solver &amp; Time Step &amp; f*Dt &amp; Error X &amp; Error Y &amp; Observed Order of Accuracy X &amp; Observed Order of Accuracy Y&quot;</span>
-  <span class="k">do </span><span class="n">s</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">ab_steps</span>
-    <span class="k">print</span> <span class="s2">&quot;(A)&quot;</span><span class="p">,</span> <span class="s2">&quot;Adams-Bashforth, &quot;</span><span class="o">//</span><span class="nb">trim</span><span class="p">(</span><span class="n">str</span><span class="p">(.</span><span class="n">true</span><span class="p">.,</span><span class="n">s</span><span class="p">))</span><span class="o">//</span><span class="s2">&quot; steps&quot;</span>
-    <span class="k">do </span><span class="n">d</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">NDt</span>
+  <span class="k">do </span><span class="n">s</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">size</span><span class="p">(</span><span class="n">errors</span><span class="p">,</span> <span class="nb">dim</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+    <span class="k">print</span> <span class="s2">&quot;(A)&quot;</span><span class="p">,</span> <span class="n">solver</span><span class="o">//</span><span class="s1">&#39;-&#39;</span><span class="o">//</span><span class="nb">trim</span><span class="p">(</span><span class="n">str</span><span class="p">(.</span><span class="n">true</span><span class="p">.,</span><span class="n">s</span><span class="p">))</span>
+    <span class="k">do </span><span class="n">d</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">size</span><span class="p">(</span><span class="n">errors</span><span class="p">,</span> <span class="nb">dim</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
       <span class="k">if</span> <span class="p">(</span><span class="n">d</span><span class="o">==</span><span class="mi">1</span><span class="p">)</span> <span class="k">then</span>
 <span class="k">        print</span> <span class="s2">&quot;(A,F8.1,A,F10.3,A,E10.3,A,E10.3,A)&quot;</span><span class="p">,</span> <span class="s2">&quot;  &amp; &quot;</span><span class="p">,</span> <span class="n">time_steps</span><span class="p">(</span><span class="n">d</span><span class="p">),</span> <span class="s2">&quot; &amp; &quot;</span><span class="p">,</span> <span class="n">f</span><span class="o">*</span><span class="n">time_steps</span><span class="p">(</span><span class="n">d</span><span class="p">),</span> <span class="s2">&quot; &amp; &quot;</span><span class="p">,</span> <span class="p">&amp;</span>
-                                                 <span class="n">ab_errors</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">s</span><span class="p">,</span> <span class="n">d</span><span class="p">),</span> <span class="s2">&quot; &amp; &quot;</span> <span class="p">,</span> <span class="n">ab_errors</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="n">s</span><span class="p">,</span> <span class="n">d</span><span class="p">),</span> <span class="s2">&quot; &amp; / &amp; /&quot;</span>
+                                                 <span class="n">errors</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">s</span><span class="p">,</span> <span class="n">d</span><span class="p">),</span> <span class="s2">&quot; &amp; &quot;</span> <span class="p">,</span> <span class="n">errors</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="n">s</span><span class="p">,</span> <span class="n">d</span><span class="p">),</span> <span class="s2">&quot; &amp; / &amp; /&quot;</span>
       <span class="k">else</span>
 <span class="k">        print</span> <span class="s2">&quot;(A,F8.1,A,F10.3,A,E10.3,A,E10.3,A,F9.2,A,F9.2)&quot;</span><span class="p">,</span> <span class="s2">&quot;  &amp; &quot;</span><span class="p">,</span> <span class="n">time_steps</span><span class="p">(</span><span class="n">d</span><span class="p">),</span> <span class="s2">&quot; &amp; &quot;</span><span class="p">,</span> <span class="n">f</span><span class="o">*</span><span class="n">time_steps</span><span class="p">(</span><span class="n">d</span><span class="p">),</span> <span class="s2">&quot; &amp; &quot;</span><span class="p">,</span> <span class="p">&amp;</span>
-                                                             <span class="n">ab_errors</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">s</span><span class="p">,</span> <span class="n">d</span><span class="p">),</span> <span class="s2">&quot; &amp; &quot;</span> <span class="p">,</span> <span class="n">ab_errors</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="n">s</span><span class="p">,</span> <span class="n">d</span><span class="p">),</span> <span class="s2">&quot; &amp; &quot;</span><span class="p">,</span> <span class="p">&amp;</span>
-                                                             <span class="n">ab_orders</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">s</span><span class="p">,</span> <span class="n">d</span><span class="o">-</span><span class="mi">1</span><span class="p">),</span> <span class="s2">&quot; &amp; &quot;</span> <span class="p">,</span> <span class="n">ab_orders</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="n">s</span><span class="p">,</span> <span class="n">d</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
-      <span class="n">endif</span>
-    <span class="n">enddo</span>
-  <span class="n">enddo</span>
-  <span class="k">do </span><span class="n">s</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">ab_steps</span>
-    <span class="k">print</span> <span class="s2">&quot;(A)&quot;</span><span class="p">,</span> <span class="s2">&quot;Adams-Bashforth-Moulton, &quot;</span><span class="o">//</span><span class="nb">trim</span><span class="p">(</span><span class="n">str</span><span class="p">(.</span><span class="n">true</span><span class="p">.,</span><span class="n">s</span><span class="p">))</span><span class="o">//</span><span class="s2">&quot; steps&quot;</span>
-    <span class="k">do </span><span class="n">d</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">NDt</span>
-      <span class="k">if</span> <span class="p">(</span><span class="n">d</span><span class="o">==</span><span class="mi">1</span><span class="p">)</span> <span class="k">then</span>
-<span class="k">        print</span> <span class="s2">&quot;(A,F8.1,A,F10.3,A,E10.3,A,E10.3,A)&quot;</span><span class="p">,</span> <span class="s2">&quot;  &amp; &quot;</span><span class="p">,</span> <span class="n">time_steps</span><span class="p">(</span><span class="n">d</span><span class="p">),</span> <span class="s2">&quot; &amp; &quot;</span><span class="p">,</span> <span class="n">f</span><span class="o">*</span><span class="n">time_steps</span><span class="p">(</span><span class="n">d</span><span class="p">),</span> <span class="s2">&quot; &amp; &quot;</span><span class="p">,</span> <span class="p">&amp;</span>
-                                                 <span class="n">abm_errors</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">s</span><span class="p">,</span> <span class="n">d</span><span class="p">),</span> <span class="s2">&quot; &amp; &quot;</span> <span class="p">,</span> <span class="n">abm_errors</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="n">s</span><span class="p">,</span> <span class="n">d</span><span class="p">),</span> <span class="s2">&quot; &amp; / &amp; /&quot;</span>
-      <span class="k">else</span>
-<span class="k">        print</span> <span class="s2">&quot;(A,F8.1,A,F10.3,A,E10.3,A,E10.3,A,F9.2,A,F9.2)&quot;</span><span class="p">,</span> <span class="s2">&quot;  &amp; &quot;</span><span class="p">,</span> <span class="n">time_steps</span><span class="p">(</span><span class="n">d</span><span class="p">),</span> <span class="s2">&quot; &amp; &quot;</span><span class="p">,</span> <span class="n">f</span><span class="o">*</span><span class="n">time_steps</span><span class="p">(</span><span class="n">d</span><span class="p">),</span> <span class="s2">&quot; &amp; &quot;</span><span class="p">,</span> <span class="p">&amp;</span>
-                                                             <span class="n">abm_errors</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">s</span><span class="p">,</span> <span class="n">d</span><span class="p">),</span> <span class="s2">&quot; &amp; &quot;</span> <span class="p">,</span> <span class="n">abm_errors</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="n">s</span><span class="p">,</span> <span class="n">d</span><span class="p">),</span> <span class="s2">&quot; &amp; &quot;</span><span class="p">,</span> <span class="p">&amp;</span>
-                                                             <span class="n">abm_orders</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">s</span><span class="p">,</span> <span class="n">d</span><span class="o">-</span><span class="mi">1</span><span class="p">),</span> <span class="s2">&quot; &amp; &quot;</span> <span class="p">,</span> <span class="n">abm_orders</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="n">s</span><span class="p">,</span> <span class="n">d</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
-      <span class="n">endif</span>
-    <span class="n">enddo</span>
-  <span class="n">enddo</span>
-  <span class="k">print</span> <span class="s2">&quot;(A)&quot;</span><span class="p">,</span> <span class="s2">&quot;Leapfrog unfiltered&quot;</span>
-  <span class="k">do </span><span class="n">d</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">NDt</span>
-    <span class="k">if</span> <span class="p">(</span><span class="n">d</span><span class="o">==</span><span class="mi">1</span><span class="p">)</span> <span class="k">then</span>
-<span class="k">      print</span> <span class="s2">&quot;(A,F8.1,A,F10.3,A,E10.3,A,E10.3,A)&quot;</span><span class="p">,</span> <span class="s2">&quot;  &amp; &quot;</span><span class="p">,</span> <span class="n">time_steps</span><span class="p">(</span><span class="n">d</span><span class="p">),</span> <span class="s2">&quot; &amp; &quot;</span><span class="p">,</span> <span class="n">f</span><span class="o">*</span><span class="n">time_steps</span><span class="p">(</span><span class="n">d</span><span class="p">),</span> <span class="s2">&quot; &amp; &quot;</span><span class="p">,</span> <span class="p">&amp;</span>
-                                               <span class="n">lf_errors</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">d</span><span class="p">),</span> <span class="s2">&quot; &amp; &quot;</span> <span class="p">,</span> <span class="n">lf_errors</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">d</span><span class="p">),</span> <span class="s2">&quot; &amp; / &amp; /&quot;</span>
-    <span class="k">else</span>
-<span class="k">      print</span> <span class="s2">&quot;(A,F8.1,A,F10.3,A,E10.3,A,E10.3,A,F9.2,A,F9.2)&quot;</span><span class="p">,</span> <span class="s2">&quot;  &amp; &quot;</span><span class="p">,</span> <span class="n">time_steps</span><span class="p">(</span><span class="n">d</span><span class="p">),</span> <span class="s2">&quot; &amp; &quot;</span><span class="p">,</span> <span class="n">f</span><span class="o">*</span><span class="n">time_steps</span><span class="p">(</span><span class="n">d</span><span class="p">),</span> <span class="s2">&quot; &amp; &quot;</span><span class="p">,</span> <span class="p">&amp;</span>
-                                                           <span class="n">lf_errors</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">d</span><span class="p">),</span> <span class="s2">&quot; &amp; &quot;</span> <span class="p">,</span> <span class="n">lf_errors</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">d</span><span class="p">),</span> <span class="s2">&quot; &amp; &quot;</span><span class="p">,</span> <span class="p">&amp;</span>
-                                                           <span class="n">lf_orders</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">d</span><span class="o">-</span><span class="mi">1</span><span class="p">),</span> <span class="s2">&quot; &amp; &quot;</span> <span class="p">,</span> <span class="n">lf_orders</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">d</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
-    <span class="n">endif</span>
-  <span class="n">enddo</span>
-  <span class="k">print</span> <span class="s2">&quot;(A)&quot;</span><span class="p">,</span> <span class="s2">&quot;Leapfrog RAW-filtered&quot;</span>
-  <span class="k">do </span><span class="n">d</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">NDt</span>
-    <span class="k">if</span> <span class="p">(</span><span class="n">d</span><span class="o">==</span><span class="mi">1</span><span class="p">)</span> <span class="k">then</span>
-<span class="k">      print</span> <span class="s2">&quot;(A,F8.1,A,F10.3,A,E10.3,A,E10.3,A)&quot;</span><span class="p">,</span> <span class="s2">&quot;  &amp; &quot;</span><span class="p">,</span> <span class="n">time_steps</span><span class="p">(</span><span class="n">d</span><span class="p">),</span> <span class="s2">&quot; &amp; &quot;</span><span class="p">,</span> <span class="n">f</span><span class="o">*</span><span class="n">time_steps</span><span class="p">(</span><span class="n">d</span><span class="p">),</span> <span class="s2">&quot; &amp; &quot;</span><span class="p">,</span> <span class="p">&amp;</span>
-                                               <span class="n">lf_errors</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">d</span><span class="p">),</span> <span class="s2">&quot; &amp; &quot;</span> <span class="p">,</span> <span class="n">lf_errors</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">d</span><span class="p">),</span> <span class="s2">&quot; &amp; / &amp; /&quot;</span>
-    <span class="k">else</span>
-<span class="k">      print</span> <span class="s2">&quot;(A,F8.1,A,F10.3,A,E10.3,A,E10.3,A,F9.2,A,F9.2)&quot;</span><span class="p">,</span> <span class="s2">&quot;  &amp; &quot;</span><span class="p">,</span> <span class="n">time_steps</span><span class="p">(</span><span class="n">d</span><span class="p">),</span> <span class="s2">&quot; &amp; &quot;</span><span class="p">,</span> <span class="n">f</span><span class="o">*</span><span class="n">time_steps</span><span class="p">(</span><span class="n">d</span><span class="p">),</span> <span class="s2">&quot; &amp; &quot;</span><span class="p">,</span> <span class="p">&amp;</span>
-                                                           <span class="n">lf_errors</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">d</span><span class="p">),</span> <span class="s2">&quot; &amp; &quot;</span> <span class="p">,</span> <span class="n">lf_errors</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">d</span><span class="p">),</span> <span class="s2">&quot; &amp; &quot;</span><span class="p">,</span> <span class="p">&amp;</span>
-                                                           <span class="n">lf_orders</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">d</span><span class="o">-</span><span class="mi">1</span><span class="p">),</span> <span class="s2">&quot; &amp; &quot;</span> <span class="p">,</span> <span class="n">lf_orders</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">d</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
-    <span class="n">endif</span>
-  <span class="n">enddo</span>
-  <span class="k">do </span><span class="n">s</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">rk_stages</span>
-    <span class="k">if</span> <span class="p">(</span><span class="n">s</span><span class="o">==</span><span class="mi">2</span><span class="p">)</span> <span class="k">cycle</span> <span class="c">! 2 stages not yet implemented</span>
-    <span class="k">if</span> <span class="p">(</span><span class="n">s</span><span class="o">==</span><span class="mi">3</span><span class="p">)</span> <span class="k">cycle</span> <span class="c">! 3 stages not yet implemented</span>
-    <span class="k">if</span> <span class="p">(</span><span class="n">s</span><span class="o">==</span><span class="mi">4</span><span class="p">)</span> <span class="k">cycle</span> <span class="c">! 4 stages not yet implemented</span>
-    <span class="k">print</span> <span class="s2">&quot;(A)&quot;</span><span class="p">,</span> <span class="s2">&quot;Low Storage Runge-Kutta, &quot;</span><span class="o">//</span><span class="nb">trim</span><span class="p">(</span><span class="n">str</span><span class="p">(.</span><span class="n">true</span><span class="p">.,</span><span class="n">s</span><span class="p">))</span><span class="o">//</span><span class="s2">&quot; stages&quot;</span>
-    <span class="k">do </span><span class="n">d</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">NDt</span>
-      <span class="k">if</span> <span class="p">(</span><span class="n">d</span><span class="o">==</span><span class="mi">1</span><span class="p">)</span> <span class="k">then</span>
-<span class="k">        print</span> <span class="s2">&quot;(A,F8.1,A,F10.3,A,E10.3,A,E10.3,A)&quot;</span><span class="p">,</span> <span class="s2">&quot;  &amp; &quot;</span><span class="p">,</span> <span class="n">time_steps</span><span class="p">(</span><span class="n">d</span><span class="p">),</span> <span class="s2">&quot; &amp; &quot;</span><span class="p">,</span> <span class="n">f</span><span class="o">*</span><span class="n">time_steps</span><span class="p">(</span><span class="n">d</span><span class="p">),</span> <span class="s2">&quot; &amp; &quot;</span><span class="p">,</span> <span class="p">&amp;</span>
-                                                 <span class="n">ls_errors</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">s</span><span class="p">,</span> <span class="n">d</span><span class="p">),</span> <span class="s2">&quot; &amp; &quot;</span> <span class="p">,</span> <span class="n">ls_errors</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="n">s</span><span class="p">,</span> <span class="n">d</span><span class="p">),</span> <span class="s2">&quot; &amp; / &amp; /&quot;</span>
-      <span class="k">else</span>
-<span class="k">        print</span> <span class="s2">&quot;(A,F8.1,A,F10.3,A,E10.3,A,E10.3,A,F9.2,A,F9.2)&quot;</span><span class="p">,</span> <span class="s2">&quot;  &amp; &quot;</span><span class="p">,</span> <span class="n">time_steps</span><span class="p">(</span><span class="n">d</span><span class="p">),</span> <span class="s2">&quot; &amp; &quot;</span><span class="p">,</span> <span class="n">f</span><span class="o">*</span><span class="n">time_steps</span><span class="p">(</span><span class="n">d</span><span class="p">),</span> <span class="s2">&quot; &amp; &quot;</span><span class="p">,</span> <span class="p">&amp;</span>
-                                                             <span class="n">ls_errors</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">s</span><span class="p">,</span> <span class="n">d</span><span class="p">),</span> <span class="s2">&quot; &amp; &quot;</span> <span class="p">,</span> <span class="n">ls_errors</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="n">s</span><span class="p">,</span> <span class="n">d</span><span class="p">),</span> <span class="s2">&quot; &amp; &quot;</span><span class="p">,</span> <span class="p">&amp;</span>
-                                                             <span class="n">ls_orders</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">s</span><span class="p">,</span> <span class="n">d</span><span class="o">-</span><span class="mi">1</span><span class="p">),</span> <span class="s2">&quot; &amp; &quot;</span> <span class="p">,</span> <span class="n">ls_orders</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="n">s</span><span class="p">,</span> <span class="n">d</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
-      <span class="n">endif</span>
-    <span class="n">enddo</span>
-  <span class="n">enddo</span>
-  <span class="k">do </span><span class="n">s</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">rk_stages</span>
-    <span class="k">if</span> <span class="p">(</span><span class="n">s</span><span class="o">==</span><span class="mi">4</span><span class="p">)</span> <span class="k">cycle</span> <span class="c">! 4 stages not yet implemented</span>
-    <span class="k">print</span> <span class="s2">&quot;(A)&quot;</span><span class="p">,</span> <span class="s2">&quot;TVD/SSP Runge-Kutta, &quot;</span><span class="o">//</span><span class="nb">trim</span><span class="p">(</span><span class="n">str</span><span class="p">(.</span><span class="n">true</span><span class="p">.,</span><span class="n">s</span><span class="p">))</span><span class="o">//</span><span class="s2">&quot; stages&quot;</span>
-    <span class="k">do </span><span class="n">d</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">NDt</span>
-      <span class="k">if</span> <span class="p">(</span><span class="n">d</span><span class="o">==</span><span class="mi">1</span><span class="p">)</span> <span class="k">then</span>
-<span class="k">        print</span> <span class="s2">&quot;(A,F8.1,A,F10.3,A,E10.3,A,E10.3,A)&quot;</span><span class="p">,</span> <span class="s2">&quot;  &amp; &quot;</span><span class="p">,</span> <span class="n">time_steps</span><span class="p">(</span><span class="n">d</span><span class="p">),</span> <span class="s2">&quot; &amp; &quot;</span><span class="p">,</span> <span class="n">f</span><span class="o">*</span><span class="n">time_steps</span><span class="p">(</span><span class="n">d</span><span class="p">),</span> <span class="s2">&quot; &amp; &quot;</span><span class="p">,</span> <span class="p">&amp;</span>
-                                                 <span class="n">rk_errors</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">s</span><span class="p">,</span> <span class="n">d</span><span class="p">),</span> <span class="s2">&quot; &amp; &quot;</span> <span class="p">,</span> <span class="n">rk_errors</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="n">s</span><span class="p">,</span> <span class="n">d</span><span class="p">),</span> <span class="s2">&quot; &amp; / &amp; /&quot;</span>
-      <span class="k">else</span>
-<span class="k">        print</span> <span class="s2">&quot;(A,F8.1,A,F10.3,A,E10.3,A,E10.3,A,F9.2,A,F9.2)&quot;</span><span class="p">,</span> <span class="s2">&quot;  &amp; &quot;</span><span class="p">,</span> <span class="n">time_steps</span><span class="p">(</span><span class="n">d</span><span class="p">),</span> <span class="s2">&quot; &amp; &quot;</span><span class="p">,</span> <span class="n">f</span><span class="o">*</span><span class="n">time_steps</span><span class="p">(</span><span class="n">d</span><span class="p">),</span> <span class="s2">&quot; &amp; &quot;</span><span class="p">,</span> <span class="p">&amp;</span>
-                                                             <span class="n">rk_errors</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">s</span><span class="p">,</span> <span class="n">d</span><span class="p">),</span> <span class="s2">&quot; &amp; &quot;</span> <span class="p">,</span> <span class="n">rk_errors</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="n">s</span><span class="p">,</span> <span class="n">d</span><span class="p">),</span> <span class="s2">&quot; &amp; &quot;</span><span class="p">,</span> <span class="p">&amp;</span>
-                                                             <span class="n">rk_orders</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">s</span><span class="p">,</span> <span class="n">d</span><span class="o">-</span><span class="mi">1</span><span class="p">),</span> <span class="s2">&quot; &amp; &quot;</span> <span class="p">,</span> <span class="n">rk_orders</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="n">s</span><span class="p">,</span> <span class="n">d</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+                                                             <span class="n">errors</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">s</span><span class="p">,</span> <span class="n">d</span><span class="p">),</span> <span class="s2">&quot; &amp; &quot;</span> <span class="p">,</span> <span class="n">errors</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="n">s</span><span class="p">,</span> <span class="n">d</span><span class="p">),</span> <span class="s2">&quot; &amp; &quot;</span><span class="p">,</span> <span class="p">&amp;</span>
+                                                             <span class="n">orders</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">s</span><span class="p">,</span> <span class="n">d</span><span class="o">-</span><span class="mi">1</span><span class="p">),</span> <span class="s2">&quot; &amp; &quot;</span> <span class="p">,</span> <span class="n">orders</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="n">s</span><span class="p">,</span> <span class="n">d</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
       <span class="n">endif</span>
     <span class="n">enddo</span>
   <span class="n">enddo</span>

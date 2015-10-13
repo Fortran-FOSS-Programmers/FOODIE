@@ -170,6 +170,8 @@
       
       <a class="list-group-item" href="../sourcefile/foodie.f90.html">foodie.f90</a>
       
+      <a class="list-group-item" href="../sourcefile/foodie_adt_integrand.f90.html">foodie_adt_integrand.f90</a>
+      
       <a class="list-group-item" href="../sourcefile/foodie_integrator_adams_bashforth.f90.html">foodie_integrator_adams_bashforth.f90</a>
       
       <a class="list-group-item" href="../sourcefile/foodie_integrator_adams_bashforth_moulton.f90.html">foodie_integrator_adams_bashforth_moulton.f90</a>
@@ -195,8 +197,6 @@
       <a class="list-group-item" href="../sourcefile/type_euler-1d-openmp.f90.html">type_euler-1D-openmp.f90</a>
       
       <a class="list-group-item" href="../sourcefile/type_euler-1d.f90.html">type_euler-1D.f90</a>
-      
-      <a class="list-group-item" href="../sourcefile/type_integrand.f90.html">type_integrand.f90</a>
       
       <a class="list-group-item" href="../sourcefile/type_lorenz.f90.html">type_lorenz.f90</a>
       
@@ -259,11 +259,11 @@
 <span class="c">!&lt;</span>
 <span class="c">!&lt;### Usage</span>
 <span class="c">!&lt;</span>
-<span class="c">!&lt; FOODiE schemes must be applied to only subclass extensions of the abstract class *type_integrand*.</span>
+<span class="c">!&lt; FOODiE schemes must be applied to only subclass extensions of the abstract class *integrand*.</span>
 <span class="c">!&lt;</span>
 <span class="c">!&lt; To use FOODiE you must:</span>
 <span class="c">!&lt;</span>
-<span class="c">!&lt;#### extend type_integrand abstract class provided by FOODiE implementing your concrete integrand field</span>
+<span class="c">!&lt;#### extend integrand abstract class provided by FOODiE implementing your concrete integrand field</span>
 <span class="c">!&lt;</span>
 <span class="c">!&lt; For example for the Lorenz&#39; ODE system</span>
 <span class="c">!&lt;</span>
@@ -305,7 +305,7 @@
 <span class="c">!-----------------------------------------------------------------------------------------------------------------------------------</span>
 
 <span class="c">!-----------------------------------------------------------------------------------------------------------------------------------</span>
-<span class="k">use </span><span class="n">type_integrand</span><span class="p">,</span> <span class="n">only</span> <span class="p">:</span> <span class="n">integrand</span>
+<span class="k">use </span><span class="n">foodie_adt_integrand</span><span class="p">,</span> <span class="n">only</span> <span class="p">:</span> <span class="n">integrand</span>
 <span class="k">use </span><span class="n">foodie_integrator_adams_bashforth</span><span class="p">,</span> <span class="n">only</span> <span class="p">:</span> <span class="n">adams_bashforth_integrator</span>
 <span class="k">use </span><span class="n">foodie_integrator_adams_bashforth_moulton</span><span class="p">,</span> <span class="n">only</span> <span class="p">:</span> <span class="n">adams_bashforth_moulton_integrator</span>
 <span class="k">use </span><span class="n">foodie_integrator_adams_moulton</span><span class="p">,</span> <span class="n">only</span> <span class="p">:</span> <span class="n">adams_moulton_integrator</span>

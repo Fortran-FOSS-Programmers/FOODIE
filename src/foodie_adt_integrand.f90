@@ -1,5 +1,5 @@
 !< Define the abstract type *integrand* for building FOODiE ODE integrators.
-module type_integrand
+module foodie_adt_integrand
 !-----------------------------------------------------------------------------------------------------------------------------------
 !< Define the abstract type *integrand* for building FOODiE ODE integrators.
 !-----------------------------------------------------------------------------------------------------------------------------------
@@ -93,4 +93,4 @@ abstract interface
   endsubroutine assignment_integrand
 endinterface
 !-----------------------------------------------------------------------------------------------------------------------------------
-endmodule type_integrand
+endmodule foodie_adt_integrand

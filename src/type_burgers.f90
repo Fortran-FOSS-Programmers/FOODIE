@@ -56,7 +56,7 @@ type, extends(integrand) :: burgers
     procedure, pass(self), public :: init             !< Init field.
     procedure, pass(self), public :: output           !< Extract Burgers field.
     procedure, pass(self), public :: dt => compute_dt !< Compute the current time step, by means of CFL condition.
-    ! type_integrand deferred methods
+    ! ADT integrand deferred methods
     procedure, pass(self), public :: t => dBurgers_dt                                         !< Time derivative, residuals func.
     procedure, pass(self), public :: update_previous_steps                                    !< Update previous time steps.
     procedure, pass(self), public :: previous_step                                            !< Get a previous time step.
@@ -135,7 +135,7 @@ contains
   !---------------------------------------------------------------------------------------------------------------------------------
   endfunction compute_dt
 
-  ! type_integrand deferred methods
+  ! ADT integrand deferred methods
   function dBurgers_dt(self, t) result(dState_dt)
   !---------------------------------------------------------------------------------------------------------------------------------
   !< Time derivative of Burgers field, residuals function.
