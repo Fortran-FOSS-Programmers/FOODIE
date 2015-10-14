@@ -169,6 +169,11 @@
 <li><input type="checkbox" disabled> 3 stages;</li>
 <li><input type="checkbox" disabled> 4 stages;</li>
 <li><input type="checkbox" disabled checked> 5 stages, 4th order accurate, 2N registers, see [3];</li>
+<li><input type="checkbox" disabled checked> 6 stages, 4th order accurate, 2N registers, see [9];</li>
+<li><input type="checkbox" disabled checked> 7 stages, 4th order accurate, 2N registers, see [9];</li>
+<li><input type="checkbox" disabled checked> 12 stages, 4th order accurate, 2N registers, see [10];</li>
+<li><input type="checkbox" disabled checked> 13 stages, 4th order accurate, 2N registers, see [10];</li>
+<li><input type="checkbox" disabled checked> 14 stages, 4th order accurate, 2N registers, see [10];</li>
 </ul>
 </li>
 <li><input type="checkbox" disabled> <a href="http://fortran-foss-programmers.github.io/FOODiE/module/foodie_integrator_tvd_runge_kutta.html">TVD/SSP</a> schemes, see [1]:<ul class="checklist">
@@ -185,6 +190,16 @@
 </li>
 <li><input type="checkbox" disabled> implicit schemes:<ul class="checklist">
 <li><input type="checkbox" disabled> Runge-Kutta schemes;</li>
+</ul>
+</li>
+<li><input type="checkbox" disabled> predictor-corrector schemes:<ul class="checklist">
+<li><input type="checkbox" disabled checked> Adams-Bashforth-Moulton schemes:<ul class="checklist">
+<li><input type="checkbox" disabled checked> 1 step, AB(1)-AM(0), 1st order accurate;</li>
+<li><input type="checkbox" disabled checked> 2 steps, AB(2)-AM(1), 2nd accurate;</li>
+<li><input type="checkbox" disabled checked> 3 steps, AB(3)-AM(2), 3rd accurate;</li>
+<li><input type="checkbox" disabled checked> 4 steps, AB(4)-AM(3), 4th accurate;</li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>
@@ -218,9 +233,11 @@
 <p>[6] <em>The RAW filter: An improvement to the Robert-Asselin filter in semi-implicit integrations</em>, Williams, P.D., Monthly Weather Review, vol. 139(6), pages 1996&ndash;2007, June 2011.</p>
 <p>[7] <em>Linear multistep method</em>, <a href="https://en.wikipedia.org/wiki/Linear_multistep_method">wikipedia article</a>.</p>
 <p>[8] <em>Scientific Software Design: The Object-Oriented Way</em>, Rouson, Damian and Xia, Jim and Xu, Xiaofeng, 2011, ISBN 9780521888134, Cambridge University Press, New York, NY, USA.</p>
+<p>[9] <em>High-accuracy large-step explicit Runge–Kutta (HALE-RK) schemes for computational aeroacoustics</em>, Vasanth Allampalli and Ray Hixon and M. Nallasamy and Scott D. Sawyer, Journal of Computational Physics, vol. 228, 2009, pp. 3837&ndash;3850.</p>
+<p>[10] <em>Efficient low-storage Runge–Kutta schemes with optimized stability regions</em>, Jens Niegemann and Richard Diehl and Kurt Busch, Journal of Computational Physics, vol. 231, 2012, pp. 364&ndash;372.</p>
 <p>Go to <a href="#top">Top</a></p>
 <h2 id="status"><a class="toclink" href="#status">Status <a href=""><img alt="Status" src="https://img.shields.io/badge/status-beta-orange.svg"></a></a></h2>
-<p>FOODiE project is young, but developed with love. A bunch of integrators have been implemented using the Rouson's Abstract Data Type Pattern and tested with complex problems, but the library API is not yet stable. Nevertheless, FOODiE is already proven to be able to integrate a wide range of different ODE problems, from pure ODEs (Lorenz and inertial oscillations equations) to complex PDEs (Burgers and Euler equations), see the documentation.</p>
+<p>FOODiE project is young, but developed with love. Many integrators have been implemented using the Rouson's Abstract Data Type Pattern and tested with complex problems, but the library API is still in beta testing status. Nevertheless, FOODiE is already proven to be able to integrate a wide range of different ODE problems, from pure ODEs (Lorenz and inertial oscillations equations) to complex PDEs (Burgers and Euler equations), see the documentation.</p>
 <p>We are searching for Fortraners enthusiast joining our team!</p>
 <h2 id="copyrights"><a class="toclink" href="#copyrights">Copyrights</a></h2>
 <p>FOODiE is an open source project, it is distributed under a multi-licensing system:</p>
@@ -442,11 +459,15 @@
                   
                 
                   
-                    <li><a href='./proc/average_solution.html'>average_solution</a></li>
+                    <li><a href='./proc/am_solver.html'>am_solver</a></li>
                   
                 
                   
                     <li><a href="./lists/procedures.html"><em>All procedures&hellip;</em></a></li>
+                  
+                
+                  
+                
                   
                 
                   

@@ -197,6 +197,8 @@
       
       <a class="list-group-item" href="../proc/add_oscillation.html">add_oscillation</a>
       
+      <a class="list-group-item" href="../proc/am_solver.html">am_solver</a>
+      
       <a class="list-group-item" href="../proc/average_solution.html">average_solution</a>
       
       <a class="list-group-item" href="../proc/burgers_assign_burgers.html">burgers_assign_burgers</a>
@@ -447,6 +449,8 @@
       
       <a class="list-group-item" href="../proc/test_abm.html">test_abm</a>
       
+      <a class="list-group-item" href="../proc/test_am.html">test_am</a>
+      
       <a class="list-group-item" href="../proc/test_euler.html">test_euler</a>
       
       <a class="list-group-item" href="../proc/test_euler%7E2.html">test_euler</a>
@@ -529,12 +533,12 @@ subroutine abm_solver(steps, solution)
   
 <tr>
   
-  <td><span class="anchor" id="variable-steps%7E18"></span>integer(kind=I_P),</td>
+  <td><span class="anchor" id="variable-steps%7E19"></span>integer(kind=I_P),</td>
   <td>intent(in)</td>
   <td></td>
   
   <td></td><td>::</td>
-  <td><strong>steps</strong></td><td><p>Number of steps used: if negative all AB solvers are used.</p></td>
+  <td><strong>steps</strong></td><td><p>Number of steps used: if negative all ABM solvers are used.</p></td>
   
 </tr>
 
@@ -544,7 +548,7 @@ subroutine abm_solver(steps, solution)
   
 <tr>
   
-  <td><span class="anchor" id="variable-solution%7E11"></span>real(kind=R_P),</td>
+  <td><span class="anchor" id="variable-solution%7E12"></span>real(kind=R_P),</td>
   <td>intent(out)</td>
   <td></td>
   
@@ -856,7 +860,7 @@ implementation in a submodule of an interface in a parent module.</p>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
   <span class="c">!&lt; Solve problem with predictor-corrector Adams-Bashforth-Moulton class of ODE solvers.</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
-  <span class="kt">integer</span><span class="p">(</span><span class="n">I_P</span><span class="p">),</span> <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span>                 <span class="kd">::</span> <span class="n">steps</span>                 <span class="c">!&lt; Number of steps used: if negative all AB solvers are used.</span>
+  <span class="kt">integer</span><span class="p">(</span><span class="n">I_P</span><span class="p">),</span> <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span>                 <span class="kd">::</span> <span class="n">steps</span>                 <span class="c">!&lt; Number of steps used: if negative all ABM solvers are used.</span>
   <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">),</span>    <span class="k">intent</span><span class="p">(</span><span class="n">OUT</span><span class="p">)</span>                <span class="kd">::</span> <span class="n">solution</span><span class="p">(</span><span class="mi">0</span><span class="p">:,</span><span class="mi">0</span><span class="p">:)</span>       <span class="c">!&lt; Solution at each time step.</span>
   <span class="k">type</span><span class="p">(</span><span class="n">tvd_runge_kutta_integrator</span><span class="p">)</span>         <span class="kd">::</span> <span class="n">rk_integrator</span>         <span class="c">!&lt; Runge-Kutta integrator.</span>
   <span class="kt">integer</span><span class="p">,</span> <span class="k">parameter</span>                       <span class="kd">::</span> <span class="n">rk_stages</span><span class="o">=</span><span class="mi">5</span>           <span class="c">!&lt; Runge-Kutta stages number.</span>

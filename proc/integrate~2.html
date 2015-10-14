@@ -185,6 +185,8 @@
       
       <a class="list-group-item" href="../proc/add_oscillation.html">add_oscillation</a>
       
+      <a class="list-group-item" href="../proc/am_solver.html">am_solver</a>
+      
       <a class="list-group-item" href="../proc/average_solution.html">average_solution</a>
       
       <a class="list-group-item" href="../proc/burgers_assign_burgers.html">burgers_assign_burgers</a>
@@ -435,6 +437,8 @@
       
       <a class="list-group-item" href="../proc/test_abm.html">test_abm</a>
       
+      <a class="list-group-item" href="../proc/test_am.html">test_am</a>
+      
       <a class="list-group-item" href="../proc/test_euler.html">test_euler</a>
       
       <a class="list-group-item" href="../proc/test_euler%7E2.html">test_euler</a>
@@ -489,7 +493,7 @@
     
     <div class="col-lg-9" id='text'>
     <h2>
-private subroutine integrate(self, U, previous, Dt, t)
+private subroutine integrate(self, U, previous, Dt, t, iterations)
     
     
     
@@ -522,7 +526,7 @@ private subroutine integrate(self, U, previous, Dt, t)
   <td></td>
   
   <td></td><td>::</td>
-  <td><strong>self</strong></td><td><p>Actual AB integrator.</p></td>
+  <td><strong>self</strong></td><td><p>Actual ABM integrator.</p></td>
   
 </tr>
 
@@ -586,6 +590,21 @@ private subroutine integrate(self, U, previous, Dt, t)
   
 </tr>
 
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-iterations"></span>integer(kind=I_P),</td>
+  <td>intent(in),</td>
+  <td>optional</td>
+  
+  <td></td><td>::</td>
+  <td><strong>iterations</strong></td><td><p>Fixed point iterations of AM scheme.</p></td>
+  
+</tr>
+
 </tbody>
 </table>
 
@@ -593,7 +612,7 @@ private subroutine integrate(self, U, previous, Dt, t)
     
     
     <h3>Description</h3>
-    <p>Integrate field with Adams-Bashforth_Moulton class scheme.</p>
+    <p>Integrate field with Adams-Bashforth-Moulton class scheme.</p>
     
     
      
@@ -648,21 +667,22 @@ private subroutine integrate(self, U, previous, Dt, t)
     
     <section>
     <h2><span class="anchor" id="src"></span>Source Code</h2>
-    <div class="highlight"><pre>  <span class="k">subroutine </span><span class="n">integrate</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">U</span><span class="p">,</span> <span class="n">previous</span><span class="p">,</span> <span class="n">Dt</span><span class="p">,</span> <span class="n">t</span><span class="p">)</span>
+    <div class="highlight"><pre>  <span class="k">subroutine </span><span class="n">integrate</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">U</span><span class="p">,</span> <span class="n">previous</span><span class="p">,</span> <span class="n">Dt</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="n">iterations</span><span class="p">)</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
-  <span class="c">!&lt; Integrate field with Adams-Bashforth_Moulton class scheme.</span>
+  <span class="c">!&lt; Integrate field with Adams-Bashforth-Moulton class scheme.</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
-  <span class="k">class</span><span class="p">(</span><span class="n">adams_bashforth_moulton_integrator</span><span class="p">),</span> <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span>    <span class="kd">::</span> <span class="n">self</span>         <span class="c">!&lt; Actual AB integrator.</span>
+  <span class="k">class</span><span class="p">(</span><span class="n">adams_bashforth_moulton_integrator</span><span class="p">),</span> <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span>    <span class="kd">::</span> <span class="n">self</span>         <span class="c">!&lt; Actual ABM integrator.</span>
   <span class="k">class</span><span class="p">(</span><span class="n">integrand</span><span class="p">),</span>                          <span class="k">intent</span><span class="p">(</span><span class="n">INOUT</span><span class="p">)</span> <span class="kd">::</span> <span class="n">U</span>            <span class="c">!&lt; Field to be integrated.</span>
   <span class="k">class</span><span class="p">(</span><span class="n">integrand</span><span class="p">),</span>                          <span class="k">intent</span><span class="p">(</span><span class="n">INOUT</span><span class="p">)</span> <span class="kd">::</span> <span class="n">previous</span><span class="p">(</span><span class="mi">1</span><span class="p">:)</span> <span class="c">!&lt; Previous time steps solutions of integrand field.</span>
   <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">),</span>                                 <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span>    <span class="kd">::</span> <span class="n">Dt</span>           <span class="c">!&lt; Time steps.</span>
   <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">),</span>                                 <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span>    <span class="kd">::</span> <span class="n">t</span><span class="p">(:)</span>         <span class="c">!&lt; Times.</span>
+  <span class="kt">integer</span><span class="p">(</span><span class="n">I_P</span><span class="p">),</span> <span class="k">optional</span><span class="p">,</span>                    <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span>    <span class="kd">::</span> <span class="n">iterations</span>   <span class="c">!&lt; Fixed point iterations of AM scheme.</span>
   <span class="kt">integer</span><span class="p">(</span><span class="n">I_P</span><span class="p">)</span>                                             <span class="kd">::</span> <span class="n">s</span>            <span class="c">!&lt; Steps counter.</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
 
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
   <span class="k">call </span><span class="n">self</span><span class="p">%</span><span class="n">predictor</span><span class="p">%</span><span class="n">integrate</span><span class="p">(</span><span class="n">U</span><span class="o">=</span><span class="n">U</span><span class="p">,</span> <span class="n">previous</span><span class="o">=</span><span class="n">previous</span><span class="p">,</span> <span class="n">Dt</span><span class="o">=</span><span class="n">Dt</span><span class="p">,</span> <span class="n">t</span><span class="o">=</span><span class="n">t</span><span class="p">,</span> <span class="n">autoupdate</span><span class="o">=</span><span class="p">.</span><span class="n">false</span><span class="p">.)</span>
-  <span class="k">call </span><span class="n">self</span><span class="p">%</span><span class="n">corrector</span><span class="p">%</span><span class="n">integrate</span><span class="p">(</span><span class="n">U</span><span class="o">=</span><span class="n">U</span><span class="p">,</span> <span class="n">previous</span><span class="o">=</span><span class="n">previous</span><span class="p">(</span><span class="mi">2</span><span class="p">:),</span> <span class="n">Dt</span><span class="o">=</span><span class="n">Dt</span><span class="p">,</span> <span class="n">t</span><span class="o">=</span><span class="n">t</span><span class="p">,</span> <span class="n">autoupdate</span><span class="o">=</span><span class="p">.</span><span class="n">false</span><span class="p">.)</span>
+  <span class="k">call </span><span class="n">self</span><span class="p">%</span><span class="n">corrector</span><span class="p">%</span><span class="n">integrate</span><span class="p">(</span><span class="n">U</span><span class="o">=</span><span class="n">U</span><span class="p">,</span> <span class="n">previous</span><span class="o">=</span><span class="n">previous</span><span class="p">(</span><span class="mi">2</span><span class="p">:),</span> <span class="n">Dt</span><span class="o">=</span><span class="n">Dt</span><span class="p">,</span> <span class="n">t</span><span class="o">=</span><span class="n">t</span><span class="p">,</span> <span class="n">iterations</span><span class="o">=</span><span class="n">iterations</span><span class="p">,</span> <span class="n">autoupdate</span><span class="o">=</span><span class="p">.</span><span class="n">false</span><span class="p">.)</span>
   <span class="k">call </span><span class="n">self</span><span class="p">%</span><span class="n">predictor</span><span class="p">%</span><span class="n">update_previous</span><span class="p">(</span><span class="n">U</span><span class="o">=</span><span class="n">U</span><span class="p">,</span> <span class="n">previous</span><span class="o">=</span><span class="n">previous</span><span class="p">)</span>
   <span class="k">return</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>

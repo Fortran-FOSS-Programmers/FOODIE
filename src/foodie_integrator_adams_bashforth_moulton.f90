@@ -112,7 +112,7 @@ contains
   !---------------------------------------------------------------------------------------------------------------------------------
   !< Create the actual Adams-Bashforth-Moulton integrator: initialize the *b* coefficients.
   !---------------------------------------------------------------------------------------------------------------------------------
-  class(adams_bashforth_moulton_integrator), intent(INOUT) :: self  !< AB integrator.
+  class(adams_bashforth_moulton_integrator), intent(INOUT) :: self  !< ABM integrator.
   integer(I_P), intent(IN)                                 :: steps !< Number of time steps used.
   !---------------------------------------------------------------------------------------------------------------------------------
 
@@ -128,7 +128,7 @@ contains
   !---------------------------------------------------------------------------------------------------------------------------------
   !< Destoy the integrator.
   !---------------------------------------------------------------------------------------------------------------------------------
-  class(adams_bashforth_moulton_integrator), intent(INOUT) :: self !< AB integrator.
+  class(adams_bashforth_moulton_integrator), intent(INOUT) :: self !< ABM integrator.
   !---------------------------------------------------------------------------------------------------------------------------------
 
   !---------------------------------------------------------------------------------------------------------------------------------
@@ -139,21 +139,22 @@ contains
   !---------------------------------------------------------------------------------------------------------------------------------
   endsubroutine destroy
 
-  subroutine integrate(self, U, previous, Dt, t)
+  subroutine integrate(self, U, previous, Dt, t, iterations)
   !---------------------------------------------------------------------------------------------------------------------------------
-  !< Integrate field with Adams-Bashforth_Moulton class scheme.
+  !< Integrate field with Adams-Bashforth-Moulton class scheme.
   !---------------------------------------------------------------------------------------------------------------------------------
-  class(adams_bashforth_moulton_integrator), intent(IN)    :: self         !< Actual AB integrator.
+  class(adams_bashforth_moulton_integrator), intent(IN)    :: self         !< Actual ABM integrator.
   class(integrand),                          intent(INOUT) :: U            !< Field to be integrated.
   class(integrand),                          intent(INOUT) :: previous(1:) !< Previous time steps solutions of integrand field.
   real(R_P),                                 intent(IN)    :: Dt           !< Time steps.
   real(R_P),                                 intent(IN)    :: t(:)         !< Times.
+  integer(I_P), optional,                    intent(IN)    :: iterations   !< Fixed point iterations of AM scheme.
   integer(I_P)                                             :: s            !< Steps counter.
   !---------------------------------------------------------------------------------------------------------------------------------
 
   !---------------------------------------------------------------------------------------------------------------------------------
   call self%predictor%integrate(U=U, previous=previous, Dt=Dt, t=t, autoupdate=.false.)
-  call self%corrector%integrate(U=U, previous=previous(2:), Dt=Dt, t=t, autoupdate=.false.)
+  call self%corrector%integrate(U=U, previous=previous(2:), Dt=Dt, t=t, iterations=iterations, autoupdate=.false.)
   call self%predictor%update_previous(U=U, previous=previous)
   return
   !---------------------------------------------------------------------------------------------------------------------------------
@@ -164,7 +165,7 @@ contains
   !---------------------------------------------------------------------------------------------------------------------------------
   !< Finalize object.
   !---------------------------------------------------------------------------------------------------------------------------------
-  type(adams_bashforth_moulton_integrator), intent(INOUT) :: self !< AB integrator.
+  type(adams_bashforth_moulton_integrator), intent(INOUT) :: self !< ABM integrator.
   !---------------------------------------------------------------------------------------------------------------------------------
 
   !---------------------------------------------------------------------------------------------------------------------------------

@@ -133,6 +133,8 @@
       
       <a class="list-group-item" href="../proc/integrate%7E3.html#variable-autoupdate_%7E2">autoupdate_</a>
       
+      <a class="list-group-item" href="../proc/integrate%7E3.html#variable-delta">delta</a>
+      
       <a class="list-group-item" href="../proc/integrate%7E3.html#variable-s%7E4">s</a>
       
     </div>
@@ -186,6 +188,8 @@
       <a class="list-group-item" href="../proc/add_lorenz.html">add_lorenz</a>
       
       <a class="list-group-item" href="../proc/add_oscillation.html">add_oscillation</a>
+      
+      <a class="list-group-item" href="../proc/am_solver.html">am_solver</a>
       
       <a class="list-group-item" href="../proc/average_solution.html">average_solution</a>
       
@@ -437,6 +441,8 @@
       
       <a class="list-group-item" href="../proc/test_abm.html">test_abm</a>
       
+      <a class="list-group-item" href="../proc/test_am.html">test_am</a>
+      
       <a class="list-group-item" href="../proc/test_euler.html">test_euler</a>
       
       <a class="list-group-item" href="../proc/test_euler%7E2.html">test_euler</a>
@@ -491,7 +497,7 @@
     
     <div class="col-lg-9" id='text'>
     <h2>
-private subroutine integrate(self, U, previous, Dt, t, autoupdate)
+private subroutine integrate(self, U, previous, Dt, t, iterations, autoupdate)
     
     
     
@@ -594,6 +600,21 @@ private subroutine integrate(self, U, previous, Dt, t, autoupdate)
   
 <tr>
   
+  <td><span class="anchor" id="variable-iterations%7E2"></span>integer(kind=I_P),</td>
+  <td>intent(in),</td>
+  <td>optional</td>
+  
+  <td></td><td>::</td>
+  <td><strong>iterations</strong></td><td><p>Fixed point iterations.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
   <td><span class="anchor" id="variable-autoupdate%7E2"></span>logical,</td>
   <td>intent(in),</td>
   <td>optional</td>
@@ -648,6 +669,20 @@ private subroutine integrate(self, U, previous, Dt, t, autoupdate)
   
 <tr>
   
+  <td><span class="anchor" id="variable-delta"></span>class(<a href='../type/integrand.html'>integrand</a>),</td>
+  
+  <td>public,</td>
+  <td>allocatable</td><td>::</td>
+  <td><strong>delta</strong></td><td></td><td></td><td><p>Delta RHS for fixex point iterations.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
   <td><span class="anchor" id="variable-s%7E4"></span>integer(kind=I_P),</td>
   
   <td>public</td>
@@ -679,7 +714,7 @@ private subroutine integrate(self, U, previous, Dt, t, autoupdate)
     
     <section>
     <h2><span class="anchor" id="src"></span>Source Code</h2>
-    <div class="highlight"><pre>  <span class="k">subroutine </span><span class="n">integrate</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">U</span><span class="p">,</span> <span class="n">previous</span><span class="p">,</span> <span class="n">Dt</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="n">autoupdate</span><span class="p">)</span>
+    <div class="highlight"><pre>  <span class="k">subroutine </span><span class="n">integrate</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">U</span><span class="p">,</span> <span class="n">previous</span><span class="p">,</span> <span class="n">Dt</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="n">iterations</span><span class="p">,</span> <span class="n">autoupdate</span><span class="p">)</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
   <span class="c">!&lt; Integrate field with Adams-Moulton class scheme.</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
@@ -688,18 +723,30 @@ private subroutine integrate(self, U, previous, Dt, t, autoupdate)
   <span class="k">class</span><span class="p">(</span><span class="n">integrand</span><span class="p">),</span>                <span class="k">intent</span><span class="p">(</span><span class="n">INOUT</span><span class="p">)</span> <span class="kd">::</span> <span class="n">previous</span><span class="p">(</span><span class="mi">1</span><span class="p">:)</span> <span class="c">!&lt; Previous time steps solutions of integrand field.</span>
   <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">),</span>                       <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span>    <span class="kd">::</span> <span class="n">Dt</span>           <span class="c">!&lt; Time steps.</span>
   <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">),</span>                       <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span>    <span class="kd">::</span> <span class="n">t</span><span class="p">(:)</span>         <span class="c">!&lt; Times.</span>
-  <span class="kt">logical</span><span class="p">,</span> <span class="k">optional</span><span class="p">,</span>               <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span>    <span class="kd">::</span> <span class="n">autoupdate</span>   <span class="c">!&lt; Perform cyclic autoupdate of previous time steps.</span>
+  <span class="kt">integer</span><span class="p">(</span><span class="n">I_P</span><span class="p">),</span> <span class="k">optional</span><span class="p">,</span>          <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span>    <span class="kd">::</span> <span class="n">iterations</span>   <span class="c">!&lt; Fixed point iterations.</span>
+  <span class="kt">logical</span><span class="p">,</span>      <span class="k">optional</span><span class="p">,</span>          <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span>    <span class="kd">::</span> <span class="n">autoupdate</span>   <span class="c">!&lt; Perform cyclic autoupdate of previous time steps.</span>
   <span class="kt">logical</span>                                        <span class="kd">::</span> <span class="n">autoupdate_</span>  <span class="c">!&lt; Perform cyclic autoupdate of previous time steps, dummy var.</span>
+  <span class="k">class</span><span class="p">(</span><span class="n">integrand</span><span class="p">),</span> <span class="k">allocatable</span>                  <span class="kd">::</span> <span class="n">delta</span>        <span class="c">!&lt; Delta RHS for fixex point iterations.</span>
   <span class="kt">integer</span><span class="p">(</span><span class="n">I_P</span><span class="p">)</span>                                   <span class="kd">::</span> <span class="n">s</span>            <span class="c">!&lt; Steps counter.</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
 
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
   <span class="n">autoupdate_</span> <span class="o">=</span> <span class="p">.</span><span class="n">true</span><span class="p">.</span> <span class="p">;</span> <span class="k">if</span> <span class="p">(</span><span class="nb">present</span><span class="p">(</span><span class="n">autoupdate</span><span class="p">))</span> <span class="n">autoupdate_</span> <span class="o">=</span> <span class="n">autoupdate</span>
   <span class="k">if</span> <span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">steps</span><span class="o">&gt;</span><span class="mi">0</span><span class="p">)</span> <span class="k">then</span>
-<span class="k">    </span><span class="n">U</span> <span class="o">=</span> <span class="n">previous</span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">steps</span><span class="p">)</span> <span class="o">+</span> <span class="n">U</span><span class="p">%</span><span class="n">t</span><span class="p">(</span><span class="n">t</span><span class="o">=</span><span class="n">t</span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">steps</span><span class="p">)</span> <span class="o">+</span> <span class="n">Dt</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="n">Dt</span> <span class="o">*</span> <span class="n">self</span><span class="p">%</span><span class="n">b</span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">steps</span><span class="p">))</span>
-    <span class="k">do </span><span class="n">s</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">self</span><span class="p">%</span><span class="n">steps</span> <span class="o">-</span> <span class="mi">1</span>
-      <span class="n">U</span> <span class="o">=</span> <span class="n">U</span> <span class="o">+</span> <span class="n">previous</span><span class="p">(</span><span class="n">s</span><span class="o">+</span><span class="mi">1</span><span class="p">)%</span><span class="n">t</span><span class="p">(</span><span class="n">t</span><span class="o">=</span><span class="n">t</span><span class="p">(</span><span class="n">s</span><span class="o">+</span><span class="mi">1</span><span class="p">))</span> <span class="o">*</span> <span class="p">(</span><span class="n">Dt</span> <span class="o">*</span> <span class="n">self</span><span class="p">%</span><span class="n">b</span><span class="p">(</span><span class="n">s</span><span class="p">))</span>
-    <span class="n">enddo</span>
+<span class="k">    if</span> <span class="p">(</span><span class="nb">present</span><span class="p">(</span><span class="n">iterations</span><span class="p">))</span> <span class="k">then</span> <span class="c">! perform fixed point iterations</span>
+      <span class="k">allocate</span><span class="p">(</span><span class="n">delta</span><span class="p">,</span> <span class="n">source</span><span class="o">=</span><span class="n">previous</span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">steps</span><span class="p">))</span>
+      <span class="k">do </span><span class="n">s</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">self</span><span class="p">%</span><span class="n">steps</span> <span class="o">-</span> <span class="mi">1</span>
+        <span class="n">delta</span> <span class="o">=</span> <span class="n">delta</span> <span class="o">+</span> <span class="n">previous</span><span class="p">(</span><span class="n">s</span><span class="o">+</span><span class="mi">1</span><span class="p">)%</span><span class="n">t</span><span class="p">(</span><span class="n">t</span><span class="o">=</span><span class="n">t</span><span class="p">(</span><span class="n">s</span><span class="o">+</span><span class="mi">1</span><span class="p">))</span> <span class="o">*</span> <span class="p">(</span><span class="n">Dt</span> <span class="o">*</span> <span class="n">self</span><span class="p">%</span><span class="n">b</span><span class="p">(</span><span class="n">s</span><span class="p">))</span>
+      <span class="n">enddo</span>
+      <span class="k">do </span><span class="n">s</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">iterations</span>
+        <span class="n">U</span> <span class="o">=</span> <span class="n">delta</span> <span class="o">+</span> <span class="n">U</span><span class="p">%</span><span class="n">t</span><span class="p">(</span><span class="n">t</span><span class="o">=</span><span class="n">t</span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">steps</span><span class="p">)</span> <span class="o">+</span> <span class="n">Dt</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="n">Dt</span> <span class="o">*</span> <span class="n">self</span><span class="p">%</span><span class="n">b</span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">steps</span><span class="p">))</span>
+      <span class="n">enddo</span>
+    <span class="k">else</span>
+<span class="k">      </span><span class="n">U</span> <span class="o">=</span> <span class="n">previous</span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">steps</span><span class="p">)</span> <span class="o">+</span> <span class="n">U</span><span class="p">%</span><span class="n">t</span><span class="p">(</span><span class="n">t</span><span class="o">=</span><span class="n">t</span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">steps</span><span class="p">)</span> <span class="o">+</span> <span class="n">Dt</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="n">Dt</span> <span class="o">*</span> <span class="n">self</span><span class="p">%</span><span class="n">b</span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">steps</span><span class="p">))</span>
+      <span class="k">do </span><span class="n">s</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">self</span><span class="p">%</span><span class="n">steps</span> <span class="o">-</span> <span class="mi">1</span>
+        <span class="n">U</span> <span class="o">=</span> <span class="n">U</span> <span class="o">+</span> <span class="n">previous</span><span class="p">(</span><span class="n">s</span><span class="o">+</span><span class="mi">1</span><span class="p">)%</span><span class="n">t</span><span class="p">(</span><span class="n">t</span><span class="o">=</span><span class="n">t</span><span class="p">(</span><span class="n">s</span><span class="o">+</span><span class="mi">1</span><span class="p">))</span> <span class="o">*</span> <span class="p">(</span><span class="n">Dt</span> <span class="o">*</span> <span class="n">self</span><span class="p">%</span><span class="n">b</span><span class="p">(</span><span class="n">s</span><span class="p">))</span>
+      <span class="n">enddo</span>
+    <span class="n">endif</span>
     <span class="k">if</span> <span class="p">(</span><span class="n">autoupdate_</span><span class="p">)</span> <span class="k">call </span><span class="n">self</span><span class="p">%</span><span class="n">update_previous</span><span class="p">(</span><span class="n">U</span><span class="o">=</span><span class="n">U</span><span class="p">,</span> <span class="n">previous</span><span class="o">=</span><span class="n">previous</span><span class="p">)</span>
   <span class="k">else</span>
 <span class="k">    </span><span class="n">U</span> <span class="o">=</span> <span class="n">U</span> <span class="o">+</span> <span class="n">U</span><span class="p">%</span><span class="n">t</span><span class="p">(</span><span class="n">t</span><span class="o">=</span><span class="n">t</span><span class="p">(</span><span class="mi">1</span><span class="p">))</span> <span class="o">*</span> <span class="p">(</span><span class="n">Dt</span> <span class="o">*</span> <span class="n">self</span><span class="p">%</span><span class="n">b</span><span class="p">(</span><span class="mi">0</span><span class="p">))</span>

@@ -478,7 +478,7 @@ private elementalsubroutine <a href='../proc/finalize%7E2.html'>finalize</a>(sel
   <td></td>
   
   <td></td><td>::</td>
-  <td><strong>self</strong></td><td><p>AB integrator.</p></td>
+  <td><strong>self</strong></td><td><p>ABM integrator.</p></td>
   
 </tr>
 
@@ -560,7 +560,7 @@ private elementalsubroutine <a href='../proc/destroy%7E2.html'>destroy</a>(self)
   <td></td>
   
   <td></td><td>::</td>
-  <td><strong>self</strong></td><td><p>AB integrator.</p></td>
+  <td><strong>self</strong></td><td><p>ABM integrator.</p></td>
   
 </tr>
 
@@ -637,7 +637,7 @@ private elementalsubroutine <a href='../proc/init%7E2.html'>init</a>(self, steps
   <td></td>
   
   <td></td><td>::</td>
-  <td><strong>self</strong></td><td><p>AB integrator.</p></td>
+  <td><strong>self</strong></td><td><p>ABM integrator.</p></td>
   
 </tr>
 
@@ -699,7 +699,7 @@ private elementalsubroutine <a href='../proc/init%7E2.html'>init</a>(self, steps
          
     
     <h3>
-private subroutine <a href='../proc/integrate%7E2.html'>integrate</a>(self, U, previous, Dt, t)
+private subroutine <a href='../proc/integrate%7E2.html'>integrate</a>(self, U, previous, Dt, t, iterations)
     
     
     
@@ -729,7 +729,7 @@ private subroutine <a href='../proc/integrate%7E2.html'>integrate</a>(self, U, p
   <td></td>
   
   <td></td><td>::</td>
-  <td><strong>self</strong></td><td><p>Actual AB integrator.</p></td>
+  <td><strong>self</strong></td><td><p>Actual ABM integrator.</p></td>
   
 </tr>
 
@@ -793,6 +793,21 @@ private subroutine <a href='../proc/integrate%7E2.html'>integrate</a>(self, U, p
   
 </tr>
 
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>integer(kind=I_P),</td>
+  <td>intent(in),</td>
+  <td>optional</td>
+  
+  <td></td><td>::</td>
+  <td><strong>iterations</strong></td><td><p>Fixed point iterations of AM scheme.</p></td>
+  
+</tr>
+
 </tbody>
 </table>
 
@@ -806,7 +821,7 @@ private subroutine <a href='../proc/integrate%7E2.html'>integrate</a>(self, U, p
 
 
        
-       <p>Integrate field with Adams-Bashforth_Moulton class scheme.</p>
+       <p>Integrate field with Adams-Bashforth-Moulton class scheme.</p>
         
 
       
