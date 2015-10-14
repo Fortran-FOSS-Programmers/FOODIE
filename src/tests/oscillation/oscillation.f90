@@ -10,6 +10,7 @@ use type_oscillation, only : oscillation
 use Data_Type_Command_Line_Interface, only : Type_Command_Line_Interface
 use foodie, only : adams_bashforth_integrator, &
                    adams_bashforth_moulton_integrator, &
+                   adams_moulton_integrator, &
                    euler_explicit_integrator, &
                    leapfrog_integrator, &
                    ls_runge_kutta_integrator, &
@@ -27,6 +28,7 @@ real(R_P)                         :: t_final                                    
 real(R_P)                         :: Dt                                                !< Time step.
 integer(I_P)                      :: error                                             !< Error handler.
 integer(I_P)                      :: stages_steps                                      !< Number of stages/steps used.
+integer(I_P)                      :: implicit_iterations                               !< Number of iterations for implicit solvers.
 character(99)                     :: solver                                            !< Solver used.
 logical                           :: plots                                             !< Flag for activating plots saving.
 logical                           :: results                                           !< Flag for activating results saving.
@@ -46,6 +48,7 @@ call cli%init(progname    = 'oscillation',                                      
                              "oscillation --solver all --plots -r   "])
 call cli%add(switch='--solver', switch_ab='-s', help='ODE solver used', required=.false., def='all', act='store')
 call cli%add(switch='--ss', help='Stages/steps used', required=.false., act='store', def='-1')
+call cli%add(switch='--iterations', help='Number of iterations for implicit solvers', required=.false., act='store', def='5')
 call cli%add(switch='--frequency', switch_ab='-f', help='Oscillation frequency', required=.false., def='1e-4', act='store')
 call cli%add(switch='--time_step', switch_ab='-Dt', help='Integration time step', required=.false., def='100.d0', act='store')
 call cli%add(switch='--t_final', switch_ab='-tf', help='Final integration time', required=.false., def='1e6', act='store')
@@ -57,6 +60,7 @@ call cli%add(switch='--errors_analysis', help='Peform errors analysis', required
 call cli%parse(error=error)
 call cli%get(switch='-s', val=solver, error=error) ; if (error/=0) stop
 call cli%get(switch='--ss', val=stages_steps, error=error) ; if (error/=0) stop
+call cli%get(switch='--iterations', val=implicit_iterations, error=error) ; if (error/=0) stop
 call cli%get(switch='-f', val=f, error=error) ; if (error/=0) stop
 call cli%get(switch='-Dt', val=Dt, error=error) ; if (error/=0) stop
 call cli%get(switch='-tf', val=t_final, error=error) ; if (error/=0) stop
@@ -72,6 +76,8 @@ else
     call test_ab(steps=stages_steps)
   case('adams-bashforth-moulton')
     call test_abm(steps=stages_steps)
+  case('adams-moulton')
+    call test_am(steps=stages_steps)
   case('euler')
     call test_euler
   case('leapfrog')
@@ -85,6 +91,7 @@ else
   case('all')
     call test_ab(steps=stages_steps)
     call test_abm(steps=stages_steps)
+    call test_am(steps=stages_steps)
     call test_euler
     call test_leapfrog
     call test_ls_rk(stages=stages_steps)
@@ -94,6 +101,7 @@ else
     print "(A)", 'Valid solver names are:'
     print "(A)", '  + adams-bashforth'
     print "(A)", '  + adams-bashforth-moulton'
+    print "(A)", '  + adams-moulton'
     print "(A)", '  + euler'
     print "(A)", '  + leapfrog'
     print "(A)", '  + leapfrog-raw'
@@ -225,7 +233,7 @@ contains
   integer(I_P), intent(IN)      :: steps            !< Number of steps used: if negative all AB solvers are used.
   integer, parameter            :: abm_steps=4      !< Adams-Bashforth-Moulton steps number.
   real(R_P), allocatable        :: solution(:,:)    !< Solution at each time step.
-  integer(I_P)                  :: s                !< AB steps counter.
+  integer(I_P)                  :: s                !< ABM steps counter.
   integer(I_P)                  :: steps_range(1:2) !< Steps used.
   character(len=:), allocatable :: output           !< Output files basename.
   character(len=:), allocatable :: title            !< Output files title.
@@ -247,6 +255,40 @@ contains
   return
   !---------------------------------------------------------------------------------------------------------------------------------
   endsubroutine test_abm
+
+  subroutine test_am(steps)
+  !---------------------------------------------------------------------------------------------------------------------------------
+  !< Test implicit Adams-Moulton class of ODE solvers.
+  !---------------------------------------------------------------------------------------------------------------------------------
+  integer(I_P), intent(IN)      :: steps            !< Number of steps used: if negative all AB solvers are used.
+  integer, parameter            :: am_steps=3       !< Adams-Moulton steps number.
+  real(R_P), allocatable        :: solution(:,:)    !< Solution at each time step.
+  integer(I_P)                  :: s                !< AM steps counter.
+  integer(I_P)                  :: steps_range(1:2) !< Steps used.
+  character(len=:), allocatable :: output           !< Output files basename.
+  character(len=:), allocatable :: title            !< Output files title.
+  !---------------------------------------------------------------------------------------------------------------------------------
+
+  !---------------------------------------------------------------------------------------------------------------------------------
+  solver = 'adams-moulton'
+  call init(output=output, solution=solution)
+  print "(A)", 'Integrating Oscillation equations by means of Adams-Moulton class of solvers'
+  steps_range = [0, am_steps] ; if (steps>0) steps_range = [steps, steps]
+  do s=steps_range(1), steps_range(2)
+    print "(A)", ' AM-'//trim(str(.true.,s))
+    title = 'Oscillation equation integration, implicit Adams-Moulton, t='//str(n=t_final)//&
+            ' steps='//trim(str(.true., s))
+    if (implicit_iterations>1) then
+      call am_solver(steps=s, solution=solution, iterations=implicit_iterations)
+    else
+      call am_solver(steps=s, solution=solution)
+    endif
+    call save_results(title=title, basename=output//'-'//trim(str(.true., s)), solution=solution)
+  enddo
+  print "(A)", 'Finish!'
+  return
+  !---------------------------------------------------------------------------------------------------------------------------------
+  endsubroutine test_am
 
   subroutine test_euler()
   !---------------------------------------------------------------------------------------------------------------------------------
@@ -405,7 +447,7 @@ contains
   !---------------------------------------------------------------------------------------------------------------------------------
   !< Solve problem with predictor-corrector Adams-Bashforth-Moulton class of ODE solvers.
   !---------------------------------------------------------------------------------------------------------------------------------
-  integer(I_P), intent(IN)                 :: steps                 !< Number of steps used: if negative all AB solvers are used.
+  integer(I_P), intent(IN)                 :: steps                 !< Number of steps used: if negative all ABM solvers are used.
   real(R_P),    intent(OUT)                :: solution(0:,0:)       !< Solution at each time step.
   type(tvd_runge_kutta_integrator)         :: rk_integrator         !< Runge-Kutta integrator.
   integer, parameter                       :: rk_stages=5           !< Runge-Kutta stages number.
@@ -443,6 +485,50 @@ contains
   return
   !---------------------------------------------------------------------------------------------------------------------------------
   endsubroutine abm_solver
+
+  subroutine am_solver(steps, iterations, solution)
+  !---------------------------------------------------------------------------------------------------------------------------------
+  !< Solve problem with implicit Adams-Moulton class of ODE solvers.
+  !---------------------------------------------------------------------------------------------------------------------------------
+  integer(I_P),           intent(IN)  :: steps                 !< Number of steps used: if negative all AM solvers are used.
+  integer(I_P), optional, intent(IN)  :: iterations            !< Number of fixed point iterations.
+  real(R_P),              intent(OUT) :: solution(0:,0:)       !< Solution at each time step.
+  type(tvd_runge_kutta_integrator)    :: rk_integrator         !< Runge-Kutta integrator.
+  integer, parameter                  :: rk_stages=5           !< Runge-Kutta stages number.
+  type(oscillation)                   :: rk_stage(1:rk_stages) !< Runge-Kutta stages.
+  type(adams_moulton_integrator)      :: am_integrator         !< Adams-Moulton integrator.
+  type(oscillation)                   :: previous(1:steps)     !< Previous time steps solutions.
+  type(oscillation)                   :: oscillator            !< Oscillation field.
+  integer                             :: step                  !< Time steps counter.
+  !---------------------------------------------------------------------------------------------------------------------------------
+
+  !---------------------------------------------------------------------------------------------------------------------------------
+  call am_integrator%init(steps=steps)
+  select case(steps)
+  case(0, 1, 2)
+    call rk_integrator%init(stages=steps+1)
+  case(3)
+    call rk_integrator%init(stages=5)
+  endselect
+  call oscillator%init(initial_state=initial_state, f=f)
+  solution = 0._R_P
+  solution(1:space_dimension, 0) = oscillator%output()
+  step = 0
+  do while(solution(0, step)<t_final)
+    step = step + 1
+    if (steps>=step) then
+      ! time steps from 1 to s - 1 must be computed with other scheme
+      call rk_integrator%integrate(U=oscillator, stage=rk_stage, Dt=Dt, t=solution(0, step))
+      previous(step) = oscillator
+    else
+      call am_integrator%integrate(U=oscillator, previous=previous, Dt=Dt, t=solution(0, step-steps:step-1), iterations=iterations)
+    endif
+    solution(0, step) = step * Dt
+    solution(1:space_dimension, step) = oscillator%output()
+  enddo
+  return
+  !---------------------------------------------------------------------------------------------------------------------------------
+  endsubroutine am_solver
 
   subroutine euler_solver(solution)
   !---------------------------------------------------------------------------------------------------------------------------------
@@ -612,11 +698,13 @@ contains
   ! errors and orders
   real(R_P) :: ab_errors(1:space_dimension, 1:ab_steps, 1:NDt)            !< Adams-Bashforth errors.
   real(R_P) :: abm_errors(1:space_dimension, 1:ab_steps, 1:NDt)           !< Adams-Bashforth-Moulton errors.
+  real(R_P) :: am_errors(1:space_dimension, 1:ab_steps, 1:NDt)            !< Adams-Moulton errors.
   real(R_P) :: lf_errors(1:space_dimension, 1:2, 1:NDt)                   !< Leapfrog errors.
   real(R_P) :: ls_rk_errors(1:space_dimension, 1:ls_rk_stages, 1:NDt)     !< Low storage Runge-Kutta errors.
   real(R_P) :: tvd_rk_errors(1:space_dimension, 1:tvd_rk_stages, 1:NDt)   !< TVD/SSP Runge-Kutta errors.
   real(R_P) :: ab_orders(1:space_dimension, 1:ab_steps, 1:NDt-1)          !< Adams-Bashforth orders.
   real(R_P) :: abm_orders(1:space_dimension, 1:ab_steps, 1:NDt-1)         !< Adams-Bashforth-Moulton orders.
+  real(R_P) :: am_orders(1:space_dimension, 1:ab_steps, 1:NDt-1)          !< Adams-Moulton orders.
   real(R_P) :: lf_orders(1:space_dimension, 1:2, 1:NDt-1)                 !< Leapfrog orders.
   real(R_P) :: ls_rk_orders(1:space_dimension, 1:ls_rk_stages, 1:NDt-1)   !< Low storage Runge-Kutta orders.
   real(R_P) :: tvd_rk_orders(1:space_dimension, 1:tvd_rk_stages, 1:NDt-1) !< TVD/SSP Runge-Kutta orders.
@@ -625,6 +713,7 @@ contains
   !---------------------------------------------------------------------------------------------------------------------------------
   ab_errors = 0._R_P     ; ab_orders = 0._R_P
   abm_errors = 0._R_P    ; abm_orders = 0._R_P
+  am_errors = 0._R_P     ; am_orders = 0._R_P
   lf_errors = 0._R_P     ; lf_orders = 0._R_P
   ls_rk_errors = 0._R_P  ; ls_rk_orders = 0._R_P
   tvd_rk_errors = 0._R_P ; tvd_rk_orders = 0._R_P
@@ -663,6 +752,28 @@ contains
   do s=1, ab_steps
     do d=1, NDt-1
       abm_orders(:, s, d) = estimate_orders(solver_error=abm_errors(:, s, d:d+1), Dt_used=time_steps(d:d+1))
+    enddo
+  enddo
+  ! Analyze errors of Adams-Moulton solvers
+  do d=1, NDt ! loop over exercised time steps
+    Dt = time_steps(d)
+    solver = 'adams-moulton'
+    call init(output=output, solution=solution)
+    do s=0, ab_steps-1
+      title = 'Oscillation equation integration, implicit Adams-Moulton, t='//str(n=t_final)//&
+              ' steps='//trim(str(.true., s))
+      if (implicit_iterations>1) then
+        call am_solver(steps=s, solution=solution, iterations=implicit_iterations)
+      else
+        call am_solver(steps=s, solution=solution)
+      endif
+      call save_results(title=title, basename=output//'-'//trim(str(.true., s)), solution=solution)
+      am_errors(:, s+1, d) = compute_errors(solution=solution)
+    enddo
+  enddo
+  do s=0, ab_steps-1
+    do d=1, NDt-1
+      am_orders(:, s+1, d) = estimate_orders(solver_error=am_errors(:, s+1, d:d+1), Dt_used=time_steps(d:d+1))
     enddo
   enddo
   ! Analyze errors of leapfrog solver
@@ -740,6 +851,7 @@ contains
   print "(A)", "Solver & Time Step & f*Dt & Error X & Error Y & Observed Order of Accuracy X & Observed Order of Accuracy Y"
   call print_analysis(solver='adams-bashforth', time_steps=time_steps, errors=ab_errors, orders=ab_orders)
   call print_analysis(solver='adams-bashforth-moulton', time_steps=time_steps, errors=abm_errors, orders=abm_orders)
+  call print_analysis(solver='adams-moulton', time_steps=time_steps, errors=am_errors, orders=am_orders)
   call print_analysis(solver='leapfrog', time_steps=time_steps, errors=lf_errors, orders=lf_orders)
   call print_analysis(solver='ls-runge-kutta', time_steps=time_steps, errors=ls_rk_errors, orders=ls_rk_orders)
   call print_analysis(solver='tvd-runge-kutta', time_steps=time_steps, errors=tvd_rk_errors, orders=tvd_rk_orders)

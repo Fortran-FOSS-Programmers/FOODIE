@@ -1,0 +1,130 @@
+\subsubsection{FOODiE aware implementation of an oscillation numerical solver}
+
+The IVP \ref{eq:oscillation} can be easily solved by means of FOODiE library. The first block of a FOODiE aware solution consists to define an \emph{oscillation integrand field} defining a concrete extension of the FOODiE \emph{integrand} type. Listing \ref{list:oscillation_type} reports the implementation of such an integrand field that is contained into the tests suite shipped within the FOODiE library.
+
+\begin{lstlisting}[firstnumber=1,style=code,caption={implementation of the \emph{oscillation integrand} type},label={list:oscillation_type}]
+type, extends(integrand) :: oscillation
+  private
+  integer(I_P)                           :: dims=0   ! Space dimensions.
+  real(R_P)                              :: f=0._R_P ! Oscillation frequency (Hz).
+  real(R_P), dimension(:),   allocatable :: U        ! Integrand (state) variables, [1:dims].
+  contains
+    ! auxiliary methods
+    procedure, pass(self), public :: init
+    procedure, pass(self), public :: output
+    ! type\_integrand deferred methods
+    procedure, pass(self), public :: t => dOscillation_dt
+    procedure, pass(lhs),  public :: integrand_multiply_integrand => &
+                                     oscillation_multiply_oscillation
+    procedure, pass(lhs),  public :: integrand_multiply_real => oscillation_multiply_real
+    procedure, pass(rhs),  public :: real_multiply_integrand => real_multiply_oscillation
+    procedure, pass(lhs),  public :: add => add_oscillation
+    procedure, pass(lhs),  public :: sub => sub_oscillation
+    procedure, pass(lhs),  public :: assign_integrand => oscillation_assign_oscillation
+    procedure, pass(lhs),  public :: assign_real => oscillation_assign_real
+endtype oscillation
+\end{lstlisting}
+
+The \emph{oscillation} field extends the \emph{integrand} ADT making it a concrete type. This derived type is very simple: it has 5 data members for storing the state vector and some auxiliary variables, and it implements all the deferred methods necessary for defining a valid concrete extension of the \emph{integrand} ADT (plus 2 auxiliary methods that are not relevant for our discussion). The key point is here constituted by the implementation of the deferred methods: the \emph{integrand} ADT does not impose any structure for the data members, that are consequently free to be customized by the client code. In this example the data members have a very simple, clean and concise structure:
+\begin{itemize}
+  \item $dims$ is the number of space dimensions; in the case of equation \ref{eq:oscillation} we have $dims=2$, however the test implementation has been kept more general parametrizing this dimension in order to easily allow future modification of the test-program itself;
+  \item $f$ stores the frequency of the oscillatory problem solved, that is here set to $10^{4}$, but it can be changed at runtime in the test-program;
+  \item $U$ is the state vector corresponding directly to the state vector of equation \ref{eq:oscillation};
+  \end{itemize}
+
+As the listing \ref{list:oscillation_type} shows, the FOODiE implementation strictly corresponds to the mathematical formulation embracing all the relevant mathematical aspects into one derived type, a single \emph{object}. Here we not review the implementation of all deferred methods, this being out of the scope of the present work: the interested reader can see the tests suite sources shipped within the FOODiE library. However, some of these methods are relevant for our discussion, thus they are reviewed.
+
+\paragraph{dOscillation\_dt, the oscillation residuals function}
+
+Probably, the most important methods for an IVP solver is the residuals function. As a matter of facts, the ODE equations are implemented into the residuals function. However, the FOODiE ADT strongly alleviates the subtle problems that could arise when the ODE solver is hard-implemented within the specific ODE equations. As a matter of facts, the \emph{integrand} ADT specifies the precise interface the residuals function must have: if the client code implements a compliant interface, the FOODiE solvers will work as expected, reducing the possible errors location into the ODE equations, having designed the solvers on the ADT and not on the concrete type.
+
+\begin{lstlisting}[firstnumber=1,style=code,caption={implementation of the \emph{oscillation integrand} residuals function},label={list:oscillation_t}]
+function dOscillation_dt(self, t) result(dState_dt)
+class(oscillation),     intent(IN) :: self      ! Oscillation field.
+real(R_P),    optional, intent(IN) :: t         ! Time.
+class(integrand),  allocatable     :: dState_dt ! Oscillation field time derivative.
+integer(I_P)                       :: dn        ! Time level, dummy variable.
+allocate(oscillation :: dState_dt)
+select type(dState_dt)
+class is(oscillation)
+  dState_dt = self
+  dState_dt%U(1) = -self%f * self%U(2)
+  dState_dt%U(2) =  self%f * self%U(1)
+endselect
+return
+endfunction dOscillation_dt
+\end{lstlisting}
+
+Listing \ref{list:oscillation_t} reports the implementation of the oscillation residuals function: it is very clear and concise. Moreover, comparing this listing with the equation \ref{eq:oscillation} the close correspondence between the mathematical formulation and Fortran implementation is evident.
+
+\paragraph{add method, an example of oscillation symmetric operator}
+
+As a prototype of the operators overloading let us consider the \emph{add} operator, it being a prototype of symmetric operators, the implementation of which is presented in listing \ref{list:oscillation_add}.
+
+\begin{lstlisting}[firstnumber=1,style=code,caption={implementation of the \emph{oscillation integrand} add operator},label={list:oscillation_add}]
+function add_oscillation(lhs, rhs) result(opr)
+class(oscillation), intent(IN) :: lhs ! Left hand side.
+class(integrand),   intent(IN) :: rhs ! Right hand side.
+class(integrand), allocatable  :: opr ! Operator result.
+allocate(oscillation :: opr)
+select type(opr)
+class is(oscillation)
+  opr = lhs
+  select type(rhs)
+  class is (oscillation)
+    opr%U = lhs%U + rhs%U
+  endselect
+endselect
+return
+endfunction add_Oscillation
+\end{lstlisting}
+It is very simple and clear: firstly all the auxiliary data are copied into the operator result, then the state vector of the result is populated with the addiction between the state vectors of the left-hand-side and right-hand-side. This is very intuitive from the mathematical point of view and it helps to reduce implementation errors. Similar implementations are possible for all the other operators necessary to define a valid \emph{intregrand} ADT concrete extension.
+
+\paragraph{assignment of an oscillation object}
+
+The assignment overloading of the \emph{oscillation} type is the last key-method that enforces the conciseness of the FOODiE aware implementation. Listing \ref{list:oscillation_assign} reports the implementation of the assignment overloading. Essentially, to all the data members of the left-hand-side are assigned the values of the corresponding right-hand-side. Notably, for the assignment of the state vector and of the previous time steps solution array we take advantage of the automatic re-allocation of the left-hand-side variables when they are not allocated or allocated differently from the right-hand-side, that is a Fortran 2003 feature. In spite its simplicity, the assignment overloading is a key-method enabling the usage of FOODiE solver: effectively, the assignment between two \emph{integrand} ADT variables is ubiquitous into the solvers implementations, see equation \ref{eq:RK} for example.
+
+\begin{lstlisting}[firstnumber=1,style=code,caption={implementation of the \emph{oscillation integrand} assignment},label={list:oscillation_assign}]
+subroutine oscillation_assign_oscillation(lhs, rhs)
+class(oscillation), intent(INOUT) :: lhs ! Left hand side.
+class(integrand),   intent(IN)    :: rhs ! Right hand side.
+select type(rhs)
+class is (oscillation)
+  lhs%dims = rhs%dims
+  lhs%f = rhs%f
+  if (allocated(rhs%U)) lhs%U = rhs%U
+endselect
+return
+endsubroutine oscillation_assign_oscillation
+\end{lstlisting}
+
+\paragraph{FOODiE numerical integration}
+
+Using the above discussed \emph{oscillation} type it is very easy to solve IVP \ref{eq:oscillation} by means of FOODiE library. Listing \ref{list:oscillation_leapfrog} presents the numerical integration of system \ref{eq:oscillation} by means of the Leapfrog RAW-filtered method. In the example, the integration is performed with $10^4$ steps with a fixed $\Delta t=10^2$ until the time $t=10^6$ is reached. The example shows also that for starting a multi-step scheme such as the Leapfrog one a lower-oder or equivalent order one-scheme is necessary: in the example the first 2 steps are computed by means of one-step TVD/SSP Runge-Kutta 2-stages schemes. Note that the memory registers for storing the Runge-Kutta stages and the RAW filter displacement must be handled by the client code. Listing \ref{list:oscillation_leapfrog} demonstrates how it is simple, clear and concise to solve a IVP by FOODiE solvers. Moreover, it proves how it is simple and effective to apply different solvers in a coupled algorithm, that greatly simplify the development of new hybrid solvers for self-adaptive time step size.
+
+\begin{lstlisting}[firstnumber=1,style=code,caption={numerical integration of the \emph{oscillation} system by means of Leapfrog RAW-filtered method},label={list:oscillation_leapfrog}]
+use foodie, only: leapfrog_integrator, tvd_runge_kutta_integrator
+type(leapfrog_integrator)        :: lf_integrator ! Leapfrog integrator.
+type(tvd_runge_kutta_integrator) :: rk_integrator ! Runge-Kutta integrator.
+type(oscillation)                :: rk_stage(1:2) ! Runge-Kutta stages.
+type(oscillation)                :: previous(1:2) ! Previous time steps solution.
+type(oscillation)                :: oscillator    ! Oscillation field.
+type(oscillation)                :: filter        ! Filter displacement.
+integer                          :: step          ! Time steps counter.
+real                             :: Dt            ! Time step.
+call lf_integrator%init()
+call rk_integrator%init(stages=2)
+call oscillator%init(initial_state=[0.0,1.0], f=10e4, steps=2)
+Dt = 100.0
+do step=1, 10000
+  if (2>=step) then
+    call rk_integrator%integrate(U=oscillator, stage=rk_stage, Dt=Dt, t=step*Dt)
+    previous(step) = oscillator
+  else
+    call lf_integrator%integrate(U=oscillator, previous=previous, filter=filter, Dt=Dt, &
+                                 t=step*Dt)
+  endif
+enddo
+call print_results(U=oscillator)
+\end{lstlisting}
+  

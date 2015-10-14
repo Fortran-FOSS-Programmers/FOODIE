@@ -1,0 +1,76 @@
+\subsection{Oscillation equations test}
+
+Let us consider the \emph{oscillation} problem, it being a simple, yet interesting IVP. Briefly, the oscillation problem is a prototype problem of non dissipative, oscillatory phenomena. For example, let us consider a pendulum subjected to the Coriolis accelerations without dissipation, the motion equations of which can be described by the ODE system \ref{eq:oscillation}.
+
+\begin{equation}
+\begin{matrix}
+U_t = R(U)  \\
+U = \begin{bmatrix}
+x \\
+y
+\end{bmatrix}\;\;\;
+R(U) = \begin{bmatrix}
+-f y \\
+f x
+\end{bmatrix}
+\end{matrix}
+\label{eq:oscillation}
+\end{equation}
+where the frequency is chosen as $f=10^4$. The ODE system \ref{eq:oscillation} is completed by the following initial conditions:
+
+\begin{equation}
+\begin{matrix}
+  x(t_0) = 0 \\
+  y(t_0) = 1
+\end{matrix}
+\label{eq:oscillation-ic}
+\end{equation}
+where $t_0=0$ is the initial time considered.
+
+The IVP constituted by equations \ref{eq:oscillation} and \ref{eq:oscillation-ic} is (apparently) simple and its exact solution is known:
+
+\begin{equation}
+\begin{matrix}
+  x(t_0 + \Delta t) = X_0 cos(f \Delta t) - y_0 sin(f \Delta t) \\
+  y(t_0 + \Delta t) = X_0 sin(f \Delta t) + y_0 cos(f \Delta t)
+\end{matrix}
+\label{eq:oscillation-exact}
+\end{equation}
+where $\Delta t$ is an arbitrary time step. This problem is non-stiff meaning that the solution is constituted by only one time-scale, namely the single frequency $f$.
+
+This problem is only apparently simple. As a matter of facts, in a non dissipative oscillatory problem the eventual errors in the amplitude approximation can rapidly drive the subsequent series of approximations to an unphysical solution. This is of particular relevance if the solution (that is numerically approximated) constitutes a \emph{prediction} far from the initial conditions, that is the common case in weather forecasting.
+
+Because the Oscillation system \ref{eq:oscillation} posses a closed exact solution, the discussion on this test has twofolds aims: to assess the accuracy of the FOODiE's built-in solvers comparing the numerical solutions with the exact one and to demonstrate how it is simple to solve this prototypical problem by means of FOODiE.
+
+\subsubsection{Errors Analysis}
+
+For the analysis of the accuracy of each solver, we have integrated the Oscillation equations \ref{eq:oscillation} with different, decreasing time steps in the range $[5000, 2500, 1250, 625, 320, 100]$. The error is estimated by the L2 norm of the difference between the exact ($U_e$) and the numerical ($U_{\Delta t}$) solutions for each time step:
+
+\begin{equation}
+  \varepsilon (\Delta t) = || U_e - U_{\Delta t} ||_2 = \sqrt{ \sum_{s=1}^{N_s} { \left(U_e(t_0 + s * \Delta t) - U_{\Delta t}(t_0 + s * \Delta t) \right)^2 }}
+\label{eq:oscillation-error}
+\end{equation}
+where $N_s$ is the total number of time steps performed to reach the final integration time.
+
+Using two pairs of subsequent-decreasing time steps solution is possible to estimate the order of accuracy of the solver employed computing the \emph{observed order} of accuracy:
+
+\begin{equation}
+  p = \frac{log10 \left( \frac{\varepsilon (\Delta t_1)}{\varepsilon (\Delta t_2)} \right)}{log10 \left( \frac{\Delta t_1}{\Delta t_2} \right)}
+\label{eq:oscillation-observed-order}
+\end{equation}
+
+where $\frac{\Delta t_1}{\Delta t_2}>1$.
+
+\input{src/tests/oscillation/oscillation-API.tex}
+
+\input{src/tests/oscillation/oscillation-solver-ab.tex}
+
+\input{src/tests/oscillation/oscillation-solver-abm.tex}
+
+\input{src/tests/oscillation/oscillation-solver-am.tex}
+
+\input{src/tests/oscillation/oscillation-solver-lf.tex}
+
+\input{src/tests/oscillation/oscillation-solver-ls-rk.tex}
+
+\input{src/tests/oscillation/oscillation-solver-tvd-rk.tex}

@@ -136,7 +136,7 @@ contains
   !---------------------------------------------------------------------------------------------------------------------------------
   endsubroutine destroy
 
-  subroutine integrate(self, U, previous, Dt, t, autoupdate)
+  subroutine integrate(self, U, previous, Dt, t, iterations, autoupdate)
   !---------------------------------------------------------------------------------------------------------------------------------
   !< Integrate field with Adams-Moulton class scheme.
   !---------------------------------------------------------------------------------------------------------------------------------
@@ -145,18 +145,30 @@ contains
   class(integrand),                intent(INOUT) :: previous(1:) !< Previous time steps solutions of integrand field.
   real(R_P),                       intent(IN)    :: Dt           !< Time steps.
   real(R_P),                       intent(IN)    :: t(:)         !< Times.
-  logical, optional,               intent(IN)    :: autoupdate   !< Perform cyclic autoupdate of previous time steps.
+  integer(I_P), optional,          intent(IN)    :: iterations   !< Fixed point iterations.
+  logical,      optional,          intent(IN)    :: autoupdate   !< Perform cyclic autoupdate of previous time steps.
   logical                                        :: autoupdate_  !< Perform cyclic autoupdate of previous time steps, dummy var.
+  class(integrand), allocatable                  :: delta        !< Delta RHS for fixex point iterations.
   integer(I_P)                                   :: s            !< Steps counter.
   !---------------------------------------------------------------------------------------------------------------------------------
 
   !---------------------------------------------------------------------------------------------------------------------------------
   autoupdate_ = .true. ; if (present(autoupdate)) autoupdate_ = autoupdate
   if (self%steps>0) then
-    U = previous(self%steps) + U%t(t=t(self%steps) + Dt) * (Dt * self%b(self%steps))
-    do s=0, self%steps - 1
-      U = U + previous(s+1)%t(t=t(s+1)) * (Dt * self%b(s))
-    enddo
+    if (present(iterations)) then ! perform fixed point iterations
+      allocate(delta, source=previous(self%steps))
+      do s=0, self%steps - 1
+        delta = delta + previous(s+1)%t(t=t(s+1)) * (Dt * self%b(s))
+      enddo
+      do s=1, iterations
+        U = delta + U%t(t=t(self%steps) + Dt) * (Dt * self%b(self%steps))
+      enddo
+    else
+      U = previous(self%steps) + U%t(t=t(self%steps) + Dt) * (Dt * self%b(self%steps))
+      do s=0, self%steps - 1
+        U = U + previous(s+1)%t(t=t(s+1)) * (Dt * self%b(s))
+      enddo
+    endif
     if (autoupdate_) call self%update_previous(U=U, previous=previous)
   else
     U = U + U%t(t=t(1)) * (Dt * self%b(0))
