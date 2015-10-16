@@ -1,5 +1,6 @@
 [modes]
 modes = errors-analysis
+        openmp-benchmark
         tests-gnu tests-intel
         tests-gnu-debug tests-intel-debug
         euler-gnu-openmp-on euler-intel-openmp-on
@@ -18,6 +19,7 @@ $OPTIMIZE        = -O2
 $EXT_DEPENDS_GNU = ./external/fobos:flap-static-gnu ./external/fobos:pyplot-fortran-static-gnu ./external/fobos:wenoof-static-gnu
 $EXT_DEPENDS_INT = ./external/fobos:flap-static-intel ./external/fobos:pyplot-fortran-static-intel ./external/fobos:wenoof-static-intel
 $OMP_EXCLUDE     = ./src/tests/euler-1D-openmp/euler-1D-openmp.f90 ./src/tests/euler-1D-openmp/type_euler-1D-openmp.f90
+$SERIAL_EXCLUDE  = ./src/tests/burgers/burgers.f90 ./src/tests/euler-1D/euler-1D.f90 ./src/tests/lorenz/lorenz.f90 ./src/tests/oscillation/oscillation.f90
 
 # main modes
 [errors-analysis]
@@ -25,6 +27,14 @@ help      = build all tests for errors analysis: GNU gfortran, release mode
 template  = template-static-gnu
 dependon  = $EXT_DEPENDS_GNU
 exclude   = $OMP_EXCLUDE
+
+[openmp-benchmark]
+help      = build all tests for OpenMP benchmarks: GNU gfortran, release mode
+template  = template-static-gnu
+openmp    = True
+preproc   = -DOPENMP
+dependon  = $EXT_DEPENDS_GNU
+exclude   = $SERIAL_EXCLUDE
 
 [tests-gnu]
 help      = build all tests: GNU gfortran, release mode

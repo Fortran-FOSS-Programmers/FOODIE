@@ -92,7 +92,6 @@ omp_threads = omp_get_num_threads()
 !$OMP END PARALLEL
 print "(A)", 'Testing FOODiE with '//trim(str(.true., omp_threads))//' OpenMP threads for Ni: '//trim(str(.true., Ni))//' cells'
 #endif
-! create Euler field initial state
 call init()
 print "(A)", 'Integrating 1D Euler equations by means of TVD/SSP Runge-Kutta class of solvers'
 call rk_integrator%init(stages=rk_stages)

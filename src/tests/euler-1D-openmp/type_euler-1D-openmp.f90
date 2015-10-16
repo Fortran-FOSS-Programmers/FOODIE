@@ -126,7 +126,6 @@ type, extends(integrand) :: euler_1D_openmp
   !< + Ns+1 : momentum conservation             (r*u)
   !< + Ns+2 : energy conservation               (r*E)
   private
-  integer(I_P)                   :: steps=0         !< Number of time steps stored.
   integer(I_P)                   :: ord=0           !< Space accuracy formal order.
   integer(I_P)                   :: Ni=0            !< Space dimension.
   integer(I_P)                   :: Ng=0            !< Number of ghost cells for boundary conditions handling.
@@ -136,7 +135,6 @@ type, extends(integrand) :: euler_1D_openmp
   real(R_P)                      :: Dx=0._R_P       !< Space step.
   type(weno_interpolator_upwind) :: weno            !< WENO interpolator.
   real(R_P),    allocatable      :: U(:,:)          !< Integrand (state) variables, whole physical domain [1:Nc,1-Ng:Ni+Ng].
-  real(R_P),    allocatable      :: previous(:,:,:) !< Previous time steps states [1:Nc,1-Ng:Ni+Ng,1:steps].
   real(R_P),    allocatable      :: cp0(:)          !< Specific heat cp of initial species [1:Ns].
   real(R_P),    allocatable      :: cv0(:)          !< Specific heat cv of initial species [1:Ns].
   character(:), allocatable      :: BC_L            !< Left boundary condition type.
@@ -149,8 +147,6 @@ type, extends(integrand) :: euler_1D_openmp
     procedure, pass(self), public :: dt => compute_dt !< Compute the current time step, by means of CFL condition.
     ! ADT integrand deferred methods
     procedure, pass(self), public :: t => dEuler_dt                                       !< Time derivative, residuals function.
-    procedure, pass(self), public :: update_previous_steps                                !< Update previous time steps.
-    procedure, pass(self), public :: previous_step                                        !< Get a previous time step.
     procedure, pass(lhs),  public :: integrand_multiply_integrand => euler_multiply_euler !< Euler * Euler operator.
     procedure, pass(lhs),  public :: integrand_multiply_real => euler_multiply_real       !< Euler * real operator.
     procedure, pass(rhs),  public :: real_multiply_integrand => real_multiply_euler       !< Real * Euler operator.
@@ -169,7 +165,7 @@ endtype euler_1D_openmp
 !-----------------------------------------------------------------------------------------------------------------------------------
 contains
   ! auxiliary methods
-  subroutine init(self, Ni, Ns, Dx, BC_L, BC_R, initial_state, cp0, cv0, steps, ord)
+  subroutine init(self, Ni, Ns, Dx, BC_L, BC_R, initial_state, cp0, cv0, ord)
   !---------------------------------------------------------------------------------------------------------------------------------
   !< Init field.
   !---------------------------------------------------------------------------------------------------------------------------------
@@ -182,16 +178,13 @@ contains
   real(R_P),              intent(IN)    :: initial_state(:,:) !< Initial state of primitive variables.
   real(R_P),              intent(IN)    :: cp0(:)             !< Initial specific heat, constant pressure.
   real(R_P),              intent(IN)    :: cv0(:)             !< Initial specific heat, constant volume.
-  integer(I_P), optional, intent(IN)    :: steps              !< Time steps stored.
   integer(I_P), optional, intent(IN)    :: ord                !< Space accuracy formal order.
   type(weno_factory)                    :: factory            !< WENO factory.
   class(weno_interpolator), allocatable :: weno               !< WENO interpolator.
   integer(I_P)                          :: i                  !< Space counter.
-  integer(I_P)                          :: s                  !< Steps counter.
   !---------------------------------------------------------------------------------------------------------------------------------
 
   !---------------------------------------------------------------------------------------------------------------------------------
-  self%steps = 0 ; if (present(steps)) self%steps = steps
   self%ord = 1 ; if (present(ord)) self%ord = ord
   self%Ng = (self%ord + 1) / 2
   if (self%ord>1) then
@@ -204,9 +197,6 @@ contains
   self%Np = Ns + 4
   self%Dx = Dx
   if (allocated(self%U)) deallocate(self%U) ; allocate(self%U  (1:self%Nc, 1:Ni))
-  if (self%steps>0) then
-    if (allocated(self%previous)) deallocate(self%previous) ; allocate(self%previous(1:self%Nc, 1:Ni, 1:self%steps))
-  endif
   self%cp0 = cp0
   self%cv0 = cv0
   self%BC_L = BC_L
@@ -214,13 +204,6 @@ contains
   do i=1, Ni
     self%U(:, i) = self%primitive2conservative(initial_state(:, i))
   enddo
-  if (self%steps>0) then
-    do s=1, self%steps
-      do i=1, Ni
-        self%previous(:, i, s) = self%primitive2conservative(initial_state(:, i))
-      enddo
-    enddo
-  endif
   return
   !---------------------------------------------------------------------------------------------------------------------------------
   endsubroutine init
@@ -233,7 +216,6 @@ contains
   !---------------------------------------------------------------------------------------------------------------------------------
 
   !---------------------------------------------------------------------------------------------------------------------------------
-  self%steps = 0
   self%ord = 0
   self%Ni = 0
   self%Ng = 0
@@ -242,7 +224,6 @@ contains
   self%Np = 0
   self%Dx = 0._R_P
   if (allocated(self%U)) deallocate(self%U)
-  if (allocated(self%previous)) deallocate(self%previous)
   if (allocated(self%cp0)) deallocate(self%cp0)
   if (allocated(self%cv0)) deallocate(self%cv0)
   if (allocated(self%BC_L)) deallocate(self%BC_L)
@@ -301,49 +282,44 @@ contains
   endfunction compute_dt
 
   ! ADT integrand deferred methods
-  function dEuler_dt(self, n, t) result(dState_dt)
+  function dEuler_dt(self, t) result(dState_dt)
   !---------------------------------------------------------------------------------------------------------------------------------
   !< Time derivative of Euler field, the residuals function.
   !---------------------------------------------------------------------------------------------------------------------------------
   class(euler_1D_openmp), intent(IN) :: self      !< Euler field.
-  integer(I_P), optional, intent(IN) :: n         !< Time level.
   real(R_P),    optional, intent(IN) :: t         !< Time.
   class(integrand), allocatable      :: dState_dt !< Euler field time derivative.
   real(R_P), allocatable             :: F(:,:)    !< Fluxes of conservative variables.
   real(R_P), allocatable             :: P(:,:)    !< Primitive variables.
   real(R_P), allocatable             :: PR(:,:,:) !< Left (1) and right (2) (reconstructed) interface values of primitive variables.
-  integer(I_P)                       :: dn        !< Time level, dummy variable.
   integer(I_P)                       :: i         !< Counter.
   !---------------------------------------------------------------------------------------------------------------------------------
 
   !---------------------------------------------------------------------------------------------------------------------------------
-  allocate(F(1:self%Nc, 0:self%Ni)) ; F = 0._R_P
-  allocate(P(1:self%Np, 1-self%Ng:self%Ni+self%Ng)) ; P = 0._R_P
-  allocate(PR(1:self%Np, 1:2, 0:self%Ni+1)) ; PR = 0._R_P
-  !$OMP PARALLEL DEFAULT(NONE) &
-  !$OMP PRIVATE(i, dn, n) &
-  !$OMP SHARED(self, P)
+  allocate(F(1:self%Nc, 0:self%Ni))
+  !$OMP PARALLEL DO PRIVATE(i) SHARED(self, F)
+  do i=0, self%Ni
+    F(:, i) = 0._R_P
+  enddo
+  allocate(P(1:self%Np, 1-self%Ng:self%Ni+self%Ng))
+  !$OMP PARALLEL DO PRIVATE(i) SHARED(self, P)
+  do i=1-self%Ng, self%Ni+self%Ng
+    P(:, i) = 0._R_P
+  enddo
+  allocate(PR(1:self%Np, 1:2, 0:self%Ni+1))
+  !$OMP PARALLEL DO PRIVATE(i) SHARED(self, P)
+  do i=0, self%Ni+1
+    PR(:, :, i) = 0._R_P
+  enddo
   ! compute primitive variables
-  if (self%steps>=2) then ! self%previous should be used, multi-step time integration
-    dn = self%steps ; if (present(n)) dn = n
-    !$OMP DO
-    do i=1, self%Ni
-      P(:, i) = self%conservative2primitive(self%previous(:, i, dn))
-    enddo
-  else ! self%U should be used, single-step time integration
-    !$OMP DO
-    do i=1, self%Ni
-      P(:, i) = self%conservative2primitive(self%U(:, i))
-    enddo
-  endif
-  !$OMP END PARALLEL
+  !$OMP PARALLEL DO PRIVATE(i) SHARED(self, P)
+  do i=1, self%Ni
+    P(:, i) = self%conservative2primitive(self%U(:, i))
+  enddo
   call self%impose_boundary_conditions(primitive=P)
   call self%reconstruct_interfaces_states(primitive=P, r_primitive=PR)
   ! compute fluxes by solving Rimeann Problems at each interface
-  !$OMP PARALLEL DEFAULT(NONE) &
-  !$OMP PRIVATE(i) &
-  !$OMP SHARED(self, F, PR)
-  !$OMP DO
+  !$OMP PARALLEL DO PRIVATE(i) SHARED(self, F, PR)
   do i=0, self%Ni
     call self%riemann_solver(r1=PR(self%Ns+3, 2, i  ), &
                              u1=PR(self%Ns+1, 2, i  ), &
@@ -362,72 +338,23 @@ contains
       endif
     endif
   enddo
-  !$OMP END PARALLEL
   ! compute residuals
   allocate(euler_1D_openmp :: dState_dt)
+  !$OMP PARALLEL PRIVATE(i) SHARED(self, dState_dt, F)
   select type(dState_dt)
   class is(euler_1D_openmp)
+    !$OMP SINGLE
     dState_dt = self
-    !!$OMP PARALLEL DEFAULT(PRIVATE) &
-    !!$OMP SHARED(self, dState_dt, F)
-    !!$OMP DO
+    !$OMP END SINGLE
+    !$OMP DO
     do i=1, self%Ni
       dState_dt%U(:, i) = (F(:, i - 1) - F(:, i)) / self%Dx
     enddo
-    !!$OMP END PARALLEL
   endselect
+  !$OMP END PARALLEL
   return
   !---------------------------------------------------------------------------------------------------------------------------------
   endfunction dEuler_dt
-
-  subroutine update_previous_steps(self, filter, weights)
-  !---------------------------------------------------------------------------------------------------------------------------------
-  !< Update previous time steps.
-  !---------------------------------------------------------------------------------------------------------------------------------
-  class(euler_1D_openmp),     intent(INOUT) :: self       !< Euler field.
-  class(integrand), optional, intent(IN)    :: filter     !< Filter field displacement.
-  real(R_P),        optional, intent(IN)    :: weights(:) !< Weights for filtering the steps.
-  integer                                   :: s          !< Time steps counter.
-  !---------------------------------------------------------------------------------------------------------------------------------
-
-  !---------------------------------------------------------------------------------------------------------------------------------
-  if (self%steps>0) then
-    do s=1, self%steps - 1
-      self%previous(:, :, s) = self%previous(:, :, s + 1)
-    enddo
-    self%previous(:, :, self%steps) = self%U
-  endif
-  if (present(filter).and.present(weights)) then
-    select type(filter)
-    class is(euler_1D_openmp)
-      do s=1, self%steps
-        self%previous(:, :, s) = self%previous(:, :, s) + filter%U * weights(s)
-      enddo
-    endselect
-  endif
-  return
-  !---------------------------------------------------------------------------------------------------------------------------------
-  endsubroutine update_previous_steps
-
-  function previous_step(self, n) result(previous)
-  !---------------------------------------------------------------------------------------------------------------------------------
-  !< Extract previous time solution of Euler field.
-  !---------------------------------------------------------------------------------------------------------------------------------
-  class(euler_1D_openmp), intent(IN) :: self     !< Euler field.
-  integer(I_P),           intent(IN) :: n        !< Time level.
-  class(integrand), allocatable      :: previous !< Previous time solution of Euler field.
-  !---------------------------------------------------------------------------------------------------------------------------------
-
-  !---------------------------------------------------------------------------------------------------------------------------------
-  allocate(euler_1D_openmp :: previous)
-  select type(previous)
-  class is(euler_1D_openmp)
-    previous = self
-    previous%U = self%previous(:, :, n)
-  endselect
-  return
-  !---------------------------------------------------------------------------------------------------------------------------------
-  endfunction previous_step
 
   function euler_multiply_euler(lhs, rhs) result(opr)
   !---------------------------------------------------------------------------------------------------------------------------------
@@ -436,18 +363,26 @@ contains
   class(euler_1D_openmp), intent(IN) :: lhs !< Left hand side.
   class(integrand),       intent(IN) :: rhs !< Right hand side.
   class(integrand), allocatable      :: opr !< Operator result.
+  integer(I_P)                       :: i   !< Counter.
   !---------------------------------------------------------------------------------------------------------------------------------
 
   !---------------------------------------------------------------------------------------------------------------------------------
   allocate(euler_1D_openmp :: opr)
+  !$OMP PARALLEL DEFAULT(NONE) PRIVATE(i) SHARED(lhs, rhs, opr)
   select type(opr)
   class is(euler_1D_openmp)
+    !$OMP SINGLE
     opr = lhs
+    !$OMP END SINGLE
     select type(rhs)
     class is (euler_1D_openmp)
-      opr%U = lhs%U * rhs%U
+      !$OMP DO
+      do i=1, lhs%Ni
+        opr%U(:, i) = lhs%U(:, i) * rhs%U(:, i)
+      enddo
     endselect
   endselect
+  !$OMP END PARALLEL
   return
   !---------------------------------------------------------------------------------------------------------------------------------
   endfunction euler_multiply_euler
@@ -459,15 +394,23 @@ contains
   class(euler_1D_openmp), intent(IN) :: lhs !< Left hand side.
   real(R_P),              intent(IN) :: rhs !< Right hand side.
   class(integrand), allocatable      :: opr !< Operator result.
+  integer(I_P)                       :: i   !< Counter.
   !---------------------------------------------------------------------------------------------------------------------------------
 
   !---------------------------------------------------------------------------------------------------------------------------------
   allocate(euler_1D_openmp :: opr)
+  !$OMP PARALLEL DEFAULT(NONE) PRIVATE(i) SHARED(lhs, rhs, opr)
   select type(opr)
   class is(euler_1D_openmp)
+    !$OMP SINGLE
     opr = lhs
-    opr%U = lhs%U * rhs
+    !$OMP END SINGLE
+    !$OMP DO
+    do i=1, lhs%Ni
+      opr%U(:, i) = lhs%U(:, i) * rhs
+    enddo
   endselect
+  !$OMP END PARALLEL
   return
   !---------------------------------------------------------------------------------------------------------------------------------
   endfunction euler_multiply_real
@@ -479,15 +422,23 @@ contains
   real(R_P),              intent(IN) :: lhs !< Left hand side.
   class(euler_1D_openmp), intent(IN) :: rhs !< Right hand side.
   class(integrand), allocatable      :: opr !< Operator result.
+  integer(I_P)                       :: i   !< Counter.
   !---------------------------------------------------------------------------------------------------------------------------------
 
   !---------------------------------------------------------------------------------------------------------------------------------
   allocate(euler_1D_openmp :: opr)
+  !$OMP PARALLEL DEFAULT(NONE) PRIVATE(i) SHARED(lhs, rhs, opr)
   select type(opr)
   class is(euler_1D_openmp)
+    !$OMP SINGLE
     opr = rhs
-    opr%U = rhs%U * lhs
+    !$OMP END SINGLE
+    !$OMP DO
+    do i=1, rhs%Ni
+      opr%U(:, i) = rhs%U(:, i) * lhs
+    enddo
   endselect
+  !$OMP END PARALLEL
   return
   !---------------------------------------------------------------------------------------------------------------------------------
   endfunction real_multiply_euler
@@ -499,18 +450,26 @@ contains
   class(euler_1D_openmp), intent(IN) :: lhs !< Left hand side.
   class(integrand),       intent(IN) :: rhs !< Right hand side.
   class(integrand), allocatable      :: opr !< Operator result.
+  integer(I_P)                       :: i   !< Counter.
   !---------------------------------------------------------------------------------------------------------------------------------
 
   !---------------------------------------------------------------------------------------------------------------------------------
   allocate (euler_1D_openmp :: opr)
+  !$OMP PARALLEL DEFAULT(NONE) PRIVATE(i) SHARED(lhs, rhs, opr)
   select type(opr)
   class is(euler_1D_openmp)
+    !$OMP SINGLE
     opr = lhs
+    !$OMP END SINGLE
     select type(rhs)
     class is (euler_1D_openmp)
-      opr%U = lhs%U + rhs%U
+      !$OMP DO
+      do i=1, lhs%Ni
+        opr%U(:, i) = lhs%U(:, i) + rhs%U(:, i)
+      enddo
     endselect
   endselect
+  !$OMP END PARALLEL
   return
   !---------------------------------------------------------------------------------------------------------------------------------
   endfunction add_euler
@@ -522,18 +481,26 @@ contains
   class(euler_1D_openmp), intent(IN) :: lhs !< Left hand side.
   class(integrand),       intent(IN) :: rhs !< Right hand side.
   class(integrand), allocatable      :: opr !< Operator result.
+  integer(I_P)                       :: i   !< Counter.
   !---------------------------------------------------------------------------------------------------------------------------------
 
   !---------------------------------------------------------------------------------------------------------------------------------
   allocate (euler_1D_openmp :: opr)
+  !$OMP PARALLEL DEFAULT(NONE) PRIVATE(i) SHARED(lhs, rhs, opr)
   select type(opr)
   class is(euler_1D_openmp)
+    !$OMP SINGLE
     opr = lhs
+    !$OMP END SINGLE
     select type(rhs)
     class is (euler_1D_openmp)
-      opr%U = lhs%U - rhs%U
+      !$OMP DO
+      do i=1, lhs%Ni
+        opr%U(:, i) = lhs%U(:, i) - rhs%U(:, i)
+      enddo
     endselect
   endselect
+  !$OMP END PARALLEL
   return
   !---------------------------------------------------------------------------------------------------------------------------------
   endfunction sub_euler
@@ -549,21 +516,19 @@ contains
   !---------------------------------------------------------------------------------------------------------------------------------
   select type(rhs)
   class is(euler_1D_openmp)
-                                 lhs%steps    = rhs%steps
-                                 lhs%ord      = rhs%ord
-                                 lhs%Ni       = rhs%Ni
-                                 lhs%Ng       = rhs%Ng
-                                 lhs%Ns       = rhs%Ns
-                                 lhs%Nc       = rhs%Nc
-                                 lhs%Np       = rhs%Np
-                                 lhs%Dx       = rhs%Dx
-                                 lhs%weno     = rhs%weno
-    if (allocated(rhs%U))        lhs%U        = rhs%U
-    if (allocated(rhs%previous)) lhs%previous = rhs%previous
-    if (allocated(rhs%cp0))      lhs%cp0      = rhs%cp0
-    if (allocated(rhs%cv0))      lhs%cv0      = rhs%cv0
-    if (allocated(rhs%BC_L))     lhs%BC_L     = rhs%BC_L
-    if (allocated(rhs%BC_R))     lhs%BC_R     = rhs%BC_R
+                             lhs%ord  = rhs%ord
+                             lhs%Ni   = rhs%Ni
+                             lhs%Ng   = rhs%Ng
+                             lhs%Ns   = rhs%Ns
+                             lhs%Nc   = rhs%Nc
+                             lhs%Np   = rhs%Np
+                             lhs%Dx   = rhs%Dx
+                             lhs%weno = rhs%weno
+    if (allocated(rhs%U))    lhs%U    = rhs%U
+    if (allocated(rhs%cp0))  lhs%cp0  = rhs%cp0
+    if (allocated(rhs%cv0))  lhs%cv0  = rhs%cv0
+    if (allocated(rhs%BC_L)) lhs%BC_L = rhs%BC_L
+    if (allocated(rhs%BC_R)) lhs%BC_R = rhs%BC_R
   endselect
   return
   !---------------------------------------------------------------------------------------------------------------------------------
@@ -575,11 +540,16 @@ contains
   !---------------------------------------------------------------------------------------------------------------------------------
   class(euler_1D_openmp), intent(INOUT) :: lhs !< Left hand side.
   real(R_P),              intent(IN)    :: rhs !< Right hand side.
+  integer(I_P)                          :: i   !< Counter.
   !---------------------------------------------------------------------------------------------------------------------------------
 
   !---------------------------------------------------------------------------------------------------------------------------------
-  if (allocated(lhs%U)) lhs%U = rhs
-  if (allocated(lhs%previous)) lhs%previous = rhs
+  if (allocated(lhs%U)) then
+    !$OMP PARALLEL DO DEFAULT(NONE) PRIVATE(i) SHARED(lhs, rhs)
+    do i=1, lhs%Ni
+      lhs%U(:, i) = rhs
+    enddo
+  endif
   return
   !---------------------------------------------------------------------------------------------------------------------------------
   endsubroutine euler_assign_real
@@ -687,19 +657,15 @@ contains
   !--------------------------------------------------------------------------------------------------------------------------------
 
   !--------------------------------------------------------------------------------------------------------------------------------
+  !$OMP PARALLEL PRIVATE(i, j, f, v, Pm, LPm, RPm, C, CR) SHARED(self, primitive, r_primitive)
   select case(self%ord)
   case(1) ! 1st order piecewise constant reconstruction
-    !$OMP PARALLEL DEFAULT(NONE) &
-    !$OMP PRIVATE(i, j, f, v, Pm, LPm, RPm, C, CR) &
-    !$OMP SHARED(self, primitive, r_primitive)
     !$OMP DO
     do i=0, self%Ni+1
       r_primitive(:, 1, i) = primitive(:, i)
       r_primitive(:, 2, i) = r_primitive(:, 1, i)
     enddo
-    !$OMP END PARALLEL
   case(3, 5, 7) ! 3rd, 5th or 7th order WENO reconstruction
-    !$OMP PARALLEL PRIVATE(i, j, f, v, Pm, LPm, RPm, C, CR) SHARED(self, primitive, r_primitive)
     !$OMP DO
     do i=0, self%Ni+1
       ! trasform primitive variables to pseudo charteristic ones
@@ -734,8 +700,8 @@ contains
                                        dot_product(r_primitive(1:self%Ns, f, i) / r_primitive(self%Ns+3, f, i), self%cv0)
       enddo
     enddo
-    !$OMP END PARALLEL
   endselect
+  !$OMP END PARALLEL
   return
   !--------------------------------------------------------------------------------------------------------------------------------
   contains
