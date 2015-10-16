@@ -133,11 +133,11 @@
       
       <a class="list-group-item" href="../type/lorenz.html#variable-dims">dims</a>
       
-      <a class="list-group-item" href="../type/lorenz.html#variable-steps%7E7">steps</a>
+      <a class="list-group-item" href="../type/lorenz.html#variable-steps%7E6">steps</a>
       
       <a class="list-group-item" href="../type/lorenz.html#variable-u%7E4">U</a>
       
-      <a class="list-group-item" href="../type/lorenz.html#variable-previous%7E4">previous</a>
+      <a class="list-group-item" href="../type/lorenz.html#variable-previous%7E3">previous</a>
       
       <a class="list-group-item" href="../type/lorenz.html#variable-sigma">sigma</a>
       
@@ -174,9 +174,9 @@
       
       <a class="list-group-item" href="../type/lorenz.html#boundprocedure-t%7E5">t</a>
       
-      <a class="list-group-item" href="../type/lorenz.html#boundprocedure-update_previous_steps%7E4">update_previous_steps</a>
+      <a class="list-group-item" href="../type/lorenz.html#boundprocedure-update_previous_steps%7E3">update_previous_steps</a>
       
-      <a class="list-group-item" href="../type/lorenz.html#boundprocedure-previous_step%7E4">previous_step</a>
+      <a class="list-group-item" href="../type/lorenz.html#boundprocedure-previous_step%7E3">previous_step</a>
       
       <a class="list-group-item" href="../type/lorenz.html#boundprocedure-integrand_multiply_integrand%7E5">integrand_multiply_integrand</a>
       
@@ -436,7 +436,7 @@ Cambridge University Press, 2011</p>
   
 <tr>
   
-  <td><span class="anchor" id="variable-steps%7E7"></span>integer(kind=I_P),</td>
+  <td><span class="anchor" id="variable-steps%7E6"></span>integer(kind=I_P),</td>
   
   <td>private</td>
   <td></td><td>::</td>
@@ -464,7 +464,7 @@ Cambridge University Press, 2011</p>
   
 <tr>
   
-  <td><span class="anchor" id="variable-previous%7E4"></span>real(kind=R_P),</td>
+  <td><span class="anchor" id="variable-previous%7E3"></span>real(kind=R_P),</td>
   
   <td>private,</td>
   <td>dimension(:,:), allocatable</td><td>::</td>
@@ -870,7 +870,7 @@ private function <a href='../proc/dlorenz_dt.html'>dLorenz_dt</a>(self, t) resul
     
 	   
 <div class="panel panel-default">
-  <div class="panel-heading codesum"><span class="anchor" id="boundprocedure-update_previous_steps%7E4"></span><h3>procedure, public, pass(self) :: <strong>update_previous_steps</strong>  
+  <div class="panel-heading codesum"><span class="anchor" id="boundprocedure-update_previous_steps%7E3"></span><h3>procedure, public, pass(self) :: <strong>update_previous_steps</strong>  
     
   </h3></div>
   
@@ -888,7 +888,7 @@ private function <a href='../proc/dlorenz_dt.html'>dLorenz_dt</a>(self, t) resul
          
     
     <h3>
-private subroutine <a href='../proc/update_previous_steps%7E4.html'>update_previous_steps</a>(self, filter, weights)
+private subroutine <a href='../proc/update_previous_steps%7E3.html'>update_previous_steps</a>(self, filter, weights)
     
     
     
@@ -977,7 +977,7 @@ private subroutine <a href='../proc/update_previous_steps%7E4.html'>update_previ
     
 	   
 <div class="panel panel-default">
-  <div class="panel-heading codesum"><span class="anchor" id="boundprocedure-previous_step%7E4"></span><h3>procedure, public, pass(self) :: <strong>previous_step</strong>  
+  <div class="panel-heading codesum"><span class="anchor" id="boundprocedure-previous_step%7E3"></span><h3>procedure, public, pass(self) :: <strong>previous_step</strong>  
     
   </h3></div>
   
@@ -995,7 +995,7 @@ private subroutine <a href='../proc/update_previous_steps%7E4.html'>update_previ
          
     
     <h3>
-private function <a href='../proc/previous_step%7E4.html'>previous_step</a>(self, n) result(previous)
+private function <a href='../proc/previous_step%7E3.html'>previous_step</a>(self, n) result(previous)
     
     
     

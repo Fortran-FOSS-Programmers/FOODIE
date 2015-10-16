@@ -340,8 +340,7 @@
   <span class="c">!&lt; + Ns+1 : momentum conservation             (r*u)</span>
   <span class="c">!&lt; + Ns+2 : energy conservation               (r*E)</span>
   <span class="k">private</span>
-<span class="k">  </span><span class="kt">integer</span><span class="p">(</span><span class="n">I_P</span><span class="p">)</span>                   <span class="kd">::</span> <span class="n">steps</span><span class="o">=</span><span class="mi">0</span>         <span class="c">!&lt; Number of time steps stored.</span>
-  <span class="kt">integer</span><span class="p">(</span><span class="n">I_P</span><span class="p">)</span>                   <span class="kd">::</span> <span class="n">ord</span><span class="o">=</span><span class="mi">0</span>           <span class="c">!&lt; Space accuracy formal order.</span>
+<span class="k">  </span><span class="kt">integer</span><span class="p">(</span><span class="n">I_P</span><span class="p">)</span>                   <span class="kd">::</span> <span class="n">ord</span><span class="o">=</span><span class="mi">0</span>           <span class="c">!&lt; Space accuracy formal order.</span>
   <span class="kt">integer</span><span class="p">(</span><span class="n">I_P</span><span class="p">)</span>                   <span class="kd">::</span> <span class="n">Ni</span><span class="o">=</span><span class="mi">0</span>            <span class="c">!&lt; Space dimension.</span>
   <span class="kt">integer</span><span class="p">(</span><span class="n">I_P</span><span class="p">)</span>                   <span class="kd">::</span> <span class="n">Ng</span><span class="o">=</span><span class="mi">0</span>            <span class="c">!&lt; Number of ghost cells for boundary conditions handling.</span>
   <span class="kt">integer</span><span class="p">(</span><span class="n">I_P</span><span class="p">)</span>                   <span class="kd">::</span> <span class="n">Ns</span><span class="o">=</span><span class="mi">0</span>            <span class="c">!&lt; Number of initial species.</span>
@@ -350,7 +349,6 @@
   <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">)</span>                      <span class="kd">::</span> <span class="n">Dx</span><span class="o">=</span><span class="mf">0._R_P</span>       <span class="c">!&lt; Space step.</span>
   <span class="k">type</span><span class="p">(</span><span class="n">weno_interpolator_upwind</span><span class="p">)</span> <span class="kd">::</span> <span class="n">weno</span>            <span class="c">!&lt; WENO interpolator.</span>
   <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">),</span>    <span class="k">allocatable</span>      <span class="kd">::</span> <span class="n">U</span><span class="p">(:,:)</span>          <span class="c">!&lt; Integrand (state) variables, whole physical domain [1:Nc,1-Ng:Ni+Ng].</span>
-  <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">),</span>    <span class="k">allocatable</span>      <span class="kd">::</span> <span class="n">previous</span><span class="p">(:,:,:)</span> <span class="c">!&lt; Previous time steps states [1:Nc,1-Ng:Ni+Ng,1:steps].</span>
   <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">),</span>    <span class="k">allocatable</span>      <span class="kd">::</span> <span class="n">cp0</span><span class="p">(:)</span>          <span class="c">!&lt; Specific heat cp of initial species [1:Ns].</span>
   <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">),</span>    <span class="k">allocatable</span>      <span class="kd">::</span> <span class="n">cv0</span><span class="p">(:)</span>          <span class="c">!&lt; Specific heat cv of initial species [1:Ns].</span>
   <span class="kt">character</span><span class="p">(:),</span> <span class="k">allocatable</span>      <span class="kd">::</span> <span class="n">BC_L</span>            <span class="c">!&lt; Left boundary condition type.</span>
@@ -363,8 +361,6 @@
     <span class="k">procedure</span><span class="p">,</span> <span class="k">pass</span><span class="p">(</span><span class="n">self</span><span class="p">),</span> <span class="k">public</span> <span class="kd">::</span> <span class="n">dt</span> <span class="o">=&gt;</span> <span class="n">compute_dt</span> <span class="c">!&lt; Compute the current time step, by means of CFL condition.</span>
     <span class="c">! ADT integrand deferred methods</span>
     <span class="k">procedure</span><span class="p">,</span> <span class="k">pass</span><span class="p">(</span><span class="n">self</span><span class="p">),</span> <span class="k">public</span> <span class="kd">::</span> <span class="n">t</span> <span class="o">=&gt;</span> <span class="n">dEuler_dt</span>                                       <span class="c">!&lt; Time derivative, residuals function.</span>
-    <span class="k">procedure</span><span class="p">,</span> <span class="k">pass</span><span class="p">(</span><span class="n">self</span><span class="p">),</span> <span class="k">public</span> <span class="kd">::</span> <span class="n">update_previous_steps</span>                                <span class="c">!&lt; Update previous time steps.</span>
-    <span class="k">procedure</span><span class="p">,</span> <span class="k">pass</span><span class="p">(</span><span class="n">self</span><span class="p">),</span> <span class="k">public</span> <span class="kd">::</span> <span class="n">previous_step</span>                                        <span class="c">!&lt; Get a previous time step.</span>
     <span class="k">procedure</span><span class="p">,</span> <span class="k">pass</span><span class="p">(</span><span class="n">lhs</span><span class="p">),</span>  <span class="k">public</span> <span class="kd">::</span> <span class="n">integrand_multiply_integrand</span> <span class="o">=&gt;</span> <span class="n">euler_multiply_euler</span> <span class="c">!&lt; Euler * Euler operator.</span>
     <span class="k">procedure</span><span class="p">,</span> <span class="k">pass</span><span class="p">(</span><span class="n">lhs</span><span class="p">),</span>  <span class="k">public</span> <span class="kd">::</span> <span class="n">integrand_multiply_real</span> <span class="o">=&gt;</span> <span class="n">euler_multiply_real</span>       <span class="c">!&lt; Euler * real operator.</span>
     <span class="k">procedure</span><span class="p">,</span> <span class="k">pass</span><span class="p">(</span><span class="n">rhs</span><span class="p">),</span>  <span class="k">public</span> <span class="kd">::</span> <span class="n">real_multiply_integrand</span> <span class="o">=&gt;</span> <span class="n">real_multiply_euler</span>       <span class="c">!&lt; Real * Euler operator.</span>
@@ -383,7 +379,7 @@
 <span class="c">!-----------------------------------------------------------------------------------------------------------------------------------</span>
 <span class="k">contains</span>
   <span class="c">! auxiliary methods</span>
-  <span class="k">subroutine </span><span class="n">init</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">Ni</span><span class="p">,</span> <span class="n">Ns</span><span class="p">,</span> <span class="n">Dx</span><span class="p">,</span> <span class="n">BC_L</span><span class="p">,</span> <span class="n">BC_R</span><span class="p">,</span> <span class="n">initial_state</span><span class="p">,</span> <span class="n">cp0</span><span class="p">,</span> <span class="n">cv0</span><span class="p">,</span> <span class="n">steps</span><span class="p">,</span> <span class="n">ord</span><span class="p">)</span>
+  <span class="k">subroutine </span><span class="n">init</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">Ni</span><span class="p">,</span> <span class="n">Ns</span><span class="p">,</span> <span class="n">Dx</span><span class="p">,</span> <span class="n">BC_L</span><span class="p">,</span> <span class="n">BC_R</span><span class="p">,</span> <span class="n">initial_state</span><span class="p">,</span> <span class="n">cp0</span><span class="p">,</span> <span class="n">cv0</span><span class="p">,</span> <span class="n">ord</span><span class="p">)</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
   <span class="c">!&lt; Init field.</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
@@ -396,16 +392,13 @@
   <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">),</span>              <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span>    <span class="kd">::</span> <span class="n">initial_state</span><span class="p">(:,:)</span> <span class="c">!&lt; Initial state of primitive variables.</span>
   <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">),</span>              <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span>    <span class="kd">::</span> <span class="n">cp0</span><span class="p">(:)</span>             <span class="c">!&lt; Initial specific heat, constant pressure.</span>
   <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">),</span>              <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span>    <span class="kd">::</span> <span class="n">cv0</span><span class="p">(:)</span>             <span class="c">!&lt; Initial specific heat, constant volume.</span>
-  <span class="kt">integer</span><span class="p">(</span><span class="n">I_P</span><span class="p">),</span> <span class="k">optional</span><span class="p">,</span> <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span>    <span class="kd">::</span> <span class="n">steps</span>              <span class="c">!&lt; Time steps stored.</span>
   <span class="kt">integer</span><span class="p">(</span><span class="n">I_P</span><span class="p">),</span> <span class="k">optional</span><span class="p">,</span> <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span>    <span class="kd">::</span> <span class="n">ord</span>                <span class="c">!&lt; Space accuracy formal order.</span>
   <span class="k">type</span><span class="p">(</span><span class="n">weno_factory</span><span class="p">)</span>                    <span class="kd">::</span> <span class="n">factory</span>            <span class="c">!&lt; WENO factory.</span>
   <span class="k">class</span><span class="p">(</span><span class="n">weno_interpolator</span><span class="p">),</span> <span class="k">allocatable</span> <span class="kd">::</span> <span class="n">weno</span>               <span class="c">!&lt; WENO interpolator.</span>
   <span class="kt">integer</span><span class="p">(</span><span class="n">I_P</span><span class="p">)</span>                          <span class="kd">::</span> <span class="n">i</span>                  <span class="c">!&lt; Space counter.</span>
-  <span class="kt">integer</span><span class="p">(</span><span class="n">I_P</span><span class="p">)</span>                          <span class="kd">::</span> <span class="n">s</span>                  <span class="c">!&lt; Steps counter.</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
 
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
-  <span class="n">self</span><span class="p">%</span><span class="n">steps</span> <span class="o">=</span> <span class="mi">0</span> <span class="p">;</span> <span class="k">if</span> <span class="p">(</span><span class="nb">present</span><span class="p">(</span><span class="n">steps</span><span class="p">))</span> <span class="n">self</span><span class="p">%</span><span class="n">steps</span> <span class="o">=</span> <span class="n">steps</span>
   <span class="n">self</span><span class="p">%</span><span class="n">ord</span> <span class="o">=</span> <span class="mi">1</span> <span class="p">;</span> <span class="k">if</span> <span class="p">(</span><span class="nb">present</span><span class="p">(</span><span class="n">ord</span><span class="p">))</span> <span class="n">self</span><span class="p">%</span><span class="n">ord</span> <span class="o">=</span> <span class="n">ord</span>
   <span class="n">self</span><span class="p">%</span><span class="n">Ng</span> <span class="o">=</span> <span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">ord</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span>
   <span class="k">if</span> <span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">ord</span><span class="o">&gt;</span><span class="mi">1</span><span class="p">)</span> <span class="k">then</span>
@@ -418,9 +411,6 @@
   <span class="n">self</span><span class="p">%</span><span class="n">Np</span> <span class="o">=</span> <span class="n">Ns</span> <span class="o">+</span> <span class="mi">4</span>
   <span class="n">self</span><span class="p">%</span><span class="n">Dx</span> <span class="o">=</span> <span class="n">Dx</span>
   <span class="k">if</span> <span class="p">(</span><span class="nb">allocated</span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">U</span><span class="p">))</span> <span class="k">deallocate</span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">U</span><span class="p">)</span> <span class="p">;</span> <span class="k">allocate</span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">U</span>  <span class="p">(</span><span class="mi">1</span><span class="p">:</span><span class="n">self</span><span class="p">%</span><span class="n">Nc</span><span class="p">,</span> <span class="mi">1</span><span class="p">:</span><span class="n">Ni</span><span class="p">))</span>
-  <span class="k">if</span> <span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">steps</span><span class="o">&gt;</span><span class="mi">0</span><span class="p">)</span> <span class="k">then</span>
-<span class="k">    if</span> <span class="p">(</span><span class="nb">allocated</span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">previous</span><span class="p">))</span> <span class="k">deallocate</span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">previous</span><span class="p">)</span> <span class="p">;</span> <span class="k">allocate</span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">previous</span><span class="p">(</span><span class="mi">1</span><span class="p">:</span><span class="n">self</span><span class="p">%</span><span class="n">Nc</span><span class="p">,</span> <span class="mi">1</span><span class="p">:</span><span class="n">Ni</span><span class="p">,</span> <span class="mi">1</span><span class="p">:</span><span class="n">self</span><span class="p">%</span><span class="n">steps</span><span class="p">))</span>
-  <span class="n">endif</span>
   <span class="n">self</span><span class="p">%</span><span class="n">cp0</span> <span class="o">=</span> <span class="n">cp0</span>
   <span class="n">self</span><span class="p">%</span><span class="n">cv0</span> <span class="o">=</span> <span class="n">cv0</span>
   <span class="n">self</span><span class="p">%</span><span class="n">BC_L</span> <span class="o">=</span> <span class="n">BC_L</span>
@@ -428,13 +418,6 @@
   <span class="k">do </span><span class="n">i</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">Ni</span>
     <span class="n">self</span><span class="p">%</span><span class="n">U</span><span class="p">(:,</span> <span class="n">i</span><span class="p">)</span> <span class="o">=</span> <span class="n">self</span><span class="p">%</span><span class="n">primitive2conservative</span><span class="p">(</span><span class="n">initial_state</span><span class="p">(:,</span> <span class="n">i</span><span class="p">))</span>
   <span class="n">enddo</span>
-  <span class="k">if</span> <span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">steps</span><span class="o">&gt;</span><span class="mi">0</span><span class="p">)</span> <span class="k">then</span>
-<span class="k">    do </span><span class="n">s</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">self</span><span class="p">%</span><span class="n">steps</span>
-      <span class="k">do </span><span class="n">i</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">Ni</span>
-        <span class="n">self</span><span class="p">%</span><span class="n">previous</span><span class="p">(:,</span> <span class="n">i</span><span class="p">,</span> <span class="n">s</span><span class="p">)</span> <span class="o">=</span> <span class="n">self</span><span class="p">%</span><span class="n">primitive2conservative</span><span class="p">(</span><span class="n">initial_state</span><span class="p">(:,</span> <span class="n">i</span><span class="p">))</span>
-      <span class="n">enddo</span>
-    <span class="n">enddo</span>
-  <span class="n">endif</span>
   <span class="k">return</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
   <span class="n">endsubroutine</span> <span class="n">init</span>
@@ -447,7 +430,6 @@
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
 
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
-  <span class="n">self</span><span class="p">%</span><span class="n">steps</span> <span class="o">=</span> <span class="mi">0</span>
   <span class="n">self</span><span class="p">%</span><span class="n">ord</span> <span class="o">=</span> <span class="mi">0</span>
   <span class="n">self</span><span class="p">%</span><span class="n">Ni</span> <span class="o">=</span> <span class="mi">0</span>
   <span class="n">self</span><span class="p">%</span><span class="n">Ng</span> <span class="o">=</span> <span class="mi">0</span>
@@ -456,7 +438,6 @@
   <span class="n">self</span><span class="p">%</span><span class="n">Np</span> <span class="o">=</span> <span class="mi">0</span>
   <span class="n">self</span><span class="p">%</span><span class="n">Dx</span> <span class="o">=</span> <span class="mf">0._R_P</span>
   <span class="k">if</span> <span class="p">(</span><span class="nb">allocated</span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">U</span><span class="p">))</span> <span class="k">deallocate</span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">U</span><span class="p">)</span>
-  <span class="k">if</span> <span class="p">(</span><span class="nb">allocated</span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">previous</span><span class="p">))</span> <span class="k">deallocate</span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">previous</span><span class="p">)</span>
   <span class="k">if</span> <span class="p">(</span><span class="nb">allocated</span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">cp0</span><span class="p">))</span> <span class="k">deallocate</span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">cp0</span><span class="p">)</span>
   <span class="k">if</span> <span class="p">(</span><span class="nb">allocated</span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">cv0</span><span class="p">))</span> <span class="k">deallocate</span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">cv0</span><span class="p">)</span>
   <span class="k">if</span> <span class="p">(</span><span class="nb">allocated</span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">BC_L</span><span class="p">))</span> <span class="k">deallocate</span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">BC_L</span><span class="p">)</span>
@@ -515,49 +496,44 @@
   <span class="n">endfunction</span> <span class="n">compute_dt</span>
 
   <span class="c">! ADT integrand deferred methods</span>
-  <span class="k">function </span><span class="n">dEuler_dt</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">n</span><span class="p">,</span> <span class="n">t</span><span class="p">)</span> <span class="k">result</span><span class="p">(</span><span class="n">dState_dt</span><span class="p">)</span>
+  <span class="k">function </span><span class="n">dEuler_dt</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">t</span><span class="p">)</span> <span class="k">result</span><span class="p">(</span><span class="n">dState_dt</span><span class="p">)</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
   <span class="c">!&lt; Time derivative of Euler field, the residuals function.</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
   <span class="k">class</span><span class="p">(</span><span class="n">euler_1D_openmp</span><span class="p">),</span> <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span> <span class="kd">::</span> <span class="n">self</span>      <span class="c">!&lt; Euler field.</span>
-  <span class="kt">integer</span><span class="p">(</span><span class="n">I_P</span><span class="p">),</span> <span class="k">optional</span><span class="p">,</span> <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span> <span class="kd">::</span> <span class="n">n</span>         <span class="c">!&lt; Time level.</span>
   <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">),</span>    <span class="k">optional</span><span class="p">,</span> <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span> <span class="kd">::</span> <span class="n">t</span>         <span class="c">!&lt; Time.</span>
   <span class="k">class</span><span class="p">(</span><span class="n">integrand</span><span class="p">),</span> <span class="k">allocatable</span>      <span class="kd">::</span> <span class="n">dState_dt</span> <span class="c">!&lt; Euler field time derivative.</span>
   <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">),</span> <span class="k">allocatable</span>             <span class="kd">::</span> <span class="n">F</span><span class="p">(:,:)</span>    <span class="c">!&lt; Fluxes of conservative variables.</span>
   <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">),</span> <span class="k">allocatable</span>             <span class="kd">::</span> <span class="n">P</span><span class="p">(:,:)</span>    <span class="c">!&lt; Primitive variables.</span>
   <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">),</span> <span class="k">allocatable</span>             <span class="kd">::</span> <span class="n">PR</span><span class="p">(:,:,:)</span> <span class="c">!&lt; Left (1) and right (2) (reconstructed) interface values of primitive variables.</span>
-  <span class="kt">integer</span><span class="p">(</span><span class="n">I_P</span><span class="p">)</span>                       <span class="kd">::</span> <span class="n">dn</span>        <span class="c">!&lt; Time level, dummy variable.</span>
   <span class="kt">integer</span><span class="p">(</span><span class="n">I_P</span><span class="p">)</span>                       <span class="kd">::</span> <span class="n">i</span>         <span class="c">!&lt; Counter.</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
 
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
-  <span class="k">allocate</span><span class="p">(</span><span class="n">F</span><span class="p">(</span><span class="mi">1</span><span class="p">:</span><span class="n">self</span><span class="p">%</span><span class="n">Nc</span><span class="p">,</span> <span class="mi">0</span><span class="p">:</span><span class="n">self</span><span class="p">%</span><span class="n">Ni</span><span class="p">))</span> <span class="p">;</span> <span class="n">F</span> <span class="o">=</span> <span class="mf">0._R_P</span>
-  <span class="k">allocate</span><span class="p">(</span><span class="n">P</span><span class="p">(</span><span class="mi">1</span><span class="p">:</span><span class="n">self</span><span class="p">%</span><span class="n">Np</span><span class="p">,</span> <span class="mi">1</span><span class="o">-</span><span class="n">self</span><span class="p">%</span><span class="n">Ng</span><span class="p">:</span><span class="n">self</span><span class="p">%</span><span class="n">Ni</span><span class="o">+</span><span class="n">self</span><span class="p">%</span><span class="n">Ng</span><span class="p">))</span> <span class="p">;</span> <span class="n">P</span> <span class="o">=</span> <span class="mf">0._R_P</span>
-  <span class="k">allocate</span><span class="p">(</span><span class="n">PR</span><span class="p">(</span><span class="mi">1</span><span class="p">:</span><span class="n">self</span><span class="p">%</span><span class="n">Np</span><span class="p">,</span> <span class="mi">1</span><span class="p">:</span><span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">:</span><span class="n">self</span><span class="p">%</span><span class="n">Ni</span><span class="o">+</span><span class="mi">1</span><span class="p">))</span> <span class="p">;</span> <span class="n">PR</span> <span class="o">=</span> <span class="mf">0._R_P</span>
-  <span class="c">!$OMP PARALLEL DEFAULT(NONE) &amp;</span>
-  <span class="c">!$OMP PRIVATE(i, dn, n) &amp;</span>
-  <span class="c">!$OMP SHARED(self, P)</span>
+  <span class="k">allocate</span><span class="p">(</span><span class="n">F</span><span class="p">(</span><span class="mi">1</span><span class="p">:</span><span class="n">self</span><span class="p">%</span><span class="n">Nc</span><span class="p">,</span> <span class="mi">0</span><span class="p">:</span><span class="n">self</span><span class="p">%</span><span class="n">Ni</span><span class="p">))</span>
+  <span class="c">!$OMP PARALLEL DO PRIVATE(i) SHARED(self, F)</span>
+  <span class="k">do </span><span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">self</span><span class="p">%</span><span class="n">Ni</span>
+    <span class="n">F</span><span class="p">(:,</span> <span class="n">i</span><span class="p">)</span> <span class="o">=</span> <span class="mf">0._R_P</span>
+  <span class="n">enddo</span>
+  <span class="k">allocate</span><span class="p">(</span><span class="n">P</span><span class="p">(</span><span class="mi">1</span><span class="p">:</span><span class="n">self</span><span class="p">%</span><span class="n">Np</span><span class="p">,</span> <span class="mi">1</span><span class="o">-</span><span class="n">self</span><span class="p">%</span><span class="n">Ng</span><span class="p">:</span><span class="n">self</span><span class="p">%</span><span class="n">Ni</span><span class="o">+</span><span class="n">self</span><span class="p">%</span><span class="n">Ng</span><span class="p">))</span>
+  <span class="c">!$OMP PARALLEL DO PRIVATE(i) SHARED(self, P)</span>
+  <span class="k">do </span><span class="n">i</span><span class="o">=</span><span class="mi">1</span><span class="o">-</span><span class="n">self</span><span class="p">%</span><span class="n">Ng</span><span class="p">,</span> <span class="n">self</span><span class="p">%</span><span class="n">Ni</span><span class="o">+</span><span class="n">self</span><span class="p">%</span><span class="n">Ng</span>
+    <span class="n">P</span><span class="p">(:,</span> <span class="n">i</span><span class="p">)</span> <span class="o">=</span> <span class="mf">0._R_P</span>
+  <span class="n">enddo</span>
+  <span class="k">allocate</span><span class="p">(</span><span class="n">PR</span><span class="p">(</span><span class="mi">1</span><span class="p">:</span><span class="n">self</span><span class="p">%</span><span class="n">Np</span><span class="p">,</span> <span class="mi">1</span><span class="p">:</span><span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">:</span><span class="n">self</span><span class="p">%</span><span class="n">Ni</span><span class="o">+</span><span class="mi">1</span><span class="p">))</span>
+  <span class="c">!$OMP PARALLEL DO PRIVATE(i) SHARED(self, P)</span>
+  <span class="k">do </span><span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">self</span><span class="p">%</span><span class="n">Ni</span><span class="o">+</span><span class="mi">1</span>
+    <span class="n">PR</span><span class="p">(:,</span> <span class="p">:,</span> <span class="n">i</span><span class="p">)</span> <span class="o">=</span> <span class="mf">0._R_P</span>
+  <span class="n">enddo</span>
   <span class="c">! compute primitive variables</span>
-  <span class="k">if</span> <span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">steps</span><span class="o">&gt;=</span><span class="mi">2</span><span class="p">)</span> <span class="k">then</span> <span class="c">! self%previous should be used, multi-step time integration</span>
-    <span class="n">dn</span> <span class="o">=</span> <span class="n">self</span><span class="p">%</span><span class="n">steps</span> <span class="p">;</span> <span class="k">if</span> <span class="p">(</span><span class="nb">present</span><span class="p">(</span><span class="n">n</span><span class="p">))</span> <span class="n">dn</span> <span class="o">=</span> <span class="n">n</span>
-    <span class="c">!$OMP DO</span>
-    <span class="k">do </span><span class="n">i</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">self</span><span class="p">%</span><span class="n">Ni</span>
-      <span class="n">P</span><span class="p">(:,</span> <span class="n">i</span><span class="p">)</span> <span class="o">=</span> <span class="n">self</span><span class="p">%</span><span class="n">conservative2primitive</span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">previous</span><span class="p">(:,</span> <span class="n">i</span><span class="p">,</span> <span class="n">dn</span><span class="p">))</span>
-    <span class="n">enddo</span>
-  <span class="k">else</span> <span class="c">! self%U should be used, single-step time integration</span>
-    <span class="c">!$OMP DO</span>
-    <span class="k">do </span><span class="n">i</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">self</span><span class="p">%</span><span class="n">Ni</span>
-      <span class="n">P</span><span class="p">(:,</span> <span class="n">i</span><span class="p">)</span> <span class="o">=</span> <span class="n">self</span><span class="p">%</span><span class="n">conservative2primitive</span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">U</span><span class="p">(:,</span> <span class="n">i</span><span class="p">))</span>
-    <span class="n">enddo</span>
-  <span class="n">endif</span>
-  <span class="c">!$OMP END PARALLEL</span>
+  <span class="c">!$OMP PARALLEL DO PRIVATE(i) SHARED(self, P)</span>
+  <span class="k">do </span><span class="n">i</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">self</span><span class="p">%</span><span class="n">Ni</span>
+    <span class="n">P</span><span class="p">(:,</span> <span class="n">i</span><span class="p">)</span> <span class="o">=</span> <span class="n">self</span><span class="p">%</span><span class="n">conservative2primitive</span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">U</span><span class="p">(:,</span> <span class="n">i</span><span class="p">))</span>
+  <span class="n">enddo</span>
   <span class="k">call </span><span class="n">self</span><span class="p">%</span><span class="n">impose_boundary_conditions</span><span class="p">(</span><span class="n">primitive</span><span class="o">=</span><span class="n">P</span><span class="p">)</span>
   <span class="k">call </span><span class="n">self</span><span class="p">%</span><span class="n">reconstruct_interfaces_states</span><span class="p">(</span><span class="n">primitive</span><span class="o">=</span><span class="n">P</span><span class="p">,</span> <span class="n">r_primitive</span><span class="o">=</span><span class="n">PR</span><span class="p">)</span>
   <span class="c">! compute fluxes by solving Rimeann Problems at each interface</span>
-  <span class="c">!$OMP PARALLEL DEFAULT(NONE) &amp;</span>
-  <span class="c">!$OMP PRIVATE(i) &amp;</span>
-  <span class="c">!$OMP SHARED(self, F, PR)</span>
-  <span class="c">!$OMP DO</span>
+  <span class="c">!$OMP PARALLEL DO PRIVATE(i) SHARED(self, F, PR)</span>
   <span class="k">do </span><span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">self</span><span class="p">%</span><span class="n">Ni</span>
     <span class="k">call </span><span class="n">self</span><span class="p">%</span><span class="n">riemann_solver</span><span class="p">(</span><span class="n">r1</span><span class="o">=</span><span class="n">PR</span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">Ns</span><span class="o">+</span><span class="mi">3</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">i</span>  <span class="p">),</span> <span class="p">&amp;</span>
                              <span class="n">u1</span><span class="o">=</span><span class="n">PR</span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">Ns</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">i</span>  <span class="p">),</span> <span class="p">&amp;</span>
@@ -576,72 +552,24 @@
       <span class="n">endif</span>
     <span class="n">endif</span>
   <span class="n">enddo</span>
-  <span class="c">!$OMP END PARALLEL</span>
   <span class="c">! compute residuals</span>
   <span class="k">allocate</span><span class="p">(</span><span class="n">euler_1D_openmp</span> <span class="kd">::</span> <span class="n">dState_dt</span><span class="p">)</span>
   <span class="k">select type</span><span class="p">(</span><span class="n">dState_dt</span><span class="p">)</span>
   <span class="k">class is</span><span class="p">(</span><span class="n">euler_1D_openmp</span><span class="p">)</span>
     <span class="n">dState_dt</span> <span class="o">=</span> <span class="n">self</span>
-    <span class="c">!!$OMP PARALLEL DEFAULT(PRIVATE) &amp;</span>
-    <span class="c">!!$OMP SHARED(self, dState_dt, F)</span>
-    <span class="c">!!$OMP DO</span>
+  <span class="n">endselect</span>
+  <span class="c">!$OMP PARALLEL PRIVATE(i) SHARED(self, dState_dt, F)</span>
+  <span class="k">select type</span><span class="p">(</span><span class="n">dState_dt</span><span class="p">)</span>
+  <span class="k">class is</span><span class="p">(</span><span class="n">euler_1D_openmp</span><span class="p">)</span>
+    <span class="c">!$OMP DO</span>
     <span class="k">do </span><span class="n">i</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">self</span><span class="p">%</span><span class="n">Ni</span>
       <span class="n">dState_dt</span><span class="p">%</span><span class="n">U</span><span class="p">(:,</span> <span class="n">i</span><span class="p">)</span> <span class="o">=</span> <span class="p">(</span><span class="n">F</span><span class="p">(:,</span> <span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">-</span> <span class="n">F</span><span class="p">(:,</span> <span class="n">i</span><span class="p">))</span> <span class="o">/</span> <span class="n">self</span><span class="p">%</span><span class="n">Dx</span>
     <span class="n">enddo</span>
-    <span class="c">!!$OMP END PARALLEL</span>
   <span class="n">endselect</span>
+  <span class="c">!$OMP END PARALLEL</span>
   <span class="k">return</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
   <span class="n">endfunction</span> <span class="n">dEuler_dt</span>
-
-  <span class="k">subroutine </span><span class="n">update_previous_steps</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">filter</span><span class="p">,</span> <span class="n">weights</span><span class="p">)</span>
-  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
-  <span class="c">!&lt; Update previous time steps.</span>
-  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
-  <span class="k">class</span><span class="p">(</span><span class="n">euler_1D_openmp</span><span class="p">),</span>     <span class="k">intent</span><span class="p">(</span><span class="n">INOUT</span><span class="p">)</span> <span class="kd">::</span> <span class="n">self</span>       <span class="c">!&lt; Euler field.</span>
-  <span class="k">class</span><span class="p">(</span><span class="n">integrand</span><span class="p">),</span> <span class="k">optional</span><span class="p">,</span> <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span>    <span class="kd">::</span> <span class="n">filter</span>     <span class="c">!&lt; Filter field displacement.</span>
-  <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">),</span>        <span class="k">optional</span><span class="p">,</span> <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span>    <span class="kd">::</span> <span class="n">weights</span><span class="p">(:)</span> <span class="c">!&lt; Weights for filtering the steps.</span>
-  <span class="kt">integer</span>                                   <span class="kd">::</span> <span class="n">s</span>          <span class="c">!&lt; Time steps counter.</span>
-  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
-
-  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
-  <span class="k">if</span> <span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">steps</span><span class="o">&gt;</span><span class="mi">0</span><span class="p">)</span> <span class="k">then</span>
-<span class="k">    do </span><span class="n">s</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">self</span><span class="p">%</span><span class="n">steps</span> <span class="o">-</span> <span class="mi">1</span>
-      <span class="n">self</span><span class="p">%</span><span class="n">previous</span><span class="p">(:,</span> <span class="p">:,</span> <span class="n">s</span><span class="p">)</span> <span class="o">=</span> <span class="n">self</span><span class="p">%</span><span class="n">previous</span><span class="p">(:,</span> <span class="p">:,</span> <span class="n">s</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
-    <span class="n">enddo</span>
-    <span class="n">self</span><span class="p">%</span><span class="n">previous</span><span class="p">(:,</span> <span class="p">:,</span> <span class="n">self</span><span class="p">%</span><span class="n">steps</span><span class="p">)</span> <span class="o">=</span> <span class="n">self</span><span class="p">%</span><span class="n">U</span>
-  <span class="n">endif</span>
-  <span class="k">if</span> <span class="p">(</span><span class="nb">present</span><span class="p">(</span><span class="n">filter</span><span class="p">).</span><span class="nb">and</span><span class="p">.</span><span class="nb">present</span><span class="p">(</span><span class="n">weights</span><span class="p">))</span> <span class="k">then</span>
-<span class="k">    select type</span><span class="p">(</span><span class="n">filter</span><span class="p">)</span>
-    <span class="k">class is</span><span class="p">(</span><span class="n">euler_1D_openmp</span><span class="p">)</span>
-      <span class="k">do </span><span class="n">s</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">self</span><span class="p">%</span><span class="n">steps</span>
-        <span class="n">self</span><span class="p">%</span><span class="n">previous</span><span class="p">(:,</span> <span class="p">:,</span> <span class="n">s</span><span class="p">)</span> <span class="o">=</span> <span class="n">self</span><span class="p">%</span><span class="n">previous</span><span class="p">(:,</span> <span class="p">:,</span> <span class="n">s</span><span class="p">)</span> <span class="o">+</span> <span class="n">filter</span><span class="p">%</span><span class="n">U</span> <span class="o">*</span> <span class="n">weights</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
-      <span class="n">enddo</span>
-    <span class="n">endselect</span>
-  <span class="n">endif</span>
-  <span class="k">return</span>
-  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
-  <span class="n">endsubroutine</span> <span class="n">update_previous_steps</span>
-
-  <span class="k">function </span><span class="n">previous_step</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">n</span><span class="p">)</span> <span class="k">result</span><span class="p">(</span><span class="n">previous</span><span class="p">)</span>
-  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
-  <span class="c">!&lt; Extract previous time solution of Euler field.</span>
-  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
-  <span class="k">class</span><span class="p">(</span><span class="n">euler_1D_openmp</span><span class="p">),</span> <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span> <span class="kd">::</span> <span class="n">self</span>     <span class="c">!&lt; Euler field.</span>
-  <span class="kt">integer</span><span class="p">(</span><span class="n">I_P</span><span class="p">),</span>           <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span> <span class="kd">::</span> <span class="n">n</span>        <span class="c">!&lt; Time level.</span>
-  <span class="k">class</span><span class="p">(</span><span class="n">integrand</span><span class="p">),</span> <span class="k">allocatable</span>      <span class="kd">::</span> <span class="n">previous</span> <span class="c">!&lt; Previous time solution of Euler field.</span>
-  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
-
-  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
-  <span class="k">allocate</span><span class="p">(</span><span class="n">euler_1D_openmp</span> <span class="kd">::</span> <span class="n">previous</span><span class="p">)</span>
-  <span class="k">select type</span><span class="p">(</span><span class="n">previous</span><span class="p">)</span>
-  <span class="k">class is</span><span class="p">(</span><span class="n">euler_1D_openmp</span><span class="p">)</span>
-    <span class="n">previous</span> <span class="o">=</span> <span class="n">self</span>
-    <span class="n">previous</span><span class="p">%</span><span class="n">U</span> <span class="o">=</span> <span class="n">self</span><span class="p">%</span><span class="n">previous</span><span class="p">(:,</span> <span class="p">:,</span> <span class="n">n</span><span class="p">)</span>
-  <span class="n">endselect</span>
-  <span class="k">return</span>
-  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
-  <span class="n">endfunction</span> <span class="n">previous_step</span>
 
   <span class="k">function </span><span class="n">euler_multiply_euler</span><span class="p">(</span><span class="n">lhs</span><span class="p">,</span> <span class="n">rhs</span><span class="p">)</span> <span class="k">result</span><span class="p">(</span><span class="n">opr</span><span class="p">)</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
@@ -650,6 +578,7 @@
   <span class="k">class</span><span class="p">(</span><span class="n">euler_1D_openmp</span><span class="p">),</span> <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span> <span class="kd">::</span> <span class="n">lhs</span> <span class="c">!&lt; Left hand side.</span>
   <span class="k">class</span><span class="p">(</span><span class="n">integrand</span><span class="p">),</span>       <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span> <span class="kd">::</span> <span class="n">rhs</span> <span class="c">!&lt; Right hand side.</span>
   <span class="k">class</span><span class="p">(</span><span class="n">integrand</span><span class="p">),</span> <span class="k">allocatable</span>      <span class="kd">::</span> <span class="n">opr</span> <span class="c">!&lt; Operator result.</span>
+  <span class="kt">integer</span><span class="p">(</span><span class="n">I_P</span><span class="p">)</span>                       <span class="kd">::</span> <span class="n">i</span>   <span class="c">!&lt; Counter.</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
 
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
@@ -657,11 +586,19 @@
   <span class="k">select type</span><span class="p">(</span><span class="n">opr</span><span class="p">)</span>
   <span class="k">class is</span><span class="p">(</span><span class="n">euler_1D_openmp</span><span class="p">)</span>
     <span class="n">opr</span> <span class="o">=</span> <span class="n">lhs</span>
+  <span class="n">endselect</span>
+  <span class="c">!$OMP PARALLEL DEFAULT(NONE) PRIVATE(i) SHARED(lhs, rhs, opr)</span>
+  <span class="k">select type</span><span class="p">(</span><span class="n">opr</span><span class="p">)</span>
+  <span class="k">class is</span><span class="p">(</span><span class="n">euler_1D_openmp</span><span class="p">)</span>
     <span class="k">select type</span><span class="p">(</span><span class="n">rhs</span><span class="p">)</span>
     <span class="k">class is</span> <span class="p">(</span><span class="n">euler_1D_openmp</span><span class="p">)</span>
-      <span class="n">opr</span><span class="p">%</span><span class="n">U</span> <span class="o">=</span> <span class="n">lhs</span><span class="p">%</span><span class="n">U</span> <span class="o">*</span> <span class="n">rhs</span><span class="p">%</span><span class="n">U</span>
+      <span class="c">!$OMP DO</span>
+      <span class="k">do </span><span class="n">i</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">lhs</span><span class="p">%</span><span class="n">Ni</span>
+        <span class="n">opr</span><span class="p">%</span><span class="n">U</span><span class="p">(:,</span> <span class="n">i</span><span class="p">)</span> <span class="o">=</span> <span class="n">lhs</span><span class="p">%</span><span class="n">U</span><span class="p">(:,</span> <span class="n">i</span><span class="p">)</span> <span class="o">*</span> <span class="n">rhs</span><span class="p">%</span><span class="n">U</span><span class="p">(:,</span> <span class="n">i</span><span class="p">)</span>
+      <span class="n">enddo</span>
     <span class="n">endselect</span>
   <span class="n">endselect</span>
+  <span class="c">!$OMP END PARALLEL</span>
   <span class="k">return</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
   <span class="n">endfunction</span> <span class="n">euler_multiply_euler</span>
@@ -673,6 +610,7 @@
   <span class="k">class</span><span class="p">(</span><span class="n">euler_1D_openmp</span><span class="p">),</span> <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span> <span class="kd">::</span> <span class="n">lhs</span> <span class="c">!&lt; Left hand side.</span>
   <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">),</span>              <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span> <span class="kd">::</span> <span class="n">rhs</span> <span class="c">!&lt; Right hand side.</span>
   <span class="k">class</span><span class="p">(</span><span class="n">integrand</span><span class="p">),</span> <span class="k">allocatable</span>      <span class="kd">::</span> <span class="n">opr</span> <span class="c">!&lt; Operator result.</span>
+  <span class="kt">integer</span><span class="p">(</span><span class="n">I_P</span><span class="p">)</span>                       <span class="kd">::</span> <span class="n">i</span>   <span class="c">!&lt; Counter.</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
 
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
@@ -680,8 +618,16 @@
   <span class="k">select type</span><span class="p">(</span><span class="n">opr</span><span class="p">)</span>
   <span class="k">class is</span><span class="p">(</span><span class="n">euler_1D_openmp</span><span class="p">)</span>
     <span class="n">opr</span> <span class="o">=</span> <span class="n">lhs</span>
-    <span class="n">opr</span><span class="p">%</span><span class="n">U</span> <span class="o">=</span> <span class="n">lhs</span><span class="p">%</span><span class="n">U</span> <span class="o">*</span> <span class="n">rhs</span>
   <span class="n">endselect</span>
+  <span class="c">!$OMP PARALLEL DEFAULT(NONE) PRIVATE(i) SHARED(lhs, rhs, opr)</span>
+  <span class="k">select type</span><span class="p">(</span><span class="n">opr</span><span class="p">)</span>
+  <span class="k">class is</span><span class="p">(</span><span class="n">euler_1D_openmp</span><span class="p">)</span>
+    <span class="c">!$OMP DO</span>
+    <span class="k">do </span><span class="n">i</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">lhs</span><span class="p">%</span><span class="n">Ni</span>
+      <span class="n">opr</span><span class="p">%</span><span class="n">U</span><span class="p">(:,</span> <span class="n">i</span><span class="p">)</span> <span class="o">=</span> <span class="n">lhs</span><span class="p">%</span><span class="n">U</span><span class="p">(:,</span> <span class="n">i</span><span class="p">)</span> <span class="o">*</span> <span class="n">rhs</span>
+    <span class="n">enddo</span>
+  <span class="n">endselect</span>
+  <span class="c">!$OMP END PARALLEL</span>
   <span class="k">return</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
   <span class="n">endfunction</span> <span class="n">euler_multiply_real</span>
@@ -693,6 +639,7 @@
   <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">),</span>              <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span> <span class="kd">::</span> <span class="n">lhs</span> <span class="c">!&lt; Left hand side.</span>
   <span class="k">class</span><span class="p">(</span><span class="n">euler_1D_openmp</span><span class="p">),</span> <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span> <span class="kd">::</span> <span class="n">rhs</span> <span class="c">!&lt; Right hand side.</span>
   <span class="k">class</span><span class="p">(</span><span class="n">integrand</span><span class="p">),</span> <span class="k">allocatable</span>      <span class="kd">::</span> <span class="n">opr</span> <span class="c">!&lt; Operator result.</span>
+  <span class="kt">integer</span><span class="p">(</span><span class="n">I_P</span><span class="p">)</span>                       <span class="kd">::</span> <span class="n">i</span>   <span class="c">!&lt; Counter.</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
 
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
@@ -700,8 +647,16 @@
   <span class="k">select type</span><span class="p">(</span><span class="n">opr</span><span class="p">)</span>
   <span class="k">class is</span><span class="p">(</span><span class="n">euler_1D_openmp</span><span class="p">)</span>
     <span class="n">opr</span> <span class="o">=</span> <span class="n">rhs</span>
-    <span class="n">opr</span><span class="p">%</span><span class="n">U</span> <span class="o">=</span> <span class="n">rhs</span><span class="p">%</span><span class="n">U</span> <span class="o">*</span> <span class="n">lhs</span>
   <span class="n">endselect</span>
+  <span class="c">!$OMP PARALLEL DEFAULT(NONE) PRIVATE(i) SHARED(lhs, rhs, opr)</span>
+  <span class="k">select type</span><span class="p">(</span><span class="n">opr</span><span class="p">)</span>
+  <span class="k">class is</span><span class="p">(</span><span class="n">euler_1D_openmp</span><span class="p">)</span>
+    <span class="c">!$OMP DO</span>
+    <span class="k">do </span><span class="n">i</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">rhs</span><span class="p">%</span><span class="n">Ni</span>
+      <span class="n">opr</span><span class="p">%</span><span class="n">U</span><span class="p">(:,</span> <span class="n">i</span><span class="p">)</span> <span class="o">=</span> <span class="n">rhs</span><span class="p">%</span><span class="n">U</span><span class="p">(:,</span> <span class="n">i</span><span class="p">)</span> <span class="o">*</span> <span class="n">lhs</span>
+    <span class="n">enddo</span>
+  <span class="n">endselect</span>
+  <span class="c">!$OMP END PARALLEL</span>
   <span class="k">return</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
   <span class="n">endfunction</span> <span class="n">real_multiply_euler</span>
@@ -713,6 +668,7 @@
   <span class="k">class</span><span class="p">(</span><span class="n">euler_1D_openmp</span><span class="p">),</span> <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span> <span class="kd">::</span> <span class="n">lhs</span> <span class="c">!&lt; Left hand side.</span>
   <span class="k">class</span><span class="p">(</span><span class="n">integrand</span><span class="p">),</span>       <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span> <span class="kd">::</span> <span class="n">rhs</span> <span class="c">!&lt; Right hand side.</span>
   <span class="k">class</span><span class="p">(</span><span class="n">integrand</span><span class="p">),</span> <span class="k">allocatable</span>      <span class="kd">::</span> <span class="n">opr</span> <span class="c">!&lt; Operator result.</span>
+  <span class="kt">integer</span><span class="p">(</span><span class="n">I_P</span><span class="p">)</span>                       <span class="kd">::</span> <span class="n">i</span>   <span class="c">!&lt; Counter.</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
 
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
@@ -720,11 +676,19 @@
   <span class="k">select type</span><span class="p">(</span><span class="n">opr</span><span class="p">)</span>
   <span class="k">class is</span><span class="p">(</span><span class="n">euler_1D_openmp</span><span class="p">)</span>
     <span class="n">opr</span> <span class="o">=</span> <span class="n">lhs</span>
+  <span class="n">endselect</span>
+  <span class="c">!$OMP PARALLEL DEFAULT(NONE) PRIVATE(i) SHARED(lhs, rhs, opr)</span>
+  <span class="k">select type</span><span class="p">(</span><span class="n">opr</span><span class="p">)</span>
+  <span class="k">class is</span><span class="p">(</span><span class="n">euler_1D_openmp</span><span class="p">)</span>
     <span class="k">select type</span><span class="p">(</span><span class="n">rhs</span><span class="p">)</span>
     <span class="k">class is</span> <span class="p">(</span><span class="n">euler_1D_openmp</span><span class="p">)</span>
-      <span class="n">opr</span><span class="p">%</span><span class="n">U</span> <span class="o">=</span> <span class="n">lhs</span><span class="p">%</span><span class="n">U</span> <span class="o">+</span> <span class="n">rhs</span><span class="p">%</span><span class="n">U</span>
+      <span class="c">!$OMP DO</span>
+      <span class="k">do </span><span class="n">i</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">lhs</span><span class="p">%</span><span class="n">Ni</span>
+        <span class="n">opr</span><span class="p">%</span><span class="n">U</span><span class="p">(:,</span> <span class="n">i</span><span class="p">)</span> <span class="o">=</span> <span class="n">lhs</span><span class="p">%</span><span class="n">U</span><span class="p">(:,</span> <span class="n">i</span><span class="p">)</span> <span class="o">+</span> <span class="n">rhs</span><span class="p">%</span><span class="n">U</span><span class="p">(:,</span> <span class="n">i</span><span class="p">)</span>
+      <span class="n">enddo</span>
     <span class="n">endselect</span>
   <span class="n">endselect</span>
+  <span class="c">!$OMP END PARALLEL</span>
   <span class="k">return</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
   <span class="n">endfunction</span> <span class="n">add_euler</span>
@@ -736,6 +700,7 @@
   <span class="k">class</span><span class="p">(</span><span class="n">euler_1D_openmp</span><span class="p">),</span> <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span> <span class="kd">::</span> <span class="n">lhs</span> <span class="c">!&lt; Left hand side.</span>
   <span class="k">class</span><span class="p">(</span><span class="n">integrand</span><span class="p">),</span>       <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span> <span class="kd">::</span> <span class="n">rhs</span> <span class="c">!&lt; Right hand side.</span>
   <span class="k">class</span><span class="p">(</span><span class="n">integrand</span><span class="p">),</span> <span class="k">allocatable</span>      <span class="kd">::</span> <span class="n">opr</span> <span class="c">!&lt; Operator result.</span>
+  <span class="kt">integer</span><span class="p">(</span><span class="n">I_P</span><span class="p">)</span>                       <span class="kd">::</span> <span class="n">i</span>   <span class="c">!&lt; Counter.</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
 
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
@@ -743,11 +708,19 @@
   <span class="k">select type</span><span class="p">(</span><span class="n">opr</span><span class="p">)</span>
   <span class="k">class is</span><span class="p">(</span><span class="n">euler_1D_openmp</span><span class="p">)</span>
     <span class="n">opr</span> <span class="o">=</span> <span class="n">lhs</span>
+  <span class="n">endselect</span>
+  <span class="c">!$OMP PARALLEL DEFAULT(NONE) PRIVATE(i) SHARED(lhs, rhs, opr)</span>
+  <span class="k">select type</span><span class="p">(</span><span class="n">opr</span><span class="p">)</span>
+  <span class="k">class is</span><span class="p">(</span><span class="n">euler_1D_openmp</span><span class="p">)</span>
     <span class="k">select type</span><span class="p">(</span><span class="n">rhs</span><span class="p">)</span>
     <span class="k">class is</span> <span class="p">(</span><span class="n">euler_1D_openmp</span><span class="p">)</span>
-      <span class="n">opr</span><span class="p">%</span><span class="n">U</span> <span class="o">=</span> <span class="n">lhs</span><span class="p">%</span><span class="n">U</span> <span class="o">-</span> <span class="n">rhs</span><span class="p">%</span><span class="n">U</span>
+      <span class="c">!$OMP DO</span>
+      <span class="k">do </span><span class="n">i</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">lhs</span><span class="p">%</span><span class="n">Ni</span>
+        <span class="n">opr</span><span class="p">%</span><span class="n">U</span><span class="p">(:,</span> <span class="n">i</span><span class="p">)</span> <span class="o">=</span> <span class="n">lhs</span><span class="p">%</span><span class="n">U</span><span class="p">(:,</span> <span class="n">i</span><span class="p">)</span> <span class="o">-</span> <span class="n">rhs</span><span class="p">%</span><span class="n">U</span><span class="p">(:,</span> <span class="n">i</span><span class="p">)</span>
+      <span class="n">enddo</span>
     <span class="n">endselect</span>
   <span class="n">endselect</span>
+  <span class="c">!$OMP END PARALLEL</span>
   <span class="k">return</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
   <span class="n">endfunction</span> <span class="n">sub_euler</span>
@@ -758,27 +731,39 @@
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
   <span class="k">class</span><span class="p">(</span><span class="n">euler_1D_openmp</span><span class="p">),</span> <span class="k">intent</span><span class="p">(</span><span class="n">INOUT</span><span class="p">)</span> <span class="kd">::</span> <span class="n">lhs</span> <span class="c">!&lt; Left hand side.</span>
   <span class="k">class</span><span class="p">(</span><span class="n">integrand</span><span class="p">),</span>       <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span>    <span class="kd">::</span> <span class="n">rhs</span> <span class="c">!&lt; Right hand side.</span>
+  <span class="kt">integer</span><span class="p">(</span><span class="n">I_P</span><span class="p">)</span>                          <span class="kd">::</span> <span class="n">i</span>   <span class="c">!&lt; Counter.</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
 
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
   <span class="k">select type</span><span class="p">(</span><span class="n">rhs</span><span class="p">)</span>
   <span class="k">class is</span><span class="p">(</span><span class="n">euler_1D_openmp</span><span class="p">)</span>
-                                 <span class="n">lhs</span><span class="p">%</span><span class="n">steps</span>    <span class="o">=</span> <span class="n">rhs</span><span class="p">%</span><span class="n">steps</span>
-                                 <span class="n">lhs</span><span class="p">%</span><span class="n">ord</span>      <span class="o">=</span> <span class="n">rhs</span><span class="p">%</span><span class="n">ord</span>
-                                 <span class="n">lhs</span><span class="p">%</span><span class="n">Ni</span>       <span class="o">=</span> <span class="n">rhs</span><span class="p">%</span><span class="n">Ni</span>
-                                 <span class="n">lhs</span><span class="p">%</span><span class="n">Ng</span>       <span class="o">=</span> <span class="n">rhs</span><span class="p">%</span><span class="n">Ng</span>
-                                 <span class="n">lhs</span><span class="p">%</span><span class="n">Ns</span>       <span class="o">=</span> <span class="n">rhs</span><span class="p">%</span><span class="n">Ns</span>
-                                 <span class="n">lhs</span><span class="p">%</span><span class="n">Nc</span>       <span class="o">=</span> <span class="n">rhs</span><span class="p">%</span><span class="n">Nc</span>
-                                 <span class="n">lhs</span><span class="p">%</span><span class="n">Np</span>       <span class="o">=</span> <span class="n">rhs</span><span class="p">%</span><span class="n">Np</span>
-                                 <span class="n">lhs</span><span class="p">%</span><span class="n">Dx</span>       <span class="o">=</span> <span class="n">rhs</span><span class="p">%</span><span class="n">Dx</span>
-                                 <span class="n">lhs</span><span class="p">%</span><span class="n">weno</span>     <span class="o">=</span> <span class="n">rhs</span><span class="p">%</span><span class="n">weno</span>
-    <span class="k">if</span> <span class="p">(</span><span class="nb">allocated</span><span class="p">(</span><span class="n">rhs</span><span class="p">%</span><span class="n">U</span><span class="p">))</span>        <span class="n">lhs</span><span class="p">%</span><span class="n">U</span>        <span class="o">=</span> <span class="n">rhs</span><span class="p">%</span><span class="n">U</span>
-    <span class="k">if</span> <span class="p">(</span><span class="nb">allocated</span><span class="p">(</span><span class="n">rhs</span><span class="p">%</span><span class="n">previous</span><span class="p">))</span> <span class="n">lhs</span><span class="p">%</span><span class="n">previous</span> <span class="o">=</span> <span class="n">rhs</span><span class="p">%</span><span class="n">previous</span>
-    <span class="k">if</span> <span class="p">(</span><span class="nb">allocated</span><span class="p">(</span><span class="n">rhs</span><span class="p">%</span><span class="n">cp0</span><span class="p">))</span>      <span class="n">lhs</span><span class="p">%</span><span class="n">cp0</span>      <span class="o">=</span> <span class="n">rhs</span><span class="p">%</span><span class="n">cp0</span>
-    <span class="k">if</span> <span class="p">(</span><span class="nb">allocated</span><span class="p">(</span><span class="n">rhs</span><span class="p">%</span><span class="n">cv0</span><span class="p">))</span>      <span class="n">lhs</span><span class="p">%</span><span class="n">cv0</span>      <span class="o">=</span> <span class="n">rhs</span><span class="p">%</span><span class="n">cv0</span>
-    <span class="k">if</span> <span class="p">(</span><span class="nb">allocated</span><span class="p">(</span><span class="n">rhs</span><span class="p">%</span><span class="n">BC_L</span><span class="p">))</span>     <span class="n">lhs</span><span class="p">%</span><span class="n">BC_L</span>     <span class="o">=</span> <span class="n">rhs</span><span class="p">%</span><span class="n">BC_L</span>
-    <span class="k">if</span> <span class="p">(</span><span class="nb">allocated</span><span class="p">(</span><span class="n">rhs</span><span class="p">%</span><span class="n">BC_R</span><span class="p">))</span>     <span class="n">lhs</span><span class="p">%</span><span class="n">BC_R</span>     <span class="o">=</span> <span class="n">rhs</span><span class="p">%</span><span class="n">BC_R</span>
+                             <span class="n">lhs</span><span class="p">%</span><span class="n">ord</span>  <span class="o">=</span> <span class="n">rhs</span><span class="p">%</span><span class="n">ord</span>
+                             <span class="n">lhs</span><span class="p">%</span><span class="n">Ni</span>   <span class="o">=</span> <span class="n">rhs</span><span class="p">%</span><span class="n">Ni</span>
+                             <span class="n">lhs</span><span class="p">%</span><span class="n">Ng</span>   <span class="o">=</span> <span class="n">rhs</span><span class="p">%</span><span class="n">Ng</span>
+                             <span class="n">lhs</span><span class="p">%</span><span class="n">Ns</span>   <span class="o">=</span> <span class="n">rhs</span><span class="p">%</span><span class="n">Ns</span>
+                             <span class="n">lhs</span><span class="p">%</span><span class="n">Nc</span>   <span class="o">=</span> <span class="n">rhs</span><span class="p">%</span><span class="n">Nc</span>
+                             <span class="n">lhs</span><span class="p">%</span><span class="n">Np</span>   <span class="o">=</span> <span class="n">rhs</span><span class="p">%</span><span class="n">Np</span>
+                             <span class="n">lhs</span><span class="p">%</span><span class="n">Dx</span>   <span class="o">=</span> <span class="n">rhs</span><span class="p">%</span><span class="n">Dx</span>
+                             <span class="n">lhs</span><span class="p">%</span><span class="n">weno</span> <span class="o">=</span> <span class="n">rhs</span><span class="p">%</span><span class="n">weno</span>
+    <span class="k">if</span> <span class="p">(</span><span class="nb">allocated</span><span class="p">(</span><span class="n">rhs</span><span class="p">%</span><span class="n">U</span><span class="p">))</span> <span class="k">then</span>
+<span class="k">      if</span> <span class="p">(</span><span class="nb">allocated</span><span class="p">(</span><span class="n">lhs</span><span class="p">%</span><span class="n">U</span><span class="p">))</span> <span class="k">deallocate</span><span class="p">(</span><span class="n">lhs</span><span class="p">%</span><span class="n">U</span><span class="p">)</span> <span class="p">;</span> <span class="k">allocate</span><span class="p">(</span><span class="n">lhs</span><span class="p">%</span><span class="n">U</span><span class="p">(</span><span class="mi">1</span><span class="p">:</span><span class="n">lhs</span><span class="p">%</span><span class="n">Nc</span><span class="p">,</span> <span class="mi">1</span><span class="p">:</span><span class="n">lhs</span><span class="p">%</span><span class="n">Ni</span><span class="p">))</span>
+    <span class="n">endif</span>
+    <span class="k">if</span> <span class="p">(</span><span class="nb">allocated</span><span class="p">(</span><span class="n">rhs</span><span class="p">%</span><span class="n">cp0</span><span class="p">))</span>  <span class="n">lhs</span><span class="p">%</span><span class="n">cp0</span>  <span class="o">=</span> <span class="n">rhs</span><span class="p">%</span><span class="n">cp0</span>
+    <span class="k">if</span> <span class="p">(</span><span class="nb">allocated</span><span class="p">(</span><span class="n">rhs</span><span class="p">%</span><span class="n">cv0</span><span class="p">))</span>  <span class="n">lhs</span><span class="p">%</span><span class="n">cv0</span>  <span class="o">=</span> <span class="n">rhs</span><span class="p">%</span><span class="n">cv0</span>
+    <span class="k">if</span> <span class="p">(</span><span class="nb">allocated</span><span class="p">(</span><span class="n">rhs</span><span class="p">%</span><span class="n">BC_L</span><span class="p">))</span> <span class="n">lhs</span><span class="p">%</span><span class="n">BC_L</span> <span class="o">=</span> <span class="n">rhs</span><span class="p">%</span><span class="n">BC_L</span>
+    <span class="k">if</span> <span class="p">(</span><span class="nb">allocated</span><span class="p">(</span><span class="n">rhs</span><span class="p">%</span><span class="n">BC_R</span><span class="p">))</span> <span class="n">lhs</span><span class="p">%</span><span class="n">BC_R</span> <span class="o">=</span> <span class="n">rhs</span><span class="p">%</span><span class="n">BC_R</span>
   <span class="n">endselect</span>
+  <span class="c">!$OMP PARALLEL DEFAULT(NONE) PRIVATE(i) SHARED(lhs, rhs)</span>
+  <span class="k">select type</span><span class="p">(</span><span class="n">rhs</span><span class="p">)</span>
+  <span class="k">class is</span><span class="p">(</span><span class="n">euler_1D_openmp</span><span class="p">)</span>
+    <span class="k">if</span> <span class="p">(</span><span class="nb">allocated</span><span class="p">(</span><span class="n">rhs</span><span class="p">%</span><span class="n">U</span><span class="p">))</span> <span class="k">then</span>
+      <span class="c">!$OMP DO</span>
+      <span class="k">do </span><span class="n">i</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">lhs</span><span class="p">%</span><span class="n">Ni</span>
+        <span class="n">lhs</span><span class="p">%</span><span class="n">U</span><span class="p">(:,</span> <span class="n">i</span><span class="p">)</span> <span class="o">=</span> <span class="n">rhs</span><span class="p">%</span><span class="n">U</span><span class="p">(:,</span> <span class="n">i</span><span class="p">)</span>
+      <span class="n">enddo</span>
+    <span class="n">endif</span>
+  <span class="n">endselect</span>
+  <span class="c">!$OMP END PARALLEL</span>
   <span class="k">return</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
   <span class="n">endsubroutine</span> <span class="n">euler_assign_euler</span>
@@ -789,11 +774,16 @@
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
   <span class="k">class</span><span class="p">(</span><span class="n">euler_1D_openmp</span><span class="p">),</span> <span class="k">intent</span><span class="p">(</span><span class="n">INOUT</span><span class="p">)</span> <span class="kd">::</span> <span class="n">lhs</span> <span class="c">!&lt; Left hand side.</span>
   <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">),</span>              <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span>    <span class="kd">::</span> <span class="n">rhs</span> <span class="c">!&lt; Right hand side.</span>
+  <span class="kt">integer</span><span class="p">(</span><span class="n">I_P</span><span class="p">)</span>                          <span class="kd">::</span> <span class="n">i</span>   <span class="c">!&lt; Counter.</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
 
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
-  <span class="k">if</span> <span class="p">(</span><span class="nb">allocated</span><span class="p">(</span><span class="n">lhs</span><span class="p">%</span><span class="n">U</span><span class="p">))</span> <span class="n">lhs</span><span class="p">%</span><span class="n">U</span> <span class="o">=</span> <span class="n">rhs</span>
-  <span class="k">if</span> <span class="p">(</span><span class="nb">allocated</span><span class="p">(</span><span class="n">lhs</span><span class="p">%</span><span class="n">previous</span><span class="p">))</span> <span class="n">lhs</span><span class="p">%</span><span class="n">previous</span> <span class="o">=</span> <span class="n">rhs</span>
+  <span class="k">if</span> <span class="p">(</span><span class="nb">allocated</span><span class="p">(</span><span class="n">lhs</span><span class="p">%</span><span class="n">U</span><span class="p">))</span> <span class="k">then</span>
+    <span class="c">!$OMP PARALLEL DO DEFAULT(NONE) PRIVATE(i) SHARED(lhs, rhs)</span>
+    <span class="k">do </span><span class="n">i</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">lhs</span><span class="p">%</span><span class="n">Ni</span>
+      <span class="n">lhs</span><span class="p">%</span><span class="n">U</span><span class="p">(:,</span> <span class="n">i</span><span class="p">)</span> <span class="o">=</span> <span class="n">rhs</span>
+    <span class="n">enddo</span>
+  <span class="n">endif</span>
   <span class="k">return</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
   <span class="n">endsubroutine</span> <span class="n">euler_assign_real</span>
@@ -901,19 +891,15 @@
   <span class="c">!--------------------------------------------------------------------------------------------------------------------------------</span>
 
   <span class="c">!--------------------------------------------------------------------------------------------------------------------------------</span>
+  <span class="c">!$OMP PARALLEL PRIVATE(i, j, f, v, Pm, LPm, RPm, C, CR) SHARED(self, primitive, r_primitive)</span>
   <span class="k">select case</span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">ord</span><span class="p">)</span>
   <span class="k">case</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="c">! 1st order piecewise constant reconstruction</span>
-    <span class="c">!$OMP PARALLEL DEFAULT(NONE) &amp;</span>
-    <span class="c">!$OMP PRIVATE(i, j, f, v, Pm, LPm, RPm, C, CR) &amp;</span>
-    <span class="c">!$OMP SHARED(self, primitive, r_primitive)</span>
     <span class="c">!$OMP DO</span>
     <span class="k">do </span><span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">self</span><span class="p">%</span><span class="n">Ni</span><span class="o">+</span><span class="mi">1</span>
       <span class="n">r_primitive</span><span class="p">(:,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">i</span><span class="p">)</span> <span class="o">=</span> <span class="n">primitive</span><span class="p">(:,</span> <span class="n">i</span><span class="p">)</span>
       <span class="n">r_primitive</span><span class="p">(:,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">i</span><span class="p">)</span> <span class="o">=</span> <span class="n">r_primitive</span><span class="p">(:,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">i</span><span class="p">)</span>
     <span class="n">enddo</span>
-    <span class="c">!$OMP END PARALLEL</span>
   <span class="k">case</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">7</span><span class="p">)</span> <span class="c">! 3rd, 5th or 7th order WENO reconstruction</span>
-    <span class="c">!$OMP PARALLEL PRIVATE(i, j, f, v, Pm, LPm, RPm, C, CR) SHARED(self, primitive, r_primitive)</span>
     <span class="c">!$OMP DO</span>
     <span class="k">do </span><span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">self</span><span class="p">%</span><span class="n">Ni</span><span class="o">+</span><span class="mi">1</span>
       <span class="c">! trasform primitive variables to pseudo charteristic ones</span>
@@ -948,8 +934,8 @@
                                        <span class="nb">dot_product</span><span class="p">(</span><span class="n">r_primitive</span><span class="p">(</span><span class="mi">1</span><span class="p">:</span><span class="n">self</span><span class="p">%</span><span class="n">Ns</span><span class="p">,</span> <span class="n">f</span><span class="p">,</span> <span class="n">i</span><span class="p">)</span> <span class="o">/</span> <span class="n">r_primitive</span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">Ns</span><span class="o">+</span><span class="mi">3</span><span class="p">,</span> <span class="n">f</span><span class="p">,</span> <span class="n">i</span><span class="p">),</span> <span class="n">self</span><span class="p">%</span><span class="n">cv0</span><span class="p">)</span>
       <span class="n">enddo</span>
     <span class="n">enddo</span>
-    <span class="c">!$OMP END PARALLEL</span>
   <span class="n">endselect</span>
+  <span class="c">!$OMP END PARALLEL</span>
   <span class="k">return</span>
   <span class="c">!--------------------------------------------------------------------------------------------------------------------------------</span>
   <span class="k">contains</span>

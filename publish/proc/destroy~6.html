@@ -363,8 +363,6 @@
       
       <a class="list-group-item" href="../proc/previous_step%7E3.html">previous_step</a>
       
-      <a class="list-group-item" href="../proc/previous_step%7E4.html">previous_step</a>
-      
       <a class="list-group-item" href="../proc/primitive2conservative.html">primitive2conservative</a>
       
       <a class="list-group-item" href="../proc/primitive2conservative%7E2.html">primitive2conservative</a>
@@ -473,8 +471,6 @@
       
       <a class="list-group-item" href="../proc/update_previous_steps%7E3.html">update_previous_steps</a>
       
-      <a class="list-group-item" href="../proc/update_previous_steps%7E4.html">update_previous_steps</a>
-      
     </div>
   </div>
   
@@ -511,7 +507,7 @@ private puresubroutine destroy(self)
   
 <tr>
   
-  <td><span class="anchor" id="variable-self%7E41"></span>class(<a href='../type/euler_1d_openmp.html'>euler_1D_openmp</a>),</td>
+  <td><span class="anchor" id="variable-self%7E40"></span>class(<a href='../type/euler_1d_openmp.html'>euler_1D_openmp</a>),</td>
   <td>intent(inout)</td>
   <td></td>
   
@@ -558,7 +554,6 @@ private puresubroutine destroy(self)
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
 
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
-  <span class="n">self</span><span class="p">%</span><span class="n">steps</span> <span class="o">=</span> <span class="mi">0</span>
   <span class="n">self</span><span class="p">%</span><span class="n">ord</span> <span class="o">=</span> <span class="mi">0</span>
   <span class="n">self</span><span class="p">%</span><span class="n">Ni</span> <span class="o">=</span> <span class="mi">0</span>
   <span class="n">self</span><span class="p">%</span><span class="n">Ng</span> <span class="o">=</span> <span class="mi">0</span>
@@ -567,7 +562,6 @@ private puresubroutine destroy(self)
   <span class="n">self</span><span class="p">%</span><span class="n">Np</span> <span class="o">=</span> <span class="mi">0</span>
   <span class="n">self</span><span class="p">%</span><span class="n">Dx</span> <span class="o">=</span> <span class="mf">0._R_P</span>
   <span class="k">if</span> <span class="p">(</span><span class="nb">allocated</span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">U</span><span class="p">))</span> <span class="k">deallocate</span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">U</span><span class="p">)</span>
-  <span class="k">if</span> <span class="p">(</span><span class="nb">allocated</span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">previous</span><span class="p">))</span> <span class="k">deallocate</span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">previous</span><span class="p">)</span>
   <span class="k">if</span> <span class="p">(</span><span class="nb">allocated</span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">cp0</span><span class="p">))</span> <span class="k">deallocate</span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">cp0</span><span class="p">)</span>
   <span class="k">if</span> <span class="p">(</span><span class="nb">allocated</span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">cv0</span><span class="p">))</span> <span class="k">deallocate</span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">cv0</span><span class="p">)</span>
   <span class="k">if</span> <span class="p">(</span><span class="nb">allocated</span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">BC_L</span><span class="p">))</span> <span class="k">deallocate</span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">BC_L</span><span class="p">)</span>

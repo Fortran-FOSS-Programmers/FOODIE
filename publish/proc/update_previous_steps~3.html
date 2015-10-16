@@ -104,14 +104,14 @@
      
     
     
-    <li><i class="fa fa-code"></i><a href="../src/type_euler-1D.f90"> Source File</a></li>
+    <li><i class="fa fa-code"></i><a href="../src/type_lorenz.f90"> Source File</a></li>
      
   </ul>
   <ol class="breadcrumb in-well text-right">
   
-     <li><a href='../sourcefile/type_euler-1d.f90.html'>type_euler-1D.f90</a></li>
+     <li><a href='../sourcefile/type_lorenz.f90.html'>type_lorenz.f90</a></li>
   
-     <li><a href='../module/type_euler_1d.html'>type_euler_1D</a></li>
+     <li><a href='../module/type_lorenz.html'>type_lorenz</a></li>
   
      <li class="active">update_previous_steps</li>
   </ol>
@@ -131,7 +131,7 @@
     <div class="panel-heading text-left"><h3 class="panel-title">Variables</h3></div>
     <div class="list-group">
       
-      <a class="list-group-item" href="../proc/update_previous_steps%7E3.html#variable-s%7E20">s</a>
+      <a class="list-group-item" href="../proc/update_previous_steps%7E3.html#variable-s%7E24">s</a>
       
     </div>
   </div>
@@ -373,8 +373,6 @@
       
       <a class="list-group-item" href="../proc/previous_step%7E3.html">previous_step</a>
       
-      <a class="list-group-item" href="../proc/previous_step%7E4.html">previous_step</a>
-      
       <a class="list-group-item" href="../proc/primitive2conservative.html">primitive2conservative</a>
       
       <a class="list-group-item" href="../proc/primitive2conservative%7E2.html">primitive2conservative</a>
@@ -483,8 +481,6 @@
       
       <a class="list-group-item" href="../proc/update_previous_steps%7E3.html">update_previous_steps</a>
       
-      <a class="list-group-item" href="../proc/update_previous_steps%7E4.html">update_previous_steps</a>
-      
     </div>
   </div>
   
@@ -521,12 +517,12 @@ private subroutine update_previous_steps(self, filter, weights)
   
 <tr>
   
-  <td><span class="anchor" id="variable-self%7E55"></span>class(<a href='../type/euler_1d.html'>euler_1D</a>),</td>
+  <td><span class="anchor" id="variable-self%7E62"></span>class(<a href='../type/lorenz.html'>lorenz</a>),</td>
   <td>intent(inout)</td>
   <td></td>
   
   <td></td><td>::</td>
-  <td><strong>self</strong></td><td><p>Euler field.</p></td>
+  <td><strong>self</strong></td><td><p>Lorenz field.</p></td>
   
 </tr>
 
@@ -536,7 +532,7 @@ private subroutine update_previous_steps(self, filter, weights)
   
 <tr>
   
-  <td><span class="anchor" id="variable-filter%7E6"></span>class(<a href='../type/integrand.html'>integrand</a>),</td>
+  <td><span class="anchor" id="variable-filter%7E7"></span>class(<a href='../type/integrand.html'>integrand</a>),</td>
   <td>intent(in),</td>
   <td>optional</td>
   
@@ -591,7 +587,7 @@ private subroutine update_previous_steps(self, filter, weights)
   
 <tr>
   
-  <td><span class="anchor" id="variable-s%7E20"></span>integer,</td>
+  <td><span class="anchor" id="variable-s%7E24"></span>integer,</td>
   
   <td>public</td>
   <td></td><td>::</td>
@@ -626,7 +622,7 @@ private subroutine update_previous_steps(self, filter, weights)
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
   <span class="c">!&lt; Update previous time steps.</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
-  <span class="k">class</span><span class="p">(</span><span class="n">euler_1D</span><span class="p">),</span>            <span class="k">intent</span><span class="p">(</span><span class="n">INOUT</span><span class="p">)</span> <span class="kd">::</span> <span class="n">self</span>       <span class="c">!&lt; Euler field.</span>
+  <span class="k">class</span><span class="p">(</span><span class="n">lorenz</span><span class="p">),</span>              <span class="k">intent</span><span class="p">(</span><span class="n">INOUT</span><span class="p">)</span> <span class="kd">::</span> <span class="n">self</span>       <span class="c">!&lt; Lorenz field.</span>
   <span class="k">class</span><span class="p">(</span><span class="n">integrand</span><span class="p">),</span> <span class="k">optional</span><span class="p">,</span> <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span>    <span class="kd">::</span> <span class="n">filter</span>     <span class="c">!&lt; Filter field displacement.</span>
   <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">),</span>        <span class="k">optional</span><span class="p">,</span> <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span>    <span class="kd">::</span> <span class="n">weights</span><span class="p">(:)</span> <span class="c">!&lt; Weights for filtering the steps.</span>
   <span class="kt">integer</span>                                   <span class="kd">::</span> <span class="n">s</span>          <span class="c">!&lt; Time steps counter.</span>
@@ -635,15 +631,15 @@ private subroutine update_previous_steps(self, filter, weights)
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
   <span class="k">if</span> <span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">steps</span><span class="o">&gt;</span><span class="mi">0</span><span class="p">)</span> <span class="k">then</span>
 <span class="k">    do </span><span class="n">s</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">self</span><span class="p">%</span><span class="n">steps</span> <span class="o">-</span> <span class="mi">1</span>
-      <span class="n">self</span><span class="p">%</span><span class="n">previous</span><span class="p">(:,</span> <span class="p">:,</span> <span class="n">s</span><span class="p">)</span> <span class="o">=</span> <span class="n">self</span><span class="p">%</span><span class="n">previous</span><span class="p">(:,</span> <span class="p">:,</span> <span class="n">s</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+      <span class="n">self</span><span class="p">%</span><span class="n">previous</span><span class="p">(:,</span> <span class="n">s</span><span class="p">)</span> <span class="o">=</span> <span class="n">self</span><span class="p">%</span><span class="n">previous</span><span class="p">(:,</span> <span class="n">s</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
     <span class="n">enddo</span>
-    <span class="n">self</span><span class="p">%</span><span class="n">previous</span><span class="p">(:,</span> <span class="p">:,</span> <span class="n">self</span><span class="p">%</span><span class="n">steps</span><span class="p">)</span> <span class="o">=</span> <span class="n">self</span><span class="p">%</span><span class="n">U</span>
+    <span class="n">self</span><span class="p">%</span><span class="n">previous</span><span class="p">(:,</span> <span class="n">self</span><span class="p">%</span><span class="n">steps</span><span class="p">)</span> <span class="o">=</span> <span class="n">self</span><span class="p">%</span><span class="n">U</span>
   <span class="n">endif</span>
   <span class="k">if</span> <span class="p">(</span><span class="nb">present</span><span class="p">(</span><span class="n">filter</span><span class="p">).</span><span class="nb">and</span><span class="p">.</span><span class="nb">present</span><span class="p">(</span><span class="n">weights</span><span class="p">))</span> <span class="k">then</span>
 <span class="k">    select type</span><span class="p">(</span><span class="n">filter</span><span class="p">)</span>
-    <span class="k">class is</span><span class="p">(</span><span class="n">euler_1D</span><span class="p">)</span>
+    <span class="k">class is</span><span class="p">(</span><span class="n">lorenz</span><span class="p">)</span>
       <span class="k">do </span><span class="n">s</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">self</span><span class="p">%</span><span class="n">steps</span>
-        <span class="n">self</span><span class="p">%</span><span class="n">previous</span><span class="p">(:,</span> <span class="p">:,</span> <span class="n">s</span><span class="p">)</span> <span class="o">=</span> <span class="n">self</span><span class="p">%</span><span class="n">previous</span><span class="p">(:,</span> <span class="p">:,</span> <span class="n">s</span><span class="p">)</span> <span class="o">+</span> <span class="n">filter</span><span class="p">%</span><span class="n">U</span> <span class="o">*</span> <span class="n">weights</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
+        <span class="n">self</span><span class="p">%</span><span class="n">previous</span><span class="p">(:,</span> <span class="n">s</span><span class="p">)</span> <span class="o">=</span> <span class="n">self</span><span class="p">%</span><span class="n">previous</span><span class="p">(:,</span> <span class="n">s</span><span class="p">)</span> <span class="o">+</span> <span class="n">filter</span><span class="p">%</span><span class="n">U</span> <span class="o">*</span> <span class="n">weights</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
       <span class="n">enddo</span>
     <span class="n">endselect</span>
   <span class="n">endif</span>
