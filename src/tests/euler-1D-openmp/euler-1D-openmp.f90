@@ -90,10 +90,8 @@ call omp_set_num_threads(omp_threads)
 !$OMP SHARED(omp_threads)
 omp_threads = omp_get_num_threads()
 !$OMP END PARALLEL
-print "(A)", 'Testing FOODiE with '//trim(str(.true., omp_threads))//' OpenMP threads for Ni: '//trim(str(.true., Ni))//' cells'
 #endif
 call init()
-print "(A)", 'Integrating 1D Euler equations by means of TVD/SSP Runge-Kutta class of solvers'
 call rk_integrator%init(stages=rk_stages)
 call domain%init(Ni=Ni, Ns=Ns, Dx=Dx, BC_L=BC_L, BC_R=BC_R, initial_state=initial_state, cp0=cp0, cv0=cv0, ord=7)
 t = 0._R_P
@@ -120,7 +118,7 @@ call save_time_serie(t=t, finish=.true.)
 call save_results(title='FOODiE test: 1D Euler equations integration, explicit TVD Runge-Kutta, t='//str(n=t_final)// &
                         trim(str(.true., rk_stages))//' stages', &
                   filename='euler_1D_openmp_integration-tvdrk-'//trim(str(.true., rk_stages)))
-print "(A)", 'Finish! Average system seconds spent for 1 step integration: '//trim(str(.true., system_clocks))
+print "(I5,A,F23.15)", omp_threads, ' ', system_clocks
 stop
 !-----------------------------------------------------------------------------------------------------------------------------------
 contains

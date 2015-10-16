@@ -340,12 +340,13 @@ contains
   enddo
   ! compute residuals
   allocate(euler_1D_openmp :: dState_dt)
+  select type(dState_dt)
+  class is(euler_1D_openmp)
+    dState_dt = self
+  endselect
   !$OMP PARALLEL PRIVATE(i) SHARED(self, dState_dt, F)
   select type(dState_dt)
   class is(euler_1D_openmp)
-    !$OMP SINGLE
-    dState_dt = self
-    !$OMP END SINGLE
     !$OMP DO
     do i=1, self%Ni
       dState_dt%U(:, i) = (F(:, i - 1) - F(:, i)) / self%Dx
@@ -368,12 +369,13 @@ contains
 
   !---------------------------------------------------------------------------------------------------------------------------------
   allocate(euler_1D_openmp :: opr)
+  select type(opr)
+  class is(euler_1D_openmp)
+    opr = lhs
+  endselect
   !$OMP PARALLEL DEFAULT(NONE) PRIVATE(i) SHARED(lhs, rhs, opr)
   select type(opr)
   class is(euler_1D_openmp)
-    !$OMP SINGLE
-    opr = lhs
-    !$OMP END SINGLE
     select type(rhs)
     class is (euler_1D_openmp)
       !$OMP DO
@@ -399,12 +401,13 @@ contains
 
   !---------------------------------------------------------------------------------------------------------------------------------
   allocate(euler_1D_openmp :: opr)
+  select type(opr)
+  class is(euler_1D_openmp)
+    opr = lhs
+  endselect
   !$OMP PARALLEL DEFAULT(NONE) PRIVATE(i) SHARED(lhs, rhs, opr)
   select type(opr)
   class is(euler_1D_openmp)
-    !$OMP SINGLE
-    opr = lhs
-    !$OMP END SINGLE
     !$OMP DO
     do i=1, lhs%Ni
       opr%U(:, i) = lhs%U(:, i) * rhs
@@ -427,12 +430,13 @@ contains
 
   !---------------------------------------------------------------------------------------------------------------------------------
   allocate(euler_1D_openmp :: opr)
+  select type(opr)
+  class is(euler_1D_openmp)
+    opr = rhs
+  endselect
   !$OMP PARALLEL DEFAULT(NONE) PRIVATE(i) SHARED(lhs, rhs, opr)
   select type(opr)
   class is(euler_1D_openmp)
-    !$OMP SINGLE
-    opr = rhs
-    !$OMP END SINGLE
     !$OMP DO
     do i=1, rhs%Ni
       opr%U(:, i) = rhs%U(:, i) * lhs
@@ -455,12 +459,13 @@ contains
 
   !---------------------------------------------------------------------------------------------------------------------------------
   allocate (euler_1D_openmp :: opr)
+  select type(opr)
+  class is(euler_1D_openmp)
+    opr = lhs
+  endselect
   !$OMP PARALLEL DEFAULT(NONE) PRIVATE(i) SHARED(lhs, rhs, opr)
   select type(opr)
   class is(euler_1D_openmp)
-    !$OMP SINGLE
-    opr = lhs
-    !$OMP END SINGLE
     select type(rhs)
     class is (euler_1D_openmp)
       !$OMP DO
@@ -486,12 +491,13 @@ contains
 
   !---------------------------------------------------------------------------------------------------------------------------------
   allocate (euler_1D_openmp :: opr)
+  select type(opr)
+  class is(euler_1D_openmp)
+    opr = lhs
+  endselect
   !$OMP PARALLEL DEFAULT(NONE) PRIVATE(i) SHARED(lhs, rhs, opr)
   select type(opr)
   class is(euler_1D_openmp)
-    !$OMP SINGLE
-    opr = lhs
-    !$OMP END SINGLE
     select type(rhs)
     class is (euler_1D_openmp)
       !$OMP DO
@@ -511,6 +517,7 @@ contains
   !---------------------------------------------------------------------------------------------------------------------------------
   class(euler_1D_openmp), intent(INOUT) :: lhs !< Left hand side.
   class(integrand),       intent(IN)    :: rhs !< Right hand side.
+  integer(I_P)                          :: i   !< Counter.
   !---------------------------------------------------------------------------------------------------------------------------------
 
   !---------------------------------------------------------------------------------------------------------------------------------
@@ -524,12 +531,25 @@ contains
                              lhs%Np   = rhs%Np
                              lhs%Dx   = rhs%Dx
                              lhs%weno = rhs%weno
-    if (allocated(rhs%U))    lhs%U    = rhs%U
+    if (allocated(rhs%U)) then
+      if (allocated(lhs%U)) deallocate(lhs%U) ; allocate(lhs%U(1:lhs%Nc, 1:lhs%Ni))
+    endif
     if (allocated(rhs%cp0))  lhs%cp0  = rhs%cp0
     if (allocated(rhs%cv0))  lhs%cv0  = rhs%cv0
     if (allocated(rhs%BC_L)) lhs%BC_L = rhs%BC_L
     if (allocated(rhs%BC_R)) lhs%BC_R = rhs%BC_R
   endselect
+  !$OMP PARALLEL DEFAULT(NONE) PRIVATE(i) SHARED(lhs, rhs)
+  select type(rhs)
+  class is(euler_1D_openmp)
+    if (allocated(rhs%U)) then
+      !$OMP DO
+      do i=1, lhs%Ni
+        lhs%U(:, i) = rhs%U(:, i)
+      enddo
+    endif
+  endselect
+  !$OMP END PARALLEL
   return
   !---------------------------------------------------------------------------------------------------------------------------------
   endsubroutine euler_assign_euler

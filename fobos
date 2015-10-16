@@ -1,6 +1,7 @@
 [modes]
 modes = errors-analysis
-        openmp-benchmark
+        benchmark-openmp-on
+        benchmark-openmp-off
         tests-gnu tests-intel
         tests-gnu-debug tests-intel-debug
         euler-gnu-openmp-on euler-intel-openmp-on
@@ -28,11 +29,22 @@ template  = template-static-gnu
 dependon  = $EXT_DEPENDS_GNU
 exclude   = $OMP_EXCLUDE
 
-[openmp-benchmark]
-help      = build all tests for OpenMP benchmarks: GNU gfortran, release mode
+[benchmark-openmp-on]
+help      = build 1D Euler OpenMP: parallelization ENABLED
 template  = template-static-gnu
 openmp    = True
 preproc   = -DOPENMP
+target    = ./src/tests/euler-1D-openmp/euler-1D-openmp.f90
+output    = euler-1D-openmp-on
+dependon  = $EXT_DEPENDS_GNU
+exclude   = $SERIAL_EXCLUDE
+
+[benchmark-openmp-off]
+help      = build 1D Euler OpenMP: parallelization ENABLED
+template  = template-static-gnu
+openmp    = False
+target    = ./src/tests/euler-1D-openmp/euler-1D-openmp.f90
+output    = euler-1D-openmp-off
 dependon  = $EXT_DEPENDS_GNU
 exclude   = $SERIAL_EXCLUDE
 
