@@ -1,12 +1,40 @@
 \section{Benchmarks on parallel frameworks}\label{sec:parallel}
 
+Speedup of strong scaling:
+
+\begin{equation}
+  speedup(N, k) = \frac{T_{serial}(N)}{T_{parallel}(N, k)}
+  \label{eq:strong-scaling-speedup}
+\end{equation}
+where $N$ is the problem size, $K$ the number of cpu-cores used, $T_{serial}$ is the cpu time of the serial code and $T_{parallel}$ the one of the parallel code.
+
+Efficiency of strong scaling:
+
+\begin{equation}
+  efficiency(N, k) = \frac{speedup(N, k)}{k}
+  \label{eq:strong-scaling-efficiency}
+\end{equation}
+
+Sizeup of weak scaling:
+
+\begin{equation}
+  sizeup(N, k) = \frac{N_k}{N_1} \cdot \frac{T_{serial}(N_1)}{T_{parallel}(N_k, k)}
+  \label{eq:weak-scaling-sizeup}
+\end{equation}
+where $N_k=k \cdot N_1$.
+
+Efficiency of weak scaling:
+
+\begin{equation}
+  efficiency(N, k) = \frac{sizeup(N, k)}{k}
+  \label{eq:weak-scaling-efficiency}
+\end{equation}
+
 {\color{red} To be written.}
 
-\subsection{OpenMP benchmark}\label{subsec:openmp}
-
-{\color{red} To be written.}
+\input{src/parallel/openmp.tex}
 
 \subsection{MPI benchmark}\label{subsec:mpi}
 
 {\color{red} To be written.}
-  
+
