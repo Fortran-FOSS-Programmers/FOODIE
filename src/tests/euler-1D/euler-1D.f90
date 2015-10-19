@@ -1,7 +1,7 @@
-!< Test FOODiE with the integration of Euler 1D PDEs system.
+!< Test FOODIE with the integration of Euler 1D PDEs system.
 program integrate_euler_1D
 !-----------------------------------------------------------------------------------------------------------------------------------
-!< Test FOODiE with the integration of Euler 1D PDEs system.
+!< Test FOODIE with the integration of Euler 1D PDEs system.
 !-----------------------------------------------------------------------------------------------------------------------------------
 
 !-----------------------------------------------------------------------------------------------------------------------------------
@@ -56,7 +56,7 @@ integer(I_P)                      :: av_Ni              !< Average the solution 
 call cli%init(progname    = 'euler-1D',                                              &
               authors     = 'Fortran-FOSS-Programmers',                              &
               license     = 'GNU GPLv3',                                             &
-              description = 'Test FOODiE library on 1D Euler equations integration', &
+              description = 'Test FOODIE library on 1D Euler equations integration', &
               examples    = ["euler-1D --solver euler --results  ",                  &
                              "euler-1D --solver ls-runge-kutta -r",                  &
                              "euler-1D --solver adams-bashforth  ",                  &
@@ -261,7 +261,7 @@ contains
     open(newunit=rawfile, file=basename//'-'//trim(str(.true.,Ni))//'_cells.dat')
     write(rawfile, '(A)')'TITLE="'//title//'"'
     write(rawfile, '(A)')variables
-    write(rawfile, '(A)')'ZONE T="FOODiE: '//trim(str(.true.,Ni))//' cells", I='//trim(str(.true.,Ni+1))//&
+    write(rawfile, '(A)')'ZONE T="FOODIE: '//trim(str(.true.,Ni))//' cells", I='//trim(str(.true.,Ni+1))//&
                          ', J=1, K=1, DATAPACKING=BLOCK, VARLOCATION=([1]=NODAL,[2-'//trim(str(.true.,Np+1)) //']=CELLCENTERED)'
     write(rawfile, '('//trim(str(.true.,Ni+1))//'('//FR_P//',1X))')xnode
     do v=1, Np
@@ -270,7 +270,7 @@ contains
     if ((av_Ni>0).and.(av_Ni/=Ni)) then
       print "(A)", ' Average solution from Ni: '//trim(str(.true.,Ni))//' to av_Ni: '//trim(str(.true.,av_Ni))
       call average_solution
-      write(rawfile, '(A)')'ZONE T="FOODiE: '//trim(str(.true.,Ni))//' cells averaged over '//trim(str(.true.,av_Ni))//&
+      write(rawfile, '(A)')'ZONE T="FOODIE: '//trim(str(.true.,Ni))//' cells averaged over '//trim(str(.true.,av_Ni))//&
                            ' cells", I='//trim(str(.true.,av_Ni+1))//&
                            ', J=1, K=1, DATAPACKING=BLOCK, VARLOCATION=([1]=NODAL,[2-'//trim(str(.true.,Np+1)) //']=CELLCENTERED)'
       write(rawfile, '('//trim(str(.true.,av_Ni+1))//'('//FR_P//',1X))')av_xnode

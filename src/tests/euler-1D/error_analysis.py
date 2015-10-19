@@ -49,7 +49,7 @@ def compute_error(s_coarse, s_fine, Dx):
 
 
 if __name__ == '__main__':
-  cliparser = argparse.ArgumentParser(prog='error_analysis.py', description='Perform error analysis of 1D Euler test of FOODiE library')
+  cliparser = argparse.ArgumentParser(prog='error_analysis.py', description='Perform error analysis of 1D Euler test of FOODIE library')
   cliparser.add_argument('-ex', '--execute', required=False, action='store_true', default=False, help='Execute the euler-1D program (avoided if results files already generated)')
   cliparser.add_argument('-p', '--problem', required=False, action='store', default='sod', choices=['sod', 'smooth'], help='Problem to be solved')
   cliparser.add_argument('--Ni_grids', required=False, action='store', nargs='+', default=[100, 200, 400, 800, 1600, 3200], help='Grids number of cells')

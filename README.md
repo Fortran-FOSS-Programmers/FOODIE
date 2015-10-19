@@ -1,8 +1,8 @@
 <a name="top"></a>
 
-# FOODiE
+# FOODIE
 
-[![GitHub tag](https://img.shields.io/github/tag/Fortran-FOSS-Programmers/FOODiE.svg)]() [![Join the chat at https://gitter.im/Fortran-FOSS-Programmers/FOODiE](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/Fortran-FOSS-Programmers/FOODiE?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+[![GitHub tag](https://img.shields.io/github/tag/Fortran-FOSS-Programmers/FOODIE.svg)]() [![Join the chat at https://gitter.im/Fortran-FOSS-Programmers/FOODIE](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/Fortran-FOSS-Programmers/FOODIE?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
 [![License](https://img.shields.io/badge/license-GNU%20GeneraL%20Public%20License%20v3,%20GPLv3-blue.svg)]()
 [![License](https://img.shields.io/badge/license-BSD2-red.svg)]()
@@ -10,34 +10,57 @@
 [![License](https://img.shields.io/badge/license-MIT-red.svg)]()
 
 [![Status](https://img.shields.io/badge/status-beta-orange.svg)]()
-[![Build Status](https://travis-ci.org/Fortran-FOSS-Programmers/FOODiE.svg?branch=master)](https://travis-ci.org/Fortran-FOSS-Programmers/FOODiE)
-[![Coverage Status](https://img.shields.io/codecov/c/github/Fortran-FOSS-Programmers/FOODiE.svg)](http://codecov.io/github/Fortran-FOSS-Programmers/FOODiE?branch=master)
-[![GitHub issues](https://img.shields.io/github/issues/Fortran-FOSS-Programmers/FOODiE.svg)]()
+[![Build Status](https://travis-ci.org/Fortran-FOSS-Programmers/FOODIE.svg?branch=master)](https://travis-ci.org/Fortran-FOSS-Programmers/FOODIE)
+[![Coverage Status](https://img.shields.io/codecov/c/github/Fortran-FOSS-Programmers/FOODIE.svg)](http://codecov.io/github/Fortran-FOSS-Programmers/FOODIE?branch=master)
+[![GitHub issues](https://img.shields.io/github/issues/Fortran-FOSS-Programmers/FOODIE.svg)]()
 
-### FOODiE, Fortran Object oriented Ordinary Differential Equations integration library
+### FOODIE, Fortran Object-Oriented Differential-equations Integration Environment
 
-- FOODiE is a pure Fortran (KISS) library for integrating Ordinary Differential Equations (ODE);
-- FOODiE is Fortran 2003+ standard compliant;
-- FOODiE is OOP designed;
-- FOODiE is a Free, Open Source Project.
+- FOODIE is a pure Fortran (KISS) library providing an awesome environment for the numerical integration of Differential-equations (ODE, PDE);
+- FOODIE is Fortran 2008+ standard compliant;
+- FOODIE is OOP designed;
+- FOODIE is a Free, Open Source Project.
 
 #### Table of Contents
 
-+ [What is FOODiE?](#what-is-FOODiE?)
++ [What is FOODIE?](#what-is-FOODIE?)
 + [Main features](#main-features)
 + [Status](#status)
 + [Copyrights](#copyrights)
 + [Documentation](#documentation)
 
-## What is FOODiE?
+## What is FOODIE?
 
-Modern Fortran standards (2003+) have introduced support for Object Oriented Programming. Exploiting new features like Abstract Data Type (ADT) is now possible to develop a KISS library for integrating Ordinary Differential Equations on ADT making the development of new numerical schemes faster, easier and clearer.
+Modern Fortran standards (2003+) have introduced support for Object-Oriented Programming (OOP). Exploiting new features like Abstract Data Type (ADT) is now possible to develop a KISS library providing an awesome environment for the numerical integration of Differential-equations such as Ordinary and Partial Differential Eqautions (ODE, PDE). FOODIE is tailored to the systems arising from the semi-discretization of PDEs, but it is not limited to them.
+
+The FOODIE environment allows the (numerical) solution of general, non linear differential equations system of the form:
+
+![IVP](https://raw.githubusercontent.com/wiki/Fortran-FOSS-Programmers/FOODIE/images/IVP.png)
+
+where:
+
++ *U_t = dU/dt*;
++ *U* is the vector of *state* variables being a function of the time-like independent variable *t*;
++ *R* is the (vectorial) residual function, it could be a non linear function of the solution *U* itself;
++ *F* is the (vectorial) initial conditions function.
+
+The FOODIE has two main purposes:
+
++ for developers devising new schemes for the numerical integrations of differential equations (DE):
+    + provide a concise, clear, robust and comprehensive abstract environment by means of which:
+        + express the solvers formulae with a very high-level language, it being close as much as possible to their *natual* mathematical formulations; this ensures:
+            + clearness, conciseness and robustness;
+            + fast-developing;
++ for clients that must solve a differential equations system:
+    + provide a simple, standard API for many built-in DE solvers out-of-the-box, thus allowing:
+        + fast-solution of new problems;
+        + robustness: the same DE solver is applied to different problems, i.e. cross-validation;
 
 Go to [Top](#top)
 
 ## Main features
 
-FOODiE is aimed to be a KISS-pure-Fortran library for integrating Ordinary Differential Equations (ODE), it being:
+FOODIE is aimed to be a KISS-pure-Fortran library for integrating Ordinary Differential Equations (ODE), it being:
 
 + [x] Pure Fortran implementation;
 + [x] KISS and user-friendly:
@@ -45,17 +68,17 @@ FOODiE is aimed to be a KISS-pure-Fortran library for integrating Ordinary Diffe
     + [ ] easy building and porting on heterogeneous architectures;
 + [ ] comprehensive solvers set out-of-the-box:
     + [x] explicit schemes:
-        + [x] [Adams-Bashforth](http://fortran-foss-programmers.github.io/FOODiE/module/foodie_integrator_adams_bashforth.html) schemes see [7]:
+        + [x] [Adams-Bashforth](http://fortran-foss-programmers.github.io/FOODIE/module/foodie_integrator_adams_bashforth.html) schemes see [7]:
             + [x] 1 step, namely the forward explicit Euler scheme, 1st order accurate;
             + [x] 2 steps, 2nd accurate;
             + [x] 3 steps, 3rd accurate;
-        + [x] [Euler](http://fortran-foss-programmers.github.io/FOODiE/module/foodie_integrator_euler_explicit.html) scheme, 1st order accurate;
-        + [x] [Leapfrog](http://fortran-foss-programmers.github.io/FOODiE/module/foodie_integrator_leapfrog.html), 2nd order accurate:
+        + [x] [Euler](http://fortran-foss-programmers.github.io/FOODIE/module/foodie_integrator_euler_explicit.html) scheme, 1st order accurate;
+        + [x] [Leapfrog](http://fortran-foss-programmers.github.io/FOODIE/module/foodie_integrator_leapfrog.html), 2nd order accurate:
             + [x] unfiltered leapfrog, 2nd order accurate, mostly unstable, see [4];
             + [x] Robert-Asselin filtered leapfrog, 1st order accurate, see [4, 5, 6];
             + [x] Robert-Asselin-Williams filtered leapfrog, 3rd order accurate, see [5, 6];
         + [ ] Runge-Kutta schemes:
-            + [ ] [low-storage](http://fortran-foss-programmers.github.io/FOODiE/module/foodie_integrator_low_storage_runge_kutta.html) schemes, see [1, 2, 3]:
+            + [ ] [low-storage](http://fortran-foss-programmers.github.io/FOODIE/module/foodie_integrator_low_storage_runge_kutta.html) schemes, see [1, 2, 3]:
                 + [x] 1 stage, namely the forward explicit Euler scheme, 1st order accurate;
                 + [ ] 2 stages;
                 + [ ] 3 stages;
@@ -66,12 +89,16 @@ FOODiE is aimed to be a KISS-pure-Fortran library for integrating Ordinary Diffe
                 + [x] 12 stages, 4th order accurate, 2N registers, see [10];
                 + [x] 13 stages, 4th order accurate, 2N registers, see [10];
                 + [x] 14 stages, 4th order accurate, 2N registers, see [10];
-            + [ ] [TVD/SSP](http://fortran-foss-programmers.github.io/FOODiE/module/foodie_integrator_tvd_runge_kutta.html) schemes, see [1]:
+            + [ ] [TVD/SSP](http://fortran-foss-programmers.github.io/FOODIE/module/foodie_integrator_tvd_runge_kutta.html) schemes, see [1]:
                 + [x] 1 stage, namely the forward explicit Euler scheme, 1st order accurate;
                 + [x] 2 stages, 2nd order accurate;
                 + [x] 3 stages, 3rd order accurate;
                 + [ ] 4 stages;
                 + [x] 5 stages, 4th order accurate;
+            + [ ] embedded (adaptive) schemes:
+                + [ ] Runge-Kutta-Fehlberg, 5 stages, 4th order accurate;
+                + [ ] Runge-Kutta-Cash-Karp, 5 stages, 4th order accurate;
+                + [ ] Prince-Dormand, 9 stages, 8th order accurate;
     + [ ] implicit schemes:
         + [ ] Runge-Kutta schemes;
     + [ ] predictor-corrector schemes:
@@ -80,18 +107,19 @@ FOODiE is aimed to be a KISS-pure-Fortran library for integrating Ordinary Diffe
             + [x] 2 steps, AB(2)-AM(1), 2nd accurate;
             + [x] 3 steps, AB(3)-AM(2), 3rd accurate;
             + [x] 4 steps, AB(4)-AM(3), 4th accurate;
-+ [ ] efficient:
-    + [ ] high scalability on parallel architectures:
-        + [ ] support for shared memory multi/many cores architecture;
-        + [ ] support for distributed memory cluster;
-        + [ ] support for GPGPU/accelerators device;
-+ [x] [Tests-Driven](https://github.com/Fortran-FOSS-Programmers/FOODiE/wiki/Examples) Developed ([TDD](https://en.wikipedia.org/wiki/Test-driven_development)):
++ [ ] efficient and *non intrusive*:
+    + [ ] FOODIE environment is unaware of any eventual parallel paradigms the clients used, but it is proved to preserve high scalability on parallel architectures such as:
+        + [x] OpenMP directive-based codes on shared memory multi/many cores architectures;
+        + [ ] CoArray Fortran (CAF) based codes for Partitioned Global Address Space (PGAS) programming model;
+        + [ ] MPI based code on distributed memory clusters;
+        + [ ] GPGPU/accelerators device enabled codes;
++ [x] [Tests-Driven](https://github.com/Fortran-FOSS-Programmers/FOODIE/wiki/Examples) Developed ([TDD](https://en.wikipedia.org/wiki/Test-driven_development)):
 + [x] well documented:
-    + [x] clear documentation of schemes implementations, e.g. see [Adams-Bashforth API documentation](http://fortran-foss-programmers.github.io/FOODiE/module/foodie_integrator_adams_bashforth.html);
-    + [x] complete [API](http://fortran-foss-programmers.github.io/FOODiE/index.html) reference;
-    + [x] comprehensive [wiki](https://github.com/Fortran-FOSS-Programmers/FOODiE/wiki):
-+ [x] collaborative developed on [GitHub](https://github.com/Fortran-FOSS-Programmers/FOODiE);
-+ [x] [FOSS licensed](https://github.com/Fortran-FOSS-Programmers/FOODiE/wiki/Copyrights);
+    + [x] clear documentation of schemes implementations, e.g. see [Adams-Bashforth API documentation](http://fortran-foss-programmers.github.io/FOODIE/module/foodie_integrator_adams_bashforth.html);
+    + [x] complete [API](http://fortran-foss-programmers.github.io/FOODIE/index.html) reference;
+    + [x] comprehensive [wiki](https://github.com/Fortran-FOSS-Programmers/FOODIE/wiki):
++ [x] collaborative developed on [GitHub](https://github.com/Fortran-FOSS-Programmers/FOODIE);
++ [x] [FOSS licensed](https://github.com/Fortran-FOSS-Programmers/FOODIE/wiki/Copyrights);
 
 Any feature request is welcome.
 
@@ -121,13 +149,13 @@ Go to [Top](#top)
 
 ## Status [![Status](https://img.shields.io/badge/status-beta-orange.svg)]()
 
-FOODiE project is young, but developed with love. Many integrators have been implemented using the Rouson's Abstract Data Type Pattern and tested with complex problems, but the library API is still in beta testing status. Nevertheless, FOODiE is already proven to be able to integrate a wide range of different ODE problems, from pure ODEs (Lorenz and inertial oscillations equations) to complex PDEs (Burgers and Euler equations), see the documentation.
+FOODIE project is young, but developed with love. Many integrators have been implemented using the Rouson's Abstract Data Type Pattern and tested with complex problems, but the library API is still in beta testing status. Nevertheless, FOODIE is already proven to be able to integrate a wide range of different ODE problems, from pure ODEs (Lorenz and inertial oscillations equations) to complex PDEs (Burgers and Euler equations), see the documentation.
 
 We are searching for Fortraners enthusiast joining our team!
 
 ## Copyrights
 
-FOODiE is an open source project, it is distributed under a multi-licensing system:
+FOODIE is an open source project, it is distributed under a multi-licensing system:
 
 + for FOSS projects:
   - [GPL v3](http://www.gnu.org/licenses/gpl-3.0.html);
@@ -136,14 +164,14 @@ FOODiE is an open source project, it is distributed under a multi-licensing syst
   - [BSD 3-Clause](http://opensource.org/licenses/BSD-3-Clause);
   - [MIT](http://opensource.org/licenses/MIT).
 
-Anyone is interest to use, to develop or to contribute to FOODiE is welcome, feel free to select the license that best matches your soul!
+Anyone is interest to use, to develop or to contribute to FOODIE is welcome, feel free to select the license that best matches your soul!
 
-More details can be found on [wiki](https://github.com/Fortran-FOSS-Programmers/FOODiE/wiki/Copyrights).
+More details can be found on [wiki](https://github.com/Fortran-FOSS-Programmers/FOODIE/wiki/Copyrights).
 
 Go to [Top](#top)
 
 ## Documentation
 
-Besides this README file the FOODiE documentation is contained into its own [wiki](https://github.com/Fortran-FOSS-Programmers/FOODiE/wiki). Detailed documentation of the API is contained into the [GitHub Pages](http://Fortran-FOSS-Programmers.github.io/FOODiE/index.html) that can also be created locally by means of [ford tool](https://github.com/cmacmackin/ford).
+Besides this README file the FOODIE documentation is contained into its own [wiki](https://github.com/Fortran-FOSS-Programmers/FOODIE/wiki). Detailed documentation of the API is contained into the [GitHub Pages](http://Fortran-FOSS-Programmers.github.io/FOODIE/index.html) that can also be created locally by means of [ford tool](https://github.com/cmacmackin/ford).
 
 Go to [Top](#top)

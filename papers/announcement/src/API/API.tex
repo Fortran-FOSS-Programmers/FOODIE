@@ -1,14 +1,14 @@
 \section{Application Program Interface}\label{sec:API}
 
-In this section we review the FOODiE API providing a detailed discussion of the implementation choices.
+In this section we review the FOODIE API providing a detailed discussion of the implementation choices.
 
-As aforementioned, the programming language used is the Fortran 2008 standard, that is a minor revision of the previous Fortran 2003 standard. Such a new Fortran idioms provide (among other useful features) an almost complete support for OOP, in particular for ADT concept. Fortran 2003 has introduced the \emph{abstract derived type}: it is a derived type suitable to serve as \emph{contract} for concrete type-extensions that has not any actual implementations, rather it provides a well-defined set of type bound procedures interfaces, that in Fortran nomenclature are called \emph{deferred} procedures. Using such an abstract definition, we can implement algorithms operating on only this abstract type and on \emph{all its concrete extensions}. This is the key feature of FOODiE library: all the above described ODE solvers are implemented on the knowledge of \emph{only one abstract type}, allowing an implementation-style based on a very high-level syntax. In the meanwhile, client codes must implement their own IVPs extending only one simple abstract type.
+As aforementioned, the programming language used is the Fortran 2008 standard, that is a minor revision of the previous Fortran 2003 standard. Such a new Fortran idioms provide (among other useful features) an almost complete support for OOP, in particular for ADT concept. Fortran 2003 has introduced the \emph{abstract derived type}: it is a derived type suitable to serve as \emph{contract} for concrete type-extensions that has not any actual implementations, rather it provides a well-defined set of type bound procedures interfaces, that in Fortran nomenclature are called \emph{deferred} procedures. Using such an abstract definition, we can implement algorithms operating on only this abstract type and on \emph{all its concrete extensions}. This is the key feature of FOODIE library: all the above described ODE solvers are implemented on the knowledge of \emph{only one abstract type}, allowing an implementation-style based on a very high-level syntax. In the meanwhile, client codes must implement their own IVPs extending only one simple abstract type.
 
-In the subsection \ref{subsec:type_integrand} a review of the FOODiE main ADT, the \emph{integrand} type, is provided, while subsections \ref{subsec:solver_euler}, \ref{subsec:solver_tvd_rk}, \ref{subsec:solver_ls_rk}, \ref{subsec:solver_ab} and \ref{subsec:solver_leapfrog} cover the API of the currently implemented solvers.
+In the subsection \ref{subsec:type_integrand} a review of the FOODIE main ADT, the \emph{integrand} type, is provided, while subsections \ref{subsec:solver_euler}, \ref{subsec:solver_tvd_rk}, \ref{subsec:solver_ls_rk}, \ref{subsec:solver_ab} and \ref{subsec:solver_leapfrog} cover the API of the currently implemented solvers.
 
-It is worth noting that all FOODiE public \emph{entities} (ADT and solvers) must be accessed by the FOODiE module, see listing \ref{list:main_module} for an example on how access to all public FOODiE entities.
+It is worth noting that all FOODIE public \emph{entities} (ADT and solvers) must be accessed by the FOODIE module, see listing \ref{list:main_module} for an example on how access to all public FOODIE entities.
 
-\begin{lstlisting}[firstnumber=1,style=code,caption={usage example importing all public entities of FOODiE main module},label={list:main_module}]
+\begin{lstlisting}[firstnumber=1,style=code,caption={usage example importing all public entities of FOODIE main module},label={list:main_module}]
 use foodie, only: integrand, &
                   adams_bashforth_integrator, &
                   adams_moulton_integrator, &
@@ -21,13 +21,13 @@ use foodie, only: integrand, &
 use foodie
 \end{lstlisting}
 
-\subsection{The main FOODiE Abstract Data Type: the integrand type}\label{subsec:type_integrand}
+\subsection{The main FOODIE Abstract Data Type: the integrand type}\label{subsec:type_integrand}
 
 The implemented ACP is based on one main ADT, the \emph{integrand} type, the definition of which is shown in listing~\ref{list:type_integrand}.
 
 \begin{lstlisting}[firstnumber=1,style=code,caption={integrand type definition},label={list:type_integrand}]
 type, abstract :: integrand
-  !< Abstract type for building FOODiE ODE integrators.
+  !< Abstract type for building FOODIE ODE integrators.
   contains
     ! public deferred procedures that concrete integrand-field must implement
     procedure(time_derivative),       pass(self), deferred, public:: t
@@ -48,7 +48,7 @@ type, abstract :: integrand
 endtype integrand
 \end{lstlisting}
 
-The \emph{integrand} type does not implement any actual integrand field, it being and abstract type. It only specifies which deferred procedures are necessary for implementing an actual concrete integrand type that can use a FOODiE solver.
+The \emph{integrand} type does not implement any actual integrand field, it being and abstract type. It only specifies which deferred procedures are necessary for implementing an actual concrete integrand type that can use a FOODIE solver.
 
 As shown in listing \ref{list:type_integrand}, the number of the deferred type bound procedures that clients must implement into their own concrete extension of the \emph{integrand} ADT is very limited: essentially, there are 1 ODE-specific procedure plus some operators definition constituted by symmetric operators between 2 integrand objects, asymmetric operators between integrand and real numbers (and viceversa) and an assignment statement for the creation of new integrand objects. These procedures are analyzed in the following paragraphs.
 
@@ -67,7 +67,7 @@ endfunction time_derivative
 
 This procedure-function takes two arguments, the first passed as a \emph{type bounded} argument, while the latter is optional, and it returns an integrand object. The passed dummy argument, \emph{self}, is a polymorphic argument that could be any extensions of the \emph{integrand} ADT. The optional argument \emph{t} is the \emph{time} at which the residuals function must be computed: it can be omitted in the case the residuals function does not depend directly on time.
 
-Commonly, into the concrete implementation of this deferred abstract procedure clients embed the actual ODE equations being solved. As an example, for the Burgers equation, that is a Partial Differential Equations (PDE) system involving also a boundary value problem, this procedure embeds the spatial operator that convert the PDE to a system of algebraic ODE. As a consequence, the eventual concrete implementation of this procedure can be very complex and errors-prone. Nevertheless, the FOODiE solvers are implemented only on the above abstract interface, thus emancipating the solvers implementation from any concrete complexity.
+Commonly, into the concrete implementation of this deferred abstract procedure clients embed the actual ODE equations being solved. As an example, for the Burgers equation, that is a Partial Differential Equations (PDE) system involving also a boundary value problem, this procedure embeds the spatial operator that convert the PDE to a system of algebraic ODE. As a consequence, the eventual concrete implementation of this procedure can be very complex and errors-prone. Nevertheless, the FOODIE solvers are implemented only on the above abstract interface, thus emancipating the solvers implementation from any concrete complexity.
 
 {\color{red} Add citations to Burgers, Adams-Bashfort, leapfrog references.}
 
@@ -84,7 +84,7 @@ class(integrand), allocatable :: operator_result !< Operator result.
 endfunction symmetric_operator
 \end{lstlisting}
 
-This interface defines a class of procedures operating on 2 \emph{integrand} objects, namely it is used for the definition of the operators \emph{multiplication}, \emph{summation} and \emph{subtraction} of integrand objects. These operators are used into the above described ODE solvers, for example see equations \ref{eq:solver-euler}, \ref{eq:RK}, \ref{eq:AB} or \ref{eq:leapfrog}. The implementation details of such a procedures class are strictly dependent on the concrete extension of the integrand type. From the FOODiE solvers point of view, we need to known only that first argument passed as bounded one, the left-hand-side of the operator, and the second argument, the right-hand-side of the operator, are two integrand object and the returned object is still an integrand one.
+This interface defines a class of procedures operating on 2 \emph{integrand} objects, namely it is used for the definition of the operators \emph{multiplication}, \emph{summation} and \emph{subtraction} of integrand objects. These operators are used into the above described ODE solvers, for example see equations \ref{eq:solver-euler}, \ref{eq:RK}, \ref{eq:AB} or \ref{eq:leapfrog}. The implementation details of such a procedures class are strictly dependent on the concrete extension of the integrand type. From the FOODIE solvers point of view, we need to known only that first argument passed as bounded one, the left-hand-side of the operator, and the second argument, the right-hand-side of the operator, are two integrand object and the returned object is still an integrand one.
 
 \subsubsection{Integrand/real and real/integrand operators procedures}
 
@@ -106,7 +106,7 @@ class(integrand), allocatable :: operator_result !< Operator result.
 endfunction real_op_integrand
 \end{lstlisting}
 
-These two interfaces are necessary in order to complete the \emph{algebra} operating on the integrand object class, allowing the multiplication of an integrand object for a real number, circumstance that happens in all solvers, see equations \ref{eq:solver-euler}, \ref{eq:RK}, \ref{eq:AB} or \ref{eq:leapfrog}. The implementation details of these procedures are strictly dependent on the concrete extension of the integrand type. From the FOODiE solvers point of view, we need to known only that first argument passed as bounded one, the left-hand-side of the operator, and the second argument, the right-hand-side of the operator, are an integrand object and real number of viceversa and the returned object is still an integrand one.
+These two interfaces are necessary in order to complete the \emph{algebra} operating on the integrand object class, allowing the multiplication of an integrand object for a real number, circumstance that happens in all solvers, see equations \ref{eq:solver-euler}, \ref{eq:RK}, \ref{eq:AB} or \ref{eq:leapfrog}. The implementation details of these procedures are strictly dependent on the concrete extension of the integrand type. From the FOODIE solvers point of view, we need to known only that first argument passed as bounded one, the left-hand-side of the operator, and the second argument, the right-hand-side of the operator, are an integrand object and real number of viceversa and the returned object is still an integrand one.
 
 \subsubsection{Integrand assignment procedure}
 
@@ -120,16 +120,16 @@ class(integrand), intent(IN)    :: rhs !< Right hand side.
 endsubroutine assignment_integrand
 \end{lstlisting}
 
-The assignment statement is necessary in order to complete the \emph{algebra} operating on the integrand object class, allowing the assignment of an integrand object by another one, circumstance that happens in all solvers, see equations \ref{eq:solver-euler}, \ref{eq:RK}, \ref{eq:AB} or \ref{eq:leapfrog}. The implementation details of this assignment is strictly dependent on the concrete extension of the integrand type. From the FOODiE solvers point of view, we need to known only that first argument passed as bounded one, the left-hand-side of the assignment, and the second argument, the right-hand-side of the assignment, are two integrand objects.
+The assignment statement is necessary in order to complete the \emph{algebra} operating on the integrand object class, allowing the assignment of an integrand object by another one, circumstance that happens in all solvers, see equations \ref{eq:solver-euler}, \ref{eq:RK}, \ref{eq:AB} or \ref{eq:leapfrog}. The implementation details of this assignment is strictly dependent on the concrete extension of the integrand type. From the FOODIE solvers point of view, we need to known only that first argument passed as bounded one, the left-hand-side of the assignment, and the second argument, the right-hand-side of the assignment, are two integrand objects.
 
 \clearpage
 
 \subsection{The explicit forward Euler solver}\label{subsec:solver_euler}
 
-The explicit forward Euler solver is exposed (by the FOODiE main module that must imported, see listing \ref{list:main_module}) as a single derived type (that is a standard convention for all FOODiE solvers) named \emph{euler\_explicit\_integrator}. It provides the type bound procedure (also referred as \emph{method}) \emph{integrate} for integrating in time an \emph{integrand} object, or any of its polymorphic concrete extensions. Consequently, for using such a solver it must be previously defined as an instance of the exposed FOODiE integrator type, see listing \ref{list:define_euler_solver}.
+The explicit forward Euler solver is exposed (by the FOODIE main module that must imported, see listing \ref{list:main_module}) as a single derived type (that is a standard convention for all FOODIE solvers) named \emph{euler\_explicit\_integrator}. It provides the type bound procedure (also referred as \emph{method}) \emph{integrate} for integrating in time an \emph{integrand} object, or any of its polymorphic concrete extensions. Consequently, for using such a solver it must be previously defined as an instance of the exposed FOODIE integrator type, see listing \ref{list:define_euler_solver}.
 
 \begin{lstlisting}[firstnumber=1,style=code,caption={definition of an explicit forward Euler integrator},label={list:define_euler_solver}]
-use FOODiE, only: euler_explicit_integrator
+use FOODIE, only: euler_explicit_integrator
 type(euler_explicit_integrator) :: integrator
 \end{lstlisting}
 
@@ -164,10 +164,10 @@ The TVD/SSP Runge-Kutta class of solvers is exposed as a single derived type nam
   \item \emph{integrate}: integrate integrand field one-step-over in time.
   \end{itemize}
 
-As common for FOODiE solvers, for using such a solver it must be previously defined as an instance of the exposed FOODiE integrator type, see listing \ref{list:define_tvd_rk_solver}.
+As common for FOODIE solvers, for using such a solver it must be previously defined as an instance of the exposed FOODIE integrator type, see listing \ref{list:define_tvd_rk_solver}.
 
 \begin{lstlisting}[firstnumber=1,style=code,caption={definition of an explicit TVD/SSP Runge-Kutta integrator},label={list:define_tvd_rk_solver}]
-use FOODiE, only: tvd_runge_kutta_integrator
+use FOODIE, only: tvd_runge_kutta_integrator
 type(tvd_runge_kutta_integrator) :: integrator
 \end{lstlisting}
 
@@ -244,10 +244,10 @@ The low storage variant of Runge-Kutta class of solvers is exposed as a single d
   \item \emph{integrate}: integrate integrand field one-step-over in time.
   \end{itemize}
 
-As common for FOODiE solvers, for using such a solver it must be previously defined as an instance of the exposed FOODiE integrator type, see listing \ref{list:define_ls_rk_solver}.
+As common for FOODIE solvers, for using such a solver it must be previously defined as an instance of the exposed FOODIE integrator type, see listing \ref{list:define_ls_rk_solver}.
 
 \begin{lstlisting}[firstnumber=1,style=code,caption={definition of an explicit low storage Runge-Kutta integrator},label={list:define_ls_rk_solver}]
-use FOODiE, only: ls_runge_kutta_integrator
+use FOODIE, only: ls_runge_kutta_integrator
 type(ls_runge_kutta_integrator) :: integrator
 \end{lstlisting}
 
@@ -321,10 +321,10 @@ The explicit Adams-Bashforth class of solvers is exposed as a single derived typ
   \item \emph{update\_previous}: auto update (cyclically) previous time steps solutions.
   \end{itemize}
 
-As common for FOODiE solvers, for using such a solver it must be previously defined as an instance of the exposed FOODiE integrator type, see listing \ref{list:define_ab_solver}.
+As common for FOODIE solvers, for using such a solver it must be previously defined as an instance of the exposed FOODIE integrator type, see listing \ref{list:define_ab_solver}.
 
 \begin{lstlisting}[firstnumber=1,style=code,caption={definition of an explicit Adams-Bashforth integrator},label={list:define_ab_solver}]
-use FOODiE, only: adams_bashforth_integrator
+use FOODIE, only: adams_bashforth_integrator
 type(adams_bashforth_integrator) :: integrator
 \end{lstlisting}
 
@@ -396,10 +396,10 @@ The explicit Adams-Moulton class of solvers is exposed as a single derived type 
   \item \emph{update\_previous}: auto update (cyclically) previous time steps solutions.
   \end{itemize}
 
-As common for FOODiE solvers, for using such a solver it must be previously defined as an instance of the exposed FOODiE integrator type, see listing \ref{list:define_am_solver}.
+As common for FOODIE solvers, for using such a solver it must be previously defined as an instance of the exposed FOODIE integrator type, see listing \ref{list:define_am_solver}.
 
 \begin{lstlisting}[firstnumber=1,style=code,caption={definition of an implicit Adams-Moulton integrator},label={list:define_am_solver}]
-use FOODiE, only: adams_moulton_integrator
+use FOODIE, only: adams_moulton_integrator
 type(adams_moulton_integrator) :: integrator
 \end{lstlisting}
 
@@ -479,10 +479,10 @@ The explicit Leapfrog class of solvers is exposed as a single derived type named
   \item \emph{integrate}: integrate integrand field one-step-over in time.
   \end{itemize}
 
-As common for FOODiE solvers, for using such a solver it must be previously defined as an instance of the exposed FOODiE integrator type, see listing \ref{list:define_lf_solver}.
+As common for FOODIE solvers, for using such a solver it must be previously defined as an instance of the exposed FOODIE integrator type, see listing \ref{list:define_lf_solver}.
 
 \begin{lstlisting}[firstnumber=1,style=code,caption={definition of an explicit Leapfrog integrator},label={list:define_lf_solver}]
-use FOODiE, only: leapfrog_integrator
+use FOODIE, only: leapfrog_integrator
 type(leapfrog_integrator) :: integrator
 \end{lstlisting}
 
@@ -548,15 +548,15 @@ It is worth noting that the method also performs the cyclic update of the previo
 
 \subsection{General Remarks}\label{subsec:API-remarks}
 
-Table \ref{tab:foodie-vs-math} presents a comparison of the relevant parts of equations \ref{eq:solver-euler}, \ref{eq:RK}, \ref{eq:RK-stage}, \ref{eq:RK-ls}, \ref{eq:AB} and \ref{eq:leapfrog} with the corresponding FOODiE implementations reported in listings \ref{list:euler_integrate}, \ref{list:tvd_rk_integrate}, \ref{list:ls_rk_integrate}, \ref{list:ab_integrate} and \ref{list:lf_integrate}, respectively. This comparison proves that the \emph{integrand} ADT has allowed a very high-level implementation syntax. The Fortran implementation is almost equivalent to the rigorous mathematical formulation. This aspect directly implies that the implementation of a ODE solver into the FOODiE library is very clear, concise and less-errors-prone than an \emph{hard-coded} implementation where the solvers must be implemented for each specific definition of the integrand type, it being not abstract.
+Table \ref{tab:foodie-vs-math} presents a comparison of the relevant parts of equations \ref{eq:solver-euler}, \ref{eq:RK}, \ref{eq:RK-stage}, \ref{eq:RK-ls}, \ref{eq:AB} and \ref{eq:leapfrog} with the corresponding FOODIE implementations reported in listings \ref{list:euler_integrate}, \ref{list:tvd_rk_integrate}, \ref{list:ls_rk_integrate}, \ref{list:ab_integrate} and \ref{list:lf_integrate}, respectively. This comparison proves that the \emph{integrand} ADT has allowed a very high-level implementation syntax. The Fortran implementation is almost equivalent to the rigorous mathematical formulation. This aspect directly implies that the implementation of a ODE solver into the FOODIE library is very clear, concise and less-errors-prone than an \emph{hard-coded} implementation where the solvers must be implemented for each specific definition of the integrand type, it being not abstract.
 
 \begin{table}[!ht]
   \centering
-  \caption{Comparison between rigorous mathematical formulation and FOODiE high-level implementation; the syntax "$(s)$" and "$(ss)$" imply the summation operation}\label{tab:foodie-vs-math}
+  \caption{Comparison between rigorous mathematical formulation and FOODIE high-level implementation; the syntax "$(s)$" and "$(ss)$" imply the summation operation}\label{tab:foodie-vs-math}
   \resizebox{0.99\textwidth}{!}{%
   \begin{tabular}{c|cc}
     \toprule
-    {\sc Solver} & {\sc Mathematical formulation} & {\sc FOODiE implementation} \\
+    {\sc Solver} & {\sc Mathematical formulation} & {\sc FOODIE implementation} \\
     \hline
     explicit forward Euler & $U\left(t^{n+1}\right) = U\left(t^n\right) +\Delta t \cdot R\left[t^n, U\left(t^n\right)\right]$ & $U = U + U\%t(t=t) * Dt$\\
     \hline
@@ -582,4 +582,4 @@ Table \ref{tab:foodie-vs-math} presents a comparison of the relevant parts of eq
 
   \end{tabular}}
 \end{table}
- 
+

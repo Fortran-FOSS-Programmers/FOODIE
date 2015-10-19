@@ -1,7 +1,7 @@
-!< Test FOODiE with the integration of Oscillation equations.
+!< Test FOODIE with the integration of Oscillation equations.
 program integrate_oscillation
 !-----------------------------------------------------------------------------------------------------------------------------------
-!< Test FOODiE with the integration of Oscillation equations.
+!< Test FOODIE with the integration of Oscillation equations.
 !-----------------------------------------------------------------------------------------------------------------------------------
 
 !-----------------------------------------------------------------------------------------------------------------------------------
@@ -41,7 +41,7 @@ logical                           :: errors_analysis                            
 call cli%init(progname    = 'oscillation',                                              &
               authors     = 'Fortran-FOSS-Programmers',                                 &
               license     = 'GNU GPLv3',                                                &
-              description = 'Test FOODiE library on Oscillation equations integration', &
+              description = 'Test FOODIE library on Oscillation equations integration', &
               examples    = ["oscillation --solver euler --results  ",                  &
                              "oscillation --solver ls-runge-kutta -r",                  &
                              "oscillation --solver adams-bashforth  ",                  &
@@ -172,7 +172,7 @@ contains
     open(newunit=rawfile, file=basename//'.dat')
     write(rawfile, '(A)')'TITLE="'//title//'"'
     write(rawfile, '(A)')'VARIABLES="t" "x" "y"'
-    write(rawfile, '(A)')'ZONE T="FOODiE time serie"'
+    write(rawfile, '(A)')'ZONE T="FOODIE time serie"'
     do s=0, ubound(solution, dim=2)
       write(rawfile, '(3('//FR_P//',1X))')(solution(i, s), i=0, space_dimension)
     enddo

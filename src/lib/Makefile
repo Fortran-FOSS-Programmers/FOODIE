@@ -1,4 +1,4 @@
-# FOODiE Makefile
+# FOODIE Makefile
 
 .SUFFIXES: .F90 .f90 .o
 .PHONY: all foodie clean

@@ -20,7 +20,7 @@ public :: euler_1D_openmp
 type, extends(integrand) :: euler_1D_openmp
   !< Euler 1D (OpenMP enabled) PDEs system field.
   !<
-  !< It is a FOODiE integrand class concrete extension.
+  !< It is a FOODIE integrand class concrete extension.
   !<
   !<### 1D Euler PDEs system
   !< The 1D Euler PDEs system considered is a non linear, hyperbolic (inviscid) system of conservation laws for compressible gas

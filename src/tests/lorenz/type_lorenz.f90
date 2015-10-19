@@ -19,11 +19,11 @@ public :: lorenz
 type, extends(integrand) :: lorenz
   !< Lorenz equations field.
   !<
-  !< It is a FOODiE integrand class concrete extension.
+  !< It is a FOODIE integrand class concrete extension.
   !<
   !<### Lorenz ODEs system
   !<The Lorenz' equations system [1] is a non linear system of pure ODEs that retains a reasonable-complex behaviour: such a
-  !<system, for a certain parameters-region exhibits a chaotic dynamics useful for testing FOODiE solvers.
+  !<system, for a certain parameters-region exhibits a chaotic dynamics useful for testing FOODIE solvers.
   !<
   !<The Lorenz' ODEs system can be written as:
   !<
@@ -49,7 +49,7 @@ type, extends(integrand) :: lorenz
   !< \beta = \frac{8}{3}
   !<\end{matrix}$$
   !<
-  !<These values are chaos-inducing thus they magnify the eventual numerical inaccuracies of FOODiE solvers, see [2].
+  !<These values are chaos-inducing thus they magnify the eventual numerical inaccuracies of FOODIE solvers, see [2].
   !<
   !<#### Bibliography
   !<

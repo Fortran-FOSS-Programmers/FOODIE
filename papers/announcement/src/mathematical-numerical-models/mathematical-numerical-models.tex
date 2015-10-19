@@ -1,14 +1,14 @@
 \section{Mathematical and Numerical Models}\label{sec:MNmodels}
 
-In many (most) circumstances, the solution of equation \ref{eq:IVP} cannot be computed in a closed, exact form (even if it exists and is unique) due to the complexity and nature of the residuals functions, that is often non linear. Consequently, the problem is often solved relying on a numerical approach: the solution of system \ref{eq:IVP} at a time $t^n$, namely $U(t^n)$, is approximated by a subsequent time-marching approximations $U_0=u_0 \rightarrow u_1 \rightarrow u_2 \rightarrow ... \rightarrow u_N\approx U(t^n)$ where the relation $u_i \rightarrow u_{i+1}$ implies a \emph{stepping, numerical integration} from the time $t^i$ to time $t^{i+1}$ and $N$ is the total number of numerical time steps necessary to evolve the initial conditions toward the searched solution $U(t^n)$. To this aim, many numerical schemes have been devised. Notably, the numerical schemes of practical usefulness must posses some necessary proprieties such as \emph{consistency} and \emph{stability} to ensure that the numerical approximation \emph{converges} to the exact solution as the numerical time step tends to zero. A detailed discussion of these details is out the scope of the present work and is omitted. Here, we briefly recall some classifications necessary to introduce the schemes implemented into the FOODiE library.
+In many (most) circumstances, the solution of equation \ref{eq:IVP} cannot be computed in a closed, exact form (even if it exists and is unique) due to the complexity and nature of the residuals functions, that is often non linear. Consequently, the problem is often solved relying on a numerical approach: the solution of system \ref{eq:IVP} at a time $t^n$, namely $U(t^n)$, is approximated by a subsequent time-marching approximations $U_0=u_0 \rightarrow u_1 \rightarrow u_2 \rightarrow ... \rightarrow u_N\approx U(t^n)$ where the relation $u_i \rightarrow u_{i+1}$ implies a \emph{stepping, numerical integration} from the time $t^i$ to time $t^{i+1}$ and $N$ is the total number of numerical time steps necessary to evolve the initial conditions toward the searched solution $U(t^n)$. To this aim, many numerical schemes have been devised. Notably, the numerical schemes of practical usefulness must posses some necessary proprieties such as \emph{consistency} and \emph{stability} to ensure that the numerical approximation \emph{converges} to the exact solution as the numerical time step tends to zero. A detailed discussion of these details is out the scope of the present work and is omitted. Here, we briefly recall some classifications necessary to introduce the schemes implemented into the FOODIE library.
 
 A non comprehensive classification of the most widely used schemes could distinguish between \emph{multi-step} versus \emph{one-step} schemes and between \emph{explicit} versus \emph{implicit} schemes.
 
-Essentially, the multi-step schemes have been developed to obtain an accurate approximation of the subsequent numerical steps using the informations contained into the previously computed steps, thus this approach relates the next step approximation to a set of the previously computed steps. On the contrary, a one-step scheme evolves the solution toward the next step using only the information coming from the current time approximation. In the framework of one-step schemes family an equivalent accurate approximation can be obtained by means of a multi-stage approach as the one due to Runge-Kutta. The current version of FOODiE provides schemes belonging to both these families.
+Essentially, the multi-step schemes have been developed to obtain an accurate approximation of the subsequent numerical steps using the informations contained into the previously computed steps, thus this approach relates the next step approximation to a set of the previously computed steps. On the contrary, a one-step scheme evolves the solution toward the next step using only the information coming from the current time approximation. In the framework of one-step schemes family an equivalent accurate approximation can be obtained by means of a multi-stage approach as the one due to Runge-Kutta. The current version of FOODIE provides schemes belonging to both these families.
 
-The other ODE solvers classification concerns with explicit or implicit nature of the schemes employed. Briefly, an explicit scheme computes the next step approximation using the previously computed steps at most to the current time, whereas an implicit scheme uses also the next step approximation (that is the unknown), thus it requires extra computations. The implicit approach is of practical use for \emph{stiff} systems where the usage of explicit schemes could require an extremely small time step to evolve in a \emph{stable} way the solution. Mixing together explicit and implicit schemes it is possible to build a family of \emph{predictor-corrector} methods: using an explicit scheme to predict a guess for the next step approximation it is possible to use an implicit method for correcting this guess. Currently, FOODiE provides explicit solvers and predictor-correct ones.
+The other ODE solvers classification concerns with explicit or implicit nature of the schemes employed. Briefly, an explicit scheme computes the next step approximation using the previously computed steps at most to the current time, whereas an implicit scheme uses also the next step approximation (that is the unknown), thus it requires extra computations. The implicit approach is of practical use for \emph{stiff} systems where the usage of explicit schemes could require an extremely small time step to evolve in a \emph{stable} way the solution. Mixing together explicit and implicit schemes it is possible to build a family of \emph{predictor-corrector} methods: using an explicit scheme to predict a guess for the next step approximation it is possible to use an implicit method for correcting this guess. Currently, FOODIE provides explicit solvers and predictor-correct ones.
 
-FOODiE currently implements the following ODE schemes:
+FOODIE currently implements the following ODE schemes:
 
 \begin{itemize}
   \item one-step schemes:
@@ -84,7 +84,7 @@ Runge-Kutta methods belong to the more general multi-stage family of schemes. Th
 
 Notably, the multi-stage schemes class has the attractive property to be \emph{self-starting}: the high order accurate solution can be obtained directly from the previous one, without the necessity to compute \emph{before} a certain number of previous steps, as it happens for the multi-step schemes. Moreover, one-step multi-stage methods are suitable for adaptively-varying time-step size (that is also possible for multi-step schemes, but at a cost of more complexity) and for discontinuous solutions, namely discontinued solutions happening at a certain time $t*$ (that in a multi-step framework can involve an overall accuracy degradation).
 
-In general, the TVD/SSP Runge-Kutta schemes provided by FOODiE library are written by means of the following algorithm:
+In general, the TVD/SSP Runge-Kutta schemes provided by FOODIE library are written by means of the following algorithm:
 \begin{equation}
   U^{n+1} = U^{n} + \Delta t \cdot\sum\limits_{s=1}^{N_{s}}{\beta_s K_s}
 \label{eq:RK}
@@ -112,7 +112,7 @@ It is worth noting that the equations \ref{eq:RK} and \ref{eq:RK-stage} contain 
 
 The equations \ref{eq:RK} and \ref{eq:RK-stage} show that Runge-Kutta methods do not require any additional differentiations of the ODE system for achieving high order accuracy, rather they require additional evaluations of the residuals function $R$.
 
-The nature of the scheme and the properties of the solutions obtained depend on the number of stages and on the value of the coefficients selected. Currently, FOODiE provides 3 Runge-Kutta schemes having TVD or Strong Stability Preserving (SSP) propriety (thus they being suitable for ODE systems involving rapidly changing non linear dynamics) the Butcher's coefficients of which are reported in tables \ref{tab:RK-TVD-butcher-2}, \ref{tab:RK-SSP-butcher-3}, \ref{tab:RK-SSP-butcher-5}.
+The nature of the scheme and the properties of the solutions obtained depend on the number of stages and on the value of the coefficients selected. Currently, FOODIE provides 3 Runge-Kutta schemes having TVD or Strong Stability Preserving (SSP) propriety (thus they being suitable for ODE systems involving rapidly changing non linear dynamics) the Butcher's coefficients of which are reported in tables \ref{tab:RK-TVD-butcher-2}, \ref{tab:RK-SSP-butcher-3}, \ref{tab:RK-SSP-butcher-5}.
 
 \begin{table}[!ht]
   \centering
@@ -158,7 +158,7 @@ It is worth noting that FODDiE also provides a one-stage TVD Runge-Kutta solver 
 
 \subsection{The explicit low storage Runge-Kutta class of schemes}
 
-As aforementioned, standard Runge-Kutta schemes have the drawback to require $N_S$ auxiliary memory registers to store the necessary stages data. In order to make an efficient use of the available limited computer memory, the class of low storage Runge-Kutta scheme was devised. Essentially, the standard Runge-Kutta class (under some specific conditions) can be reformulated allowing a more efficient memory management. Currently FOODiE provides a class of \emph{2N registers} storage Runge-Kutta schemes, meaning that the storage of all stages requires only 2 registers of memory with a \emph{word} length $N$ (namely the length of the state vector) in contrast to the standard formulation where $N_s$ registers of the same length $N$ are required. This is a dramatic improvement of memory efficiency especially for schemes using a high number of stages ($N_s \ge 4$) where the memory necessary is an half with respect the original formulation. Unfortunately, not all standard Runge-Kutta schemes can be reformulated as a low storage one.
+As aforementioned, standard Runge-Kutta schemes have the drawback to require $N_S$ auxiliary memory registers to store the necessary stages data. In order to make an efficient use of the available limited computer memory, the class of low storage Runge-Kutta scheme was devised. Essentially, the standard Runge-Kutta class (under some specific conditions) can be reformulated allowing a more efficient memory management. Currently FOODIE provides a class of \emph{2N registers} storage Runge-Kutta schemes, meaning that the storage of all stages requires only 2 registers of memory with a \emph{word} length $N$ (namely the length of the state vector) in contrast to the standard formulation where $N_s$ registers of the same length $N$ are required. This is a dramatic improvement of memory efficiency especially for schemes using a high number of stages ($N_s \ge 4$) where the memory necessary is an half with respect the original formulation. Unfortunately, not all standard Runge-Kutta schemes can be reformulated as a low storage one.
 
 Following the Williamson's approach the standard coefficients are reformulated to the coefficients vectors $A$, $B$ and $C$ and the Runge-Kutta algorithm becomes:
 
@@ -175,7 +175,7 @@ Following the Williamson's approach the standard coefficients are reformulated t
 \label{eq:RK-ls}
 \end{equation}
 
-Currently FOODiE provides 5/6/7/12/13/14 stages, all $4^{th}$ order, 2N registers explicit schemes, the coefficients of which are listed in table \ref{tab:RK-ls}.
+Currently FOODIE provides 5/6/7/12/13/14 stages, all $4^{th}$ order, 2N registers explicit schemes, the coefficients of which are listed in table \ref{tab:RK-ls}.
 
 \begin{table}[!ht]
   \centering
@@ -301,7 +301,7 @@ Similarly to the TVD/SSP Runge-Kutta class, the low storage class also provides 
 
 Adams-Bashforth methods belong to the more general (linear) explicit multi-step family of schemes. This kind of schemes has been designed to achieve a more accurate solution than the $1^{st}$ Euler scheme using the information coming from the solutions already computed at previous time steps. Typically only one new residuals function $R$ evaluation is required at each time step, whereas Runge-Kutta schemes require many of them.
 
-In general, the Adams-Bashforth schemes provided by FOODiE library are written by means of the following algorithm (for only explicit schemes):
+In general, the Adams-Bashforth schemes provided by FOODIE library are written by means of the following algorithm (for only explicit schemes):
 
 \begin{equation}
 U\left(t^{n+N_s}\right) = U\left(t^{n+N_s-1}\right) +\Delta t \sum_{s=1}^{n+N_s}{ b_s \cdot R\left[t^{n+s-1}, U\left(t^{n+s-1}\right)\right]}
@@ -309,7 +309,7 @@ U\left(t^{n+N_s}\right) = U\left(t^{n+N_s-1}\right) +\Delta t \sum_{s=1}^{n+N_s}
 \end{equation}
 where $N_s$ is the number of time steps considered and $b_s$ are the linear coefficients selected.
 
-Currently FOODiE provides 2, 3, and 4 steps schemes having $2^{nd}$, $3^{rd}$ and $4^{th}$ formal order of accuracy, respectively. The $b_s$ coefficients are reported in table \ref{tab:AB-coeff}.
+Currently FOODIE provides 2, 3, and 4 steps schemes having $2^{nd}$, $3^{rd}$ and $4^{th}$ formal order of accuracy, respectively. The $b_s$ coefficients are reported in table \ref{tab:AB-coeff}.
 
 \begin{table}[!ht]
   \centering
@@ -334,7 +334,7 @@ It is worth noting that for $N_s>1$ the Adams-Bashforth class of solvers is not 
 
 Adams-Moulton methods belong to the more general (linear) implicit multi-step family of schemes. This kind of schemes has been designed to achieve a more accurate solution than the $1^{st}$ Euler scheme using the information coming from the solutions already computed at previous time steps. Typically only one new residuals function $R$ evaluation is required at each time step, whereas Runge-Kutta schemes require many of them.
 
-In general, the Adams-Moulton schemes provided by FOODiE library are written by means of the following algorithm (for only implicit schemes):
+In general, the Adams-Moulton schemes provided by FOODIE library are written by means of the following algorithm (for only implicit schemes):
 
 \begin{equation}
   U\left(t^{n+N_s}\right) = U\left(t^{n+N_s-1}\right) +\Delta t \sum_{s=0}^{n+N_s-1}{ b_s \cdot R\left[t^{n+s}, U\left(t^{n+s}\right)\right]} + b_{N_s}\cdot R\left[t^{n+N_s}, U\left(t^{n+N_s}\right)\right]
@@ -342,7 +342,7 @@ In general, the Adams-Moulton schemes provided by FOODiE library are written by 
 \end{equation}
 where $N_s$ is the number of time steps considered and $b_s$ are the linear coefficients selected.
 
-Currently FOODiE provides 1, 2, and 3 steps schemes having $2^{nd}$, $3^{rd}$ and $4^{th}$ formal order of accuracy, respectively. The $b_s$ coefficients are reported in table \ref{tab:AM-coeff}.
+Currently FOODIE provides 1, 2, and 3 steps schemes having $2^{nd}$, $3^{rd}$ and $4^{th}$ formal order of accuracy, respectively. The $b_s$ coefficients are reported in table \ref{tab:AM-coeff}.
 
 \begin{table}[!ht]
   \centering
@@ -367,7 +367,7 @@ It is worth noting that for $N_s>1$ the Adams-Moulton class of solvers is not \e
 
 Adams-Bashforth-Moulton methods belong to the more general (linear) predictor-corrector multi-step family of schemes. This kind of schemes has been designed to achieve a more accurate solution than the $1^{st}$ Euler scheme using the information coming from the solutions already computed at previous time steps. Typically only one new residuals function $R$ evaluation is required at each time step, whereas Runge-Kutta schemes require many of them.
 
-In general, the Adams-Bashforth-Moulton schemes provided by FOODiE library are written by means of the following algorithm:
+In general, the Adams-Bashforth-Moulton schemes provided by FOODIE library are written by means of the following algorithm:
 
 \begin{equation}
   \begin{matrix}
@@ -378,7 +378,7 @@ In general, the Adams-Bashforth-Moulton schemes provided by FOODiE library are w
 \end{equation}
 where $N_s^{p,c}$ is the number of time steps considered for the Adams-Bashforth predictor/Adams-Moulton corrector (respectively) and $b_s^{p,c}$ are the corresponding linear coefficients selected. Essentially, the Adams-Bashforth prediction $U\left(t^{n+N_s^p}\right)_p$ is corrected by means of the Adams-Moulton correction resulting in $U\left(t^{n+N_s^c}\right)_c$. In order to preserve the formal order of accuracy the relation $N_s^p=N_s^c+1$ always holds.
 
-Currently FOODiE provides $N_s^c=1, 2, 3 \rightarrow N_s^c=2, 3, 4$ steps schemes having $2^{nd}$, $3^{rd}$ and $4^{th}$ formal order of accuracy, respectively. The $b_s^{p,c}$ coefficients are those reported in tables \ref{tab:AB-coeff} and \ref{tab:AM-coeff}.
+Currently FOODIE provides $N_s^c=1, 2, 3 \rightarrow N_s^c=2, 3, 4$ steps schemes having $2^{nd}$, $3^{rd}$ and $4^{th}$ formal order of accuracy, respectively. The $b_s^{p,c}$ coefficients are those reported in tables \ref{tab:AB-coeff} and \ref{tab:AM-coeff}.
 
 {\color{red} Add citations.}
 
@@ -386,13 +386,13 @@ Currently FOODiE provides $N_s^c=1, 2, 3 \rightarrow N_s^c=2, 3, 4$ steps scheme
 
 The \emph{leapfrog} scheme belongs to the multi-step family, it being formally a centered second order approximation in time. The leapfrog method (in its original formulation) is mostly unstable, however it is well suited for periodic-oscillatory problems providing a null error on the amplitude value and a formal second order error on the phase one, under the satisfaction of the time-step size stable limit. Commonly, the leapfrog methods are said to provide a $2 \Delta t$ computational mode that can generate unphysical, unstable solutions. As consequence, the original leapfrog scheme is generally \emph{filtered} in order to suppress these computational modes.
 
-The unfiltered leapfrog scheme provided by FOODiE is:
+The unfiltered leapfrog scheme provided by FOODIE is:
 \begin{equation}
   U\left(t^{n+2}\right) = U\left(t^{n}\right) + 2\Delta t \cdot R\left[t^{n+1}, U\left(t^{n+1}\right)\right]
 \label{eq:leapfrog}
 \end{equation}
 
-FOODiE provides, in a \emph{seamless} API, also filtered leapfrog schemes. A widely used filter is due to Robert and Asselin, that suppress the computational modes at the cost of accuracy reduction resulting into a $1^{st}$ order error in amplitude value. A more accurate filter, able to provide a $3^{rd}$ order error on amplitude, is a modification of the Robert-Asselin filter due to Williams known as Robert-Asselin-Williams (RAW) filter, that filters the approximation of $U\left(t^{n+1}\right)$ and $U\left(t^{n+2}\right)$ by the following scalar coefficient:
+FOODIE provides, in a \emph{seamless} API, also filtered leapfrog schemes. A widely used filter is due to Robert and Asselin, that suppress the computational modes at the cost of accuracy reduction resulting into a $1^{st}$ order error in amplitude value. A more accurate filter, able to provide a $3^{rd}$ order error on amplitude, is a modification of the Robert-Asselin filter due to Williams known as Robert-Asselin-Williams (RAW) filter, that filters the approximation of $U\left(t^{n+1}\right)$ and $U\left(t^{n+2}\right)$ by the following scalar coefficient:
 
 \begin{equation}
   \begin{matrix}
@@ -404,7 +404,7 @@ FOODiE provides, in a \emph{seamless} API, also filtered leapfrog schemes. A wid
 \label{eq:leapfrog-RAW}
 \end{equation}
 
-The filter coefficients should be taken as $\nu \in (0,1]$ and $\alpha \in (0.5,1]$. If $\alpha=0.5$ the filters of time $t^{n+1}$ and $t^{n+2}$ have the same amplitude and opposite sign thus allowing to the optimal $3^{rd}$ order error on amplitude. The default values of the FOODiE provided scheme are $\nu=0.01$ $\alpha=0.53$, but they can be customized at runtime.
+The filter coefficients should be taken as $\nu \in (0,1]$ and $\alpha \in (0.5,1]$. If $\alpha=0.5$ the filters of time $t^{n+1}$ and $t^{n+2}$ have the same amplitude and opposite sign thus allowing to the optimal $3^{rd}$ order error on amplitude. The default values of the FOODIE provided scheme are $\nu=0.01$ $\alpha=0.53$, but they can be customized at runtime.
 
 {\color{red} Add citations.}
-  
+

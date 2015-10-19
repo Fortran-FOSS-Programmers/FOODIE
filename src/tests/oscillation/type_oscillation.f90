@@ -19,7 +19,7 @@ public :: oscillation
 type, extends(integrand) :: oscillation
   !< Oscillation equations field.
   !<
-  !< It is a FOODiE integrand class concrete extension.
+  !< It is a FOODIE integrand class concrete extension.
   !<
   !<### Oscillation ODEs system
   !<The (inertial) Oscillation equations system is a non linear system of pure ODEs and it can be written as:

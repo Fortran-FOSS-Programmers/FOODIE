@@ -1,5 +1,5 @@
 #!/bin/bash
-# script automotion for FOODiE's errors analysis of the provided tests
+# script automotion for FOODIE's errors analysis of the provided tests
 echo "Building tests executables"
 cd ../../../
 FoBiS.py build -mode errors-analysis --build_dir papers/announcement/errors_analysis/tests > builds.log

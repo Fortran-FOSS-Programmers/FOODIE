@@ -1,7 +1,7 @@
-!< Define the abstract type *integrand* for building FOODiE ODE integrators.
+!< Define the abstract type *integrand* for building FOODIE ODE integrators.
 module foodie_adt_integrand
 !-----------------------------------------------------------------------------------------------------------------------------------
-!< Define the abstract type *integrand* for building FOODiE ODE integrators.
+!< Define the abstract type *integrand* for building FOODIE ODE integrators.
 !-----------------------------------------------------------------------------------------------------------------------------------
 
 !-----------------------------------------------------------------------------------------------------------------------------------
@@ -16,7 +16,7 @@ public :: integrand
 
 !-----------------------------------------------------------------------------------------------------------------------------------
 type, abstract :: integrand
-  !< Abstract type for building FOODiE ODE integrators.
+  !< Abstract type for building FOODIE ODE integrators.
   contains
     ! public deferred procedures that concrete integrand-field must implement
     procedure(time_derivative),      pass(self), deferred, public :: t !< Time derivative, residuals.

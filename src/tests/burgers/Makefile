@@ -1,4 +1,4 @@
-# FOODiE Makefile
+# FOODIE Makefile
 
 INCLUDE  = ../../lib
 EXTERNAL = ../../../external/FLAP

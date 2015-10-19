@@ -1,6 +1,6 @@
-\subsubsection{FOODiE aware implementation of an oscillation numerical solver}
+\subsubsection{FOODIE aware implementation of an oscillation numerical solver}
 
-The IVP \ref{eq:oscillation} can be easily solved by means of FOODiE library. The first block of a FOODiE aware solution consists to define an \emph{oscillation integrand field} defining a concrete extension of the FOODiE \emph{integrand} type. Listing \ref{list:oscillation_type} reports the implementation of such an integrand field that is contained into the tests suite shipped within the FOODiE library.
+The IVP \ref{eq:oscillation} can be easily solved by means of FOODIE library. The first block of a FOODIE aware solution consists to define an \emph{oscillation integrand field} defining a concrete extension of the FOODIE \emph{integrand} type. Listing \ref{list:oscillation_type} reports the implementation of such an integrand field that is contained into the tests suite shipped within the FOODIE library.
 
 \begin{lstlisting}[firstnumber=1,style=code,caption={implementation of the \emph{oscillation integrand} type},label={list:oscillation_type}]
 type, extends(integrand) :: oscillation
@@ -32,11 +32,11 @@ The \emph{oscillation} field extends the \emph{integrand} ADT making it a concre
   \item $U$ is the state vector corresponding directly to the state vector of equation \ref{eq:oscillation};
   \end{itemize}
 
-As the listing \ref{list:oscillation_type} shows, the FOODiE implementation strictly corresponds to the mathematical formulation embracing all the relevant mathematical aspects into one derived type, a single \emph{object}. Here we not review the implementation of all deferred methods, this being out of the scope of the present work: the interested reader can see the tests suite sources shipped within the FOODiE library. However, some of these methods are relevant for our discussion, thus they are reviewed.
+As the listing \ref{list:oscillation_type} shows, the FOODIE implementation strictly corresponds to the mathematical formulation embracing all the relevant mathematical aspects into one derived type, a single \emph{object}. Here we not review the implementation of all deferred methods, this being out of the scope of the present work: the interested reader can see the tests suite sources shipped within the FOODIE library. However, some of these methods are relevant for our discussion, thus they are reviewed.
 
 \paragraph{dOscillation\_dt, the oscillation residuals function}
 
-Probably, the most important methods for an IVP solver is the residuals function. As a matter of facts, the ODE equations are implemented into the residuals function. However, the FOODiE ADT strongly alleviates the subtle problems that could arise when the ODE solver is hard-implemented within the specific ODE equations. As a matter of facts, the \emph{integrand} ADT specifies the precise interface the residuals function must have: if the client code implements a compliant interface, the FOODiE solvers will work as expected, reducing the possible errors location into the ODE equations, having designed the solvers on the ADT and not on the concrete type.
+Probably, the most important methods for an IVP solver is the residuals function. As a matter of facts, the ODE equations are implemented into the residuals function. However, the FOODIE ADT strongly alleviates the subtle problems that could arise when the ODE solver is hard-implemented within the specific ODE equations. As a matter of facts, the \emph{integrand} ADT specifies the precise interface the residuals function must have: if the client code implements a compliant interface, the FOODIE solvers will work as expected, reducing the possible errors location into the ODE equations, having designed the solvers on the ADT and not on the concrete type.
 
 \begin{lstlisting}[firstnumber=1,style=code,caption={implementation of the \emph{oscillation integrand} residuals function},label={list:oscillation_t}]
 function dOscillation_dt(self, t) result(dState_dt)
@@ -82,7 +82,7 @@ It is very simple and clear: firstly all the auxiliary data are copied into the 
 
 \paragraph{assignment of an oscillation object}
 
-The assignment overloading of the \emph{oscillation} type is the last key-method that enforces the conciseness of the FOODiE aware implementation. Listing \ref{list:oscillation_assign} reports the implementation of the assignment overloading. Essentially, to all the data members of the left-hand-side are assigned the values of the corresponding right-hand-side. Notably, for the assignment of the state vector and of the previous time steps solution array we take advantage of the automatic re-allocation of the left-hand-side variables when they are not allocated or allocated differently from the right-hand-side, that is a Fortran 2003 feature. In spite its simplicity, the assignment overloading is a key-method enabling the usage of FOODiE solver: effectively, the assignment between two \emph{integrand} ADT variables is ubiquitous into the solvers implementations, see equation \ref{eq:RK} for example.
+The assignment overloading of the \emph{oscillation} type is the last key-method that enforces the conciseness of the FOODIE aware implementation. Listing \ref{list:oscillation_assign} reports the implementation of the assignment overloading. Essentially, to all the data members of the left-hand-side are assigned the values of the corresponding right-hand-side. Notably, for the assignment of the state vector and of the previous time steps solution array we take advantage of the automatic re-allocation of the left-hand-side variables when they are not allocated or allocated differently from the right-hand-side, that is a Fortran 2003 feature. In spite its simplicity, the assignment overloading is a key-method enabling the usage of FOODIE solver: effectively, the assignment between two \emph{integrand} ADT variables is ubiquitous into the solvers implementations, see equation \ref{eq:RK} for example.
 
 \begin{lstlisting}[firstnumber=1,style=code,caption={implementation of the \emph{oscillation integrand} assignment},label={list:oscillation_assign}]
 subroutine oscillation_assign_oscillation(lhs, rhs)
@@ -98,9 +98,9 @@ return
 endsubroutine oscillation_assign_oscillation
 \end{lstlisting}
 
-\paragraph{FOODiE numerical integration}
+\paragraph{FOODIE numerical integration}
 
-Using the above discussed \emph{oscillation} type it is very easy to solve IVP \ref{eq:oscillation} by means of FOODiE library. Listing \ref{list:oscillation_leapfrog} presents the numerical integration of system \ref{eq:oscillation} by means of the Leapfrog RAW-filtered method. In the example, the integration is performed with $10^4$ steps with a fixed $\Delta t=10^2$ until the time $t=10^6$ is reached. The example shows also that for starting a multi-step scheme such as the Leapfrog one a lower-oder or equivalent order one-scheme is necessary: in the example the first 2 steps are computed by means of one-step TVD/SSP Runge-Kutta 2-stages schemes. Note that the memory registers for storing the Runge-Kutta stages and the RAW filter displacement must be handled by the client code. Listing \ref{list:oscillation_leapfrog} demonstrates how it is simple, clear and concise to solve a IVP by FOODiE solvers. Moreover, it proves how it is simple and effective to apply different solvers in a coupled algorithm, that greatly simplify the development of new hybrid solvers for self-adaptive time step size.
+Using the above discussed \emph{oscillation} type it is very easy to solve IVP \ref{eq:oscillation} by means of FOODIE library. Listing \ref{list:oscillation_leapfrog} presents the numerical integration of system \ref{eq:oscillation} by means of the Leapfrog RAW-filtered method. In the example, the integration is performed with $10^4$ steps with a fixed $\Delta t=10^2$ until the time $t=10^6$ is reached. The example shows also that for starting a multi-step scheme such as the Leapfrog one a lower-oder or equivalent order one-scheme is necessary: in the example the first 2 steps are computed by means of one-step TVD/SSP Runge-Kutta 2-stages schemes. Note that the memory registers for storing the Runge-Kutta stages and the RAW filter displacement must be handled by the client code. Listing \ref{list:oscillation_leapfrog} demonstrates how it is simple, clear and concise to solve a IVP by FOODIE solvers. Moreover, it proves how it is simple and effective to apply different solvers in a coupled algorithm, that greatly simplify the development of new hybrid solvers for self-adaptive time step size.
 
 \begin{lstlisting}[firstnumber=1,style=code,caption={numerical integration of the \emph{oscillation} system by means of Leapfrog RAW-filtered method},label={list:oscillation_leapfrog}]
 use foodie, only: leapfrog_integrator, tvd_runge_kutta_integrator
@@ -127,4 +127,4 @@ do step=1, 10000
 enddo
 call print_results(U=oscillator)
 \end{lstlisting}
-  
+

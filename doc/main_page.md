@@ -1,7 +1,7 @@
-project: FOODiE
+project: FOODIE
 project_dir: ./src/
 output_dir: ./doc/html/publish/
-project_github: https://github.com/Fortran-FOSS-Programmers/FOODiE
+project_github: https://github.com/Fortran-FOSS-Programmers/FOODIE
 summary: Fortran Object oriented Ordinary Differential Equations integration library
 author: Fortran-FOSS-Programmers Group
 github: http://fortran-foss-programmers.github.io/
@@ -19,4 +19,4 @@ warn: true
 graph: true
 extra_mods: iso_fortran_env:https://gcc.gnu.org/onlinedocs/gfortran/ISO_005fFORTRAN_005fENV.html
 
-{!README-FOODiE.md!}
+{!README-FOODIE.md!}

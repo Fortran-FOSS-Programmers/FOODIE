@@ -1,7 +1,7 @@
-!< Test FOODiE with the integration of Euler 1D PDEs system.
+!< Test FOODIE with the integration of Euler 1D PDEs system.
 program integrate_euler_1D_openmp
 !-----------------------------------------------------------------------------------------------------------------------------------
-!< Test FOODiE with the integration of Euler 1D PDEs system.
+!< Test FOODIE with the integration of Euler 1D PDEs system.
 !-----------------------------------------------------------------------------------------------------------------------------------
 
 !-----------------------------------------------------------------------------------------------------------------------------------
@@ -59,7 +59,7 @@ integer(I_P)                      :: steps                 !< Time steps counter
 call cli%init(progname    = 'euler-1D-openmp',                                                       &
               authors     = 'Fortran-FOSS-Programmers',                                              &
               license     = 'GNU GPLv3',                                                             &
-              description = 'Test FOODiE library on 1D Euler equations integration, OpenMP enabled', &
+              description = 'Test FOODIE library on 1D Euler equations integration, OpenMP enabled', &
               examples    = ["euler-1D --results  ",                                                 &
                              "euler-1D -r -t -v -p",                                                 &
                              "euler-1D            ",                                                 &
@@ -96,7 +96,7 @@ call rk_integrator%init(stages=rk_stages)
 call domain%init(Ni=Ni, Ns=Ns, Dx=Dx, BC_L=BC_L, BC_R=BC_R, initial_state=initial_state, cp0=cp0, cv0=cv0, ord=7)
 t = 0._R_P
 steps = 0
-call save_time_serie(title='FOODiE test: 1D Euler equations integration, explicit TVD Runge-Kutta, t='//str(n=t_final)// &
+call save_time_serie(title='FOODIE test: 1D Euler equations integration, explicit TVD Runge-Kutta, t='//str(n=t_final)// &
                            trim(str(.true., rk_stages))//' stages', &
                      filename='euler_1D_openmp_integration-tvdrk-'//trim(str(.true., rk_stages))//'-time_serie.dat', &
                      t=t)
@@ -115,7 +115,7 @@ enddo
 system_clocks = system_clocks / steps
 if (verbose) print "(A)", '    Time step: '//str(n=dt)//', Time: '//str(n=t)
 call save_time_serie(t=t, finish=.true.)
-call save_results(title='FOODiE test: 1D Euler equations integration, explicit TVD Runge-Kutta, t='//str(n=t_final)// &
+call save_results(title='FOODIE test: 1D Euler equations integration, explicit TVD Runge-Kutta, t='//str(n=t_final)// &
                         trim(str(.true., rk_stages))//' stages', &
                   filename='euler_1D_openmp_integration-tvdrk-'//trim(str(.true., rk_stages)))
 print "(I5,A,F23.15)", omp_threads, ' ', system_clocks

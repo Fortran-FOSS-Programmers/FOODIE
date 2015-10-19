@@ -1,7 +1,7 @@
-!< Test FOODiE with the integration of Lorenz equations.
+!< Test FOODIE with the integration of Lorenz equations.
 program integrate_lorenz
 !-----------------------------------------------------------------------------------------------------------------------------------
-!< Test FOODiE with the integration of Lorenz equations.
+!< Test FOODIE with the integration of Lorenz equations.
 !-----------------------------------------------------------------------------------------------------------------------------------
 
 !-----------------------------------------------------------------------------------------------------------------------------------
@@ -39,7 +39,7 @@ logical                           :: results                                    
 call cli%init(progname    = 'lorenz',                                              &
               authors     = 'Fortran-FOSS-Programmers',                            &
               license     = 'GNU GPLv3',                                           &
-              description = 'Test FOODiE library on Lorenz equations integration', &
+              description = 'Test FOODIE library on Lorenz equations integration', &
               examples    = ["lorenz --solver euler --results  ",                  &
                              "lorenz --solver ls-runge-kutta -r",                  &
                              "lorenz --solver adams-bashforth  ",                  &
@@ -161,7 +161,7 @@ contains
       solution(0, step) = step * dt
       solution(1:space_dimension, step) = attractor%output()
     enddo
-    call save_results(title='FOODiE test: Lorenz equation integration, explicit Adams-Bashforth '//trim(str(.true., s))//' steps', &
+    call save_results(title='FOODIE test: Lorenz equation integration, explicit Adams-Bashforth '//trim(str(.true., s))//' steps', &
                       filename='lorenz_integration-ab-'//trim(str(.true., s)))
   enddo
   print "(A)", 'Finish!'
@@ -187,7 +187,7 @@ contains
     solution(0, step) = step * dt
     solution(1:space_dimension, step) = attractor%output()
   enddo
-  call save_results(title='FOODiE test: Lorenz equation integration, explicit Euler', &
+  call save_results(title='FOODIE test: Lorenz equation integration, explicit Euler', &
                     filename='lorenz_integration-euler')
   print "(A)", 'Finish!'
   return
@@ -225,7 +225,7 @@ contains
     solution(0, step) = step * dt
     solution(1:space_dimension, step) = attractor%output()
   enddo
-  call save_results(title='FOODiE test: Lorenz equation integration, explicit leapfrog scheme',&
+  call save_results(title='FOODIE test: Lorenz equation integration, explicit leapfrog scheme',&
                     filename='lorenz_integration-lf-RAW-filter')
   print "(A)", 'Finish!'
   return
@@ -260,7 +260,7 @@ contains
       solution(0, step) = step * dt
       solution(1:space_dimension, step) = attractor%output()
     enddo
-    call save_results(title='FOODiE test: Lorenz equation integration, explicit low storage Runge-Kutta '//trim(str(.true., s))//&
+    call save_results(title='FOODIE test: Lorenz equation integration, explicit low storage Runge-Kutta '//trim(str(.true., s))//&
                       ' stages', filename='lorenz_integration-lsrk-'//trim(str(.true., s)))
   enddo
   print "(A)", 'Finish!'
@@ -293,7 +293,7 @@ contains
       solution(0, step) = step * dt
       solution(1:space_dimension, step) = attractor%output()
     enddo
-    call save_results(title='FOODiE test: Lorenz equation integration, explicit TVD Runge-Kutta '//trim(str(.true., s))//' stages',&
+    call save_results(title='FOODIE test: Lorenz equation integration, explicit TVD Runge-Kutta '//trim(str(.true., s))//' stages',&
                       filename='lorenz_integration-tvdrk-'//trim(str(.true., s)))
   enddo
   print "(A)", 'Finish!'

@@ -7,7 +7,7 @@ In order to automate the errors analysis computation a bash script is provided, 
 1. save a summary log of the analysis;
 1. if Tecplot program is present into PATH, the results of the errors analysis are plotted by means of the provided layouts and exported into PNG images in order to be easily used into the LaTeX manuscript under writing.
 
-To run the script from the FOODiE root directly do:
+To run the script from the FOODIE root directly do:
 
 ```shell
 cd papers/announcement/errors_analysis/

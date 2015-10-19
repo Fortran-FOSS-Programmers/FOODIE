@@ -1,5 +1,5 @@
 #!/bin/bash
-# script automotion for FOODiE's OpenMP benchmark using provided tests
+# script automotion for FOODIE's OpenMP benchmark using provided tests
 
 # defaults
 bench='all'
@@ -11,7 +11,7 @@ function print_usage {
   # print help message for correct CLI usage
   echo
   echo "`basename $0`"
-  echo "script automotion for FOODiE OpenMP benchmark"
+  echo "script automotion for FOODIE OpenMP benchmark"
   echo "Usage: `basename $0` [opts [args]]"
   echo "  [ -b #benchmark_type -r #ripetitions -Ni #cells ]"
   echo

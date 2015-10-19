@@ -1,8 +1,8 @@
-!< FOODiE integrator: provide a predictor-corrector class of Adams-Bashforth-Moutlon multi-step schemes, from 1st to 4rd order
+!< FOODIE integrator: provide a predictor-corrector class of Adams-Bashforth-Moutlon multi-step schemes, from 1st to 4rd order
 !< accutate.
 module foodie_integrator_adams_bashforth_moulton
 !-----------------------------------------------------------------------------------------------------------------------------------
-!< FOODiE integrator: provide a predictor-corrector class of Adams-Bashforth-Moutlon multi-step schemes, from 1st to 4rd order
+!< FOODIE integrator: provide a predictor-corrector class of Adams-Bashforth-Moutlon multi-step schemes, from 1st to 4rd order
 !< accutate.
 !<
 !< Considering the following ODE system:
@@ -92,7 +92,7 @@ public :: adams_bashforth_moulton_integrator
 
 !-----------------------------------------------------------------------------------------------------------------------------------
 type :: adams_bashforth_moulton_integrator
-  !< FOODiE integrator: provide an explicit class of Adams-Bashforth-Moulton multi-step schemes, from 1st to 4rd order accurate.
+  !< FOODIE integrator: provide an explicit class of Adams-Bashforth-Moulton multi-step schemes, from 1st to 4rd order accurate.
   !<
   !< @note The integrator must be created or initialized (predictor and corrector schemes selection) before used.
   private

@@ -1,5 +1,5 @@
 #
-# FOODiE Makefile
+# FOODIE Makefile
 #
 ########################################################################
 # Compiler and flags
