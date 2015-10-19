@@ -2,6 +2,7 @@
 # script automotion for FOODIE's OpenMP benchmark using provided tests
 
 # defaults
+code='all'
 bench='all'
 ripetitions=1
 Ni=100
@@ -13,9 +14,10 @@ function print_usage {
   echo "`basename $0`"
   echo "script automotion for FOODIE OpenMP benchmark"
   echo "Usage: `basename $0` [opts [args]]"
-  echo "  [ -b #benchmark_type -r #ripetitions -Ni #cells ]"
+  echo "  [ -c #code_type -b #benchmark_type -r #ripetitions -Ni #cells ]"
   echo
   echo "Defaults of optional arguments:"
+  echo "  -c all # type of code: valid value are 'all', 'foodie', 'no-foodie'"
   echo "  -b all # type of benchmark: valid value are 'all', 'strong', 'weak'"
   echo "  -r 1 # number of ripetitions for averaging the benchmarks results"
   echo "  -Ni 1000 # test size for strong scaling or minimum test size for weak scaling benchamrk"
@@ -39,10 +41,77 @@ function run_exe {
   average_cpu_time=`echo "scale=10; $average_cpu_time/$ripetitions" | bc -l`
   echo $average_cpu_time
 }
+function strong_scaling {
+  # perform strong scaling analysis
+  foodie=$1
+  if [ "$foodie" == "yes" ]; then
+    exe='../tests-openmp/euler-1D-openmp'
+    output='strong-scaling.dat'
+  else
+    exe='../tests-openmp/euler-1D-openmp-no-foodie'
+    output='strong-scaling-no-foodie.dat'
+  fi
+  echo 'TITLE="Strong scaling analysis, cells '$Ni'"' > $output
+  echo 'VARIABLES="OpenMP threads number" "CPU time"' >> $output
+  echo "Benchmarking without OpenMP threads"
+  average_cpu_time=$(run_exe $exe'-off' 1 $Ni)
+  echo 0 $average_cpu_time >> $output
+  c=1
+  while [ "$c" -lt $ncores ]; do
+    echo "Benchmarking with "$c" OpenMP threads"
+    average_cpu_time=$(run_exe $exe'-on' $c $Ni)
+    echo $c $average_cpu_time >> $output
+    c=$((c*2))
+    if [ "$c" -gt $ncores ]; then
+      # doing the last benchmark
+      echo "Benchmarking with "$ncores" OpenMP threads"
+      average_cpu_time=$(run_exe $exe'-on' $ncores $Ni)
+      echo $ncores $average_cpu_time >> $output
+    fi
+  done
+}
+function weak_scaling {
+  # perform weak scaling analysis
+  foodie=$1
+  if [ "$foodie" == "yes" ]; then
+    exe='../tests-openmp/euler-1D-openmp'
+    output='weak-scaling.dat'
+  else
+    exe='../tests-openmp/euler-1D-openmp-no-foodie'
+    output='weak-scaling-no-foodie.dat'
+  fi
+  echo 'TITLE="Weak scaling analysis"' > $output
+  echo 'VARIABLES="Size" "OpenMP threads number" "CPU time"' >> $output
+  echo "Benchmarking without OpenMP threads and size "$Ni
+  average_cpu_time=$(run_exe $exe'-off' 1 $Ni)
+  echo $Ni 0 $average_cpu_time >> $output
+  c=1
+  s=$Ni
+  while [ "$c" -lt $ncores ]; do
+    echo "Benchmarking with "$c" OpenMP threads and size "$s
+    average_cpu_time=$(run_exe $exe'-on' $c $s)
+    echo $s $c $average_cpu_time >> $output
+    c=$((c*2))
+    s=$((c*Ni))
+    if [ "$c" -gt $ncores ]; then
+      # doing the last benchmark
+      s=$((ncores*Ni))
+      echo "Benchmarking with "$ncores" OpenMP threads and size "$s
+      average_cpu_time=$(run_exe $exe'-on' $ncores $s)
+      echo $s $ncores $average_cpu_time >> $output
+    fi
+  done
+}
 
 # parsing CLI
 while [ $# -gt 0 ]; do
   case "$1" in
+  "-c")
+    shift; code=$1
+    if [ "$bench" != "all" ] && [ "$bench" != "foodie" ] && [ "$bench" != "no-foodie" ] ; then
+      echo; echo "invalid value $1"; print_usage; exit 1
+    fi
+    ;;
   "-b")
     shift; bench=$1
     if [ "$bench" != "all" ] && [ "$bench" != "strong" ] && [ "$bench" != "weak" ] ; then
@@ -63,13 +132,24 @@ while [ $# -gt 0 ]; do
 done
 
 # building codes
-rm -rf tests-openmp
 echo "Building 1D Euler OpenMP test executable"
 cd ../../../
-FoBiS.py build -mode benchmark-openmp-on --build_dir papers/announcement/openmp_benchmark/tests-openmp > papers/announcement/openmp_benchmark/builds.log
-rm -rf papers/announcement/openmp_benchmark/tests-openmp/obj
-rm -rf papers/announcement/openmp_benchmark/tests-openmp/mod
-FoBiS.py build -mode benchmark-openmp-off --build_dir papers/announcement/openmp_benchmark/tests-openmp >> papers/announcement/openmp_benchmark/builds.log
+if [ "$code" == "all" ] || [ "$code" == "foodie" ]; then
+  rm -rf papers/announcement/openmp_benchmark/tests-openmp/obj
+  rm -rf papers/announcement/openmp_benchmark/tests-openmp/mod
+  FoBiS.py build -mode benchmark-openmp-on --build_dir papers/announcement/openmp_benchmark/tests-openmp > papers/announcement/openmp_benchmark/builds.log
+  rm -rf papers/announcement/openmp_benchmark/tests-openmp/obj
+  rm -rf papers/announcement/openmp_benchmark/tests-openmp/mod
+  FoBiS.py build -mode benchmark-openmp-off --build_dir papers/announcement/openmp_benchmark/tests-openmp >> papers/announcement/openmp_benchmark/builds.log
+fi
+if [ "$code" == "all" ] || [ "$code" == "no-foodie" ]; then
+  rm -rf papers/announcement/openmp_benchmark/tests-openmp/obj
+  rm -rf papers/announcement/openmp_benchmark/tests-openmp/mod
+  FoBiS.py build -mode benchmark-openmp-no-foodie-on --build_dir papers/announcement/openmp_benchmark/tests-openmp >> papers/announcement/openmp_benchmark/builds.log
+  rm -rf papers/announcement/openmp_benchmark/tests-openmp/obj
+  rm -rf papers/announcement/openmp_benchmark/tests-openmp/mod
+  FoBiS.py build -mode benchmark-openmp-no-foodie-off --build_dir papers/announcement/openmp_benchmark/tests-openmp >> papers/announcement/openmp_benchmark/builds.log
+fi
 cd -
 # benchmarks
 tecplot=$(which tec360)
@@ -81,50 +161,21 @@ echo "Available physical cores "$ncores
 echo "1D Euler test benchmark"
 mkdir -p results-euler-1D-openmp
 cd results-euler-1D-openmp
-if [ "$bench" == "all" ] || [ "$bench" == "strong" ]; then
-  # strong scaling
-  echo 'TITLE="Strong scaling analysis, cells '$Ni'"' > strong-scaling.dat
-  echo 'VARIABLES="OpenMP threads number" "CPU time"' >> strong-scaling.dat
-  echo "Benchmarking without OpenMP threads"
-  average_cpu_time=$(run_exe ../tests-openmp/euler-1D-openmp-off 1 $Ni)
-  echo 0 $average_cpu_time >> strong-scaling.dat
-  c=1
-  while [ "$c" -lt $ncores ]; do
-    echo "Benchmarking with "$c" OpenMP threads"
-    average_cpu_time=$(run_exe ../tests-openmp/euler-1D-openmp-on $c $Ni)
-    echo $c $average_cpu_time >> strong-scaling.dat
-    c=$((c*2))
-    if [ "$c" -gt $ncores ]; then
-      # doing the last benchmark
-      echo "Benchmarking with "$ncores" OpenMP threads"
-      average_cpu_time=$(run_exe ../tests-openmp/euler-1D-openmp-on $ncores $Ni)
-      echo $ncores $average_cpu_time >> strong-scaling.dat
-    fi
-  done
+if [ "$code" == "all" ] || [ "$code" == "foodie" ]; then
+  if [ "$bench" == "all" ] || [ "$bench" == "strong" ]; then
+    strong_scaling yes
+  fi
+  if [ "$bench" == "all" ] || [ "$bench" == "weak" ]; then
+    weak_scaling yes
+  fi
 fi
-if [ "$bench" == "all" ] || [ "$bench" == "weak" ]; then
-  # weak scaling
-  echo 'TITLE="Weak scaling analysis"' > weak-scaling.dat
-  echo 'VARIABLES="Size" "OpenMP threads number" "CPU time"' >> weak-scaling.dat
-  echo "Benchmarking without OpenMP threads"
-  average_cpu_time=$(run_exe ../tests-openmp/euler-1D-openmp-off 1 $Ni)
-  echo $Ni 0 $average_cpu_time >> weak-scaling.dat
-  c=1
-  s=$Ni
-  while [ "$c" -lt $ncores ]; do
-    echo "Benchmarking with "$c" OpenMP threads"
-    average_cpu_time=$(run_exe ../tests-openmp/euler-1D-openmp-on $c $s)
-    echo $s $c $average_cpu_time >> weak-scaling.dat
-    c=$((c*2))
-    s=$((c*Ni))
-    if [ "$c" -gt $ncores ]; then
-      # doing the last benchmark
-      echo "Benchmarking with "$ncores" OpenMP threads"
-      s=$((ncores*Ni))
-      average_cpu_time=$(run_exe ../tests-openmp/euler-1D-openmp-on $ncores $s)
-      echo $s $ncores $average_cpu_time >> weak-scaling.dat
-    fi
-  done
+if [ "$code" == "all" ] || [ "$code" == "no-foodie" ]; then
+  if [ "$bench" == "all" ] || [ "$bench" == "strong" ]; then
+    strong_scaling no
+  fi
+  if [ "$bench" == "all" ] || [ "$bench" == "weak" ]; then
+    weak_scaling no
+  fi
 fi
 if [ -x "$tecplot" ] ; then
   ln -fs ../utilities-euler-1D-openmp/*lay .

@@ -29,7 +29,6 @@ real(R_P)                         :: dt                    !< Time step.
 real(R_P)                         :: t                     !< Time.
 type(euler_1D_openmp)             :: domain                !< Domain of Euler equations.
 real(R_P),    parameter           :: CFL=0.7_R_P           !< CFL value.
-real(R_P),    parameter           :: t_final=0.15_R_P      !< Final time.
 integer(I_P), parameter           :: Ns=1                  !< Number of differnt initial gas species.
 integer(I_P), parameter           :: Nc=Ns+2               !< Number of conservative variables.
 integer(I_P), parameter           :: Np=Ns+4               !< Number of primitive variables.
@@ -43,6 +42,7 @@ real(R_P), allocatable            :: initial_state(:,:)    !< Initial state of p
 real(R_P), allocatable            :: x(:)                  !< Cell center x-abscissa values.
 real(R_P), allocatable            :: final_state(:,:)      !< Final state.
 integer(I_P)                      :: error                 !< Error handler.
+integer(I_P)                      :: steps_max             !< Maximum number of time steps.
 integer(I_P)                      :: omp_threads           !< Number of OpenMP threads.
 logical                           :: plots                 !< Flag for activating plots saving.
 logical                           :: results               !< Flag for activating results saving.
@@ -65,6 +65,7 @@ call cli%init(progname    = 'euler-1D-openmp',                                  
                              "euler-1D            ",                                                 &
                              "euler-1D --plots -r "])
 call cli%add(switch='--Ni', help='Number finite volumes used', required=.false., act='store', def='100', error=error)
+call cli%add(switch='--steps', help='Number time steps performed', required=.false., act='store', def='10', error=error)
 call cli%add(switch='--results', switch_ab='-r', help='Save results', required=.false., act='store_true', def='.false.', &
              error=error)
 call cli%add(switch='--plots', switch_ab='-p', help='Save plots of results', required=.false., act='store_true', def='.false.', &
@@ -77,6 +78,7 @@ call cli%add(switch='--omp_threads', help='Number of OpenMP threads used', requi
 call cli%parse(error=error)
 call cli%get(switch='--omp_threads', val=omp_threads, error=error) ; if (error/=0) stop
 call cli%get(switch='--Ni', val=Ni, error=error) ; if (error/=0) stop
+call cli%get(switch='--steps', val=steps_max, error=error) ; if (error/=0) stop
 call cli%get(switch='-r', val=results, error=error) ; if (error/=0) stop
 call cli%get(switch='-p', val=plots, error=error) ; if (error/=0) stop
 call cli%get(switch='-t', val=time_serie, error=error) ; if (error/=0) stop
@@ -95,27 +97,25 @@ call init()
 call rk_integrator%init(stages=rk_stages)
 call domain%init(Ni=Ni, Ns=Ns, Dx=Dx, BC_L=BC_L, BC_R=BC_R, initial_state=initial_state, cp0=cp0, cv0=cv0, ord=7)
 t = 0._R_P
-steps = 0
-call save_time_serie(title='FOODIE test: 1D Euler equations integration, explicit TVD Runge-Kutta, t='//str(n=t_final)// &
+call save_time_serie(title='FOODIE test: 1D Euler equations integration, explicit TVD Runge-Kutta'// &
                            trim(str(.true., rk_stages))//' stages', &
                      filename='euler_1D_openmp_integration-tvdrk-'//trim(str(.true., rk_stages))//'-time_serie.dat', &
                      t=t)
 system_clocks = 0._R_P
-do while(t<t_final)
+do steps=1, steps_max
   if (verbose) print "(A)", '    Time step: '//str(n=dt)//', Time: '//str(n=t)
-  dt = domain%dt(Nmax=0, Tmax=t_final, t=t, CFL=CFL)
+  dt = domain%dt(Nmax=steps_max, Tmax=0._R_P, t=t, CFL=CFL)
   call system_clock(profiling(1), count_rate)
   call rk_integrator%integrate(U=domain, stage=rk_stage, dt=dt, t=t)
   call system_clock(profiling(2), count_rate)
   system_clocks = system_clocks + real(profiling(2) - profiling(1), kind=R_P)/count_rate
   t = t + dt
-  steps = steps + 1
   call save_time_serie(t=t)
 enddo
-system_clocks = system_clocks / steps
+system_clocks = system_clocks / steps_max
 if (verbose) print "(A)", '    Time step: '//str(n=dt)//', Time: '//str(n=t)
 call save_time_serie(t=t, finish=.true.)
-call save_results(title='FOODIE test: 1D Euler equations integration, explicit TVD Runge-Kutta, t='//str(n=t_final)// &
+call save_results(title='FOODIE test: 1D Euler equations integration, explicit TVD Runge-Kutta'// &
                         trim(str(.true., rk_stages))//' stages', &
                   filename='euler_1D_openmp_integration-tvdrk-'//trim(str(.true., rk_stages)))
 print "(I5,A,F23.15)", omp_threads, ' ', system_clocks

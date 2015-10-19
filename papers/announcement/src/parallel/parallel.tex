@@ -1,34 +1,46 @@
 \section{Benchmarks on parallel frameworks}\label{sec:parallel}
 
-Speedup of strong scaling:
+As aforementioned, FOODIE is unaware of any parallel paradigms or programming models the client codes adopt. As a consequence, the parallel performances measurements presented into this section are aimed only to prove that FOODIE environment does not destroy the parallel scaling of the baseline code implemented without FOODIE.
+
+To obtain such a prove, the 1D Euler PDE system described previously is numerically solved with FOODIE-aware test codes that in turn exploit parallel resources by means:
+
+\begin{itemize}
+  \item CoArray Fortran (CAF) model, for shared and distributed memory architectures;
+  \item OpenMP directive-based model, for only shared memory architectures;
+  \item Message Passing Interface (MPI) library-based model, for only distributed memory architectures;
+  \end{itemize}
+
+In order to measure the performances of the parallel-enabled FOODIE tests, the \emph{strong} and \emph{weak} scaling have been considered. For the strong scaling the \emph{speedup} has been computed:
 
 \begin{equation}
   speedup(N, k) = \frac{T_{serial}(N)}{T_{parallel}(N, k)}
   \label{eq:strong-scaling-speedup}
 \end{equation}
-where $N$ is the problem size, $K$ the number of cpu-cores used, $T_{serial}$ is the cpu time of the serial code and $T_{parallel}$ the one of the parallel code.
-
-Efficiency of strong scaling:
+where $N$ is the problem size, $K$ the number of parallel resources used (namely the physical cores), $T_{serial}$ is the CPU time of the serial code and $T_{parallel}$ the one of the parallel code. The ideal speedup is linear with slop equals to 1. The efficiency correlated to the strong scaling measurement is defined as:
 
 \begin{equation}
   efficiency(N, k) = \frac{speedup(N, k)}{k}
   \label{eq:strong-scaling-efficiency}
 \end{equation}
+The maximum ideal efficiency is obviously the unity.
 
-Sizeup of weak scaling:
+For the of weak scaling measurement the \emph{sizeup} has been computed:
 
 \begin{equation}
   sizeup(N, k) = \frac{N_k}{N_1} \cdot \frac{T_{serial}(N_1)}{T_{parallel}(N_k, k)}
   \label{eq:weak-scaling-sizeup}
 \end{equation}
-where $N_k=k \cdot N_1$.
-
-Efficiency of weak scaling:
+where $N_1$ is the minimum size considered and $N_K$ is the size used for the test computed with $k$ parallel resources. If $N_K$ is scaled proportional to $N_1$, the ideal sizeup is again linear and if $N_k = k \cdot N_1$ the slope is again linear. The efficiency correlated to the weak scaling is defined as:
 
 \begin{equation}
   efficiency(N, k) = \frac{sizeup(N, k)}{k}
   \label{eq:weak-scaling-efficiency}
 \end{equation}
+The maximum ideal efficiency is obviously the unity.
+
+The same 1D Euler PDE problem is also solved by parallel-enabled codes that are not based on FOODIE: their solutions provide a reference for measuring the effect of FOODIE abstraction on the parallel scaling.
+
+\subsection{CAF benchmark}\label{subsec:caf}
 
 {\color{red} To be written.}
 
@@ -37,4 +49,3 @@ Efficiency of weak scaling:
 \subsection{MPI benchmark}\label{subsec:mpi}
 
 {\color{red} To be written.}
-
