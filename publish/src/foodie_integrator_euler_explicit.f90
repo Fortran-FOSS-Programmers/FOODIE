@@ -1,7 +1,7 @@
-!< FOODiE integrator: provide an explicit Euler scheme, it being 1st order accurate.
+!< FOODIE integrator: provide an explicit Euler scheme, it being 1st order accurate.
 module foodie_integrator_euler_explicit
 !-----------------------------------------------------------------------------------------------------------------------------------
-!< FOODiE integrator: provide an explicit Euler scheme, it being 1st order accurate.
+!< FOODIE integrator: provide an explicit Euler scheme, it being 1st order accurate.
 !<
 !< Considering the following ODE system:
 !<
@@ -28,7 +28,7 @@ public :: euler_explicit_integrator
 
 !-----------------------------------------------------------------------------------------------------------------------------------
 type :: euler_explicit_integrator
-  !< FOODiE integrator: provide an explicit Euler scheme, it being 1st order accurate.
+  !< FOODIE integrator: provide an explicit Euler scheme, it being 1st order accurate.
   !<
   !< @note The integrator can be used directly without any initialization.
   contains

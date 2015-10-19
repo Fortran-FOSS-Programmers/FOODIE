@@ -10,7 +10,7 @@
     <meta name="author" content="Chris MacMackin" >
     <link rel="icon" href="../favicon.png">
 
-    <title>burgers.f90 &ndash; FOODiE</title>
+    <title>burgers.f90 &ndash; FOODIE</title>
 
     <link href="../css/bootstrap.min.css" rel="stylesheet">
     <link href="../css/pygments.css" rel="stylesheet">
@@ -48,7 +48,7 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </button>
-          <a class="navbar-brand" href="../index.html">FOODiE </a>
+          <a class="navbar-brand" href="../index.html">FOODIE </a>
         </div>
         <div id="navbar" class="navbar-collapse collapse">
           <ul class="nav navbar-nav">
@@ -166,6 +166,8 @@
       
       <a class="list-group-item" href="../sourcefile/euler-1d-openmp.f90.html">euler-1D-openmp.f90</a>
       
+      <a class="list-group-item" href="../sourcefile/euler-1d-openmp_no_foodie.f90.html">euler-1D-openmp_no_foodie.f90</a>
+      
       <a class="list-group-item" href="../sourcefile/euler-1d.f90.html">euler-1D.f90</a>
       
       <a class="list-group-item" href="../sourcefile/foodie.f90.html">foodie.f90</a>
@@ -196,6 +198,8 @@
       
       <a class="list-group-item" href="../sourcefile/type_euler-1d-openmp.f90.html">type_euler-1D-openmp.f90</a>
       
+      <a class="list-group-item" href="../sourcefile/type_euler-1d-openmp.f90%7E2.html">type_euler-1D-openmp.f90</a>
+      
       <a class="list-group-item" href="../sourcefile/type_euler-1d.f90.html">type_euler-1D.f90</a>
       
       <a class="list-group-item" href="../sourcefile/type_lorenz.f90.html">type_lorenz.f90</a>
@@ -208,14 +212,14 @@
   
     </div>
     <div class="col-lg-9" id='text'>
-    <p>Test FOODiE with the integration of Burgers equation.</p>
+    <p>Test FOODIE with the integration of Burgers equation.</p>
     <br>
     <section>
     <h2><span class="anchor" id="src"></span>Source Code</h2>
-    <div class="highlight"><pre><span class="c">!&lt; Test FOODiE with the integration of Burgers equation.</span>
+    <div class="highlight"><pre><span class="c">!&lt; Test FOODIE with the integration of Burgers equation.</span>
 <span class="k">program </span><span class="n">integrate_burgers</span>
 <span class="c">!-----------------------------------------------------------------------------------------------------------------------------------</span>
-<span class="c">!&lt; Test FOODiE with the integration of Burgers equation.</span>
+<span class="c">!&lt; Test FOODIE with the integration of Burgers equation.</span>
 <span class="c">!-----------------------------------------------------------------------------------------------------------------------------------</span>
 
 <span class="c">!-----------------------------------------------------------------------------------------------------------------------------------</span>
@@ -253,7 +257,7 @@
 <span class="k">call </span><span class="n">cli</span><span class="p">%</span><span class="n">init</span><span class="p">(</span><span class="n">progname</span>    <span class="o">=</span> <span class="s1">&#39;burgers&#39;</span><span class="p">,</span>                                             <span class="p">&amp;</span>
               <span class="n">authors</span>     <span class="o">=</span> <span class="s1">&#39;Fortran-FOSS-Programmers&#39;</span><span class="p">,</span>                            <span class="p">&amp;</span>
               <span class="n">license</span>     <span class="o">=</span> <span class="s1">&#39;GNU GPLv3&#39;</span><span class="p">,</span>                                           <span class="p">&amp;</span>
-              <span class="n">description</span> <span class="o">=</span> <span class="s1">&#39;Test FOODiE library on Burgers equation integration&#39;</span><span class="p">,</span> <span class="p">&amp;</span>
+              <span class="n">description</span> <span class="o">=</span> <span class="s1">&#39;Test FOODIE library on Burgers equation integration&#39;</span><span class="p">,</span> <span class="p">&amp;</span>
               <span class="n">examples</span>    <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;burgers --solver euler --results  &quot;</span><span class="p">,</span>                 <span class="p">&amp;</span>
                              <span class="s2">&quot;burgers --solver ls-runge-kutta -r&quot;</span><span class="p">,</span>                 <span class="p">&amp;</span>
                              <span class="s2">&quot;burgers --solver adams-bashforth  &quot;</span><span class="p">,</span>                 <span class="p">&amp;</span>
@@ -399,7 +403,7 @@
       <span class="n">step</span> <span class="o">=</span> <span class="n">step</span> <span class="o">+</span> <span class="mi">1</span>
     <span class="n">enddo</span>
     <span class="n">final_state</span> <span class="o">=</span> <span class="n">domain</span><span class="p">%</span><span class="n">output</span><span class="p">()</span>
-    <span class="k">call </span><span class="n">save_results</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s1">&#39;FOODiE test: Burgers equation integration, t=&#39;</span><span class="o">//</span><span class="n">str</span><span class="p">(</span><span class="n">n</span><span class="o">=</span><span class="n">t_final</span><span class="p">)</span><span class="o">//</span><span class="s1">&#39; explicit &#39;</span><span class="o">//</span><span class="p">&amp;</span>
+    <span class="k">call </span><span class="n">save_results</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s1">&#39;FOODIE test: Burgers equation integration, t=&#39;</span><span class="o">//</span><span class="n">str</span><span class="p">(</span><span class="n">n</span><span class="o">=</span><span class="n">t_final</span><span class="p">)</span><span class="o">//</span><span class="s1">&#39; explicit &#39;</span><span class="o">//</span><span class="p">&amp;</span>
                             <span class="s1">&#39;Adams-Bashforth &#39;</span><span class="o">//</span><span class="nb">trim</span><span class="p">(</span><span class="n">str</span><span class="p">(.</span><span class="n">true</span><span class="p">.,</span> <span class="n">s</span><span class="p">))</span><span class="o">//</span><span class="s1">&#39; steps&#39;</span><span class="p">,</span> <span class="p">&amp;</span>
                       <span class="n">filename</span><span class="o">=</span><span class="s1">&#39;burgers_integration-ab-&#39;</span><span class="o">//</span><span class="nb">trim</span><span class="p">(</span><span class="n">str</span><span class="p">(.</span><span class="n">true</span><span class="p">.,</span> <span class="n">s</span><span class="p">)))</span>
   <span class="n">enddo</span>
@@ -427,7 +431,7 @@
     <span class="n">t</span> <span class="o">=</span> <span class="n">t</span> <span class="o">+</span> <span class="n">dt</span>
   <span class="n">enddo</span>
   <span class="n">final_state</span> <span class="o">=</span> <span class="n">domain</span><span class="p">%</span><span class="n">output</span><span class="p">()</span>
-  <span class="k">call </span><span class="n">save_results</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s1">&#39;FOODiE test: Burgers equation integration, t=&#39;</span><span class="o">//</span><span class="n">str</span><span class="p">(</span><span class="n">n</span><span class="o">=</span><span class="n">t_final</span><span class="p">)</span><span class="o">//</span><span class="s1">&#39; explicit Euler&#39;</span><span class="p">,</span> <span class="p">&amp;</span>
+  <span class="k">call </span><span class="n">save_results</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s1">&#39;FOODIE test: Burgers equation integration, t=&#39;</span><span class="o">//</span><span class="n">str</span><span class="p">(</span><span class="n">n</span><span class="o">=</span><span class="n">t_final</span><span class="p">)</span><span class="o">//</span><span class="s1">&#39; explicit Euler&#39;</span><span class="p">,</span> <span class="p">&amp;</span>
                     <span class="n">filename</span><span class="o">=</span><span class="s1">&#39;burgers_integration-euler&#39;</span><span class="p">)</span>
   <span class="k">print</span> <span class="s2">&quot;(A)&quot;</span><span class="p">,</span> <span class="s1">&#39;Finish!&#39;</span>
   <span class="k">return</span>
@@ -469,7 +473,7 @@
     <span class="n">step</span> <span class="o">=</span> <span class="n">step</span> <span class="o">+</span> <span class="mi">1</span>
   <span class="n">enddo</span>
   <span class="n">final_state</span> <span class="o">=</span> <span class="n">domain</span><span class="p">%</span><span class="n">output</span><span class="p">()</span>
-  <span class="k">call </span><span class="n">save_results</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s1">&#39;FOODiE test: Burgers equation integration, t=&#39;</span><span class="o">//</span><span class="n">str</span><span class="p">(</span><span class="n">n</span><span class="o">=</span><span class="n">t_final</span><span class="p">)</span><span class="o">//</span><span class="s1">&#39; explicit leapfrog scheme&#39;</span><span class="p">,&amp;</span>
+  <span class="k">call </span><span class="n">save_results</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s1">&#39;FOODIE test: Burgers equation integration, t=&#39;</span><span class="o">//</span><span class="n">str</span><span class="p">(</span><span class="n">n</span><span class="o">=</span><span class="n">t_final</span><span class="p">)</span><span class="o">//</span><span class="s1">&#39; explicit leapfrog scheme&#39;</span><span class="p">,&amp;</span>
                     <span class="n">filename</span><span class="o">=</span><span class="s1">&#39;burgers_integration-lf-RAW-filter&#39;</span><span class="p">)</span>
   <span class="k">print</span> <span class="s2">&quot;(A)&quot;</span><span class="p">,</span> <span class="s1">&#39;Finish!&#39;</span>
   <span class="k">return</span>
@@ -505,7 +509,7 @@
       <span class="n">t</span> <span class="o">=</span> <span class="n">t</span> <span class="o">+</span> <span class="n">dt</span>
     <span class="n">enddo</span>
     <span class="n">final_state</span> <span class="o">=</span> <span class="n">domain</span><span class="p">%</span><span class="n">output</span><span class="p">()</span>
-    <span class="k">call </span><span class="n">save_results</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s1">&#39;FOODiE test: Burgers equation integration, t=&#39;</span><span class="o">//</span><span class="n">str</span><span class="p">(</span><span class="n">n</span><span class="o">=</span><span class="n">t_final</span><span class="p">)</span><span class="o">//</span><span class="s1">&#39; explicit low storage Runge-Kutta &#39;</span><span class="o">//</span><span class="p">&amp;</span>
+    <span class="k">call </span><span class="n">save_results</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s1">&#39;FOODIE test: Burgers equation integration, t=&#39;</span><span class="o">//</span><span class="n">str</span><span class="p">(</span><span class="n">n</span><span class="o">=</span><span class="n">t_final</span><span class="p">)</span><span class="o">//</span><span class="s1">&#39; explicit low storage Runge-Kutta &#39;</span><span class="o">//</span><span class="p">&amp;</span>
                             <span class="nb">trim</span><span class="p">(</span><span class="n">str</span><span class="p">(.</span><span class="n">true</span><span class="p">.,</span> <span class="n">s</span><span class="p">))</span><span class="o">//</span><span class="s1">&#39; stages&#39;</span><span class="p">,</span> <span class="p">&amp;</span>
                       <span class="n">filename</span><span class="o">=</span><span class="s1">&#39;burgers_integration-lsrk-&#39;</span><span class="o">//</span><span class="nb">trim</span><span class="p">(</span><span class="n">str</span><span class="p">(.</span><span class="n">true</span><span class="p">.,</span> <span class="n">s</span><span class="p">)))</span>
   <span class="n">enddo</span>
@@ -540,7 +544,7 @@
       <span class="n">t</span> <span class="o">=</span> <span class="n">t</span> <span class="o">+</span> <span class="n">dt</span>
     <span class="n">enddo</span>
     <span class="n">final_state</span> <span class="o">=</span> <span class="n">domain</span><span class="p">%</span><span class="n">output</span><span class="p">()</span>
-    <span class="k">call </span><span class="n">save_results</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s1">&#39;FOODiE test: Burgers equation integration, t=&#39;</span><span class="o">//</span><span class="n">str</span><span class="p">(</span><span class="n">n</span><span class="o">=</span><span class="n">t_final</span><span class="p">)</span><span class="o">//</span><span class="s1">&#39; explicit TVD Runge-Kutta &#39;</span><span class="o">//</span><span class="p">&amp;</span>
+    <span class="k">call </span><span class="n">save_results</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s1">&#39;FOODIE test: Burgers equation integration, t=&#39;</span><span class="o">//</span><span class="n">str</span><span class="p">(</span><span class="n">n</span><span class="o">=</span><span class="n">t_final</span><span class="p">)</span><span class="o">//</span><span class="s1">&#39; explicit TVD Runge-Kutta &#39;</span><span class="o">//</span><span class="p">&amp;</span>
                             <span class="nb">trim</span><span class="p">(</span><span class="n">str</span><span class="p">(.</span><span class="n">true</span><span class="p">.,</span> <span class="n">s</span><span class="p">))</span><span class="o">//</span><span class="s1">&#39; stages&#39;</span><span class="p">,</span> <span class="p">&amp;</span>
                       <span class="n">filename</span><span class="o">=</span><span class="s1">&#39;burgers_integration-tvdrk-&#39;</span><span class="o">//</span><span class="nb">trim</span><span class="p">(</span><span class="n">str</span><span class="p">(.</span><span class="n">true</span><span class="p">.,</span> <span class="n">s</span><span class="p">)))</span>
   <span class="n">enddo</span>
@@ -558,7 +562,7 @@
     <hr>
     <footer>
         <div class="row">
-        <div class="col-md-6">&copy; 2015 FOODiE was written by Fortran-FOSS-Programmers Group. </div>
+        <div class="col-md-6">&copy; 2015 FOODIE was written by Fortran-FOSS-Programmers Group. </div>
         <div class="col-md-6"><span class="pull-right">Documentation generated by <a href="https://github.com/cmacmackin/ford">FORD</a>.</span></div>
         </div>
         <br>

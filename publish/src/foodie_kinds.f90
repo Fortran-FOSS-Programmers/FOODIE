@@ -1,7 +1,7 @@
-!< FOODiE kinds: definition of reals and integer kind parameters of FOODiE library.
+!< FOODIE kinds: definition of reals and integer kind parameters of FOODIE library.
 module foodie_kinds
 !-----------------------------------------------------------------------------------------------------------------------------------
-!< FOODiE kinds: definition of reals and integer kind parameters of FOODiE library.
+!< FOODIE kinds: definition of reals and integer kind parameters of FOODIE library.
 !-----------------------------------------------------------------------------------------------------------------------------------
 
 !-----------------------------------------------------------------------------------------------------------------------------------

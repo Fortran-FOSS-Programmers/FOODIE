@@ -1,7 +1,7 @@
-!< FOODiE integrator: provide an explicit class of low storage Runge-Kutta schemes, from 1st to 4th order accurate.
+!< FOODIE integrator: provide an explicit class of low storage Runge-Kutta schemes, from 1st to 4th order accurate.
 module foodie_integrator_low_storage_runge_kutta
 !-----------------------------------------------------------------------------------------------------------------------------------
-!< FOODiE integrator: provide an explicit class of low storage Runge-Kutta schemes, from 1st to 4th order accurate.
+!< FOODIE integrator: provide an explicit class of low storage Runge-Kutta schemes, from 1st to 4th order accurate.
 !<
 !< The class of integrators provided have the low storage property allowing for an efficient use of the memory.
 !< Following Williamson approach [1], the LSRK(5,4)2N (solution 3) scheme of Carpenter et al. [2] is implemented.
@@ -162,7 +162,7 @@ public :: ls_runge_kutta_integrator
 
 !-----------------------------------------------------------------------------------------------------------------------------------
 type :: ls_runge_kutta_integrator
-  !< FOODiE integrator: provide an explicit class of low storage Runge-Kutta schemes, from 1st to 4th order accurate.
+  !< FOODIE integrator: provide an explicit class of low storage Runge-Kutta schemes, from 1st to 4th order accurate.
   !<
   !< @note The integrator must be created or initialized (initialize the RK coeficients) before used.
   integer(I_P)           :: stages=0 !< Number of stages.

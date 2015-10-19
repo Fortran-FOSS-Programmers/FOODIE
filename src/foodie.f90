@@ -1,9 +1,9 @@
-!< FOODiE, Fortran Object oriented Ordinary Differential Equations integration library.
+!< FOODIE, Fortran Object oriented Ordinary Differential Equations integration library.
 module foodie
 !-----------------------------------------------------------------------------------------------------------------------------------
-!< FOODiE, Fortran Object oriented Ordinary Differential Equations integration library.
+!< FOODIE, Fortran Object oriented Ordinary Differential Equations integration library.
 !<
-!< FOODiE is a KISS library for solving systems of Ordinary Differential Equation (ODE) into the Initial Values Problems (IVP)
+!< FOODIE is a KISS library for solving systems of Ordinary Differential Equation (ODE) into the Initial Values Problems (IVP)
 !< contest. The mathematical formulation of the problem is:
 !<
 !< $$U_t = R(t,U)$$
@@ -12,7 +12,7 @@ module foodie
 !< where \(U_t = \frac{dU}{dt}\), *U* is the vector of *state* variables being a function of the time-like independent variable
 !< *t*, *R* is the (vectorial) residual function and *F* is the (vectorial) initial conditions function.
 !<
-!< FOODiE is aimed to the time-like integration of the above system of ODE. To this aim, different numerical schemes are provided:
+!< FOODIE is aimed to the time-like integration of the above system of ODE. To this aim, different numerical schemes are provided:
 !<
 !<+ *explicit Adams-Bashforth* class of schemes:
 !<    + 1 step, namely the explicit forward Euler scheme, 1st order accurate;
@@ -45,11 +45,11 @@ module foodie
 !<
 !<### Usage
 !<
-!< FOODiE schemes must be applied to only subclass extensions of the abstract class *integrand*.
+!< FOODIE schemes must be applied to only subclass extensions of the abstract class *integrand*.
 !<
-!< To use FOODiE you must:
+!< To use FOODIE you must:
 !<
-!<#### extend integrand abstract class provided by FOODiE implementing your concrete integrand field
+!<#### extend integrand abstract class provided by FOODIE implementing your concrete integrand field
 !<
 !< For example for the Lorenz' ODE system
 !<
@@ -57,7 +57,7 @@ module foodie
 !< type, extends(integrand) :: lorenz
 !<   !< Lorenz equations field.
 !<   !<
-!<   !< It is a FOODiE integrand class.
+!<   !< It is a FOODIE integrand class.
 !<   private
 !<   real(R_P), dimension(:), allocatable :: state        !< Solution vector.
 !<   real(R_P)                            :: sigma=0._R_P !< Lorenz \(\sigma\).
@@ -74,7 +74,7 @@ module foodie
 !< endtype lorenz
 !<```
 !<
-!<#### use one of the provided FOODiE integrator
+!<#### use one of the provided FOODIE integrator
 !<
 !< For example using the forward explicit Euler scheme to the above Lorenz' ODE system
 !<

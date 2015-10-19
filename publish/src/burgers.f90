@@ -1,7 +1,7 @@
-!< Test FOODiE with the integration of Burgers equation.
+!< Test FOODIE with the integration of Burgers equation.
 program integrate_burgers
 !-----------------------------------------------------------------------------------------------------------------------------------
-!< Test FOODiE with the integration of Burgers equation.
+!< Test FOODIE with the integration of Burgers equation.
 !-----------------------------------------------------------------------------------------------------------------------------------
 
 !-----------------------------------------------------------------------------------------------------------------------------------
@@ -39,7 +39,7 @@ logical                           :: results             !< Flag for activating 
 call cli%init(progname    = 'burgers',                                             &
               authors     = 'Fortran-FOSS-Programmers',                            &
               license     = 'GNU GPLv3',                                           &
-              description = 'Test FOODiE library on Burgers equation integration', &
+              description = 'Test FOODIE library on Burgers equation integration', &
               examples    = ["burgers --solver euler --results  ",                 &
                              "burgers --solver ls-runge-kutta -r",                 &
                              "burgers --solver adams-bashforth  ",                 &
@@ -185,7 +185,7 @@ contains
       step = step + 1
     enddo
     final_state = domain%output()
-    call save_results(title='FOODiE test: Burgers equation integration, t='//str(n=t_final)//' explicit '//&
+    call save_results(title='FOODIE test: Burgers equation integration, t='//str(n=t_final)//' explicit '//&
                             'Adams-Bashforth '//trim(str(.true., s))//' steps', &
                       filename='burgers_integration-ab-'//trim(str(.true., s)))
   enddo
@@ -213,7 +213,7 @@ contains
     t = t + dt
   enddo
   final_state = domain%output()
-  call save_results(title='FOODiE test: Burgers equation integration, t='//str(n=t_final)//' explicit Euler', &
+  call save_results(title='FOODIE test: Burgers equation integration, t='//str(n=t_final)//' explicit Euler', &
                     filename='burgers_integration-euler')
   print "(A)", 'Finish!'
   return
@@ -255,7 +255,7 @@ contains
     step = step + 1
   enddo
   final_state = domain%output()
-  call save_results(title='FOODiE test: Burgers equation integration, t='//str(n=t_final)//' explicit leapfrog scheme',&
+  call save_results(title='FOODIE test: Burgers equation integration, t='//str(n=t_final)//' explicit leapfrog scheme',&
                     filename='burgers_integration-lf-RAW-filter')
   print "(A)", 'Finish!'
   return
@@ -291,7 +291,7 @@ contains
       t = t + dt
     enddo
     final_state = domain%output()
-    call save_results(title='FOODiE test: Burgers equation integration, t='//str(n=t_final)//' explicit low storage Runge-Kutta '//&
+    call save_results(title='FOODIE test: Burgers equation integration, t='//str(n=t_final)//' explicit low storage Runge-Kutta '//&
                             trim(str(.true., s))//' stages', &
                       filename='burgers_integration-lsrk-'//trim(str(.true., s)))
   enddo
@@ -326,7 +326,7 @@ contains
       t = t + dt
     enddo
     final_state = domain%output()
-    call save_results(title='FOODiE test: Burgers equation integration, t='//str(n=t_final)//' explicit TVD Runge-Kutta '//&
+    call save_results(title='FOODIE test: Burgers equation integration, t='//str(n=t_final)//' explicit TVD Runge-Kutta '//&
                             trim(str(.true., s))//' stages', &
                       filename='burgers_integration-tvdrk-'//trim(str(.true., s)))
   enddo

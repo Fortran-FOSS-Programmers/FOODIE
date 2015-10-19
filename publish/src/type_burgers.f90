@@ -19,7 +19,7 @@ public :: burgers
 type, extends(integrand) :: burgers
   !< Burgers equations field.
   !<
-  !< It is a FOODiE integrand class concrete extension.
+  !< It is a FOODIE integrand class concrete extension.
   !<
   !<### Burgers PDE equation
   !<The Burgers PDE equation is a non linear PDE widely used as numerical benchmark that can be applied to describe

@@ -1,7 +1,7 @@
-!< FOODiE integrator: provide an explicit class of leapfrog multi-step schemes, 2nd order accutate.
+!< FOODIE integrator: provide an explicit class of leapfrog multi-step schemes, 2nd order accutate.
 module foodie_integrator_leapfrog
 !-----------------------------------------------------------------------------------------------------------------------------------
-!< FOODiE integrator: provide an explicit class of leapfrog multi-step schemes, 2nd order accutate.
+!< FOODIE integrator: provide an explicit class of leapfrog multi-step schemes, 2nd order accutate.
 !<
 !< Considering the following ODE system:
 !<
@@ -50,7 +50,7 @@ public :: leapfrog_integrator
 
 !-----------------------------------------------------------------------------------------------------------------------------------
 type :: leapfrog_integrator
-  !< FOODiE integrator: provide an explicit class of leapfrog multi-step schemes, 2nd order accutate.
+  !< FOODIE integrator: provide an explicit class of leapfrog multi-step schemes, 2nd order accutate.
   !<
   !< @note The integrator could be used without initialialization (initialize the time filter coefficients) if the defulat values
   !< are suitable for the problem.

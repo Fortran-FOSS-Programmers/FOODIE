@@ -1,7 +1,7 @@
-!< FOODiE integrator: provide an implicit class of Adams-Moutlon multi-step schemes, from 1st to 4rd order accutate.
+!< FOODIE integrator: provide an implicit class of Adams-Moutlon multi-step schemes, from 1st to 4rd order accutate.
 module foodie_integrator_adams_moulton
 !-----------------------------------------------------------------------------------------------------------------------------------
-!< FOODiE integrator: provide an implicit class of Adams-Moutlon multi-step schemes, from 1st to 4rd order accutate.
+!< FOODIE integrator: provide an implicit class of Adams-Moutlon multi-step schemes, from 1st to 4rd order accutate.
 !<
 !< Considering the following ODE system:
 !<
@@ -71,7 +71,7 @@ public :: adams_moulton_integrator
 
 !-----------------------------------------------------------------------------------------------------------------------------------
 type :: adams_moulton_integrator
-  !< FOODiE integrator: provide an explicit class of Adams-Moulton multi-step schemes, from 1st to 3rd order accutate.
+  !< FOODIE integrator: provide an explicit class of Adams-Moulton multi-step schemes, from 1st to 3rd order accutate.
   !<
   !< @note The integrator must be created or initialized (initialize the *b* coeficients) before used.
   private

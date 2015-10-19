@@ -10,7 +10,7 @@
     <meta name="author" content="Chris MacMackin" >
     <link rel="icon" href="../favicon.png">
 
-    <title>foodie.f90 &ndash; FOODiE</title>
+    <title>foodie.f90 &ndash; FOODIE</title>
 
     <link href="../css/bootstrap.min.css" rel="stylesheet">
     <link href="../css/pygments.css" rel="stylesheet">
@@ -48,7 +48,7 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </button>
-          <a class="navbar-brand" href="../index.html">FOODiE </a>
+          <a class="navbar-brand" href="../index.html">FOODIE </a>
         </div>
         <div id="navbar" class="navbar-collapse collapse">
           <ul class="nav navbar-nav">
@@ -166,6 +166,8 @@
       
       <a class="list-group-item" href="../sourcefile/euler-1d-openmp.f90.html">euler-1D-openmp.f90</a>
       
+      <a class="list-group-item" href="../sourcefile/euler-1d-openmp_no_foodie.f90.html">euler-1D-openmp_no_foodie.f90</a>
+      
       <a class="list-group-item" href="../sourcefile/euler-1d.f90.html">euler-1D.f90</a>
       
       <a class="list-group-item" href="../sourcefile/foodie.f90.html">foodie.f90</a>
@@ -196,6 +198,8 @@
       
       <a class="list-group-item" href="../sourcefile/type_euler-1d-openmp.f90.html">type_euler-1D-openmp.f90</a>
       
+      <a class="list-group-item" href="../sourcefile/type_euler-1d-openmp.f90%7E2.html">type_euler-1D-openmp.f90</a>
+      
       <a class="list-group-item" href="../sourcefile/type_euler-1d.f90.html">type_euler-1D.f90</a>
       
       <a class="list-group-item" href="../sourcefile/type_lorenz.f90.html">type_lorenz.f90</a>
@@ -208,16 +212,16 @@
   
     </div>
     <div class="col-lg-9" id='text'>
-    <p>FOODiE, Fortran Object oriented Ordinary Differential Equations integration library.</p>
+    <p>FOODIE, Fortran Object oriented Ordinary Differential Equations integration library.</p>
     <br>
     <section>
     <h2><span class="anchor" id="src"></span>Source Code</h2>
-    <div class="highlight"><pre><span class="c">!&lt; FOODiE, Fortran Object oriented Ordinary Differential Equations integration library.</span>
+    <div class="highlight"><pre><span class="c">!&lt; FOODIE, Fortran Object oriented Ordinary Differential Equations integration library.</span>
 <span class="k">module </span><span class="n">foodie</span>
 <span class="c">!-----------------------------------------------------------------------------------------------------------------------------------</span>
-<span class="c">!&lt; FOODiE, Fortran Object oriented Ordinary Differential Equations integration library.</span>
+<span class="c">!&lt; FOODIE, Fortran Object oriented Ordinary Differential Equations integration library.</span>
 <span class="c">!&lt;</span>
-<span class="c">!&lt; FOODiE is a KISS library for solving systems of Ordinary Differential Equation (ODE) into the Initial Values Problems (IVP)</span>
+<span class="c">!&lt; FOODIE is a KISS library for solving systems of Ordinary Differential Equation (ODE) into the Initial Values Problems (IVP)</span>
 <span class="c">!&lt; contest. The mathematical formulation of the problem is:</span>
 <span class="c">!&lt;</span>
 <span class="c">!&lt; $$U_t = R(t,U)$$</span>
@@ -226,7 +230,7 @@
 <span class="c">!&lt; where \(U_t = \frac{dU}{dt}\), *U* is the vector of *state* variables being a function of the time-like independent variable</span>
 <span class="c">!&lt; *t*, *R* is the (vectorial) residual function and *F* is the (vectorial) initial conditions function.</span>
 <span class="c">!&lt;</span>
-<span class="c">!&lt; FOODiE is aimed to the time-like integration of the above system of ODE. To this aim, different numerical schemes are provided:</span>
+<span class="c">!&lt; FOODIE is aimed to the time-like integration of the above system of ODE. To this aim, different numerical schemes are provided:</span>
 <span class="c">!&lt;</span>
 <span class="c">!&lt;+ *explicit Adams-Bashforth* class of schemes:</span>
 <span class="c">!&lt;    + 1 step, namely the explicit forward Euler scheme, 1st order accurate;</span>
@@ -259,11 +263,11 @@
 <span class="c">!&lt;</span>
 <span class="c">!&lt;### Usage</span>
 <span class="c">!&lt;</span>
-<span class="c">!&lt; FOODiE schemes must be applied to only subclass extensions of the abstract class *integrand*.</span>
+<span class="c">!&lt; FOODIE schemes must be applied to only subclass extensions of the abstract class *integrand*.</span>
 <span class="c">!&lt;</span>
-<span class="c">!&lt; To use FOODiE you must:</span>
+<span class="c">!&lt; To use FOODIE you must:</span>
 <span class="c">!&lt;</span>
-<span class="c">!&lt;#### extend integrand abstract class provided by FOODiE implementing your concrete integrand field</span>
+<span class="c">!&lt;#### extend integrand abstract class provided by FOODIE implementing your concrete integrand field</span>
 <span class="c">!&lt;</span>
 <span class="c">!&lt; For example for the Lorenz&#39; ODE system</span>
 <span class="c">!&lt;</span>
@@ -271,7 +275,7 @@
 <span class="c">!&lt; type, extends(integrand) :: lorenz</span>
 <span class="c">!&lt;   !&lt; Lorenz equations field.</span>
 <span class="c">!&lt;   !&lt;</span>
-<span class="c">!&lt;   !&lt; It is a FOODiE integrand class.</span>
+<span class="c">!&lt;   !&lt; It is a FOODIE integrand class.</span>
 <span class="c">!&lt;   private</span>
 <span class="c">!&lt;   real(R_P), dimension(:), allocatable :: state        !&lt; Solution vector.</span>
 <span class="c">!&lt;   real(R_P)                            :: sigma=0._R_P !&lt; Lorenz \(\sigma\).</span>
@@ -288,7 +292,7 @@
 <span class="c">!&lt; endtype lorenz</span>
 <span class="c">!&lt;```</span>
 <span class="c">!&lt;</span>
-<span class="c">!&lt;#### use one of the provided FOODiE integrator</span>
+<span class="c">!&lt;#### use one of the provided FOODIE integrator</span>
 <span class="c">!&lt;</span>
 <span class="c">!&lt; For example using the forward explicit Euler scheme to the above Lorenz&#39; ODE system</span>
 <span class="c">!&lt;</span>
@@ -337,7 +341,7 @@
     <hr>
     <footer>
         <div class="row">
-        <div class="col-md-6">&copy; 2015 FOODiE was written by Fortran-FOSS-Programmers Group. </div>
+        <div class="col-md-6">&copy; 2015 FOODIE was written by Fortran-FOSS-Programmers Group. </div>
         <div class="col-md-6"><span class="pull-right">Documentation generated by <a href="https://github.com/cmacmackin/ford">FORD</a>.</span></div>
         </div>
         <br>

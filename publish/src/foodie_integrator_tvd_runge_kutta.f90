@@ -1,7 +1,7 @@
-!< FOODiE integrator: provide an explicit class of TVD or SSP Runge-Kutta schemes, from 1st to 4th order accutate.
+!< FOODIE integrator: provide an explicit class of TVD or SSP Runge-Kutta schemes, from 1st to 4th order accutate.
 module foodie_integrator_tvd_runge_kutta
 !-----------------------------------------------------------------------------------------------------------------------------------
-!< FOODiE integrator: provide an explicit class of TVD or SSP Runge-Kutta schemes, from 1st to 4th order accutate.
+!< FOODIE integrator: provide an explicit class of TVD or SSP Runge-Kutta schemes, from 1st to 4th order accutate.
 !<
 !< The class of integrators provided have the Total Variation Diminishing (TVD) property or the Strong Stability Preserving (SSP)
 !< one. The schemes are explicit and defined through the Butcher's table syntax, see[1] .
@@ -98,7 +98,7 @@ public :: tvd_runge_kutta_integrator
 
 !-----------------------------------------------------------------------------------------------------------------------------------
 type :: tvd_runge_kutta_integrator
-  !< FOODiE integrator: provide an explicit class of TVD or SSP Runge-Kutta schemes, from 1st to 4th order accutate.
+  !< FOODIE integrator: provide an explicit class of TVD or SSP Runge-Kutta schemes, from 1st to 4th order accutate.
   !<
   !< @note The integrator must be created or initialized (initialize the RK coeficients) before used.
   integer(I_P)           :: stages=0  !< Number of stages.

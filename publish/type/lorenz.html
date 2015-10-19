@@ -10,7 +10,7 @@
     <meta name="author" content="Chris MacMackin" >
     <link rel="icon" href="../favicon.png">
 
-    <title>lorenz &ndash; FOODiE </title>
+    <title>lorenz &ndash; FOODIE </title>
 
     <link href="../css/bootstrap.min.css" rel="stylesheet">
     <link href="../css/pygments.css" rel="stylesheet">
@@ -48,7 +48,7 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </button>
-          <a class="navbar-brand" href="../index.html">FOODiE </a>
+          <a class="navbar-brand" href="../index.html">FOODIE </a>
         </div>
         <div id="navbar" class="navbar-collapse collapse">
           <ul class="nav navbar-nav">
@@ -135,7 +135,7 @@
       
       <a class="list-group-item" href="../type/lorenz.html#variable-steps%7E6">steps</a>
       
-      <a class="list-group-item" href="../type/lorenz.html#variable-u%7E4">U</a>
+      <a class="list-group-item" href="../type/lorenz.html#variable-u%7E5">U</a>
       
       <a class="list-group-item" href="../type/lorenz.html#variable-previous%7E3">previous</a>
       
@@ -143,7 +143,7 @@
       
       <a class="list-group-item" href="../type/lorenz.html#variable-rho">rho</a>
       
-      <a class="list-group-item" href="../type/lorenz.html#variable-beta%7E2">beta</a>
+      <a class="list-group-item" href="../type/lorenz.html#variable-beta%7E3">beta</a>
       
     </div>
   </div>
@@ -168,11 +168,11 @@
     <div class="panel-heading text-left"><h3 class="panel-title">Type-Bound Procedures</h3></div>
     <div class="list-group">
       
-      <a class="list-group-item" href="../type/lorenz.html#boundprocedure-init%7E10">init</a>
+      <a class="list-group-item" href="../type/lorenz.html#boundprocedure-init%7E12">init</a>
       
-      <a class="list-group-item" href="../type/lorenz.html#boundprocedure-output%7E4">output</a>
+      <a class="list-group-item" href="../type/lorenz.html#boundprocedure-output%7E5">output</a>
       
-      <a class="list-group-item" href="../type/lorenz.html#boundprocedure-t%7E5">t</a>
+      <a class="list-group-item" href="../type/lorenz.html#boundprocedure-t%7E6">t</a>
       
       <a class="list-group-item" href="../type/lorenz.html#boundprocedure-update_previous_steps%7E3">update_previous_steps</a>
       
@@ -188,7 +188,7 @@
       
       <a class="list-group-item" href="../type/lorenz.html#boundprocedure-sub%7E5">sub</a>
       
-      <a class="list-group-item" href="../type/lorenz.html#boundprocedure-assign_integrand%7E5">assign_integrand</a>
+      <a class="list-group-item" href="../type/lorenz.html#boundprocedure-assign_integrand%7E6">assign_integrand</a>
       
       <a class="list-group-item" href="../type/lorenz.html#boundprocedure-assign_real%7E4">assign_real</a>
       
@@ -223,6 +223,8 @@
       
       <a class="list-group-item" href="../type/euler_1d_openmp.html">euler_1D_openmp</a>
       
+      <a class="list-group-item" href="../type/euler_1d_openmp%7E2.html">euler_1D_openmp</a>
+      
       <a class="list-group-item" href="../type/euler_explicit_integrator.html">euler_explicit_integrator</a>
       
       <a class="list-group-item" href="../type/integrand.html">integrand</a>
@@ -234,6 +236,8 @@
       <a class="list-group-item" href="../type/ls_runge_kutta_integrator.html">ls_runge_kutta_integrator</a>
       
       <a class="list-group-item" href="../type/oscillation.html">oscillation</a>
+      
+      <a class="list-group-item" href="../type/tvd_runge_kutta_integrator%7E2.html">tvd_runge_kutta_integrator</a>
       
       <a class="list-group-item" href="../type/tvd_runge_kutta_integrator.html">tvd_runge_kutta_integrator</a>
       
@@ -369,10 +373,10 @@ implementation in a submodule of an interface in a parent module.</p>
     <br><br>
     
     <p>Lorenz equations field.</p>
-<p>It is a FOODiE integrand class concrete extension.</p>
+<p>It is a FOODIE integrand class concrete extension.</p>
 <h3 id="lorenz-odes-system"><a class="toclink" href="#lorenz-odes-system">Lorenz ODEs system</a></h3>
 <p>The Lorenz' equations system [1] is a non linear system of pure ODEs that retains a reasonable-complex behaviour: such a
-system, for a certain parameters-region exhibits a chaotic dynamics useful for testing FOODiE solvers.</p>
+system, for a certain parameters-region exhibits a chaotic dynamics useful for testing FOODIE solvers.</p>
 <p>The Lorenz' ODEs system can be written as:</p>
 <p>$$\begin{matrix}
  U_t = R(U)  \\
@@ -393,7 +397,7 @@ system, for a certain parameters-region exhibits a chaotic dynamics useful for t
  \rho = 28 \\
  \beta = \frac{8}{3}
 \end{matrix}$$</p>
-<p>These values are chaos-inducing thus they magnify the eventual numerical inaccuracies of FOODiE solvers, see [2].</p>
+<p>These values are chaos-inducing thus they magnify the eventual numerical inaccuracies of FOODIE solvers, see [2].</p>
 <h4 id="bibliography"><a class="toclink" href="#bibliography">Bibliography</a></h4>
 <p>[1] <em>Deterministic Nonperiodic Flow</em>, Lorenz E.N., Journal of the Atmospheric Sciences, 1963, vol. 20, pp. 130&ndash;141,
 doi: http://dx.doi.org/10.1175/1520-0469(1963)020&lt;0130:DNF&gt;2.0.CO;2</p>
@@ -450,7 +454,7 @@ Cambridge University Press, 2011</p>
   
 <tr>
   
-  <td><span class="anchor" id="variable-u%7E4"></span>real(kind=R_P),</td>
+  <td><span class="anchor" id="variable-u%7E5"></span>real(kind=R_P),</td>
   
   <td>private,</td>
   <td>dimension(:), allocatable</td><td>::</td>
@@ -506,7 +510,7 @@ Cambridge University Press, 2011</p>
   
 <tr>
   
-  <td><span class="anchor" id="variable-beta%7E2"></span>real(kind=R_P),</td>
+  <td><span class="anchor" id="variable-beta%7E3"></span>real(kind=R_P),</td>
   
   <td>private</td>
   <td></td><td>::</td>
@@ -531,7 +535,7 @@ Cambridge University Press, 2011</p>
     
 	   
 <div class="panel panel-default">
-  <div class="panel-heading codesum"><span class="anchor" id="boundprocedure-init%7E10"></span><h3>procedure, public, pass(self) :: <strong>init</strong>  
+  <div class="panel-heading codesum"><span class="anchor" id="boundprocedure-init%7E12"></span><h3>procedure, public, pass(self) :: <strong>init</strong>  
     
   </h3></div>
   
@@ -549,7 +553,7 @@ Cambridge University Press, 2011</p>
          
     
     <h3>
-private subroutine <a href='../proc/init%7E13.html'>init</a>(self, initial_state, sigma, rho, beta, steps)
+private subroutine <a href='../proc/init%7E15.html'>init</a>(self, initial_state, sigma, rho, beta, steps)
     
     
     
@@ -683,7 +687,7 @@ private subroutine <a href='../proc/init%7E13.html'>init</a>(self, initial_state
     
 	   
 <div class="panel panel-default">
-  <div class="panel-heading codesum"><span class="anchor" id="boundprocedure-output%7E4"></span><h3>procedure, public, pass(self) :: <strong>output</strong>  
+  <div class="panel-heading codesum"><span class="anchor" id="boundprocedure-output%7E5"></span><h3>procedure, public, pass(self) :: <strong>output</strong>  
     
   </h3></div>
   
@@ -701,7 +705,7 @@ private subroutine <a href='../proc/init%7E13.html'>init</a>(self, initial_state
          
     
     <h3>
-private purefunction <a href='../proc/output%7E4.html'>output</a>(self) result(state)
+private purefunction <a href='../proc/output%7E5.html'>output</a>(self) result(state)
     
     
     
@@ -769,7 +773,7 @@ private purefunction <a href='../proc/output%7E4.html'>output</a>(self) result(s
     
 	   
 <div class="panel panel-default">
-  <div class="panel-heading codesum"><span class="anchor" id="boundprocedure-t%7E5"></span><h3>procedure, public, pass(self) :: <strong>t</strong>  => <a href='../proc/dlorenz_dt.html'>dLorenz_dt</a> 
+  <div class="panel-heading codesum"><span class="anchor" id="boundprocedure-t%7E6"></span><h3>procedure, public, pass(self) :: <strong>t</strong>  => <a href='../proc/dlorenz_dt.html'>dLorenz_dt</a> 
     
   </h3></div>
   
@@ -1583,7 +1587,7 @@ private function <a href='../proc/sub_lorenz.html'>sub_lorenz</a>(lhs, rhs) resu
     
 	   
 <div class="panel panel-default">
-  <div class="panel-heading codesum"><span class="anchor" id="boundprocedure-assign_integrand%7E5"></span><h3>procedure, public, pass(lhs) :: <strong>assign_integrand</strong>  => <a href='../proc/lorenz_assign_lorenz.html'>lorenz_assign_lorenz</a> 
+  <div class="panel-heading codesum"><span class="anchor" id="boundprocedure-assign_integrand%7E6"></span><h3>procedure, public, pass(lhs) :: <strong>assign_integrand</strong>  => <a href='../proc/lorenz_assign_lorenz.html'>lorenz_assign_lorenz</a> 
     
   </h3></div>
   
@@ -1774,11 +1778,11 @@ private subroutine <a href='../proc/lorenz_assign_real.html'>lorenz_assign_real<
     <div class="highlight"><pre><span class="k">type</span><span class="p">,</span> <span class="k">extends</span><span class="p">(</span><span class="n">integrand</span><span class="p">)</span> <span class="kd">::</span> <span class="n">lorenz</span>
   <span class="c">!&lt; Lorenz equations field.</span>
   <span class="c">!&lt;</span>
-  <span class="c">!&lt; It is a FOODiE integrand class concrete extension.</span>
+  <span class="c">!&lt; It is a FOODIE integrand class concrete extension.</span>
   <span class="c">!&lt;</span>
   <span class="c">!&lt;### Lorenz ODEs system</span>
   <span class="c">!&lt;The Lorenz&#39; equations system [1] is a non linear system of pure ODEs that retains a reasonable-complex behaviour: such a</span>
-  <span class="c">!&lt;system, for a certain parameters-region exhibits a chaotic dynamics useful for testing FOODiE solvers.</span>
+  <span class="c">!&lt;system, for a certain parameters-region exhibits a chaotic dynamics useful for testing FOODIE solvers.</span>
   <span class="c">!&lt;</span>
   <span class="c">!&lt;The Lorenz&#39; ODEs system can be written as:</span>
   <span class="c">!&lt;</span>
@@ -1804,7 +1808,7 @@ private subroutine <a href='../proc/lorenz_assign_real.html'>lorenz_assign_real<
   <span class="c">!&lt; \beta = \frac{8}{3}</span>
   <span class="c">!&lt;\end{matrix}$$</span>
   <span class="c">!&lt;</span>
-  <span class="c">!&lt;These values are chaos-inducing thus they magnify the eventual numerical inaccuracies of FOODiE solvers, see [2].</span>
+  <span class="c">!&lt;These values are chaos-inducing thus they magnify the eventual numerical inaccuracies of FOODIE solvers, see [2].</span>
   <span class="c">!&lt;</span>
   <span class="c">!&lt;#### Bibliography</span>
   <span class="c">!&lt;</span>
@@ -1851,7 +1855,7 @@ private subroutine <a href='../proc/lorenz_assign_real.html'>lorenz_assign_real<
     <hr>
     <footer>
         <div class="row">
-        <div class="col-md-6">&copy; 2015 FOODiE was written by Fortran-FOSS-Programmers Group. </div>
+        <div class="col-md-6">&copy; 2015 FOODIE was written by Fortran-FOSS-Programmers Group. </div>
         <div class="col-md-6"><span class="pull-right">Documentation generated by <a href="https://github.com/cmacmackin/ford">FORD</a>.</span></div>
         </div>
         <br>
