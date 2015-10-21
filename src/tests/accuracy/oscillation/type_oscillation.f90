@@ -48,15 +48,16 @@ type, extends(integrand) :: oscillation
   !<#### State variables organization
   !< State variables are organized as an array (rank 1) of reals of *dims* elements, in this case 2 elements.
   private
-  integer(I_P)                           :: dims=0   !< Space dimensions.
-  real(R_P)                              :: f=0._R_P !< Oscillation frequency (Hz).
-  real(R_P), dimension(:),   allocatable :: U        !< Integrand (state) variables, [1:dims].
+  integer(I_P)                         :: dims=0   !< Space dimensions.
+  real(R_P)                            :: f=0._R_P !< Oscillation frequency (Hz).
+  real(R_P), dimension(:), allocatable :: U        !< Integrand (state) variables, [1:dims].
   contains
     ! auxiliary methods
     procedure, pass(self), public :: init   !< Init field.
     procedure, pass(self), public :: output !< Extract Oscillation field.
     ! ADT integrand deferred methods
     procedure, pass(self), public :: t => dOscillation_dt                                             !< Time derivative, residuals.
+    procedure, pass(lhs),  public :: local_error => oscillation_local_error                           !<||Oscillation-oscillation||.
     procedure, pass(lhs),  public :: integrand_multiply_integrand => oscillation_multiply_oscillation !< Oscillation * oscillation.
     procedure, pass(lhs),  public :: integrand_multiply_real => oscillation_multiply_real             !< Oscillation * real.
     procedure, pass(rhs),  public :: real_multiply_integrand => real_multiply_oscillation             !< Real * Oscillation.
@@ -106,7 +107,6 @@ contains
   class(oscillation),     intent(IN) :: self      !< Oscillation field.
   real(R_P),    optional, intent(IN) :: t         !< Time.
   class(integrand),  allocatable     :: dState_dt !< Oscillation field time derivative.
-  integer(I_P)                       :: dn        !< Time level, dummy variable.
   !---------------------------------------------------------------------------------------------------------------------------------
 
   !---------------------------------------------------------------------------------------------------------------------------------
@@ -120,6 +120,33 @@ contains
   return
   !---------------------------------------------------------------------------------------------------------------------------------
   endfunction dOscillation_dt
+
+  function oscillation_local_error(lhs, rhs) result(error)
+  !---------------------------------------------------------------------------------------------------------------------------------
+  !< Estimate local truncation error between 2 oscillation approximations.
+  !<
+  !< The estimation is done by norm L2 of U:
+  !<
+  !< $$ error = \sqrt{ \sum_i{ \frac{(lhs\%U_i - rhs\%U_i)^2}{lhs\%U_i^2} }} $$
+  !---------------------------------------------------------------------------------------------------------------------------------
+  class(oscillation), intent(IN) :: lhs   !< Left hand side.
+  class(integrand),   intent(IN) :: rhs   !< Right hand side.
+  real(R_P)                      :: error !< Error estimation.
+  integer(I_P)                   :: i     !< Space counter.
+  !---------------------------------------------------------------------------------------------------------------------------------
+
+  !---------------------------------------------------------------------------------------------------------------------------------
+  select type(rhs)
+  class is (oscillation)
+    error = 0._R_P
+    do i=1, lhs%dims
+      error = error + (lhs%U(i) - rhs%U(i))**2/lhs%U(i)**2
+    enddo
+    error = sqrt(error)
+  endselect
+  return
+  !---------------------------------------------------------------------------------------------------------------------------------
+  endfunction oscillation_local_error
 
   function oscillation_multiply_oscillation(lhs, rhs) result(opr)
   !---------------------------------------------------------------------------------------------------------------------------------

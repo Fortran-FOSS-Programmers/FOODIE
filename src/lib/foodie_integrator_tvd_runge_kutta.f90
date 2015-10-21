@@ -1,9 +1,9 @@
-!< FOODIE integrator: provide an explicit class of TVD or SSP Runge-Kutta schemes, from 1st to 4th order accutate.
+!< FOODIE integrator: provide an explicit class of TVD or SSP Runge-Kutta schemes, from 1st to 4th order accurate.
 module foodie_integrator_tvd_runge_kutta
 !-----------------------------------------------------------------------------------------------------------------------------------
-!< FOODIE integrator: provide an explicit class of TVD or SSP Runge-Kutta schemes, from 1st to 4th order accutate.
+!< FOODIE integrator: provide an explicit class of TVD or SSP Runge-Kutta schemes, from 1st to 4th order accurate.
 !<
-!< The class of integrators provided have the Total Variation Diminishing (TVD) property or the Strong Stability Preserving (SSP)
+!< The integrators provided have the Total Variation Diminishing (TVD) property or the Strong Stability Preserving (SSP)
 !< one. The schemes are explicit and defined through the Butcher's table syntax, see[1] .
 !<
 !< Considering the following ODE system:
@@ -24,23 +24,29 @@ module foodie_integrator_tvd_runge_kutta
 !< The schemes are explicit thus the above summation is up to \(s-1\). The coefficients \(\beta\), \(\alpha\) and \(\gamma\) are
 !< given in the Butcher table form:
 !<
-!< |                 |                   |                   |            |                    |
-!< |-----------------|-------------------|-------------------|------------|--------------------|
-!< | \(\gamma^1\)    | \(\alpha^{1,1}\)  | \(\alpha^{1,2}\)  | \(\cdots\) | \(\alpha^{1,Ns}\)  |
-!< | \(\gamma^2\)    | \(\alpha^{2,1}\)  | \(\alpha^{2,2}\)  | \(\cdots\) | \(\alpha^{2,Ns}\)  |
-!< | \(\vdots\)      | \(\vdots\)        | \(\vdots\)        | \(\ddots\) | \(\vdots\)         |
-!< | \(\gamma^{Ns}\) | \(\alpha^{Ns,1}\) | \(\alpha^{Ns,2}\) | \(\cdots\) | \(\alpha^{Ns,Ns}\) |
-!< |                 | \(\beta^1\)       | \(\beta^2\)       | \(\cdots\) | \(\beta^{Ns}\)     |
+!<```
+!<  gamma^1    | alpha^{1,1}       alpha^{1,2}       ...        alpha^{1,Ns}
+!<  gamma^2    | alpha^{2,1}       alpha^{2,2}       ...        alpha^{2,Ns}
+!<  .          | .                 .                 .          .
+!<  .          | .                 .                  .         .
+!<  .          | .                 .                   .        .
+!<  gamma^{Ns} | alpha^{Ns,1}      alpha^{Ns,2}      ...        alpha^{Ns,Ns}
+!< ------------|-------------------------------------------------------------
+!<             | beta^1            beta^2            ...        beta^{Ns}
+!<```
 !<
 !< Because only explicit schemes are considered the Butcher table reduces to diagonal matrix:
 !<
-!< |                 |                   |                   |            |                    |
-!< |-----------------|-------------------|-------------------|------------|--------------------|
-!< | \(\gamma^1\)    | \(      0     \)  | \(      0     \)  | \(\cdots\) | \(        0    \)  |
-!< | \(\gamma^2\)    | \(\alpha^{2,1}\)  | \(\alpha^{2,2}\)  | \(\cdots\) | \(\alpha^{2,Ns}\)  |
-!< | \(\vdots\)      | \(\vdots\)        | \(\vdots\)        | \(\ddots\) | \(\vdots\)         |
-!< | \(\gamma^{Ns}\) | \(\alpha^{Ns,1}\) | \(\alpha^{Ns,2}\) | \(\cdots\) | \(        0     \) |
-!< |                 | \(\beta^1\)       | \(\beta^2\)       | \(\cdots\) | \(\beta^{Ns}\)     |
+!<```
+!<  gamma^1    | 0                 0                 ...        0
+!<  gamma^2    | alpha^{2,1}       0                 ...        0
+!<  .          | .                 .                 .          .
+!<  .          | .                 .                  .         .
+!<  .          | .                 .                   .        .
+!<  gamma^{Ns} | alpha^{Ns,1}      alpha^{Ns,2}      ...        0
+!< ------------|-------------------------------------------------------------
+!<             | beta^1            beta^2            ...        beta^{Ns}
+!<```
 !<
 !< Moreover the following relation always holds:
 !< \( \gamma^s = \sum_{i=1}^{Ns}\alpha^{s,i} \)
@@ -49,32 +55,42 @@ module foodie_integrator_tvd_runge_kutta
 !<
 !<##### 1 stage, Explicit Forward Euler, 1st order
 !< This scheme is TVD and reverts to Explicit Forward Euler, it being 1st order.
-!< $$\beta = \left[1\right]$$
-!< $$\alpha = \left[ {\begin{array}{*{20}{c}} 0&0 \end{array}} \right]$$
-!< $$\gamma = \left[0\right]$$
+!<```
+!<  0 | 0
+!< ---|---
+!<    | 1
+!<```
 !<
 !<##### 2 stages, SSP, 2nd order
 !< This scheme is an optmial SSP(2, 2) without low-storage algorithm, see [2].
-!< $$\beta = \left[ {\begin{array}{*{20}{c}} \frac{1}{2}&\frac{1}{2} \end{array}} \right]$$
-!< $$\alpha = \left[ {\begin{array}{*{20}{c}} 0&0\\ 1&0 \end{array}} \right]$$
-!< $$\gamma = \left[ {\begin{array}{*{20}{c}} 0 \\ 1 \end{array}} \right]$$
+!<```
+!<  0 | 0     0
+!<  1 | 1     0
+!< ---|-----------
+!<    | 1/2   1/2
+!<```
 !<
 !<##### 3 stages, SSP, 3rd order
 !< This scheme is an optmial SSP(3, 3) without low-storage algorithm, see [2].
-!< $$\beta = \left[ {\begin{array}{*{20}{c}} \frac{1}{6}&\frac{1}{6}&\frac{1}{3}  \end{array}} \right]$$
-!< $$\alpha = \left[ {\begin{array}{*{20}{c}} 0&0&0\\ 1&0&0\\ \frac{1}{4}&\frac{1}{4}&0 \end{array}} \right]$$
-!< $$\gamma = \left[ {\begin{array}{*{20}{c}} 0 \\ 1 \\ \frac{1}{2} \end{array}} \right]$$
+!<```
+!<  0   | 0     0     0
+!<  1   | 1     0     0
+!<  1/2 | 1/4   1/4   0
+!< -----|-----------------
+!<      | 1/6   1/6   1/3
+!<```
 !<
 !<##### 5 stages, SSP, 4th order
 !< This scheme is an optmial SSP(5, 4) without low-storage algorithm, see [2].
-!< $$\beta = \left[ {\begin{array}{*{20}{c}} 0.14681187618661&0.24848290924556&0.10425883036650&0.27443890091960&
-!< 0.22600748319395 \end{array}} \right]$$
-!< $$\alpha = \left[ {\begin{array}{*{20}{c}}
-!< 0&0&0&0&0 \\ 0.39175222700392&0&0&0&0 \\ 0.21766909633821&0.36841059262959&0&0&0 \\ 0.08269208670950&
-!< 0.13995850206999&0.25189177424738&0&0 \\ 0.06796628370320&0.11503469844438&0.20703489864929&0.54497475021237&0
-!< \end{array}} \right]$$
-!< $$\gamma = \left[ {\begin{array}{*{20}{c}} 0\\0.39175222700392\\0.58607968896780\\0.47454236302687\\0.93501063100924
-!<           \end{array}} \right]$$
+!<```
+!<  0                | 0                  0                  0                  0                  0
+!<  0.39175222700392 | 0.39175222700392   0                  0                  0                  0
+!<  0.58607968896780 | 0.21766909633821   0.36841059262959   0                  0                  0
+!<  0.47454236302687 | 0.08269208670950   0.13995850206999   0.25189177424738   0                  0
+!<  0.93501063100924 | 0.06796628370320   0.11503469844438   0.20703489864929   0.54497475021237   0
+!< ------------------|---------------------------------------------------------------------------------------------
+!<                   | 0.14681187618661   0.24848290924556   0.10425883036650   0.27443890091960   0.22600748319395
+!<```
 !<
 !<#### Bibliography
 !<
@@ -98,9 +114,9 @@ public :: tvd_runge_kutta_integrator
 
 !-----------------------------------------------------------------------------------------------------------------------------------
 type :: tvd_runge_kutta_integrator
-  !< FOODIE integrator: provide an explicit class of TVD or SSP Runge-Kutta schemes, from 1st to 4th order accutate.
+  !< FOODIE integrator: provide an explicit class of TVD or SSP Runge-Kutta schemes, from 1st to 4th order accurate.
   !<
-  !< @note The integrator must be created or initialized (initialize the RK coeficients) before used.
+  !< @note The integrator must be created or initialized (initialize the RK coefficients) before used.
   integer(I_P)           :: stages=0  !< Number of stages.
   real(R_P), allocatable :: alph(:,:) !< \(\alpha\) Butcher's coefficients.
   real(R_P), allocatable :: beta(:)   !< \(\beta\) Butcher's coefficients.
@@ -176,7 +192,7 @@ contains
 
   elemental subroutine destroy(self)
   !---------------------------------------------------------------------------------------------------------------------------------
-  !< Destoy the integrator.
+  !< Destroy the integrator.
   !---------------------------------------------------------------------------------------------------------------------------------
   class(tvd_runge_kutta_integrator), intent(INOUT) :: self !< Integrator.
   !---------------------------------------------------------------------------------------------------------------------------------
@@ -194,7 +210,7 @@ contains
   !---------------------------------------------------------------------------------------------------------------------------------
   !< Integrate field with explicit TVD (or SSP) Runge-Kutta scheme.
   !<
-  !< @note This method can be used **after** the integrator is created (i.e. the RK coeficients are initialized).
+  !< @note This method can be used **after** the integrator is created (i.e. the RK coefficients are initialized).
   !---------------------------------------------------------------------------------------------------------------------------------
   class(tvd_runge_kutta_integrator), intent(IN)    :: self      !< Actual RK integrator.
   class(integrand),                  intent(INOUT) :: U         !< Field to be integrated.

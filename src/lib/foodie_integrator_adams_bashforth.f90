@@ -1,7 +1,7 @@
-!< FOODIE integrator: provide an explicit class of Adams-Bashforth multi-step schemes, from 1st to 4rd order accutate.
+!< FOODIE integrator: provide an explicit class of Adams-Bashforth multi-step schemes, from 1st to 4rd order accurate.
 module foodie_integrator_adams_bashforth
 !-----------------------------------------------------------------------------------------------------------------------------------
-!< FOODIE integrator: provide an explicit class of Adams-Bashforth multi-step schemes, from 1st to 4rd order accutate.
+!< FOODIE integrator: provide an explicit class of Adams-Bashforth multi-step schemes, from 1st to 4rd order accurate.
 !<
 !< Considering the following ODE system:
 !<
@@ -123,7 +123,7 @@ contains
 
   elemental subroutine destroy(self)
   !---------------------------------------------------------------------------------------------------------------------------------
-  !< Destoy the integrator.
+  !< Destroy the integrator.
   !---------------------------------------------------------------------------------------------------------------------------------
   class(adams_bashforth_integrator), intent(INOUT) :: self !< AB integrator.
   !---------------------------------------------------------------------------------------------------------------------------------

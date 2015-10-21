@@ -50,5 +50,5 @@ script:
 
 after_success:
   - cd $TRAVIS_BUILD_DIR
-  - bash <(curl -s https://codecov.io/bash)
+  - cd build/lib/obj/ ; bash <(curl -s https://codecov.io/bash) ; cd -
   - ./makedoc.sh Fortran-FOSS-Programmers/FOODiE
