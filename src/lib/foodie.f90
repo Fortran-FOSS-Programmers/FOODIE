@@ -32,6 +32,8 @@ module foodie
 !<    + SSP(2,2): 2 stages, 2nd order accurate;
 !<    + SSP(3,3): 3 stages, 3rd order accurate;
 !<    + SSP(5,4): 5 stages, 4th order accurate;
+!<+ *explicit embedded Runge-Kutta* class schemes:
+!<    + DP(7,4): 7 stages, 4th order accurate, Dormand and Prince scheme;
 !<+ *implicit Adams-Moulton* class of schemes:
 !<    + 0 step, namely the implicit backward Euler scheme, 1st order accurate;
 !<    + 1 step, 2nd order accurate;
