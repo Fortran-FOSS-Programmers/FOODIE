@@ -131,11 +131,11 @@
     <div class="panel-heading text-left"><h3 class="panel-title">Variables</h3></div>
     <div class="list-group">
       
-      <a class="list-group-item" href="../type/oscillation.html#variable-dims%7E2">dims</a>
+      <a class="list-group-item" href="../type/oscillation.html#variable-dims">dims</a>
       
       <a class="list-group-item" href="../type/oscillation.html#variable-f">f</a>
       
-      <a class="list-group-item" href="../type/oscillation.html#variable-u%7E6">U</a>
+      <a class="list-group-item" href="../type/oscillation.html#variable-u">U</a>
       
     </div>
   </div>
@@ -160,23 +160,25 @@
     <div class="panel-heading text-left"><h3 class="panel-title">Type-Bound Procedures</h3></div>
     <div class="list-group">
       
-      <a class="list-group-item" href="../type/oscillation.html#boundprocedure-init%7E13">init</a>
+      <a class="list-group-item" href="../type/oscillation.html#boundprocedure-init%7E8">init</a>
       
-      <a class="list-group-item" href="../type/oscillation.html#boundprocedure-output%7E6">output</a>
+      <a class="list-group-item" href="../type/oscillation.html#boundprocedure-output">output</a>
       
-      <a class="list-group-item" href="../type/oscillation.html#boundprocedure-t%7E7">t</a>
+      <a class="list-group-item" href="../type/oscillation.html#boundprocedure-t%7E2">t</a>
       
-      <a class="list-group-item" href="../type/oscillation.html#boundprocedure-integrand_multiply_integrand%7E6">integrand_multiply_integrand</a>
+      <a class="list-group-item" href="../type/oscillation.html#boundprocedure-local_error%7E2">local_error</a>
       
-      <a class="list-group-item" href="../type/oscillation.html#boundprocedure-integrand_multiply_real%7E6">integrand_multiply_real</a>
+      <a class="list-group-item" href="../type/oscillation.html#boundprocedure-integrand_multiply_integrand%7E2">integrand_multiply_integrand</a>
       
-      <a class="list-group-item" href="../type/oscillation.html#boundprocedure-real_multiply_integrand%7E6">real_multiply_integrand</a>
+      <a class="list-group-item" href="../type/oscillation.html#boundprocedure-integrand_multiply_real%7E2">integrand_multiply_real</a>
       
-      <a class="list-group-item" href="../type/oscillation.html#boundprocedure-add%7E6">add</a>
+      <a class="list-group-item" href="../type/oscillation.html#boundprocedure-real_multiply_integrand%7E2">real_multiply_integrand</a>
       
-      <a class="list-group-item" href="../type/oscillation.html#boundprocedure-sub%7E6">sub</a>
+      <a class="list-group-item" href="../type/oscillation.html#boundprocedure-add%7E2">add</a>
       
-      <a class="list-group-item" href="../type/oscillation.html#boundprocedure-assign_integrand%7E7">assign_integrand</a>
+      <a class="list-group-item" href="../type/oscillation.html#boundprocedure-sub%7E2">sub</a>
+      
+      <a class="list-group-item" href="../type/oscillation.html#boundprocedure-assign_integrand%7E2">assign_integrand</a>
       
     </div>
   </div>
@@ -204,6 +206,8 @@
       <a class="list-group-item" href="../type/adams_moulton_integrator.html">adams_moulton_integrator</a>
       
       <a class="list-group-item" href="../type/burgers.html">burgers</a>
+      
+      <a class="list-group-item" href="../type/emd_runge_kutta_integrator.html">emd_runge_kutta_integrator</a>
       
       <a class="list-group-item" href="../type/euler_1d.html">euler_1D</a>
       
@@ -401,7 +405,7 @@ stable leading to a wrong path, see [1].</p>
   
 <tr>
   
-  <td><span class="anchor" id="variable-dims%7E2"></span>integer(kind=I_P),</td>
+  <td><span class="anchor" id="variable-dims"></span>integer(kind=I_P),</td>
   
   <td>private</td>
   <td></td><td>::</td>
@@ -429,7 +433,7 @@ stable leading to a wrong path, see [1].</p>
   
 <tr>
   
-  <td><span class="anchor" id="variable-u%7E6"></span>real(kind=R_P),</td>
+  <td><span class="anchor" id="variable-u"></span>real(kind=R_P),</td>
   
   <td>private,</td>
   <td>dimension(:), allocatable</td><td>::</td>
@@ -454,7 +458,7 @@ stable leading to a wrong path, see [1].</p>
     
 	   
 <div class="panel panel-default">
-  <div class="panel-heading codesum"><span class="anchor" id="boundprocedure-init%7E13"></span><h3>procedure, public, pass(self) :: <strong>init</strong>  
+  <div class="panel-heading codesum"><span class="anchor" id="boundprocedure-init%7E8"></span><h3>procedure, public, pass(self) :: <strong>init</strong>  
     
   </h3></div>
   
@@ -472,7 +476,7 @@ stable leading to a wrong path, see [1].</p>
          
     
     <h3>
-private subroutine <a href='../proc/init%7E17.html'>init</a>(self, initial_state, f)
+private subroutine <a href='../proc/init%7E9.html'>init</a>(self, initial_state, f)
     
     
     
@@ -561,7 +565,7 @@ private subroutine <a href='../proc/init%7E17.html'>init</a>(self, initial_state
     
 	   
 <div class="panel panel-default">
-  <div class="panel-heading codesum"><span class="anchor" id="boundprocedure-output%7E6"></span><h3>procedure, public, pass(self) :: <strong>output</strong>  
+  <div class="panel-heading codesum"><span class="anchor" id="boundprocedure-output"></span><h3>procedure, public, pass(self) :: <strong>output</strong>  
     
   </h3></div>
   
@@ -579,7 +583,7 @@ private subroutine <a href='../proc/init%7E17.html'>init</a>(self, initial_state
          
     
     <h3>
-private purefunction <a href='../proc/output%7E6.html'>output</a>(self) result(state)
+private purefunction <a href='../proc/output.html'>output</a>(self) result(state)
     
     
     
@@ -647,7 +651,7 @@ private purefunction <a href='../proc/output%7E6.html'>output</a>(self) result(s
     
 	   
 <div class="panel panel-default">
-  <div class="panel-heading codesum"><span class="anchor" id="boundprocedure-t%7E7"></span><h3>procedure, public, pass(self) :: <strong>t</strong>  => <a href='../proc/doscillation_dt.html'>dOscillation_dt</a> 
+  <div class="panel-heading codesum"><span class="anchor" id="boundprocedure-t%7E2"></span><h3>procedure, public, pass(self) :: <strong>t</strong>  => <a href='../proc/doscillation_dt.html'>dOscillation_dt</a> 
     
   </h3></div>
   
@@ -748,7 +752,108 @@ private function <a href='../proc/doscillation_dt.html'>dOscillation_dt</a>(self
     
 	   
 <div class="panel panel-default">
-  <div class="panel-heading codesum"><span class="anchor" id="boundprocedure-integrand_multiply_integrand%7E6"></span><h3>procedure, public, pass(lhs) :: <strong>integrand_multiply_integrand</strong>  => <a href='../proc/oscillation_multiply_oscillation.html'>oscillation_multiply_oscillation</a> 
+  <div class="panel-heading codesum"><span class="anchor" id="boundprocedure-local_error%7E2"></span><h3>procedure, public, pass(lhs) :: <strong>local_error</strong>  => <a href='../proc/oscillation_local_error.html'>oscillation_local_error</a> 
+    
+  </h3></div>
+  
+  <div class="panel-body">
+    
+
+
+    <p>||Oscillation-oscillation||.</p>
+  </div>
+  
+  <ul class="list-group">
+    
+      <li class="list-group-item">
+      
+         
+    
+    <h3>
+private function <a href='../proc/oscillation_local_error.html'>oscillation_local_error</a>(lhs, rhs) result(error)
+    
+    
+    
+</h3>
+    
+    <h4>Arguments</h4>
+    
+      
+      
+<table class="table table-striped varlist">
+<thead><tr><th>Type</th>
+<th>Intent</th><th>Optional</th>
+<th>Attributes</th><th></th><th>Name</th><th></th></thead>
+
+
+
+<tbody>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>class(<a href='../type/oscillation.html'>oscillation</a>),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>lhs</strong></td><td><p>Left hand side.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>class(<a href='../type/integrand.html'>integrand</a>),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>rhs</strong></td><td><p>Right hand side.</p></td>
+  
+</tr>
+
+</tbody>
+</table>
+
+      
+    
+    
+
+  
+  
+  
+  
+     <h4>Return Value <small>real(kind=R_P)
+  </small></h4>
+  <p>Error estimation.</p>
+    
+    
+    <h4>Description</h4>
+       
+       
+
+
+       
+       <p>Estimate local truncation error between 2 oscillation approximations.</p>
+        
+
+      
+      </li>
+    
+  </ul>
+</div>
+
+    
+	   
+<div class="panel panel-default">
+  <div class="panel-heading codesum"><span class="anchor" id="boundprocedure-integrand_multiply_integrand%7E2"></span><h3>procedure, public, pass(lhs) :: <strong>integrand_multiply_integrand</strong>  => <a href='../proc/oscillation_multiply_oscillation.html'>oscillation_multiply_oscillation</a> 
     
   </h3></div>
   
@@ -849,7 +954,7 @@ private function <a href='../proc/oscillation_multiply_oscillation.html'>oscilla
     
 	   
 <div class="panel panel-default">
-  <div class="panel-heading codesum"><span class="anchor" id="boundprocedure-integrand_multiply_real%7E6"></span><h3>procedure, public, pass(lhs) :: <strong>integrand_multiply_real</strong>  => <a href='../proc/oscillation_multiply_real.html'>oscillation_multiply_real</a> 
+  <div class="panel-heading codesum"><span class="anchor" id="boundprocedure-integrand_multiply_real%7E2"></span><h3>procedure, public, pass(lhs) :: <strong>integrand_multiply_real</strong>  => <a href='../proc/oscillation_multiply_real.html'>oscillation_multiply_real</a> 
     
   </h3></div>
   
@@ -950,7 +1055,7 @@ private function <a href='../proc/oscillation_multiply_real.html'>oscillation_mu
     
 	   
 <div class="panel panel-default">
-  <div class="panel-heading codesum"><span class="anchor" id="boundprocedure-real_multiply_integrand%7E6"></span><h3>procedure, public, pass(rhs) :: <strong>real_multiply_integrand</strong>  => <a href='../proc/real_multiply_oscillation.html'>real_multiply_oscillation</a> 
+  <div class="panel-heading codesum"><span class="anchor" id="boundprocedure-real_multiply_integrand%7E2"></span><h3>procedure, public, pass(rhs) :: <strong>real_multiply_integrand</strong>  => <a href='../proc/real_multiply_oscillation.html'>real_multiply_oscillation</a> 
     
   </h3></div>
   
@@ -1051,7 +1156,7 @@ private function <a href='../proc/real_multiply_oscillation.html'>real_multiply_
     
 	   
 <div class="panel panel-default">
-  <div class="panel-heading codesum"><span class="anchor" id="boundprocedure-add%7E6"></span><h3>procedure, public, pass(lhs) :: <strong>add</strong>  => <a href='../proc/add_oscillation.html'>add_oscillation</a> 
+  <div class="panel-heading codesum"><span class="anchor" id="boundprocedure-add%7E2"></span><h3>procedure, public, pass(lhs) :: <strong>add</strong>  => <a href='../proc/add_oscillation.html'>add_oscillation</a> 
     
   </h3></div>
   
@@ -1152,7 +1257,7 @@ private function <a href='../proc/add_oscillation.html'>add_oscillation</a>(lhs,
     
 	   
 <div class="panel panel-default">
-  <div class="panel-heading codesum"><span class="anchor" id="boundprocedure-sub%7E6"></span><h3>procedure, public, pass(lhs) :: <strong>sub</strong>  => <a href='../proc/sub_oscillation.html'>sub_oscillation</a> 
+  <div class="panel-heading codesum"><span class="anchor" id="boundprocedure-sub%7E2"></span><h3>procedure, public, pass(lhs) :: <strong>sub</strong>  => <a href='../proc/sub_oscillation.html'>sub_oscillation</a> 
     
   </h3></div>
   
@@ -1253,7 +1358,7 @@ private function <a href='../proc/sub_oscillation.html'>sub_oscillation</a>(lhs,
     
 	   
 <div class="panel panel-default">
-  <div class="panel-heading codesum"><span class="anchor" id="boundprocedure-assign_integrand%7E7"></span><h3>procedure, public, pass(lhs) :: <strong>assign_integrand</strong>  => <a href='../proc/oscillation_assign_oscillation.html'>oscillation_assign_oscillation</a> 
+  <div class="panel-heading codesum"><span class="anchor" id="boundprocedure-assign_integrand%7E2"></span><h3>procedure, public, pass(lhs) :: <strong>assign_integrand</strong>  => <a href='../proc/oscillation_assign_oscillation.html'>oscillation_assign_oscillation</a> 
     
   </h3></div>
   
@@ -1381,15 +1486,16 @@ private subroutine <a href='../proc/oscillation_assign_oscillation.html'>oscilla
   <span class="c">!&lt;#### State variables organization</span>
   <span class="c">!&lt; State variables are organized as an array (rank 1) of reals of *dims* elements, in this case 2 elements.</span>
   <span class="k">private</span>
-<span class="k">  </span><span class="kt">integer</span><span class="p">(</span><span class="n">I_P</span><span class="p">)</span>                           <span class="kd">::</span> <span class="n">dims</span><span class="o">=</span><span class="mi">0</span>   <span class="c">!&lt; Space dimensions.</span>
-  <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">)</span>                              <span class="kd">::</span> <span class="n">f</span><span class="o">=</span><span class="mf">0._R_P</span> <span class="c">!&lt; Oscillation frequency (Hz).</span>
-  <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">),</span> <span class="k">dimension</span><span class="p">(:),</span>   <span class="k">allocatable</span> <span class="kd">::</span> <span class="n">U</span>        <span class="c">!&lt; Integrand (state) variables, [1:dims].</span>
+<span class="k">  </span><span class="kt">integer</span><span class="p">(</span><span class="n">I_P</span><span class="p">)</span>                         <span class="kd">::</span> <span class="n">dims</span><span class="o">=</span><span class="mi">0</span>   <span class="c">!&lt; Space dimensions.</span>
+  <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">)</span>                            <span class="kd">::</span> <span class="n">f</span><span class="o">=</span><span class="mf">0._R_P</span> <span class="c">!&lt; Oscillation frequency (Hz).</span>
+  <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">),</span> <span class="k">dimension</span><span class="p">(:),</span> <span class="k">allocatable</span> <span class="kd">::</span> <span class="n">U</span>        <span class="c">!&lt; Integrand (state) variables, [1:dims].</span>
   <span class="k">contains</span>
     <span class="c">! auxiliary methods</span>
     <span class="k">procedure</span><span class="p">,</span> <span class="k">pass</span><span class="p">(</span><span class="n">self</span><span class="p">),</span> <span class="k">public</span> <span class="kd">::</span> <span class="n">init</span>   <span class="c">!&lt; Init field.</span>
     <span class="k">procedure</span><span class="p">,</span> <span class="k">pass</span><span class="p">(</span><span class="n">self</span><span class="p">),</span> <span class="k">public</span> <span class="kd">::</span> <span class="n">output</span> <span class="c">!&lt; Extract Oscillation field.</span>
     <span class="c">! ADT integrand deferred methods</span>
     <span class="k">procedure</span><span class="p">,</span> <span class="k">pass</span><span class="p">(</span><span class="n">self</span><span class="p">),</span> <span class="k">public</span> <span class="kd">::</span> <span class="n">t</span> <span class="o">=&gt;</span> <span class="n">dOscillation_dt</span>                                             <span class="c">!&lt; Time derivative, residuals.</span>
+    <span class="k">procedure</span><span class="p">,</span> <span class="k">pass</span><span class="p">(</span><span class="n">lhs</span><span class="p">),</span>  <span class="k">public</span> <span class="kd">::</span> <span class="n">local_error</span> <span class="o">=&gt;</span> <span class="n">oscillation_local_error</span>                           <span class="c">!&lt;||Oscillation-oscillation||.</span>
     <span class="k">procedure</span><span class="p">,</span> <span class="k">pass</span><span class="p">(</span><span class="n">lhs</span><span class="p">),</span>  <span class="k">public</span> <span class="kd">::</span> <span class="n">integrand_multiply_integrand</span> <span class="o">=&gt;</span> <span class="n">oscillation_multiply_oscillation</span> <span class="c">!&lt; Oscillation * oscillation.</span>
     <span class="k">procedure</span><span class="p">,</span> <span class="k">pass</span><span class="p">(</span><span class="n">lhs</span><span class="p">),</span>  <span class="k">public</span> <span class="kd">::</span> <span class="n">integrand_multiply_real</span> <span class="o">=&gt;</span> <span class="n">oscillation_multiply_real</span>             <span class="c">!&lt; Oscillation * real.</span>
     <span class="k">procedure</span><span class="p">,</span> <span class="k">pass</span><span class="p">(</span><span class="n">rhs</span><span class="p">),</span>  <span class="k">public</span> <span class="kd">::</span> <span class="n">real_multiply_integrand</span> <span class="o">=&gt;</span> <span class="n">real_multiply_oscillation</span>             <span class="c">!&lt; Real * Oscillation.</span>

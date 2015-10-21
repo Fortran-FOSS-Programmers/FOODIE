@@ -104,14 +104,14 @@
      
     
     
-    <li><i class="fa fa-code"></i><a href="../src/type_lorenz.f90"> Source File</a></li>
+    <li><i class="fa fa-code"></i><a href="../src/type_euler-1D.f90"> Source File</a></li>
      
   </ul>
   <ol class="breadcrumb in-well text-right">
   
-     <li><a href='../sourcefile/type_lorenz.f90.html'>type_lorenz.f90</a></li>
+     <li><a href='../sourcefile/type_euler-1d.f90.html'>type_euler-1D.f90</a></li>
   
-     <li><a href='../module/type_lorenz.html'>type_lorenz</a></li>
+     <li><a href='../module/type_euler_1d.html'>type_euler_1D</a></li>
   
      <li class="active">output</li>
   </ol>
@@ -125,6 +125,16 @@
     <div class="col-lg-3">
     
   
+  
+  
+  <div class="panel panel-primary">
+    <div class="panel-heading text-left"><h3 class="panel-title">Variables</h3></div>
+    <div class="list-group">
+      
+      <a class="list-group-item" href="../proc/output%7E5.html#variable-i%7E35">i</a>
+      
+    </div>
+  </div>
   
   
   
@@ -233,6 +243,8 @@
       
       <a class="list-group-item" href="../proc/destroy%7E8.html">destroy</a>
       
+      <a class="list-group-item" href="../proc/destroy%7E9.html">destroy</a>
+      
       <a class="list-group-item" href="../proc/destroy_rk.html">destroy_rk</a>
       
       <a class="list-group-item" href="../proc/deuler_dt.html">dEuler_dt</a>
@@ -250,6 +262,8 @@
       <a class="list-group-item" href="../proc/e%7E2.html">E</a>
       
       <a class="list-group-item" href="../proc/e%7E3.html">E</a>
+      
+      <a class="list-group-item" href="../proc/emd_rk_solver.html">emd_rk_solver</a>
       
       <a class="list-group-item" href="../proc/estimate_orders.html">estimate_orders</a>
       
@@ -290,6 +304,8 @@
       <a class="list-group-item" href="../proc/finalize%7E7.html">finalize</a>
       
       <a class="list-group-item" href="../proc/finalize%7E8.html">finalize</a>
+      
+      <a class="list-group-item" href="../proc/finalize%7E9.html">finalize</a>
       
       <a class="list-group-item" href="../proc/finalize_rk.html">finalize_rk</a>
       
@@ -339,6 +355,8 @@
       
       <a class="list-group-item" href="../proc/init%7E17.html">init</a>
       
+      <a class="list-group-item" href="../proc/init%7E18.html">init</a>
+      
       <a class="list-group-item" href="../proc/init_rk.html">init_rk</a>
       
       <a class="list-group-item" href="../proc/integrate.html">integrate</a>
@@ -355,6 +373,8 @@
       
       <a class="list-group-item" href="../proc/integrate%7E7.html">integrate</a>
       
+      <a class="list-group-item" href="../proc/integrate%7E8.html">integrate</a>
+      
       <a class="list-group-item" href="../proc/integrate_rk.html">integrate_rk</a>
       
       <a class="list-group-item" href="../proc/leapfrog_solver.html">leapfrog_solver</a>
@@ -369,7 +389,11 @@
       
       <a class="list-group-item" href="../proc/ls_rk_solver.html">ls_rk_solver</a>
       
+      <a class="list-group-item" href="../proc/new_dt.html">new_Dt</a>
+      
       <a class="list-group-item" href="../proc/oscillation_assign_oscillation.html">oscillation_assign_oscillation</a>
+      
+      <a class="list-group-item" href="../proc/oscillation_local_error.html">oscillation_local_error</a>
       
       <a class="list-group-item" href="../proc/oscillation_multiply_oscillation.html">oscillation_multiply_oscillation</a>
       
@@ -477,6 +501,8 @@
       
       <a class="list-group-item" href="../proc/test_am.html">test_am</a>
       
+      <a class="list-group-item" href="../proc/test_emd_rk.html">test_emd_rk</a>
+      
       <a class="list-group-item" href="../proc/test_euler.html">test_euler</a>
       
       <a class="list-group-item" href="../proc/test_euler%7E2.html">test_euler</a>
@@ -557,12 +583,12 @@ private purefunction output(self) result(state)
   
 <tr>
   
-  <td><span class="anchor" id="variable-self%7E73"></span>class(<a href='../type/lorenz.html'>lorenz</a>),</td>
+  <td><span class="anchor" id="variable-self%7E68"></span>class(<a href='../type/euler_1d.html'>euler_1D</a>),</td>
   <td>intent(in)</td>
   <td></td>
   
   <td></td><td>::</td>
-  <td><strong>self</strong></td><td><p>Lorenz field.</p></td>
+  <td><strong>self</strong></td><td><p>Euler field.</p></td>
   
 </tr>
 
@@ -577,15 +603,47 @@ private purefunction output(self) result(state)
     
     
 	 <h3>Return Value <small><span class="anchor" id="variable-state%7E5"></span>real(kind=R_P),
-  dimension(:),allocatable</small></h3>
-    <p>Lorenz state vector.</p>
+  dimension(:,:),allocatable</small></h3>
+    <p>Euler state vector.</p>
     
     
     <h3>Description</h3>
-    <p>Output the Lorenz field state.</p>
+    <p>Output the Euler field state (primitive variables).</p>
     
     
      
+    <br>
+    
+    <section>
+    <h2>Variables</h2>
+    
+<table class="table table-striped varlist">
+<thead><tr><th>Type</th><th>Visibility</th>
+
+<th>Attributes</th><th></th><th>Name</th><th></th><th>Initial</th><th></th></thead>
+
+
+
+<tbody>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-i%7E35"></span>integer(kind=I_P),</td>
+  
+  <td>public</td>
+  <td></td><td>::</td>
+  <td><strong>i</strong></td><td></td><td></td><td><p>Counter.</p></td>
+  
+</tr>
+
+</tbody>
+</table>
+
+    </section>
     <br>
     
     
@@ -607,14 +665,18 @@ private purefunction output(self) result(state)
     <h2><span class="anchor" id="src"></span>Source Code</h2>
     <div class="highlight"><pre>  <span class="k">pure function </span><span class="n">output</span><span class="p">(</span><span class="n">self</span><span class="p">)</span> <span class="k">result</span><span class="p">(</span><span class="n">state</span><span class="p">)</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
-  <span class="c">!&lt; Output the Lorenz field state.</span>
+  <span class="c">!&lt; Output the Euler field state (primitive variables).</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
-  <span class="k">class</span><span class="p">(</span><span class="n">lorenz</span><span class="p">),</span> <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span>            <span class="kd">::</span> <span class="n">self</span>  <span class="c">!&lt; Lorenz field.</span>
-  <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">),</span> <span class="k">dimension</span><span class="p">(:),</span> <span class="k">allocatable</span> <span class="kd">::</span> <span class="n">state</span> <span class="c">!&lt; Lorenz state vector.</span>
+  <span class="k">class</span><span class="p">(</span><span class="n">euler_1D</span><span class="p">),</span> <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span>            <span class="kd">::</span> <span class="n">self</span>  <span class="c">!&lt; Euler field.</span>
+  <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">),</span> <span class="k">dimension</span><span class="p">(:,:),</span> <span class="k">allocatable</span> <span class="kd">::</span> <span class="n">state</span> <span class="c">!&lt; Euler state vector.</span>
+  <span class="kt">integer</span><span class="p">(</span><span class="n">I_P</span><span class="p">)</span>                           <span class="kd">::</span> <span class="n">i</span>     <span class="c">!&lt; Counter.</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
 
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
-  <span class="n">state</span> <span class="o">=</span> <span class="n">self</span><span class="p">%</span><span class="n">U</span>
+  <span class="k">allocate</span><span class="p">(</span><span class="n">state</span><span class="p">(</span><span class="mi">1</span><span class="p">:</span><span class="n">self</span><span class="p">%</span><span class="n">Np</span><span class="p">,</span> <span class="mi">1</span><span class="p">:</span><span class="n">self</span><span class="p">%</span><span class="n">Ni</span><span class="p">))</span>
+  <span class="k">do </span><span class="n">i</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">self</span><span class="p">%</span><span class="n">Ni</span>
+    <span class="n">state</span><span class="p">(:,</span> <span class="n">i</span><span class="p">)</span> <span class="o">=</span> <span class="n">self</span><span class="p">%</span><span class="n">conservative2primitive</span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">U</span><span class="p">(:,</span> <span class="n">i</span><span class="p">))</span>
+  <span class="n">enddo</span>
   <span class="k">return</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
   <span class="n">endfunction</span> <span class="n">output</span>

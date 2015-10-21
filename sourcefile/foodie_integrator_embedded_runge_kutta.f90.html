@@ -1,0 +1,530 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+	 
+	 <meta name="description" content="Fortran Object oriented Ordinary Differential Equations integration library">
+    
+    <meta name="author" content="Chris MacMackin" >
+    <link rel="icon" href="../favicon.png">
+
+    <title>foodie_integrator_embedded_runge_kutta.f90 &ndash; FOODIE</title>
+
+    <link href="../css/bootstrap.min.css" rel="stylesheet">
+    <link href="../css/pygments.css" rel="stylesheet">
+    <link href="../css/font-awesome.min.css" rel="stylesheet">
+    <link href="../css/local.css" rel="stylesheet">
+    
+
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+    
+    <script src="../js/jquery-2.1.3.min.js"></script>
+    <script src="../js/svg-pan-zoom.min.js"></script>
+
+    
+    <script src="../tipuesearch/tipuesearch_content.js"></script>
+    <link  href="../tipuesearch/tipuesearch.css" rel="stylesheet">
+    <script src="../tipuesearch/tipuesearch_set.js"></script>
+    <script src="../tipuesearch/tipuesearch.js"></script>
+    
+
+  </head>
+
+  <body>
+
+    <!-- Fixed navbar -->
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="../index.html">FOODIE </a>
+        </div>
+        <div id="navbar" class="navbar-collapse collapse">
+          <ul class="nav navbar-nav">
+				
+                
+            <li><a href="../lists/files.html">Source Files</a></li>
+				
+				
+            <li><a href="../lists/modules.html">Modules</a></li>
+				
+				
+            <li><a href="../lists/procedures.html">Procedures</a></li>
+				
+				
+            <li><a href="../lists/absint.html">Abstract Interfaces</a></li>
+								
+            <li><a href="../lists/types.html">Derived Types</a></li>
+				
+				
+            <li><a href="../lists/programs.html">Programs</a></li>
+				
+          </ul>
+        
+        <form action="../search.html" class="navbar-form navbar-right" role="search">
+        <div class="form-group">
+          <input type="text" class="form-control" placeholder="Search" name="q" id="tipue_search_input" autocomplete="off" required>
+        </div>
+<!--
+        <button type="submit" class="btn btn-default">Submit</button>
+-->
+        </form>
+        
+        </div><!--/.nav-collapse -->
+      </div>
+    </nav>
+
+    <div class="container">
+    
+  
+  <div class="row">
+    <h1>foodie_integrator_embedded_runge_kutta.f90
+    <small>Source File</small>
+    
+    </h1>
+	 
+<div class="row">
+<div class="col-lg-12">
+<div class="well well-sm">
+  <ul class="list-inline" style="margin-bottom:0px;display:inline">
+     
+     
+     
+     
+    
+    
+    <li><i class="fa fa-code"></i><a href="../src/foodie_integrator_embedded_runge_kutta.f90"> Source File</a></li>
+     
+  </ul>
+  <ol class="breadcrumb in-well text-right">
+  
+     <li class="active">foodie_integrator_embedded_runge_kutta.f90</li>
+  </ol>
+</div>
+</div>
+</div>
+    
+  </div>
+  <div class="row">
+    <div class="col-lg-3">
+    
+  
+  
+  
+  
+  
+  
+  
+  <div class="panel panel-primary">
+    <div class="panel-heading text-left"><h3 class="panel-title">Modules</h3></div>
+    <div class="list-group">
+      
+      <a class="list-group-item" href="../module/foodie_integrator_emd_runge_kutta.html">foodie_integrator_emd_runge_kutta</a>
+      
+    </div>
+  </div>
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  <div class="panel panel-primary">
+    <div class="panel-heading text-left"><h3 class="panel-title">Source Code</h3></div>
+    <div class="list-group">
+      <a class="list-group-item" href="../sourcefile/foodie_integrator_embedded_runge_kutta.f90.html#src">foodie_integrator_embedded_runge_kutta.f90</a>
+    </div>
+  </div>
+  
+  <hr>
+  
+  <div class="panel panel-default">
+    <div class="panel-heading text-left"><h3 class="panel-title">All Source Files</h3></div>
+    <div class="list-group">
+      
+      <a class="list-group-item" href="../sourcefile/burgers.f90.html">burgers.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/euler-1d-openmp.f90.html">euler-1D-openmp.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/euler-1d-openmp_no_foodie.f90.html">euler-1D-openmp_no_foodie.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/euler-1d.f90.html">euler-1D.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/foodie.f90.html">foodie.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/foodie_adt_integrand.f90.html">foodie_adt_integrand.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/foodie_integrator_adams_bashforth.f90.html">foodie_integrator_adams_bashforth.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/foodie_integrator_adams_bashforth_moulton.f90.html">foodie_integrator_adams_bashforth_moulton.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/foodie_integrator_adams_moulton.f90.html">foodie_integrator_adams_moulton.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/foodie_integrator_embedded_runge_kutta.f90.html">foodie_integrator_embedded_runge_kutta.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/foodie_integrator_euler_explicit.f90.html">foodie_integrator_euler_explicit.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/foodie_integrator_leapfrog.f90.html">foodie_integrator_leapfrog.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/foodie_integrator_low_storage_runge_kutta.f90.html">foodie_integrator_low_storage_runge_kutta.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/foodie_integrator_tvd_runge_kutta.f90.html">foodie_integrator_tvd_runge_kutta.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/foodie_kinds.f90.html">foodie_kinds.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/lorenz.f90.html">lorenz.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/oscillation.f90.html">oscillation.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/type_burgers.f90.html">type_burgers.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/type_euler-1d-openmp.f90.html">type_euler-1D-openmp.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/type_euler-1d-openmp.f90%7E2.html">type_euler-1D-openmp.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/type_euler-1d.f90.html">type_euler-1D.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/type_lorenz.f90.html">type_lorenz.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/type_oscillation.f90.html">type_oscillation.f90</a>
+      
+    </div>
+  </div>
+  
+  
+    </div>
+    <div class="col-lg-9" id='text'>
+    <p>FOODIE integrator: provide an explicit class of embedded Runge-Kutta schemes, from 1st to 4th order accurate.</p>
+    <br>
+    <section>
+    <h2><span class="anchor" id="src"></span>Source Code</h2>
+    <div class="highlight"><pre><span class="c">!&lt; FOODIE integrator: provide an explicit class of embedded Runge-Kutta schemes, from 1st to 4th order accurate.</span>
+<span class="k">module </span><span class="n">foodie_integrator_emd_runge_kutta</span>
+<span class="c">!-----------------------------------------------------------------------------------------------------------------------------------</span>
+<span class="c">!&lt; FOODIE integrator: provide an explicit class of embedded Runge-Kutta schemes, from 1st to 4th order accurate.</span>
+<span class="c">!&lt;</span>
+<span class="c">!&lt; The integrators provided have the embedded pairs property allowing for automatic step size control.</span>
+<span class="c">!&lt; The schemes are explicit and defined through the extended Butcher&#39;s table syntax, see[1] .</span>
+<span class="c">!&lt;</span>
+<span class="c">!&lt; Considering the following ODE system:</span>
+<span class="c">!&lt;</span>
+<span class="c">!&lt; $$ U_t = R(t,U) $$</span>
+<span class="c">!&lt;</span>
+<span class="c">!&lt; where \(U_t = \frac{dU}{dt}\), *U* is the vector of *state* variables being a function of the time-like independent variable</span>
+<span class="c">!&lt; *t*, *R* is the (vectorial) residual function, the class of schemes implemented are written in the form:</span>
+<span class="c">!&lt;</span>
+<span class="c">!&lt; $$ U_p^{n+1} = U^n +\Delta t \sum_{s=1}^{Ns}\beta_p^s K^s $$</span>
+<span class="c">!&lt; $$ U_{p+1}^{n+1} = U^n +\Delta t \sum_{s=1}^{Ns}\beta_{p+1}^s K^s $$</span>
+<span class="c">!&lt;</span>
+<span class="c">!&lt; *p* is the lower accuracy order scheme and *p+1* is the higher one; Ns is the number of stages used and \(K^s\) is</span>
+<span class="c">!&lt; the \(s^{th}\) stage computed as:</span>
+<span class="c">!&lt;</span>
+<span class="c">!&lt; $$ K^s = R\left( t^n+\gamma^s \Delta t, U^n +\Delta t \sum_{i=1}^{s-1}\alpha^{s,i} K^i \right) $$</span>
+<span class="c">!&lt;</span>
+<span class="c">!&lt; @note The value of \(\Delta t\) must be provided, it not being computed by the integrator.</span>
+<span class="c">!&lt;</span>
+<span class="c">!&lt; The schemes are explicit thus the above summation is up to \(s-1\). The coefficients \(\beta\), \(\alpha\) and \(\gamma\) are</span>
+<span class="c">!&lt; given in the extended Butcher table form:</span>
+<span class="c">!&lt;</span>
+<span class="c">!&lt;```</span>
+<span class="c">!&lt;  gamma^1    | alpha^{1,1}       alpha^{1,2}       ...        alpha^{1,Ns}</span>
+<span class="c">!&lt;  gamma^2    | alpha^{2,1}       alpha^{2,2}       ...        alpha^{2,Ns}</span>
+<span class="c">!&lt;  .          | .                 .                 .          .</span>
+<span class="c">!&lt;  .          | .                 .                  .         .</span>
+<span class="c">!&lt;  .          | .                 .                   .        .</span>
+<span class="c">!&lt;  gamma^{Ns} | alpha^{Ns,1}      alpha^{Ns,2}      ...        alpha^{Ns,Ns}</span>
+<span class="c">!&lt; ------------|-------------------------------------------------------------</span>
+<span class="c">!&lt;             | beta_p^1          beta_p^2          ...        beta_p^{Ns}</span>
+<span class="c">!&lt;             | beta_{p+1}^1      beta_{p+1}^2      ...        beta_{p+1}^{Ns}</span>
+<span class="c">!&lt;```</span>
+<span class="c">!&lt;</span>
+<span class="c">!&lt; Because only explicit schemes are considered the Butcher table reduces to diagonal matrix:</span>
+<span class="c">!&lt;</span>
+<span class="c">!&lt;```</span>
+<span class="c">!&lt;  gamma^1    | 0                 0                 ...        0</span>
+<span class="c">!&lt;  gamma^2    | alpha^{2,1}       0                 ...        0</span>
+<span class="c">!&lt;  .          | .                 .                 .          .</span>
+<span class="c">!&lt;  .          | .                 .                  .         .</span>
+<span class="c">!&lt;  .          | .                 .                   .        .</span>
+<span class="c">!&lt;  gamma^{Ns} | alpha^{Ns,1}      alpha^{Ns,2}      ...        0</span>
+<span class="c">!&lt; ------------|-------------------------------------------------------------</span>
+<span class="c">!&lt;             | beta_p^1          beta_p^2          ...        beta_p^{Ns}</span>
+<span class="c">!&lt;             | beta_{p+1}^1      beta_{p+1}^2      ...        beta_{p+1}^{Ns}</span>
+<span class="c">!&lt;```</span>
+<span class="c">!&lt;</span>
+<span class="c">!&lt; Moreover the following relation always holds:</span>
+<span class="c">!&lt; \( \gamma^s = \sum_{i=1}^{Ns}\alpha^{s,i} \)</span>
+<span class="c">!&lt;</span>
+<span class="c">!&lt; The different schemes are selected accordingly to the number of stages used. Currently the following schemes are available:</span>
+<span class="c">!&lt;</span>
+<span class="c">!&lt;##### 7 stages, 4th order</span>
+<span class="c">!&lt; This scheme is Dormand and Prince scheme, see [1].</span>
+<span class="c">!&lt;```</span>
+<span class="c">!&lt;  0    | 0             0            0             0            0              0          0</span>
+<span class="c">!&lt;  1/5  | 1/5           0            0             0            0              0          0</span>
+<span class="c">!&lt;  3/10 | 3/40          9/40         0             0            0              0          0</span>
+<span class="c">!&lt;  4/5  | 44/45        -56/15        32/9          0            0              0          0</span>
+<span class="c">!&lt;  8/9  | 19372/6561   -25360/2187   64448/6561   -212/729      0              0          0</span>
+<span class="c">!&lt;  1    | 9017/3168    -355/33       46732/5247    49/176      -5103/18656     0          0</span>
+<span class="c">!&lt;  1    | 35/384        0            500/1113      125/192     -2187/6784      11/84      0</span>
+<span class="c">!&lt; --------------------------------------------------------------------------------------------</span>
+<span class="c">!&lt;       | 35/384        0            500/1113      125/192     -2187/6784      11/84      0</span>
+<span class="c">!&lt;       | 5179/57600    0            7571/16695    393/640     -92097/339200   187/2100   1/40</span>
+<span class="c">!&lt;```</span>
+<span class="c">!&lt;</span>
+<span class="c">!&lt;#### Bibliography</span>
+<span class="c">!&lt;</span>
+<span class="c">!&lt; [1] *A family of embedded Runge-Kutta formulae*, Dormand, J. R.; Prince, P. J. (1980), , Journal of Computational and</span>
+<span class="c">!&lt; Applied Mathematics 6 (1): 19--26, doi:10.1016/0771-050X(80)90013-3</span>
+<span class="c">!-----------------------------------------------------------------------------------------------------------------------------------</span>
+
+<span class="c">!-----------------------------------------------------------------------------------------------------------------------------------</span>
+<span class="k">use </span><span class="n">foodie_kinds</span><span class="p">,</span> <span class="n">only</span> <span class="p">:</span> <span class="n">R_P</span><span class="p">,</span> <span class="n">I_P</span>
+<span class="k">use </span><span class="n">foodie_adt_integrand</span><span class="p">,</span> <span class="n">only</span> <span class="p">:</span> <span class="n">integrand</span>
+<span class="c">!-----------------------------------------------------------------------------------------------------------------------------------</span>
+
+<span class="c">!-----------------------------------------------------------------------------------------------------------------------------------</span>
+<span class="k">implicit none</span>
+<span class="k">private</span>
+<span class="k">public</span> <span class="kd">::</span> <span class="n">emd_runge_kutta_integrator</span>
+<span class="c">!-----------------------------------------------------------------------------------------------------------------------------------</span>
+
+<span class="c">!-----------------------------------------------------------------------------------------------------------------------------------</span>
+<span class="k">type</span> <span class="kd">::</span> <span class="n">emd_runge_kutta_integrator</span>
+  <span class="c">!&lt; FOODIE integrator: provide an explicit class of TVD or SSP Runge-Kutta schemes, from 1st to 4th order accurate.</span>
+  <span class="c">!&lt;</span>
+  <span class="c">!&lt; @note The integrator must be created or initialized (initialize the RK coefficients) before used.</span>
+  <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">)</span>              <span class="kd">::</span> <span class="n">tolerance</span><span class="o">=</span><span class="mf">0._R_P</span> <span class="c">!&lt; Tolerance on the local truncation error.</span>
+  <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">)</span>              <span class="kd">::</span> <span class="n">pp1_inv</span><span class="o">=</span><span class="mf">0._R_P</span>   <span class="c">!&lt; 1/(p+1) where p is the accuracy order of the lower accurate scheme of the pair.</span>
+  <span class="kt">integer</span><span class="p">(</span><span class="n">I_P</span><span class="p">)</span>           <span class="kd">::</span> <span class="n">stages</span><span class="o">=</span><span class="mi">0</span>         <span class="c">!&lt; Number of stages.</span>
+  <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">),</span> <span class="k">allocatable</span> <span class="kd">::</span> <span class="n">alph</span><span class="p">(:,:)</span>        <span class="c">!&lt; \(\alpha\) Butcher&#39;s coefficients.</span>
+  <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">),</span> <span class="k">allocatable</span> <span class="kd">::</span> <span class="n">beta</span><span class="p">(:,:)</span>        <span class="c">!&lt; \(\beta\) Butcher&#39;s coefficients.</span>
+  <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">),</span> <span class="k">allocatable</span> <span class="kd">::</span> <span class="n">gamm</span><span class="p">(:)</span>          <span class="c">!&lt; \(\gamma\) Butcher&#39;s coefficients.</span>
+  <span class="k">contains</span>
+<span class="k">    procedure</span><span class="p">,</span> <span class="k">pass</span><span class="p">(</span><span class="n">self</span><span class="p">),</span> <span class="k">public</span>  <span class="kd">::</span> <span class="n">destroy</span>   <span class="c">!&lt; Destroy the integrator.</span>
+    <span class="k">procedure</span><span class="p">,</span> <span class="k">pass</span><span class="p">(</span><span class="n">self</span><span class="p">),</span> <span class="k">public</span>  <span class="kd">::</span> <span class="n">init</span>      <span class="c">!&lt; Initialize (create) the integrator.</span>
+    <span class="k">procedure</span><span class="p">,</span> <span class="k">pass</span><span class="p">(</span><span class="n">self</span><span class="p">),</span> <span class="k">public</span>  <span class="kd">::</span> <span class="n">integrate</span> <span class="c">!&lt; Integrate integrand field.</span>
+    <span class="k">procedure</span><span class="p">,</span> <span class="k">pass</span><span class="p">(</span><span class="n">self</span><span class="p">),</span> <span class="k">private</span> <span class="kd">::</span> <span class="n">new_Dt</span>    <span class="c">!&lt; Compute new estimation of the time step Dt.</span>
+    <span class="k">final</span>                          <span class="kd">::</span> <span class="n">finalize</span>  <span class="c">!&lt; Finalize object.</span>
+<span class="n">endtype</span> <span class="n">emd_runge_kutta_integrator</span>
+<span class="c">!-----------------------------------------------------------------------------------------------------------------------------------</span>
+<span class="k">contains</span>
+  <span class="c">! public methods</span>
+  <span class="k">elemental subroutine </span><span class="n">init</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">stages</span><span class="p">,</span> <span class="n">tolerance</span><span class="p">)</span>
+  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+  <span class="c">!&lt; Create the actual RK integrator: initialize the Butcher&#39; table coefficients.</span>
+  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+  <span class="k">class</span><span class="p">(</span><span class="n">emd_runge_kutta_integrator</span><span class="p">),</span> <span class="k">intent</span><span class="p">(</span><span class="n">INOUT</span><span class="p">)</span> <span class="kd">::</span> <span class="n">self</span>      <span class="c">!&lt; RK integrator.</span>
+  <span class="kt">integer</span><span class="p">(</span><span class="n">I_P</span><span class="p">),</span>                      <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span>    <span class="kd">::</span> <span class="n">stages</span>    <span class="c">!&lt; Number of stages used.</span>
+  <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">),</span> <span class="k">optional</span><span class="p">,</span>               <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span>    <span class="kd">::</span> <span class="n">tolerance</span> <span class="c">!&lt; Tolerance on the local truncation error (default 0.01).</span>
+  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+
+  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+  <span class="k">if</span> <span class="p">(</span><span class="n">stages</span><span class="o">&lt;</span><span class="mi">1</span><span class="p">)</span> <span class="k">return</span> <span class="c">! error print should be added</span>
+  <span class="k">if</span> <span class="p">(</span><span class="nb">present</span><span class="p">(</span><span class="n">tolerance</span><span class="p">))</span> <span class="k">then</span>
+<span class="k">    </span><span class="n">self</span><span class="p">%</span><span class="n">tolerance</span> <span class="o">=</span> <span class="n">tolerance</span>
+  <span class="k">else</span>
+<span class="k">    </span><span class="n">self</span><span class="p">%</span><span class="n">tolerance</span> <span class="o">=</span> <span class="mf">0.01_R_P</span>
+  <span class="n">endif</span>
+  <span class="n">self</span><span class="p">%</span><span class="n">stages</span> <span class="o">=</span> <span class="n">stages</span>
+  <span class="k">if</span> <span class="p">(</span><span class="nb">allocated</span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">beta</span><span class="p">))</span> <span class="k">deallocate</span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">beta</span><span class="p">)</span> <span class="p">;</span> <span class="k">allocate</span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">beta</span><span class="p">(</span><span class="mi">1</span><span class="p">:</span><span class="n">stages</span><span class="p">,</span> <span class="mi">1</span><span class="p">:</span><span class="mi">2</span>     <span class="p">))</span> <span class="p">;</span> <span class="n">self</span><span class="p">%</span><span class="n">beta</span> <span class="o">=</span> <span class="mf">0._R_P</span>
+  <span class="k">if</span> <span class="p">(</span><span class="nb">allocated</span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">alph</span><span class="p">))</span> <span class="k">deallocate</span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">alph</span><span class="p">)</span> <span class="p">;</span> <span class="k">allocate</span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">alph</span><span class="p">(</span><span class="mi">1</span><span class="p">:</span><span class="n">stages</span><span class="p">,</span> <span class="mi">1</span><span class="p">:</span><span class="n">stages</span><span class="p">))</span> <span class="p">;</span> <span class="n">self</span><span class="p">%</span><span class="n">alph</span> <span class="o">=</span> <span class="mf">0._R_P</span>
+  <span class="k">if</span> <span class="p">(</span><span class="nb">allocated</span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">gamm</span><span class="p">))</span> <span class="k">deallocate</span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">gamm</span><span class="p">)</span> <span class="p">;</span> <span class="k">allocate</span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">gamm</span><span class="p">(</span>          <span class="mi">1</span><span class="p">:</span><span class="n">stages</span><span class="p">))</span> <span class="p">;</span> <span class="n">self</span><span class="p">%</span><span class="n">gamm</span> <span class="o">=</span> <span class="mf">0._R_P</span>
+  <span class="k">select case</span><span class="p">(</span><span class="n">stages</span><span class="p">)</span>
+  <span class="k">case</span><span class="p">(</span><span class="mi">7</span><span class="p">)</span>
+    <span class="c">! DPRK(7,4)</span>
+    <span class="n">self</span><span class="p">%</span><span class="n">pp1_inv</span> <span class="o">=</span> <span class="mf">1._R_P</span><span class="o">/</span><span class="p">(</span><span class="mf">4._R_P</span> <span class="o">+</span> <span class="mf">1._R_P</span><span class="p">)</span>
+
+    <span class="n">self</span><span class="p">%</span><span class="n">beta</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span> <span class="o">=</span>   <span class="mi">3</span><span class="mf">5._R_P</span><span class="o">/</span><span class="mi">38</span><span class="mf">4._R_P</span>    <span class="p">;</span> <span class="n">self</span><span class="p">%</span><span class="n">beta</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span> <span class="o">=</span>  <span class="mi">517</span><span class="mf">9._R_P</span><span class="o">/</span><span class="mi">5760</span><span class="mf">0._R_P</span>
+    <span class="n">self</span><span class="p">%</span><span class="n">beta</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span> <span class="o">=</span>   <span class="mf">0._R_P</span>              <span class="p">;</span> <span class="n">self</span><span class="p">%</span><span class="n">beta</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span> <span class="o">=</span>  <span class="mf">0._R_P</span>
+    <span class="n">self</span><span class="p">%</span><span class="n">beta</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span> <span class="o">=</span>   <span class="mi">50</span><span class="mf">0._R_P</span><span class="o">/</span><span class="mi">111</span><span class="mf">3._R_P</span>  <span class="p">;</span> <span class="n">self</span><span class="p">%</span><span class="n">beta</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span> <span class="o">=</span>  <span class="mi">757</span><span class="mf">1._R_P</span><span class="o">/</span><span class="mi">1669</span><span class="mf">5._R_P</span>
+    <span class="n">self</span><span class="p">%</span><span class="n">beta</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span> <span class="o">=</span>   <span class="mi">12</span><span class="mf">5._R_P</span><span class="o">/</span><span class="mi">19</span><span class="mf">2._R_P</span>   <span class="p">;</span> <span class="n">self</span><span class="p">%</span><span class="n">beta</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span> <span class="o">=</span>  <span class="mi">39</span><span class="mf">3._R_P</span><span class="o">/</span><span class="mi">64</span><span class="mf">0._R_P</span>
+    <span class="n">self</span><span class="p">%</span><span class="n">beta</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span> <span class="o">=</span>  <span class="o">-</span><span class="mi">218</span><span class="mf">7._R_P</span><span class="o">/</span><span class="mi">678</span><span class="mf">4._R_P</span> <span class="p">;</span> <span class="n">self</span><span class="p">%</span><span class="n">beta</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span> <span class="o">=</span> <span class="o">-</span><span class="mi">9209</span><span class="mf">7._R_P</span><span class="o">/</span><span class="mi">33920</span><span class="mf">0._R_P</span>
+    <span class="n">self</span><span class="p">%</span><span class="n">beta</span><span class="p">(</span><span class="mi">6</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span> <span class="o">=</span>   <span class="mi">1</span><span class="mf">1._R_P</span><span class="o">/</span><span class="mi">8</span><span class="mf">4._R_P</span>     <span class="p">;</span> <span class="n">self</span><span class="p">%</span><span class="n">beta</span><span class="p">(</span><span class="mi">6</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span> <span class="o">=</span>  <span class="mi">18</span><span class="mf">7._R_P</span><span class="o">/</span><span class="mi">210</span><span class="mf">0._R_P</span>
+    <span class="n">self</span><span class="p">%</span><span class="n">beta</span><span class="p">(</span><span class="mi">7</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span> <span class="o">=</span>   <span class="mf">0._R_P</span>              <span class="p">;</span> <span class="n">self</span><span class="p">%</span><span class="n">beta</span><span class="p">(</span><span class="mi">7</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span> <span class="o">=</span>  <span class="mf">1._R_P</span><span class="o">/</span><span class="mi">4</span><span class="mf">0._R_P</span>
+
+    <span class="n">self</span><span class="p">%</span><span class="n">alph</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span><span class="o">=</span><span class="mf">1._R_P</span><span class="o">/</span><span class="mf">5._R_P</span>
+    <span class="n">self</span><span class="p">%</span><span class="n">alph</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span><span class="o">=</span><span class="mf">3._R_P</span><span class="o">/</span><span class="mi">4</span><span class="mf">0._R_P</span>      <span class="p">;</span><span class="n">self</span><span class="p">%</span><span class="n">alph</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span><span class="o">=</span> <span class="mf">9._R_P</span><span class="o">/</span><span class="mi">4</span><span class="mf">0._R_P</span>
+    <span class="n">self</span><span class="p">%</span><span class="n">alph</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span><span class="o">=</span><span class="mi">4</span><span class="mf">4._R_P</span><span class="o">/</span><span class="mi">4</span><span class="mf">5._R_P</span>     <span class="p">;</span><span class="n">self</span><span class="p">%</span><span class="n">alph</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span><span class="o">=-</span><span class="mi">5</span><span class="mf">6._R_P</span><span class="o">/</span><span class="mi">1</span><span class="mf">5._R_P</span>     <span class="p">;</span><span class="n">self</span><span class="p">%</span><span class="n">alph</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span><span class="o">=</span><span class="mi">3</span><span class="mf">2._R_P</span><span class="o">/</span><span class="mf">9._R_P</span>
+    <span class="n">self</span><span class="p">%</span><span class="n">alph</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span><span class="o">=</span><span class="mi">1937</span><span class="mf">2._R_P</span><span class="o">/</span><span class="mi">656</span><span class="mf">1._R_P</span><span class="p">;</span><span class="n">self</span><span class="p">%</span><span class="n">alph</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span><span class="o">=-</span><span class="mi">2536</span><span class="mf">0._R_P</span><span class="o">/</span><span class="mi">218</span><span class="mf">7._R_P</span><span class="p">;</span><span class="n">self</span><span class="p">%</span><span class="n">alph</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span><span class="o">=</span><span class="mi">6444</span><span class="mf">8._R_P</span><span class="o">/</span><span class="mi">656</span><span class="mf">1._R_P</span>
+    <span class="n">self</span><span class="p">%</span><span class="n">alph</span><span class="p">(</span><span class="mi">6</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span><span class="o">=</span><span class="mi">901</span><span class="mf">7._R_P</span><span class="o">/</span><span class="mi">316</span><span class="mf">8._R_P</span> <span class="p">;</span><span class="n">self</span><span class="p">%</span><span class="n">alph</span><span class="p">(</span><span class="mi">6</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span><span class="o">=-</span><span class="mi">35</span><span class="mf">5._R_P</span><span class="o">/</span><span class="mi">3</span><span class="mf">3._R_P</span>    <span class="p">;</span><span class="n">self</span><span class="p">%</span><span class="n">alph</span><span class="p">(</span><span class="mi">6</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span><span class="o">=</span><span class="mi">4673</span><span class="mf">2._R_P</span><span class="o">/</span><span class="mi">524</span><span class="mf">7._R_P</span>
+    <span class="n">self</span><span class="p">%</span><span class="n">alph</span><span class="p">(</span><span class="mi">7</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span><span class="o">=</span><span class="mi">3</span><span class="mf">5._R_P</span><span class="o">/</span><span class="mi">38</span><span class="mf">4._R_P</span>    <span class="p">;</span><span class="n">self</span><span class="p">%</span><span class="n">alph</span><span class="p">(</span><span class="mi">7</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span><span class="o">=</span> <span class="mf">0._R_P</span>              <span class="p">;</span><span class="n">self</span><span class="p">%</span><span class="n">alph</span><span class="p">(</span><span class="mi">7</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span><span class="o">=</span><span class="mi">50</span><span class="mf">0._R_P</span><span class="o">/</span><span class="mi">111</span><span class="mf">3._R_P</span>
+
+    <span class="n">self</span><span class="p">%</span><span class="n">alph</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">4</span><span class="p">)</span><span class="o">=-</span><span class="mi">21</span><span class="mf">2._R_P</span><span class="o">/</span><span class="mi">72</span><span class="mf">9._R_P</span>
+    <span class="n">self</span><span class="p">%</span><span class="n">alph</span><span class="p">(</span><span class="mi">6</span><span class="p">,</span> <span class="mi">4</span><span class="p">)</span><span class="o">=</span> <span class="mi">4</span><span class="mf">9._R_P</span><span class="o">/</span><span class="mi">17</span><span class="mf">6._R_P</span> <span class="p">;</span><span class="n">self</span><span class="p">%</span><span class="n">alph</span><span class="p">(</span><span class="mi">6</span><span class="p">,</span> <span class="mi">5</span><span class="p">)</span><span class="o">=-</span><span class="mi">510</span><span class="mf">3._R_P</span><span class="o">/</span><span class="mi">1865</span><span class="mf">6._R_P</span>
+    <span class="n">self</span><span class="p">%</span><span class="n">alph</span><span class="p">(</span><span class="mi">7</span><span class="p">,</span> <span class="mi">4</span><span class="p">)</span><span class="o">=</span> <span class="mi">12</span><span class="mf">5._R_P</span><span class="o">/</span><span class="mi">19</span><span class="mf">2._R_P</span><span class="p">;</span><span class="n">self</span><span class="p">%</span><span class="n">alph</span><span class="p">(</span><span class="mi">7</span><span class="p">,</span> <span class="mi">5</span><span class="p">)</span><span class="o">=-</span><span class="mi">218</span><span class="mf">7._R_P</span><span class="o">/</span><span class="mi">678</span><span class="mf">4._R_P</span> <span class="p">;</span><span class="n">self</span><span class="p">%</span><span class="n">alph</span><span class="p">(</span><span class="mi">7</span><span class="p">,</span> <span class="mi">6</span><span class="p">)</span><span class="o">=</span><span class="mi">1</span><span class="mf">1._R_P</span><span class="o">/</span><span class="mi">8</span><span class="mf">4._R_P</span>
+
+    <span class="n">self</span><span class="p">%</span><span class="n">gamm</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span> <span class="o">=</span> <span class="mf">1._R_P</span><span class="o">/</span><span class="mf">5._R_P</span>
+    <span class="n">self</span><span class="p">%</span><span class="n">gamm</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span> <span class="o">=</span> <span class="mf">3._R_P</span><span class="o">/</span><span class="mi">1</span><span class="mf">0._R_P</span>
+    <span class="n">self</span><span class="p">%</span><span class="n">gamm</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span> <span class="o">=</span> <span class="mf">4._R_P</span><span class="o">/</span><span class="mf">5._R_P</span>
+    <span class="n">self</span><span class="p">%</span><span class="n">gamm</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span> <span class="o">=</span> <span class="mf">8._R_P</span><span class="o">/</span><span class="mf">9._R_P</span>
+    <span class="n">self</span><span class="p">%</span><span class="n">gamm</span><span class="p">(</span><span class="mi">6</span><span class="p">)</span> <span class="o">=</span> <span class="mf">1._R_P</span>
+    <span class="n">self</span><span class="p">%</span><span class="n">gamm</span><span class="p">(</span><span class="mi">7</span><span class="p">)</span> <span class="o">=</span> <span class="mf">1._R_P</span>
+  <span class="n">endselect</span>
+  <span class="k">return</span>
+  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+  <span class="n">endsubroutine</span> <span class="n">init</span>
+
+  <span class="k">elemental subroutine </span><span class="n">destroy</span><span class="p">(</span><span class="n">self</span><span class="p">)</span>
+  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+  <span class="c">!&lt; Destroy the integrator.</span>
+  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+  <span class="k">class</span><span class="p">(</span><span class="n">emd_runge_kutta_integrator</span><span class="p">),</span> <span class="k">intent</span><span class="p">(</span><span class="n">INOUT</span><span class="p">)</span> <span class="kd">::</span> <span class="n">self</span> <span class="c">!&lt; Integrator.</span>
+  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+
+  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+  <span class="n">self</span><span class="p">%</span><span class="n">tolerance</span> <span class="o">=</span> <span class="mf">0._R_P</span>
+  <span class="n">self</span><span class="p">%</span><span class="n">stages</span> <span class="o">=</span> <span class="mi">0</span>
+  <span class="k">if</span> <span class="p">(</span><span class="nb">allocated</span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">alph</span><span class="p">))</span> <span class="k">deallocate</span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">alph</span><span class="p">)</span>
+  <span class="k">if</span> <span class="p">(</span><span class="nb">allocated</span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">beta</span><span class="p">))</span> <span class="k">deallocate</span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">beta</span><span class="p">)</span>
+  <span class="k">if</span> <span class="p">(</span><span class="nb">allocated</span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">gamm</span><span class="p">))</span> <span class="k">deallocate</span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">gamm</span><span class="p">)</span>
+  <span class="k">return</span>
+  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+  <span class="n">endsubroutine</span> <span class="n">destroy</span>
+
+  <span class="k">subroutine </span><span class="n">integrate</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">U</span><span class="p">,</span> <span class="n">stage</span><span class="p">,</span> <span class="n">Dt</span><span class="p">,</span> <span class="n">t</span><span class="p">)</span>
+  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+  <span class="c">!&lt; Integrate field with explicit embedded Runge-Kutta scheme.</span>
+  <span class="c">!&lt;</span>
+  <span class="c">!&lt; The time steps is adaptively resized using the local truncation error estimation by means of the embedded pairs of RK schemes.</span>
+  <span class="c">!&lt;</span>
+  <span class="c">!&lt; @note This method can be used **after** the integrator is created (i.e. the RK coefficients are initialized).</span>
+  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+  <span class="k">class</span><span class="p">(</span><span class="n">emd_runge_kutta_integrator</span><span class="p">),</span> <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span>    <span class="kd">::</span> <span class="n">self</span>      <span class="c">!&lt; Actual RK integrator.</span>
+  <span class="k">class</span><span class="p">(</span><span class="n">integrand</span><span class="p">),</span>                  <span class="k">intent</span><span class="p">(</span><span class="n">INOUT</span><span class="p">)</span> <span class="kd">::</span> <span class="n">U</span>         <span class="c">!&lt; Field to be integrated.</span>
+  <span class="k">class</span><span class="p">(</span><span class="n">integrand</span><span class="p">),</span>                  <span class="k">intent</span><span class="p">(</span><span class="n">INOUT</span><span class="p">)</span> <span class="kd">::</span> <span class="n">stage</span><span class="p">(</span><span class="mi">1</span><span class="p">:)</span> <span class="c">!&lt; Runge-Kutta stages [1:stages].</span>
+  <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">),</span>                         <span class="k">intent</span><span class="p">(</span><span class="n">INOUT</span><span class="p">)</span> <span class="kd">::</span> <span class="n">Dt</span>        <span class="c">!&lt; Time step.</span>
+  <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">),</span>                         <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span>    <span class="kd">::</span> <span class="n">t</span>         <span class="c">!&lt; Time.</span>
+  <span class="k">class</span><span class="p">(</span><span class="n">integrand</span><span class="p">),</span> <span class="k">allocatable</span>                    <span class="kd">::</span> <span class="n">U1</span>        <span class="c">!&lt; First U evaluation.</span>
+  <span class="k">class</span><span class="p">(</span><span class="n">integrand</span><span class="p">),</span> <span class="k">allocatable</span>                    <span class="kd">::</span> <span class="n">U2</span>        <span class="c">!&lt; Second U evaluation.</span>
+  <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">)</span>                                        <span class="kd">::</span> <span class="n">error</span>     <span class="c">!&lt; Local truncation error estimation.</span>
+  <span class="kt">integer</span><span class="p">(</span><span class="n">I_P</span><span class="p">)</span>                                     <span class="kd">::</span> <span class="n">s</span>         <span class="c">!&lt; First stages counter.</span>
+  <span class="kt">integer</span><span class="p">(</span><span class="n">I_P</span><span class="p">)</span>                                     <span class="kd">::</span> <span class="n">ss</span>        <span class="c">!&lt; Second stages counter.</span>
+  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+
+  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+  <span class="k">allocate</span><span class="p">(</span><span class="n">U1</span><span class="p">,</span> <span class="n">source</span><span class="o">=</span><span class="n">U</span><span class="p">)</span>
+  <span class="k">allocate</span><span class="p">(</span><span class="n">U2</span><span class="p">,</span> <span class="n">source</span><span class="o">=</span><span class="n">U</span><span class="p">)</span>
+  <span class="n">error</span> <span class="o">=</span> <span class="err">1</span><span class="n">e6</span>
+  <span class="k">do while</span><span class="p">(</span><span class="n">error</span><span class="o">&gt;</span><span class="n">self</span><span class="p">%</span><span class="n">tolerance</span><span class="p">)</span>
+    <span class="c">! compute stages</span>
+    <span class="k">do </span><span class="n">s</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">self</span><span class="p">%</span><span class="n">stages</span>
+      <span class="n">stage</span><span class="p">(</span><span class="n">s</span><span class="p">)</span> <span class="o">=</span> <span class="n">U</span>
+      <span class="k">do </span><span class="n">ss</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">s</span> <span class="o">-</span> <span class="mi">1</span>
+        <span class="n">stage</span><span class="p">(</span><span class="n">s</span><span class="p">)</span> <span class="o">=</span> <span class="n">stage</span><span class="p">(</span><span class="n">s</span><span class="p">)</span> <span class="o">+</span> <span class="n">stage</span><span class="p">(</span><span class="n">ss</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="n">Dt</span> <span class="o">*</span> <span class="n">self</span><span class="p">%</span><span class="n">alph</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">ss</span><span class="p">))</span>
+      <span class="n">enddo</span>
+      <span class="n">stage</span><span class="p">(</span><span class="n">s</span><span class="p">)</span> <span class="o">=</span> <span class="n">stage</span><span class="p">(</span><span class="n">s</span><span class="p">)%</span><span class="n">t</span><span class="p">(</span><span class="n">t</span><span class="o">=</span><span class="n">t</span> <span class="o">+</span> <span class="n">self</span><span class="p">%</span><span class="n">gamm</span><span class="p">(</span><span class="n">s</span><span class="p">)</span> <span class="o">*</span> <span class="n">Dt</span><span class="p">)</span>
+    <span class="n">enddo</span>
+    <span class="c">! compute new time step</span>
+    <span class="n">U1</span> <span class="o">=</span> <span class="n">U</span>
+    <span class="n">U2</span> <span class="o">=</span> <span class="n">U</span>
+    <span class="k">do </span><span class="n">s</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">self</span><span class="p">%</span><span class="n">stages</span>
+      <span class="n">U1</span> <span class="o">=</span> <span class="n">U1</span> <span class="o">+</span>  <span class="n">stage</span><span class="p">(</span><span class="n">s</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="n">Dt</span> <span class="o">*</span> <span class="n">self</span><span class="p">%</span><span class="n">beta</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+      <span class="n">U2</span> <span class="o">=</span> <span class="n">U2</span> <span class="o">+</span>  <span class="n">stage</span><span class="p">(</span><span class="n">s</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="n">Dt</span> <span class="o">*</span> <span class="n">self</span><span class="p">%</span><span class="n">beta</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="mi">2</span><span class="p">))</span>
+    <span class="n">enddo</span>
+    <span class="n">error</span> <span class="o">=</span> <span class="n">U2</span><span class="p">.</span><span class="n">lterror</span><span class="p">.</span><span class="n">U1</span>
+    <span class="k">call </span><span class="n">self</span><span class="p">%</span><span class="n">new_Dt</span><span class="p">(</span><span class="n">error</span><span class="o">=</span><span class="n">error</span><span class="p">,</span> <span class="n">Dt</span><span class="o">=</span><span class="n">Dt</span><span class="p">)</span>
+  <span class="n">enddo</span>
+  <span class="n">U</span> <span class="o">=</span> <span class="n">U1</span>
+  <span class="k">return</span>
+  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+  <span class="n">endsubroutine</span> <span class="n">integrate</span>
+
+  <span class="c">! private methods</span>
+  <span class="k">elemental subroutine </span><span class="n">new_Dt</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">error</span><span class="p">,</span> <span class="n">Dt</span><span class="p">)</span>
+  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+  <span class="c">!&lt; Compute new estimation of the time step Dt.</span>
+  <span class="c">!&lt;</span>
+  <span class="c">!&lt; The formula employed is:</span>
+  <span class="c">!&lt;</span>
+  <span class="c">!&lt; $$ Dt_{new} = 0.9 Dt_{old} \left( \frac{tolerance}{error} \right)^{\frac{1}{p+1}} $$</span>
+  <span class="c">!&lt;</span>
+  <span class="c">!&lt; @note 0.9 is a safety factor.</span>
+  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+  <span class="k">class</span><span class="p">(</span><span class="n">emd_runge_kutta_integrator</span><span class="p">),</span> <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span>    <span class="kd">::</span> <span class="n">self</span>  <span class="c">!&lt; Integrator.</span>
+  <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">),</span>                         <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span>    <span class="kd">::</span> <span class="n">error</span> <span class="c">!&lt; Local truncation error estimation.</span>
+  <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">),</span>                         <span class="k">intent</span><span class="p">(</span><span class="n">INOUT</span><span class="p">)</span> <span class="kd">::</span> <span class="n">Dt</span>    <span class="c">!&lt; Time step.</span>
+  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+
+  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+  <span class="n">Dt</span> <span class="o">=</span> <span class="mf">0.9_R_P</span> <span class="o">*</span> <span class="n">Dt</span> <span class="o">*</span> <span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">tolerance</span><span class="o">/</span><span class="n">error</span><span class="p">)</span><span class="o">**</span><span class="n">self</span><span class="p">%</span><span class="n">pp1_inv</span>
+  <span class="k">return</span>
+  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+  <span class="n">endsubroutine</span> <span class="n">new_Dt</span>
+
+  <span class="k">elemental subroutine </span><span class="n">finalize</span><span class="p">(</span><span class="n">self</span><span class="p">)</span>
+  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+  <span class="c">!&lt; Finalize object.</span>
+  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+  <span class="k">type</span><span class="p">(</span><span class="n">emd_runge_kutta_integrator</span><span class="p">),</span> <span class="k">intent</span><span class="p">(</span><span class="n">INOUT</span><span class="p">)</span> <span class="kd">::</span> <span class="n">self</span> <span class="c">!&lt; Integrator.</span>
+  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+
+  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+  <span class="k">call </span><span class="n">self</span><span class="p">%</span><span class="n">destroy</span>
+  <span class="k">return</span>
+  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+  <span class="n">endsubroutine</span> <span class="n">finalize</span>
+<span class="n">endmodule</span> <span class="n">foodie_integrator_emd_runge_kutta</span>
+</pre></div>
+
+    </section>
+    </div>
+  </div>
+
+    <hr>
+    <footer>
+        <div class="row">
+        <div class="col-md-6">&copy; 2015 FOODIE was written by Fortran-FOSS-Programmers Group. </div>
+        <div class="col-md-6"><span class="pull-right">Documentation generated by <a href="https://github.com/cmacmackin/ford">FORD</a>.</span></div>
+        </div>
+        <br>
+    </footer>
+    </div> <!-- /container -->
+
+
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+<!--
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+-->
+    <script src="../js/bootstrap.min.js"></script>
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+    <script src="../js/ie10-viewport-bug-workaround.js"></script>
+
+    <!-- MathJax JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        TeX: { extensions: ['AMSmath.js','AMSsymbols.js','noErrors.js','noUndefined.js'], equationNumbers: { autoNumber: 'AMS' } },
+        jax: ['input/TeX','input/MathML','output/HTML-CSS'],
+        extensions: ['tex2jax.js','mml2jax.js','MathMenu.js','MathZoom.js'],
+        'HTML-CSS': { 
+           styles: { '.MathJax_Display, .MathJax .mo, .MathJax .mi, .MathJax .mn': {color: '#000000 ! important'} }
+        }
+      });
+    </script>
+    <script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+  </body>
+</html>

@@ -148,6 +148,8 @@
       
       <a class="list-group-item" href="../type/integrand.html#boundprocedure-t">t</a>
       
+      <a class="list-group-item" href="../type/integrand.html#boundprocedure-local_error">local_error</a>
+      
       <a class="list-group-item" href="../type/integrand.html#boundprocedure-integrand_multiply_integrand">integrand_multiply_integrand</a>
       
       <a class="list-group-item" href="../type/integrand.html#boundprocedure-integrand_multiply_real">integrand_multiply_real</a>
@@ -159,6 +161,8 @@
       <a class="list-group-item" href="../type/integrand.html#boundprocedure-sub">sub</a>
       
       <a class="list-group-item" href="../type/integrand.html#boundprocedure-assign_integrand">assign_integrand</a>
+      
+      <a class="list-group-item" href="../type/integrand.html#boundprocedure-operator%28.lterror.%29">operator(.lterror.)</a>
       
       <a class="list-group-item" href="../type/integrand.html#boundprocedure-operator%28%2B%29">operator(+)</a>
       
@@ -194,6 +198,8 @@
       <a class="list-group-item" href="../type/adams_moulton_integrator.html">adams_moulton_integrator</a>
       
       <a class="list-group-item" href="../type/burgers.html">burgers</a>
+      
+      <a class="list-group-item" href="../type/emd_runge_kutta_integrator.html">emd_runge_kutta_integrator</a>
       
       <a class="list-group-item" href="../type/euler_1d.html">euler_1D</a>
       
@@ -332,6 +338,109 @@ function <a href='../interface/time_derivative.html'>time_derivative</a>(self, t
 
        
        <p>Time derivative function of integrand class, i.e. the residuals function.</p>
+        
+
+         
+      
+      </li>
+    
+  </ul>
+</div>
+
+    
+	   
+<div class="panel panel-default">
+  <div class="panel-heading codesum"><span class="anchor" id="boundprocedure-local_error"></span><h3>procedure(<a href='../interface/local_error_operator.html'>local_error_operator</a>), public, pass(lhs), deferred :: <strong>local_error</strong>  
+    
+  </h3></div>
+  
+  <div class="panel-body">
+    
+
+
+    <p>||integrand - integrand||.</p>
+  </div>
+  
+  <ul class="list-group">
+    
+      <li class="list-group-item">
+      
+         
+            
+    
+    <h3>
+function <a href='../interface/local_error_operator.html'>local_error_operator</a>(lhs, rhs) result(error)
+    
+    
+    
+<small>Prototype</small></h3>
+    
+    <h4>Arguments</h4>
+    
+      
+      
+<table class="table table-striped varlist">
+<thead><tr><th>Type</th>
+<th>Intent</th><th>Optional</th>
+<th>Attributes</th><th></th><th>Name</th><th></th></thead>
+
+
+
+<tbody>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>class(<a href='../type/integrand.html'>integrand</a>),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>lhs</strong></td><td><p>Left hand side.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>class(<a href='../type/integrand.html'>integrand</a>),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>rhs</strong></td><td><p>Right hand side.</p></td>
+  
+</tr>
+
+</tbody>
+</table>
+
+      
+    
+    
+
+  
+  
+  
+  
+     <h4>Return Value <small>real(kind=R_P)
+  </small></h4>
+  <p>Error estimation.</p>
+    
+    
+    <h4>Description</h4>
+       
+       
+
+
+       
+       <p>Estimate local truncation error between 2 solution approximations.</p>
         
 
          
@@ -661,7 +770,7 @@ function <a href='../interface/real_op_integrand.html'>real_op_integrand</a>(lhs
     
 
 
-    <p>Integrand + integrand oprator.</p>
+    <p>Integrand + integrand operator.</p>
   </div>
   
   <ul class="list-group">
@@ -764,7 +873,7 @@ function <a href='../interface/symmetric_operator.html'>symmetric_operator</a>(l
     
 
 
-    <p>Integrand - integrand oprator.</p>
+    <p>Integrand - integrand operator.</p>
   </div>
   
   <ul class="list-group">
@@ -953,6 +1062,54 @@ subroutine <a href='../interface/assignment_integrand.html'>assignment_integrand
     
 	   
 <div class="panel panel-default">
+  <div class="panel-heading codesum"><span class="anchor" id="boundprocedure-operator%28.lterror.%29"></span><h3>generic, public :: <strong>operator(.lterror.)</strong>  => <a href='../type/integrand.html#boundprocedure-local_error'>local_error</a> 
+    
+  </h3></div>
+  
+  <div class="panel-body">
+    
+
+
+    <p>Estimate local truncation error.</p>
+  </div>
+  
+  <ul class="list-group">
+    
+      <li class="list-group-item">
+      
+         
+    
+    <h3>
+pass(lhs) deferred <a href='../type/integrand.html#boundprocedure-local_error'>local_error</a>()
+    
+    
+    
+</h3>
+    
+    <h4>Arguments</h4>
+    
+      <em>None</em>
+    
+    
+    
+    <h4>Description</h4>
+       
+       
+
+
+       
+       <p>||integrand - integrand||.</p>
+        
+
+      
+      </li>
+    
+  </ul>
+</div>
+
+    
+	   
+<div class="panel panel-default">
   <div class="panel-heading codesum"><span class="anchor" id="boundprocedure-operator%28%2B%29"></span><h3>generic, public :: <strong>operator(+)</strong>  => <a href='../type/integrand.html#boundprocedure-add'>add</a> 
     
   </h3></div>
@@ -989,7 +1146,7 @@ pass(lhs) deferred <a href='../type/integrand.html#boundprocedure-add'>add</a>()
 
 
        
-       <p>Integrand + integrand oprator.</p>
+       <p>Integrand + integrand operator.</p>
         
 
       
@@ -1037,7 +1194,7 @@ pass(lhs) deferred <a href='../type/integrand.html#boundprocedure-sub'>sub</a>()
 
 
        
-       <p>Integrand - integrand oprator.</p>
+       <p>Integrand - integrand operator.</p>
         
 
       
@@ -1213,13 +1370,15 @@ pass(lhs) deferred <a href='../type/integrand.html#boundprocedure-assign_integra
     <span class="c">! public deferred procedures that concrete integrand-field must implement</span>
     <span class="k">procedure</span><span class="p">(</span><span class="n">time_derivative</span><span class="p">),</span>      <span class="k">pass</span><span class="p">(</span><span class="n">self</span><span class="p">),</span> <span class="k">deferred</span><span class="p">,</span> <span class="k">public</span> <span class="kd">::</span> <span class="n">t</span> <span class="c">!&lt; Time derivative, residuals.</span>
     <span class="c">! operators</span>
+    <span class="k">procedure</span><span class="p">(</span><span class="n">local_error_operator</span><span class="p">),</span> <span class="k">pass</span><span class="p">(</span><span class="n">lhs</span><span class="p">),</span>  <span class="k">deferred</span><span class="p">,</span> <span class="k">public</span> <span class="kd">::</span> <span class="n">local_error</span>                  <span class="c">!&lt; ||integrand - integrand||.</span>
     <span class="k">procedure</span><span class="p">(</span><span class="n">symmetric_operator</span><span class="p">),</span>   <span class="k">pass</span><span class="p">(</span><span class="n">lhs</span><span class="p">),</span>  <span class="k">deferred</span><span class="p">,</span> <span class="k">public</span> <span class="kd">::</span> <span class="n">integrand_multiply_integrand</span> <span class="c">!&lt; Integrand * integrand operator.</span>
     <span class="k">procedure</span><span class="p">(</span><span class="n">integrand_op_real</span><span class="p">),</span>    <span class="k">pass</span><span class="p">(</span><span class="n">lhs</span><span class="p">),</span>  <span class="k">deferred</span><span class="p">,</span> <span class="k">public</span> <span class="kd">::</span> <span class="n">integrand_multiply_real</span>      <span class="c">!&lt; Integrand * real operator.</span>
     <span class="k">procedure</span><span class="p">(</span><span class="n">real_op_integrand</span><span class="p">),</span>    <span class="k">pass</span><span class="p">(</span><span class="n">rhs</span><span class="p">),</span>  <span class="k">deferred</span><span class="p">,</span> <span class="k">public</span> <span class="kd">::</span> <span class="n">real_multiply_integrand</span>      <span class="c">!&lt; Real * integrand operator.</span>
-    <span class="k">procedure</span><span class="p">(</span><span class="n">symmetric_operator</span><span class="p">),</span>   <span class="k">pass</span><span class="p">(</span><span class="n">lhs</span><span class="p">),</span>  <span class="k">deferred</span><span class="p">,</span> <span class="k">public</span> <span class="kd">::</span> <span class="n">add</span>                          <span class="c">!&lt; Integrand + integrand oprator.</span>
-    <span class="k">procedure</span><span class="p">(</span><span class="n">symmetric_operator</span><span class="p">),</span>   <span class="k">pass</span><span class="p">(</span><span class="n">lhs</span><span class="p">),</span>  <span class="k">deferred</span><span class="p">,</span> <span class="k">public</span> <span class="kd">::</span> <span class="n">sub</span>                          <span class="c">!&lt; Integrand - integrand oprator.</span>
+    <span class="k">procedure</span><span class="p">(</span><span class="n">symmetric_operator</span><span class="p">),</span>   <span class="k">pass</span><span class="p">(</span><span class="n">lhs</span><span class="p">),</span>  <span class="k">deferred</span><span class="p">,</span> <span class="k">public</span> <span class="kd">::</span> <span class="n">add</span>                          <span class="c">!&lt; Integrand + integrand operator.</span>
+    <span class="k">procedure</span><span class="p">(</span><span class="n">symmetric_operator</span><span class="p">),</span>   <span class="k">pass</span><span class="p">(</span><span class="n">lhs</span><span class="p">),</span>  <span class="k">deferred</span><span class="p">,</span> <span class="k">public</span> <span class="kd">::</span> <span class="n">sub</span>                          <span class="c">!&lt; Integrand - integrand operator.</span>
     <span class="k">procedure</span><span class="p">(</span><span class="n">assignment_integrand</span><span class="p">),</span> <span class="k">pass</span><span class="p">(</span><span class="n">lhs</span><span class="p">),</span>  <span class="k">deferred</span><span class="p">,</span> <span class="k">public</span> <span class="kd">::</span> <span class="n">assign_integrand</span>             <span class="c">!&lt; Integrand = integrand.</span>
     <span class="c">! operators overloading</span>
+    <span class="k">generic</span><span class="p">,</span> <span class="k">public</span> <span class="kd">::</span> <span class="n">operator</span><span class="p">(.</span><span class="n">lterror</span><span class="p">.)</span> <span class="o">=&gt;</span> <span class="n">local_error</span>              <span class="c">!&lt; Estimate local truncation error.</span>
     <span class="k">generic</span><span class="p">,</span> <span class="k">public</span> <span class="kd">::</span> <span class="n">operator</span><span class="p">(</span><span class="o">+</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="n">add</span>                              <span class="c">!&lt; Overloading + operator.</span>
     <span class="k">generic</span><span class="p">,</span> <span class="k">public</span> <span class="kd">::</span> <span class="n">operator</span><span class="p">(</span><span class="o">-</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="n">sub</span>                              <span class="c">!&lt; Overloading - operator.</span>
     <span class="k">generic</span><span class="p">,</span> <span class="k">public</span> <span class="kd">::</span> <span class="n">operator</span><span class="p">(</span><span class="o">*</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="n">integrand_multiply_integrand</span><span class="p">,</span> <span class="p">&amp;</span>

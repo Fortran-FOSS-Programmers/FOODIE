@@ -131,21 +131,21 @@
     <div class="panel-heading text-left"><h3 class="panel-title">Variables</h3></div>
     <div class="list-group">
       
-      <a class="list-group-item" href="../proc/leapfrog_solver.html#variable-rk_integrator%7E16">rk_integrator</a>
+      <a class="list-group-item" href="../proc/leapfrog_solver.html#variable-rk_integrator%7E5">rk_integrator</a>
       
-      <a class="list-group-item" href="../proc/leapfrog_solver.html#variable-rk_stages%7E18">rk_stages</a>
+      <a class="list-group-item" href="../proc/leapfrog_solver.html#variable-rk_stages%7E7">rk_stages</a>
       
-      <a class="list-group-item" href="../proc/leapfrog_solver.html#variable-rk_stage%7E16">rk_stage</a>
+      <a class="list-group-item" href="../proc/leapfrog_solver.html#variable-rk_stage%7E5">rk_stage</a>
       
-      <a class="list-group-item" href="../proc/leapfrog_solver.html#variable-lf_integrator%7E4">lf_integrator</a>
+      <a class="list-group-item" href="../proc/leapfrog_solver.html#variable-lf_integrator">lf_integrator</a>
       
-      <a class="list-group-item" href="../proc/leapfrog_solver.html#variable-previous%7E22">previous</a>
+      <a class="list-group-item" href="../proc/leapfrog_solver.html#variable-previous%7E13">previous</a>
       
-      <a class="list-group-item" href="../proc/leapfrog_solver.html#variable-filter%7E8">filter</a>
+      <a class="list-group-item" href="../proc/leapfrog_solver.html#variable-filter%7E2">filter</a>
       
-      <a class="list-group-item" href="../proc/leapfrog_solver.html#variable-oscillator%7E5">oscillator</a>
+      <a class="list-group-item" href="../proc/leapfrog_solver.html#variable-oscillator%7E6">oscillator</a>
       
-      <a class="list-group-item" href="../proc/leapfrog_solver.html#variable-step%7E14">step</a>
+      <a class="list-group-item" href="../proc/leapfrog_solver.html#variable-step%7E6">step</a>
       
       <a class="list-group-item" href="../proc/leapfrog_solver.html#variable-filtered">filtered</a>
       
@@ -259,6 +259,8 @@
       
       <a class="list-group-item" href="../proc/destroy%7E8.html">destroy</a>
       
+      <a class="list-group-item" href="../proc/destroy%7E9.html">destroy</a>
+      
       <a class="list-group-item" href="../proc/destroy_rk.html">destroy_rk</a>
       
       <a class="list-group-item" href="../proc/deuler_dt.html">dEuler_dt</a>
@@ -276,6 +278,8 @@
       <a class="list-group-item" href="../proc/e%7E2.html">E</a>
       
       <a class="list-group-item" href="../proc/e%7E3.html">E</a>
+      
+      <a class="list-group-item" href="../proc/emd_rk_solver.html">emd_rk_solver</a>
       
       <a class="list-group-item" href="../proc/estimate_orders.html">estimate_orders</a>
       
@@ -316,6 +320,8 @@
       <a class="list-group-item" href="../proc/finalize%7E7.html">finalize</a>
       
       <a class="list-group-item" href="../proc/finalize%7E8.html">finalize</a>
+      
+      <a class="list-group-item" href="../proc/finalize%7E9.html">finalize</a>
       
       <a class="list-group-item" href="../proc/finalize_rk.html">finalize_rk</a>
       
@@ -365,6 +371,8 @@
       
       <a class="list-group-item" href="../proc/init%7E17.html">init</a>
       
+      <a class="list-group-item" href="../proc/init%7E18.html">init</a>
+      
       <a class="list-group-item" href="../proc/init_rk.html">init_rk</a>
       
       <a class="list-group-item" href="../proc/integrate.html">integrate</a>
@@ -381,6 +389,8 @@
       
       <a class="list-group-item" href="../proc/integrate%7E7.html">integrate</a>
       
+      <a class="list-group-item" href="../proc/integrate%7E8.html">integrate</a>
+      
       <a class="list-group-item" href="../proc/integrate_rk.html">integrate_rk</a>
       
       <a class="list-group-item" href="../proc/leapfrog_solver.html">leapfrog_solver</a>
@@ -395,7 +405,11 @@
       
       <a class="list-group-item" href="../proc/ls_rk_solver.html">ls_rk_solver</a>
       
+      <a class="list-group-item" href="../proc/new_dt.html">new_Dt</a>
+      
       <a class="list-group-item" href="../proc/oscillation_assign_oscillation.html">oscillation_assign_oscillation</a>
+      
+      <a class="list-group-item" href="../proc/oscillation_local_error.html">oscillation_local_error</a>
       
       <a class="list-group-item" href="../proc/oscillation_multiply_oscillation.html">oscillation_multiply_oscillation</a>
       
@@ -503,6 +517,8 @@
       
       <a class="list-group-item" href="../proc/test_am.html">test_am</a>
       
+      <a class="list-group-item" href="../proc/test_emd_rk.html">test_emd_rk</a>
+      
       <a class="list-group-item" href="../proc/test_euler.html">test_euler</a>
       
       <a class="list-group-item" href="../proc/test_euler%7E2.html">test_euler</a>
@@ -583,7 +599,7 @@ subroutine leapfrog_solver(solution, raw)
   
 <tr>
   
-  <td><span class="anchor" id="variable-solution%7E15"></span>real(kind=R_P),</td>
+  <td><span class="anchor" id="variable-solution%7E17"></span>real(kind=R_P),</td>
   <td>intent(out)</td>
   <td></td>
   
@@ -636,15 +652,15 @@ subroutine leapfrog_solver(solution, raw)
 <polygon fill="none" stroke="black" points="396,-48 310,-48 310,-22 396,-22 396,-48"/>
 <text text-anchor="middle" x="353" y="-32.55" font-family="Helvetica,sans-Serif" font-size="10.50">leapfrog_solver</text>
 </g>
-<!-- proc~test_leapfrog~4 -->
-<g id="node2" class="node"><title>proc~test_leapfrog~4</title>
-<a xlink:href="../proc/test_leapfrog%7E4.html" xlink:title="test_leapfrog">
+<!-- proc~test_leapfrog -->
+<g id="node2" class="node"><title>proc~test_leapfrog</title>
+<a xlink:href="../proc/test_leapfrog.html" xlink:title="test_leapfrog">
 <polygon fill="#d9534f" stroke="#d9534f" points="246,-70 172,-70 172,-44 246,-44 246,-70"/>
 <text text-anchor="middle" x="209" y="-54.55" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">test_leapfrog</text>
 </a>
 </g>
-<!-- proc~test_leapfrog~4&#45;&gt;proc~leapfrog_solver -->
-<g id="edge6" class="edge"><title>proc~test_leapfrog~4&#45;&gt;proc~leapfrog_solver</title>
+<!-- proc~test_leapfrog&#45;&gt;proc~leapfrog_solver -->
+<g id="edge6" class="edge"><title>proc~test_leapfrog&#45;&gt;proc~leapfrog_solver</title>
 <path fill="none" stroke="black" d="M246.834,-51.2198C262.995,-48.7508 282.145,-45.825 299.702,-43.1428"/>
 <polygon fill="black" stroke="black" points="300.463,-46.5672 309.82,-41.597 299.406,-39.6475 300.463,-46.5672"/>
 </g>
@@ -667,8 +683,8 @@ subroutine leapfrog_solver(solution, raw)
 <text text-anchor="middle" x="54" y="-32.55" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">integrate_oscillation</text>
 </a>
 </g>
-<!-- program~integrate_oscillation&#45;&gt;proc~test_leapfrog~4 -->
-<g id="edge2" class="edge"><title>program~integrate_oscillation&#45;&gt;proc~test_leapfrog~4</title>
+<!-- program~integrate_oscillation&#45;&gt;proc~test_leapfrog -->
+<g id="edge2" class="edge"><title>program~integrate_oscillation&#45;&gt;proc~test_leapfrog</title>
 <path fill="none" stroke="black" d="M107.776,-42.6328C125.155,-45.0994 144.294,-47.8159 161.208,-50.2167"/>
 <polygon fill="black" stroke="black" points="161.024,-53.7256 171.417,-51.6656 162.008,-46.795 161.024,-53.7256"/>
 </g>
@@ -791,7 +807,7 @@ implementation in a submodule of an interface in a parent module.</p>
   
 <tr>
   
-  <td><span class="anchor" id="variable-rk_integrator%7E16"></span>type(<a href='../type/tvd_runge_kutta_integrator%7E2.html'>tvd_runge_kutta_integrator</a>),</td>
+  <td><span class="anchor" id="variable-rk_integrator%7E5"></span>type(<a href='../type/tvd_runge_kutta_integrator%7E2.html'>tvd_runge_kutta_integrator</a>),</td>
   
   <td>public</td>
   <td></td><td>::</td>
@@ -805,7 +821,7 @@ implementation in a submodule of an interface in a parent module.</p>
   
 <tr>
   
-  <td><span class="anchor" id="variable-rk_stages%7E18"></span>integer,</td>
+  <td><span class="anchor" id="variable-rk_stages%7E7"></span>integer,</td>
   
   <td>public,</td>
   <td>parameter</td><td>::</td>
@@ -819,7 +835,7 @@ implementation in a submodule of an interface in a parent module.</p>
   
 <tr>
   
-  <td><span class="anchor" id="variable-rk_stage%7E16"></span>type(<a href='../type/oscillation.html'>oscillation</a>),</td>
+  <td><span class="anchor" id="variable-rk_stage%7E5"></span>type(<a href='../type/oscillation.html'>oscillation</a>),</td>
   
   <td>public</td>
   <td></td><td>::</td>
@@ -833,7 +849,7 @@ implementation in a submodule of an interface in a parent module.</p>
   
 <tr>
   
-  <td><span class="anchor" id="variable-lf_integrator%7E4"></span>type(<a href='../type/leapfrog_integrator.html'>leapfrog_integrator</a>),</td>
+  <td><span class="anchor" id="variable-lf_integrator"></span>type(<a href='../type/leapfrog_integrator.html'>leapfrog_integrator</a>),</td>
   
   <td>public</td>
   <td></td><td>::</td>
@@ -847,7 +863,7 @@ implementation in a submodule of an interface in a parent module.</p>
   
 <tr>
   
-  <td><span class="anchor" id="variable-previous%7E22"></span>type(<a href='../type/oscillation.html'>oscillation</a>),</td>
+  <td><span class="anchor" id="variable-previous%7E13"></span>type(<a href='../type/oscillation.html'>oscillation</a>),</td>
   
   <td>public</td>
   <td></td><td>::</td>
@@ -861,7 +877,7 @@ implementation in a submodule of an interface in a parent module.</p>
   
 <tr>
   
-  <td><span class="anchor" id="variable-filter%7E8"></span>type(<a href='../type/oscillation.html'>oscillation</a>),</td>
+  <td><span class="anchor" id="variable-filter%7E2"></span>type(<a href='../type/oscillation.html'>oscillation</a>),</td>
   
   <td>public</td>
   <td></td><td>::</td>
@@ -875,7 +891,7 @@ implementation in a submodule of an interface in a parent module.</p>
   
 <tr>
   
-  <td><span class="anchor" id="variable-oscillator%7E5"></span>type(<a href='../type/oscillation.html'>oscillation</a>),</td>
+  <td><span class="anchor" id="variable-oscillator%7E6"></span>type(<a href='../type/oscillation.html'>oscillation</a>),</td>
   
   <td>public</td>
   <td></td><td>::</td>
@@ -889,7 +905,7 @@ implementation in a submodule of an interface in a parent module.</p>
   
 <tr>
   
-  <td><span class="anchor" id="variable-step%7E14"></span>integer,</td>
+  <td><span class="anchor" id="variable-step%7E6"></span>integer,</td>
   
   <td>public</td>
   <td></td><td>::</td>

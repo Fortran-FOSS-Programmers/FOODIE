@@ -104,14 +104,14 @@
      
     
     
-    <li><i class="fa fa-code"></i><a href="../src/type_euler-1D.f90"> Source File</a></li>
+    <li><i class="fa fa-code"></i><a href="../src/type_euler-1D-openmp.f90"> Source File</a></li>
      
   </ul>
   <ol class="breadcrumb in-well text-right">
   
-     <li><a href='../sourcefile/type_euler-1d.f90.html'>type_euler-1D.f90</a></li>
+     <li><a href='../sourcefile/type_euler-1d-openmp.f90%7E2.html'>type_euler-1D-openmp.f90</a></li>
   
-     <li><a href='../module/type_euler_1d.html'>type_euler_1D</a></li>
+     <li><a href='../module/type_euler_1d_openmp.html'>type_euler_1D_openmp</a></li>
   
      <li class="active">finalize</li>
   </ol>
@@ -233,6 +233,8 @@
       
       <a class="list-group-item" href="../proc/destroy%7E8.html">destroy</a>
       
+      <a class="list-group-item" href="../proc/destroy%7E9.html">destroy</a>
+      
       <a class="list-group-item" href="../proc/destroy_rk.html">destroy_rk</a>
       
       <a class="list-group-item" href="../proc/deuler_dt.html">dEuler_dt</a>
@@ -250,6 +252,8 @@
       <a class="list-group-item" href="../proc/e%7E2.html">E</a>
       
       <a class="list-group-item" href="../proc/e%7E3.html">E</a>
+      
+      <a class="list-group-item" href="../proc/emd_rk_solver.html">emd_rk_solver</a>
       
       <a class="list-group-item" href="../proc/estimate_orders.html">estimate_orders</a>
       
@@ -290,6 +294,8 @@
       <a class="list-group-item" href="../proc/finalize%7E7.html">finalize</a>
       
       <a class="list-group-item" href="../proc/finalize%7E8.html">finalize</a>
+      
+      <a class="list-group-item" href="../proc/finalize%7E9.html">finalize</a>
       
       <a class="list-group-item" href="../proc/finalize_rk.html">finalize_rk</a>
       
@@ -339,6 +345,8 @@
       
       <a class="list-group-item" href="../proc/init%7E17.html">init</a>
       
+      <a class="list-group-item" href="../proc/init%7E18.html">init</a>
+      
       <a class="list-group-item" href="../proc/init_rk.html">init_rk</a>
       
       <a class="list-group-item" href="../proc/integrate.html">integrate</a>
@@ -355,6 +363,8 @@
       
       <a class="list-group-item" href="../proc/integrate%7E7.html">integrate</a>
       
+      <a class="list-group-item" href="../proc/integrate%7E8.html">integrate</a>
+      
       <a class="list-group-item" href="../proc/integrate_rk.html">integrate_rk</a>
       
       <a class="list-group-item" href="../proc/leapfrog_solver.html">leapfrog_solver</a>
@@ -369,7 +379,11 @@
       
       <a class="list-group-item" href="../proc/ls_rk_solver.html">ls_rk_solver</a>
       
+      <a class="list-group-item" href="../proc/new_dt.html">new_Dt</a>
+      
       <a class="list-group-item" href="../proc/oscillation_assign_oscillation.html">oscillation_assign_oscillation</a>
+      
+      <a class="list-group-item" href="../proc/oscillation_local_error.html">oscillation_local_error</a>
       
       <a class="list-group-item" href="../proc/oscillation_multiply_oscillation.html">oscillation_multiply_oscillation</a>
       
@@ -477,6 +491,8 @@
       
       <a class="list-group-item" href="../proc/test_am.html">test_am</a>
       
+      <a class="list-group-item" href="../proc/test_emd_rk.html">test_emd_rk</a>
+      
       <a class="list-group-item" href="../proc/test_euler.html">test_euler</a>
       
       <a class="list-group-item" href="../proc/test_euler%7E2.html">test_euler</a>
@@ -557,7 +573,7 @@ private subroutine finalize(self)
   
 <tr>
   
-  <td><span class="anchor" id="variable-self%7E72"></span>type(<a href='../type/euler_1d.html'>euler_1D</a>),</td>
+  <td><span class="anchor" id="variable-self%7E59"></span>type(<a href='../type/euler_1d_openmp%7E2.html'>euler_1D_openmp</a>),</td>
   <td>intent(inout)</td>
   <td></td>
   
@@ -600,7 +616,7 @@ private subroutine finalize(self)
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
   <span class="c">!&lt; Destroy field.</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
-  <span class="k">type</span><span class="p">(</span><span class="n">euler_1D</span><span class="p">),</span> <span class="k">intent</span><span class="p">(</span><span class="n">INOUT</span><span class="p">)</span> <span class="kd">::</span> <span class="n">self</span> <span class="c">!&lt; Euler field.</span>
+  <span class="k">type</span><span class="p">(</span><span class="n">euler_1D_openmp</span><span class="p">),</span> <span class="k">intent</span><span class="p">(</span><span class="n">INOUT</span><span class="p">)</span> <span class="kd">::</span> <span class="n">self</span> <span class="c">!&lt; Euler field.</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
 
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>

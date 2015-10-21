@@ -104,14 +104,14 @@
      
     
     
-    <li><i class="fa fa-code"></i><a href="../src/type_euler-1D-openmp.f90"> Source File</a></li>
+    <li><i class="fa fa-code"></i><a href="../src/foodie_integrator_tvd_runge_kutta.f90"> Source File</a></li>
      
   </ul>
   <ol class="breadcrumb in-well text-right">
   
-     <li><a href='../sourcefile/type_euler-1d-openmp.f90.html'>type_euler-1D-openmp.f90</a></li>
+     <li><a href='../sourcefile/foodie_integrator_tvd_runge_kutta.f90.html'>foodie_integrator_tvd_runge_kutta.f90</a></li>
   
-     <li><a href='../module/type_euler_1d_openmp_no_foodie.html'>type_euler_1D_openmp_no_foodie</a></li>
+     <li><a href='../module/foodie_integrator_tvd_runge_kutta.html'>foodie_integrator_tvd_runge_kutta</a></li>
   
      <li class="active">destroy</li>
   </ol>
@@ -233,6 +233,8 @@
       
       <a class="list-group-item" href="../proc/destroy%7E8.html">destroy</a>
       
+      <a class="list-group-item" href="../proc/destroy%7E9.html">destroy</a>
+      
       <a class="list-group-item" href="../proc/destroy_rk.html">destroy_rk</a>
       
       <a class="list-group-item" href="../proc/deuler_dt.html">dEuler_dt</a>
@@ -250,6 +252,8 @@
       <a class="list-group-item" href="../proc/e%7E2.html">E</a>
       
       <a class="list-group-item" href="../proc/e%7E3.html">E</a>
+      
+      <a class="list-group-item" href="../proc/emd_rk_solver.html">emd_rk_solver</a>
       
       <a class="list-group-item" href="../proc/estimate_orders.html">estimate_orders</a>
       
@@ -290,6 +294,8 @@
       <a class="list-group-item" href="../proc/finalize%7E7.html">finalize</a>
       
       <a class="list-group-item" href="../proc/finalize%7E8.html">finalize</a>
+      
+      <a class="list-group-item" href="../proc/finalize%7E9.html">finalize</a>
       
       <a class="list-group-item" href="../proc/finalize_rk.html">finalize_rk</a>
       
@@ -339,6 +345,8 @@
       
       <a class="list-group-item" href="../proc/init%7E17.html">init</a>
       
+      <a class="list-group-item" href="../proc/init%7E18.html">init</a>
+      
       <a class="list-group-item" href="../proc/init_rk.html">init_rk</a>
       
       <a class="list-group-item" href="../proc/integrate.html">integrate</a>
@@ -355,6 +363,8 @@
       
       <a class="list-group-item" href="../proc/integrate%7E7.html">integrate</a>
       
+      <a class="list-group-item" href="../proc/integrate%7E8.html">integrate</a>
+      
       <a class="list-group-item" href="../proc/integrate_rk.html">integrate_rk</a>
       
       <a class="list-group-item" href="../proc/leapfrog_solver.html">leapfrog_solver</a>
@@ -369,7 +379,11 @@
       
       <a class="list-group-item" href="../proc/ls_rk_solver.html">ls_rk_solver</a>
       
+      <a class="list-group-item" href="../proc/new_dt.html">new_Dt</a>
+      
       <a class="list-group-item" href="../proc/oscillation_assign_oscillation.html">oscillation_assign_oscillation</a>
+      
+      <a class="list-group-item" href="../proc/oscillation_local_error.html">oscillation_local_error</a>
       
       <a class="list-group-item" href="../proc/oscillation_multiply_oscillation.html">oscillation_multiply_oscillation</a>
       
@@ -477,6 +491,8 @@
       
       <a class="list-group-item" href="../proc/test_am.html">test_am</a>
       
+      <a class="list-group-item" href="../proc/test_emd_rk.html">test_emd_rk</a>
+      
       <a class="list-group-item" href="../proc/test_euler.html">test_euler</a>
       
       <a class="list-group-item" href="../proc/test_euler%7E2.html">test_euler</a>
@@ -529,7 +545,7 @@
     
     <div class="col-lg-9" id='text'>
     <h2>
-private puresubroutine destroy(self)
+private elementalsubroutine destroy(self)
     
     
     
@@ -557,12 +573,12 @@ private puresubroutine destroy(self)
   
 <tr>
   
-  <td><span class="anchor" id="variable-self%7E44"></span>class(<a href='../type/euler_1d_openmp.html'>euler_1D_openmp</a>),</td>
+  <td><span class="anchor" id="variable-self%7E28"></span>class(<a href='../type/tvd_runge_kutta_integrator%7E2.html'>tvd_runge_kutta_integrator</a>),</td>
   <td>intent(inout)</td>
   <td></td>
   
   <td></td><td>::</td>
-  <td><strong>self</strong></td><td><p>Euler field.</p></td>
+  <td><strong>self</strong></td><td><p>Integrator.</p></td>
   
 </tr>
 
@@ -573,7 +589,7 @@ private puresubroutine destroy(self)
     
     
     <h3>Description</h3>
-    <p>Destroy field.</p>
+    <p>Destroy the integrator.</p>
     
     
      
@@ -596,26 +612,18 @@ private puresubroutine destroy(self)
     
     <section>
     <h2><span class="anchor" id="src"></span>Source Code</h2>
-    <div class="highlight"><pre>  <span class="k">pure subroutine </span><span class="n">destroy</span><span class="p">(</span><span class="n">self</span><span class="p">)</span>
+    <div class="highlight"><pre>  <span class="k">elemental subroutine </span><span class="n">destroy</span><span class="p">(</span><span class="n">self</span><span class="p">)</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
-  <span class="c">!&lt; Destroy field.</span>
+  <span class="c">!&lt; Destroy the integrator.</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
-  <span class="k">class</span><span class="p">(</span><span class="n">euler_1D_openmp</span><span class="p">),</span> <span class="k">intent</span><span class="p">(</span><span class="n">INOUT</span><span class="p">)</span> <span class="kd">::</span> <span class="n">self</span> <span class="c">!&lt; Euler field.</span>
+  <span class="k">class</span><span class="p">(</span><span class="n">tvd_runge_kutta_integrator</span><span class="p">),</span> <span class="k">intent</span><span class="p">(</span><span class="n">INOUT</span><span class="p">)</span> <span class="kd">::</span> <span class="n">self</span> <span class="c">!&lt; Integrator.</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
 
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
-  <span class="n">self</span><span class="p">%</span><span class="n">ord</span> <span class="o">=</span> <span class="mi">0</span>
-  <span class="n">self</span><span class="p">%</span><span class="n">Ni</span> <span class="o">=</span> <span class="mi">0</span>
-  <span class="n">self</span><span class="p">%</span><span class="n">Ng</span> <span class="o">=</span> <span class="mi">0</span>
-  <span class="n">self</span><span class="p">%</span><span class="n">Ns</span> <span class="o">=</span> <span class="mi">0</span>
-  <span class="n">self</span><span class="p">%</span><span class="n">Nc</span> <span class="o">=</span> <span class="mi">0</span>
-  <span class="n">self</span><span class="p">%</span><span class="n">Np</span> <span class="o">=</span> <span class="mi">0</span>
-  <span class="n">self</span><span class="p">%</span><span class="n">Dx</span> <span class="o">=</span> <span class="mf">0._R_P</span>
-  <span class="k">if</span> <span class="p">(</span><span class="nb">allocated</span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">U</span><span class="p">))</span> <span class="k">deallocate</span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">U</span><span class="p">)</span>
-  <span class="k">if</span> <span class="p">(</span><span class="nb">allocated</span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">cp0</span><span class="p">))</span> <span class="k">deallocate</span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">cp0</span><span class="p">)</span>
-  <span class="k">if</span> <span class="p">(</span><span class="nb">allocated</span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">cv0</span><span class="p">))</span> <span class="k">deallocate</span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">cv0</span><span class="p">)</span>
-  <span class="k">if</span> <span class="p">(</span><span class="nb">allocated</span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">BC_L</span><span class="p">))</span> <span class="k">deallocate</span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">BC_L</span><span class="p">)</span>
-  <span class="k">if</span> <span class="p">(</span><span class="nb">allocated</span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">BC_R</span><span class="p">))</span> <span class="k">deallocate</span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">BC_R</span><span class="p">)</span>
+  <span class="n">self</span><span class="p">%</span><span class="n">stages</span> <span class="o">=</span> <span class="mi">0</span>
+  <span class="k">if</span> <span class="p">(</span><span class="nb">allocated</span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">alph</span><span class="p">))</span> <span class="k">deallocate</span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">alph</span><span class="p">)</span>
+  <span class="k">if</span> <span class="p">(</span><span class="nb">allocated</span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">beta</span><span class="p">))</span> <span class="k">deallocate</span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">beta</span><span class="p">)</span>
+  <span class="k">if</span> <span class="p">(</span><span class="nb">allocated</span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">gamm</span><span class="p">))</span> <span class="k">deallocate</span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">gamm</span><span class="p">)</span>
   <span class="k">return</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
   <span class="n">endsubroutine</span> <span class="n">destroy</span>

@@ -21,13 +21,15 @@ type, abstract :: integrand
     ! public deferred procedures that concrete integrand-field must implement
     procedure(time_derivative),      pass(self), deferred, public :: t !< Time derivative, residuals.
     ! operators
+    procedure(local_error_operator), pass(lhs),  deferred, public :: local_error                  !< ||integrand - integrand||.
     procedure(symmetric_operator),   pass(lhs),  deferred, public :: integrand_multiply_integrand !< Integrand * integrand operator.
     procedure(integrand_op_real),    pass(lhs),  deferred, public :: integrand_multiply_real      !< Integrand * real operator.
     procedure(real_op_integrand),    pass(rhs),  deferred, public :: real_multiply_integrand      !< Real * integrand operator.
-    procedure(symmetric_operator),   pass(lhs),  deferred, public :: add                          !< Integrand + integrand oprator.
-    procedure(symmetric_operator),   pass(lhs),  deferred, public :: sub                          !< Integrand - integrand oprator.
+    procedure(symmetric_operator),   pass(lhs),  deferred, public :: add                          !< Integrand + integrand operator.
+    procedure(symmetric_operator),   pass(lhs),  deferred, public :: sub                          !< Integrand - integrand operator.
     procedure(assignment_integrand), pass(lhs),  deferred, public :: assign_integrand             !< Integrand = integrand.
     ! operators overloading
+    generic, public :: operator(.lterror.) => local_error              !< Estimate local truncation error.
     generic, public :: operator(+) => add                              !< Overloading + operator.
     generic, public :: operator(-) => sub                              !< Overloading - operator.
     generic, public :: operator(*) => integrand_multiply_integrand, &
@@ -48,6 +50,17 @@ abstract interface
   class(integrand), allocatable      :: dState_dt !< Result of the time derivative function of integrand field.
   !---------------------------------------------------------------------------------------------------------------------------------
   endfunction time_derivative
+
+  function local_error_operator(lhs, rhs) result(error)
+  !---------------------------------------------------------------------------------------------------------------------------------
+  !< Estimate local truncation error between 2 solution approximations.
+  !---------------------------------------------------------------------------------------------------------------------------------
+  import :: integrand, R_P
+  class(integrand), intent(IN)  :: lhs   !< Left hand side.
+  class(integrand), intent(IN)  :: rhs   !< Right hand side.
+  real(R_P)                     :: error !< Error estimation.
+  !---------------------------------------------------------------------------------------------------------------------------------
+  endfunction local_error_operator
 
   function integrand_op_real(lhs, rhs) result(operator_result)
   !---------------------------------------------------------------------------------------------------------------------------------

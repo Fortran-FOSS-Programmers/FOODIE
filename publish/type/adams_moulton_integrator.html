@@ -203,6 +203,8 @@
       
       <a class="list-group-item" href="../type/burgers.html">burgers</a>
       
+      <a class="list-group-item" href="../type/emd_runge_kutta_integrator.html">emd_runge_kutta_integrator</a>
+      
       <a class="list-group-item" href="../type/euler_1d.html">euler_1D</a>
       
       <a class="list-group-item" href="../type/euler_1d_openmp.html">euler_1D_openmp</a>
@@ -234,8 +236,8 @@
     <div class="col-lg-9" id='text'>
     <h2>type, public :: adams_moulton_integrator</h2>
     
-    <p>FOODIE integrator: provide an explicit class of Adams-Moulton multi-step schemes, from 1st to 3rd order accutate.</p>
-<p></p><div class="alert alert-info" role="alert"><h4>Note</h4>The integrator must be created or initialized (initialize the <em>b</em> coeficients) before used.
+    <p>FOODIE integrator: provide an explicit class of Adams-Moulton multi-step schemes, from 1st to 3rd order accurate.</p>
+<p></p><div class="alert alert-info" role="alert"><h4>Note</h4>The integrator must be created or initialized (initialize the <em>b</em> coefficients) before used.
  Finalize object.</div>
     
     
@@ -554,7 +556,7 @@ private elementalsubroutine <a href='../proc/destroy%7E3.html'>destroy</a>(self)
 
 
        
-       <p>Destoy the integrator.</p>
+       <p>Destroy the integrator.</p>
         
 
       
@@ -937,9 +939,9 @@ private subroutine <a href='../proc/update_previous%7E2.html'>update_previous</a
     <section>
     <h2><span class="anchor" id="src"></span>Source Code</h2>
     <div class="highlight"><pre><span class="k">type</span> <span class="kd">::</span> <span class="n">adams_moulton_integrator</span>
-  <span class="c">!&lt; FOODIE integrator: provide an explicit class of Adams-Moulton multi-step schemes, from 1st to 3rd order accutate.</span>
+  <span class="c">!&lt; FOODIE integrator: provide an explicit class of Adams-Moulton multi-step schemes, from 1st to 3rd order accurate.</span>
   <span class="c">!&lt;</span>
-  <span class="c">!&lt; @note The integrator must be created or initialized (initialize the *b* coeficients) before used.</span>
+  <span class="c">!&lt; @note The integrator must be created or initialized (initialize the *b* coefficients) before used.</span>
   <span class="k">private</span>
 <span class="k">  </span><span class="kt">integer</span><span class="p">(</span><span class="n">I_P</span><span class="p">)</span>           <span class="kd">::</span> <span class="n">steps</span><span class="o">=-</span><span class="mi">1</span> <span class="c">!&lt; Number of time steps.</span>
   <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">),</span> <span class="k">allocatable</span> <span class="kd">::</span> <span class="n">b</span><span class="p">(:)</span>     <span class="c">!&lt; \(b\) coefficients.</span>

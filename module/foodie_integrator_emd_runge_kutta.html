@@ -1,0 +1,1334 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+	 
+	 <meta name="description" content="Fortran Object oriented Ordinary Differential Equations integration library">
+    
+    <meta name="author" content="Chris MacMackin" >
+    <link rel="icon" href="../favicon.png">
+
+    <title>foodie_integrator_emd_runge_kutta &ndash; FOODIE</title>
+
+    <link href="../css/bootstrap.min.css" rel="stylesheet">
+    <link href="../css/pygments.css" rel="stylesheet">
+    <link href="../css/font-awesome.min.css" rel="stylesheet">
+    <link href="../css/local.css" rel="stylesheet">
+    
+
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+    
+    <script src="../js/jquery-2.1.3.min.js"></script>
+    <script src="../js/svg-pan-zoom.min.js"></script>
+
+    
+    <script src="../tipuesearch/tipuesearch_content.js"></script>
+    <link  href="../tipuesearch/tipuesearch.css" rel="stylesheet">
+    <script src="../tipuesearch/tipuesearch_set.js"></script>
+    <script src="../tipuesearch/tipuesearch.js"></script>
+    
+
+  </head>
+
+  <body>
+
+    <!-- Fixed navbar -->
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="../index.html">FOODIE </a>
+        </div>
+        <div id="navbar" class="navbar-collapse collapse">
+          <ul class="nav navbar-nav">
+				
+                
+            <li><a href="../lists/files.html">Source Files</a></li>
+				
+				
+            <li><a href="../lists/modules.html">Modules</a></li>
+				
+				
+            <li><a href="../lists/procedures.html">Procedures</a></li>
+				
+				
+            <li><a href="../lists/absint.html">Abstract Interfaces</a></li>
+								
+            <li><a href="../lists/types.html">Derived Types</a></li>
+				
+				
+            <li><a href="../lists/programs.html">Programs</a></li>
+				
+          </ul>
+        
+        <form action="../search.html" class="navbar-form navbar-right" role="search">
+        <div class="form-group">
+          <input type="text" class="form-control" placeholder="Search" name="q" id="tipue_search_input" autocomplete="off" required>
+        </div>
+<!--
+        <button type="submit" class="btn btn-default">Submit</button>
+-->
+        </form>
+        
+        </div><!--/.nav-collapse -->
+      </div>
+    </nav>
+
+    <div class="container">
+    
+  
+  <div class="row">
+    <h1>foodie_integrator_emd_runge_kutta 
+    <small>Module</small>
+    
+    </h1>
+	 
+<div class="row">
+<div class="col-lg-12">
+<div class="well well-sm">
+  <ul class="list-inline" style="margin-bottom:0px;display:inline">
+     
+     
+     
+     
+    
+    
+    <li><i class="fa fa-code"></i><a href="../src/foodie_integrator_embedded_runge_kutta.f90"> Source File</a></li>
+     
+  </ul>
+  <ol class="breadcrumb in-well text-right">
+  
+     <li><a href='../sourcefile/foodie_integrator_embedded_runge_kutta.f90.html'>foodie_integrator_embedded_runge_kutta.f90</a></li>
+  
+     <li class="active">foodie_integrator_emd_runge_kutta</li>
+  </ol>
+</div>
+</div>
+</div>
+    
+  </div>
+  
+  <div class="row">
+    <div class="col-lg-3">
+    
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  <div class="panel panel-primary">
+    <div class="panel-heading text-left"><h3 class="panel-title">Derived Types</h3></div>
+    <div class="list-group">
+      
+      <a class="list-group-item" href="../module/foodie_integrator_emd_runge_kutta.html#type-emd_runge_kutta_integrator">emd_runge_kutta_integrator</a>
+      
+    </div>
+  </div>
+  
+  
+  
+  
+  <div class="panel panel-primary">
+    <div class="panel-heading text-left"><h3 class="panel-title">Subroutines</h3></div>
+    <div class="list-group">
+      
+      <a class="list-group-item" href="../module/foodie_integrator_emd_runge_kutta.html#proc-init%7E4">init</a>
+      
+      <a class="list-group-item" href="../module/foodie_integrator_emd_runge_kutta.html#proc-destroy%7E4">destroy</a>
+      
+      <a class="list-group-item" href="../module/foodie_integrator_emd_runge_kutta.html#proc-integrate%7E4">integrate</a>
+      
+      <a class="list-group-item" href="../module/foodie_integrator_emd_runge_kutta.html#proc-new_dt">new_Dt</a>
+      
+      <a class="list-group-item" href="../module/foodie_integrator_emd_runge_kutta.html#proc-finalize%7E4">finalize</a>
+      
+    </div>
+  </div>
+  
+  
+  
+  
+  
+  
+  
+  
+  <hr>
+  
+  <div class="panel panel-default">
+    <div class="panel-heading text-left"><h3 class="panel-title">All Modules</h3></div>
+    <div class="list-group">
+      
+      <a class="list-group-item" href="../module/foodie.html">foodie</a>
+      
+      <a class="list-group-item" href="../module/foodie_adt_integrand.html">foodie_adt_integrand</a>
+      
+      <a class="list-group-item" href="../module/foodie_integrator_adams_bashforth.html">foodie_integrator_adams_bashforth</a>
+      
+      <a class="list-group-item" href="../module/foodie_integrator_adams_bashforth_moulton.html">foodie_integrator_adams_bashforth_moulton</a>
+      
+      <a class="list-group-item" href="../module/foodie_integrator_adams_moulton.html">foodie_integrator_adams_moulton</a>
+      
+      <a class="list-group-item" href="../module/foodie_integrator_emd_runge_kutta.html">foodie_integrator_emd_runge_kutta</a>
+      
+      <a class="list-group-item" href="../module/foodie_integrator_euler_explicit.html">foodie_integrator_euler_explicit</a>
+      
+      <a class="list-group-item" href="../module/foodie_integrator_leapfrog.html">foodie_integrator_leapfrog</a>
+      
+      <a class="list-group-item" href="../module/foodie_integrator_low_storage_runge_kutta.html">foodie_integrator_low_storage_runge_kutta</a>
+      
+      <a class="list-group-item" href="../module/foodie_integrator_tvd_runge_kutta.html">foodie_integrator_tvd_runge_kutta</a>
+      
+      <a class="list-group-item" href="../module/foodie_kinds.html">foodie_kinds</a>
+      
+      <a class="list-group-item" href="../module/type_burgers.html">type_burgers</a>
+      
+      <a class="list-group-item" href="../module/type_euler_1d.html">type_euler_1D</a>
+      
+      <a class="list-group-item" href="../module/type_euler_1d_openmp.html">type_euler_1D_openmp</a>
+      
+      <a class="list-group-item" href="../module/type_euler_1d_openmp_no_foodie.html">type_euler_1D_openmp_no_foodie</a>
+      
+      <a class="list-group-item" href="../module/type_lorenz.html">type_lorenz</a>
+      
+      <a class="list-group-item" href="../module/type_oscillation.html">type_oscillation</a>
+      
+    </div>
+  </div>
+  
+  
+    </div>
+    
+    <div class="col-lg-9" id='text'>
+    
+    
+  
+    <ul class="list-inline">
+      <li><h4>Uses:</h4></li>
+      
+      <li><a href='../module/foodie_kinds.html'>foodie_kinds</a></li>
+      
+      <li><a href='../module/foodie_adt_integrand.html'>foodie_adt_integrand</a></li>
+      
+    </ul>
+  
+
+    
+                <div class="depgraph"><?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.26.3 (20100126.1600)
+ -->
+<!-- Title: module~~foodie_integrator_emd_runge_kutta~~UsesGraph Pages: 1 -->
+<svg id="modulefoodie_integrator_emd_runge_kuttaUsesGraph" width="452pt" height="54pt"
+ viewBox="0.00 0.00 452.00 54.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="module~~foodie_integrator_emd_runge_kutta~~UsesGraph" class="graph" transform="scale(1 1) rotate(0) translate(4 50)">
+<title>module~~foodie_integrator_emd_runge_kutta~~UsesGraph</title>
+<polygon fill="white" stroke="white" points="-4,5 -4,-50 449,-50 449,5 -4,5"/>
+<!-- module~foodie_integrator_emd_runge_kutta -->
+<g id="node1" class="node"><title>module~foodie_integrator_emd_runge_kutta</title>
+<polygon fill="none" stroke="black" points="444,-46 260,-46 260,-20 444,-20 444,-46"/>
+<text text-anchor="middle" x="352" y="-30.55" font-family="Helvetica,sans-Serif" font-size="10.50">foodie_integrator_emd_runge_kutta</text>
+</g>
+<!-- module~foodie_kinds -->
+<g id="node2" class="node"><title>module~foodie_kinds</title>
+<a xlink:href="../module/foodie_kinds.html" xlink:title="foodie_kinds">
+<polygon fill="#337ab7" stroke="#337ab7" points="73,-46 1,-46 1,-20 73,-20 73,-46"/>
+<text text-anchor="middle" x="37" y="-30.55" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">foodie_kinds</text>
+</a>
+</g>
+<!-- module~foodie_kinds&#45;&gt;module~foodie_integrator_emd_runge_kutta -->
+<g id="edge4" class="edge"><title>module~foodie_kinds&#45;&gt;module~foodie_integrator_emd_runge_kutta</title>
+<path fill="none" stroke="black" stroke-dasharray="5,2" d="M73.7585,-34.2035C85.3524,-34.5304 98.2102,-34.8385 110,-35 155.797,-35.6272 206.472,-35.3576 249.566,-34.8413"/>
+<polygon fill="black" stroke="black" points="249.823,-38.3384 259.778,-34.7126 249.735,-31.339 249.823,-38.3384"/>
+</g>
+<!-- module~foodie_adt_integrand -->
+<g id="node3" class="node"><title>module~foodie_adt_integrand</title>
+<a xlink:href="../module/foodie_adt_integrand.html" xlink:title="foodie_adt_integrand">
+<polygon fill="#337ab7" stroke="#337ab7" points="224,-26 110,-26 110,-1.24345e-14 224,-3.55271e-15 224,-26"/>
+<text text-anchor="middle" x="167" y="-10.55" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">foodie_adt_integrand</text>
+</a>
+</g>
+<!-- module~foodie_kinds&#45;&gt;module~foodie_adt_integrand -->
+<g id="edge2" class="edge"><title>module~foodie_kinds&#45;&gt;module~foodie_adt_integrand</title>
+<path fill="none" stroke="black" stroke-dasharray="5,2" d="M73.5582,-27.3757C81.7428,-26.1165 90.6769,-24.742 99.6705,-23.3584"/>
+<polygon fill="black" stroke="black" points="100.462,-26.7779 109.813,-21.798 99.3972,-19.8593 100.462,-26.7779"/>
+</g>
+<!-- module~foodie_adt_integrand&#45;&gt;module~foodie_integrator_emd_runge_kutta -->
+<g id="edge6" class="edge"><title>module~foodie_adt_integrand&#45;&gt;module~foodie_integrator_emd_runge_kutta</title>
+<path fill="none" stroke="black" stroke-dasharray="5,2" d="M224.016,-19.1639C232.269,-20.0561 240.967,-20.9965 249.784,-21.9496"/>
+<polygon fill="black" stroke="black" points="249.454,-25.4342 259.772,-23.0294 250.206,-18.4748 249.454,-25.4342"/>
+</g>
+</g>
+</svg>
+</div>
+                <div><a type="button" class="graph-help" data-toggle="modal" href="#graph-help-text">Help</a></div>
+                <div class="modal fade" id="graph-help-text" tabindex="-1" role="dialog">
+                  <div class="modal-dialog modal-lg" role="document">
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title" id="-graph-help-label">Graph Key</h4>
+                      </div>
+                      <div class="modal-body">
+                        
+Nodes of different colours represent the following:
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.26.3 (20100126.1600)
+ -->
+<!-- Title: Graph Key Pages: 1 -->
+<svg width="641pt" height="28pt"
+ viewBox="0.00 0.00 641.00 27.80" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="graph1" class="graph" transform="scale(0.817602 0.817602) rotate(0) translate(4 30)">
+<title>Graph Key</title>
+<polygon fill="white" stroke="white" points="-4,5 -4,-30 781,-30 781,5 -4,5"/>
+<!-- Module -->
+<g id="node1" class="node"><title>Module</title>
+<polygon fill="#337ab7" stroke="#337ab7" points="54,-26 2.13163e-14,-26 0,-1.24345e-14 54,-3.55271e-15 54,-26"/>
+<text text-anchor="middle" x="27" y="-10.55" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Module</text>
+</g>
+<!-- Submodule -->
+<g id="node2" class="node"><title>Submodule</title>
+<polygon fill="#5bc0de" stroke="#5bc0de" points="138,-26 72,-26 72,-1.24345e-14 138,-3.55271e-15 138,-26"/>
+<text text-anchor="middle" x="105" y="-10.55" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Submodule</text>
+</g>
+<!-- Type -->
+<g id="node3" class="node"><title>Type</title>
+<polygon fill="#5cb85c" stroke="#5cb85c" points="210,-26 156,-26 156,-1.24345e-14 210,-3.55271e-15 210,-26"/>
+<text text-anchor="middle" x="183" y="-10.55" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Type</text>
+</g>
+<!-- Subroutine -->
+<g id="node4" class="node"><title>Subroutine</title>
+<polygon fill="#d9534f" stroke="#d9534f" points="292,-26 228,-26 228,-1.24345e-14 292,-3.55271e-15 292,-26"/>
+<text text-anchor="middle" x="260" y="-10.55" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Subroutine</text>
+</g>
+<!-- Function -->
+<g id="node5" class="node"><title>Function</title>
+<polygon fill="#d94e8f" stroke="#d94e8f" points="364,-26 310,-26 310,-1.24345e-14 364,-3.55271e-15 364,-26"/>
+<text text-anchor="middle" x="337" y="-10.55" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Function</text>
+</g>
+<!-- Interface -->
+<g id="node6" class="node"><title>Interface</title>
+<polygon fill="#a7506f" stroke="#a7506f" points="436,-26 382,-26 382,-1.24345e-14 436,-3.55271e-15 436,-26"/>
+<text text-anchor="middle" x="409" y="-10.55" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Interface</text>
+</g>
+<!-- Unknown Procedure Type -->
+<g id="node7" class="node"><title>Unknown Procedure Type</title>
+<polygon fill="#777777" stroke="#777777" points="590,-26 454,-26 454,-1.24345e-14 590,-3.55271e-15 590,-26"/>
+<text text-anchor="middle" x="522" y="-10.55" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Unknown Procedure Type</text>
+</g>
+<!-- Program -->
+<g id="node8" class="node"><title>Program</title>
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="662,-26 608,-26 608,-1.24345e-14 662,-3.55271e-15 662,-26"/>
+<text text-anchor="middle" x="635" y="-10.55" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Program</text>
+</g>
+<!-- This Page&#39;s Entity -->
+<g id="node9" class="node"><title>This Page&#39;s Entity</title>
+<polygon fill="none" stroke="black" points="776,-26 680,-26 680,-1.24345e-14 776,-3.55271e-15 776,-26"/>
+<text text-anchor="middle" x="728" y="-10.55" font-family="Helvetica,sans-Serif" font-size="10.50">This Page&#39;s Entity</text>
+</g>
+</g>
+</svg>
+
+<h5>Module Graph</h5>
+<p>Solid arrows point from a parent (sub)module to the submodule which is
+descended from it. Dashed arrows point from a module being used to the
+module using it.</p>
+<h5>Type Graph</h5>
+<p>Solid arrows point from one derived type to another which extends
+(inherits from) it. Dashed arrows point from a derived type to another
+type containing it as a components, with a label listing the name(s) of
+said component(s).</p>
+<h5>Call Graph</h5>
+<p>Solid arrows point from a procedure to one which it calls. Dashed 
+arrows point from an interface to procedures which implement that interface.
+This could include the module procedures in a generic interface or the
+implementation in a submodule of an interface in a parent module.</p>
+
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                
+    
+    <p>FOODIE integrator: provide an explicit class of embedded Runge-Kutta schemes, from 1st to 4th order accurate.</p>
+<p>The integrators provided have the embedded pairs property allowing for automatic step size control.
+ The schemes are explicit and defined through the extended Butcher's table syntax, see[1] .</p>
+<p>Considering the following ODE system:</p>
+<p>$$ U_t = R(t,U) $$</p>
+<p>where \(U_t = \frac{dU}{dt}\), <em>U</em> is the vector of <em>state</em> variables being a function of the time-like independent variable
+ <em>t</em>, <em>R</em> is the (vectorial) residual function, the class of schemes implemented are written in the form:</p>
+<p>$$ U_p^{n+1} = U^n +\Delta t \sum_{s=1}^{Ns}\beta_p^s K^s $$
+ $$ U_{p+1}^{n+1} = U^n +\Delta t \sum_{s=1}^{Ns}\beta_{p+1}^s K^s $$</p>
+<p><em>p</em> is the lower accuracy order scheme and <em>p+1</em> is the higher one; Ns is the number of stages used and \(K^s\) is
+ the \(s^{th}\) stage computed as:</p>
+<p>$$ K^s = R\left( t^n+\gamma^s \Delta t, U^n +\Delta t \sum_{i=1}^{s-1}\alpha^{s,i} K^i \right) $$</p>
+<p></p><div class="alert alert-info" role="alert"><h4>Note</h4>The value of \(\Delta t\) must be provided, it not being computed by the integrator.</div>
+<p>The schemes are explicit thus the above summation is up to \(s-1\). The coefficients \(\beta\), \(\alpha\) and \(\gamma\) are
+ given in the extended Butcher table form:</p>
+<div class="codehilite"><pre>  gamma^1    | alpha^{1,1}       alpha^{1,2}       ...        alpha^{1,Ns}
+  gamma^2    | alpha^{2,1}       alpha^{2,2}       ...        alpha^{2,Ns}
+  .          | .                 .                 .          .
+  .          | .                 .                  .         .
+  .          | .                 .                   .        .
+  gamma^{Ns} | alpha^{Ns,1}      alpha^{Ns,2}      ...        alpha^{Ns,Ns}
+ ------------|-------------------------------------------------------------
+             | beta_p^1          beta_p^2          ...        beta_p^{Ns}
+             | beta_{p+1}^1      beta_{p+1}^2      ...        beta_{p+1}^{Ns}
+</pre></div>
+
+
+<p>Because only explicit schemes are considered the Butcher table reduces to diagonal matrix:</p>
+<div class="codehilite"><pre>  gamma^1    | 0                 0                 ...        0
+  gamma^2    | alpha^{2,1}       0                 ...        0
+  .          | .                 .                 .          .
+  .          | .                 .                  .         .
+  .          | .                 .                   .        .
+  gamma^{Ns} | alpha^{Ns,1}      alpha^{Ns,2}      ...        0
+ ------------|-------------------------------------------------------------
+             | beta_p^1          beta_p^2          ...        beta_p^{Ns}
+             | beta_{p+1}^1      beta_{p+1}^2      ...        beta_{p+1}^{Ns}
+</pre></div>
+
+
+<p>Moreover the following relation always holds:
+ \( \gamma^s = \sum_{i=1}^{Ns}\alpha^{s,i} \)</p>
+<p>The different schemes are selected accordingly to the number of stages used. Currently the following schemes are available:</p>
+<h5 id="7-stages-4th-order"><a class="toclink" href="#7-stages-4th-order">7 stages, 4th order</a></h5>
+<p>This scheme is Dormand and Prince scheme, see [1].</p>
+<div class="codehilite"><pre>  0    | 0             0            0             0            0              0          0
+  1/5  | 1/5           0            0             0            0              0          0
+  3/10 | 3/40          9/40         0             0            0              0          0
+  4/5  | 44/45        -56/15        32/9          0            0              0          0
+  8/9  | 19372/6561   -25360/2187   64448/6561   -212/729      0              0          0
+  1    | 9017/3168    -355/33       46732/5247    49/176      -5103/18656     0          0
+  1    | 35/384        0            500/1113      125/192     -2187/6784      11/84      0
+ --------------------------------------------------------------------------------------------
+       | 35/384        0            500/1113      125/192     -2187/6784      11/84      0
+       | 5179/57600    0            7571/16695    393/640     -92097/339200   187/2100   1/40
+</pre></div>
+
+
+<h4 id="bibliography"><a class="toclink" href="#bibliography">Bibliography</a></h4>
+<p>[1] <em>A family of embedded Runge-Kutta formulae</em>, Dormand, J. R.; Prince, P. J. (1980), , Journal of Computational and
+ Applied Mathematics 6 (1): 19&ndash;26, doi:10.1016/0771-050X(80)90013-3</p>
+    
+    
+    <h3>Used By</h3>
+    
+                <div class="depgraph"><?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.26.3 (20100126.1600)
+ -->
+<!-- Title: module~~foodie_integrator_emd_runge_kutta~~UsedByGraph Pages: 1 -->
+<svg id="modulefoodie_integrator_emd_runge_kuttaUsedByGraph" width="632pt" height="357pt"
+ viewBox="0.00 0.00 632.00 356.63" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="module~~foodie_integrator_emd_runge_kutta~~UsedByGraph" class="graph" transform="scale(1 1) rotate(0) translate(4 352.627)">
+<title>module~~foodie_integrator_emd_runge_kutta~~UsedByGraph</title>
+<polygon fill="white" stroke="white" points="-4,5 -4,-352.627 629,-352.627 629,5 -4,5"/>
+<!-- module~foodie_integrator_emd_runge_kutta -->
+<g id="node1" class="node"><title>module~foodie_integrator_emd_runge_kutta</title>
+<polygon fill="none" stroke="black" points="184,-184.627 8.52651e-14,-184.627 0,-158.627 184,-158.627 184,-184.627"/>
+<text text-anchor="middle" x="92" y="-169.177" font-family="Helvetica,sans-Serif" font-size="10.50">foodie_integrator_emd_runge_kutta</text>
+</g>
+<!-- module~foodie -->
+<g id="node2" class="node"><title>module~foodie</title>
+<a xlink:href="../module/foodie.html" xlink:title="foodie">
+<polygon fill="#337ab7" stroke="#337ab7" points="274,-184.627 220,-184.627 220,-158.627 274,-158.627 274,-184.627"/>
+<text text-anchor="middle" x="247" y="-169.177" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">foodie</text>
+</a>
+</g>
+<!-- module~foodie_integrator_emd_runge_kutta&#45;&gt;module~foodie -->
+<g id="edge32" class="edge"><title>module~foodie_integrator_emd_runge_kutta&#45;&gt;module~foodie</title>
+<path fill="none" stroke="black" stroke-dasharray="5,2" d="M184.402,-171.627C193.228,-171.627 201.785,-171.627 209.593,-171.627"/>
+<polygon fill="black" stroke="black" points="209.731,-175.127 219.731,-171.627 209.731,-168.127 209.731,-175.127"/>
+</g>
+<!-- module~type_oscillation -->
+<g id="node3" class="node"><title>module~type_oscillation</title>
+<a xlink:href="../module/type_oscillation.html" xlink:title="type_oscillation">
+<polygon fill="#337ab7" stroke="#337ab7" points="416,-348.627 332,-348.627 332,-322.627 416,-322.627 416,-348.627"/>
+<text text-anchor="middle" x="374" y="-333.177" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">type_oscillation</text>
+</a>
+</g>
+<!-- module~foodie&#45;&gt;module~type_oscillation -->
+<g id="edge12" class="edge"><title>module~foodie&#45;&gt;module~type_oscillation</title>
+<path fill="none" stroke="black" stroke-dasharray="5,2" d="M249.686,-184.793C255.795,-211.586 273.145,-272.926 310,-308.627 313.695,-312.206 317.935,-315.342 322.437,-318.084"/>
+<polygon fill="black" stroke="black" points="320.877,-321.219 331.341,-322.881 324.198,-315.057 320.877,-321.219"/>
+</g>
+<!-- module~type_lorenz -->
+<g id="node4" class="node"><title>module~type_lorenz</title>
+<a xlink:href="../module/type_lorenz.html" xlink:title="type_lorenz">
+<polygon fill="#337ab7" stroke="#337ab7" points="408,-266.627 340,-266.627 340,-240.627 408,-240.627 408,-266.627"/>
+<text text-anchor="middle" x="374" y="-251.177" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">type_lorenz</text>
+</a>
+</g>
+<!-- module~foodie&#45;&gt;module~type_lorenz -->
+<g id="edge14" class="edge"><title>module~foodie&#45;&gt;module~type_lorenz</title>
+<path fill="none" stroke="black" stroke-dasharray="5,2" d="M259.536,-184.754C271.599,-196.827 290.791,-214.625 310,-226.627 316.328,-230.581 323.336,-234.201 330.325,-237.417"/>
+<polygon fill="black" stroke="black" points="329.214,-240.751 339.779,-241.547 332.016,-234.337 329.214,-240.751"/>
+</g>
+<!-- program~integrate_euler_1d -->
+<g id="node5" class="node"><title>program~integrate_euler_1d</title>
+<a xlink:href="../program/integrate_euler_1d.html" xlink:title="integrate_euler_1D">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="601,-184.627 497,-184.627 497,-158.627 601,-158.627 601,-184.627"/>
+<text text-anchor="middle" x="549" y="-169.177" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">integrate_euler_1D</text>
+</a>
+</g>
+<!-- module~foodie&#45;&gt;program~integrate_euler_1d -->
+<g id="edge16" class="edge"><title>module~foodie&#45;&gt;program~integrate_euler_1d</title>
+<path fill="none" stroke="black" stroke-dasharray="5,2" d="M274.024,-184.029C299.253,-194.71 338.275,-208.968 374,-212.627"/>
+<path fill="none" stroke="black" stroke-dasharray="5,2" d="M374,-212.627C385.713,-213.827 444.44,-199.361 490.676,-187.285"/>
+<polygon fill="black" stroke="black" points="491.845,-190.597 500.629,-184.672 490.068,-183.826 491.845,-190.597"/>
+</g>
+<!-- module~type_euler_1d_openmp -->
+<g id="node6" class="node"><title>module~type_euler_1d_openmp</title>
+<a xlink:href="../module/type_euler_1d_openmp.html" xlink:title="type_euler_1D_openmp">
+<polygon fill="#337ab7" stroke="#337ab7" points="437,-140.627 311,-140.627 311,-114.627 437,-114.627 437,-140.627"/>
+<text text-anchor="middle" x="374" y="-125.177" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">type_euler_1D_openmp</text>
+</a>
+</g>
+<!-- module~foodie&#45;&gt;module~type_euler_1d_openmp -->
+<g id="edge18" class="edge"><title>module~foodie&#45;&gt;module~type_euler_1d_openmp</title>
+<path fill="none" stroke="black" stroke-dasharray="5,2" d="M274.279,-162.069C285.359,-158.195 298.287,-153.686 310,-149.627 315.204,-147.824 320.648,-145.944 326.07,-144.075"/>
+<polygon fill="black" stroke="black" points="327.432,-147.308 335.748,-140.742 325.153,-140.689 327.432,-147.308"/>
+</g>
+<!-- program~integrate_oscillation -->
+<g id="node7" class="node"><title>program~integrate_oscillation</title>
+<a xlink:href="../program/integrate_oscillation.html" xlink:title="integrate_oscillation">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="602,-327.627 496,-327.627 496,-301.627 602,-301.627 602,-327.627"/>
+<text text-anchor="middle" x="549" y="-312.177" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">integrate_oscillation</text>
+</a>
+</g>
+<!-- module~foodie&#45;&gt;program~integrate_oscillation -->
+<g id="edge20" class="edge"><title>module~foodie&#45;&gt;program~integrate_oscillation</title>
+<path fill="none" stroke="black" stroke-dasharray="5,2" d="M250.893,-184.681C258.354,-207.254 276.935,-253.299 310,-275.627 337.872,-294.449 424.258,-304.978 485.131,-310.228"/>
+<polygon fill="black" stroke="black" points="485.167,-313.743 495.424,-311.086 485.749,-306.767 485.167,-313.743"/>
+</g>
+<!-- module~type_burgers -->
+<g id="node8" class="node"><title>module~type_burgers</title>
+<a xlink:href="../module/type_burgers.html" xlink:title="type_burgers">
+<polygon fill="#337ab7" stroke="#337ab7" points="412,-58.6272 336,-58.6272 336,-32.6272 412,-32.6272 412,-58.6272"/>
+<text text-anchor="middle" x="374" y="-43.1772" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">type_burgers</text>
+</a>
+</g>
+<!-- module~foodie&#45;&gt;module~type_burgers -->
+<g id="edge22" class="edge"><title>module~foodie&#45;&gt;module~type_burgers</title>
+<path fill="none" stroke="black" stroke-dasharray="5,2" d="M252.207,-158.62C261.132,-137.822 281.214,-96.9546 310,-72.6272 314.957,-68.4385 320.657,-64.8177 326.57,-61.7111"/>
+<polygon fill="black" stroke="black" points="328.433,-64.7009 335.96,-57.2451 325.426,-58.3795 328.433,-64.7009"/>
+</g>
+<!-- program~integrate_lorenz -->
+<g id="node9" class="node"><title>program~integrate_lorenz</title>
+<a xlink:href="../program/integrate_lorenz.html" xlink:title="integrate_lorenz">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="594,-228.627 504,-228.627 504,-202.627 594,-202.627 594,-228.627"/>
+<text text-anchor="middle" x="549" y="-213.177" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">integrate_lorenz</text>
+</a>
+</g>
+<!-- module~foodie&#45;&gt;program~integrate_lorenz -->
+<g id="edge24" class="edge"><title>module~foodie&#45;&gt;program~integrate_lorenz</title>
+<path fill="none" stroke="black" stroke-dasharray="5,2" d="M374,-212.627C413.859,-216.71 459.085,-217.382 493.575,-217.075"/>
+<polygon fill="black" stroke="black" points="493.959,-220.571 503.916,-216.951 493.875,-213.571 493.959,-220.571"/>
+</g>
+<!-- program~integrate_burgers -->
+<g id="node10" class="node"><title>program~integrate_burgers</title>
+<a xlink:href="../program/integrate_burgers.html" xlink:title="integrate_burgers">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="597,-47.6272 501,-47.6272 501,-21.6272 597,-21.6272 597,-47.6272"/>
+<text text-anchor="middle" x="549" y="-32.1772" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">integrate_burgers</text>
+</a>
+</g>
+<!-- module~foodie&#45;&gt;program~integrate_burgers -->
+<g id="edge26" class="edge"><title>module~foodie&#45;&gt;program~integrate_burgers</title>
+<path fill="none" stroke="black" stroke-dasharray="5,2" d="M247.991,-158.355C251.044,-128.166 263.178,-54.5838 310,-23.6272 368.632,15.1377 454.179,-2.15174 505.44,-18.3282"/>
+<polygon fill="black" stroke="black" points="504.624,-21.744 515.217,-21.5317 506.804,-15.0919 504.624,-21.744"/>
+</g>
+<!-- module~type_euler_1d -->
+<g id="node11" class="node"><title>module~type_euler_1d</title>
+<a xlink:href="../module/type_euler_1d.html" xlink:title="type_euler_1D">
+<polygon fill="#337ab7" stroke="#337ab7" points="415,-184.627 333,-184.627 333,-158.627 415,-158.627 415,-184.627"/>
+<text text-anchor="middle" x="374" y="-169.177" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">type_euler_1D</text>
+</a>
+</g>
+<!-- module~foodie&#45;&gt;module~type_euler_1d -->
+<g id="edge28" class="edge"><title>module~foodie&#45;&gt;module~type_euler_1d</title>
+<path fill="none" stroke="black" stroke-dasharray="5,2" d="M274.245,-171.627C288.368,-171.627 306.091,-171.627 322.664,-171.627"/>
+<polygon fill="black" stroke="black" points="322.793,-175.127 332.793,-171.627 322.793,-168.127 322.793,-175.127"/>
+</g>
+<!-- program~integrate_euler_1d_openmp -->
+<g id="node12" class="node"><title>program~integrate_euler_1d_openmp</title>
+<a xlink:href="../program/integrate_euler_1d_openmp.html" xlink:title="integrate_euler_1D_openmp">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="623,-110.627 475,-110.627 475,-84.6272 623,-84.6272 623,-110.627"/>
+<text text-anchor="middle" x="549" y="-95.1772" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">integrate_euler_1D_openmp</text>
+</a>
+</g>
+<!-- module~foodie&#45;&gt;program~integrate_euler_1d_openmp -->
+<g id="edge30" class="edge"><title>module~foodie&#45;&gt;program~integrate_euler_1d_openmp</title>
+<path fill="none" stroke="black" stroke-dasharray="5,2" d="M254.866,-158.57C265.242,-142.729 285.134,-116.763 310,-105.627 357.92,-84.1669 416.823,-81.9579 464.162,-85.2167"/>
+<polygon fill="black" stroke="black" points="464.144,-88.7259 474.387,-86.0169 464.69,-81.7472 464.144,-88.7259"/>
+</g>
+<!-- module~type_oscillation&#45;&gt;program~integrate_oscillation -->
+<g id="edge2" class="edge"><title>module~type_oscillation&#45;&gt;program~integrate_oscillation</title>
+<path fill="none" stroke="black" stroke-dasharray="5,2" d="M416.81,-330.49C437.436,-328.015 462.59,-324.996 485.399,-322.259"/>
+<polygon fill="black" stroke="black" points="485.836,-325.732 495.348,-321.066 485.002,-318.782 485.836,-325.732"/>
+</g>
+<!-- module~type_lorenz&#45;&gt;program~integrate_lorenz -->
+<g id="edge4" class="edge"><title>module~type_lorenz&#45;&gt;program~integrate_lorenz</title>
+<path fill="none" stroke="black" stroke-dasharray="5,2" d="M408.157,-246.21C432.519,-240.92 465.803,-233.693 493.898,-227.592"/>
+<polygon fill="black" stroke="black" points="494.958,-230.944 503.987,-225.401 493.472,-224.103 494.958,-230.944"/>
+</g>
+<!-- module~type_euler_1d_openmp&#45;&gt;program~integrate_euler_1d_openmp -->
+<g id="edge6" class="edge"><title>module~type_euler_1d_openmp&#45;&gt;program~integrate_euler_1d_openmp</title>
+<path fill="none" stroke="black" stroke-dasharray="5,2" d="M437.674,-116.712C446.337,-115.227 455.337,-113.684 464.297,-112.148"/>
+<polygon fill="black" stroke="black" points="465.113,-115.559 474.378,-110.42 463.93,-108.66 465.113,-115.559"/>
+</g>
+<!-- module~type_burgers&#45;&gt;program~integrate_burgers -->
+<g id="edge8" class="edge"><title>module~type_burgers&#45;&gt;program~integrate_burgers</title>
+<path fill="none" stroke="black" stroke-dasharray="5,2" d="M412.404,-43.2132C435.232,-41.7784 464.651,-39.9292 490.337,-38.3146"/>
+<polygon fill="black" stroke="black" points="490.584,-41.8061 500.344,-37.6856 490.145,-34.8199 490.584,-41.8061"/>
+</g>
+<!-- module~type_euler_1d&#45;&gt;program~integrate_euler_1d -->
+<g id="edge10" class="edge"><title>module~type_euler_1d&#45;&gt;program~integrate_euler_1d</title>
+<path fill="none" stroke="black" stroke-dasharray="5,2" d="M415.03,-171.627C436.422,-171.627 463.034,-171.627 486.89,-171.627"/>
+<polygon fill="black" stroke="black" points="486.922,-175.127 496.922,-171.627 486.922,-168.127 486.922,-175.127"/>
+</g>
+</g>
+</svg>
+</div>
+                <div><a type="button" class="graph-help" data-toggle="modal" href="#graph-help-text">Help</a></div>
+                <div class="modal fade" id="graph-help-text" tabindex="-1" role="dialog">
+                  <div class="modal-dialog modal-lg" role="document">
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title" id="-graph-help-label">Graph Key</h4>
+                      </div>
+                      <div class="modal-body">
+                        
+Nodes of different colours represent the following:
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.26.3 (20100126.1600)
+ -->
+<!-- Title: Graph Key Pages: 1 -->
+<svg width="641pt" height="28pt"
+ viewBox="0.00 0.00 641.00 27.80" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="graph1" class="graph" transform="scale(0.817602 0.817602) rotate(0) translate(4 30)">
+<title>Graph Key</title>
+<polygon fill="white" stroke="white" points="-4,5 -4,-30 781,-30 781,5 -4,5"/>
+<!-- Module -->
+<g id="node1" class="node"><title>Module</title>
+<polygon fill="#337ab7" stroke="#337ab7" points="54,-26 2.13163e-14,-26 0,-1.24345e-14 54,-3.55271e-15 54,-26"/>
+<text text-anchor="middle" x="27" y="-10.55" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Module</text>
+</g>
+<!-- Submodule -->
+<g id="node2" class="node"><title>Submodule</title>
+<polygon fill="#5bc0de" stroke="#5bc0de" points="138,-26 72,-26 72,-1.24345e-14 138,-3.55271e-15 138,-26"/>
+<text text-anchor="middle" x="105" y="-10.55" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Submodule</text>
+</g>
+<!-- Type -->
+<g id="node3" class="node"><title>Type</title>
+<polygon fill="#5cb85c" stroke="#5cb85c" points="210,-26 156,-26 156,-1.24345e-14 210,-3.55271e-15 210,-26"/>
+<text text-anchor="middle" x="183" y="-10.55" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Type</text>
+</g>
+<!-- Subroutine -->
+<g id="node4" class="node"><title>Subroutine</title>
+<polygon fill="#d9534f" stroke="#d9534f" points="292,-26 228,-26 228,-1.24345e-14 292,-3.55271e-15 292,-26"/>
+<text text-anchor="middle" x="260" y="-10.55" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Subroutine</text>
+</g>
+<!-- Function -->
+<g id="node5" class="node"><title>Function</title>
+<polygon fill="#d94e8f" stroke="#d94e8f" points="364,-26 310,-26 310,-1.24345e-14 364,-3.55271e-15 364,-26"/>
+<text text-anchor="middle" x="337" y="-10.55" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Function</text>
+</g>
+<!-- Interface -->
+<g id="node6" class="node"><title>Interface</title>
+<polygon fill="#a7506f" stroke="#a7506f" points="436,-26 382,-26 382,-1.24345e-14 436,-3.55271e-15 436,-26"/>
+<text text-anchor="middle" x="409" y="-10.55" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Interface</text>
+</g>
+<!-- Unknown Procedure Type -->
+<g id="node7" class="node"><title>Unknown Procedure Type</title>
+<polygon fill="#777777" stroke="#777777" points="590,-26 454,-26 454,-1.24345e-14 590,-3.55271e-15 590,-26"/>
+<text text-anchor="middle" x="522" y="-10.55" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Unknown Procedure Type</text>
+</g>
+<!-- Program -->
+<g id="node8" class="node"><title>Program</title>
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="662,-26 608,-26 608,-1.24345e-14 662,-3.55271e-15 662,-26"/>
+<text text-anchor="middle" x="635" y="-10.55" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Program</text>
+</g>
+<!-- This Page&#39;s Entity -->
+<g id="node9" class="node"><title>This Page&#39;s Entity</title>
+<polygon fill="none" stroke="black" points="776,-26 680,-26 680,-1.24345e-14 776,-3.55271e-15 776,-26"/>
+<text text-anchor="middle" x="728" y="-10.55" font-family="Helvetica,sans-Serif" font-size="10.50">This Page&#39;s Entity</text>
+</g>
+</g>
+</svg>
+
+<h5>Module Graph</h5>
+<p>Solid arrows point from a parent (sub)module to the submodule which is
+descended from it. Dashed arrows point from a module being used to the
+module using it.</p>
+<h5>Type Graph</h5>
+<p>Solid arrows point from one derived type to another which extends
+(inherits from) it. Dashed arrows point from a derived type to another
+type containing it as a components, with a label listing the name(s) of
+said component(s).</p>
+<h5>Call Graph</h5>
+<p>Solid arrows point from a procedure to one which it calls. Dashed 
+arrows point from an interface to procedures which implement that interface.
+This could include the module procedures in a generic interface or the
+implementation in a submodule of an interface in a parent module.</p>
+
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                
+    <br>
+    
+
+    
+    
+    
+    
+    
+
+    
+    
+    
+    <section>
+     <h2>Derived Types</h2>
+	 
+	   
+<div class="panel panel-default">
+  <div class="panel-heading codesum"><span class="anchor" id="type-emd_runge_kutta_integrator"></span><h3>type, public :: <a href='../type/emd_runge_kutta_integrator.html'>emd_runge_kutta_integrator</a>
+    
+  </h3></div>
+  <div class="panel-body">
+     
+     <h4>Components</h4>
+    
+<table class="table table-striped varlist">
+<thead><tr><th>Type</th><th>Visibility</th>
+
+<th>Attributes</th><th></th><th>Name</th><th></th><th>Initial</th><th></th></thead>
+
+
+
+<tbody>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-tolerance"></span>real(kind=R_P),</td>
+  
+  <td>public</td>
+  <td></td><td>::</td>
+  <td><strong>tolerance</strong></td><td> =</td><td>0._R_P</td><td><p>Tolerance on the local truncation error.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-pp1_inv"></span>real(kind=R_P),</td>
+  
+  <td>public</td>
+  <td></td><td>::</td>
+  <td><strong>pp1_inv</strong></td><td> =</td><td>0._R_P</td><td><p>1/(p+1) where p is the accuracy order of the lower accurate scheme of the pair.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-stages"></span>integer(kind=I_P),</td>
+  
+  <td>public</td>
+  <td></td><td>::</td>
+  <td><strong>stages</strong></td><td> =</td><td>0</td><td><p>Number of stages.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-alph"></span>real(kind=R_P),</td>
+  
+  <td>public,</td>
+  <td>allocatable</td><td>::</td>
+  <td><strong>alph</strong>(:,:)</td><td></td><td></td><td><p>\(\alpha\) Butcher's coefficients.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-beta"></span>real(kind=R_P),</td>
+  
+  <td>public,</td>
+  <td>allocatable</td><td>::</td>
+  <td><strong>beta</strong>(:,:)</td><td></td><td></td><td><p>\(\beta\) Butcher's coefficients.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-gamm"></span>real(kind=R_P),</td>
+  
+  <td>public,</td>
+  <td>allocatable</td><td>::</td>
+  <td><strong>gamm</strong>(:)</td><td></td><td></td><td><p>\(\gamma\) Butcher's coefficients.</p></td>
+  
+</tr>
+
+</tbody>
+</table>
+
+     
+     
+     
+     <h4>Finalizations Procedures</h4>
+      <table class="table table-striped varlist">
+      <tbody>
+      
+       <tr><td>final :: <strong>finalize</strong></h3></td><td><p>Finalize object.</p></td></tr>
+      
+       </tbody>
+       </table>  
+          
+     
+     <h4>Type-Bound Procedures</h4>
+      <table class="table table-striped varlist">
+      <tbody>
+      
+       <tr><td>procedure, public, pass(self) :: <strong>destroy</strong>  </td>
+       <td><p>Destroy the integrator.</p></td></tr>
+      
+       <tr><td>procedure, public, pass(self) :: <strong>init</strong>  </td>
+       <td><p>Initialize (create) the integrator.</p></td></tr>
+      
+       <tr><td>procedure, public, pass(self) :: <strong>integrate</strong>  </td>
+       <td><p>Integrate integrand field.</p></td></tr>
+      
+       <tr><td>procedure, private, pass(self) :: <strong>new_Dt</strong>  </td>
+       <td><p>Compute new estimation of the time step Dt.</p></td></tr>
+      
+       </tbody>
+       </table>
+     
+     
+     <h4>Description</h4>
+       
+       <p>FOODIE integrator: provide an explicit class of TVD or SSP Runge-Kutta schemes, from 1st to 4th order accurate.</p>
+     
+  </div>
+</div>
+
+     
+    </section>
+	<br>
+    
+    
+    
+
+    
+    <section>
+    <h2>Subroutines</h2>
+    
+    
+  <div class="panel panel-default">
+  <div class="panel-heading codesum"><span class="anchor" id="proc-init%7E4"></span><h3>
+private elementalsubroutine <a href='../proc/init%7E4.html'>init</a>(self, stages, tolerance)
+    
+    
+    
+</h3></div>
+  <div class="panel-body">
+       
+    
+    <h4>Arguments</h4>
+    
+      
+      
+<table class="table table-striped varlist">
+<thead><tr><th>Type</th>
+<th>Intent</th><th>Optional</th>
+<th>Attributes</th><th></th><th>Name</th><th></th></thead>
+
+
+
+<tbody>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>class(<a href='../type/emd_runge_kutta_integrator.html'>emd_runge_kutta_integrator</a>),</td>
+  <td>intent(inout)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>self</strong></td><td><p>RK integrator.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>integer(kind=I_P),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>stages</strong></td><td><p>Number of stages used.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>real(kind=R_P),</td>
+  <td>intent(in),</td>
+  <td>optional</td>
+  
+  <td></td><td>::</td>
+  <td><strong>tolerance</strong></td><td><p>Tolerance on the local truncation error (default 0.01).</p></td>
+  
+</tr>
+
+</tbody>
+</table>
+
+      
+    
+    
+    
+    <h4>Description</h4>
+       
+       
+
+
+       
+       <p>Create the actual RK integrator: initialize the Butcher' table coefficients.</p>
+        
+
+  </div>
+  </div>
+
+    
+    
+  <div class="panel panel-default">
+  <div class="panel-heading codesum"><span class="anchor" id="proc-destroy%7E4"></span><h3>
+private elementalsubroutine <a href='../proc/destroy%7E4.html'>destroy</a>(self)
+    
+    
+    
+</h3></div>
+  <div class="panel-body">
+       
+    
+    <h4>Arguments</h4>
+    
+      
+      
+<table class="table table-striped varlist">
+<thead><tr><th>Type</th>
+<th>Intent</th><th>Optional</th>
+<th>Attributes</th><th></th><th>Name</th><th></th></thead>
+
+
+
+<tbody>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>class(<a href='../type/emd_runge_kutta_integrator.html'>emd_runge_kutta_integrator</a>),</td>
+  <td>intent(inout)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>self</strong></td><td><p>Integrator.</p></td>
+  
+</tr>
+
+</tbody>
+</table>
+
+      
+    
+    
+    
+    <h4>Description</h4>
+       
+       
+
+
+       
+       <p>Destroy the integrator.</p>
+        
+
+  </div>
+  </div>
+
+    
+    
+  <div class="panel panel-default">
+  <div class="panel-heading codesum"><span class="anchor" id="proc-integrate%7E4"></span><h3>
+private subroutine <a href='../proc/integrate%7E4.html'>integrate</a>(self, U, stage, Dt, t)
+    
+    
+    
+</h3></div>
+  <div class="panel-body">
+       
+    
+    <h4>Arguments</h4>
+    
+      
+      
+<table class="table table-striped varlist">
+<thead><tr><th>Type</th>
+<th>Intent</th><th>Optional</th>
+<th>Attributes</th><th></th><th>Name</th><th></th></thead>
+
+
+
+<tbody>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>class(<a href='../type/emd_runge_kutta_integrator.html'>emd_runge_kutta_integrator</a>),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>self</strong></td><td><p>Actual RK integrator.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>class(<a href='../type/integrand.html'>integrand</a>),</td>
+  <td>intent(inout)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>U</strong></td><td><p>Field to be integrated.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>class(<a href='../type/integrand.html'>integrand</a>),</td>
+  <td>intent(inout)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>stage</strong>(1:)</td><td><p>Runge-Kutta stages [1:stages].</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>real(kind=R_P),</td>
+  <td>intent(inout)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>Dt</strong></td><td><p>Time step.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>real(kind=R_P),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>t</strong></td><td><p>Time.</p></td>
+  
+</tr>
+
+</tbody>
+</table>
+
+      
+    
+    
+    
+    <h4>Description</h4>
+       
+       
+
+
+       
+       <p>Integrate field with explicit embedded Runge-Kutta scheme.</p>
+        
+
+  </div>
+  </div>
+
+    
+    
+  <div class="panel panel-default">
+  <div class="panel-heading codesum"><span class="anchor" id="proc-new_dt"></span><h3>
+private elementalsubroutine <a href='../proc/new_dt.html'>new_Dt</a>(self, error, Dt)
+    
+    
+    
+</h3></div>
+  <div class="panel-body">
+       
+    
+    <h4>Arguments</h4>
+    
+      
+      
+<table class="table table-striped varlist">
+<thead><tr><th>Type</th>
+<th>Intent</th><th>Optional</th>
+<th>Attributes</th><th></th><th>Name</th><th></th></thead>
+
+
+
+<tbody>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>class(<a href='../type/emd_runge_kutta_integrator.html'>emd_runge_kutta_integrator</a>),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>self</strong></td><td><p>Integrator.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>real(kind=R_P),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>error</strong></td><td><p>Local truncation error estimation.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>real(kind=R_P),</td>
+  <td>intent(inout)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>Dt</strong></td><td><p>Time step.</p></td>
+  
+</tr>
+
+</tbody>
+</table>
+
+      
+    
+    
+    
+    <h4>Description</h4>
+       
+       
+
+
+       
+       <p>Compute new estimation of the time step Dt.</p>
+        
+
+  </div>
+  </div>
+
+    
+    
+  <div class="panel panel-default">
+  <div class="panel-heading codesum"><span class="anchor" id="proc-finalize%7E4"></span><h3>
+private elementalsubroutine <a href='../proc/finalize%7E4.html'>finalize</a>(self)
+    
+    
+    
+</h3></div>
+  <div class="panel-body">
+       
+    
+    <h4>Arguments</h4>
+    
+      
+      
+<table class="table table-striped varlist">
+<thead><tr><th>Type</th>
+<th>Intent</th><th>Optional</th>
+<th>Attributes</th><th></th><th>Name</th><th></th></thead>
+
+
+
+<tbody>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>type(<a href='../type/emd_runge_kutta_integrator.html'>emd_runge_kutta_integrator</a>),</td>
+  <td>intent(inout)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>self</strong></td><td><p>Integrator.</p></td>
+  
+</tr>
+
+</tbody>
+</table>
+
+      
+    
+    
+    
+    <h4>Description</h4>
+       
+       
+
+
+       
+       <p>Finalize object.</p>
+        
+
+  </div>
+  </div>
+
+    
+    </section>    
+    <br>
+    
+    
+    
+    </div>
+  </div>
+
+    <hr>
+    <footer>
+        <div class="row">
+        <div class="col-md-6">&copy; 2015 FOODIE was written by Fortran-FOSS-Programmers Group. </div>
+        <div class="col-md-6"><span class="pull-right">Documentation generated by <a href="https://github.com/cmacmackin/ford">FORD</a>.</span></div>
+        </div>
+        <br>
+    </footer>
+    </div> <!-- /container -->
+
+
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+<!--
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+-->
+    <script src="../js/bootstrap.min.js"></script>
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+    <script src="../js/ie10-viewport-bug-workaround.js"></script>
+
+    <!-- MathJax JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        TeX: { extensions: ['AMSmath.js','AMSsymbols.js','noErrors.js','noUndefined.js'], equationNumbers: { autoNumber: 'AMS' } },
+        jax: ['input/TeX','input/MathML','output/HTML-CSS'],
+        extensions: ['tex2jax.js','mml2jax.js','MathMenu.js','MathZoom.js'],
+        'HTML-CSS': { 
+           styles: { '.MathJax_Display, .MathJax .mo, .MathJax .mi, .MathJax .mn': {color: '#000000 ! important'} }
+        }
+      });
+    </script>
+    <script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+  </body>
+</html>

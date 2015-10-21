@@ -104,14 +104,14 @@
      
     
     
-    <li><i class="fa fa-code"></i><a href="../src/oscillation.f90"> Source File</a></li>
+    <li><i class="fa fa-code"></i><a href="../src/euler-1D.f90"> Source File</a></li>
      
   </ul>
   <ol class="breadcrumb in-well text-right">
   
-     <li><a href='../sourcefile/oscillation.f90.html'>oscillation.f90</a></li>
+     <li><a href='../sourcefile/euler-1d.f90.html'>euler-1D.f90</a></li>
   
-     <li><a href='../program/integrate_oscillation.html'>integrate_oscillation</a></li>
+     <li><a href='../program/integrate_euler_1d.html'>integrate_euler_1D</a></li>
   
      <li class="active">init</li>
   </ol>
@@ -125,6 +125,20 @@
     <div class="col-lg-3">
     
   
+  
+  
+  <div class="panel panel-primary">
+    <div class="panel-heading text-left"><h3 class="panel-title">Variables</h3></div>
+    <div class="list-group">
+      
+      <a class="list-group-item" href="../proc/init%7E16.html#variable-pi%7E2">pi</a>
+      
+      <a class="list-group-item" href="../proc/init%7E16.html#variable-i%7E33">i</a>
+      
+      <a class="list-group-item" href="../proc/init%7E16.html#variable-s%7E24">s</a>
+      
+    </div>
+  </div>
   
   
   
@@ -233,6 +247,8 @@
       
       <a class="list-group-item" href="../proc/destroy%7E8.html">destroy</a>
       
+      <a class="list-group-item" href="../proc/destroy%7E9.html">destroy</a>
+      
       <a class="list-group-item" href="../proc/destroy_rk.html">destroy_rk</a>
       
       <a class="list-group-item" href="../proc/deuler_dt.html">dEuler_dt</a>
@@ -250,6 +266,8 @@
       <a class="list-group-item" href="../proc/e%7E2.html">E</a>
       
       <a class="list-group-item" href="../proc/e%7E3.html">E</a>
+      
+      <a class="list-group-item" href="../proc/emd_rk_solver.html">emd_rk_solver</a>
       
       <a class="list-group-item" href="../proc/estimate_orders.html">estimate_orders</a>
       
@@ -290,6 +308,8 @@
       <a class="list-group-item" href="../proc/finalize%7E7.html">finalize</a>
       
       <a class="list-group-item" href="../proc/finalize%7E8.html">finalize</a>
+      
+      <a class="list-group-item" href="../proc/finalize%7E9.html">finalize</a>
       
       <a class="list-group-item" href="../proc/finalize_rk.html">finalize_rk</a>
       
@@ -339,6 +359,8 @@
       
       <a class="list-group-item" href="../proc/init%7E17.html">init</a>
       
+      <a class="list-group-item" href="../proc/init%7E18.html">init</a>
+      
       <a class="list-group-item" href="../proc/init_rk.html">init_rk</a>
       
       <a class="list-group-item" href="../proc/integrate.html">integrate</a>
@@ -355,6 +377,8 @@
       
       <a class="list-group-item" href="../proc/integrate%7E7.html">integrate</a>
       
+      <a class="list-group-item" href="../proc/integrate%7E8.html">integrate</a>
+      
       <a class="list-group-item" href="../proc/integrate_rk.html">integrate_rk</a>
       
       <a class="list-group-item" href="../proc/leapfrog_solver.html">leapfrog_solver</a>
@@ -369,7 +393,11 @@
       
       <a class="list-group-item" href="../proc/ls_rk_solver.html">ls_rk_solver</a>
       
+      <a class="list-group-item" href="../proc/new_dt.html">new_Dt</a>
+      
       <a class="list-group-item" href="../proc/oscillation_assign_oscillation.html">oscillation_assign_oscillation</a>
+      
+      <a class="list-group-item" href="../proc/oscillation_local_error.html">oscillation_local_error</a>
       
       <a class="list-group-item" href="../proc/oscillation_multiply_oscillation.html">oscillation_multiply_oscillation</a>
       
@@ -477,6 +505,8 @@
       
       <a class="list-group-item" href="../proc/test_am.html">test_am</a>
       
+      <a class="list-group-item" href="../proc/test_emd_rk.html">test_emd_rk</a>
+      
       <a class="list-group-item" href="../proc/test_euler.html">test_euler</a>
       
       <a class="list-group-item" href="../proc/test_euler%7E2.html">test_euler</a>
@@ -529,7 +559,7 @@
     
     <div class="col-lg-9" id='text'>
     <h2>
-subroutine init(output, solution)
+subroutine init()
     
     
     
@@ -541,54 +571,12 @@ subroutine init(output, solution)
 
     <h3>Arguments</h3>
     
-      
-<table class="table table-striped varlist">
-<thead><tr><th>Type</th>
-<th>Intent</th><th>Optional</th>
-<th>Attributes</th><th></th><th>Name</th><th></th></thead>
-
-
-
-<tbody>
-
-  
-  
-  
-  
-<tr>
-  
-  <td><span class="anchor" id="variable-output%7E7"></span>character(len=:),</td>
-  <td>intent(out),</td>
-  <td></td>
-  
-  <td>allocatable</td><td>::</td>
-  <td><strong>output</strong></td><td><p>Output files basename.</p></td>
-  
-</tr>
-
-  
-  
-  
-  
-<tr>
-  
-  <td><span class="anchor" id="variable-solution%7E2"></span>real(kind=R_P),</td>
-  <td>intent(out),</td>
-  <td></td>
-  
-  <td>allocatable</td><td>::</td>
-  <td><strong>solution</strong>(:,:)</td><td><p>Solution at each time step.</p></td>
-  
-</tr>
-
-</tbody>
-</table>
-
+      <em>None</em>
     
     
     
     <h3>Description</h3>
-    <p>Initialize solver local variable from global variables.</p>
+    <p>Initialize the field.</p>
     
     
      <h3>Calls</h3>
@@ -599,35 +587,25 @@ subroutine init(output, solution)
 <!-- Generated by graphviz version 2.26.3 (20100126.1600)
  -->
 <!-- Title: proc~~init~16~~CallsGraph Pages: 1 -->
-<svg id="procinit16CallsGraph" width="152pt" height="78pt"
- viewBox="0.00 0.00 152.00 78.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-<g id="proc~~init~16~~CallsGraph" class="graph" transform="scale(1 1) rotate(0) translate(4 74)">
+<svg id="procinit16CallsGraph" width="152pt" height="34pt"
+ viewBox="0.00 0.00 152.00 34.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="proc~~init~16~~CallsGraph" class="graph" transform="scale(1 1) rotate(0) translate(4 30)">
 <title>proc~~init~16~~CallsGraph</title>
-<polygon fill="white" stroke="white" points="-4,5 -4,-74 149,-74 149,5 -4,5"/>
+<polygon fill="white" stroke="white" points="-4,5 -4,-30 149,-30 149,5 -4,5"/>
 <!-- proc~init~16 -->
 <g id="node1" class="node"><title>proc~init~16</title>
-<polygon fill="none" stroke="black" points="54,-48 2.13163e-14,-48 0,-22 54,-22 54,-48"/>
-<text text-anchor="middle" x="27" y="-32.55" font-family="Helvetica,sans-Serif" font-size="10.50">init</text>
+<polygon fill="none" stroke="black" points="54,-26 2.13163e-14,-26 0,-1.24345e-14 54,-3.55271e-15 54,-26"/>
+<text text-anchor="middle" x="27" y="-10.55" font-family="Helvetica,sans-Serif" font-size="10.50">init</text>
 </g>
 <!-- str -->
 <g id="node2" class="node"><title>str</title>
-<polygon fill="#777777" stroke="#777777" points="144,-70 90,-70 90,-44 144,-44 144,-70"/>
-<text text-anchor="middle" x="117" y="-54.55" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">str</text>
+<polygon fill="#777777" stroke="#777777" points="144,-26 90,-26 90,-1.24345e-14 144,-3.55271e-15 144,-26"/>
+<text text-anchor="middle" x="117" y="-10.55" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">str</text>
 </g>
 <!-- proc~init~16&#45;&gt;str -->
 <g id="edge2" class="edge"><title>proc~init~16&#45;&gt;str</title>
-<path fill="none" stroke="black" d="M54.003,-41.6007C62.1158,-43.5839 71.1631,-45.7954 79.8131,-47.9099"/>
-<polygon fill="black" stroke="black" points="79.1599,-51.3532 89.705,-50.3279 80.8221,-44.5534 79.1599,-51.3532"/>
-</g>
-<!-- strz -->
-<g id="node3" class="node"><title>strz</title>
-<polygon fill="#777777" stroke="#777777" points="144,-26 90,-26 90,-1.24345e-14 144,-3.55271e-15 144,-26"/>
-<text text-anchor="middle" x="117" y="-10.55" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">strz</text>
-</g>
-<!-- proc~init~16&#45;&gt;strz -->
-<g id="edge4" class="edge"><title>proc~init~16&#45;&gt;strz</title>
-<path fill="none" stroke="black" d="M54.003,-28.3993C62.1158,-26.4161 71.1631,-24.2046 79.8131,-22.0901"/>
-<polygon fill="black" stroke="black" points="80.8221,-25.4466 89.705,-19.6721 79.1599,-18.6468 80.8221,-25.4466"/>
+<path fill="none" stroke="black" d="M54.003,-13C62.0277,-13 70.9665,-13 79.5309,-13"/>
+<polygon fill="black" stroke="black" points="79.7051,-16.5001 89.705,-13 79.705,-9.5001 79.7051,-16.5001"/>
 </g>
 </g>
 </svg>
@@ -732,158 +710,27 @@ implementation in a submodule of an interface in a parent module.</p>
 <!-- Generated by graphviz version 2.26.3 (20100126.1600)
  -->
 <!-- Title: proc~~init~16~~CalledByGraph Pages: 1 -->
-<svg id="procinit16CalledByGraph" width="372pt" height="342pt"
- viewBox="0.00 0.00 372.00 342.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-<g id="proc~~init~16~~CalledByGraph" class="graph" transform="scale(1 1) rotate(0) translate(4 338)">
+<svg id="procinit16CalledByGraph" width="202pt" height="34pt"
+ viewBox="0.00 0.00 202.00 34.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="proc~~init~16~~CalledByGraph" class="graph" transform="scale(1 1) rotate(0) translate(4 30)">
 <title>proc~~init~16~~CalledByGraph</title>
-<polygon fill="white" stroke="white" points="-4,5 -4,-338 369,-338 369,5 -4,5"/>
+<polygon fill="white" stroke="white" points="-4,5 -4,-30 199,-30 199,5 -4,5"/>
 <!-- proc~init~16 -->
 <g id="node1" class="node"><title>proc~init~16</title>
-<polygon fill="none" stroke="black" points="364,-180 310,-180 310,-154 364,-154 364,-180"/>
-<text text-anchor="middle" x="337" y="-164.55" font-family="Helvetica,sans-Serif" font-size="10.50">init</text>
+<polygon fill="none" stroke="black" points="194,-26 140,-26 140,-1.24345e-14 194,-3.55271e-15 194,-26"/>
+<text text-anchor="middle" x="167" y="-10.55" font-family="Helvetica,sans-Serif" font-size="10.50">init</text>
 </g>
-<!-- proc~test_abm -->
-<g id="node2" class="node"><title>proc~test_abm</title>
-<a xlink:href="../proc/test_abm.html" xlink:title="test_abm">
-<polygon fill="#d9534f" stroke="#d9534f" points="237,-334 181,-334 181,-308 237,-308 237,-334"/>
-<text text-anchor="middle" x="209" y="-318.55" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">test_abm</text>
+<!-- program~integrate_euler_1d -->
+<g id="node2" class="node"><title>program~integrate_euler_1d</title>
+<a xlink:href="../program/integrate_euler_1d.html" xlink:title="integrate_euler_1D">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="104,-26 3.55271e-14,-26 0,-1.24345e-14 104,-3.55271e-15 104,-26"/>
+<text text-anchor="middle" x="52" y="-10.55" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">integrate_euler_1D</text>
 </a>
 </g>
-<!-- proc~test_abm&#45;&gt;proc~init~16 -->
-<g id="edge18" class="edge"><title>proc~test_abm&#45;&gt;proc~init~16</title>
-<path fill="none" stroke="black" d="M237.762,-316.441C250.087,-313.27 263.932,-307.937 274,-299 306.982,-269.725 324.208,-219.42 331.877,-190.092"/>
-<polygon fill="black" stroke="black" points="335.292,-190.86 334.282,-180.313 328.495,-189.188 335.292,-190.86"/>
-</g>
-<!-- proc~test_ls_rk~4 -->
-<g id="node3" class="node"><title>proc~test_ls_rk~4</title>
-<a xlink:href="../proc/test_ls_rk%7E4.html" xlink:title="test_ls_rk">
-<polygon fill="#d9534f" stroke="#d9534f" points="238,-290 180,-290 180,-264 238,-264 238,-290"/>
-<text text-anchor="middle" x="209" y="-274.55" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">test_ls_rk</text>
-</a>
-</g>
-<!-- proc~test_ls_rk~4&#45;&gt;proc~init~16 -->
-<g id="edge20" class="edge"><title>proc~test_ls_rk~4&#45;&gt;proc~init~16</title>
-<path fill="none" stroke="black" d="M238.038,-271.31C249.991,-267.964 263.472,-262.804 274,-255 297.479,-237.595 315.684,-208.853 326.357,-188.976"/>
-<polygon fill="black" stroke="black" points="329.504,-190.51 330.981,-180.019 323.284,-187.299 329.504,-190.51"/>
-</g>
-<!-- proc~test_tvd_rk~4 -->
-<g id="node4" class="node"><title>proc~test_tvd_rk~4</title>
-<a xlink:href="../proc/test_tvd_rk%7E4.html" xlink:title="test_tvd_rk">
-<polygon fill="#d9534f" stroke="#d9534f" points="241,-246 177,-246 177,-220 241,-220 241,-246"/>
-<text text-anchor="middle" x="209" y="-230.55" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">test_tvd_rk</text>
-</a>
-</g>
-<!-- proc~test_tvd_rk~4&#45;&gt;proc~init~16 -->
-<g id="edge22" class="edge"><title>proc~test_tvd_rk~4&#45;&gt;proc~init~16</title>
-<path fill="none" stroke="black" d="M241.805,-223.899C252.344,-220.452 263.899,-216.106 274,-211 287.568,-204.142 301.539,-194.671 312.867,-186.273"/>
-<polygon fill="black" stroke="black" points="315.119,-188.957 320.964,-180.12 310.884,-183.384 315.119,-188.957"/>
-</g>
-<!-- proc~perform_errors_analysis -->
-<g id="node5" class="node"><title>proc~perform_errors_analysis</title>
-<a xlink:href="../proc/perform_errors_analysis.html" xlink:title="perform_errors_analysis">
-<polygon fill="#d9534f" stroke="#d9534f" points="273,-202 145,-202 145,-176 273,-176 273,-202"/>
-<text text-anchor="middle" x="209" y="-186.55" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">perform_errors_analysis</text>
-</a>
-</g>
-<!-- proc~perform_errors_analysis&#45;&gt;proc~init~16 -->
-<g id="edge24" class="edge"><title>proc~perform_errors_analysis&#45;&gt;proc~init~16</title>
-<path fill="none" stroke="black" d="M273.75,-177.871C282.731,-176.327 291.693,-174.787 299.928,-173.372"/>
-<polygon fill="black" stroke="black" points="300.653,-176.799 309.916,-171.655 299.467,-169.9 300.653,-176.799"/>
-</g>
-<!-- proc~test_am -->
-<g id="node6" class="node"><title>proc~test_am</title>
-<a xlink:href="../proc/test_am.html" xlink:title="test_am">
-<polygon fill="#d9534f" stroke="#d9534f" points="236,-158 182,-158 182,-132 236,-132 236,-158"/>
-<text text-anchor="middle" x="209" y="-142.55" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">test_am</text>
-</a>
-</g>
-<!-- proc~test_am&#45;&gt;proc~init~16 -->
-<g id="edge26" class="edge"><title>proc~test_am&#45;&gt;proc~init~16</title>
-<path fill="none" stroke="black" d="M236.146,-149.666C254.728,-152.86 279.599,-157.134 299.992,-160.639"/>
-<polygon fill="black" stroke="black" points="299.445,-164.097 309.894,-162.341 300.631,-157.198 299.445,-164.097"/>
-</g>
-<!-- proc~test_leapfrog~4 -->
-<g id="node7" class="node"><title>proc~test_leapfrog~4</title>
-<a xlink:href="../proc/test_leapfrog%7E4.html" xlink:title="test_leapfrog">
-<polygon fill="#d9534f" stroke="#d9534f" points="246,-114 172,-114 172,-88 246,-88 246,-114"/>
-<text text-anchor="middle" x="209" y="-98.55" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">test_leapfrog</text>
-</a>
-</g>
-<!-- proc~test_leapfrog~4&#45;&gt;proc~init~16 -->
-<g id="edge28" class="edge"><title>proc~test_leapfrog~4&#45;&gt;proc~init~16</title>
-<path fill="none" stroke="black" d="M246.522,-111.684C255.718,-114.846 265.388,-118.647 274,-123 287.568,-129.858 301.539,-139.329 312.867,-147.727"/>
-<polygon fill="black" stroke="black" points="310.884,-150.616 320.964,-153.88 315.119,-145.043 310.884,-150.616"/>
-</g>
-<!-- proc~test_ab~4 -->
-<g id="node8" class="node"><title>proc~test_ab~4</title>
-<a xlink:href="../proc/test_ab%7E4.html" xlink:title="test_ab">
-<polygon fill="#d9534f" stroke="#d9534f" points="236,-70 182,-70 182,-44 236,-44 236,-70"/>
-<text text-anchor="middle" x="209" y="-54.55" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">test_ab</text>
-</a>
-</g>
-<!-- proc~test_ab~4&#45;&gt;proc~init~16 -->
-<g id="edge30" class="edge"><title>proc~test_ab~4&#45;&gt;proc~init~16</title>
-<path fill="none" stroke="black" d="M236.096,-62.1583C248.511,-65.4814 262.898,-70.77 274,-79 297.479,-96.4049 315.684,-125.147 326.357,-145.024"/>
-<polygon fill="black" stroke="black" points="323.284,-146.701 330.981,-153.981 329.504,-143.49 323.284,-146.701"/>
-</g>
-<!-- proc~test_euler~4 -->
-<g id="node9" class="node"><title>proc~test_euler~4</title>
-<a xlink:href="../proc/test_euler%7E4.html" xlink:title="test_euler">
-<polygon fill="#d9534f" stroke="#d9534f" points="239,-26 179,-26 179,-1.24345e-14 239,-3.55271e-15 239,-26"/>
-<text text-anchor="middle" x="209" y="-10.55" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">test_euler</text>
-</a>
-</g>
-<!-- proc~test_euler~4&#45;&gt;proc~init~16 -->
-<g id="edge32" class="edge"><title>proc~test_euler~4&#45;&gt;proc~init~16</title>
-<path fill="none" stroke="black" d="M239.076,-17.9041C251.063,-21.1117 264.288,-26.3797 274,-35 306.982,-64.2751 324.208,-114.58 331.877,-143.908"/>
-<polygon fill="black" stroke="black" points="328.495,-144.812 334.282,-153.687 335.292,-143.14 328.495,-144.812"/>
-</g>
-<!-- program~integrate_oscillation -->
-<g id="node10" class="node"><title>program~integrate_oscillation</title>
-<a xlink:href="../program/integrate_oscillation.html" xlink:title="integrate_oscillation">
-<polygon fill="#f0ad4e" stroke="#f0ad4e" points="107,-180 1,-180 1,-154 107,-154 107,-180"/>
-<text text-anchor="middle" x="54" y="-164.55" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">integrate_oscillation</text>
-</a>
-</g>
-<!-- program~integrate_oscillation&#45;&gt;proc~test_abm -->
-<g id="edge2" class="edge"><title>program~integrate_oscillation&#45;&gt;proc~test_abm</title>
-<path fill="none" stroke="black" d="M59.5572,-180.342C71.2513,-206.826 100.922,-266.295 144,-299 151.817,-304.935 161.334,-309.328 170.648,-312.558"/>
-<polygon fill="black" stroke="black" points="169.613,-315.901 180.2,-315.518 171.684,-309.215 169.613,-315.901"/>
-</g>
-<!-- program~integrate_oscillation&#45;&gt;proc~test_ls_rk~4 -->
-<g id="edge4" class="edge"><title>program~integrate_oscillation&#45;&gt;proc~test_ls_rk~4</title>
-<path fill="none" stroke="black" d="M64.2215,-180.224C79.5976,-199.281 110.471,-234.431 144,-255 152.054,-259.941 161.357,-263.932 170.361,-267.088"/>
-<polygon fill="black" stroke="black" points="169.35,-270.439 179.942,-270.189 171.506,-263.779 169.35,-270.439"/>
-</g>
-<!-- program~integrate_oscillation&#45;&gt;proc~test_tvd_rk~4 -->
-<g id="edge6" class="edge"><title>program~integrate_oscillation&#45;&gt;proc~test_tvd_rk~4</title>
-<path fill="none" stroke="black" d="M78.4398,-180.008C96.324,-189.265 121.323,-201.664 144,-211 151.281,-213.998 159.135,-216.914 166.781,-219.591"/>
-<polygon fill="black" stroke="black" points="165.701,-222.92 176.296,-222.842 167.965,-216.296 165.701,-222.92"/>
-</g>
-<!-- program~integrate_oscillation&#45;&gt;proc~perform_errors_analysis -->
-<g id="edge8" class="edge"><title>program~integrate_oscillation&#45;&gt;proc~perform_errors_analysis</title>
-<path fill="none" stroke="black" d="M107.776,-174.633C116.353,-175.85 125.358,-177.128 134.313,-178.399"/>
-<polygon fill="black" stroke="black" points="133.984,-181.888 144.377,-179.828 134.968,-174.957 133.984,-181.888"/>
-</g>
-<!-- program~integrate_oscillation&#45;&gt;proc~test_am -->
-<g id="edge10" class="edge"><title>program~integrate_oscillation&#45;&gt;proc~test_am</title>
-<path fill="none" stroke="black" d="M107.776,-159.367C128.876,-156.372 152.572,-153.009 171.73,-150.29"/>
-<polygon fill="black" stroke="black" points="172.452,-153.723 181.861,-148.852 171.468,-146.792 172.452,-153.723"/>
-</g>
-<!-- program~integrate_oscillation&#45;&gt;proc~test_leapfrog~4 -->
-<g id="edge12" class="edge"><title>program~integrate_oscillation&#45;&gt;proc~test_leapfrog~4</title>
-<path fill="none" stroke="black" d="M78.4398,-153.992C96.324,-144.735 121.323,-132.336 144,-123 149.575,-120.705 155.487,-118.457 161.383,-116.328"/>
-<polygon fill="black" stroke="black" points="162.956,-119.486 171.231,-112.869 160.636,-112.881 162.956,-119.486"/>
-</g>
-<!-- program~integrate_oscillation&#45;&gt;proc~test_ab~4 -->
-<g id="edge14" class="edge"><title>program~integrate_oscillation&#45;&gt;proc~test_ab~4</title>
-<path fill="none" stroke="black" d="M64.2215,-153.776C79.5976,-134.719 110.471,-99.5688 144,-79 152.592,-73.7291 162.605,-69.5391 172.161,-66.2914"/>
-<polygon fill="black" stroke="black" points="173.382,-69.5765 181.875,-63.2422 171.286,-62.8978 173.382,-69.5765"/>
-</g>
-<!-- program~integrate_oscillation&#45;&gt;proc~test_euler~4 -->
-<g id="edge16" class="edge"><title>program~integrate_oscillation&#45;&gt;proc~test_euler~4</title>
-<path fill="none" stroke="black" d="M59.5572,-153.658C71.2513,-127.174 100.922,-67.705 144,-35 151.456,-29.3393 160.459,-25.0809 169.357,-21.8973"/>
-<polygon fill="black" stroke="black" points="170.433,-25.2279 178.892,-18.849 168.301,-18.5603 170.433,-25.2279"/>
+<!-- program~integrate_euler_1d&#45;&gt;proc~init~16 -->
+<g id="edge2" class="edge"><title>program~integrate_euler_1d&#45;&gt;proc~init~16</title>
+<path fill="none" stroke="black" d="M104.116,-13C112.808,-13 121.665,-13 129.884,-13"/>
+<polygon fill="black" stroke="black" points="129.892,-16.5001 139.892,-13 129.892,-9.5001 129.892,-16.5001"/>
 </g>
 </g>
 </svg>
@@ -981,6 +828,66 @@ implementation in a submodule of an interface in a parent module.</p>
      
     <br>
     
+    <section>
+    <h2>Variables</h2>
+    
+<table class="table table-striped varlist">
+<thead><tr><th>Type</th><th>Visibility</th>
+
+<th>Attributes</th><th></th><th>Name</th><th></th><th>Initial</th><th></th></thead>
+
+
+
+<tbody>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-pi%7E2"></span>real(kind=R_P),</td>
+  
+  <td>public,</td>
+  <td>parameter</td><td>::</td>
+  <td><strong>pi</strong></td><td> =</td><td>4._R_P*atan(1._R_P)</td><td><p>Pi greek.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-i%7E33"></span>integer(kind=I_P),</td>
+  
+  <td>public</td>
+  <td></td><td>::</td>
+  <td><strong>i</strong></td><td></td><td></td><td><p>Space counter.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-s%7E24"></span>integer(kind=I_P),</td>
+  
+  <td>public</td>
+  <td></td><td>::</td>
+  <td><strong>s</strong></td><td></td><td></td><td><p>Species counter.</p></td>
+  
+</tr>
+
+</tbody>
+</table>
+
+    </section>
+    <br>
+    
     
     
     
@@ -998,27 +905,106 @@ implementation in a submodule of an interface in a parent module.</p>
     
     <section>
     <h2><span class="anchor" id="src"></span>Source Code</h2>
-    <div class="highlight"><pre>  <span class="k">subroutine </span><span class="n">init</span><span class="p">(</span><span class="n">output</span><span class="p">,</span> <span class="n">solution</span><span class="p">)</span>
+    <div class="highlight"><pre>  <span class="k">subroutine </span><span class="n">init</span><span class="p">()</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
-  <span class="c">!&lt; Initialize solver local variable from global variables.</span>
+  <span class="c">!&lt; Initialize the field.</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
-  <span class="kt">character</span><span class="p">(</span><span class="nb">len</span><span class="o">=</span><span class="p">:),</span> <span class="k">allocatable</span><span class="p">,</span> <span class="k">intent</span><span class="p">(</span><span class="n">OUT</span><span class="p">)</span> <span class="kd">::</span> <span class="n">output</span>        <span class="c">!&lt; Output files basename.</span>
-  <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">),</span>        <span class="k">allocatable</span><span class="p">,</span> <span class="k">intent</span><span class="p">(</span><span class="n">OUT</span><span class="p">)</span> <span class="kd">::</span> <span class="n">solution</span><span class="p">(:,:)</span> <span class="c">!&lt; Solution at each time step.</span>
+  <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">),</span> <span class="k">parameter</span> <span class="kd">::</span> <span class="n">pi</span><span class="o">=</span><span class="mf">4._R_P</span> <span class="o">*</span> <span class="nb">atan</span><span class="p">(</span><span class="mf">1._R_P</span><span class="p">)</span> <span class="c">!&lt; Pi greek.</span>
+  <span class="kt">integer</span><span class="p">(</span><span class="n">I_P</span><span class="p">)</span>         <span class="kd">::</span> <span class="n">i</span>                        <span class="c">!&lt; Space counter.</span>
+  <span class="kt">integer</span><span class="p">(</span><span class="n">I_P</span><span class="p">)</span>         <span class="kd">::</span> <span class="n">s</span>                        <span class="c">!&lt; Species counter.</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
 
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
-  <span class="k">if</span> <span class="p">(</span><span class="nb">mod</span><span class="p">(</span><span class="n">t_final</span><span class="p">,</span> <span class="n">Dt</span><span class="p">)</span><span class="o">/=</span><span class="mi">0</span><span class="p">)</span> <span class="k">then</span>
-<span class="k">    print</span> <span class="s2">&quot;(A)&quot;</span><span class="p">,</span> <span class="s1">&#39;Error: the final integration time must be an exact multiple of the time step used!&#39;</span>
-    <span class="k">print</span> <span class="s2">&quot;(A)&quot;</span><span class="p">,</span> <span class="s1">&#39;Final integration time: &#39;</span><span class="o">//</span><span class="n">str</span><span class="p">(.</span><span class="n">true</span><span class="p">.,</span><span class="n">t_final</span><span class="p">)</span>
-    <span class="k">print</span> <span class="s2">&quot;(A)&quot;</span><span class="p">,</span> <span class="s1">&#39;Time step: &#39;</span><span class="o">//</span><span class="n">str</span><span class="p">(.</span><span class="n">true</span><span class="p">.,</span><span class="n">Dt</span><span class="p">)</span>
-    <span class="k">stop</span>
-<span class="k">  </span><span class="n">endif</span>
-  <span class="k">if</span> <span class="p">(</span><span class="nb">trim</span><span class="p">(</span><span class="nb">adjustl</span><span class="p">(</span><span class="n">output_cli</span><span class="p">))</span><span class="o">/=</span><span class="s1">&#39;unset&#39;</span><span class="p">)</span> <span class="k">then</span>
-<span class="k">    </span><span class="n">output</span> <span class="o">=</span> <span class="nb">trim</span><span class="p">(</span><span class="nb">adjustl</span><span class="p">(</span><span class="n">output_cli</span><span class="p">))</span><span class="o">//</span><span class="s1">&#39;-&#39;</span><span class="o">//</span><span class="nb">trim</span><span class="p">(</span><span class="n">strz</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="nb">int</span><span class="p">(</span><span class="n">t_final</span><span class="o">/</span><span class="n">Dt</span><span class="p">)))</span><span class="o">//</span><span class="s1">&#39;-time_steps&#39;</span><span class="o">//</span><span class="s1">&#39;-&#39;</span><span class="o">//</span><span class="nb">trim</span><span class="p">(</span><span class="nb">adjustl</span><span class="p">(</span><span class="n">solver</span><span class="p">))</span>
-  <span class="k">else</span>
-<span class="k">    </span><span class="n">output</span> <span class="o">=</span> <span class="s1">&#39;oscillation_integration-&#39;</span><span class="o">//</span><span class="nb">trim</span><span class="p">(</span><span class="n">strz</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="nb">int</span><span class="p">(</span><span class="n">t_final</span><span class="o">/</span><span class="n">Dt</span><span class="p">)))</span><span class="o">//</span><span class="s1">&#39;-time_steps&#39;</span><span class="o">//</span><span class="s1">&#39;-&#39;</span><span class="o">//</span><span class="nb">trim</span><span class="p">(</span><span class="nb">adjustl</span><span class="p">(</span><span class="n">solver</span><span class="p">))</span>
+  <span class="k">allocate</span><span class="p">(</span><span class="n">xcenter</span><span class="p">(</span><span class="mi">1</span><span class="p">:</span><span class="n">Ni</span><span class="p">))</span>
+  <span class="k">allocate</span><span class="p">(</span><span class="n">xnode</span><span class="p">(</span><span class="mi">0</span><span class="p">:</span><span class="n">Ni</span><span class="p">))</span>
+  <span class="n">Dx</span><span class="o">=</span><span class="mf">1._R_P</span><span class="o">/</span><span class="n">Ni</span>
+  <span class="k">do </span><span class="n">i</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">Ni</span>
+    <span class="n">xcenter</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="o">=</span> <span class="n">Dx</span> <span class="o">*</span> <span class="n">i</span> <span class="o">-</span> <span class="mf">0.5_R_P</span> <span class="o">*</span> <span class="n">Dx</span>
+  <span class="n">enddo</span>
+  <span class="k">do </span><span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">Ni</span>
+    <span class="n">xnode</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="o">=</span> <span class="n">Dx</span> <span class="o">*</span> <span class="n">i</span>
+  <span class="n">enddo</span>
+  <span class="k">if</span> <span class="p">((</span><span class="n">av_Ni</span><span class="o">&gt;</span><span class="mi">0</span><span class="p">).</span><span class="nb">and</span><span class="p">.(</span><span class="n">av_Ni</span><span class="o">/=</span><span class="n">Ni</span><span class="p">))</span> <span class="k">then</span>
+<span class="k">    allocate</span><span class="p">(</span><span class="n">av_xnode</span><span class="p">(</span><span class="mi">0</span><span class="p">:</span><span class="n">av_Ni</span><span class="p">))</span>
+    <span class="k">do </span><span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">av_Ni</span>
+      <span class="n">av_xnode</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="o">=</span> <span class="mf">1._R_P</span><span class="o">/</span><span class="n">av_Ni</span> <span class="o">*</span> <span class="n">i</span>
+    <span class="n">enddo</span>
   <span class="n">endif</span>
-  <span class="k">if</span> <span class="p">(</span><span class="nb">allocated</span><span class="p">(</span><span class="n">solution</span><span class="p">))</span> <span class="k">deallocate</span><span class="p">(</span><span class="n">solution</span><span class="p">)</span> <span class="p">;</span> <span class="k">allocate</span><span class="p">(</span><span class="n">solution</span><span class="p">(</span><span class="mi">0</span><span class="p">:</span><span class="n">space_dimension</span><span class="p">,</span> <span class="mi">0</span><span class="p">:</span><span class="nb">int</span><span class="p">(</span><span class="n">t_final</span><span class="o">/</span><span class="n">Dt</span><span class="p">)))</span>
+  <span class="k">select case</span><span class="p">(</span><span class="nb">trim</span><span class="p">(</span><span class="nb">adjustl</span><span class="p">(</span><span class="n">problem</span><span class="p">)))</span>
+  <span class="k">case</span><span class="p">(</span><span class="s1">&#39;sod&#39;</span><span class="p">)</span>
+    <span class="k">print</span> <span class="s2">&quot;(A)&quot;</span><span class="p">,</span> <span class="s1">&#39;Solving &quot;&#39;</span><span class="o">//</span><span class="nb">trim</span><span class="p">(</span><span class="nb">adjustl</span><span class="p">(</span><span class="n">problem</span><span class="p">))</span><span class="o">//</span><span class="s1">&#39;&quot; problem&#39;</span>
+    <span class="n">t_final</span> <span class="o">=</span> <span class="mf">0.2_R_P</span>
+    <span class="n">CFL</span> <span class="o">=</span> <span class="mf">0.7_R_P</span>
+    <span class="n">Ns</span> <span class="o">=</span> <span class="mi">1</span>
+    <span class="n">Nc</span> <span class="o">=</span> <span class="n">Ns</span> <span class="o">+</span> <span class="mi">2</span>
+    <span class="n">Np</span> <span class="o">=</span> <span class="n">Ns</span> <span class="o">+</span> <span class="mi">4</span>
+    <span class="k">allocate</span><span class="p">(</span><span class="n">initial_state</span><span class="p">(</span><span class="mi">1</span><span class="p">:</span><span class="n">Np</span><span class="p">,</span> <span class="mi">1</span><span class="p">:</span><span class="n">Ni</span><span class="p">))</span>
+    <span class="k">allocate</span><span class="p">(</span><span class="n">cp0</span><span class="p">(</span><span class="mi">1</span><span class="p">:</span><span class="n">Ns</span><span class="p">))</span>
+    <span class="k">allocate</span><span class="p">(</span><span class="n">cv0</span><span class="p">(</span><span class="mi">1</span><span class="p">:</span><span class="n">Ns</span><span class="p">))</span>
+    <span class="n">variables</span> <span class="o">=</span> <span class="s1">&#39;VARIABLES=&quot;x&quot;&#39;</span>
+    <span class="k">do </span><span class="n">s</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">Ns</span>
+      <span class="n">variables</span> <span class="o">=</span> <span class="n">variables</span><span class="o">//</span><span class="s1">&#39; &quot;rho(&#39;</span><span class="o">//</span><span class="nb">trim</span><span class="p">(</span><span class="n">str</span><span class="p">(.</span><span class="n">true</span><span class="p">.,</span><span class="n">s</span><span class="p">))</span><span class="o">//</span><span class="s1">&#39;)&quot;&#39;</span>
+    <span class="n">enddo</span>
+    <span class="n">variables</span> <span class="o">=</span> <span class="n">variables</span><span class="o">//</span><span class="s1">&#39;  &quot;u&quot; &quot;p&quot; &quot;rho&quot; &quot;gamma&quot;&#39;</span>
+    <span class="n">BC_L</span> <span class="o">=</span> <span class="s1">&#39;TRA&#39;</span>
+    <span class="n">BC_R</span> <span class="o">=</span> <span class="s1">&#39;TRA&#39;</span>
+    <span class="n">cp0</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">=</span> <span class="mi">104</span><span class="mf">0._R_P</span>
+    <span class="n">cv0</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">=</span> <span class="mi">74</span><span class="mf">3._R_P</span>
+    <span class="k">do </span><span class="n">i</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">Ni</span><span class="o">/</span><span class="mi">2</span>
+      <span class="n">initial_state</span><span class="p">(:,</span> <span class="n">i</span><span class="p">)</span> <span class="o">=</span> <span class="p">[</span><span class="mf">1._R_P</span><span class="p">,</span> <span class="p">&amp;</span> <span class="c">! rho(s)</span>
+                             <span class="mf">0._R_P</span><span class="p">,</span> <span class="p">&amp;</span> <span class="c">! u</span>
+                             <span class="mf">1._R_P</span><span class="p">,</span> <span class="p">&amp;</span> <span class="c">! p</span>
+                             <span class="mf">1._R_P</span><span class="p">,</span> <span class="p">&amp;</span> <span class="c">! sum(rho(s))</span>
+                             <span class="n">cp0</span><span class="o">/</span><span class="n">cv0</span><span class="p">]</span>  <span class="c">! gamma = cp/cv</span>
+    <span class="n">enddo</span>
+    <span class="k">do </span><span class="n">i</span><span class="o">=</span><span class="n">Ni</span><span class="o">/</span><span class="mi">2</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">Ni</span>
+      <span class="n">initial_state</span><span class="p">(:,</span> <span class="n">i</span><span class="p">)</span> <span class="o">=</span> <span class="p">[</span><span class="mf">0.125_R_P</span><span class="p">,</span> <span class="p">&amp;</span> <span class="c">! rho(s)</span>
+                             <span class="mf">0._R_P</span><span class="p">,</span>    <span class="p">&amp;</span> <span class="c">! u</span>
+                             <span class="mf">0.1_R_P</span><span class="p">,</span>   <span class="p">&amp;</span> <span class="c">! p</span>
+                             <span class="mf">0.125_R_P</span><span class="p">,</span> <span class="p">&amp;</span> <span class="c">! sum(rho(s))</span>
+                             <span class="n">cp0</span><span class="o">/</span><span class="n">cv0</span><span class="p">]</span>     <span class="c">! gamma = cp/cv</span>
+    <span class="n">enddo</span>
+  <span class="k">case</span><span class="p">(</span><span class="s1">&#39;smooth&#39;</span><span class="p">)</span>
+    <span class="k">print</span> <span class="s2">&quot;(A)&quot;</span><span class="p">,</span> <span class="s1">&#39;Solving &quot;&#39;</span><span class="o">//</span><span class="nb">trim</span><span class="p">(</span><span class="nb">adjustl</span><span class="p">(</span><span class="n">problem</span><span class="p">))</span><span class="o">//</span><span class="s1">&#39;&quot; problem&#39;</span>
+    <span class="n">t_final</span> <span class="o">=</span> <span class="mf">0.1_R_P</span>
+    <span class="n">CFL</span> <span class="o">=</span> <span class="mf">0.7_R_P</span>
+    <span class="n">Ns</span> <span class="o">=</span> <span class="mi">1</span>
+    <span class="n">Nc</span> <span class="o">=</span> <span class="n">Ns</span> <span class="o">+</span> <span class="mi">2</span>
+    <span class="n">Np</span> <span class="o">=</span> <span class="n">Ns</span> <span class="o">+</span> <span class="mi">4</span>
+    <span class="k">allocate</span><span class="p">(</span><span class="n">initial_state</span><span class="p">(</span><span class="mi">1</span><span class="p">:</span><span class="n">Np</span><span class="p">,</span> <span class="mi">1</span><span class="p">:</span><span class="n">Ni</span><span class="p">))</span>
+    <span class="k">allocate</span><span class="p">(</span><span class="n">cp0</span><span class="p">(</span><span class="mi">1</span><span class="p">:</span><span class="n">Ns</span><span class="p">))</span>
+    <span class="k">allocate</span><span class="p">(</span><span class="n">cv0</span><span class="p">(</span><span class="mi">1</span><span class="p">:</span><span class="n">Ns</span><span class="p">))</span>
+    <span class="n">variables</span> <span class="o">=</span> <span class="s1">&#39;VARIABLES=&quot;x&quot;&#39;</span>
+    <span class="k">do </span><span class="n">s</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">Ns</span>
+      <span class="n">variables</span> <span class="o">=</span> <span class="n">variables</span><span class="o">//</span><span class="s1">&#39; &quot;rho(&#39;</span><span class="o">//</span><span class="nb">trim</span><span class="p">(</span><span class="n">str</span><span class="p">(.</span><span class="n">true</span><span class="p">.,</span><span class="n">s</span><span class="p">))</span><span class="o">//</span><span class="s1">&#39;)&quot;&#39;</span>
+    <span class="n">enddo</span>
+    <span class="n">variables</span> <span class="o">=</span> <span class="n">variables</span><span class="o">//</span><span class="s1">&#39;  &quot;u&quot; &quot;p&quot; &quot;rho&quot; &quot;gamma&quot;&#39;</span>
+    <span class="n">BC_L</span> <span class="o">=</span> <span class="s1">&#39;TRA&#39;</span>
+    <span class="n">BC_R</span> <span class="o">=</span> <span class="s1">&#39;TRA&#39;</span>
+    <span class="n">cp0</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">=</span> <span class="mi">104</span><span class="mf">0._R_P</span>
+    <span class="n">cv0</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">=</span> <span class="mi">74</span><span class="mf">3._R_P</span>
+    <span class="k">do </span><span class="n">i</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">Ni</span>
+      <span class="n">initial_state</span><span class="p">(:,</span> <span class="n">i</span><span class="p">)</span> <span class="o">=</span> <span class="p">[</span><span class="mf">1._R_P</span> <span class="o">+</span> <span class="mf">4._R_P</span> <span class="o">/</span> <span class="mf">5._R_P</span>  <span class="o">*</span> <span class="nb">sin</span><span class="p">(</span>         <span class="n">pi</span> <span class="o">*</span> <span class="n">xcenter</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="o">*</span> <span class="mf">0.5_R_P</span><span class="p">)</span> <span class="o">+</span> <span class="p">&amp;</span>
+                                      <span class="mf">1._R_P</span> <span class="o">/</span> <span class="mi">1</span><span class="mf">0._R_P</span> <span class="o">*</span> <span class="nb">sin</span><span class="p">(</span><span class="mf">5._R_P</span> <span class="o">*</span> <span class="n">pi</span> <span class="o">*</span> <span class="n">xcenter</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="o">*</span> <span class="mf">0.5_R_P</span><span class="p">),</span>  <span class="p">&amp;</span> <span class="c">! rho(s)</span>
+                             <span class="mf">0.5_R_P</span> <span class="o">*</span> <span class="p">(</span><span class="n">xcenter</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="o">-</span> <span class="mf">0.5_R_P</span><span class="p">)</span><span class="o">**</span><span class="mi">4</span><span class="p">,</span>                                  <span class="p">&amp;</span> <span class="c">! u</span>
+                             <span class="mi">1</span><span class="mf">0._R_P</span> <span class="o">+</span> <span class="mf">2._R_P</span> <span class="o">*</span> <span class="n">xcenter</span><span class="p">(</span><span class="n">i</span><span class="p">)</span><span class="o">**</span><span class="mi">4</span><span class="p">,</span>                                     <span class="p">&amp;</span> <span class="c">! p</span>
+                             <span class="mf">1._R_P</span> <span class="o">+</span> <span class="mf">4._R_P</span> <span class="o">/</span> <span class="mf">5._R_P</span>  <span class="o">*</span> <span class="nb">sin</span><span class="p">(</span>         <span class="n">pi</span> <span class="o">*</span> <span class="n">xcenter</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="o">*</span> <span class="mf">0.5_R_P</span><span class="p">)</span> <span class="o">+</span> <span class="p">&amp;</span>
+                                      <span class="mf">1._R_P</span> <span class="o">/</span> <span class="mi">1</span><span class="mf">0._R_P</span> <span class="o">*</span> <span class="nb">sin</span><span class="p">(</span><span class="mf">5._R_P</span> <span class="o">*</span> <span class="n">pi</span> <span class="o">*</span> <span class="n">xcenter</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="o">*</span> <span class="mf">0.5_R_P</span><span class="p">),</span>  <span class="p">&amp;</span> <span class="c">! sum(rho(s))</span>
+                             <span class="n">cp0</span><span class="o">/</span><span class="n">cv0</span><span class="p">]</span>     <span class="c">! gamma = cp/cv</span>
+    <span class="n">enddo</span>
+  <span class="k">case </span><span class="n">default</span>
+    <span class="k">print</span> <span class="s2">&quot;(A)&quot;</span><span class="p">,</span> <span class="s1">&#39;Error: unknown problem &quot;&#39;</span><span class="o">//</span><span class="nb">trim</span><span class="p">(</span><span class="nb">adjustl</span><span class="p">(</span><span class="n">problem</span><span class="p">))</span><span class="o">//</span><span class="s1">&#39;&quot;&#39;</span>
+    <span class="k">print</span> <span class="s2">&quot;(A)&quot;</span><span class="p">,</span> <span class="s1">&#39;Valid problem names are:&#39;</span>
+    <span class="k">print</span> <span class="s2">&quot;(A)&quot;</span><span class="p">,</span> <span class="s1">&#39;  + sod&#39;</span>
+    <span class="k">print</span> <span class="s2">&quot;(A)&quot;</span><span class="p">,</span> <span class="s1">&#39;  + smooth&#39;</span>
+    <span class="k">stop</span>
+<span class="k">  </span><span class="n">endselect</span>
+
+  <span class="k">if</span> <span class="p">(</span><span class="nb">trim</span><span class="p">(</span><span class="nb">adjustl</span><span class="p">(</span><span class="n">output_cli</span><span class="p">))</span><span class="o">/=</span><span class="s1">&#39;unset&#39;</span><span class="p">)</span> <span class="k">then</span>
+<span class="k">    </span><span class="n">output</span> <span class="o">=</span> <span class="nb">trim</span><span class="p">(</span><span class="nb">adjustl</span><span class="p">(</span><span class="n">output_cli</span><span class="p">))</span><span class="o">//</span><span class="s1">&#39;-&#39;</span><span class="o">//</span><span class="nb">trim</span><span class="p">(</span><span class="nb">adjustl</span><span class="p">(</span><span class="n">solver</span><span class="p">))</span>
+  <span class="k">else</span>
+<span class="k">    </span><span class="n">output</span> <span class="o">=</span> <span class="s1">&#39;euler_1D_integration-&#39;</span><span class="o">//</span><span class="nb">trim</span><span class="p">(</span><span class="nb">adjustl</span><span class="p">(</span><span class="n">solver</span><span class="p">))</span>
+  <span class="n">endif</span>
   <span class="k">return</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
   <span class="n">endsubroutine</span> <span class="n">init</span>

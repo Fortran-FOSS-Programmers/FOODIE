@@ -180,6 +180,8 @@
       
       <a class="list-group-item" href="../sourcefile/foodie_integrator_adams_moulton.f90.html">foodie_integrator_adams_moulton.f90</a>
       
+      <a class="list-group-item" href="../sourcefile/foodie_integrator_embedded_runge_kutta.f90.html">foodie_integrator_embedded_runge_kutta.f90</a>
+      
       <a class="list-group-item" href="../sourcefile/foodie_integrator_euler_explicit.f90.html">foodie_integrator_euler_explicit.f90</a>
       
       <a class="list-group-item" href="../sourcefile/foodie_integrator_leapfrog.f90.html">foodie_integrator_leapfrog.f90</a>
@@ -250,6 +252,8 @@
 <span class="c">!&lt;    + SSP(2,2): 2 stages, 2nd order accurate;</span>
 <span class="c">!&lt;    + SSP(3,3): 3 stages, 3rd order accurate;</span>
 <span class="c">!&lt;    + SSP(5,4): 5 stages, 4th order accurate;</span>
+<span class="c">!&lt;+ *explicit embedded Runge-Kutta* class schemes:</span>
+<span class="c">!&lt;    + DP(7,4): 7 stages, 4th order accurate, Dormand and Prince scheme;</span>
 <span class="c">!&lt;+ *implicit Adams-Moulton* class of schemes:</span>
 <span class="c">!&lt;    + 0 step, namely the implicit backward Euler scheme, 1st order accurate;</span>
 <span class="c">!&lt;    + 1 step, 2nd order accurate;</span>
@@ -313,6 +317,7 @@
 <span class="k">use </span><span class="n">foodie_integrator_adams_bashforth</span><span class="p">,</span> <span class="n">only</span> <span class="p">:</span> <span class="n">adams_bashforth_integrator</span>
 <span class="k">use </span><span class="n">foodie_integrator_adams_bashforth_moulton</span><span class="p">,</span> <span class="n">only</span> <span class="p">:</span> <span class="n">adams_bashforth_moulton_integrator</span>
 <span class="k">use </span><span class="n">foodie_integrator_adams_moulton</span><span class="p">,</span> <span class="n">only</span> <span class="p">:</span> <span class="n">adams_moulton_integrator</span>
+<span class="k">use </span><span class="n">foodie_integrator_emd_runge_kutta</span><span class="p">,</span> <span class="n">only</span> <span class="p">:</span> <span class="n">emd_runge_kutta_integrator</span>
 <span class="k">use </span><span class="n">foodie_integrator_euler_explicit</span><span class="p">,</span> <span class="n">only</span> <span class="p">:</span> <span class="n">euler_explicit_integrator</span>
 <span class="k">use </span><span class="n">foodie_integrator_leapfrog</span><span class="p">,</span> <span class="n">only</span> <span class="p">:</span> <span class="n">leapfrog_integrator</span>
 <span class="k">use </span><span class="n">foodie_integrator_low_storage_runge_kutta</span><span class="p">,</span> <span class="n">only</span> <span class="p">:</span> <span class="n">ls_runge_kutta_integrator</span>
@@ -326,6 +331,7 @@
 <span class="k">public</span> <span class="kd">::</span> <span class="n">adams_bashforth_integrator</span>
 <span class="k">public</span> <span class="kd">::</span> <span class="n">adams_bashforth_moulton_integrator</span>
 <span class="k">public</span> <span class="kd">::</span> <span class="n">adams_moulton_integrator</span>
+<span class="k">public</span> <span class="kd">::</span> <span class="n">emd_runge_kutta_integrator</span>
 <span class="k">public</span> <span class="kd">::</span> <span class="n">euler_explicit_integrator</span>
 <span class="k">public</span> <span class="kd">::</span> <span class="n">leapfrog_integrator</span>
 <span class="k">public</span> <span class="kd">::</span> <span class="n">ls_runge_kutta_integrator</span>

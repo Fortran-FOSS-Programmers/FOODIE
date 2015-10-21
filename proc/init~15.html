@@ -104,14 +104,14 @@
      
     
     
-    <li><i class="fa fa-code"></i><a href="../src/type_lorenz.f90"> Source File</a></li>
+    <li><i class="fa fa-code"></i><a href="../src/type_burgers.f90"> Source File</a></li>
      
   </ul>
   <ol class="breadcrumb in-well text-right">
   
-     <li><a href='../sourcefile/type_lorenz.f90.html'>type_lorenz.f90</a></li>
+     <li><a href='../sourcefile/type_burgers.f90.html'>type_burgers.f90</a></li>
   
-     <li><a href='../module/type_lorenz.html'>type_lorenz</a></li>
+     <li><a href='../module/type_burgers.html'>type_burgers</a></li>
   
      <li class="active">init</li>
   </ol>
@@ -131,7 +131,7 @@
     <div class="panel-heading text-left"><h3 class="panel-title">Variables</h3></div>
     <div class="list-group">
       
-      <a class="list-group-item" href="../proc/init%7E15.html#variable-s%7E24">s</a>
+      <a class="list-group-item" href="../proc/init%7E15.html#variable-s%7E22">s</a>
       
     </div>
   </div>
@@ -243,6 +243,8 @@
       
       <a class="list-group-item" href="../proc/destroy%7E8.html">destroy</a>
       
+      <a class="list-group-item" href="../proc/destroy%7E9.html">destroy</a>
+      
       <a class="list-group-item" href="../proc/destroy_rk.html">destroy_rk</a>
       
       <a class="list-group-item" href="../proc/deuler_dt.html">dEuler_dt</a>
@@ -260,6 +262,8 @@
       <a class="list-group-item" href="../proc/e%7E2.html">E</a>
       
       <a class="list-group-item" href="../proc/e%7E3.html">E</a>
+      
+      <a class="list-group-item" href="../proc/emd_rk_solver.html">emd_rk_solver</a>
       
       <a class="list-group-item" href="../proc/estimate_orders.html">estimate_orders</a>
       
@@ -300,6 +304,8 @@
       <a class="list-group-item" href="../proc/finalize%7E7.html">finalize</a>
       
       <a class="list-group-item" href="../proc/finalize%7E8.html">finalize</a>
+      
+      <a class="list-group-item" href="../proc/finalize%7E9.html">finalize</a>
       
       <a class="list-group-item" href="../proc/finalize_rk.html">finalize_rk</a>
       
@@ -349,6 +355,8 @@
       
       <a class="list-group-item" href="../proc/init%7E17.html">init</a>
       
+      <a class="list-group-item" href="../proc/init%7E18.html">init</a>
+      
       <a class="list-group-item" href="../proc/init_rk.html">init_rk</a>
       
       <a class="list-group-item" href="../proc/integrate.html">integrate</a>
@@ -365,6 +373,8 @@
       
       <a class="list-group-item" href="../proc/integrate%7E7.html">integrate</a>
       
+      <a class="list-group-item" href="../proc/integrate%7E8.html">integrate</a>
+      
       <a class="list-group-item" href="../proc/integrate_rk.html">integrate_rk</a>
       
       <a class="list-group-item" href="../proc/leapfrog_solver.html">leapfrog_solver</a>
@@ -379,7 +389,11 @@
       
       <a class="list-group-item" href="../proc/ls_rk_solver.html">ls_rk_solver</a>
       
+      <a class="list-group-item" href="../proc/new_dt.html">new_Dt</a>
+      
       <a class="list-group-item" href="../proc/oscillation_assign_oscillation.html">oscillation_assign_oscillation</a>
+      
+      <a class="list-group-item" href="../proc/oscillation_local_error.html">oscillation_local_error</a>
       
       <a class="list-group-item" href="../proc/oscillation_multiply_oscillation.html">oscillation_multiply_oscillation</a>
       
@@ -487,6 +501,8 @@
       
       <a class="list-group-item" href="../proc/test_am.html">test_am</a>
       
+      <a class="list-group-item" href="../proc/test_emd_rk.html">test_emd_rk</a>
+      
       <a class="list-group-item" href="../proc/test_euler.html">test_euler</a>
       
       <a class="list-group-item" href="../proc/test_euler%7E2.html">test_euler</a>
@@ -539,7 +555,7 @@
     
     <div class="col-lg-9" id='text'>
     <h2>
-private subroutine init(self, initial_state, sigma, rho, beta, steps)
+private subroutine init(self, initial_state, Ni, h, nu, steps)
     
     
     
@@ -567,12 +583,12 @@ private subroutine init(self, initial_state, sigma, rho, beta, steps)
   
 <tr>
   
-  <td><span class="anchor" id="variable-self%7E76"></span>class(<a href='../type/lorenz.html'>lorenz</a>),</td>
+  <td><span class="anchor" id="variable-self%7E66"></span>class(<a href='../type/burgers.html'>burgers</a>),</td>
   <td>intent(inout)</td>
   <td></td>
   
   <td></td><td>::</td>
-  <td><strong>self</strong></td><td><p>Lorenz field.</p></td>
+  <td><strong>self</strong></td><td><p>Burgers field.</p></td>
   
 </tr>
 
@@ -582,12 +598,12 @@ private subroutine init(self, initial_state, sigma, rho, beta, steps)
   
 <tr>
   
-  <td><span class="anchor" id="variable-initial_state%7E5"></span>real(kind=R_P),</td>
+  <td><span class="anchor" id="variable-initial_state%7E4"></span>real(kind=R_P),</td>
   <td>intent(in),</td>
   <td></td>
   
-  <td>dimension(:)</td><td>::</td>
-  <td><strong>initial_state</strong></td><td><p>Initial state of Lorenz field vector.</p></td>
+  <td>dimension(1:Ni)</td><td>::</td>
+  <td><strong>initial_state</strong></td><td><p>Initial state of Burgers field domain.</p></td>
   
 </tr>
 
@@ -597,12 +613,12 @@ private subroutine init(self, initial_state, sigma, rho, beta, steps)
   
 <tr>
   
-  <td><span class="anchor" id="variable-sigma%7E2"></span>real(kind=R_P),</td>
+  <td><span class="anchor" id="variable-ni%7E7"></span>integer(kind=I_P),</td>
   <td>intent(in)</td>
   <td></td>
   
   <td></td><td>::</td>
-  <td><strong>sigma</strong></td><td><p>Lorenz  \(\sigma\).</p></td>
+  <td><strong>Ni</strong></td><td><p>Number of grid nodes.</p></td>
   
 </tr>
 
@@ -612,12 +628,12 @@ private subroutine init(self, initial_state, sigma, rho, beta, steps)
   
 <tr>
   
-  <td><span class="anchor" id="variable-rho%7E2"></span>real(kind=R_P),</td>
+  <td><span class="anchor" id="variable-h%7E2"></span>real(kind=R_P),</td>
   <td>intent(in)</td>
   <td></td>
   
   <td></td><td>::</td>
-  <td><strong>rho</strong></td><td><p>Lorenz  \(\rho\).</p></td>
+  <td><strong>h</strong></td><td><p>Space step discretization.</p></td>
   
 </tr>
 
@@ -627,12 +643,12 @@ private subroutine init(self, initial_state, sigma, rho, beta, steps)
   
 <tr>
   
-  <td><span class="anchor" id="variable-beta%7E4"></span>real(kind=R_P),</td>
+  <td><span class="anchor" id="variable-nu%7E4"></span>real(kind=R_P),</td>
   <td>intent(in)</td>
   <td></td>
   
   <td></td><td>::</td>
-  <td><strong>beta</strong></td><td><p>Lorenz  \(\beta\).</p></td>
+  <td><strong>nu</strong></td><td><p>Viscosity.</p></td>
   
 </tr>
 
@@ -642,7 +658,7 @@ private subroutine init(self, initial_state, sigma, rho, beta, steps)
   
 <tr>
   
-  <td><span class="anchor" id="variable-steps%7E12"></span>integer(kind=I_P),</td>
+  <td><span class="anchor" id="variable-steps%7E16"></span>integer(kind=I_P),</td>
   <td>intent(in),</td>
   <td>optional</td>
   
@@ -658,7 +674,7 @@ private subroutine init(self, initial_state, sigma, rho, beta, steps)
     
     
     <h3>Description</h3>
-    <p>Construct an initialized Lorenz field.</p>
+    <p>Construct an initialized Burgers field.</p>
     
     
      
@@ -682,7 +698,7 @@ private subroutine init(self, initial_state, sigma, rho, beta, steps)
   
 <tr>
   
-  <td><span class="anchor" id="variable-s%7E24"></span>integer(kind=I_P),</td>
+  <td><span class="anchor" id="variable-s%7E22"></span>integer(kind=I_P),</td>
   
   <td>public</td>
   <td></td><td>::</td>
@@ -713,25 +729,24 @@ private subroutine init(self, initial_state, sigma, rho, beta, steps)
     
     <section>
     <h2><span class="anchor" id="src"></span>Source Code</h2>
-    <div class="highlight"><pre>  <span class="k">subroutine </span><span class="n">init</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">initial_state</span><span class="p">,</span> <span class="n">sigma</span><span class="p">,</span> <span class="n">rho</span><span class="p">,</span> <span class="n">beta</span><span class="p">,</span> <span class="n">steps</span><span class="p">)</span>
+    <div class="highlight"><pre>  <span class="k">subroutine </span><span class="n">init</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">initial_state</span><span class="p">,</span> <span class="n">Ni</span><span class="p">,</span> <span class="n">h</span><span class="p">,</span> <span class="n">nu</span><span class="p">,</span> <span class="n">steps</span><span class="p">)</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
-  <span class="c">!&lt; Construct an initialized Lorenz field.</span>
+  <span class="c">!&lt; Construct an initialized Burgers field.</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
-  <span class="k">class</span><span class="p">(</span><span class="n">lorenz</span><span class="p">),</span>           <span class="k">intent</span><span class="p">(</span><span class="n">INOUT</span><span class="p">)</span> <span class="kd">::</span> <span class="n">self</span>          <span class="c">!&lt; Lorenz field.</span>
-  <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">),</span> <span class="k">dimension</span><span class="p">(:),</span> <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span>    <span class="kd">::</span> <span class="n">initial_state</span> <span class="c">!&lt; Initial state of Lorenz field vector.</span>
-  <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">),</span>               <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span>    <span class="kd">::</span> <span class="n">sigma</span>         <span class="c">!&lt; Lorenz  \(\sigma\).</span>
-  <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">),</span>               <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span>    <span class="kd">::</span> <span class="n">rho</span>           <span class="c">!&lt; Lorenz  \(\rho\).</span>
-  <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">),</span>               <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span>    <span class="kd">::</span> <span class="n">beta</span>          <span class="c">!&lt; Lorenz  \(\beta\).</span>
-  <span class="kt">integer</span><span class="p">(</span><span class="n">I_P</span><span class="p">),</span> <span class="k">optional</span><span class="p">,</span>  <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span>    <span class="kd">::</span> <span class="n">steps</span>         <span class="c">!&lt; Time steps stored.</span>
-  <span class="kt">integer</span><span class="p">(</span><span class="n">I_P</span><span class="p">)</span>                           <span class="kd">::</span> <span class="n">s</span>             <span class="c">!&lt; Time steps counter.</span>
+  <span class="k">class</span><span class="p">(</span><span class="n">burgers</span><span class="p">),</span>             <span class="k">intent</span><span class="p">(</span><span class="n">INOUT</span><span class="p">)</span> <span class="kd">::</span> <span class="n">self</span>          <span class="c">!&lt; Burgers field.</span>
+  <span class="kt">integer</span><span class="p">(</span><span class="n">I_P</span><span class="p">),</span>               <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span>    <span class="kd">::</span> <span class="n">Ni</span>            <span class="c">!&lt; Number of grid nodes.</span>
+  <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">),</span> <span class="k">dimension</span><span class="p">(</span><span class="mi">1</span><span class="p">:</span><span class="n">Ni</span><span class="p">),</span> <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span>    <span class="kd">::</span> <span class="n">initial_state</span> <span class="c">!&lt; Initial state of Burgers field domain.</span>
+  <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">),</span>                  <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span>    <span class="kd">::</span> <span class="n">h</span>             <span class="c">!&lt; Space step discretization.</span>
+  <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">),</span>                  <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span>    <span class="kd">::</span> <span class="n">nu</span>            <span class="c">!&lt; Viscosity.</span>
+  <span class="kt">integer</span><span class="p">(</span><span class="n">I_P</span><span class="p">),</span> <span class="k">optional</span><span class="p">,</span>     <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span>    <span class="kd">::</span> <span class="n">steps</span>         <span class="c">!&lt; Time steps stored.</span>
+  <span class="kt">integer</span><span class="p">(</span><span class="n">I_P</span><span class="p">)</span>                              <span class="kd">::</span> <span class="n">s</span>             <span class="c">!&lt; Time steps counter.</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
 
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
-  <span class="n">self</span><span class="p">%</span><span class="n">dims</span> <span class="o">=</span> <span class="n">size</span><span class="p">(</span><span class="n">initial_state</span><span class="p">)</span>
   <span class="n">self</span><span class="p">%</span><span class="n">steps</span> <span class="o">=</span> <span class="mi">0</span> <span class="p">;</span> <span class="k">if</span> <span class="p">(</span><span class="nb">present</span><span class="p">(</span><span class="n">steps</span><span class="p">))</span> <span class="n">self</span><span class="p">%</span><span class="n">steps</span> <span class="o">=</span> <span class="n">steps</span>
-  <span class="k">if</span> <span class="p">(</span><span class="nb">allocated</span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">U</span><span class="p">))</span> <span class="k">deallocate</span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">U</span><span class="p">)</span> <span class="p">;</span> <span class="k">allocate</span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">U</span><span class="p">(</span><span class="mi">1</span><span class="p">:</span><span class="n">self</span><span class="p">%</span><span class="n">dims</span><span class="p">))</span>
+  <span class="k">if</span> <span class="p">(</span><span class="nb">allocated</span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">U</span><span class="p">))</span> <span class="k">deallocate</span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">U</span><span class="p">)</span> <span class="p">;</span> <span class="k">allocate</span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">U</span><span class="p">(</span><span class="mi">1</span><span class="p">:</span><span class="n">Ni</span><span class="p">))</span>
   <span class="k">if</span> <span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">steps</span><span class="o">&gt;</span><span class="mi">0</span><span class="p">)</span> <span class="k">then</span>
-<span class="k">    if</span> <span class="p">(</span><span class="nb">allocated</span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">previous</span><span class="p">))</span> <span class="k">deallocate</span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">previous</span><span class="p">)</span> <span class="p">;</span> <span class="k">allocate</span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">previous</span><span class="p">(</span><span class="mi">1</span><span class="p">:</span><span class="n">self</span><span class="p">%</span><span class="n">dims</span><span class="p">,</span> <span class="mi">1</span><span class="p">:</span><span class="n">self</span><span class="p">%</span><span class="n">steps</span><span class="p">))</span>
+<span class="k">    if</span> <span class="p">(</span><span class="nb">allocated</span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">previous</span><span class="p">))</span> <span class="k">deallocate</span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">previous</span><span class="p">)</span> <span class="p">;</span> <span class="k">allocate</span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">previous</span><span class="p">(</span><span class="mi">1</span><span class="p">:</span><span class="n">Ni</span><span class="p">,</span> <span class="mi">1</span><span class="p">:</span><span class="n">self</span><span class="p">%</span><span class="n">steps</span><span class="p">))</span>
   <span class="n">endif</span>
   <span class="n">self</span><span class="p">%</span><span class="n">U</span> <span class="o">=</span> <span class="n">initial_state</span>
   <span class="k">if</span> <span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">steps</span><span class="o">&gt;</span><span class="mi">0</span><span class="p">)</span> <span class="k">then</span>
@@ -739,9 +754,9 @@ private subroutine init(self, initial_state, sigma, rho, beta, steps)
       <span class="n">self</span><span class="p">%</span><span class="n">previous</span><span class="p">(:,</span> <span class="n">s</span><span class="p">)</span> <span class="o">=</span> <span class="n">initial_state</span>
     <span class="n">enddo</span>
   <span class="n">endif</span>
-  <span class="n">self</span><span class="p">%</span><span class="n">sigma</span> <span class="o">=</span> <span class="n">sigma</span>
-  <span class="n">self</span><span class="p">%</span><span class="n">rho</span> <span class="o">=</span> <span class="n">rho</span>
-  <span class="n">self</span><span class="p">%</span><span class="n">beta</span> <span class="o">=</span> <span class="n">beta</span>
+  <span class="n">self</span><span class="p">%</span><span class="n">Ni</span> <span class="o">=</span> <span class="n">Ni</span>
+  <span class="n">self</span><span class="p">%</span><span class="n">h</span> <span class="o">=</span> <span class="n">h</span>
+  <span class="n">self</span><span class="p">%</span><span class="n">nu</span> <span class="o">=</span> <span class="n">nu</span>
   <span class="k">return</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
   <span class="n">endsubroutine</span> <span class="n">init</span>

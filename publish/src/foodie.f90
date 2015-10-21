@@ -32,6 +32,8 @@ module foodie
 !<    + SSP(2,2): 2 stages, 2nd order accurate;
 !<    + SSP(3,3): 3 stages, 3rd order accurate;
 !<    + SSP(5,4): 5 stages, 4th order accurate;
+!<+ *explicit embedded Runge-Kutta* class schemes:
+!<    + DP(7,4): 7 stages, 4th order accurate, Dormand and Prince scheme;
 !<+ *implicit Adams-Moulton* class of schemes:
 !<    + 0 step, namely the implicit backward Euler scheme, 1st order accurate;
 !<    + 1 step, 2nd order accurate;
@@ -95,6 +97,7 @@ use foodie_adt_integrand, only : integrand
 use foodie_integrator_adams_bashforth, only : adams_bashforth_integrator
 use foodie_integrator_adams_bashforth_moulton, only : adams_bashforth_moulton_integrator
 use foodie_integrator_adams_moulton, only : adams_moulton_integrator
+use foodie_integrator_emd_runge_kutta, only : emd_runge_kutta_integrator
 use foodie_integrator_euler_explicit, only : euler_explicit_integrator
 use foodie_integrator_leapfrog, only : leapfrog_integrator
 use foodie_integrator_low_storage_runge_kutta, only : ls_runge_kutta_integrator
@@ -108,6 +111,7 @@ public :: integrand
 public :: adams_bashforth_integrator
 public :: adams_bashforth_moulton_integrator
 public :: adams_moulton_integrator
+public :: emd_runge_kutta_integrator
 public :: euler_explicit_integrator
 public :: leapfrog_integrator
 public :: ls_runge_kutta_integrator

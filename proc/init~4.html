@@ -104,14 +104,14 @@
      
     
     
-    <li><i class="fa fa-code"></i><a href="../src/foodie_integrator_leapfrog.f90"> Source File</a></li>
+    <li><i class="fa fa-code"></i><a href="../src/foodie_integrator_embedded_runge_kutta.f90"> Source File</a></li>
      
   </ul>
   <ol class="breadcrumb in-well text-right">
   
-     <li><a href='../sourcefile/foodie_integrator_leapfrog.f90.html'>foodie_integrator_leapfrog.f90</a></li>
+     <li><a href='../sourcefile/foodie_integrator_embedded_runge_kutta.f90.html'>foodie_integrator_embedded_runge_kutta.f90</a></li>
   
-     <li><a href='../module/foodie_integrator_leapfrog.html'>foodie_integrator_leapfrog</a></li>
+     <li><a href='../module/foodie_integrator_emd_runge_kutta.html'>foodie_integrator_emd_runge_kutta</a></li>
   
      <li class="active">init</li>
   </ol>
@@ -233,6 +233,8 @@
       
       <a class="list-group-item" href="../proc/destroy%7E8.html">destroy</a>
       
+      <a class="list-group-item" href="../proc/destroy%7E9.html">destroy</a>
+      
       <a class="list-group-item" href="../proc/destroy_rk.html">destroy_rk</a>
       
       <a class="list-group-item" href="../proc/deuler_dt.html">dEuler_dt</a>
@@ -250,6 +252,8 @@
       <a class="list-group-item" href="../proc/e%7E2.html">E</a>
       
       <a class="list-group-item" href="../proc/e%7E3.html">E</a>
+      
+      <a class="list-group-item" href="../proc/emd_rk_solver.html">emd_rk_solver</a>
       
       <a class="list-group-item" href="../proc/estimate_orders.html">estimate_orders</a>
       
@@ -290,6 +294,8 @@
       <a class="list-group-item" href="../proc/finalize%7E7.html">finalize</a>
       
       <a class="list-group-item" href="../proc/finalize%7E8.html">finalize</a>
+      
+      <a class="list-group-item" href="../proc/finalize%7E9.html">finalize</a>
       
       <a class="list-group-item" href="../proc/finalize_rk.html">finalize_rk</a>
       
@@ -339,6 +345,8 @@
       
       <a class="list-group-item" href="../proc/init%7E17.html">init</a>
       
+      <a class="list-group-item" href="../proc/init%7E18.html">init</a>
+      
       <a class="list-group-item" href="../proc/init_rk.html">init_rk</a>
       
       <a class="list-group-item" href="../proc/integrate.html">integrate</a>
@@ -355,6 +363,8 @@
       
       <a class="list-group-item" href="../proc/integrate%7E7.html">integrate</a>
       
+      <a class="list-group-item" href="../proc/integrate%7E8.html">integrate</a>
+      
       <a class="list-group-item" href="../proc/integrate_rk.html">integrate_rk</a>
       
       <a class="list-group-item" href="../proc/leapfrog_solver.html">leapfrog_solver</a>
@@ -369,7 +379,11 @@
       
       <a class="list-group-item" href="../proc/ls_rk_solver.html">ls_rk_solver</a>
       
+      <a class="list-group-item" href="../proc/new_dt.html">new_Dt</a>
+      
       <a class="list-group-item" href="../proc/oscillation_assign_oscillation.html">oscillation_assign_oscillation</a>
+      
+      <a class="list-group-item" href="../proc/oscillation_local_error.html">oscillation_local_error</a>
       
       <a class="list-group-item" href="../proc/oscillation_multiply_oscillation.html">oscillation_multiply_oscillation</a>
       
@@ -477,6 +491,8 @@
       
       <a class="list-group-item" href="../proc/test_am.html">test_am</a>
       
+      <a class="list-group-item" href="../proc/test_emd_rk.html">test_emd_rk</a>
+      
       <a class="list-group-item" href="../proc/test_euler.html">test_euler</a>
       
       <a class="list-group-item" href="../proc/test_euler%7E2.html">test_euler</a>
@@ -529,7 +545,7 @@
     
     <div class="col-lg-9" id='text'>
     <h2>
-private elementalsubroutine init(self, nu, alpha)
+private elementalsubroutine init(self, stages, tolerance)
     
     
     
@@ -557,12 +573,12 @@ private elementalsubroutine init(self, nu, alpha)
   
 <tr>
   
-  <td><span class="anchor" id="variable-self%7E16"></span>class(<a href='../type/leapfrog_integrator.html'>leapfrog_integrator</a>),</td>
+  <td><span class="anchor" id="variable-self%7E16"></span>class(<a href='../type/emd_runge_kutta_integrator.html'>emd_runge_kutta_integrator</a>),</td>
   <td>intent(inout)</td>
   <td></td>
   
   <td></td><td>::</td>
-  <td><strong>self</strong></td><td><p>LF integrator.</p></td>
+  <td><strong>self</strong></td><td><p>RK integrator.</p></td>
   
 </tr>
 
@@ -572,12 +588,12 @@ private elementalsubroutine init(self, nu, alpha)
   
 <tr>
   
-  <td><span class="anchor" id="variable-nu%7E3"></span>real(kind=R_P),</td>
-  <td>intent(in),</td>
-  <td>optional</td>
+  <td><span class="anchor" id="variable-stages%7E5"></span>integer(kind=I_P),</td>
+  <td>intent(in)</td>
+  <td></td>
   
   <td></td><td>::</td>
-  <td><strong>nu</strong></td><td><p>Williams-Robert-Asselin filter coefficient.</p></td>
+  <td><strong>stages</strong></td><td><p>Number of stages used.</p></td>
   
 </tr>
 
@@ -587,12 +603,12 @@ private elementalsubroutine init(self, nu, alpha)
   
 <tr>
   
-  <td><span class="anchor" id="variable-alpha%7E2"></span>real(kind=R_P),</td>
+  <td><span class="anchor" id="variable-tolerance%7E2"></span>real(kind=R_P),</td>
   <td>intent(in),</td>
   <td>optional</td>
   
   <td></td><td>::</td>
-  <td><strong>alpha</strong></td><td><p>Robert-Asselin filter coefficient.</p></td>
+  <td><strong>tolerance</strong></td><td><p>Tolerance on the local truncation error (default 0.01).</p></td>
   
 </tr>
 
@@ -603,7 +619,7 @@ private elementalsubroutine init(self, nu, alpha)
     
     
     <h3>Description</h3>
-    <p>Create the actual leapfrog integrator: initialize the filter coefficient.</p>
+    <p>Create the actual RK integrator: initialize the Butcher' table coefficients.</p>
     
     
      
@@ -626,20 +642,57 @@ private elementalsubroutine init(self, nu, alpha)
     
     <section>
     <h2><span class="anchor" id="src"></span>Source Code</h2>
-    <div class="highlight"><pre>  <span class="k">elemental subroutine </span><span class="n">init</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">nu</span><span class="p">,</span> <span class="n">alpha</span><span class="p">)</span>
+    <div class="highlight"><pre>  <span class="k">elemental subroutine </span><span class="n">init</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">stages</span><span class="p">,</span> <span class="n">tolerance</span><span class="p">)</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
-  <span class="c">!&lt; Create the actual leapfrog integrator: initialize the filter coefficient.</span>
+  <span class="c">!&lt; Create the actual RK integrator: initialize the Butcher&#39; table coefficients.</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
-  <span class="k">class</span><span class="p">(</span><span class="n">leapfrog_integrator</span><span class="p">),</span> <span class="k">intent</span><span class="p">(</span><span class="n">INOUT</span><span class="p">)</span> <span class="kd">::</span> <span class="n">self</span>  <span class="c">!&lt; LF integrator.</span>
-  <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">),</span> <span class="k">optional</span><span class="p">,</span>        <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span>    <span class="kd">::</span> <span class="n">nu</span>    <span class="c">!&lt; Williams-Robert-Asselin filter coefficient.</span>
-  <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">),</span> <span class="k">optional</span><span class="p">,</span>        <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span>    <span class="kd">::</span> <span class="n">alpha</span> <span class="c">!&lt; Robert-Asselin filter coefficient.</span>
+  <span class="k">class</span><span class="p">(</span><span class="n">emd_runge_kutta_integrator</span><span class="p">),</span> <span class="k">intent</span><span class="p">(</span><span class="n">INOUT</span><span class="p">)</span> <span class="kd">::</span> <span class="n">self</span>      <span class="c">!&lt; RK integrator.</span>
+  <span class="kt">integer</span><span class="p">(</span><span class="n">I_P</span><span class="p">),</span>                      <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span>    <span class="kd">::</span> <span class="n">stages</span>    <span class="c">!&lt; Number of stages used.</span>
+  <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">),</span> <span class="k">optional</span><span class="p">,</span>               <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span>    <span class="kd">::</span> <span class="n">tolerance</span> <span class="c">!&lt; Tolerance on the local truncation error (default 0.01).</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
 
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
-  <span class="n">self</span><span class="p">%</span><span class="n">nu</span> <span class="o">=</span> <span class="mf">0.01_R_P</span>
-  <span class="n">self</span><span class="p">%</span><span class="n">alpha</span> <span class="o">=</span> <span class="mf">0.53_R_P</span>
-  <span class="k">if</span> <span class="p">(</span><span class="nb">present</span><span class="p">(</span><span class="n">nu</span><span class="p">))</span> <span class="n">self</span><span class="p">%</span><span class="n">nu</span> <span class="o">=</span> <span class="n">nu</span>
-  <span class="k">if</span> <span class="p">(</span><span class="nb">present</span><span class="p">(</span><span class="n">alpha</span><span class="p">))</span> <span class="n">self</span><span class="p">%</span><span class="n">alpha</span> <span class="o">=</span> <span class="n">alpha</span>
+  <span class="k">if</span> <span class="p">(</span><span class="n">stages</span><span class="o">&lt;</span><span class="mi">1</span><span class="p">)</span> <span class="k">return</span> <span class="c">! error print should be added</span>
+  <span class="k">if</span> <span class="p">(</span><span class="nb">present</span><span class="p">(</span><span class="n">tolerance</span><span class="p">))</span> <span class="k">then</span>
+<span class="k">    </span><span class="n">self</span><span class="p">%</span><span class="n">tolerance</span> <span class="o">=</span> <span class="n">tolerance</span>
+  <span class="k">else</span>
+<span class="k">    </span><span class="n">self</span><span class="p">%</span><span class="n">tolerance</span> <span class="o">=</span> <span class="mf">0.01_R_P</span>
+  <span class="n">endif</span>
+  <span class="n">self</span><span class="p">%</span><span class="n">stages</span> <span class="o">=</span> <span class="n">stages</span>
+  <span class="k">if</span> <span class="p">(</span><span class="nb">allocated</span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">beta</span><span class="p">))</span> <span class="k">deallocate</span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">beta</span><span class="p">)</span> <span class="p">;</span> <span class="k">allocate</span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">beta</span><span class="p">(</span><span class="mi">1</span><span class="p">:</span><span class="n">stages</span><span class="p">,</span> <span class="mi">1</span><span class="p">:</span><span class="mi">2</span>     <span class="p">))</span> <span class="p">;</span> <span class="n">self</span><span class="p">%</span><span class="n">beta</span> <span class="o">=</span> <span class="mf">0._R_P</span>
+  <span class="k">if</span> <span class="p">(</span><span class="nb">allocated</span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">alph</span><span class="p">))</span> <span class="k">deallocate</span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">alph</span><span class="p">)</span> <span class="p">;</span> <span class="k">allocate</span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">alph</span><span class="p">(</span><span class="mi">1</span><span class="p">:</span><span class="n">stages</span><span class="p">,</span> <span class="mi">1</span><span class="p">:</span><span class="n">stages</span><span class="p">))</span> <span class="p">;</span> <span class="n">self</span><span class="p">%</span><span class="n">alph</span> <span class="o">=</span> <span class="mf">0._R_P</span>
+  <span class="k">if</span> <span class="p">(</span><span class="nb">allocated</span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">gamm</span><span class="p">))</span> <span class="k">deallocate</span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">gamm</span><span class="p">)</span> <span class="p">;</span> <span class="k">allocate</span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">gamm</span><span class="p">(</span>          <span class="mi">1</span><span class="p">:</span><span class="n">stages</span><span class="p">))</span> <span class="p">;</span> <span class="n">self</span><span class="p">%</span><span class="n">gamm</span> <span class="o">=</span> <span class="mf">0._R_P</span>
+  <span class="k">select case</span><span class="p">(</span><span class="n">stages</span><span class="p">)</span>
+  <span class="k">case</span><span class="p">(</span><span class="mi">7</span><span class="p">)</span>
+    <span class="c">! DPRK(7,4)</span>
+    <span class="n">self</span><span class="p">%</span><span class="n">pp1_inv</span> <span class="o">=</span> <span class="mf">1._R_P</span><span class="o">/</span><span class="p">(</span><span class="mf">4._R_P</span> <span class="o">+</span> <span class="mf">1._R_P</span><span class="p">)</span>
+
+    <span class="n">self</span><span class="p">%</span><span class="n">beta</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span> <span class="o">=</span>   <span class="mi">3</span><span class="mf">5._R_P</span><span class="o">/</span><span class="mi">38</span><span class="mf">4._R_P</span>    <span class="p">;</span> <span class="n">self</span><span class="p">%</span><span class="n">beta</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span> <span class="o">=</span>  <span class="mi">517</span><span class="mf">9._R_P</span><span class="o">/</span><span class="mi">5760</span><span class="mf">0._R_P</span>
+    <span class="n">self</span><span class="p">%</span><span class="n">beta</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span> <span class="o">=</span>   <span class="mf">0._R_P</span>              <span class="p">;</span> <span class="n">self</span><span class="p">%</span><span class="n">beta</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span> <span class="o">=</span>  <span class="mf">0._R_P</span>
+    <span class="n">self</span><span class="p">%</span><span class="n">beta</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span> <span class="o">=</span>   <span class="mi">50</span><span class="mf">0._R_P</span><span class="o">/</span><span class="mi">111</span><span class="mf">3._R_P</span>  <span class="p">;</span> <span class="n">self</span><span class="p">%</span><span class="n">beta</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span> <span class="o">=</span>  <span class="mi">757</span><span class="mf">1._R_P</span><span class="o">/</span><span class="mi">1669</span><span class="mf">5._R_P</span>
+    <span class="n">self</span><span class="p">%</span><span class="n">beta</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span> <span class="o">=</span>   <span class="mi">12</span><span class="mf">5._R_P</span><span class="o">/</span><span class="mi">19</span><span class="mf">2._R_P</span>   <span class="p">;</span> <span class="n">self</span><span class="p">%</span><span class="n">beta</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span> <span class="o">=</span>  <span class="mi">39</span><span class="mf">3._R_P</span><span class="o">/</span><span class="mi">64</span><span class="mf">0._R_P</span>
+    <span class="n">self</span><span class="p">%</span><span class="n">beta</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span> <span class="o">=</span>  <span class="o">-</span><span class="mi">218</span><span class="mf">7._R_P</span><span class="o">/</span><span class="mi">678</span><span class="mf">4._R_P</span> <span class="p">;</span> <span class="n">self</span><span class="p">%</span><span class="n">beta</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span> <span class="o">=</span> <span class="o">-</span><span class="mi">9209</span><span class="mf">7._R_P</span><span class="o">/</span><span class="mi">33920</span><span class="mf">0._R_P</span>
+    <span class="n">self</span><span class="p">%</span><span class="n">beta</span><span class="p">(</span><span class="mi">6</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span> <span class="o">=</span>   <span class="mi">1</span><span class="mf">1._R_P</span><span class="o">/</span><span class="mi">8</span><span class="mf">4._R_P</span>     <span class="p">;</span> <span class="n">self</span><span class="p">%</span><span class="n">beta</span><span class="p">(</span><span class="mi">6</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span> <span class="o">=</span>  <span class="mi">18</span><span class="mf">7._R_P</span><span class="o">/</span><span class="mi">210</span><span class="mf">0._R_P</span>
+    <span class="n">self</span><span class="p">%</span><span class="n">beta</span><span class="p">(</span><span class="mi">7</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span> <span class="o">=</span>   <span class="mf">0._R_P</span>              <span class="p">;</span> <span class="n">self</span><span class="p">%</span><span class="n">beta</span><span class="p">(</span><span class="mi">7</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span> <span class="o">=</span>  <span class="mf">1._R_P</span><span class="o">/</span><span class="mi">4</span><span class="mf">0._R_P</span>
+
+    <span class="n">self</span><span class="p">%</span><span class="n">alph</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span><span class="o">=</span><span class="mf">1._R_P</span><span class="o">/</span><span class="mf">5._R_P</span>
+    <span class="n">self</span><span class="p">%</span><span class="n">alph</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span><span class="o">=</span><span class="mf">3._R_P</span><span class="o">/</span><span class="mi">4</span><span class="mf">0._R_P</span>      <span class="p">;</span><span class="n">self</span><span class="p">%</span><span class="n">alph</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span><span class="o">=</span> <span class="mf">9._R_P</span><span class="o">/</span><span class="mi">4</span><span class="mf">0._R_P</span>
+    <span class="n">self</span><span class="p">%</span><span class="n">alph</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span><span class="o">=</span><span class="mi">4</span><span class="mf">4._R_P</span><span class="o">/</span><span class="mi">4</span><span class="mf">5._R_P</span>     <span class="p">;</span><span class="n">self</span><span class="p">%</span><span class="n">alph</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span><span class="o">=-</span><span class="mi">5</span><span class="mf">6._R_P</span><span class="o">/</span><span class="mi">1</span><span class="mf">5._R_P</span>     <span class="p">;</span><span class="n">self</span><span class="p">%</span><span class="n">alph</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span><span class="o">=</span><span class="mi">3</span><span class="mf">2._R_P</span><span class="o">/</span><span class="mf">9._R_P</span>
+    <span class="n">self</span><span class="p">%</span><span class="n">alph</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span><span class="o">=</span><span class="mi">1937</span><span class="mf">2._R_P</span><span class="o">/</span><span class="mi">656</span><span class="mf">1._R_P</span><span class="p">;</span><span class="n">self</span><span class="p">%</span><span class="n">alph</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span><span class="o">=-</span><span class="mi">2536</span><span class="mf">0._R_P</span><span class="o">/</span><span class="mi">218</span><span class="mf">7._R_P</span><span class="p">;</span><span class="n">self</span><span class="p">%</span><span class="n">alph</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span><span class="o">=</span><span class="mi">6444</span><span class="mf">8._R_P</span><span class="o">/</span><span class="mi">656</span><span class="mf">1._R_P</span>
+    <span class="n">self</span><span class="p">%</span><span class="n">alph</span><span class="p">(</span><span class="mi">6</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span><span class="o">=</span><span class="mi">901</span><span class="mf">7._R_P</span><span class="o">/</span><span class="mi">316</span><span class="mf">8._R_P</span> <span class="p">;</span><span class="n">self</span><span class="p">%</span><span class="n">alph</span><span class="p">(</span><span class="mi">6</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span><span class="o">=-</span><span class="mi">35</span><span class="mf">5._R_P</span><span class="o">/</span><span class="mi">3</span><span class="mf">3._R_P</span>    <span class="p">;</span><span class="n">self</span><span class="p">%</span><span class="n">alph</span><span class="p">(</span><span class="mi">6</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span><span class="o">=</span><span class="mi">4673</span><span class="mf">2._R_P</span><span class="o">/</span><span class="mi">524</span><span class="mf">7._R_P</span>
+    <span class="n">self</span><span class="p">%</span><span class="n">alph</span><span class="p">(</span><span class="mi">7</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span><span class="o">=</span><span class="mi">3</span><span class="mf">5._R_P</span><span class="o">/</span><span class="mi">38</span><span class="mf">4._R_P</span>    <span class="p">;</span><span class="n">self</span><span class="p">%</span><span class="n">alph</span><span class="p">(</span><span class="mi">7</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span><span class="o">=</span> <span class="mf">0._R_P</span>              <span class="p">;</span><span class="n">self</span><span class="p">%</span><span class="n">alph</span><span class="p">(</span><span class="mi">7</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span><span class="o">=</span><span class="mi">50</span><span class="mf">0._R_P</span><span class="o">/</span><span class="mi">111</span><span class="mf">3._R_P</span>
+
+    <span class="n">self</span><span class="p">%</span><span class="n">alph</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">4</span><span class="p">)</span><span class="o">=-</span><span class="mi">21</span><span class="mf">2._R_P</span><span class="o">/</span><span class="mi">72</span><span class="mf">9._R_P</span>
+    <span class="n">self</span><span class="p">%</span><span class="n">alph</span><span class="p">(</span><span class="mi">6</span><span class="p">,</span> <span class="mi">4</span><span class="p">)</span><span class="o">=</span> <span class="mi">4</span><span class="mf">9._R_P</span><span class="o">/</span><span class="mi">17</span><span class="mf">6._R_P</span> <span class="p">;</span><span class="n">self</span><span class="p">%</span><span class="n">alph</span><span class="p">(</span><span class="mi">6</span><span class="p">,</span> <span class="mi">5</span><span class="p">)</span><span class="o">=-</span><span class="mi">510</span><span class="mf">3._R_P</span><span class="o">/</span><span class="mi">1865</span><span class="mf">6._R_P</span>
+    <span class="n">self</span><span class="p">%</span><span class="n">alph</span><span class="p">(</span><span class="mi">7</span><span class="p">,</span> <span class="mi">4</span><span class="p">)</span><span class="o">=</span> <span class="mi">12</span><span class="mf">5._R_P</span><span class="o">/</span><span class="mi">19</span><span class="mf">2._R_P</span><span class="p">;</span><span class="n">self</span><span class="p">%</span><span class="n">alph</span><span class="p">(</span><span class="mi">7</span><span class="p">,</span> <span class="mi">5</span><span class="p">)</span><span class="o">=-</span><span class="mi">218</span><span class="mf">7._R_P</span><span class="o">/</span><span class="mi">678</span><span class="mf">4._R_P</span> <span class="p">;</span><span class="n">self</span><span class="p">%</span><span class="n">alph</span><span class="p">(</span><span class="mi">7</span><span class="p">,</span> <span class="mi">6</span><span class="p">)</span><span class="o">=</span><span class="mi">1</span><span class="mf">1._R_P</span><span class="o">/</span><span class="mi">8</span><span class="mf">4._R_P</span>
+
+    <span class="n">self</span><span class="p">%</span><span class="n">gamm</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span> <span class="o">=</span> <span class="mf">1._R_P</span><span class="o">/</span><span class="mf">5._R_P</span>
+    <span class="n">self</span><span class="p">%</span><span class="n">gamm</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span> <span class="o">=</span> <span class="mf">3._R_P</span><span class="o">/</span><span class="mi">1</span><span class="mf">0._R_P</span>
+    <span class="n">self</span><span class="p">%</span><span class="n">gamm</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span> <span class="o">=</span> <span class="mf">4._R_P</span><span class="o">/</span><span class="mf">5._R_P</span>
+    <span class="n">self</span><span class="p">%</span><span class="n">gamm</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span> <span class="o">=</span> <span class="mf">8._R_P</span><span class="o">/</span><span class="mf">9._R_P</span>
+    <span class="n">self</span><span class="p">%</span><span class="n">gamm</span><span class="p">(</span><span class="mi">6</span><span class="p">)</span> <span class="o">=</span> <span class="mf">1._R_P</span>
+    <span class="n">self</span><span class="p">%</span><span class="n">gamm</span><span class="p">(</span><span class="mi">7</span><span class="p">)</span> <span class="o">=</span> <span class="mf">1._R_P</span>
+  <span class="n">endselect</span>
   <span class="k">return</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
   <span class="n">endsubroutine</span> <span class="n">init</span>

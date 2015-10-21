@@ -104,14 +104,14 @@
      
     
     
-    <li><i class="fa fa-code"></i><a href="../src/oscillation.f90"> Source File</a></li>
+    <li><i class="fa fa-code"></i><a href="../src/lorenz.f90"> Source File</a></li>
      
   </ul>
   <ol class="breadcrumb in-well text-right">
   
-     <li><a href='../sourcefile/oscillation.f90.html'>oscillation.f90</a></li>
+     <li><a href='../sourcefile/lorenz.f90.html'>lorenz.f90</a></li>
   
-     <li><a href='../program/integrate_oscillation.html'>integrate_oscillation</a></li>
+     <li><a href='../program/integrate_lorenz.html'>integrate_lorenz</a></li>
   
      <li class="active">test_ls_rk</li>
   </ol>
@@ -131,17 +131,17 @@
     <div class="panel-heading text-left"><h3 class="panel-title">Variables</h3></div>
     <div class="list-group">
       
-      <a class="list-group-item" href="../proc/test_ls_rk%7E4.html#variable-rk_stages%7E13">rk_stages</a>
+      <a class="list-group-item" href="../proc/test_ls_rk%7E4.html#variable-rk_integrator%7E18">rk_integrator</a>
       
-      <a class="list-group-item" href="../proc/test_ls_rk%7E4.html#variable-solution%7E9">solution</a>
+      <a class="list-group-item" href="../proc/test_ls_rk%7E4.html#variable-rk_stages%7E18">rk_stages</a>
       
-      <a class="list-group-item" href="../proc/test_ls_rk%7E4.html#variable-s%7E31">s</a>
+      <a class="list-group-item" href="../proc/test_ls_rk%7E4.html#variable-registers%7E4">registers</a>
       
-      <a class="list-group-item" href="../proc/test_ls_rk%7E4.html#variable-stages_range%7E3">stages_range</a>
+      <a class="list-group-item" href="../proc/test_ls_rk%7E4.html#variable-rk_stage%7E18">rk_stage</a>
       
-      <a class="list-group-item" href="../proc/test_ls_rk%7E4.html#variable-output%7E13">output</a>
+      <a class="list-group-item" href="../proc/test_ls_rk%7E4.html#variable-s%7E32">s</a>
       
-      <a class="list-group-item" href="../proc/test_ls_rk%7E4.html#variable-title%7E20">title</a>
+      <a class="list-group-item" href="../proc/test_ls_rk%7E4.html#variable-step%7E16">step</a>
       
     </div>
   </div>
@@ -253,6 +253,8 @@
       
       <a class="list-group-item" href="../proc/destroy%7E8.html">destroy</a>
       
+      <a class="list-group-item" href="../proc/destroy%7E9.html">destroy</a>
+      
       <a class="list-group-item" href="../proc/destroy_rk.html">destroy_rk</a>
       
       <a class="list-group-item" href="../proc/deuler_dt.html">dEuler_dt</a>
@@ -270,6 +272,8 @@
       <a class="list-group-item" href="../proc/e%7E2.html">E</a>
       
       <a class="list-group-item" href="../proc/e%7E3.html">E</a>
+      
+      <a class="list-group-item" href="../proc/emd_rk_solver.html">emd_rk_solver</a>
       
       <a class="list-group-item" href="../proc/estimate_orders.html">estimate_orders</a>
       
@@ -310,6 +314,8 @@
       <a class="list-group-item" href="../proc/finalize%7E7.html">finalize</a>
       
       <a class="list-group-item" href="../proc/finalize%7E8.html">finalize</a>
+      
+      <a class="list-group-item" href="../proc/finalize%7E9.html">finalize</a>
       
       <a class="list-group-item" href="../proc/finalize_rk.html">finalize_rk</a>
       
@@ -359,6 +365,8 @@
       
       <a class="list-group-item" href="../proc/init%7E17.html">init</a>
       
+      <a class="list-group-item" href="../proc/init%7E18.html">init</a>
+      
       <a class="list-group-item" href="../proc/init_rk.html">init_rk</a>
       
       <a class="list-group-item" href="../proc/integrate.html">integrate</a>
@@ -375,6 +383,8 @@
       
       <a class="list-group-item" href="../proc/integrate%7E7.html">integrate</a>
       
+      <a class="list-group-item" href="../proc/integrate%7E8.html">integrate</a>
+      
       <a class="list-group-item" href="../proc/integrate_rk.html">integrate_rk</a>
       
       <a class="list-group-item" href="../proc/leapfrog_solver.html">leapfrog_solver</a>
@@ -389,7 +399,11 @@
       
       <a class="list-group-item" href="../proc/ls_rk_solver.html">ls_rk_solver</a>
       
+      <a class="list-group-item" href="../proc/new_dt.html">new_Dt</a>
+      
       <a class="list-group-item" href="../proc/oscillation_assign_oscillation.html">oscillation_assign_oscillation</a>
+      
+      <a class="list-group-item" href="../proc/oscillation_local_error.html">oscillation_local_error</a>
       
       <a class="list-group-item" href="../proc/oscillation_multiply_oscillation.html">oscillation_multiply_oscillation</a>
       
@@ -497,6 +511,8 @@
       
       <a class="list-group-item" href="../proc/test_am.html">test_am</a>
       
+      <a class="list-group-item" href="../proc/test_emd_rk.html">test_emd_rk</a>
+      
       <a class="list-group-item" href="../proc/test_euler.html">test_euler</a>
       
       <a class="list-group-item" href="../proc/test_euler%7E2.html">test_euler</a>
@@ -549,7 +565,7 @@
     
     <div class="col-lg-9" id='text'>
     <h2>
-subroutine test_ls_rk(stages)
+subroutine test_ls_rk()
     
     
     
@@ -561,34 +577,7 @@ subroutine test_ls_rk(stages)
 
     <h3>Arguments</h3>
     
-      
-<table class="table table-striped varlist">
-<thead><tr><th>Type</th>
-<th>Intent</th><th>Optional</th>
-<th>Attributes</th><th></th><th>Name</th><th></th></thead>
-
-
-
-<tbody>
-
-  
-  
-  
-  
-<tr>
-  
-  <td><span class="anchor" id="variable-stages%7E7"></span>integer(kind=I_P),</td>
-  <td>intent(in)</td>
-  <td></td>
-  
-  <td></td><td>::</td>
-  <td><strong>stages</strong></td><td><p>Number of stages used: if negative all RK solvers are used.</p></td>
-  
-</tr>
-
-</tbody>
-</table>
-
+      <em>None</em>
     
     
     
@@ -604,88 +593,37 @@ subroutine test_ls_rk(stages)
 <!-- Generated by graphviz version 2.26.3 (20100126.1600)
  -->
 <!-- Title: proc~~test_ls_rk~4~~CallsGraph Pages: 1 -->
-<svg id="proctest_ls_rk4CallsGraph" width="294pt" height="165pt"
- viewBox="0.00 0.00 294.00 165.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-<g id="proc~~test_ls_rk~4~~CallsGraph" class="graph" transform="scale(1 1) rotate(0) translate(4 161)">
+<svg id="proctest_ls_rk4CallsGraph" width="176pt" height="78pt"
+ viewBox="0.00 0.00 176.00 78.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="proc~~test_ls_rk~4~~CallsGraph" class="graph" transform="scale(1 1) rotate(0) translate(4 74)">
 <title>proc~~test_ls_rk~4~~CallsGraph</title>
-<polygon fill="white" stroke="white" points="-4,5 -4,-161 291,-161 291,5 -4,5"/>
+<polygon fill="white" stroke="white" points="-4,5 -4,-74 173,-74 173,5 -4,5"/>
 <!-- proc~test_ls_rk~4 -->
 <g id="node1" class="node"><title>proc~test_ls_rk~4</title>
-<polygon fill="none" stroke="black" points="58,-92 2.4869e-14,-92 0,-66 58,-66 58,-92"/>
-<text text-anchor="middle" x="29" y="-76.55" font-family="Helvetica,sans-Serif" font-size="10.50">test_ls_rk</text>
+<polygon fill="none" stroke="black" points="58,-48 2.4869e-14,-48 0,-22 58,-22 58,-48"/>
+<text text-anchor="middle" x="29" y="-32.55" font-family="Helvetica,sans-Serif" font-size="10.50">test_ls_rk</text>
 </g>
-<!-- proc~init~16 -->
-<g id="node2" class="node"><title>proc~init~16</title>
-<a xlink:href="../proc/init%7E16.html" xlink:title="init">
-<polygon fill="#d9534f" stroke="#d9534f" points="158,-114 104,-114 104,-88 158,-88 158,-114"/>
-<text text-anchor="middle" x="131" y="-98.55" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">init</text>
-</a>
+<!-- str -->
+<g id="node2" class="node"><title>str</title>
+<polygon fill="#777777" stroke="#777777" points="158,-70 104,-70 104,-44 158,-44 158,-70"/>
+<text text-anchor="middle" x="131" y="-54.55" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">str</text>
 </g>
-<!-- proc~test_ls_rk~4&#45;&gt;proc~init~16 -->
-<g id="edge8" class="edge"><title>proc~test_ls_rk~4&#45;&gt;proc~init~16</title>
-<path fill="none" stroke="black" d="M58.2291,-85.3043C69.3387,-87.7005 82.1452,-90.4627 93.8882,-92.9955"/>
-<polygon fill="black" stroke="black" points="93.3515,-96.4602 103.865,-95.1473 94.8274,-89.6175 93.3515,-96.4602"/>
+<!-- proc~test_ls_rk~4&#45;&gt;str -->
+<g id="edge2" class="edge"><title>proc~test_ls_rk~4&#45;&gt;str</title>
+<path fill="none" stroke="black" d="M58.2291,-41.3043C69.3387,-43.7005 82.1452,-46.4627 93.8882,-48.9955"/>
+<polygon fill="black" stroke="black" points="93.3515,-52.4602 103.865,-51.1473 94.8274,-45.6175 93.3515,-52.4602"/>
 </g>
 <!-- proc~save_results~6 -->
 <g id="node3" class="node"><title>proc~save_results~6</title>
 <a xlink:href="../proc/save_results%7E6.html" xlink:title="save_results">
-<polygon fill="#d9534f" stroke="#d9534f" points="167,-70 95,-70 95,-44 167,-44 167,-70"/>
-<text text-anchor="middle" x="131" y="-54.55" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">save_results</text>
+<polygon fill="#d9534f" stroke="#d9534f" points="167,-26 95,-26 95,-1.24345e-14 167,-3.55271e-15 167,-26"/>
+<text text-anchor="middle" x="131" y="-10.55" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">save_results</text>
 </a>
 </g>
 <!-- proc~test_ls_rk~4&#45;&gt;proc~save_results~6 -->
-<g id="edge10" class="edge"><title>proc~test_ls_rk~4&#45;&gt;proc~save_results~6</title>
-<path fill="none" stroke="black" d="M58.2291,-72.6957C66.4413,-70.9244 75.5806,-68.9532 84.5323,-67.0225"/>
-<polygon fill="black" stroke="black" points="85.4625,-70.4024 94.4997,-64.8726 83.9866,-63.5597 85.4625,-70.4024"/>
-</g>
-<!-- str -->
-<g id="node4" class="node"><title>str</title>
-<polygon fill="#777777" stroke="#777777" points="272,-157 218,-157 218,-131 272,-131 272,-157"/>
-<text text-anchor="middle" x="245" y="-141.55" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">str</text>
-</g>
-<!-- proc~test_ls_rk~4&#45;&gt;str -->
-<g id="edge12" class="edge"><title>proc~test_ls_rk~4&#45;&gt;str</title>
-<path fill="none" stroke="black" d="M43.892,-92.0255C56.3892,-102.194 75.1723,-115.77 94,-123 131.073,-137.235 176.558,-141.998 207.861,-143.502"/>
-<polygon fill="black" stroke="black" points="207.77,-147.001 217.9,-143.896 208.045,-140.006 207.77,-147.001"/>
-</g>
-<!-- proc~ls_rk_solver -->
-<g id="node5" class="node"><title>proc~ls_rk_solver</title>
-<a xlink:href="../proc/ls_rk_solver.html" xlink:title="ls_rk_solver">
-<polygon fill="#d9534f" stroke="#d9534f" points="166,-26 96,-26 96,-1.24345e-14 166,-3.55271e-15 166,-26"/>
-<text text-anchor="middle" x="131" y="-10.55" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">ls_rk_solver</text>
-</a>
-</g>
-<!-- proc~test_ls_rk~4&#45;&gt;proc~ls_rk_solver -->
-<g id="edge14" class="edge"><title>proc~test_ls_rk~4&#45;&gt;proc~ls_rk_solver</title>
-<path fill="none" stroke="black" d="M47.5804,-65.9982C60.4768,-57.079 78.1248,-45.0806 94,-35 95.8966,-33.7957 97.858,-32.5708 99.8428,-31.3468"/>
-<polygon fill="black" stroke="black" points="101.833,-34.2331 108.566,-26.0529 98.2017,-28.2488 101.833,-34.2331"/>
-</g>
-<!-- proc~init~16&#45;&gt;str -->
-<g id="edge2" class="edge"><title>proc~init~16&#45;&gt;str</title>
-<path fill="none" stroke="black" d="M158.016,-111.19C172.956,-116.826 191.738,-123.91 208.023,-130.052"/>
-<polygon fill="black" stroke="black" points="207.191,-133.479 217.782,-133.734 209.661,-126.93 207.191,-133.479"/>
-</g>
-<!-- strz -->
-<g id="node6" class="node"><title>strz</title>
-<polygon fill="#777777" stroke="#777777" points="272,-113 218,-113 218,-87 272,-87 272,-113"/>
-<text text-anchor="middle" x="245" y="-97.55" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">strz</text>
-</g>
-<!-- proc~init~16&#45;&gt;strz -->
-<g id="edge4" class="edge"><title>proc~init~16&#45;&gt;strz</title>
-<path fill="none" stroke="black" d="M158.016,-100.763C172.816,-100.633 191.384,-100.47 207.561,-100.328"/>
-<polygon fill="black" stroke="black" points="207.814,-103.826 217.782,-100.239 207.752,-96.8267 207.814,-103.826"/>
-</g>
-<!-- proc~exact_solution -->
-<g id="node9" class="node"><title>proc~exact_solution</title>
-<a xlink:href="../proc/exact_solution.html" xlink:title="exact_solution">
-<polygon fill="#d94e8f" stroke="#d94e8f" points="285,-69 205,-69 205,-43 285,-43 285,-69"/>
-<text text-anchor="middle" x="245" y="-53.55" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">exact_solution</text>
-</a>
-</g>
-<!-- proc~save_results~6&#45;&gt;proc~exact_solution -->
-<g id="edge6" class="edge"><title>proc~save_results~6&#45;&gt;proc~exact_solution</title>
-<path fill="none" stroke="black" d="M167.698,-56.6781C176.21,-56.6034 185.418,-56.5227 194.41,-56.4438"/>
-<polygon fill="black" stroke="black" points="194.453,-59.9436 204.422,-56.356 194.391,-52.9439 194.453,-59.9436"/>
+<g id="edge4" class="edge"><title>proc~test_ls_rk~4&#45;&gt;proc~save_results~6</title>
+<path fill="none" stroke="black" d="M58.2291,-28.6957C66.4413,-26.9244 75.5806,-24.9532 84.5323,-23.0225"/>
+<polygon fill="black" stroke="black" points="85.4625,-26.4024 94.4997,-20.8726 83.9866,-19.5597 85.4625,-26.4024"/>
 </g>
 </g>
 </svg>
@@ -790,27 +728,27 @@ implementation in a submodule of an interface in a parent module.</p>
 <!-- Generated by graphviz version 2.26.3 (20100126.1600)
  -->
 <!-- Title: proc~~test_ls_rk~4~~CalledByGraph Pages: 1 -->
-<svg id="proctest_ls_rk4CalledByGraph" width="210pt" height="34pt"
- viewBox="0.00 0.00 210.00 34.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<svg id="proctest_ls_rk4CalledByGraph" width="192pt" height="34pt"
+ viewBox="0.00 0.00 192.00 34.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
 <g id="proc~~test_ls_rk~4~~CalledByGraph" class="graph" transform="scale(1 1) rotate(0) translate(4 30)">
 <title>proc~~test_ls_rk~4~~CalledByGraph</title>
-<polygon fill="white" stroke="white" points="-4,5 -4,-30 207,-30 207,5 -4,5"/>
+<polygon fill="white" stroke="white" points="-4,5 -4,-30 189,-30 189,5 -4,5"/>
 <!-- proc~test_ls_rk~4 -->
 <g id="node1" class="node"><title>proc~test_ls_rk~4</title>
-<polygon fill="none" stroke="black" points="202,-26 144,-26 144,-1.24345e-14 202,-3.55271e-15 202,-26"/>
-<text text-anchor="middle" x="173" y="-10.55" font-family="Helvetica,sans-Serif" font-size="10.50">test_ls_rk</text>
+<polygon fill="none" stroke="black" points="184,-26 126,-26 126,-1.24345e-14 184,-3.55271e-15 184,-26"/>
+<text text-anchor="middle" x="155" y="-10.55" font-family="Helvetica,sans-Serif" font-size="10.50">test_ls_rk</text>
 </g>
-<!-- program~integrate_oscillation -->
-<g id="node2" class="node"><title>program~integrate_oscillation</title>
-<a xlink:href="../program/integrate_oscillation.html" xlink:title="integrate_oscillation">
-<polygon fill="#f0ad4e" stroke="#f0ad4e" points="107,-26 1,-26 1,-1.24345e-14 107,-3.55271e-15 107,-26"/>
-<text text-anchor="middle" x="54" y="-10.55" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">integrate_oscillation</text>
+<!-- program~integrate_lorenz -->
+<g id="node2" class="node"><title>program~integrate_lorenz</title>
+<a xlink:href="../program/integrate_lorenz.html" xlink:title="integrate_lorenz">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="90,-26 4.26326e-14,-26 0,-1.24345e-14 90,-3.55271e-15 90,-26"/>
+<text text-anchor="middle" x="45" y="-10.55" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">integrate_lorenz</text>
 </a>
 </g>
-<!-- program~integrate_oscillation&#45;&gt;proc~test_ls_rk~4 -->
-<g id="edge2" class="edge"><title>program~integrate_oscillation&#45;&gt;proc~test_ls_rk~4</title>
-<path fill="none" stroke="black" d="M107.582,-13C116.344,-13 125.279,-13 133.616,-13"/>
-<polygon fill="black" stroke="black" points="133.8,-16.5001 143.8,-13 133.8,-9.5001 133.8,-16.5001"/>
+<!-- program~integrate_lorenz&#45;&gt;proc~test_ls_rk~4 -->
+<g id="edge2" class="edge"><title>program~integrate_lorenz&#45;&gt;proc~test_ls_rk~4</title>
+<path fill="none" stroke="black" d="M90.0586,-13C98.569,-13 107.408,-13 115.723,-13"/>
+<polygon fill="black" stroke="black" points="115.912,-16.5001 125.912,-13 115.912,-9.5001 115.912,-16.5001"/>
 </g>
 </g>
 </svg>
@@ -926,11 +864,25 @@ implementation in a submodule of an interface in a parent module.</p>
   
 <tr>
   
-  <td><span class="anchor" id="variable-rk_stages%7E13"></span>integer,</td>
+  <td><span class="anchor" id="variable-rk_integrator%7E18"></span>type(<a href='../type/ls_runge_kutta_integrator.html'>ls_runge_kutta_integrator</a>),</td>
+  
+  <td>public</td>
+  <td></td><td>::</td>
+  <td><strong>rk_integrator</strong></td><td></td><td></td><td><p>Runge-Kutta integrator.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-rk_stages%7E18"></span>integer,</td>
   
   <td>public,</td>
   <td>parameter</td><td>::</td>
-  <td><strong>rk_stages</strong></td><td> =</td><td>14</td><td><p>Runge-Kutta stages number.</p></td>
+  <td><strong>rk_stages</strong></td><td> =</td><td>5</td><td><p>Runge-Kutta stages number.</p></td>
   
 </tr>
 
@@ -940,11 +892,11 @@ implementation in a submodule of an interface in a parent module.</p>
   
 <tr>
   
-  <td><span class="anchor" id="variable-solution%7E9"></span>real(kind=R_P),</td>
+  <td><span class="anchor" id="variable-registers%7E4"></span>integer,</td>
   
   <td>public,</td>
-  <td>allocatable</td><td>::</td>
-  <td><strong>solution</strong>(:,:)</td><td></td><td></td><td><p>Solution at each time step.</p></td>
+  <td>parameter</td><td>::</td>
+  <td><strong>registers</strong></td><td> =</td><td>2</td><td><p>Runge-Kutta stages number.</p></td>
   
 </tr>
 
@@ -954,7 +906,21 @@ implementation in a submodule of an interface in a parent module.</p>
   
 <tr>
   
-  <td><span class="anchor" id="variable-s%7E31"></span>integer(kind=I_P),</td>
+  <td><span class="anchor" id="variable-rk_stage%7E18"></span>type(<a href='../type/lorenz.html'>lorenz</a>),</td>
+  
+  <td>public</td>
+  <td></td><td>::</td>
+  <td><strong>rk_stage</strong>(1:registers)</td><td></td><td></td><td><p>Runge-Kutta stages.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-s%7E32"></span>integer(kind=I_P),</td>
   
   <td>public</td>
   <td></td><td>::</td>
@@ -968,39 +934,11 @@ implementation in a submodule of an interface in a parent module.</p>
   
 <tr>
   
-  <td><span class="anchor" id="variable-stages_range%7E3"></span>integer(kind=I_P),</td>
+  <td><span class="anchor" id="variable-step%7E16"></span>integer(kind=I_P),</td>
   
   <td>public</td>
   <td></td><td>::</td>
-  <td><strong>stages_range</strong>(1:2)</td><td></td><td></td><td><p>Stages used.</p></td>
-  
-</tr>
-
-  
-  
-  
-  
-<tr>
-  
-  <td><span class="anchor" id="variable-output%7E13"></span>character(len=:),</td>
-  
-  <td>public,</td>
-  <td>allocatable</td><td>::</td>
-  <td><strong>output</strong></td><td></td><td></td><td><p>Output files basename.</p></td>
-  
-</tr>
-
-  
-  
-  
-  
-<tr>
-  
-  <td><span class="anchor" id="variable-title%7E20"></span>character(len=:),</td>
-  
-  <td>public,</td>
-  <td>allocatable</td><td>::</td>
-  <td><strong>title</strong></td><td></td><td></td><td><p>Output files title.</p></td>
+  <td><strong>step</strong></td><td></td><td></td><td><p>Time steps counter.</p></td>
   
 </tr>
 
@@ -1027,37 +965,36 @@ implementation in a submodule of an interface in a parent module.</p>
     
     <section>
     <h2><span class="anchor" id="src"></span>Source Code</h2>
-    <div class="highlight"><pre>  <span class="k">subroutine </span><span class="n">test_ls_rk</span><span class="p">(</span><span class="n">stages</span><span class="p">)</span>
+    <div class="highlight"><pre>  <span class="k">subroutine </span><span class="n">test_ls_rk</span><span class="p">()</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
   <span class="c">!&lt; Test explicit low storage Runge-Kutta class of ODE solvers.</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
-  <span class="kt">integer</span><span class="p">(</span><span class="n">I_P</span><span class="p">),</span> <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span>      <span class="kd">::</span> <span class="n">stages</span>            <span class="c">!&lt; Number of stages used: if negative all RK solvers are used.</span>
-  <span class="kt">integer</span><span class="p">,</span> <span class="k">parameter</span>            <span class="kd">::</span> <span class="n">rk_stages</span><span class="o">=</span><span class="mi">14</span>      <span class="c">!&lt; Runge-Kutta stages number.</span>
-  <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">),</span> <span class="k">allocatable</span>        <span class="kd">::</span> <span class="n">solution</span><span class="p">(:,:)</span>     <span class="c">!&lt; Solution at each time step.</span>
-  <span class="kt">integer</span><span class="p">(</span><span class="n">I_P</span><span class="p">)</span>                  <span class="kd">::</span> <span class="n">s</span>                 <span class="c">!&lt; RK stages counter.</span>
-  <span class="kt">integer</span><span class="p">(</span><span class="n">I_P</span><span class="p">)</span>                  <span class="kd">::</span> <span class="n">stages_range</span><span class="p">(</span><span class="mi">1</span><span class="p">:</span><span class="mi">2</span><span class="p">)</span> <span class="c">!&lt; Stages used.</span>
-  <span class="kt">character</span><span class="p">(</span><span class="nb">len</span><span class="o">=</span><span class="p">:),</span> <span class="k">allocatable</span> <span class="kd">::</span> <span class="n">output</span>            <span class="c">!&lt; Output files basename.</span>
-  <span class="kt">character</span><span class="p">(</span><span class="nb">len</span><span class="o">=</span><span class="p">:),</span> <span class="k">allocatable</span> <span class="kd">::</span> <span class="n">title</span>             <span class="c">!&lt; Output files title.</span>
+  <span class="k">type</span><span class="p">(</span><span class="n">ls_runge_kutta_integrator</span><span class="p">)</span> <span class="kd">::</span> <span class="n">rk_integrator</span>         <span class="c">!&lt; Runge-Kutta integrator.</span>
+  <span class="kt">integer</span><span class="p">,</span> <span class="k">parameter</span>              <span class="kd">::</span> <span class="n">rk_stages</span><span class="o">=</span><span class="mi">5</span>           <span class="c">!&lt; Runge-Kutta stages number.</span>
+  <span class="kt">integer</span><span class="p">,</span> <span class="k">parameter</span>              <span class="kd">::</span> <span class="n">registers</span><span class="o">=</span><span class="mi">2</span>           <span class="c">!&lt; Runge-Kutta stages number.</span>
+  <span class="k">type</span><span class="p">(</span><span class="n">lorenz</span><span class="p">)</span>                    <span class="kd">::</span> <span class="n">rk_stage</span><span class="p">(</span><span class="mi">1</span><span class="p">:</span><span class="n">registers</span><span class="p">)</span> <span class="c">!&lt; Runge-Kutta stages.</span>
+  <span class="kt">integer</span><span class="p">(</span><span class="n">I_P</span><span class="p">)</span>                    <span class="kd">::</span> <span class="n">s</span>                     <span class="c">!&lt; RK stages counter.</span>
+  <span class="kt">integer</span><span class="p">(</span><span class="n">I_P</span><span class="p">)</span>                    <span class="kd">::</span> <span class="n">step</span>                  <span class="c">!&lt; Time steps counter.</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
 
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
-  <span class="n">solver</span> <span class="o">=</span> <span class="s1">&#39;ls-runge-kutta&#39;</span>
-  <span class="k">call </span><span class="n">init</span><span class="p">(</span><span class="n">output</span><span class="o">=</span><span class="n">output</span><span class="p">,</span> <span class="n">solution</span><span class="o">=</span><span class="n">solution</span><span class="p">)</span>
-  <span class="k">print</span> <span class="s2">&quot;(A)&quot;</span><span class="p">,</span> <span class="s1">&#39;Integrating Oscillation equations by means of low storage (2N) Runge-Kutta class of solvers&#39;</span>
-  <span class="n">stages_range</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="n">rk_stages</span><span class="p">]</span> <span class="p">;</span> <span class="k">if</span> <span class="p">(</span><span class="n">stages</span><span class="o">&gt;</span><span class="mi">0</span><span class="p">)</span> <span class="n">stages_range</span> <span class="o">=</span> <span class="p">[</span><span class="n">stages</span><span class="p">,</span> <span class="n">stages</span><span class="p">]</span>
-  <span class="k">do </span><span class="n">s</span><span class="o">=</span><span class="n">stages_range</span><span class="p">(</span><span class="mi">1</span><span class="p">),</span> <span class="n">stages_range</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+  <span class="k">print</span> <span class="s2">&quot;(A)&quot;</span><span class="p">,</span> <span class="s1">&#39;Integrating Lorenz equations by means of low storage (2N) Runge-Kutta class of solvers&#39;</span>
+  <span class="k">do </span><span class="n">s</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">rk_stages</span>
     <span class="k">if</span> <span class="p">(</span><span class="n">s</span><span class="o">==</span><span class="mi">2</span><span class="p">)</span> <span class="k">cycle</span> <span class="c">! 2 stages not yet implemented</span>
     <span class="k">if</span> <span class="p">(</span><span class="n">s</span><span class="o">==</span><span class="mi">3</span><span class="p">)</span> <span class="k">cycle</span> <span class="c">! 3 stages not yet implemented</span>
     <span class="k">if</span> <span class="p">(</span><span class="n">s</span><span class="o">==</span><span class="mi">4</span><span class="p">)</span> <span class="k">cycle</span> <span class="c">! 4 stages not yet implemented</span>
-    <span class="k">if</span> <span class="p">(</span><span class="n">s</span><span class="o">==</span><span class="mi">8</span><span class="p">)</span> <span class="k">cycle</span> <span class="c">! 8 stages not yet implemented</span>
-    <span class="k">if</span> <span class="p">(</span><span class="n">s</span><span class="o">==</span><span class="mi">9</span><span class="p">)</span> <span class="k">cycle</span> <span class="c">! 9 stages not yet implemented</span>
-    <span class="k">if</span> <span class="p">(</span><span class="n">s</span><span class="o">==</span><span class="mi">10</span><span class="p">)</span> <span class="k">cycle</span> <span class="c">! 10 stages not yet implemented</span>
-    <span class="k">if</span> <span class="p">(</span><span class="n">s</span><span class="o">==</span><span class="mi">11</span><span class="p">)</span> <span class="k">cycle</span> <span class="c">! 11 stages not yet implemented</span>
     <span class="k">print</span> <span class="s2">&quot;(A)&quot;</span><span class="p">,</span> <span class="s1">&#39; RK-&#39;</span><span class="o">//</span><span class="nb">trim</span><span class="p">(</span><span class="n">str</span><span class="p">(.</span><span class="n">true</span><span class="p">.,</span><span class="n">s</span><span class="p">))</span>
-    <span class="n">title</span> <span class="o">=</span> <span class="s1">&#39;Oscillation equation integration, explicit low storage Runge-Kutta, t=&#39;</span><span class="o">//</span><span class="n">str</span><span class="p">(</span><span class="n">n</span><span class="o">=</span><span class="n">t_final</span><span class="p">)</span><span class="o">//</span><span class="p">&amp;</span>
-      <span class="s1">&#39; steps=&#39;</span><span class="o">//</span><span class="nb">trim</span><span class="p">(</span><span class="n">str</span><span class="p">(.</span><span class="n">true</span><span class="p">.,</span> <span class="n">s</span><span class="p">))</span>
-    <span class="k">call </span><span class="n">ls_rk_solver</span><span class="p">(</span><span class="n">stages</span><span class="o">=</span><span class="n">s</span><span class="p">,</span> <span class="n">solution</span><span class="o">=</span><span class="n">solution</span><span class="p">)</span>
-    <span class="k">call </span><span class="n">save_results</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="n">title</span><span class="p">,</span> <span class="n">basename</span><span class="o">=</span><span class="n">output</span><span class="o">//</span><span class="s1">&#39;-&#39;</span><span class="o">//</span><span class="nb">trim</span><span class="p">(</span><span class="n">str</span><span class="p">(.</span><span class="n">true</span><span class="p">.,</span> <span class="n">s</span><span class="p">)),</span> <span class="n">solution</span><span class="o">=</span><span class="n">solution</span><span class="p">)</span>
+    <span class="k">call </span><span class="n">rk_integrator</span><span class="p">%</span><span class="n">init</span><span class="p">(</span><span class="n">stages</span><span class="o">=</span><span class="n">s</span><span class="p">)</span>
+    <span class="k">call </span><span class="n">attractor</span><span class="p">%</span><span class="n">init</span><span class="p">(</span><span class="n">initial_state</span><span class="o">=</span><span class="n">initial_state</span><span class="p">,</span> <span class="n">sigma</span><span class="o">=</span><span class="n">sigma</span><span class="p">,</span> <span class="n">rho</span><span class="o">=</span><span class="n">rho</span><span class="p">,</span> <span class="n">beta</span><span class="o">=</span><span class="n">beta</span><span class="p">)</span>
+    <span class="n">solution</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span> <span class="o">=</span> <span class="mf">0._R_P</span>
+    <span class="n">solution</span><span class="p">(</span><span class="mi">1</span><span class="p">:</span><span class="n">space_dimension</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span> <span class="o">=</span> <span class="n">attractor</span><span class="p">%</span><span class="n">output</span><span class="p">()</span>
+    <span class="k">do </span><span class="n">step</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span> <span class="n">num_steps</span>
+      <span class="k">call </span><span class="n">rk_integrator</span><span class="p">%</span><span class="n">integrate</span><span class="p">(</span><span class="n">U</span><span class="o">=</span><span class="n">attractor</span><span class="p">,</span> <span class="n">stage</span><span class="o">=</span><span class="n">rk_stage</span><span class="p">,</span> <span class="n">dt</span><span class="o">=</span><span class="n">dt</span><span class="p">,</span> <span class="n">t</span><span class="o">=</span><span class="n">solution</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">step</span><span class="p">))</span>
+      <span class="n">solution</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">step</span><span class="p">)</span> <span class="o">=</span> <span class="n">step</span> <span class="o">*</span> <span class="n">dt</span>
+      <span class="n">solution</span><span class="p">(</span><span class="mi">1</span><span class="p">:</span><span class="n">space_dimension</span><span class="p">,</span> <span class="n">step</span><span class="p">)</span> <span class="o">=</span> <span class="n">attractor</span><span class="p">%</span><span class="n">output</span><span class="p">()</span>
+    <span class="n">enddo</span>
+    <span class="k">call </span><span class="n">save_results</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s1">&#39;FOODIE test: Lorenz equation integration, explicit low storage Runge-Kutta &#39;</span><span class="o">//</span><span class="nb">trim</span><span class="p">(</span><span class="n">str</span><span class="p">(.</span><span class="n">true</span><span class="p">.,</span> <span class="n">s</span><span class="p">))</span><span class="o">//</span><span class="p">&amp;</span>
+                      <span class="s1">&#39; stages&#39;</span><span class="p">,</span> <span class="n">filename</span><span class="o">=</span><span class="s1">&#39;lorenz_integration-lsrk-&#39;</span><span class="o">//</span><span class="nb">trim</span><span class="p">(</span><span class="n">str</span><span class="p">(.</span><span class="n">true</span><span class="p">.,</span> <span class="n">s</span><span class="p">)))</span>
   <span class="n">enddo</span>
   <span class="k">print</span> <span class="s2">&quot;(A)&quot;</span><span class="p">,</span> <span class="s1">&#39;Finish!&#39;</span>
   <span class="k">return</span>

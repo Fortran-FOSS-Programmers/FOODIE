@@ -127,16 +127,6 @@
   
   
   
-  <div class="panel panel-primary">
-    <div class="panel-heading text-left"><h3 class="panel-title">Variables</h3></div>
-    <div class="list-group">
-      
-      <a class="list-group-item" href="../proc/doscillation_dt.html#variable-dn%7E2">dn</a>
-      
-    </div>
-  </div>
-  
-  
   
   
   
@@ -243,6 +233,8 @@
       
       <a class="list-group-item" href="../proc/destroy%7E8.html">destroy</a>
       
+      <a class="list-group-item" href="../proc/destroy%7E9.html">destroy</a>
+      
       <a class="list-group-item" href="../proc/destroy_rk.html">destroy_rk</a>
       
       <a class="list-group-item" href="../proc/deuler_dt.html">dEuler_dt</a>
@@ -260,6 +252,8 @@
       <a class="list-group-item" href="../proc/e%7E2.html">E</a>
       
       <a class="list-group-item" href="../proc/e%7E3.html">E</a>
+      
+      <a class="list-group-item" href="../proc/emd_rk_solver.html">emd_rk_solver</a>
       
       <a class="list-group-item" href="../proc/estimate_orders.html">estimate_orders</a>
       
@@ -300,6 +294,8 @@
       <a class="list-group-item" href="../proc/finalize%7E7.html">finalize</a>
       
       <a class="list-group-item" href="../proc/finalize%7E8.html">finalize</a>
+      
+      <a class="list-group-item" href="../proc/finalize%7E9.html">finalize</a>
       
       <a class="list-group-item" href="../proc/finalize_rk.html">finalize_rk</a>
       
@@ -349,6 +345,8 @@
       
       <a class="list-group-item" href="../proc/init%7E17.html">init</a>
       
+      <a class="list-group-item" href="../proc/init%7E18.html">init</a>
+      
       <a class="list-group-item" href="../proc/init_rk.html">init_rk</a>
       
       <a class="list-group-item" href="../proc/integrate.html">integrate</a>
@@ -365,6 +363,8 @@
       
       <a class="list-group-item" href="../proc/integrate%7E7.html">integrate</a>
       
+      <a class="list-group-item" href="../proc/integrate%7E8.html">integrate</a>
+      
       <a class="list-group-item" href="../proc/integrate_rk.html">integrate_rk</a>
       
       <a class="list-group-item" href="../proc/leapfrog_solver.html">leapfrog_solver</a>
@@ -379,7 +379,11 @@
       
       <a class="list-group-item" href="../proc/ls_rk_solver.html">ls_rk_solver</a>
       
+      <a class="list-group-item" href="../proc/new_dt.html">new_Dt</a>
+      
       <a class="list-group-item" href="../proc/oscillation_assign_oscillation.html">oscillation_assign_oscillation</a>
+      
+      <a class="list-group-item" href="../proc/oscillation_local_error.html">oscillation_local_error</a>
       
       <a class="list-group-item" href="../proc/oscillation_multiply_oscillation.html">oscillation_multiply_oscillation</a>
       
@@ -487,6 +491,8 @@
       
       <a class="list-group-item" href="../proc/test_am.html">test_am</a>
       
+      <a class="list-group-item" href="../proc/test_emd_rk.html">test_emd_rk</a>
+      
       <a class="list-group-item" href="../proc/test_euler.html">test_euler</a>
       
       <a class="list-group-item" href="../proc/test_euler%7E2.html">test_euler</a>
@@ -567,7 +573,7 @@ private function dOscillation_dt(self, t) result(dState_dt)
   
 <tr>
   
-  <td><span class="anchor" id="variable-self%7E79"></span>class(<a href='../type/oscillation.html'>oscillation</a>),</td>
+  <td><span class="anchor" id="variable-self%7E32"></span>class(<a href='../type/oscillation.html'>oscillation</a>),</td>
   <td>intent(in)</td>
   <td></td>
   
@@ -582,7 +588,7 @@ private function dOscillation_dt(self, t) result(dState_dt)
   
 <tr>
   
-  <td><span class="anchor" id="variable-t%7E38"></span>real(kind=R_P),</td>
+  <td><span class="anchor" id="variable-t%7E18"></span>real(kind=R_P),</td>
   <td>intent(in),</td>
   <td>optional</td>
   
@@ -601,7 +607,7 @@ private function dOscillation_dt(self, t) result(dState_dt)
     
     
     
-	 <h3>Return Value <small><span class="anchor" id="variable-dstate_dt%7E7"></span>class(<a href='../type/integrand.html'>integrand</a>),
+	 <h3>Return Value <small><span class="anchor" id="variable-dstate_dt%7E2"></span>class(<a href='../type/integrand.html'>integrand</a>),
   allocatable</small></h3>
     <p>Oscillation field time derivative.</p>
     
@@ -611,38 +617,6 @@ private function dOscillation_dt(self, t) result(dState_dt)
     
     
      
-    <br>
-    
-    <section>
-    <h2>Variables</h2>
-    
-<table class="table table-striped varlist">
-<thead><tr><th>Type</th><th>Visibility</th>
-
-<th>Attributes</th><th></th><th>Name</th><th></th><th>Initial</th><th></th></thead>
-
-
-
-<tbody>
-
-  
-  
-  
-  
-<tr>
-  
-  <td><span class="anchor" id="variable-dn%7E2"></span>integer(kind=I_P),</td>
-  
-  <td>public</td>
-  <td></td><td>::</td>
-  <td><strong>dn</strong></td><td></td><td></td><td><p>Time level, dummy variable.</p></td>
-  
-</tr>
-
-</tbody>
-</table>
-
-    </section>
     <br>
     
     
@@ -669,7 +643,6 @@ private function dOscillation_dt(self, t) result(dState_dt)
   <span class="k">class</span><span class="p">(</span><span class="n">oscillation</span><span class="p">),</span>     <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span> <span class="kd">::</span> <span class="n">self</span>      <span class="c">!&lt; Oscillation field.</span>
   <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">),</span>    <span class="k">optional</span><span class="p">,</span> <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span> <span class="kd">::</span> <span class="n">t</span>         <span class="c">!&lt; Time.</span>
   <span class="k">class</span><span class="p">(</span><span class="n">integrand</span><span class="p">),</span>  <span class="k">allocatable</span>     <span class="kd">::</span> <span class="n">dState_dt</span> <span class="c">!&lt; Oscillation field time derivative.</span>
-  <span class="kt">integer</span><span class="p">(</span><span class="n">I_P</span><span class="p">)</span>                       <span class="kd">::</span> <span class="n">dn</span>        <span class="c">!&lt; Time level, dummy variable.</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
 
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>

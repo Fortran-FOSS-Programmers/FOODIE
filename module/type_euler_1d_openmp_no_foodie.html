@@ -152,7 +152,7 @@
       
       <a class="list-group-item" href="../module/type_euler_1d_openmp_no_foodie.html#proc-output%7E2">output</a>
       
-      <a class="list-group-item" href="../module/type_euler_1d_openmp_no_foodie.html#proc-compute_dt%7E2">compute_dt</a>
+      <a class="list-group-item" href="../module/type_euler_1d_openmp_no_foodie.html#proc-compute_dt">compute_dt</a>
       
       <a class="list-group-item" href="../module/type_euler_1d_openmp_no_foodie.html#proc-deuler_dt">dEuler_dt</a>
       
@@ -187,9 +187,9 @@
       
       <a class="list-group-item" href="../module/type_euler_1d_openmp_no_foodie.html#proc-finalize_rk">finalize_rk</a>
       
-      <a class="list-group-item" href="../module/type_euler_1d_openmp_no_foodie.html#proc-init%7E10">init</a>
+      <a class="list-group-item" href="../module/type_euler_1d_openmp_no_foodie.html#proc-init%7E11">init</a>
       
-      <a class="list-group-item" href="../module/type_euler_1d_openmp_no_foodie.html#proc-destroy%7E6">destroy</a>
+      <a class="list-group-item" href="../module/type_euler_1d_openmp_no_foodie.html#proc-destroy%7E7">destroy</a>
       
       <a class="list-group-item" href="../module/type_euler_1d_openmp_no_foodie.html#proc-euler_assign_euler">euler_assign_euler</a>
       
@@ -199,7 +199,7 @@
       
       <a class="list-group-item" href="../module/type_euler_1d_openmp_no_foodie.html#proc-riemann_solver">riemann_solver</a>
       
-      <a class="list-group-item" href="../module/type_euler_1d_openmp_no_foodie.html#proc-finalize%7E6">finalize</a>
+      <a class="list-group-item" href="../module/type_euler_1d_openmp_no_foodie.html#proc-finalize%7E7">finalize</a>
       
       <a class="list-group-item" href="../module/type_euler_1d_openmp_no_foodie.html#proc-compute_inter_states">compute_inter_states</a>
       
@@ -228,6 +228,8 @@
       <a class="list-group-item" href="../module/foodie_integrator_adams_bashforth_moulton.html">foodie_integrator_adams_bashforth_moulton</a>
       
       <a class="list-group-item" href="../module/foodie_integrator_adams_moulton.html">foodie_integrator_adams_moulton</a>
+      
+      <a class="list-group-item" href="../module/foodie_integrator_emd_runge_kutta.html">foodie_integrator_emd_runge_kutta</a>
       
       <a class="list-group-item" href="../module/foodie_integrator_euler_explicit.html">foodie_integrator_euler_explicit</a>
       
@@ -581,7 +583,7 @@ implementation in a submodule of an interface in a parent module.</p>
   
 <tr>
   
-  <td><span class="anchor" id="variable-ni%7E2"></span>integer(kind=I_P),</td>
+  <td><span class="anchor" id="variable-ni"></span>integer(kind=I_P),</td>
   
   <td>private</td>
   <td></td><td>::</td>
@@ -835,7 +837,7 @@ implementation in a submodule of an interface in a parent module.</p>
   
 <tr>
   
-  <td><span class="anchor" id="variable-stages%7E3"></span>integer(kind=I_P),</td>
+  <td><span class="anchor" id="variable-stages%7E4"></span>integer(kind=I_P),</td>
   
   <td>public</td>
   <td></td><td>::</td>
@@ -849,7 +851,7 @@ implementation in a submodule of an interface in a parent module.</p>
   
 <tr>
   
-  <td><span class="anchor" id="variable-alph%7E2"></span>real(kind=R_P),</td>
+  <td><span class="anchor" id="variable-alph%7E3"></span>real(kind=R_P),</td>
   
   <td>public,</td>
   <td>allocatable</td><td>::</td>
@@ -863,7 +865,7 @@ implementation in a submodule of an interface in a parent module.</p>
   
 <tr>
   
-  <td><span class="anchor" id="variable-beta%7E2"></span>real(kind=R_P),</td>
+  <td><span class="anchor" id="variable-beta%7E3"></span>real(kind=R_P),</td>
   
   <td>public,</td>
   <td>allocatable</td><td>::</td>
@@ -877,7 +879,7 @@ implementation in a submodule of an interface in a parent module.</p>
   
 <tr>
   
-  <td><span class="anchor" id="variable-gamm%7E2"></span>real(kind=R_P),</td>
+  <td><span class="anchor" id="variable-gamm%7E3"></span>real(kind=R_P),</td>
   
   <td>public,</td>
   <td>allocatable</td><td>::</td>
@@ -1004,8 +1006,8 @@ private purefunction <a href='../proc/output%7E2.html'>output</a>(self) result(s
     
     
   <div class="panel panel-default">
-  <div class="panel-heading codesum"><span class="anchor" id="proc-compute_dt%7E2"></span><h3>
-private purefunction <a href='../proc/compute_dt%7E2.html'>compute_dt</a>(self, Nmax, Tmax, t, CFL) result(Dt)
+  <div class="panel-heading codesum"><span class="anchor" id="proc-compute_dt"></span><h3>
+private purefunction <a href='../proc/compute_dt.html'>compute_dt</a>(self, Nmax, Tmax, t, CFL) result(Dt)
     
     
     
@@ -2211,8 +2213,8 @@ private elementalsubroutine <a href='../proc/finalize_rk.html'>finalize_rk</a>(s
     
     
   <div class="panel panel-default">
-  <div class="panel-heading codesum"><span class="anchor" id="proc-init%7E10"></span><h3>
-private subroutine <a href='../proc/init%7E10.html'>init</a>(self, Ni, Ns, Dx, BC_L, BC_R, initial_state, cp0, cv0, ord)
+  <div class="panel-heading codesum"><span class="anchor" id="proc-init%7E11"></span><h3>
+private subroutine <a href='../proc/init%7E11.html'>init</a>(self, Ni, Ns, Dx, BC_L, BC_R, initial_state, cp0, cv0, ord)
     
     
     
@@ -2405,8 +2407,8 @@ private subroutine <a href='../proc/init%7E10.html'>init</a>(self, Ni, Ns, Dx, B
     
     
   <div class="panel panel-default">
-  <div class="panel-heading codesum"><span class="anchor" id="proc-destroy%7E6"></span><h3>
-private puresubroutine <a href='../proc/destroy%7E6.html'>destroy</a>(self)
+  <div class="panel-heading codesum"><span class="anchor" id="proc-destroy%7E7"></span><h3>
+private puresubroutine <a href='../proc/destroy%7E7.html'>destroy</a>(self)
     
     
     
@@ -2895,8 +2897,8 @@ private puresubroutine <a href='../proc/riemann_solver.html'>riemann_solver</a>(
     
     
   <div class="panel panel-default">
-  <div class="panel-heading codesum"><span class="anchor" id="proc-finalize%7E6"></span><h3>
-private subroutine <a href='../proc/finalize%7E6.html'>finalize</a>(self)
+  <div class="panel-heading codesum"><span class="anchor" id="proc-finalize%7E7"></span><h3>
+private subroutine <a href='../proc/finalize%7E7.html'>finalize</a>(self)
     
     
     

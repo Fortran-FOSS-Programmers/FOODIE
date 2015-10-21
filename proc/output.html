@@ -104,14 +104,14 @@
      
     
     
-    <li><i class="fa fa-code"></i><a href="../src/type_burgers.f90"> Source File</a></li>
+    <li><i class="fa fa-code"></i><a href="../src/type_oscillation.f90"> Source File</a></li>
      
   </ul>
   <ol class="breadcrumb in-well text-right">
   
-     <li><a href='../sourcefile/type_burgers.f90.html'>type_burgers.f90</a></li>
+     <li><a href='../sourcefile/type_oscillation.f90.html'>type_oscillation.f90</a></li>
   
-     <li><a href='../module/type_burgers.html'>type_burgers</a></li>
+     <li><a href='../module/type_oscillation.html'>type_oscillation</a></li>
   
      <li class="active">output</li>
   </ol>
@@ -233,6 +233,8 @@
       
       <a class="list-group-item" href="../proc/destroy%7E8.html">destroy</a>
       
+      <a class="list-group-item" href="../proc/destroy%7E9.html">destroy</a>
+      
       <a class="list-group-item" href="../proc/destroy_rk.html">destroy_rk</a>
       
       <a class="list-group-item" href="../proc/deuler_dt.html">dEuler_dt</a>
@@ -250,6 +252,8 @@
       <a class="list-group-item" href="../proc/e%7E2.html">E</a>
       
       <a class="list-group-item" href="../proc/e%7E3.html">E</a>
+      
+      <a class="list-group-item" href="../proc/emd_rk_solver.html">emd_rk_solver</a>
       
       <a class="list-group-item" href="../proc/estimate_orders.html">estimate_orders</a>
       
@@ -290,6 +294,8 @@
       <a class="list-group-item" href="../proc/finalize%7E7.html">finalize</a>
       
       <a class="list-group-item" href="../proc/finalize%7E8.html">finalize</a>
+      
+      <a class="list-group-item" href="../proc/finalize%7E9.html">finalize</a>
       
       <a class="list-group-item" href="../proc/finalize_rk.html">finalize_rk</a>
       
@@ -339,6 +345,8 @@
       
       <a class="list-group-item" href="../proc/init%7E17.html">init</a>
       
+      <a class="list-group-item" href="../proc/init%7E18.html">init</a>
+      
       <a class="list-group-item" href="../proc/init_rk.html">init_rk</a>
       
       <a class="list-group-item" href="../proc/integrate.html">integrate</a>
@@ -355,6 +363,8 @@
       
       <a class="list-group-item" href="../proc/integrate%7E7.html">integrate</a>
       
+      <a class="list-group-item" href="../proc/integrate%7E8.html">integrate</a>
+      
       <a class="list-group-item" href="../proc/integrate_rk.html">integrate_rk</a>
       
       <a class="list-group-item" href="../proc/leapfrog_solver.html">leapfrog_solver</a>
@@ -369,7 +379,11 @@
       
       <a class="list-group-item" href="../proc/ls_rk_solver.html">ls_rk_solver</a>
       
+      <a class="list-group-item" href="../proc/new_dt.html">new_Dt</a>
+      
       <a class="list-group-item" href="../proc/oscillation_assign_oscillation.html">oscillation_assign_oscillation</a>
+      
+      <a class="list-group-item" href="../proc/oscillation_local_error.html">oscillation_local_error</a>
       
       <a class="list-group-item" href="../proc/oscillation_multiply_oscillation.html">oscillation_multiply_oscillation</a>
       
@@ -477,6 +491,8 @@
       
       <a class="list-group-item" href="../proc/test_am.html">test_am</a>
       
+      <a class="list-group-item" href="../proc/test_emd_rk.html">test_emd_rk</a>
+      
       <a class="list-group-item" href="../proc/test_euler.html">test_euler</a>
       
       <a class="list-group-item" href="../proc/test_euler%7E2.html">test_euler</a>
@@ -557,12 +573,12 @@ private purefunction output(self) result(state)
   
 <tr>
   
-  <td><span class="anchor" id="variable-self%7E26"></span>class(<a href='../type/burgers.html'>burgers</a>),</td>
+  <td><span class="anchor" id="variable-self%7E31"></span>class(<a href='../type/oscillation.html'>oscillation</a>),</td>
   <td>intent(in)</td>
   <td></td>
   
   <td></td><td>::</td>
-  <td><strong>self</strong></td><td><p>Burgers field.</p></td>
+  <td><strong>self</strong></td><td><p>Oscillation field.</p></td>
   
 </tr>
 
@@ -578,11 +594,11 @@ private purefunction output(self) result(state)
     
 	 <h3>Return Value <small><span class="anchor" id="variable-state"></span>real(kind=R_P),
   dimension(:),allocatable</small></h3>
-    <p>Burgers state variable.</p>
+    <p>Oscillation state vector.</p>
     
     
     <h3>Description</h3>
-    <p>Output the Burgers field state.</p>
+    <p>Output the Oscillation field state.</p>
     
     
      
@@ -607,10 +623,10 @@ private purefunction output(self) result(state)
     <h2><span class="anchor" id="src"></span>Source Code</h2>
     <div class="highlight"><pre>  <span class="k">pure function </span><span class="n">output</span><span class="p">(</span><span class="n">self</span><span class="p">)</span> <span class="k">result</span><span class="p">(</span><span class="n">state</span><span class="p">)</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
-  <span class="c">!&lt; Output the Burgers field state.</span>
+  <span class="c">!&lt; Output the Oscillation field state.</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
-  <span class="k">class</span><span class="p">(</span><span class="n">burgers</span><span class="p">),</span> <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span>           <span class="kd">::</span> <span class="n">self</span>  <span class="c">!&lt; Burgers field.</span>
-  <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">),</span> <span class="k">dimension</span><span class="p">(:),</span> <span class="k">allocatable</span> <span class="kd">::</span> <span class="n">state</span> <span class="c">!&lt; Burgers state variable.</span>
+  <span class="k">class</span><span class="p">(</span><span class="n">oscillation</span><span class="p">),</span> <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span>       <span class="kd">::</span> <span class="n">self</span>  <span class="c">!&lt; Oscillation field.</span>
+  <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">),</span> <span class="k">dimension</span><span class="p">(:),</span> <span class="k">allocatable</span> <span class="kd">::</span> <span class="n">state</span> <span class="c">!&lt; Oscillation state vector.</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
 
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>

@@ -104,14 +104,14 @@
      
     
     
-    <li><i class="fa fa-code"></i><a href="../src/lorenz.f90"> Source File</a></li>
+    <li><i class="fa fa-code"></i><a href="../src/euler-1D.f90"> Source File</a></li>
      
   </ul>
   <ol class="breadcrumb in-well text-right">
   
-     <li><a href='../sourcefile/lorenz.f90.html'>lorenz.f90</a></li>
+     <li><a href='../sourcefile/euler-1d.f90.html'>euler-1D.f90</a></li>
   
-     <li><a href='../program/integrate_lorenz.html'>integrate_lorenz</a></li>
+     <li><a href='../program/integrate_euler_1d.html'>integrate_euler_1D</a></li>
   
      <li class="active">save_results</li>
   </ol>
@@ -135,9 +135,7 @@
       
       <a class="list-group-item" href="../proc/save_results%7E5.html#variable-plt%7E5">plt</a>
       
-      <a class="list-group-item" href="../proc/save_results%7E5.html#variable-i%7E39">i</a>
-      
-      <a class="list-group-item" href="../proc/save_results%7E5.html#variable-s%7E20">s</a>
+      <a class="list-group-item" href="../proc/save_results%7E5.html#variable-v%7E9">v</a>
       
     </div>
   </div>
@@ -249,6 +247,8 @@
       
       <a class="list-group-item" href="../proc/destroy%7E8.html">destroy</a>
       
+      <a class="list-group-item" href="../proc/destroy%7E9.html">destroy</a>
+      
       <a class="list-group-item" href="../proc/destroy_rk.html">destroy_rk</a>
       
       <a class="list-group-item" href="../proc/deuler_dt.html">dEuler_dt</a>
@@ -266,6 +266,8 @@
       <a class="list-group-item" href="../proc/e%7E2.html">E</a>
       
       <a class="list-group-item" href="../proc/e%7E3.html">E</a>
+      
+      <a class="list-group-item" href="../proc/emd_rk_solver.html">emd_rk_solver</a>
       
       <a class="list-group-item" href="../proc/estimate_orders.html">estimate_orders</a>
       
@@ -306,6 +308,8 @@
       <a class="list-group-item" href="../proc/finalize%7E7.html">finalize</a>
       
       <a class="list-group-item" href="../proc/finalize%7E8.html">finalize</a>
+      
+      <a class="list-group-item" href="../proc/finalize%7E9.html">finalize</a>
       
       <a class="list-group-item" href="../proc/finalize_rk.html">finalize_rk</a>
       
@@ -355,6 +359,8 @@
       
       <a class="list-group-item" href="../proc/init%7E17.html">init</a>
       
+      <a class="list-group-item" href="../proc/init%7E18.html">init</a>
+      
       <a class="list-group-item" href="../proc/init_rk.html">init_rk</a>
       
       <a class="list-group-item" href="../proc/integrate.html">integrate</a>
@@ -371,6 +377,8 @@
       
       <a class="list-group-item" href="../proc/integrate%7E7.html">integrate</a>
       
+      <a class="list-group-item" href="../proc/integrate%7E8.html">integrate</a>
+      
       <a class="list-group-item" href="../proc/integrate_rk.html">integrate_rk</a>
       
       <a class="list-group-item" href="../proc/leapfrog_solver.html">leapfrog_solver</a>
@@ -385,7 +393,11 @@
       
       <a class="list-group-item" href="../proc/ls_rk_solver.html">ls_rk_solver</a>
       
+      <a class="list-group-item" href="../proc/new_dt.html">new_Dt</a>
+      
       <a class="list-group-item" href="../proc/oscillation_assign_oscillation.html">oscillation_assign_oscillation</a>
+      
+      <a class="list-group-item" href="../proc/oscillation_local_error.html">oscillation_local_error</a>
       
       <a class="list-group-item" href="../proc/oscillation_multiply_oscillation.html">oscillation_multiply_oscillation</a>
       
@@ -493,6 +505,8 @@
       
       <a class="list-group-item" href="../proc/test_am.html">test_am</a>
       
+      <a class="list-group-item" href="../proc/test_emd_rk.html">test_emd_rk</a>
+      
       <a class="list-group-item" href="../proc/test_euler.html">test_euler</a>
       
       <a class="list-group-item" href="../proc/test_euler%7E2.html">test_euler</a>
@@ -545,7 +559,7 @@
     
     <div class="col-lg-9" id='text'>
     <h2>
-subroutine save_results(title, filename)
+subroutine save_results(title, basename)
     
     
     
@@ -573,7 +587,7 @@ subroutine save_results(title, filename)
   
 <tr>
   
-  <td><span class="anchor" id="variable-title%7E13"></span>character(len=*),</td>
+  <td><span class="anchor" id="variable-title%7E16"></span>character(len=*),</td>
   <td>intent(in)</td>
   <td></td>
   
@@ -588,12 +602,12 @@ subroutine save_results(title, filename)
   
 <tr>
   
-  <td><span class="anchor" id="variable-filename%7E7"></span>character(len=*),</td>
+  <td><span class="anchor" id="variable-basename%7E2"></span>character(len=*),</td>
   <td>intent(in)</td>
   <td></td>
   
   <td></td><td>::</td>
-  <td><strong>filename</strong></td><td><p>Output filename.</p></td>
+  <td><strong>basename</strong></td><td><p>Output basename.</p></td>
   
 </tr>
 
@@ -604,9 +618,143 @@ subroutine save_results(title, filename)
     
     
     <h3>Description</h3>
-    <p>Save plots of results.</p>
+    <p>Save results.</p>
     
     
+     <h3>Calls</h3>
+     
+                <div class="depgraph"><?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.26.3 (20100126.1600)
+ -->
+<!-- Title: proc~~save_results~5~~CallsGraph Pages: 1 -->
+<svg id="procsave_results5CallsGraph" width="212pt" height="78pt"
+ viewBox="0.00 0.00 212.00 78.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="proc~~save_results~5~~CallsGraph" class="graph" transform="scale(1 1) rotate(0) translate(4 74)">
+<title>proc~~save_results~5~~CallsGraph</title>
+<polygon fill="white" stroke="white" points="-4,5 -4,-74 209,-74 209,5 -4,5"/>
+<!-- proc~save_results~5 -->
+<g id="node1" class="node"><title>proc~save_results~5</title>
+<polygon fill="none" stroke="black" points="73,-48 1,-48 1,-22 73,-22 73,-48"/>
+<text text-anchor="middle" x="37" y="-32.55" font-family="Helvetica,sans-Serif" font-size="10.50">save_results</text>
+</g>
+<!-- str -->
+<g id="node2" class="node"><title>str</title>
+<polygon fill="#777777" stroke="#777777" points="184,-70 130,-70 130,-44 184,-44 184,-70"/>
+<text text-anchor="middle" x="157" y="-54.55" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">str</text>
+</g>
+<!-- proc~save_results~5&#45;&gt;str -->
+<g id="edge2" class="edge"><title>proc~save_results~5&#45;&gt;str</title>
+<path fill="none" stroke="black" d="M73.656,-41.7203C88.1874,-44.3844 104.883,-47.4452 119.497,-50.1244"/>
+<polygon fill="black" stroke="black" points="119.242,-53.6359 129.709,-51.9967 120.504,-46.7507 119.242,-53.6359"/>
+</g>
+<!-- proc~average_solution -->
+<g id="node3" class="node"><title>proc~average_solution</title>
+<a xlink:href="../proc/average_solution.html" xlink:title="average_solution">
+<polygon fill="#d9534f" stroke="#d9534f" points="204,-26 110,-26 110,-1.24345e-14 204,-3.55271e-15 204,-26"/>
+<text text-anchor="middle" x="157" y="-10.55" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">average_solution</text>
+</a>
+</g>
+<!-- proc~save_results~5&#45;&gt;proc~average_solution -->
+<g id="edge4" class="edge"><title>proc~save_results~5&#45;&gt;proc~average_solution</title>
+<path fill="none" stroke="black" d="M73.656,-28.2797C81.969,-26.7557 90.9904,-25.1018 99.9251,-23.4637"/>
+<polygon fill="black" stroke="black" points="100.728,-26.8749 109.933,-21.6289 99.4661,-19.9896 100.728,-26.8749"/>
+</g>
+</g>
+</svg>
+</div>
+                <div><a type="button" class="graph-help" data-toggle="modal" href="#graph-help-text">Help</a></div>
+                <div class="modal fade" id="graph-help-text" tabindex="-1" role="dialog">
+                  <div class="modal-dialog modal-lg" role="document">
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title" id="-graph-help-label">Graph Key</h4>
+                      </div>
+                      <div class="modal-body">
+                        
+Nodes of different colours represent the following:
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.26.3 (20100126.1600)
+ -->
+<!-- Title: Graph Key Pages: 1 -->
+<svg width="641pt" height="28pt"
+ viewBox="0.00 0.00 641.00 27.80" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="graph1" class="graph" transform="scale(0.817602 0.817602) rotate(0) translate(4 30)">
+<title>Graph Key</title>
+<polygon fill="white" stroke="white" points="-4,5 -4,-30 781,-30 781,5 -4,5"/>
+<!-- Module -->
+<g id="node1" class="node"><title>Module</title>
+<polygon fill="#337ab7" stroke="#337ab7" points="54,-26 2.13163e-14,-26 0,-1.24345e-14 54,-3.55271e-15 54,-26"/>
+<text text-anchor="middle" x="27" y="-10.55" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Module</text>
+</g>
+<!-- Submodule -->
+<g id="node2" class="node"><title>Submodule</title>
+<polygon fill="#5bc0de" stroke="#5bc0de" points="138,-26 72,-26 72,-1.24345e-14 138,-3.55271e-15 138,-26"/>
+<text text-anchor="middle" x="105" y="-10.55" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Submodule</text>
+</g>
+<!-- Type -->
+<g id="node3" class="node"><title>Type</title>
+<polygon fill="#5cb85c" stroke="#5cb85c" points="210,-26 156,-26 156,-1.24345e-14 210,-3.55271e-15 210,-26"/>
+<text text-anchor="middle" x="183" y="-10.55" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Type</text>
+</g>
+<!-- Subroutine -->
+<g id="node4" class="node"><title>Subroutine</title>
+<polygon fill="#d9534f" stroke="#d9534f" points="292,-26 228,-26 228,-1.24345e-14 292,-3.55271e-15 292,-26"/>
+<text text-anchor="middle" x="260" y="-10.55" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Subroutine</text>
+</g>
+<!-- Function -->
+<g id="node5" class="node"><title>Function</title>
+<polygon fill="#d94e8f" stroke="#d94e8f" points="364,-26 310,-26 310,-1.24345e-14 364,-3.55271e-15 364,-26"/>
+<text text-anchor="middle" x="337" y="-10.55" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Function</text>
+</g>
+<!-- Interface -->
+<g id="node6" class="node"><title>Interface</title>
+<polygon fill="#a7506f" stroke="#a7506f" points="436,-26 382,-26 382,-1.24345e-14 436,-3.55271e-15 436,-26"/>
+<text text-anchor="middle" x="409" y="-10.55" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Interface</text>
+</g>
+<!-- Unknown Procedure Type -->
+<g id="node7" class="node"><title>Unknown Procedure Type</title>
+<polygon fill="#777777" stroke="#777777" points="590,-26 454,-26 454,-1.24345e-14 590,-3.55271e-15 590,-26"/>
+<text text-anchor="middle" x="522" y="-10.55" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Unknown Procedure Type</text>
+</g>
+<!-- Program -->
+<g id="node8" class="node"><title>Program</title>
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="662,-26 608,-26 608,-1.24345e-14 662,-3.55271e-15 662,-26"/>
+<text text-anchor="middle" x="635" y="-10.55" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Program</text>
+</g>
+<!-- This Page&#39;s Entity -->
+<g id="node9" class="node"><title>This Page&#39;s Entity</title>
+<polygon fill="none" stroke="black" points="776,-26 680,-26 680,-1.24345e-14 776,-3.55271e-15 776,-26"/>
+<text text-anchor="middle" x="728" y="-10.55" font-family="Helvetica,sans-Serif" font-size="10.50">This Page&#39;s Entity</text>
+</g>
+</g>
+</svg>
+
+<h5>Module Graph</h5>
+<p>Solid arrows point from a parent (sub)module to the submodule which is
+descended from it. Dashed arrows point from a module being used to the
+module using it.</p>
+<h5>Type Graph</h5>
+<p>Solid arrows point from one derived type to another which extends
+(inherits from) it. Dashed arrows point from a derived type to another
+type containing it as a components, with a label listing the name(s) of
+said component(s).</p>
+<h5>Call Graph</h5>
+<p>Solid arrows point from a procedure to one which it calls. Dashed 
+arrows point from an interface to procedures which implement that interface.
+This could include the module procedures in a generic interface or the
+implementation in a submodule of an interface in a parent module.</p>
+
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                
+     
      
      <h3>Called By</h3>
      
@@ -616,107 +764,107 @@ subroutine save_results(title, filename)
 <!-- Generated by graphviz version 2.26.3 (20100126.1600)
  -->
 <!-- Title: proc~~save_results~5~~CalledByGraph Pages: 1 -->
-<svg id="procsave_results5CalledByGraph" width="320pt" height="210pt"
- viewBox="0.00 0.00 320.00 210.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<svg id="procsave_results5CalledByGraph" width="334pt" height="210pt"
+ viewBox="0.00 0.00 334.00 210.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
 <g id="proc~~save_results~5~~CalledByGraph" class="graph" transform="scale(1 1) rotate(0) translate(4 206)">
 <title>proc~~save_results~5~~CalledByGraph</title>
-<polygon fill="white" stroke="white" points="-4,5 -4,-206 317,-206 317,5 -4,5"/>
+<polygon fill="white" stroke="white" points="-4,5 -4,-206 331,-206 331,5 -4,5"/>
 <!-- proc~save_results~5 -->
 <g id="node1" class="node"><title>proc~save_results~5</title>
-<polygon fill="none" stroke="black" points="311,-114 239,-114 239,-88 311,-88 311,-114"/>
-<text text-anchor="middle" x="275" y="-98.55" font-family="Helvetica,sans-Serif" font-size="10.50">save_results</text>
-</g>
-<!-- proc~test_tvd_rk~3 -->
-<g id="node2" class="node"><title>proc~test_tvd_rk~3</title>
-<a xlink:href="../proc/test_tvd_rk%7E3.html" xlink:title="test_tvd_rk">
-<polygon fill="#d9534f" stroke="#d9534f" points="196,-202 132,-202 132,-176 196,-176 196,-202"/>
-<text text-anchor="middle" x="164" y="-186.55" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">test_tvd_rk</text>
-</a>
-</g>
-<!-- proc~test_tvd_rk~3&#45;&gt;proc~save_results~5 -->
-<g id="edge12" class="edge"><title>proc~test_tvd_rk~3&#45;&gt;proc~save_results~5</title>
-<path fill="none" stroke="black" d="M188.604,-175.773C193.167,-173.037 197.811,-170.054 202,-167 221.104,-153.073 240.884,-134.918 255.028,-121.176"/>
-<polygon fill="black" stroke="black" points="257.595,-123.56 262.265,-114.05 252.684,-118.572 257.595,-123.56"/>
-</g>
-<!-- proc~test_leapfrog~3 -->
-<g id="node3" class="node"><title>proc~test_leapfrog~3</title>
-<a xlink:href="../proc/test_leapfrog%7E3.html" xlink:title="test_leapfrog">
-<polygon fill="#d9534f" stroke="#d9534f" points="201,-158 127,-158 127,-132 201,-132 201,-158"/>
-<text text-anchor="middle" x="164" y="-142.55" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">test_leapfrog</text>
-</a>
-</g>
-<!-- proc~test_leapfrog~3&#45;&gt;proc~save_results~5 -->
-<g id="edge14" class="edge"><title>proc~test_leapfrog~3&#45;&gt;proc~save_results~5</title>
-<path fill="none" stroke="black" d="M197.003,-131.918C208.087,-127.524 220.611,-122.559 232.329,-117.915"/>
-<polygon fill="black" stroke="black" points="233.926,-121.047 241.932,-114.108 231.346,-114.539 233.926,-121.047"/>
-</g>
-<!-- proc~test_ls_rk~3 -->
-<g id="node4" class="node"><title>proc~test_ls_rk~3</title>
-<a xlink:href="../proc/test_ls_rk%7E3.html" xlink:title="test_ls_rk">
-<polygon fill="#d9534f" stroke="#d9534f" points="193,-114 135,-114 135,-88 193,-88 193,-114"/>
-<text text-anchor="middle" x="164" y="-98.55" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">test_ls_rk</text>
-</a>
-</g>
-<!-- proc~test_ls_rk~3&#45;&gt;proc~save_results~5 -->
-<g id="edge16" class="edge"><title>proc~test_ls_rk~3&#45;&gt;proc~save_results~5</title>
-<path fill="none" stroke="black" d="M193.164,-101C203.895,-101 216.336,-101 228.228,-101"/>
-<polygon fill="black" stroke="black" points="228.482,-104.5 238.481,-101 228.481,-97.5001 228.482,-104.5"/>
+<polygon fill="none" stroke="black" points="325,-114 253,-114 253,-88 325,-88 325,-114"/>
+<text text-anchor="middle" x="289" y="-98.55" font-family="Helvetica,sans-Serif" font-size="10.50">save_results</text>
 </g>
 <!-- proc~test_ab~3 -->
-<g id="node5" class="node"><title>proc~test_ab~3</title>
+<g id="node2" class="node"><title>proc~test_ab~3</title>
 <a xlink:href="../proc/test_ab%7E3.html" xlink:title="test_ab">
-<polygon fill="#d9534f" stroke="#d9534f" points="191,-70 137,-70 137,-44 191,-44 191,-70"/>
-<text text-anchor="middle" x="164" y="-54.55" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">test_ab</text>
+<polygon fill="#d9534f" stroke="#d9534f" points="205,-202 151,-202 151,-176 205,-176 205,-202"/>
+<text text-anchor="middle" x="178" y="-186.55" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">test_ab</text>
 </a>
 </g>
 <!-- proc~test_ab~3&#45;&gt;proc~save_results~5 -->
-<g id="edge18" class="edge"><title>proc~test_ab~3&#45;&gt;proc~save_results~5</title>
-<path fill="none" stroke="black" d="M191.154,-67.7636C203.669,-72.7247 218.814,-78.7279 232.769,-84.2598"/>
-<polygon fill="black" stroke="black" points="231.608,-87.5643 242.194,-87.9957 234.187,-81.0569 231.608,-87.5643"/>
+<g id="edge12" class="edge"><title>proc~test_ab~3&#45;&gt;proc~save_results~5</title>
+<path fill="none" stroke="black" d="M202.604,-175.773C207.167,-173.037 211.811,-170.054 216,-167 235.104,-153.073 254.884,-134.918 269.028,-121.176"/>
+<polygon fill="black" stroke="black" points="271.595,-123.56 276.265,-114.05 266.684,-118.572 271.595,-123.56"/>
+</g>
+<!-- proc~test_ls_rk~3 -->
+<g id="node3" class="node"><title>proc~test_ls_rk~3</title>
+<a xlink:href="../proc/test_ls_rk%7E3.html" xlink:title="test_ls_rk">
+<polygon fill="#d9534f" stroke="#d9534f" points="207,-158 149,-158 149,-132 207,-132 207,-158"/>
+<text text-anchor="middle" x="178" y="-142.55" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">test_ls_rk</text>
+</a>
+</g>
+<!-- proc~test_ls_rk~3&#45;&gt;proc~save_results~5 -->
+<g id="edge14" class="edge"><title>proc~test_ls_rk~3&#45;&gt;proc~save_results~5</title>
+<path fill="none" stroke="black" d="M207.164,-133.44C219.259,-128.645 233.526,-122.99 246.732,-117.755"/>
+<polygon fill="black" stroke="black" points="248.108,-120.975 256.114,-114.036 245.528,-114.467 248.108,-120.975"/>
+</g>
+<!-- proc~test_tvd_rk~3 -->
+<g id="node4" class="node"><title>proc~test_tvd_rk~3</title>
+<a xlink:href="../proc/test_tvd_rk%7E3.html" xlink:title="test_tvd_rk">
+<polygon fill="#d9534f" stroke="#d9534f" points="210,-114 146,-114 146,-88 210,-88 210,-114"/>
+<text text-anchor="middle" x="178" y="-98.55" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">test_tvd_rk</text>
+</a>
+</g>
+<!-- proc~test_tvd_rk~3&#45;&gt;proc~save_results~5 -->
+<g id="edge16" class="edge"><title>proc~test_tvd_rk~3&#45;&gt;proc~save_results~5</title>
+<path fill="none" stroke="black" d="M210.703,-101C220.488,-101 231.416,-101 241.931,-101"/>
+<polygon fill="black" stroke="black" points="242.251,-104.5 252.251,-101 242.251,-97.5001 242.251,-104.5"/>
+</g>
+<!-- proc~test_leapfrog~3 -->
+<g id="node5" class="node"><title>proc~test_leapfrog~3</title>
+<a xlink:href="../proc/test_leapfrog%7E3.html" xlink:title="test_leapfrog">
+<polygon fill="#d9534f" stroke="#d9534f" points="215,-70 141,-70 141,-44 215,-44 215,-70"/>
+<text text-anchor="middle" x="178" y="-54.55" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">test_leapfrog</text>
+</a>
+</g>
+<!-- proc~test_leapfrog~3&#45;&gt;proc~save_results~5 -->
+<g id="edge18" class="edge"><title>proc~test_leapfrog~3&#45;&gt;proc~save_results~5</title>
+<path fill="none" stroke="black" d="M211.003,-70.0823C222.087,-74.4758 234.611,-79.4405 246.329,-84.0853"/>
+<polygon fill="black" stroke="black" points="245.346,-87.4607 255.932,-87.8921 247.926,-80.9533 245.346,-87.4607"/>
 </g>
 <!-- proc~test_euler~3 -->
 <g id="node6" class="node"><title>proc~test_euler~3</title>
 <a xlink:href="../proc/test_euler%7E3.html" xlink:title="test_euler">
-<polygon fill="#d9534f" stroke="#d9534f" points="194,-26 134,-26 134,-1.24345e-14 194,-3.55271e-15 194,-26"/>
-<text text-anchor="middle" x="164" y="-10.55" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">test_euler</text>
+<polygon fill="#d9534f" stroke="#d9534f" points="208,-26 148,-26 148,-1.24345e-14 208,-3.55271e-15 208,-26"/>
+<text text-anchor="middle" x="178" y="-10.55" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">test_euler</text>
 </a>
 </g>
 <!-- proc~test_euler~3&#45;&gt;proc~save_results~5 -->
 <g id="edge20" class="edge"><title>proc~test_euler~3&#45;&gt;proc~save_results~5</title>
-<path fill="none" stroke="black" d="M188.604,-26.2273C193.167,-28.9626 197.811,-31.9463 202,-35 221.104,-48.9274 240.884,-67.0817 255.028,-80.8243"/>
-<polygon fill="black" stroke="black" points="252.684,-83.4283 262.265,-87.9503 257.595,-78.4403 252.684,-83.4283"/>
+<path fill="none" stroke="black" d="M202.604,-26.2273C207.167,-28.9626 211.811,-31.9463 216,-35 235.104,-48.9274 254.884,-67.0817 269.028,-80.8243"/>
+<polygon fill="black" stroke="black" points="266.684,-83.4283 276.265,-87.9503 271.595,-78.4403 266.684,-83.4283"/>
 </g>
-<!-- program~integrate_lorenz -->
-<g id="node7" class="node"><title>program~integrate_lorenz</title>
-<a xlink:href="../program/integrate_lorenz.html" xlink:title="integrate_lorenz">
-<polygon fill="#f0ad4e" stroke="#f0ad4e" points="90,-114 4.26326e-14,-114 0,-88 90,-88 90,-114"/>
-<text text-anchor="middle" x="45" y="-98.55" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">integrate_lorenz</text>
+<!-- program~integrate_euler_1d -->
+<g id="node7" class="node"><title>program~integrate_euler_1d</title>
+<a xlink:href="../program/integrate_euler_1d.html" xlink:title="integrate_euler_1D">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="104,-114 3.55271e-14,-114 0,-88 104,-88 104,-114"/>
+<text text-anchor="middle" x="52" y="-98.55" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">integrate_euler_1D</text>
 </a>
 </g>
-<!-- program~integrate_lorenz&#45;&gt;proc~test_tvd_rk~3 -->
-<g id="edge2" class="edge"><title>program~integrate_lorenz&#45;&gt;proc~test_tvd_rk~3</title>
-<path fill="none" stroke="black" d="M59.6691,-114.151C75.483,-128.038 101.668,-150.201 126,-167 127.647,-168.137 129.355,-169.272 131.096,-170.394"/>
-<polygon fill="black" stroke="black" points="129.575,-173.568 139.924,-175.836 133.249,-167.609 129.575,-173.568"/>
+<!-- program~integrate_euler_1d&#45;&gt;proc~test_ab~3 -->
+<g id="edge2" class="edge"><title>program~integrate_euler_1d&#45;&gt;proc~test_ab~3</title>
+<path fill="none" stroke="black" d="M68.1221,-114.005C85.4573,-127.77 114.033,-149.833 140,-167 141.86,-168.23 143.791,-169.466 145.753,-170.69"/>
+<polygon fill="black" stroke="black" points="144.054,-173.753 154.423,-175.933 147.677,-167.763 144.054,-173.753"/>
 </g>
-<!-- program~integrate_lorenz&#45;&gt;proc~test_leapfrog~3 -->
-<g id="edge4" class="edge"><title>program~integrate_lorenz&#45;&gt;proc~test_leapfrog~3</title>
-<path fill="none" stroke="black" d="M80.3817,-114.082C92.5019,-118.564 106.229,-123.639 119.006,-128.364"/>
-<polygon fill="black" stroke="black" points="117.956,-131.707 128.549,-131.892 120.384,-125.141 117.956,-131.707"/>
+<!-- program~integrate_euler_1d&#45;&gt;proc~test_ls_rk~3 -->
+<g id="edge4" class="edge"><title>program~integrate_euler_1d&#45;&gt;proc~test_ls_rk~3</title>
+<path fill="none" stroke="black" d="M89.463,-114.082C105.202,-119.579 123.501,-125.969 139.364,-131.508"/>
+<polygon fill="black" stroke="black" points="138.287,-134.839 148.882,-134.832 140.595,-128.23 138.287,-134.839"/>
 </g>
-<!-- program~integrate_lorenz&#45;&gt;proc~test_ls_rk~3 -->
-<g id="edge6" class="edge"><title>program~integrate_lorenz&#45;&gt;proc~test_ls_rk~3</title>
-<path fill="none" stroke="black" d="M90.3283,-101C101.677,-101 113.756,-101 124.78,-101"/>
-<polygon fill="black" stroke="black" points="124.968,-104.5 134.968,-101 124.968,-97.5001 124.968,-104.5"/>
+<!-- program~integrate_euler_1d&#45;&gt;proc~test_tvd_rk~3 -->
+<g id="edge6" class="edge"><title>program~integrate_euler_1d&#45;&gt;proc~test_tvd_rk~3</title>
+<path fill="none" stroke="black" d="M104.341,-101C114.678,-101 125.41,-101 135.379,-101"/>
+<polygon fill="black" stroke="black" points="135.443,-104.5 145.443,-101 135.443,-97.5001 135.443,-104.5"/>
 </g>
-<!-- program~integrate_lorenz&#45;&gt;proc~test_ab~3 -->
-<g id="edge8" class="edge"><title>program~integrate_lorenz&#45;&gt;proc~test_ab~3</title>
-<path fill="none" stroke="black" d="M80.3817,-87.9177C95.2188,-82.4317 112.464,-76.0552 127.426,-70.523"/>
-<polygon fill="black" stroke="black" points="128.715,-73.7781 136.881,-67.0273 126.288,-67.2126 128.715,-73.7781"/>
+<!-- program~integrate_euler_1d&#45;&gt;proc~test_leapfrog~3 -->
+<g id="edge8" class="edge"><title>program~integrate_euler_1d&#45;&gt;proc~test_leapfrog~3</title>
+<path fill="none" stroke="black" d="M89.463,-87.9177C102.422,-83.3923 117.116,-78.2611 130.757,-73.4975"/>
+<polygon fill="black" stroke="black" points="132.177,-76.7091 140.464,-70.1079 129.869,-70.1005 132.177,-76.7091"/>
 </g>
-<!-- program~integrate_lorenz&#45;&gt;proc~test_euler~3 -->
-<g id="edge10" class="edge"><title>program~integrate_lorenz&#45;&gt;proc~test_euler~3</title>
-<path fill="none" stroke="black" d="M59.6691,-87.8488C75.483,-73.9625 101.668,-51.7988 126,-35 127.647,-33.8631 129.355,-32.728 131.096,-31.6064"/>
-<polygon fill="black" stroke="black" points="133.249,-34.3909 139.924,-26.1636 129.575,-28.4322 133.249,-34.3909"/>
+<!-- program~integrate_euler_1d&#45;&gt;proc~test_euler~3 -->
+<g id="edge10" class="edge"><title>program~integrate_euler_1d&#45;&gt;proc~test_euler~3</title>
+<path fill="none" stroke="black" d="M68.1221,-87.9946C85.4573,-74.23 114.033,-52.167 140,-35 141.86,-33.7703 143.791,-32.5344 145.753,-31.3098"/>
+<polygon fill="black" stroke="black" points="147.677,-34.2366 154.423,-26.067 144.054,-28.2466 147.677,-34.2366"/>
 </g>
 </g>
 </svg>
@@ -860,25 +1008,11 @@ implementation in a submodule of an interface in a parent module.</p>
   
 <tr>
   
-  <td><span class="anchor" id="variable-i%7E39"></span>integer(kind=I_P),</td>
+  <td><span class="anchor" id="variable-v%7E9"></span>integer(kind=I_P),</td>
   
   <td>public</td>
   <td></td><td>::</td>
-  <td><strong>i</strong></td><td></td><td></td><td><p>Counter.</p></td>
-  
-</tr>
-
-  
-  
-  
-  
-<tr>
-  
-  <td><span class="anchor" id="variable-s%7E20"></span>integer(kind=I_P),</td>
-  
-  <td>public</td>
-  <td></td><td>::</td>
-  <td><strong>s</strong></td><td></td><td></td><td><p>Counter.</p></td>
+  <td><strong>v</strong></td><td></td><td></td><td><p>Counter.</p></td>
   
 </tr>
 
@@ -905,40 +1039,52 @@ implementation in a submodule of an interface in a parent module.</p>
     
     <section>
     <h2><span class="anchor" id="src"></span>Source Code</h2>
-    <div class="highlight"><pre>  <span class="k">subroutine </span><span class="n">save_results</span><span class="p">(</span><span class="n">title</span><span class="p">,</span> <span class="n">filename</span><span class="p">)</span>
+    <div class="highlight"><pre>  <span class="k">subroutine </span><span class="n">save_results</span><span class="p">(</span><span class="n">title</span><span class="p">,</span> <span class="n">basename</span><span class="p">)</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
-  <span class="c">!&lt; Save plots of results.</span>
+  <span class="c">!&lt; Save results.</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
   <span class="kt">character</span><span class="p">(</span><span class="o">*</span><span class="p">),</span> <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span> <span class="kd">::</span> <span class="n">title</span>    <span class="c">!&lt; Plot title.</span>
-  <span class="kt">character</span><span class="p">(</span><span class="o">*</span><span class="p">),</span> <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span> <span class="kd">::</span> <span class="n">filename</span> <span class="c">!&lt; Output filename.</span>
+  <span class="kt">character</span><span class="p">(</span><span class="o">*</span><span class="p">),</span> <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span> <span class="kd">::</span> <span class="n">basename</span> <span class="c">!&lt; Output basename.</span>
   <span class="kt">integer</span><span class="p">(</span><span class="n">I_P</span><span class="p">)</span>             <span class="kd">::</span> <span class="n">rawfile</span>  <span class="c">!&lt; Raw file unit for saving results.</span>
   <span class="k">type</span><span class="p">(</span><span class="n">pyplot</span><span class="p">)</span>             <span class="kd">::</span> <span class="n">plt</span>      <span class="c">!&lt; Plot file handler.</span>
-  <span class="kt">integer</span><span class="p">(</span><span class="n">I_P</span><span class="p">)</span>             <span class="kd">::</span> <span class="n">i</span>        <span class="c">!&lt; Counter.</span>
-  <span class="kt">integer</span><span class="p">(</span><span class="n">I_P</span><span class="p">)</span>             <span class="kd">::</span> <span class="n">s</span>        <span class="c">!&lt; Counter.</span>
+  <span class="kt">integer</span><span class="p">(</span><span class="n">I_P</span><span class="p">)</span>             <span class="kd">::</span> <span class="n">v</span>        <span class="c">!&lt; Counter.</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
 
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+  <span class="k">if</span> <span class="p">(</span><span class="n">results</span><span class="p">.</span><span class="nb">or</span><span class="p">.</span><span class="n">plots</span><span class="p">)</span> <span class="n">final_state</span> <span class="o">=</span> <span class="n">domain</span><span class="p">%</span><span class="n">output</span><span class="p">()</span>
   <span class="k">if</span> <span class="p">(</span><span class="n">results</span><span class="p">)</span> <span class="k">then</span>
-<span class="k">    open</span><span class="p">(</span><span class="n">newunit</span><span class="o">=</span><span class="n">rawfile</span><span class="p">,</span> <span class="k">file</span><span class="o">=</span><span class="n">filename</span><span class="o">//</span><span class="s1">&#39;.dat&#39;</span><span class="p">)</span>
-    <span class="k">write</span><span class="p">(</span><span class="n">rawfile</span><span class="p">,</span> <span class="s1">&#39;(A)&#39;</span><span class="p">)</span><span class="s1">&#39;# &#39;</span><span class="o">//</span><span class="n">title</span>
-    <span class="k">write</span><span class="p">(</span><span class="n">rawfile</span><span class="p">,</span> <span class="s1">&#39;(A)&#39;</span><span class="p">)</span><span class="s1">&#39;# VARIABLES: &quot;t&quot; &quot;x&quot; &quot;y&quot; &quot;z&quot;&#39;</span>
-    <span class="k">do </span><span class="n">s</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">num_steps</span>
-      <span class="k">write</span><span class="p">(</span><span class="n">rawfile</span><span class="p">,</span> <span class="s1">&#39;(4(&#39;</span><span class="o">//</span><span class="n">FR_P</span><span class="o">//</span><span class="s1">&#39;,1X))&#39;</span><span class="p">)(</span><span class="n">solution</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">s</span><span class="p">),</span> <span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
+<span class="k">    open</span><span class="p">(</span><span class="n">newunit</span><span class="o">=</span><span class="n">rawfile</span><span class="p">,</span> <span class="k">file</span><span class="o">=</span><span class="n">basename</span><span class="o">//</span><span class="s1">&#39;-&#39;</span><span class="o">//</span><span class="nb">trim</span><span class="p">(</span><span class="n">str</span><span class="p">(.</span><span class="n">true</span><span class="p">.,</span><span class="n">Ni</span><span class="p">))</span><span class="o">//</span><span class="s1">&#39;_cells.dat&#39;</span><span class="p">)</span>
+    <span class="k">write</span><span class="p">(</span><span class="n">rawfile</span><span class="p">,</span> <span class="s1">&#39;(A)&#39;</span><span class="p">)</span><span class="s1">&#39;TITLE=&quot;&#39;</span><span class="o">//</span><span class="n">title</span><span class="o">//</span><span class="s1">&#39;&quot;&#39;</span>
+    <span class="k">write</span><span class="p">(</span><span class="n">rawfile</span><span class="p">,</span> <span class="s1">&#39;(A)&#39;</span><span class="p">)</span><span class="n">variables</span>
+    <span class="k">write</span><span class="p">(</span><span class="n">rawfile</span><span class="p">,</span> <span class="s1">&#39;(A)&#39;</span><span class="p">)</span><span class="s1">&#39;ZONE T=&quot;FOODIE: &#39;</span><span class="o">//</span><span class="nb">trim</span><span class="p">(</span><span class="n">str</span><span class="p">(.</span><span class="n">true</span><span class="p">.,</span><span class="n">Ni</span><span class="p">))</span><span class="o">//</span><span class="s1">&#39; cells&quot;, I=&#39;</span><span class="o">//</span><span class="nb">trim</span><span class="p">(</span><span class="n">str</span><span class="p">(.</span><span class="n">true</span><span class="p">.,</span><span class="n">Ni</span><span class="o">+</span><span class="mi">1</span><span class="p">))</span><span class="o">//</span><span class="p">&amp;</span>
+                         <span class="s1">&#39;, J=1, K=1, DATAPACKING=BLOCK, VARLOCATION=([1]=NODAL,[2-&#39;</span><span class="o">//</span><span class="nb">trim</span><span class="p">(</span><span class="n">str</span><span class="p">(.</span><span class="n">true</span><span class="p">.,</span><span class="n">Np</span><span class="o">+</span><span class="mi">1</span><span class="p">))</span> <span class="o">//</span><span class="s1">&#39;]=CELLCENTERED)&#39;</span>
+    <span class="k">write</span><span class="p">(</span><span class="n">rawfile</span><span class="p">,</span> <span class="s1">&#39;(&#39;</span><span class="o">//</span><span class="nb">trim</span><span class="p">(</span><span class="n">str</span><span class="p">(.</span><span class="n">true</span><span class="p">.,</span><span class="n">Ni</span><span class="o">+</span><span class="mi">1</span><span class="p">))</span><span class="o">//</span><span class="s1">&#39;(&#39;</span><span class="o">//</span><span class="n">FR_P</span><span class="o">//</span><span class="s1">&#39;,1X))&#39;</span><span class="p">)</span><span class="n">xnode</span>
+    <span class="k">do </span><span class="n">v</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">Np</span>
+      <span class="k">write</span><span class="p">(</span><span class="n">rawfile</span><span class="p">,</span> <span class="s1">&#39;(&#39;</span><span class="o">//</span><span class="nb">trim</span><span class="p">(</span><span class="n">str</span><span class="p">(.</span><span class="n">true</span><span class="p">.,</span><span class="n">Ni</span><span class="p">))</span><span class="o">//</span><span class="s1">&#39;(&#39;</span><span class="o">//</span><span class="n">FR_P</span><span class="o">//</span><span class="s1">&#39;,1X))&#39;</span><span class="p">)</span><span class="n">final_state</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="p">:)</span>
     <span class="n">enddo</span>
+    <span class="k">if</span> <span class="p">((</span><span class="n">av_Ni</span><span class="o">&gt;</span><span class="mi">0</span><span class="p">).</span><span class="nb">and</span><span class="p">.(</span><span class="n">av_Ni</span><span class="o">/=</span><span class="n">Ni</span><span class="p">))</span> <span class="k">then</span>
+<span class="k">      print</span> <span class="s2">&quot;(A)&quot;</span><span class="p">,</span> <span class="s1">&#39; Average solution from Ni: &#39;</span><span class="o">//</span><span class="nb">trim</span><span class="p">(</span><span class="n">str</span><span class="p">(.</span><span class="n">true</span><span class="p">.,</span><span class="n">Ni</span><span class="p">))</span><span class="o">//</span><span class="s1">&#39; to av_Ni: &#39;</span><span class="o">//</span><span class="nb">trim</span><span class="p">(</span><span class="n">str</span><span class="p">(.</span><span class="n">true</span><span class="p">.,</span><span class="n">av_Ni</span><span class="p">))</span>
+      <span class="k">call </span><span class="n">average_solution</span>
+      <span class="k">write</span><span class="p">(</span><span class="n">rawfile</span><span class="p">,</span> <span class="s1">&#39;(A)&#39;</span><span class="p">)</span><span class="s1">&#39;ZONE T=&quot;FOODIE: &#39;</span><span class="o">//</span><span class="nb">trim</span><span class="p">(</span><span class="n">str</span><span class="p">(.</span><span class="n">true</span><span class="p">.,</span><span class="n">Ni</span><span class="p">))</span><span class="o">//</span><span class="s1">&#39; cells averaged over &#39;</span><span class="o">//</span><span class="nb">trim</span><span class="p">(</span><span class="n">str</span><span class="p">(.</span><span class="n">true</span><span class="p">.,</span><span class="n">av_Ni</span><span class="p">))</span><span class="o">//</span><span class="p">&amp;</span>
+                           <span class="s1">&#39; cells&quot;, I=&#39;</span><span class="o">//</span><span class="nb">trim</span><span class="p">(</span><span class="n">str</span><span class="p">(.</span><span class="n">true</span><span class="p">.,</span><span class="n">av_Ni</span><span class="o">+</span><span class="mi">1</span><span class="p">))</span><span class="o">//</span><span class="p">&amp;</span>
+                           <span class="s1">&#39;, J=1, K=1, DATAPACKING=BLOCK, VARLOCATION=([1]=NODAL,[2-&#39;</span><span class="o">//</span><span class="nb">trim</span><span class="p">(</span><span class="n">str</span><span class="p">(.</span><span class="n">true</span><span class="p">.,</span><span class="n">Np</span><span class="o">+</span><span class="mi">1</span><span class="p">))</span> <span class="o">//</span><span class="s1">&#39;]=CELLCENTERED)&#39;</span>
+      <span class="k">write</span><span class="p">(</span><span class="n">rawfile</span><span class="p">,</span> <span class="s1">&#39;(&#39;</span><span class="o">//</span><span class="nb">trim</span><span class="p">(</span><span class="n">str</span><span class="p">(.</span><span class="n">true</span><span class="p">.,</span><span class="n">av_Ni</span><span class="o">+</span><span class="mi">1</span><span class="p">))</span><span class="o">//</span><span class="s1">&#39;(&#39;</span><span class="o">//</span><span class="n">FR_P</span><span class="o">//</span><span class="s1">&#39;,1X))&#39;</span><span class="p">)</span><span class="n">av_xnode</span>
+      <span class="k">do </span><span class="n">v</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">Np</span>
+        <span class="k">write</span><span class="p">(</span><span class="n">rawfile</span><span class="p">,</span> <span class="s1">&#39;(&#39;</span><span class="o">//</span><span class="nb">trim</span><span class="p">(</span><span class="n">str</span><span class="p">(.</span><span class="n">true</span><span class="p">.,</span><span class="n">av_Ni</span><span class="p">))</span><span class="o">//</span><span class="s1">&#39;(&#39;</span><span class="o">//</span><span class="n">FR_P</span><span class="o">//</span><span class="s1">&#39;,1X))&#39;</span><span class="p">)</span><span class="n">av_state</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="p">:)</span>
+      <span class="n">enddo</span>
+    <span class="n">endif</span>
     <span class="k">close</span><span class="p">(</span><span class="n">rawfile</span><span class="p">)</span>
   <span class="n">endif</span>
   <span class="k">if</span> <span class="p">(</span><span class="n">plots</span><span class="p">)</span> <span class="k">then</span>
-<span class="k">    call </span><span class="n">plt</span><span class="p">%</span><span class="n">initialize</span><span class="p">(</span><span class="n">grid</span><span class="o">=</span><span class="p">.</span><span class="n">true</span><span class="p">.,</span> <span class="n">xlabel</span><span class="o">=</span><span class="s1">&#39;time&#39;</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="n">title</span><span class="p">,</span> <span class="n">legend</span><span class="o">=</span><span class="p">.</span><span class="n">true</span><span class="p">.)</span>
-    <span class="k">call </span><span class="n">plt</span><span class="p">%</span><span class="n">add_plot</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">solution</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="p">:),</span> <span class="n">y</span><span class="o">=</span><span class="n">solution</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="p">:),</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;x&#39;</span><span class="p">,</span> <span class="n">linestyle</span><span class="o">=</span><span class="s1">&#39;r-&#39;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
-    <span class="k">call </span><span class="n">plt</span><span class="p">%</span><span class="n">add_plot</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">solution</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="p">:),</span> <span class="n">y</span><span class="o">=</span><span class="n">solution</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="p">:),</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;y&#39;</span><span class="p">,</span> <span class="n">linestyle</span><span class="o">=</span><span class="s1">&#39;b-&#39;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
-    <span class="k">call </span><span class="n">plt</span><span class="p">%</span><span class="n">add_plot</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">solution</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="p">:),</span> <span class="n">y</span><span class="o">=</span><span class="n">solution</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="p">:),</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;z&#39;</span><span class="p">,</span> <span class="n">linestyle</span><span class="o">=</span><span class="s1">&#39;g-&#39;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
-    <span class="k">call </span><span class="n">plt</span><span class="p">%</span><span class="n">savefig</span><span class="p">(</span><span class="n">filename</span><span class="o">//</span><span class="s1">&#39;.png&#39;</span><span class="p">)</span>
-
-    <span class="k">call </span><span class="n">plt</span><span class="p">%</span><span class="n">initialize</span><span class="p">(</span><span class="n">grid</span><span class="o">=</span><span class="p">.</span><span class="n">true</span><span class="p">.,</span> <span class="n">title</span><span class="o">=</span><span class="n">title</span><span class="o">//</span><span class="s1">&#39;-path&#39;</span><span class="p">,</span> <span class="n">legend</span><span class="o">=</span><span class="p">.</span><span class="n">true</span><span class="p">.)</span>
-    <span class="k">call </span><span class="n">plt</span><span class="p">%</span><span class="n">add_plot</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">solution</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="p">:),</span> <span class="n">y</span><span class="o">=</span><span class="n">solution</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="p">:),</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;x-y path&#39;</span><span class="p">,</span> <span class="n">linestyle</span><span class="o">=</span><span class="s1">&#39;r-&#39;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
-    <span class="k">call </span><span class="n">plt</span><span class="p">%</span><span class="n">add_plot</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">solution</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="p">:),</span> <span class="n">y</span><span class="o">=</span><span class="n">solution</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="p">:),</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;x-z path&#39;</span><span class="p">,</span> <span class="n">linestyle</span><span class="o">=</span><span class="s1">&#39;g-&#39;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
-    <span class="k">call </span><span class="n">plt</span><span class="p">%</span><span class="n">add_plot</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">solution</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="p">:),</span> <span class="n">y</span><span class="o">=</span><span class="n">solution</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="p">:),</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;y-z path&#39;</span><span class="p">,</span> <span class="n">linestyle</span><span class="o">=</span><span class="s1">&#39;b-&#39;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
-    <span class="k">call </span><span class="n">plt</span><span class="p">%</span><span class="n">savefig</span><span class="p">(</span><span class="s1">&#39;path-&#39;</span><span class="o">//</span><span class="n">filename</span><span class="o">//</span><span class="s1">&#39;.png&#39;</span><span class="p">)</span>
+<span class="k">    call </span><span class="n">plt</span><span class="p">%</span><span class="n">initialize</span><span class="p">(</span><span class="n">grid</span><span class="o">=</span><span class="p">.</span><span class="n">true</span><span class="p">.,</span> <span class="n">xlabel</span><span class="o">=</span><span class="s1">&#39;x&#39;</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="n">title</span><span class="p">)</span>
+    <span class="k">do </span><span class="n">v</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">Ns</span>
+      <span class="k">call </span><span class="n">plt</span><span class="p">%</span><span class="n">add_plot</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">xcenter</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="n">final_state</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="p">:),</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;rho(&#39;</span><span class="o">//</span><span class="nb">trim</span><span class="p">(</span><span class="n">str</span><span class="p">(.</span><span class="n">true</span><span class="p">.,</span><span class="n">v</span><span class="p">))</span><span class="o">//</span><span class="s1">&#39;)&#39;</span><span class="p">,</span> <span class="n">linestyle</span><span class="o">=</span><span class="s1">&#39;b-&#39;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">enddo</span>
+    <span class="k">call </span><span class="n">plt</span><span class="p">%</span><span class="n">add_plot</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">xcenter</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="n">final_state</span><span class="p">(</span><span class="n">Ns</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="p">:),</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;u&#39;</span><span class="p">,</span> <span class="n">linestyle</span><span class="o">=</span><span class="s1">&#39;r-&#39;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+    <span class="k">call </span><span class="n">plt</span><span class="p">%</span><span class="n">add_plot</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">xcenter</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="n">final_state</span><span class="p">(</span><span class="n">Ns</span><span class="o">+</span><span class="mi">2</span><span class="p">,</span> <span class="p">:),</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;p&#39;</span><span class="p">,</span> <span class="n">linestyle</span><span class="o">=</span><span class="s1">&#39;g-&#39;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+    <span class="k">call </span><span class="n">plt</span><span class="p">%</span><span class="n">add_plot</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">xcenter</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="n">final_state</span><span class="p">(</span><span class="n">Ns</span><span class="o">+</span><span class="mi">3</span><span class="p">,</span> <span class="p">:),</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;rho&#39;</span><span class="p">,</span> <span class="n">linestyle</span><span class="o">=</span><span class="s1">&#39;o-&#39;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+    <span class="k">call </span><span class="n">plt</span><span class="p">%</span><span class="n">add_plot</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">xcenter</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="n">final_state</span><span class="p">(</span><span class="n">Ns</span><span class="o">+</span><span class="mi">4</span><span class="p">,</span> <span class="p">:),</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;gamma&#39;</span><span class="p">,</span> <span class="n">linestyle</span><span class="o">=</span><span class="s1">&#39;c-&#39;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+    <span class="k">call </span><span class="n">plt</span><span class="p">%</span><span class="n">savefig</span><span class="p">(</span><span class="n">basename</span><span class="o">//</span><span class="s1">&#39;-&#39;</span><span class="o">//</span><span class="nb">trim</span><span class="p">(</span><span class="n">str</span><span class="p">(.</span><span class="n">true</span><span class="p">.,</span><span class="n">Ni</span><span class="p">))</span><span class="o">//</span><span class="s1">&#39;_cells.png&#39;</span><span class="p">)</span>
   <span class="n">endif</span>
   <span class="k">return</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>

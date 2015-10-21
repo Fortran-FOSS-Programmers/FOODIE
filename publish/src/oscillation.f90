@@ -11,6 +11,7 @@ use Data_Type_Command_Line_Interface, only : Type_Command_Line_Interface
 use foodie, only : adams_bashforth_integrator, &
                    adams_bashforth_moulton_integrator, &
                    adams_moulton_integrator, &
+                   emd_runge_kutta_integrator, &
                    euler_explicit_integrator, &
                    leapfrog_integrator, &
                    ls_runge_kutta_integrator, &
@@ -26,6 +27,7 @@ real(R_P), parameter              :: initial_state(1:space_dimension)=[0._R_P, 1
 real(R_P)                         :: f                                                 !< Oscillation frequency.
 real(R_P)                         :: t_final                                           !< Final time.
 real(R_P)                         :: Dt                                                !< Time step.
+real(R_P)                         :: tolerance                                         !< Tolerance on local truncation error.
 integer(I_P)                      :: error                                             !< Error handler.
 integer(I_P)                      :: stages_steps                                      !< Number of stages/steps used.
 integer(I_P)                      :: implicit_iterations                               !< Number of iterations for implicit solvers.
@@ -51,6 +53,7 @@ call cli%add(switch='--ss', help='Stages/steps used', required=.false., act='sto
 call cli%add(switch='--iterations', help='Number of iterations for implicit solvers', required=.false., act='store', def='5')
 call cli%add(switch='--frequency', switch_ab='-f', help='Oscillation frequency', required=.false., def='1e-4', act='store')
 call cli%add(switch='--time_step', switch_ab='-Dt', help='Integration time step', required=.false., def='100.d0', act='store')
+call cli%add(switch='--tolerance', switch_ab='-tol', help='Tolerance on local error', required=.false., def='0.001d0', act='store')
 call cli%add(switch='--t_final', switch_ab='-tf', help='Final integration time', required=.false., def='1e6', act='store')
 call cli%add(switch='--results', switch_ab='-r', help='Save results', required=.false., act='store_true', def='.false.')
 call cli%add(switch='--plots', switch_ab='-p', help='Save plots of results', required=.false., act='store_true', def='.false.')
@@ -63,6 +66,7 @@ call cli%get(switch='--ss', val=stages_steps, error=error) ; if (error/=0) stop
 call cli%get(switch='--iterations', val=implicit_iterations, error=error) ; if (error/=0) stop
 call cli%get(switch='-f', val=f, error=error) ; if (error/=0) stop
 call cli%get(switch='-Dt', val=Dt, error=error) ; if (error/=0) stop
+call cli%get(switch='-tol', val=tolerance, error=error) ; if (error/=0) stop
 call cli%get(switch='-tf', val=t_final, error=error) ; if (error/=0) stop
 call cli%get(switch='-r', val=results, error=error) ; if (error/=0) stop
 call cli%get(switch='-p', val=plots, error=error) ; if (error/=0) stop
@@ -78,6 +82,8 @@ else
     call test_abm(steps=stages_steps)
   case('adams-moulton')
     call test_am(steps=stages_steps)
+  case('emd-runge-kutta')
+    call test_emd_rk(stages=stages_steps)
   case('euler')
     call test_euler
   case('leapfrog')
@@ -92,6 +98,7 @@ else
     call test_ab(steps=stages_steps)
     call test_abm(steps=stages_steps)
     call test_am(steps=stages_steps)
+    call test_emd_rk(stages=stages_steps)
     call test_euler
     call test_leapfrog
     call test_ls_rk(stages=stages_steps)
@@ -102,6 +109,7 @@ else
     print "(A)", '  + adams-bashforth'
     print "(A)", '  + adams-bashforth-moulton'
     print "(A)", '  + adams-moulton'
+    print "(A)", '  + emd-runge-kutta'
     print "(A)", '  + euler'
     print "(A)", '  + leapfrog'
     print "(A)", '  + leapfrog-raw'
@@ -129,9 +137,17 @@ contains
     stop
   endif
   if (trim(adjustl(output_cli))/='unset') then
-    output = trim(adjustl(output_cli))//'-'//trim(strz(10,int(t_final/Dt)))//'-time_steps'//'-'//trim(adjustl(solver))
+    if (trim(adjustl(solver))/='emd-runge-kutta') then
+      output = trim(adjustl(output_cli))//'-'//trim(strz(10,int(t_final/Dt)))//'-time_steps-'//trim(adjustl(solver))
+    else
+      output = trim(adjustl(output_cli))//'-'//trim(str(n=tolerance))//'-tolerance-'//trim(adjustl(solver))
+    endif
   else
-    output = 'oscillation_integration-'//trim(strz(10,int(t_final/Dt)))//'-time_steps'//'-'//trim(adjustl(solver))
+    if (trim(adjustl(solver))/='emd-runge-kutta') then
+      output = 'oscillation_integration-'//trim(strz(10,int(t_final/Dt)))//'-time_steps-'//trim(adjustl(solver))
+    else
+      output = 'oscillation_integration-'//trim(str(n=tolerance))//'-tolerance-'//trim(adjustl(solver))
+    endif
   endif
   if (allocated(solution)) deallocate(solution) ; allocate(solution(0:space_dimension, 0:int(t_final/Dt)))
   return
@@ -289,6 +305,42 @@ contains
   return
   !---------------------------------------------------------------------------------------------------------------------------------
   endsubroutine test_am
+
+  subroutine test_emd_rk(stages)
+  !---------------------------------------------------------------------------------------------------------------------------------
+  !< Test explicit embedded Runge-Kutta class of ODE solvers.
+  !---------------------------------------------------------------------------------------------------------------------------------
+  integer(I_P), intent(IN)      :: stages            !< Number of stages used: if negative all RK solvers are used.
+  integer, parameter            :: rk_stages=7       !< Runge-Kutta stages number.
+  real(R_P), allocatable        :: solution(:,:)     !< Solution at each time step.
+  integer(I_P)                  :: s                 !< RK stages counter.
+  integer(I_P)                  :: stages_range(1:2) !< Stages used.
+  character(len=:), allocatable :: output            !< Output files basename.
+  character(len=:), allocatable :: title             !< Output files title.
+  integer(I_P)                  :: last_step         !< Last time step computed.
+  !---------------------------------------------------------------------------------------------------------------------------------
+
+  !---------------------------------------------------------------------------------------------------------------------------------
+  solver = 'emd-runge-kutta'
+  call init(output=output, solution=solution)
+  print "(A)", 'Integrating Oscillation equations by means of embedded Runge-Kutta class of solvers'
+  stages_range = [1, rk_stages] ; if (stages>0) stages_range = [stages, stages]
+  do s=stages_range(1), stages_range(2)
+    if (s==1) cycle ! 1 stages not yet implemented
+    if (s==2) cycle ! 2 stages not yet implemented
+    if (s==3) cycle ! 3 stages not yet implemented
+    if (s==4) cycle ! 4 stages not yet implemented
+    if (s==5) cycle ! 5 stages not yet implemented
+    if (s==6) cycle ! 6 stages not yet implemented
+    print "(A)", ' RK-'//trim(str(.true.,s))
+    title = 'Oscillation equation integration, explicit embedded Runge-Kutta, t='//str(n=t_final)//' steps='//trim(str(.true., s))
+    call emd_rk_solver(stages=s, tolerance=tolerance, solution=solution, last_step=last_step)
+    call save_results(title=title, basename=output//'-'//trim(str(.true., s)), solution=solution(:, 0:last_step))
+  enddo
+  print "(A)", 'Finish!'
+  return
+  !---------------------------------------------------------------------------------------------------------------------------------
+  endsubroutine test_emd_rk
 
   subroutine test_euler()
   !---------------------------------------------------------------------------------------------------------------------------------
@@ -529,6 +581,39 @@ contains
   return
   !---------------------------------------------------------------------------------------------------------------------------------
   endsubroutine am_solver
+
+  subroutine emd_rk_solver(stages, tolerance, solution, last_step)
+  !---------------------------------------------------------------------------------------------------------------------------------
+  !< Solve problem with explicit embedded Runge-Kutta class of ODE solvers.
+  !---------------------------------------------------------------------------------------------------------------------------------
+  integer(I_P), intent(IN)         :: stages             !< Number of stages used: if negative all RK solvers are used.
+  real(R_P),    intent(IN)         :: tolerance          !< Tolerance on local truncation error.
+  real(R_P),    intent(OUT)        :: solution(0:,0:)    !< Solution at each time step.
+  integer(I_P), intent(OUT)        :: last_step          !< Last time step number.
+  type(emd_runge_kutta_integrator) :: rk_integrator      !< Runge-Kutta integrator.
+  type(oscillation)                :: rk_stage(1:stages) !< Runge-Kutta stages.
+  type(oscillation)                :: oscillator         !< Oscillation field.
+  integer(I_P)                     :: step               !< Time steps counter.
+  real(R_P)                        :: Dt_a               !< Adaptive time step.
+  !---------------------------------------------------------------------------------------------------------------------------------
+
+  !---------------------------------------------------------------------------------------------------------------------------------
+  Dt_a = Dt
+  call rk_integrator%init(stages=stages, tolerance=tolerance)
+  call oscillator%init(initial_state=initial_state, f=f)
+  solution = 0._R_P
+  solution(1:space_dimension, 0) = oscillator%output()
+  step = 0
+  do while(solution(0, step)<t_final)
+    step = step + 1
+    solution(0, step) = solution(0, step - 1) + Dt_a
+    call rk_integrator%integrate(U=oscillator, stage=rk_stage, Dt=Dt_a, t=solution(0, step))
+    solution(1:space_dimension, step) = oscillator%output()
+  enddo
+  last_step = step
+  return
+  !---------------------------------------------------------------------------------------------------------------------------------
+  endsubroutine emd_rk_solver
 
   subroutine euler_solver(solution)
   !---------------------------------------------------------------------------------------------------------------------------------

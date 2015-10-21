@@ -215,10 +215,10 @@
 <li><input type="checkbox" disabled checked> 5 stages, 4th order accurate;</li>
 </ul>
 </li>
-<li><input type="checkbox" disabled> embedded (adaptive) schemes:<ul class="checklist">
+<li><input type="checkbox" disabled> <a href="http://fortran-foss-programmers.github.io/FOODIE/module/foodie_integrator_emd_runge_kutta.html">embedded (adaptive)</a> schemes:<ul class="checklist">
 <li><input type="checkbox" disabled> Runge-Kutta-Fehlberg, 5 stages, 4th order accurate;</li>
 <li><input type="checkbox" disabled> Runge-Kutta-Cash-Karp, 5 stages, 4th order accurate;</li>
-<li><input type="checkbox" disabled> Prince-Dormand, 9 stages, 8th order accurate;</li>
+<li><input type="checkbox" disabled checked> Prince-Dormand, 7 stages, 4th order accurate, see [11];</li>
 </ul>
 </li>
 </ul>
@@ -273,6 +273,7 @@
 <p>[8] <em>Scientific Software Design: The Object-Oriented Way</em>, Rouson, Damian and Xia, Jim and Xu, Xiaofeng, 2011, ISBN 9780521888134, Cambridge University Press, New York, NY, USA.</p>
 <p>[9] <em>High-accuracy large-step explicit Runge–Kutta (HALE-RK) schemes for computational aeroacoustics</em>, Vasanth Allampalli and Ray Hixon and M. Nallasamy and Scott D. Sawyer, Journal of Computational Physics, vol. 228, 2009, pp. 3837&ndash;3850.</p>
 <p>[10] <em>Efficient low-storage Runge–Kutta schemes with optimized stability regions</em>, Jens Niegemann and Richard Diehl and Kurt Busch, Journal of Computational Physics, vol. 231, 2012, pp. 364&ndash;372.</p>
+<p>[11] <em>A family of embedded Runge-Kutta formulae</em>, Dormand, J. R.; Prince, P. J. (1980), , Journal of Computational and Applied Mathematics 6 (1): 19&ndash;26, doi:10.1016/0771-050X(80)90013-3.</p>
 <p>Go to <a href="#top">Top</a></p>
 <h2 id="status"><a class="toclink" href="#status">Status <a href=""><img alt="Status" src="https://img.shields.io/badge/status-beta-orange.svg"></a></a></h2>
 <p>FOODIE project is young, but developed with love. Many integrators have been implemented using the Rouson's Abstract Data Type Pattern and tested with complex problems, but the library API is still in beta testing status. Nevertheless, FOODIE is already proven to be able to integrate a wide range of different ODE problems, from pure ODEs (Lorenz and inertial oscillations equations) to complex PDEs (Burgers and Euler equations), see the documentation.</p>
@@ -368,11 +369,13 @@
                   
                 
                   
-                    <li><a href='./sourcefile/foodie_integrator_euler_explicit.f90.html'>foodie_integrator_euler_explicit.f90</a></li>
+                    <li><a href='./sourcefile/foodie_integrator_embedded_runge_kutta.f90.html'>foodie_integrator_embedded_runge_kutta.f90</a></li>
                   
                 
                   
                     <li><a href="./lists/files.html"><em>All source files&hellip;</em></a></li>
+                  
+                
                   
                 
                   
@@ -425,6 +428,10 @@
                   
                 
                   
+                    <li><a href='./module/foodie_integrator_emd_runge_kutta.html'>foodie_integrator_emd_runge_kutta</a></li>
+                  
+                
+                  
                     <li><a href='./module/foodie_integrator_euler_explicit.html'>foodie_integrator_euler_explicit</a></li>
                   
                 
@@ -441,11 +448,9 @@
                   
                 
                   
-                    <li><a href='./module/foodie_kinds.html'>foodie_kinds</a></li>
+                    <li><a href="./lists/modules.html"><em>All modules&hellip;</em></a></li>
                   
                 
-                  
-                    <li><a href="./lists/modules.html"><em>All modules&hellip;</em></a></li>
                   
                 
                   
@@ -852,6 +857,22 @@
                 
                   
                 
+                  
+                
+                  
+                
+                  
+                
+                  
+                
+                  
+                
+                  
+                
+                  
+                
+                  
+                
               </ul>
           </div>
           
@@ -877,6 +898,10 @@
                   
                 
                   
+                    <li><a href='./type/emd_runge_kutta_integrator.html'>emd_runge_kutta_integrator</a></li>
+                  
+                
+                  
                     <li><a href='./type/euler_1d.html'>euler_1D</a></li>
                   
                 
@@ -896,8 +921,6 @@
                     <li><a href='./type/integrand.html'>integrand</a></li>
                   
                 
-                  
-                    <li><a href='./type/leapfrog_integrator.html'>leapfrog_integrator</a></li>
                   
                 
                   

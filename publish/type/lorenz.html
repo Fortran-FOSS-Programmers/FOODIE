@@ -131,11 +131,11 @@
     <div class="panel-heading text-left"><h3 class="panel-title">Variables</h3></div>
     <div class="list-group">
       
-      <a class="list-group-item" href="../type/lorenz.html#variable-dims">dims</a>
+      <a class="list-group-item" href="../type/lorenz.html#variable-dims%7E2">dims</a>
       
       <a class="list-group-item" href="../type/lorenz.html#variable-steps%7E6">steps</a>
       
-      <a class="list-group-item" href="../type/lorenz.html#variable-u%7E5">U</a>
+      <a class="list-group-item" href="../type/lorenz.html#variable-u%7E6">U</a>
       
       <a class="list-group-item" href="../type/lorenz.html#variable-previous%7E3">previous</a>
       
@@ -143,7 +143,7 @@
       
       <a class="list-group-item" href="../type/lorenz.html#variable-rho">rho</a>
       
-      <a class="list-group-item" href="../type/lorenz.html#variable-beta%7E3">beta</a>
+      <a class="list-group-item" href="../type/lorenz.html#variable-beta%7E4">beta</a>
       
     </div>
   </div>
@@ -168,27 +168,27 @@
     <div class="panel-heading text-left"><h3 class="panel-title">Type-Bound Procedures</h3></div>
     <div class="list-group">
       
-      <a class="list-group-item" href="../type/lorenz.html#boundprocedure-init%7E12">init</a>
+      <a class="list-group-item" href="../type/lorenz.html#boundprocedure-init%7E14">init</a>
       
-      <a class="list-group-item" href="../type/lorenz.html#boundprocedure-output%7E5">output</a>
+      <a class="list-group-item" href="../type/lorenz.html#boundprocedure-output%7E6">output</a>
       
-      <a class="list-group-item" href="../type/lorenz.html#boundprocedure-t%7E6">t</a>
+      <a class="list-group-item" href="../type/lorenz.html#boundprocedure-t%7E7">t</a>
       
       <a class="list-group-item" href="../type/lorenz.html#boundprocedure-update_previous_steps%7E3">update_previous_steps</a>
       
       <a class="list-group-item" href="../type/lorenz.html#boundprocedure-previous_step%7E3">previous_step</a>
       
-      <a class="list-group-item" href="../type/lorenz.html#boundprocedure-integrand_multiply_integrand%7E5">integrand_multiply_integrand</a>
+      <a class="list-group-item" href="../type/lorenz.html#boundprocedure-integrand_multiply_integrand%7E6">integrand_multiply_integrand</a>
       
-      <a class="list-group-item" href="../type/lorenz.html#boundprocedure-integrand_multiply_real%7E5">integrand_multiply_real</a>
+      <a class="list-group-item" href="../type/lorenz.html#boundprocedure-integrand_multiply_real%7E6">integrand_multiply_real</a>
       
-      <a class="list-group-item" href="../type/lorenz.html#boundprocedure-real_multiply_integrand%7E5">real_multiply_integrand</a>
+      <a class="list-group-item" href="../type/lorenz.html#boundprocedure-real_multiply_integrand%7E6">real_multiply_integrand</a>
       
-      <a class="list-group-item" href="../type/lorenz.html#boundprocedure-add%7E5">add</a>
+      <a class="list-group-item" href="../type/lorenz.html#boundprocedure-add%7E6">add</a>
       
-      <a class="list-group-item" href="../type/lorenz.html#boundprocedure-sub%7E5">sub</a>
+      <a class="list-group-item" href="../type/lorenz.html#boundprocedure-sub%7E6">sub</a>
       
-      <a class="list-group-item" href="../type/lorenz.html#boundprocedure-assign_integrand%7E6">assign_integrand</a>
+      <a class="list-group-item" href="../type/lorenz.html#boundprocedure-assign_integrand%7E7">assign_integrand</a>
       
       <a class="list-group-item" href="../type/lorenz.html#boundprocedure-assign_real%7E4">assign_real</a>
       
@@ -218,6 +218,8 @@
       <a class="list-group-item" href="../type/adams_moulton_integrator.html">adams_moulton_integrator</a>
       
       <a class="list-group-item" href="../type/burgers.html">burgers</a>
+      
+      <a class="list-group-item" href="../type/emd_runge_kutta_integrator.html">emd_runge_kutta_integrator</a>
       
       <a class="list-group-item" href="../type/euler_1d.html">euler_1D</a>
       
@@ -426,7 +428,7 @@ Cambridge University Press, 2011</p>
   
 <tr>
   
-  <td><span class="anchor" id="variable-dims"></span>integer(kind=I_P),</td>
+  <td><span class="anchor" id="variable-dims%7E2"></span>integer(kind=I_P),</td>
   
   <td>private</td>
   <td></td><td>::</td>
@@ -454,7 +456,7 @@ Cambridge University Press, 2011</p>
   
 <tr>
   
-  <td><span class="anchor" id="variable-u%7E5"></span>real(kind=R_P),</td>
+  <td><span class="anchor" id="variable-u%7E6"></span>real(kind=R_P),</td>
   
   <td>private,</td>
   <td>dimension(:), allocatable</td><td>::</td>
@@ -510,7 +512,7 @@ Cambridge University Press, 2011</p>
   
 <tr>
   
-  <td><span class="anchor" id="variable-beta%7E3"></span>real(kind=R_P),</td>
+  <td><span class="anchor" id="variable-beta%7E4"></span>real(kind=R_P),</td>
   
   <td>private</td>
   <td></td><td>::</td>
@@ -535,7 +537,7 @@ Cambridge University Press, 2011</p>
     
 	   
 <div class="panel panel-default">
-  <div class="panel-heading codesum"><span class="anchor" id="boundprocedure-init%7E12"></span><h3>procedure, public, pass(self) :: <strong>init</strong>  
+  <div class="panel-heading codesum"><span class="anchor" id="boundprocedure-init%7E14"></span><h3>procedure, public, pass(self) :: <strong>init</strong>  
     
   </h3></div>
   
@@ -553,7 +555,7 @@ Cambridge University Press, 2011</p>
          
     
     <h3>
-private subroutine <a href='../proc/init%7E15.html'>init</a>(self, initial_state, sigma, rho, beta, steps)
+private subroutine <a href='../proc/init%7E18.html'>init</a>(self, initial_state, sigma, rho, beta, steps)
     
     
     
@@ -687,7 +689,7 @@ private subroutine <a href='../proc/init%7E15.html'>init</a>(self, initial_state
     
 	   
 <div class="panel panel-default">
-  <div class="panel-heading codesum"><span class="anchor" id="boundprocedure-output%7E5"></span><h3>procedure, public, pass(self) :: <strong>output</strong>  
+  <div class="panel-heading codesum"><span class="anchor" id="boundprocedure-output%7E6"></span><h3>procedure, public, pass(self) :: <strong>output</strong>  
     
   </h3></div>
   
@@ -705,7 +707,7 @@ private subroutine <a href='../proc/init%7E15.html'>init</a>(self, initial_state
          
     
     <h3>
-private purefunction <a href='../proc/output%7E5.html'>output</a>(self) result(state)
+private purefunction <a href='../proc/output%7E6.html'>output</a>(self) result(state)
     
     
     
@@ -773,7 +775,7 @@ private purefunction <a href='../proc/output%7E5.html'>output</a>(self) result(s
     
 	   
 <div class="panel panel-default">
-  <div class="panel-heading codesum"><span class="anchor" id="boundprocedure-t%7E6"></span><h3>procedure, public, pass(self) :: <strong>t</strong>  => <a href='../proc/dlorenz_dt.html'>dLorenz_dt</a> 
+  <div class="panel-heading codesum"><span class="anchor" id="boundprocedure-t%7E7"></span><h3>procedure, public, pass(self) :: <strong>t</strong>  => <a href='../proc/dlorenz_dt.html'>dLorenz_dt</a> 
     
   </h3></div>
   
@@ -1082,7 +1084,7 @@ private function <a href='../proc/previous_step%7E3.html'>previous_step</a>(self
     
 	   
 <div class="panel panel-default">
-  <div class="panel-heading codesum"><span class="anchor" id="boundprocedure-integrand_multiply_integrand%7E5"></span><h3>procedure, public, pass(lhs) :: <strong>integrand_multiply_integrand</strong>  => <a href='../proc/lorenz_multiply_lorenz.html'>lorenz_multiply_lorenz</a> 
+  <div class="panel-heading codesum"><span class="anchor" id="boundprocedure-integrand_multiply_integrand%7E6"></span><h3>procedure, public, pass(lhs) :: <strong>integrand_multiply_integrand</strong>  => <a href='../proc/lorenz_multiply_lorenz.html'>lorenz_multiply_lorenz</a> 
     
   </h3></div>
   
@@ -1183,7 +1185,7 @@ private function <a href='../proc/lorenz_multiply_lorenz.html'>lorenz_multiply_l
     
 	   
 <div class="panel panel-default">
-  <div class="panel-heading codesum"><span class="anchor" id="boundprocedure-integrand_multiply_real%7E5"></span><h3>procedure, public, pass(lhs) :: <strong>integrand_multiply_real</strong>  => <a href='../proc/lorenz_multiply_real.html'>lorenz_multiply_real</a> 
+  <div class="panel-heading codesum"><span class="anchor" id="boundprocedure-integrand_multiply_real%7E6"></span><h3>procedure, public, pass(lhs) :: <strong>integrand_multiply_real</strong>  => <a href='../proc/lorenz_multiply_real.html'>lorenz_multiply_real</a> 
     
   </h3></div>
   
@@ -1284,7 +1286,7 @@ private function <a href='../proc/lorenz_multiply_real.html'>lorenz_multiply_rea
     
 	   
 <div class="panel panel-default">
-  <div class="panel-heading codesum"><span class="anchor" id="boundprocedure-real_multiply_integrand%7E5"></span><h3>procedure, public, pass(rhs) :: <strong>real_multiply_integrand</strong>  => <a href='../proc/real_multiply_lorenz.html'>real_multiply_lorenz</a> 
+  <div class="panel-heading codesum"><span class="anchor" id="boundprocedure-real_multiply_integrand%7E6"></span><h3>procedure, public, pass(rhs) :: <strong>real_multiply_integrand</strong>  => <a href='../proc/real_multiply_lorenz.html'>real_multiply_lorenz</a> 
     
   </h3></div>
   
@@ -1385,7 +1387,7 @@ private function <a href='../proc/real_multiply_lorenz.html'>real_multiply_loren
     
 	   
 <div class="panel panel-default">
-  <div class="panel-heading codesum"><span class="anchor" id="boundprocedure-add%7E5"></span><h3>procedure, public, pass(lhs) :: <strong>add</strong>  => <a href='../proc/add_lorenz.html'>add_lorenz</a> 
+  <div class="panel-heading codesum"><span class="anchor" id="boundprocedure-add%7E6"></span><h3>procedure, public, pass(lhs) :: <strong>add</strong>  => <a href='../proc/add_lorenz.html'>add_lorenz</a> 
     
   </h3></div>
   
@@ -1486,7 +1488,7 @@ private function <a href='../proc/add_lorenz.html'>add_lorenz</a>(lhs, rhs) resu
     
 	   
 <div class="panel panel-default">
-  <div class="panel-heading codesum"><span class="anchor" id="boundprocedure-sub%7E5"></span><h3>procedure, public, pass(lhs) :: <strong>sub</strong>  => <a href='../proc/sub_lorenz.html'>sub_lorenz</a> 
+  <div class="panel-heading codesum"><span class="anchor" id="boundprocedure-sub%7E6"></span><h3>procedure, public, pass(lhs) :: <strong>sub</strong>  => <a href='../proc/sub_lorenz.html'>sub_lorenz</a> 
     
   </h3></div>
   
@@ -1587,7 +1589,7 @@ private function <a href='../proc/sub_lorenz.html'>sub_lorenz</a>(lhs, rhs) resu
     
 	   
 <div class="panel panel-default">
-  <div class="panel-heading codesum"><span class="anchor" id="boundprocedure-assign_integrand%7E6"></span><h3>procedure, public, pass(lhs) :: <strong>assign_integrand</strong>  => <a href='../proc/lorenz_assign_lorenz.html'>lorenz_assign_lorenz</a> 
+  <div class="panel-heading codesum"><span class="anchor" id="boundprocedure-assign_integrand%7E7"></span><h3>procedure, public, pass(lhs) :: <strong>assign_integrand</strong>  => <a href='../proc/lorenz_assign_lorenz.html'>lorenz_assign_lorenz</a> 
     
   </h3></div>
   

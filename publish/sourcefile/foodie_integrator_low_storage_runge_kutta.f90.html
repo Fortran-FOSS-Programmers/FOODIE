@@ -180,6 +180,8 @@
       
       <a class="list-group-item" href="../sourcefile/foodie_integrator_adams_moulton.f90.html">foodie_integrator_adams_moulton.f90</a>
       
+      <a class="list-group-item" href="../sourcefile/foodie_integrator_embedded_runge_kutta.f90.html">foodie_integrator_embedded_runge_kutta.f90</a>
+      
       <a class="list-group-item" href="../sourcefile/foodie_integrator_euler_explicit.f90.html">foodie_integrator_euler_explicit.f90</a>
       
       <a class="list-group-item" href="../sourcefile/foodie_integrator_leapfrog.f90.html">foodie_integrator_leapfrog.f90</a>
@@ -221,7 +223,7 @@
 <span class="c">!-----------------------------------------------------------------------------------------------------------------------------------</span>
 <span class="c">!&lt; FOODIE integrator: provide an explicit class of low storage Runge-Kutta schemes, from 1st to 4th order accurate.</span>
 <span class="c">!&lt;</span>
-<span class="c">!&lt; The class of integrators provided have the low storage property allowing for an efficient use of the memory.</span>
+<span class="c">!&lt; The integrators provided have the low storage property allowing for an efficient use of the memory.</span>
 <span class="c">!&lt; Following Williamson approach [1], the LSRK(5,4)2N (solution 3) scheme of Carpenter et al. [2] is implemented.</span>
 <span class="c">!&lt;</span>
 <span class="c">!&lt; Considering the following ODE system:</span>
@@ -382,7 +384,7 @@
 <span class="k">type</span> <span class="kd">::</span> <span class="n">ls_runge_kutta_integrator</span>
   <span class="c">!&lt; FOODIE integrator: provide an explicit class of low storage Runge-Kutta schemes, from 1st to 4th order accurate.</span>
   <span class="c">!&lt;</span>
-  <span class="c">!&lt; @note The integrator must be created or initialized (initialize the RK coeficients) before used.</span>
+  <span class="c">!&lt; @note The integrator must be created or initialized (initialize the RK coefficients) before used.</span>
   <span class="kt">integer</span><span class="p">(</span><span class="n">I_P</span><span class="p">)</span>           <span class="kd">::</span> <span class="n">stages</span><span class="o">=</span><span class="mi">0</span> <span class="c">!&lt; Number of stages.</span>
   <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">),</span> <span class="k">allocatable</span> <span class="kd">::</span> <span class="n">A</span><span class="p">(:)</span>     <span class="c">!&lt; Low storage *A* coefficients.</span>
   <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">),</span> <span class="k">allocatable</span> <span class="kd">::</span> <span class="n">B</span><span class="p">(:)</span>     <span class="c">!&lt; Low storage *B* coefficients.</span>
@@ -505,7 +507,7 @@
 
   <span class="k">elemental subroutine </span><span class="n">destroy</span><span class="p">(</span><span class="n">self</span><span class="p">)</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
-  <span class="c">!&lt; Destoy the integrator.</span>
+  <span class="c">!&lt; Destroy the integrator.</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
   <span class="k">class</span><span class="p">(</span><span class="n">ls_runge_kutta_integrator</span><span class="p">),</span> <span class="k">intent</span><span class="p">(</span><span class="n">INOUT</span><span class="p">)</span> <span class="kd">::</span> <span class="n">self</span> <span class="c">!&lt; Integrator.</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
@@ -523,7 +525,7 @@
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
   <span class="c">!&lt; Integrate field with explicit low storage Runge-Kutta scheme.</span>
   <span class="c">!&lt;</span>
-  <span class="c">!&lt; @note This method can be used **after** the integrator is created (i.e. the RK coeficients are initialized).</span>
+  <span class="c">!&lt; @note This method can be used **after** the integrator is created (i.e. the RK coefficients are initialized).</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
   <span class="k">class</span><span class="p">(</span><span class="n">ls_runge_kutta_integrator</span><span class="p">),</span> <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span>    <span class="kd">::</span> <span class="n">self</span>       <span class="c">!&lt; Actual RK integrator.</span>
   <span class="k">class</span><span class="p">(</span><span class="n">integrand</span><span class="p">),</span>                 <span class="k">intent</span><span class="p">(</span><span class="n">INOUT</span><span class="p">)</span> <span class="kd">::</span> <span class="n">U</span>          <span class="c">!&lt; Field to be integrated.</span>
