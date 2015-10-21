@@ -98,6 +98,7 @@ else
     call test_ab(steps=stages_steps)
     call test_abm(steps=stages_steps)
     call test_am(steps=stages_steps)
+    call test_emd_rk(stages=stages_steps)
     call test_euler
     call test_leapfrog
     call test_ls_rk(stages=stages_steps)

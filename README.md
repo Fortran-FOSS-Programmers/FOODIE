@@ -95,10 +95,10 @@ FOODIE is aimed to be a KISS-pure-Fortran library for integrating Ordinary Diffe
                 + [x] 3 stages, 3rd order accurate;
                 + [ ] 4 stages;
                 + [x] 5 stages, 4th order accurate;
-            + [ ] embedded (adaptive) schemes:
+            + [ ] [embedded (adaptive)](http://fortran-foss-programmers.github.io/FOODIE/module/foodie_integrator_emd_runge_kutta.html) schemes:
                 + [ ] Runge-Kutta-Fehlberg, 5 stages, 4th order accurate;
                 + [ ] Runge-Kutta-Cash-Karp, 5 stages, 4th order accurate;
-                + [ ] Prince-Dormand, 9 stages, 8th order accurate;
+                + [x] Prince-Dormand, 7 stages, 4th order accurate, see [11];
     + [ ] implicit schemes:
         + [ ] Runge-Kutta schemes;
     + [ ] predictor-corrector schemes:
@@ -144,6 +144,8 @@ Any feature request is welcome.
 [9] *High-accuracy large-step explicit Runge–Kutta (HALE-RK) schemes for computational aeroacoustics*, Vasanth Allampalli and Ray Hixon and M. Nallasamy and Scott D. Sawyer, Journal of Computational Physics, vol. 228, 2009, pp. 3837--3850.
 
 [10] *Efficient low-storage Runge–Kutta schemes with optimized stability regions*, Jens Niegemann and Richard Diehl and Kurt Busch, Journal of Computational Physics, vol. 231, 2012, pp. 364--372.
+
+[11] *A family of embedded Runge-Kutta formulae*, Dormand, J. R.; Prince, P. J. (1980), , Journal of Computational and Applied Mathematics 6 (1): 19--26, doi:10.1016/0771-050X(80)90013-3.
 
 Go to [Top](#top)
 
