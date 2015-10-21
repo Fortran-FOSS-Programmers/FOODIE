@@ -149,7 +149,6 @@ contains
   real(R_P),                                 intent(IN)    :: Dt           !< Time steps.
   real(R_P),                                 intent(IN)    :: t(:)         !< Times.
   integer(I_P), optional,                    intent(IN)    :: iterations   !< Fixed point iterations of AM scheme.
-  integer(I_P)                                             :: s            !< Steps counter.
   !---------------------------------------------------------------------------------------------------------------------------------
 
   !---------------------------------------------------------------------------------------------------------------------------------

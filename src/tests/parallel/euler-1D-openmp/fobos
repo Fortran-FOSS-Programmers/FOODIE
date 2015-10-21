@@ -1,0 +1,118 @@
+[modes]
+modes = gnu gnu-debug
+        intel intel-debug
+        benchmark-openmp-on
+        benchmark-openmp-off
+
+[common-variables]
+$CSTATIC_GNU     = -cpp -c -frealloc-lhs
+$CSTATIC_INT     = -cpp -c -assume realloc_lhs
+$DEBUG_GNU       = -O0 -g3 -Warray-bounds -Wcharacter-truncation -Wline-truncation -Wimplicit-interface -Wimplicit-procedure -Wunderflow -Wuninitialized -fcheck=all -fmodule-private -ffree-line-length-132 -fimplicit-none -fbacktrace -fdump-core -finit-real=nan -std=f2008 -fall-intrinsics
+$DEBUG_INT       = -O0 -debug all -check all -warn all -extend-source 132 -traceback -gen-interfaces -fp-stack-check -fstack-protector-all -ftrapuv -no-ftz -std08
+$OPTIMIZE        = -O2
+$DEPENDS_GNU     = ./fobos:foodie-static-gnu ./external/fobos:flap-static-gnu ./external/fobos:pyplot-fortran-static-gnu ./external/fobos:wenoof-static-gnu
+$DEPENDS_GNU_DEB = ./fobos:foodie-static-gnu-debug ./external/fobos:flap-static-gnu-debug ./external/fobos:pyplot-fortran-static-gnu-debug ./external/fobos:wenoof-static-gnu-debug
+$DEPENDS_INT     = ./fobos:foodie-static-intel ./external/fobos:flap-static-intel ./external/fobos:pyplot-fortran-static-intel ./external/fobos:wenoof-static-intel
+$DEPENDS_INT_DEB = ./fobos:foodie-static-intel-debug ./external/fobos:flap-static-intel-debug ./external/fobos:pyplot-fortran-static-intel-debug ./external/fobos:wenoof-static-intel-debug
+
+# main modes
+[gnu]
+help            = Build test in release mode with GNU gfortran
+compiler        = gnu
+cflags          = $CSTATIC_GNU $OPTIMIZE
+lflags          = $OPTIMIZE
+openmp          = True
+cflags_heritage = True
+build_dir       = build/tests/parallel/euler-1D-openmp/
+mod_dir         = mod
+obj_dir         = obj
+src             = src/tests/parallel/euler-1D-openmp/
+colors          = True
+quiet           = False
+log             = True
+jobs            = 10
+dependon        = $DEPENDS_GNU
+
+[gnu-debug]
+help            = Build test in debug mode with GNU gfortran
+compiler        = gnu
+cflags          = $CSTATIC_GNU $DEBUG_GNU
+lflags          = $DEBUG_GNU
+openmp          = True
+cflags_heritage = True
+build_dir       = build/tests/parallel/euler-1D-openmp/
+mod_dir         = mod
+obj_dir         = obj
+src             = src/tests/parallel/euler-1D-openmp/
+colors          = True
+quiet           = False
+log             = True
+jobs            = 10
+dependon        = $DEPENDS_GNU_DEB
+
+[intel]
+help            = Build test in release mode with Intel Fortran
+compiler        = intel
+cflags          = $CSTATIC_INT $OPTIMIZE
+lflags          = $OPTIMIZE
+openmp          = True
+cflags_heritage = True
+build_dir       = build/tests/parallel/euler-1D-openmp/
+mod_dir         = mod
+obj_dir         = obj
+src             = src/tests/parallel/euler-1D-openmp/
+colors          = True
+quiet           = False
+log             = True
+jobs            = 10
+dependon        = $DEPENDS_INT
+
+[intel-debug]
+help            = Build test in debug mode with Intel Fortran
+compiler        = intel
+cflags          = $CSTATIC_INT $DEBUG_INT
+lflags          = $DEBUG_INT
+openmp          = True
+cflags_heritage = True
+build_dir       = build/tests/parallel/euler-1D-openmp/
+mod_dir         = mod
+obj_dir         = obj
+src             = src/tests/parallel/euler-1D-openmp/
+colors          = True
+quiet           = False
+log             = True
+jobs            = 10
+dependon        = $DEPENDS_INT_DEB
+
+[benchmark-openmp-on]
+help            = Build test in release mode with GNU gfortran for OpenMP benchmarks (on)
+compiler        = gnu
+cflags          = $CSTATIC_GNU $OPTIMIZE
+lflags          = $OPTIMIZE
+openmp          = True
+cflags_heritage = True
+mod_dir         = mod
+obj_dir         = obj
+src             = src/tests/parallel/euler-1D-openmp/
+colors          = True
+quiet           = False
+log             = True
+jobs            = 10
+dependon        = $DEPENDS_GNU
+
+[benchmark-openmp-off]
+help            = Build test in release mode with GNU gfortran for OpenMP benchmarks (off)
+compiler        = gnu
+cflags          = $CSTATIC_GNU $OPTIMIZE
+lflags          = $OPTIMIZE
+openmp          = False
+cflags_heritage = True
+mod_dir         = mod
+obj_dir         = obj
+src             = src/tests/parallel/euler-1D-openmp/
+colors          = True
+quiet           = False
+log             = True
+jobs            = 10
+dependon        = $DEPENDS_GNU
+

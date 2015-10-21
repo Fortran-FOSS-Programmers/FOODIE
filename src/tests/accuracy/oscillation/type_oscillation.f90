@@ -106,7 +106,6 @@ contains
   class(oscillation),     intent(IN) :: self      !< Oscillation field.
   real(R_P),    optional, intent(IN) :: t         !< Time.
   class(integrand),  allocatable     :: dState_dt !< Oscillation field time derivative.
-  integer(I_P)                       :: dn        !< Time level, dummy variable.
   !---------------------------------------------------------------------------------------------------------------------------------
 
   !---------------------------------------------------------------------------------------------------------------------------------
