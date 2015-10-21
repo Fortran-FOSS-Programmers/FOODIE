@@ -1,7 +1,7 @@
-!< FOODIE integrator: provide an implicit class of Adams-Moutlon multi-step schemes, from 1st to 4rd order accutate.
+!< FOODIE integrator: provide an implicit class of Adams-Moutlon multi-step schemes, from 1st to 4rd order accurate.
 module foodie_integrator_adams_moulton
 !-----------------------------------------------------------------------------------------------------------------------------------
-!< FOODIE integrator: provide an implicit class of Adams-Moutlon multi-step schemes, from 1st to 4rd order accutate.
+!< FOODIE integrator: provide an implicit class of Adams-Moutlon multi-step schemes, from 1st to 4rd order accurate.
 !<
 !< Considering the following ODE system:
 !<
@@ -71,9 +71,9 @@ public :: adams_moulton_integrator
 
 !-----------------------------------------------------------------------------------------------------------------------------------
 type :: adams_moulton_integrator
-  !< FOODIE integrator: provide an explicit class of Adams-Moulton multi-step schemes, from 1st to 3rd order accutate.
+  !< FOODIE integrator: provide an explicit class of Adams-Moulton multi-step schemes, from 1st to 3rd order accurate.
   !<
-  !< @note The integrator must be created or initialized (initialize the *b* coeficients) before used.
+  !< @note The integrator must be created or initialized (initialize the *b* coefficients) before used.
   private
   integer(I_P)           :: steps=-1 !< Number of time steps.
   real(R_P), allocatable :: b(:)     !< \(b\) coefficients.
@@ -124,7 +124,7 @@ contains
 
   elemental subroutine destroy(self)
   !---------------------------------------------------------------------------------------------------------------------------------
-  !< Destoy the integrator.
+  !< Destroy the integrator.
   !---------------------------------------------------------------------------------------------------------------------------------
   class(adams_moulton_integrator), intent(INOUT) :: self !< AB integrator.
   !---------------------------------------------------------------------------------------------------------------------------------
