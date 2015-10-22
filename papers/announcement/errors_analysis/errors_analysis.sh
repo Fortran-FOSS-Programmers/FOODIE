@@ -1,8 +1,9 @@
 #!/bin/bash
 # script automotion for FOODIE's errors analysis of the provided tests
 echo "Building tests executables"
+date > builds.log
 cd ../../../
-FoBiS.py build -f src/tests/accuracy/oscillation/fobos -mode errors-analysis --build_dir papers/announcement/errors_analysis/tests > builds.log
+FoBiS.py build -f src/tests/accuracy/oscillation/fobos -mode errors-analysis --build_dir papers/announcement/errors_analysis/tests >> papers/announcement/errors_analysis/builds.log
 cd -
 
 echo "Oscillation test errors analysis"

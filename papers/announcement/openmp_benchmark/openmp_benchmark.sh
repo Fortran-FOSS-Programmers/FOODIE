@@ -133,22 +133,23 @@ done
 
 # building codes
 echo "Building 1D Euler OpenMP test executable"
+date > builds.log
 cd ../../../
 if [ "$code" == "all" ] || [ "$code" == "foodie" ]; then
   rm -rf papers/announcement/openmp_benchmark/tests-openmp/obj
   rm -rf papers/announcement/openmp_benchmark/tests-openmp/mod
-  FoBiS.py build -mode benchmark-openmp-on --build_dir papers/announcement/openmp_benchmark/tests-openmp > papers/announcement/openmp_benchmark/builds.log
+  FoBiS.py build -f src/tests/parallel/euler-1D-openmp/fobos -mode benchmark-openmp-on --build_dir papers/announcement/openmp_benchmark/tests-openmp >> papers/announcement/openmp_benchmark/builds.log
   rm -rf papers/announcement/openmp_benchmark/tests-openmp/obj
   rm -rf papers/announcement/openmp_benchmark/tests-openmp/mod
-  FoBiS.py build -mode benchmark-openmp-off --build_dir papers/announcement/openmp_benchmark/tests-openmp >> papers/announcement/openmp_benchmark/builds.log
+  FoBiS.py build -f src/tests/parallel/euler-1D-openmp/fobos -mode benchmark-openmp-off --build_dir papers/announcement/openmp_benchmark/tests-openmp >> papers/announcement/openmp_benchmark/builds.log
 fi
 if [ "$code" == "all" ] || [ "$code" == "no-foodie" ]; then
   rm -rf papers/announcement/openmp_benchmark/tests-openmp/obj
   rm -rf papers/announcement/openmp_benchmark/tests-openmp/mod
-  FoBiS.py build -mode benchmark-openmp-no-foodie-on --build_dir papers/announcement/openmp_benchmark/tests-openmp >> papers/announcement/openmp_benchmark/builds.log
+  FoBiS.py build -f src/tests/parallel/euler-1D-openmp-no-foodie/fobos -mode benchmark-openmp-on --build_dir papers/announcement/openmp_benchmark/tests-openmp >> papers/announcement/openmp_benchmark/builds.log
   rm -rf papers/announcement/openmp_benchmark/tests-openmp/obj
   rm -rf papers/announcement/openmp_benchmark/tests-openmp/mod
-  FoBiS.py build -mode benchmark-openmp-no-foodie-off --build_dir papers/announcement/openmp_benchmark/tests-openmp >> papers/announcement/openmp_benchmark/builds.log
+  FoBiS.py build -f src/tests/parallel/euler-1D-openmp-no-foodie/fobos -mode benchmark-openmp-off --build_dir papers/announcement/openmp_benchmark/tests-openmp >> papers/announcement/openmp_benchmark/builds.log
 fi
 cd -
 # benchmarks
