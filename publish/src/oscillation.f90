@@ -140,13 +140,13 @@ contains
     if (trim(adjustl(solver))/='emd-runge-kutta') then
       output = trim(adjustl(output_cli))//'-'//trim(strz(10,int(t_final/Dt)))//'-time_steps-'//trim(adjustl(solver))
     else
-      output = trim(adjustl(output_cli))//'-'//trim(str(n=tolerance))//'-tolerance-'//trim(adjustl(solver))
+      output = trim(adjustl(output_cli))//'-'//trim(str(.true.,n=tolerance))//'-tolerance-'//trim(adjustl(solver))
     endif
   else
     if (trim(adjustl(solver))/='emd-runge-kutta') then
       output = 'oscillation_integration-'//trim(strz(10,int(t_final/Dt)))//'-time_steps-'//trim(adjustl(solver))
     else
-      output = 'oscillation_integration-'//trim(str(n=tolerance))//'-tolerance-'//trim(adjustl(solver))
+      output = 'oscillation_integration-'//trim(str(.true.,n=tolerance))//'-tolerance-'//trim(adjustl(solver))
     endif
   endif
   if (allocated(solution)) deallocate(solution) ; allocate(solution(0:space_dimension, 0:int(t_final/Dt)))
@@ -334,7 +334,7 @@ contains
     if (s==6) cycle ! 6 stages not yet implemented
     print "(A)", ' RK-'//trim(str(.true.,s))
     title = 'Oscillation equation integration, explicit embedded Runge-Kutta, t='//str(n=t_final)//' steps='//trim(str(.true., s))
-    call emd_rk_solver(stages=s, tolerance=tolerance, solution=solution, last_step=last_step)
+    call emd_rk_solver(stages=s, tol=tolerance, solution=solution, last_step=last_step)
     call save_results(title=title, basename=output//'-'//trim(str(.true., s)), solution=solution(:, 0:last_step))
   enddo
   print "(A)", 'Finish!'
@@ -582,12 +582,12 @@ contains
   !---------------------------------------------------------------------------------------------------------------------------------
   endsubroutine am_solver
 
-  subroutine emd_rk_solver(stages, tolerance, solution, last_step)
+  subroutine emd_rk_solver(stages, tol, solution, last_step)
   !---------------------------------------------------------------------------------------------------------------------------------
   !< Solve problem with explicit embedded Runge-Kutta class of ODE solvers.
   !---------------------------------------------------------------------------------------------------------------------------------
   integer(I_P), intent(IN)         :: stages             !< Number of stages used: if negative all RK solvers are used.
-  real(R_P),    intent(IN)         :: tolerance          !< Tolerance on local truncation error.
+  real(R_P),    intent(IN)         :: tol                !< Tolerance on local truncation error.
   real(R_P),    intent(OUT)        :: solution(0:,0:)    !< Solution at each time step.
   integer(I_P), intent(OUT)        :: last_step          !< Last time step number.
   type(emd_runge_kutta_integrator) :: rk_integrator      !< Runge-Kutta integrator.
@@ -598,16 +598,16 @@ contains
   !---------------------------------------------------------------------------------------------------------------------------------
 
   !---------------------------------------------------------------------------------------------------------------------------------
-  Dt_a = Dt
-  call rk_integrator%init(stages=stages, tolerance=tolerance)
+  Dt_a = 10000._R_P ! initial step very large to trigger adaptation
+  call rk_integrator%init(stages=stages, tolerance=tol)
   call oscillator%init(initial_state=initial_state, f=f)
   solution = 0._R_P
   solution(1:space_dimension, 0) = oscillator%output()
   step = 0
   do while(solution(0, step)<t_final)
     step = step + 1
-    solution(0, step) = solution(0, step - 1) + Dt_a
     call rk_integrator%integrate(U=oscillator, stage=rk_stage, Dt=Dt_a, t=solution(0, step))
+    solution(0, step) = solution(0, step - 1) + Dt_a
     solution(1:space_dimension, step) = oscillator%output()
   enddo
   last_step = step
@@ -765,31 +765,42 @@ contains
   !<
   !<where \(\frac{\Delta t_1}{\Delta t_2}>1\).
   !---------------------------------------------------------------------------------------------------------------------------------
-  integer(I_P), parameter       :: NDt=6                        !< Number of time steps exercised.
+  integer(I_P), parameter       :: NDt=6                             !< Number of time steps exercised.
   real(R_P),    parameter       :: time_steps(1:NDt)=[5000._R_P, &
                                                       2500._R_P, &
                                                       1250._R_P, &
                                                       625._R_P,  &
                                                       320._R_P,  &
-                                                      100._R_P] !< Time steps exercised.
-  integer, parameter            :: ab_steps=4                   !< Adams-Bashforth steps number.
-  integer, parameter            :: tvd_rk_stages=5              !< TVD/SSP Runge-Kutta stages number.
-  integer, parameter            :: ls_rk_stages=14              !< Low storage Runge-Kutta stages number.
-  integer(I_P)                  :: s                            !< Steps/stages counter.
-  integer(I_P)                  :: d                            !< Time steps-exercised counter.
-  character(len=:), allocatable :: output                       !< Output files basename.
-  character(len=:), allocatable :: title                        !< Output files title.
-  real(R_P), allocatable        :: solution(:,:)                !< Solution at each time step.
+                                                      100._R_P]      !< Time steps exercised.
+  real(R_P),    parameter       :: tolerances(1:NDt)=[0.01_R_P,     &
+                                                      0.001_R_P,    &
+                                                      0.0001_R_P,   &
+                                                      0.00001_R_P,  &
+                                                      0.000001_R_P, &
+                                                      0.0000001_R_P] !< Tolerances for embedded RK solvers.
+  integer, parameter            :: ab_steps=4                        !< Adams-Bashforth steps number.
+  integer, parameter            :: emd_rk_stages=7                   !< Embedded Runge-Kutta stages number.
+  integer, parameter            :: tvd_rk_stages=5                   !< TVD/SSP Runge-Kutta stages number.
+  integer, parameter            :: ls_rk_stages=14                   !< Low storage Runge-Kutta stages number.
+  integer(I_P)                  :: s                                 !< Steps/stages counter.
+  integer(I_P)                  :: d                                 !< Time steps-exercised counter.
+  character(len=:), allocatable :: output                            !< Output files basename.
+  character(len=:), allocatable :: title                             !< Output files title.
+  real(R_P), allocatable        :: solution(:,:)                     !< Solution at each time step.
+  integer(I_P)                  :: last_step                         !< Last time step computed.
+  real(R_P)                     :: Dt_mean(1:NDt)                    !< Mean time resolution for adaptive step methods.
   ! errors and orders
   real(R_P) :: ab_errors(1:space_dimension, 1:ab_steps, 1:NDt)            !< Adams-Bashforth errors.
   real(R_P) :: abm_errors(1:space_dimension, 1:ab_steps, 1:NDt)           !< Adams-Bashforth-Moulton errors.
   real(R_P) :: am_errors(1:space_dimension, 1:ab_steps, 1:NDt)            !< Adams-Moulton errors.
+  real(R_P) :: emd_rk_errors(1:space_dimension, 1:emd_rk_stages, 1:NDt)   !< TVD/SSP Runge-Kutta errors.
   real(R_P) :: lf_errors(1:space_dimension, 1:2, 1:NDt)                   !< Leapfrog errors.
   real(R_P) :: ls_rk_errors(1:space_dimension, 1:ls_rk_stages, 1:NDt)     !< Low storage Runge-Kutta errors.
   real(R_P) :: tvd_rk_errors(1:space_dimension, 1:tvd_rk_stages, 1:NDt)   !< TVD/SSP Runge-Kutta errors.
   real(R_P) :: ab_orders(1:space_dimension, 1:ab_steps, 1:NDt-1)          !< Adams-Bashforth orders.
   real(R_P) :: abm_orders(1:space_dimension, 1:ab_steps, 1:NDt-1)         !< Adams-Bashforth-Moulton orders.
   real(R_P) :: am_orders(1:space_dimension, 1:ab_steps, 1:NDt-1)          !< Adams-Moulton orders.
+  real(R_P) :: emd_rk_orders(1:space_dimension, 1:emd_rk_stages, 1:NDt-1) !< Embedded Runge-Kutta orders.
   real(R_P) :: lf_orders(1:space_dimension, 1:2, 1:NDt-1)                 !< Leapfrog orders.
   real(R_P) :: ls_rk_orders(1:space_dimension, 1:ls_rk_stages, 1:NDt-1)   !< Low storage Runge-Kutta orders.
   real(R_P) :: tvd_rk_orders(1:space_dimension, 1:tvd_rk_stages, 1:NDt-1) !< TVD/SSP Runge-Kutta orders.
@@ -799,6 +810,7 @@ contains
   ab_errors = 0._R_P     ; ab_orders = 0._R_P
   abm_errors = 0._R_P    ; abm_orders = 0._R_P
   am_errors = 0._R_P     ; am_orders = 0._R_P
+  emd_rk_errors = 0._R_P ; emd_rk_orders = 0._R_P
   lf_errors = 0._R_P     ; lf_orders = 0._R_P
   ls_rk_errors = 0._R_P  ; ls_rk_orders = 0._R_P
   tvd_rk_errors = 0._R_P ; tvd_rk_orders = 0._R_P
@@ -859,6 +871,37 @@ contains
   do s=0, ab_steps-1
     do d=1, NDt-1
       am_orders(:, s+1, d) = estimate_orders(solver_error=am_errors(:, s+1, d:d+1), Dt_used=time_steps(d:d+1))
+    enddo
+  enddo
+  ! Analyze errors of embedded Runge-Kutta solvers
+  do d=1, NDt ! loop over exercised tolerances
+    Dt = time_steps(NDt)
+    tolerance = tolerances(d)
+    solver = 'emd-runge-kutta'
+    call init(output=output, solution=solution)
+    do s=1, emd_rk_stages
+      if (s==1) cycle ! 1 stages not yet implemented
+      if (s==2) cycle ! 2 stages not yet implemented
+      if (s==3) cycle ! 3 stages not yet implemented
+      if (s==4) cycle ! 4 stages not yet implemented
+      if (s==5) cycle ! 5 stages not yet implemented
+      if (s==6) cycle ! 6 stages not yet implemented
+      title = 'Oscillation equation integration, explicit embedded Runge-Kutta t='//str(n=t_final)//' stages='//trim(str(.true., s))
+      call emd_rk_solver(stages=s, tol=tolerances(d), solution=solution, last_step=last_step)
+      Dt_mean(d) = t_final/real(last_step, kind=R_P)
+      call save_results(title=title, basename=output//'-'//trim(str(.true., s)), solution=solution(:, 0:last_step))
+      emd_rk_errors(:, s, d) = compute_errors(solution=solution(:, 0:last_step))
+    enddo
+  enddo
+  do s=1, emd_rk_stages
+    if (s==1) cycle ! 1 stages not yet implemented
+    if (s==2) cycle ! 2 stages not yet implemented
+    if (s==3) cycle ! 3 stages not yet implemented
+    if (s==4) cycle ! 4 stages not yet implemented
+    if (s==5) cycle ! 5 stages not yet implemented
+    if (s==6) cycle ! 6 stages not yet implemented
+    do d=1, NDt-1
+      emd_rk_orders(:, s, d) = estimate_orders(solver_error=emd_rk_errors(:, s, d:d+1), Dt_used=Dt_mean(d:d+1))
     enddo
   enddo
   ! Analyze errors of leapfrog solver
@@ -937,6 +980,7 @@ contains
   call print_analysis(solver='adams-bashforth', time_steps=time_steps, errors=ab_errors, orders=ab_orders)
   call print_analysis(solver='adams-bashforth-moulton', time_steps=time_steps, errors=abm_errors, orders=abm_orders)
   call print_analysis(solver='adams-moulton', time_steps=time_steps, errors=am_errors, orders=am_orders)
+  call print_analysis(solver='emd-runge-kutta', time_steps=Dt_mean, errors=emd_rk_errors, orders=emd_rk_orders)
   call print_analysis(solver='leapfrog', time_steps=time_steps, errors=lf_errors, orders=lf_orders)
   call print_analysis(solver='ls-runge-kutta', time_steps=time_steps, errors=ls_rk_errors, orders=ls_rk_orders)
   call print_analysis(solver='tvd-runge-kutta', time_steps=time_steps, errors=tvd_rk_errors, orders=tvd_rk_orders)
