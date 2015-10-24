@@ -1,9 +1,5 @@
 # FOODIE Makefile
 
-INCLUDE  = ../../lib
-EXTERNAL = ../../../external/FLAP
-LIB      = ../../lib
-
 OBJS = oscillation.o type_oscillation.o
 
 .SUFFIXES: .f90 .o
