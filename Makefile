@@ -19,6 +19,12 @@ FCFLAGS = "-cpp -g -O0 -C -fbacktrace"
 OPTSC = $(FCFLAGS)" -c"
 
 ########################################################################
+# Paths
+
+LIBDIR  = $(shell pwd)/src/lib
+FLAPDIR = $(shell pwd)/external/FLAP
+
+########################################################################
 # Targets
 
 .PHONY: all external foodie tests lorenz oscillation burgers clean
@@ -32,25 +38,35 @@ external:
 	$(MAKE) FC=$(FC) OPTSC=$(OPTSC) --directory=external/FLAP
 	ar ruv external/FLAP/libexternal.a external/FLAP/tests/obj/data_type_command_line_interface.o external/FLAP/tests/obj/ir_precision.o
 
-tests: lorenz oscillation burgers
+tests: accuracy parallel regression
 
-lorenz: foodie external
-	$(MAKE) FC=$(FC) FCFLAGS=$(FCFLAGS) --directory=src/tests/$@
-	cp src/tests/$@/$@ .
+accuracy: oscillation
+parallel: euler-1D-openmp euler-1D-openmp-no-foodie
+regression: lorenz burgers
 
 oscillation: foodie external
-	$(MAKE) FC=$(FC) FCFLAGS=$(FCFLAGS) --directory=src/tests/$@
-	cp src/tests/$@/$@ .
+	$(MAKE) FC=$(FC) FCFLAGS=$(FCFLAGS) INCLUDE=$(LIBDIR) LIB=$(LIBDIR) EXTERNAL=$(FLAPDIR) --directory=src/tests/accuracy/$@
+	cp src/tests/accuracy/$@/$@ .
+
+lorenz: foodie external
+	$(MAKE) FC=$(FC) FCFLAGS=$(FCFLAGS) INCLUDE=$(LIBDIR) LIB=$(LIBDIR) EXTERNAL=$(FLAPDIR) --directory=src/tests/regression/$@
+	cp src/tests/regression/$@/$@ .
 
 burgers: foodie external
-	$(MAKE) FC=$(FC) FCFLAGS=$(FCFLAGS) --directory=src/tests/$@
-	cp src/tests/$@/$@ .
+	$(MAKE) FC=$(FC) FCFLAGS=$(FCFLAGS) INCLUDE=$(LIBDIR) LIB=$(LIBDIR) EXTERNAL=$(FLAPDIR) --directory=src/tests/regression/$@
+	cp src/tests/regression/$@/$@ .
+
+euler-1D-openmp:
+	@echo "euler-1D-openmp build not implemented in Makefile yet; use FoBIS instead"
+
+euler-1D-openmp-no-foodie:
+	@echo "euler-1D-openmp-no-foodie Build not implemented in Makefile yet; use FoBIS instead"
 
 clean:
 	rm -vf lorenz oscillation burgers
 	rm -vf external/FLAP/libexternal.a
 	$(MAKE) --directory=external/FLAP clean
 	$(MAKE) --directory=src/lib clean
-	$(MAKE) --directory=src/tests/lorenz clean
-	$(MAKE) --directory=src/tests/oscillation clean
-	$(MAKE) --directory=src/tests/burgers clean
+	$(MAKE) --directory=src/tests/accuracy/oscillation clean
+	$(MAKE) --directory=src/tests/regression/burgers clean
+	$(MAKE) --directory=src/tests/regression/lorenz clean
