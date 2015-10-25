@@ -45,6 +45,7 @@ type, extends(integrand) :: burgers
   !<#### State variables organization
   !< State variable is organized as an array (rank 1) for whole physical domain.
   private
+  integer(I_P)                           :: dims=0    !< Space dimensions.
   integer(I_P)                           :: Ni=0      !< Number of grid nodes.
   integer(I_P)                           :: steps=0   !< Number of time steps stored.
   real(R_P)                              :: h=0._R_P  !< Space step discretization.
@@ -60,6 +61,7 @@ type, extends(integrand) :: burgers
     procedure, pass(self), public :: t => dBurgers_dt                                         !< Time derivative, residuals func.
     procedure, pass(self), public :: update_previous_steps                                    !< Update previous time steps.
     procedure, pass(self), public :: previous_step                                            !< Get a previous time step.
+    procedure, pass(lhs),  public :: local_error => burgers_local_error                       !< Local error.
     procedure, pass(lhs),  public :: integrand_multiply_integrand => burgers_multiply_burgers !< Burgers * burgers operator.
     procedure, pass(lhs),  public :: integrand_multiply_real => burgers_multiply_real         !< Burgers * real operator.
     procedure, pass(rhs),  public :: real_multiply_integrand => real_multiply_burgers         !< Real * Burgers operator.
@@ -88,6 +90,7 @@ contains
   !---------------------------------------------------------------------------------------------------------------------------------
 
   !---------------------------------------------------------------------------------------------------------------------------------
+  self%dims = size(initial_state)
   self%steps = 0 ; if (present(steps)) self%steps = steps
   if (allocated(self%U)) deallocate(self%U) ; allocate(self%U(1:Ni))
   if (self%steps>0) then
@@ -205,6 +208,33 @@ contains
   return
   !---------------------------------------------------------------------------------------------------------------------------------
   endfunction previous_step
+
+  function burgers_local_error(lhs, rhs) result(error)
+  !---------------------------------------------------------------------------------------------------------------------------------
+  !< Estimate local truncation error between 2 burgers approximations.
+  !<
+  !< The estimation is done by norm L2 of U:
+  !<
+  !< $$ error = \sqrt{ \sum_i{ \frac{(lhs\%U_i - rhs\%U_i)^2}{lhs\%U_i^2} }} $$
+  !---------------------------------------------------------------------------------------------------------------------------------
+  class(burgers), intent(IN) :: lhs   !< Left hand side.
+  class(integrand),   intent(IN) :: rhs   !< Right hand side.
+  real(R_P)                      :: error !< Error estimation.
+  integer(I_P)                   :: i     !< Space counter.
+  !---------------------------------------------------------------------------------------------------------------------------------
+
+  !---------------------------------------------------------------------------------------------------------------------------------
+  select type(rhs)
+  class is (burgers)
+    error = 0._R_P
+    do i=1, lhs%dims
+      error = error + (lhs%U(i) - rhs%U(i))**2/lhs%U(i)**2
+    enddo
+    error = sqrt(error)
+  endselect
+  return
+  !---------------------------------------------------------------------------------------------------------------------------------
+  endfunction burgers_local_error
 
   function burgers_multiply_burgers(lhs, rhs) result(opr)
   !---------------------------------------------------------------------------------------------------------------------------------

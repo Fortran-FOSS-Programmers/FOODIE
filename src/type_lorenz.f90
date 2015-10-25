@@ -75,6 +75,7 @@ type, extends(integrand) :: lorenz
     procedure, pass(self), public :: output !< Extract Lorenz field.
     ! ADT integrand deferred methods
     procedure, pass(self), public :: t => dLorenz_dt                                        !< Time derivative, residuals function.
+    procedure, pass(lhs),  public :: local_error => lorenz_local_error                      !< Local error.
     procedure, pass(self), public :: update_previous_steps                                  !< Update previous time steps.
     procedure, pass(self), public :: previous_step                                          !< Get a previous time step.
     procedure, pass(lhs),  public :: integrand_multiply_integrand => lorenz_multiply_lorenz !< Lorenz * Lorenz operator.
@@ -207,6 +208,34 @@ contains
   return
   !---------------------------------------------------------------------------------------------------------------------------------
   endfunction previous_step
+
+  function lorenz_local_error(lhs, rhs) result(error)
+  !---------------------------------------------------------------------------------------------------------------------------------
+  !< Estimate local truncation error between 2 lorenz approximations.
+  !<
+  !< The estimation is done by norm L2 of U:
+  !<
+  !< $$ error = \sqrt{ \sum_i{ \frac{(lhs\%U_i - rhs\%U_i)^2}{lhs\%U_i^2} }} $$
+  !---------------------------------------------------------------------------------------------------------------------------------
+  class(lorenz), intent(IN) :: lhs   !< Left hand side.
+  class(integrand),   intent(IN) :: rhs   !< Right hand side.
+  real(R_P)                      :: error !< Error estimation.
+  integer(I_P)                   :: i     !< Space counter.
+  !---------------------------------------------------------------------------------------------------------------------------------
+
+  !---------------------------------------------------------------------------------------------------------------------------------
+  select type(rhs)
+  class is (lorenz)
+    error = 0._R_P
+    do i=1, lhs%dims
+      error = error + (lhs%U(i) - rhs%U(i))**2/lhs%U(i)**2
+    enddo
+    error = sqrt(error)
+  endselect
+  return
+  !---------------------------------------------------------------------------------------------------------------------------------
+  endfunction lorenz_local_error
+
 
   function lorenz_multiply_lorenz(lhs, rhs) result(opr)
   !---------------------------------------------------------------------------------------------------------------------------------
