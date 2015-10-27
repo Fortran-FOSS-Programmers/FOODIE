@@ -1,9 +1,5 @@
 # FOODIE Makefile
 
-INCLUDE  = ../../lib
-EXTERNAL = ../../../external/FLAP
-LIB      = ../../lib
-
 OBJS = burgers.o type_burgers.o
 
 .SUFFIXES: .f90 .o

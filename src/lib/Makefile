@@ -10,6 +10,7 @@ OBJS = foodie_adt_integrand.o \
        foodie_integrator_euler_explicit.o \
        foodie_integrator_leapfrog.o \
        foodie_integrator_low_storage_runge_kutta.o \
+       foodie_integrator_embedded_runge_kutta.o \
        foodie_integrator_tvd_runge_kutta.o \
        foodie_kinds.o \
        pyplot_module.o
@@ -33,6 +34,7 @@ foodie_integrator_adams_bashforth_moulton.o: foodie_integrator_adams_bashforth_m
 foodie_integrator_adams_moulton.o: foodie_integrator_adams_moulton.f90 foodie_adt_integrand.o foodie_kinds.o
 foodie_integrator_euler_explicit.o: foodie_integrator_euler_explicit.f90 foodie_adt_integrand.o foodie_kinds.o
 foodie_integrator_leapfrog.o: foodie_integrator_leapfrog.f90 foodie_adt_integrand.o foodie_kinds.o
+foodie_integrator_embedded_runge_kutta.o: foodie_integrator_embedded_runge_kutta.f90 foodie_adt_integrand.o foodie_kinds.o
 foodie_integrator_low_storage_runge_kutta.o: foodie_integrator_low_storage_runge_kutta.f90 foodie_adt_integrand.o foodie_kinds.o
 foodie_integrator_tvd_runge_kutta.o: foodie_integrator_tvd_runge_kutta.f90 foodie_adt_integrand.o foodie_kinds.o
 foodie_adt_integrand.o: foodie_adt_integrand.f90 foodie_kinds.o
