@@ -1,5 +1,6 @@
 [modes]
-modes = foodie-static-gnu foodie-static-gnu-debug foodie-shared-gnu foodie-shared-gnu-debug
+modes = foodie-static-opencoarrays-gnu foodie-static-opencoarrays-gnu-debug
+        foodie-static-gnu foodie-static-gnu-debug foodie-shared-gnu foodie-shared-gnu-debug
         foodie-static-intel foodie-static-intel-debug foodie-shared-intel foodie-shared-intel-debug
         foodie-static-gnu-coverage
 
@@ -14,6 +15,44 @@ $DEBUG_INT   = -O0 -debug all -check all -warn all -extend-source 132 -traceback
 $OPTIMIZE    = -O2
 
 # main modes
+[foodie-static-opencoarrays-gnu]
+help            = Build FOODIE library in static release mode with OpenCoarrays-GNU gfortran
+compiler        = opencoarrays-gnu
+cflags          = $CSTATIC_GNU $OPTIMIZE
+lflags          = $OPTIMIZE
+preproc         = -DCAF
+cflags_heritage = True
+build_dir       = ./build/lib/
+mod_dir         = mod
+obj_dir         = obj
+src             = src/lib/
+target          = foodie.f90
+output          = libfoodie.a
+mklib           = static
+colors          = True
+quiet           = False
+log             = True
+jobs            = 10
+
+[foodie-static-opencoarrays-gnu-debug]
+help            = Build FOODIE library in static release mode with OpenCoarrays-GNU gfortran
+compiler        = opencoarrays-gnu
+cflags          = $CSTATIC_GNU $DEBUG_GNU
+lflags          = $DEBUG_GNU
+preproc         = -DCAF
+cflags_heritage = True
+build_dir       = ./build/lib/
+mod_dir         = mod
+obj_dir         = obj
+src             = src/lib/
+target          = foodie.f90
+output          = libfoodie.a
+mklib           = static
+colors          = True
+quiet           = False
+log             = True
+jobs            = 10
+
 [foodie-static-gnu]
 help            = Build FOODIE library in static release mode with GNU gfortran
 compiler        = gnu

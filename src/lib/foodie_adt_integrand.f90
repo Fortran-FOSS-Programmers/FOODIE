@@ -17,6 +17,9 @@ public :: integrand
 !-----------------------------------------------------------------------------------------------------------------------------------
 type, abstract :: integrand
   !< Abstract type for building FOODIE ODE integrators.
+#ifdef CAF
+  class(*), allocatable :: dummy_to_allow_extensions[:] !< Dummy member to allow concrete extensions with coarray members.
+#endif
   contains
     ! public deferred procedures that concrete integrand-field must implement
     procedure(time_derivative),      pass(self), deferred, public :: t !< Time derivative, residuals.

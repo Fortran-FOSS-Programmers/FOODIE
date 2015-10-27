@@ -1,7 +1,7 @@
-!< Define Euler 1D (OpenMP enabled) field that is a concrete extension of the abstract integrand type.
-module type_euler_1D_openmp
+!< Define Euler 1D field that is a concrete extension of the abstract integrand type.
+module type_euler_1D
 !-----------------------------------------------------------------------------------------------------------------------------------
-!< Define Euler 1D (OpenMP enabled) field that is a concrete extension of the abstract integrand type.
+!< Define Euler 1D field that is a concrete extension of the abstract integrand type.
 !-----------------------------------------------------------------------------------------------------------------------------------
 
 !-----------------------------------------------------------------------------------------------------------------------------------
@@ -13,12 +13,12 @@ use wenoof, only : weno_factory, weno_constructor_upwind, weno_interpolator, wen
 !-----------------------------------------------------------------------------------------------------------------------------------
 implicit none
 private
-public :: euler_1D_openmp
+public :: euler_1D
 !-----------------------------------------------------------------------------------------------------------------------------------
 
 !-----------------------------------------------------------------------------------------------------------------------------------
-type, extends(integrand) :: euler_1D_openmp
-  !< Euler 1D (OpenMP enabled) PDEs system field.
+type, extends(integrand) :: euler_1D
+  !< Euler 1D PDEs system field.
   !<
   !< It is a FOODIE integrand class concrete extension.
   !<
@@ -126,25 +126,28 @@ type, extends(integrand) :: euler_1D_openmp
   !< + Ns+1 : momentum conservation             (r*u)
   !< + Ns+2 : energy conservation               (r*E)
   private
-  integer(I_P)                   :: ord=0           !< Space accuracy formal order.
-  integer(I_P)                   :: Ni=0            !< Space dimension.
-  integer(I_P)                   :: Ng=0            !< Number of ghost cells for boundary conditions handling.
-  integer(I_P)                   :: Ns=0            !< Number of initial species.
-  integer(I_P)                   :: Nc=0            !< Number of conservative variables, Ns+2.
-  integer(I_P)                   :: Np=0            !< Number of primitive variables, Ns+4.
-  real(R_P)                      :: Dx=0._R_P       !< Space step.
-  type(weno_interpolator_upwind) :: weno            !< WENO interpolator.
-  real(R_P),    allocatable      :: U(:,:)          !< Integrand (state) variables, whole physical domain [1:Nc,1-Ng:Ni+Ng].
-  real(R_P),    allocatable      :: cp0(:)          !< Specific heat cp of initial species [1:Ns].
-  real(R_P),    allocatable      :: cv0(:)          !< Specific heat cv of initial species [1:Ns].
-  character(:), allocatable      :: BC_L            !< Left boundary condition type.
-  character(:), allocatable      :: BC_R            !< Right boundary condition type.
+  integer(I_P)                      :: ord=0     !< Space accuracy formal order.
+  integer(I_P)                      :: Ni=0      !< Space dimension.
+  integer(I_P)                      :: Ng=0      !< Number of ghost cells for boundary conditions handling.
+  integer(I_P)                      :: Ns=0      !< Number of initial species.
+  integer(I_P)                      :: Nc=0      !< Number of conservative variables, Ns+2.
+  integer(I_P)                      :: Np=0      !< Number of primitive variables, Ns+4.
+  real(R_P)                         :: Dx=0._R_P !< Space step.
+  type(weno_interpolator_upwind)    :: weno      !< WENO interpolator.
+  real(R_P),    allocatable         :: U(:,:)    !< Integrand (state) variables, whole physical domain [1:Nc,1-Ng:Ni+Ng].
+  real(R_P),    allocatable         :: U_L(:,:)  !< Integrand (state) variables, left ghost cells [1:Nc,1:Ng].
+  real(R_P),    allocatable         :: U_R(:,:)  !< Integrand (state) variables, right ghost cells [1:Nc,Ni-Ng+1:Ni].
+  real(R_P),    allocatable         :: cp0(:)    !< Specific heat cp of initial species [1:Ns].
+  real(R_P),    allocatable         :: cv0(:)    !< Specific heat cv of initial species [1:Ns].
+  character(:), allocatable         :: BC_L      !< Left boundary condition type.
+  character(:), allocatable         :: BC_R      !< Right boundary condition type.
   contains
     ! auxiliary methods
     procedure, pass(self), public :: init             !< Init field.
     procedure, pass(self), public :: destroy          !< Destroy field.
     procedure, pass(self), public :: output           !< Extract Euler field.
     procedure, pass(self), public :: dt => compute_dt !< Compute the current time step, by means of CFL condition.
+    procedure, pass(self), public :: set_ghost_cells  !< Set ghost cells values from remote CAF images.
     ! ADT integrand deferred methods
     procedure, pass(self), public :: t => dEuler_dt                                       !< Time derivative, residuals function.
     procedure, pass(lhs),  public :: local_error => euler_local_error                     !<||euler-euler||.
@@ -162,7 +165,7 @@ type, extends(integrand) :: euler_1D_openmp
     procedure, pass(self), private :: reconstruct_interfaces_states !< Reconstruct interfaces states.
     procedure, pass(self), private :: riemann_solver                !< Solve the Riemann Problem at cell interfaces.
     final                          :: finalize                      !< Finalize field.
-endtype euler_1D_openmp
+endtype euler_1D
 !-----------------------------------------------------------------------------------------------------------------------------------
 contains
   ! auxiliary methods
@@ -170,8 +173,8 @@ contains
   !---------------------------------------------------------------------------------------------------------------------------------
   !< Init field.
   !---------------------------------------------------------------------------------------------------------------------------------
-  class(euler_1D_openmp), intent(INOUT) :: self               !< Euler field.
-  integer(I_P),           intent(IN)    :: Ni                 !< Space dimension.
+  class(euler_1D),        intent(INOUT) :: self               !< Euler field.
+  integer(I_P),           intent(IN)    :: Ni                 !< Space dimension (local image).
   integer(I_P),           intent(IN)    :: Ns                 !< Number of initial species.
   real(R_P),              intent(IN)    :: Dx                 !< Space step.
   character(*),           intent(IN)    :: BC_L               !< Left boundary condition type.
@@ -197,7 +200,9 @@ contains
   self%Nc = Ns + 2
   self%Np = Ns + 4
   self%Dx = Dx
-  if (allocated(self%U)) deallocate(self%U) ; allocate(self%U  (1:self%Nc, 1:Ni))
+  if (allocated(self%U)) deallocate(self%U) ; allocate(self%U(1:self%Nc, 1:Ni))
+  if (allocated(self%U_L)) deallocate(self%U_L) ; allocate(self%U_L(1:self%Nc, 1:self%Ng))
+  if (allocated(self%U_R)) deallocate(self%U_R) ; allocate(self%U_R(1:self%Nc, self%Ni-self%Ng+1:self%Ni))
   self%cp0 = cp0
   self%cv0 = cv0
   self%BC_L = BC_L
@@ -213,7 +218,7 @@ contains
   !---------------------------------------------------------------------------------------------------------------------------------
   !< Destroy field.
   !---------------------------------------------------------------------------------------------------------------------------------
-  class(euler_1D_openmp), intent(INOUT) :: self !< Euler field.
+  class(euler_1D), intent(INOUT) :: self !< Euler field.
   !---------------------------------------------------------------------------------------------------------------------------------
 
   !---------------------------------------------------------------------------------------------------------------------------------
@@ -225,6 +230,8 @@ contains
   self%Np = 0
   self%Dx = 0._R_P
   if (allocated(self%U)) deallocate(self%U)
+  if (allocated(self%U_L)) deallocate(self%U_L)
+  if (allocated(self%U_R)) deallocate(self%U_R)
   if (allocated(self%cp0)) deallocate(self%cp0)
   if (allocated(self%cv0)) deallocate(self%cv0)
   if (allocated(self%BC_L)) deallocate(self%BC_L)
@@ -233,20 +240,29 @@ contains
   !---------------------------------------------------------------------------------------------------------------------------------
   endsubroutine destroy
 
-  pure function output(self) result(state)
+  pure function output(self, iL, iU) result(state)
   !---------------------------------------------------------------------------------------------------------------------------------
   !< Output the Euler field state (primitive variables).
   !---------------------------------------------------------------------------------------------------------------------------------
-  class(euler_1D_openmp), intent(IN)     :: self  !< Euler field.
+  class(euler_1D), intent(IN)            :: self  !< Euler field.
+  integer(I_P),    intent(IN), optional  :: iL    !< Lower bound of extracted domain.
+  integer(I_P),    intent(IN), optional  :: iU    !< Upper bound of extracted domain.
   real(R_P), dimension(:,:), allocatable :: state !< Euler state vector.
   integer(I_P)                           :: i     !< Counter.
   !---------------------------------------------------------------------------------------------------------------------------------
 
   !---------------------------------------------------------------------------------------------------------------------------------
-  allocate(state(1:self%Np, 1:self%Ni))
-  do i=1, self%Ni
-    state(:, i) = self%conservative2primitive(self%U(:, i))
-  enddo
+  if (present(iL).and.present(iU)) then
+    allocate(state(1:self%Np, iL:iU))
+    do i=iL, iU
+      state(:, i) = self%conservative2primitive(self%U(:, i))
+    enddo
+  else
+    allocate(state(1:self%Np, 1:self%Ni))
+    do i=1, self%Ni
+      state(:, i) = self%conservative2primitive(self%U(:, i))
+    enddo
+  endif
   return
   !---------------------------------------------------------------------------------------------------------------------------------
   endfunction output
@@ -255,15 +271,15 @@ contains
   !--------------------------------------------------------------------------------------------------------------------------------
   !< Compute the current time step by means of CFL condition.
   !--------------------------------------------------------------------------------------------------------------------------------
-  class(euler_1D_openmp), intent(IN) :: self !< Euler field.
-  integer(I_P),           intent(IN) :: Nmax !< Maximun number of iterates.
-  real(R_P),              intent(IN) :: Tmax !< Maximum time (ignored if Nmax>0).
-  real(R_P),              intent(IN) :: t    !< Time.
-  real(R_P),              intent(IN) :: CFL  !< CFL value.
-  real(R_P)                          :: Dt   !< Time step.
-  real(R_P), allocatable             :: P(:) !< Primitive variables.
-  real(R_P)                          :: vmax !< Maximum propagation speed of signals.
-  integer(I_P)                       :: i    !< Counter.
+  class(euler_1D), intent(IN) :: self !< Euler field.
+  integer(I_P),    intent(IN) :: Nmax !< Maximun number of iterates.
+  real(R_P),       intent(IN) :: Tmax !< Maximum time (ignored if Nmax>0).
+  real(R_P),       intent(IN) :: t    !< Time.
+  real(R_P),       intent(IN) :: CFL  !< CFL value.
+  real(R_P)                   :: Dt   !< Time step.
+  real(R_P), allocatable      :: P(:) !< Primitive variables.
+  real(R_P)                   :: vmax !< Maximum propagation speed of signals.
+  integer(I_P)                :: i    !< Counter.
   !--------------------------------------------------------------------------------------------------------------------------------
 
   !--------------------------------------------------------------------------------------------------------------------------------
@@ -282,45 +298,60 @@ contains
   !--------------------------------------------------------------------------------------------------------------------------------
   endfunction compute_dt
 
+  pure subroutine set_ghost_cells(self, U_L, U_R)
+  !---------------------------------------------------------------------------------------------------------------------------------
+  !< Set ghost cells values from remote CAF images.
+  !---------------------------------------------------------------------------------------------------------------------------------
+  class(euler_1D),     intent(INOUT) :: self                                     !< Euler field.
+  real(R_P), optional, intent(IN)    :: U_L(1:self%Nc,1:self%Ng)                 !< Left ghost cells.
+  real(R_P), optional, intent(IN)    :: U_R(1:self%Nc,self%Ni-self%Ng+1:self%Ni) !< Right ghost cells.
+  !---------------------------------------------------------------------------------------------------------------------------------
+
+  !---------------------------------------------------------------------------------------------------------------------------------
+  if (present(U_L)) then
+    self%U_L = U_L
+  endif
+  if (present(U_R)) then
+    self%U_R = U_R
+  endif
+  return
+  !---------------------------------------------------------------------------------------------------------------------------------
+  endsubroutine set_ghost_cells
+
   ! ADT integrand deferred methods
   function dEuler_dt(self, t) result(dState_dt)
   !---------------------------------------------------------------------------------------------------------------------------------
   !< Time derivative of Euler field, the residuals function.
   !---------------------------------------------------------------------------------------------------------------------------------
-  class(euler_1D_openmp), intent(IN) :: self      !< Euler field.
-  real(R_P),    optional, intent(IN) :: t         !< Time.
-  class(integrand), allocatable      :: dState_dt !< Euler field time derivative.
-  real(R_P), allocatable             :: F(:,:)    !< Fluxes of conservative variables.
-  real(R_P), allocatable             :: P(:,:)    !< Primitive variables.
-  real(R_P), allocatable             :: PR(:,:,:) !< Left (1) and right (2) (reconstructed) interface values of primitive variables.
-  integer(I_P)                       :: i         !< Counter.
+  class(euler_1D),     intent(IN) :: self      !< Euler field.
+  real(R_P), optional, intent(IN) :: t         !< Time.
+  class(integrand), allocatable   :: dState_dt !< Euler field time derivative.
+  real(R_P),        allocatable   :: F(:,:)    !< Fluxes of conservative variables.
+  real(R_P),        allocatable   :: P(:,:)    !< Primitive variables.
+  real(R_P),        allocatable   :: PR(:,:,:) !< Left (1) and right (2) (reconstructed) interface values of primitive variables.
+  integer(I_P)                    :: i         !< Counter.
   !---------------------------------------------------------------------------------------------------------------------------------
 
   !---------------------------------------------------------------------------------------------------------------------------------
   allocate(F(1:self%Nc, 0:self%Ni))
-  !$OMP PARALLEL DO PRIVATE(i) SHARED(self, F)
   do i=0, self%Ni
     F(:, i) = 0._R_P
   enddo
   allocate(P(1:self%Np, 1-self%Ng:self%Ni+self%Ng))
-  !$OMP PARALLEL DO PRIVATE(i) SHARED(self, P)
   do i=1-self%Ng, self%Ni+self%Ng
     P(:, i) = 0._R_P
   enddo
   allocate(PR(1:self%Np, 1:2, 0:self%Ni+1))
-  !$OMP PARALLEL DO PRIVATE(i) SHARED(self, P)
   do i=0, self%Ni+1
     PR(:, :, i) = 0._R_P
   enddo
   ! compute primitive variables
-  !$OMP PARALLEL DO PRIVATE(i) SHARED(self, P)
   do i=1, self%Ni
     P(:, i) = self%conservative2primitive(self%U(:, i))
   enddo
   call self%impose_boundary_conditions(primitive=P)
   call self%reconstruct_interfaces_states(primitive=P, r_primitive=PR)
   ! compute fluxes by solving Rimeann Problems at each interface
-  !$OMP PARALLEL DO PRIVATE(i) SHARED(self, F, PR)
   do i=0, self%Ni
     call self%riemann_solver(r1=PR(self%Ns+3, 2, i  ), &
                              u1=PR(self%Ns+1, 2, i  ), &
@@ -340,20 +371,17 @@ contains
     endif
   enddo
   ! compute residuals
-  allocate(euler_1D_openmp :: dState_dt)
+  allocate(euler_1D :: dState_dt)
   select type(dState_dt)
-  class is(euler_1D_openmp)
+  class is(euler_1D)
     dState_dt = self
   endselect
-  !$OMP PARALLEL PRIVATE(i) SHARED(self, dState_dt, F)
   select type(dState_dt)
-  class is(euler_1D_openmp)
-    !$OMP DO
+  class is(euler_1D)
     do i=1, self%Ni
       dState_dt%U(:, i) = (F(:, i - 1) - F(:, i)) / self%Dx
     enddo
   endselect
-  !$OMP END PARALLEL
   return
   !---------------------------------------------------------------------------------------------------------------------------------
   endfunction dEuler_dt
@@ -366,16 +394,16 @@ contains
   !<
   !< $$ error = \sqrt{ \sum_i{\sum_i{ \frac{(lhs\%U_i - rhs\%U_i)^2}{lhs\%U_i^2} }} } $$
   !---------------------------------------------------------------------------------------------------------------------------------
-  class(euler_1D_openmp), intent(IN) :: lhs   !< Left hand side.
-  class(integrand),       intent(IN) :: rhs   !< Right hand side.
-  real(R_P)                          :: error !< Error estimation.
-  integer(I_P)                       :: i     !< Space counter.
-  integer(I_P)                       :: v     !< Variables counter.
+  class(euler_1D),  intent(IN) :: lhs   !< Left hand side.
+  class(integrand), intent(IN) :: rhs   !< Right hand side.
+  real(R_P)                    :: error !< Error estimation.
+  integer(I_P)                 :: i     !< Space counter.
+  integer(I_P)                 :: v     !< Variables counter.
   !---------------------------------------------------------------------------------------------------------------------------------
 
   !---------------------------------------------------------------------------------------------------------------------------------
   select type(rhs)
-  class is (euler_1D_openmp)
+  class is (euler_1D)
     error = 0._R_P
     do i=1, lhs%Ni
       do v=1, lhs%Nc
@@ -392,30 +420,27 @@ contains
   !---------------------------------------------------------------------------------------------------------------------------------
   !< Multiply an Euler field by another one.
   !---------------------------------------------------------------------------------------------------------------------------------
-  class(euler_1D_openmp), intent(IN) :: lhs !< Left hand side.
-  class(integrand),       intent(IN) :: rhs !< Right hand side.
-  class(integrand), allocatable      :: opr !< Operator result.
-  integer(I_P)                       :: i   !< Counter.
+  class(euler_1D),  intent(IN)  :: lhs !< Left hand side.
+  class(integrand), intent(IN)  :: rhs !< Right hand side.
+  class(integrand), allocatable :: opr !< Operator result.
+  integer(I_P)                  :: i   !< Counter.
   !---------------------------------------------------------------------------------------------------------------------------------
 
   !---------------------------------------------------------------------------------------------------------------------------------
-  allocate(euler_1D_openmp :: opr)
+  allocate(euler_1D :: opr)
   select type(opr)
-  class is(euler_1D_openmp)
+  class is(euler_1D)
     opr = lhs
   endselect
-  !$OMP PARALLEL DEFAULT(NONE) PRIVATE(i) SHARED(lhs, rhs, opr)
   select type(opr)
-  class is(euler_1D_openmp)
+  class is(euler_1D)
     select type(rhs)
-    class is (euler_1D_openmp)
-      !$OMP DO
+    class is (euler_1D)
       do i=1, lhs%Ni
         opr%U(:, i) = lhs%U(:, i) * rhs%U(:, i)
       enddo
     endselect
   endselect
-  !$OMP END PARALLEL
   return
   !---------------------------------------------------------------------------------------------------------------------------------
   endfunction euler_multiply_euler
@@ -424,27 +449,24 @@ contains
   !---------------------------------------------------------------------------------------------------------------------------------
   !< Multiply an Euler field by a real scalar.
   !---------------------------------------------------------------------------------------------------------------------------------
-  class(euler_1D_openmp), intent(IN) :: lhs !< Left hand side.
-  real(R_P),              intent(IN) :: rhs !< Right hand side.
-  class(integrand), allocatable      :: opr !< Operator result.
-  integer(I_P)                       :: i   !< Counter.
+  class(euler_1D), intent(IN)   :: lhs !< Left hand side.
+  real(R_P),       intent(IN)   :: rhs !< Right hand side.
+  class(integrand), allocatable :: opr !< Operator result.
+  integer(I_P)                  :: i   !< Counter.
   !---------------------------------------------------------------------------------------------------------------------------------
 
   !---------------------------------------------------------------------------------------------------------------------------------
-  allocate(euler_1D_openmp :: opr)
+  allocate(euler_1D :: opr)
   select type(opr)
-  class is(euler_1D_openmp)
+  class is(euler_1D)
     opr = lhs
   endselect
-  !$OMP PARALLEL DEFAULT(NONE) PRIVATE(i) SHARED(lhs, rhs, opr)
   select type(opr)
-  class is(euler_1D_openmp)
-    !$OMP DO
+  class is(euler_1D)
     do i=1, lhs%Ni
       opr%U(:, i) = lhs%U(:, i) * rhs
     enddo
   endselect
-  !$OMP END PARALLEL
   return
   !---------------------------------------------------------------------------------------------------------------------------------
   endfunction euler_multiply_real
@@ -453,27 +475,24 @@ contains
   !---------------------------------------------------------------------------------------------------------------------------------
   !< Multiply a real scalar by an Euler field.
   !---------------------------------------------------------------------------------------------------------------------------------
-  real(R_P),              intent(IN) :: lhs !< Left hand side.
-  class(euler_1D_openmp), intent(IN) :: rhs !< Right hand side.
-  class(integrand), allocatable      :: opr !< Operator result.
-  integer(I_P)                       :: i   !< Counter.
+  real(R_P),       intent(IN)   :: lhs !< Left hand side.
+  class(euler_1D), intent(IN)   :: rhs !< Right hand side.
+  class(integrand), allocatable :: opr !< Operator result.
+  integer(I_P)                  :: i   !< Counter.
   !---------------------------------------------------------------------------------------------------------------------------------
 
   !---------------------------------------------------------------------------------------------------------------------------------
-  allocate(euler_1D_openmp :: opr)
+  allocate(euler_1D :: opr)
   select type(opr)
-  class is(euler_1D_openmp)
+  class is(euler_1D)
     opr = rhs
   endselect
-  !$OMP PARALLEL DEFAULT(NONE) PRIVATE(i) SHARED(lhs, rhs, opr)
   select type(opr)
-  class is(euler_1D_openmp)
-    !$OMP DO
+  class is(euler_1D)
     do i=1, rhs%Ni
       opr%U(:, i) = rhs%U(:, i) * lhs
     enddo
   endselect
-  !$OMP END PARALLEL
   return
   !---------------------------------------------------------------------------------------------------------------------------------
   endfunction real_multiply_euler
@@ -482,30 +501,27 @@ contains
   !---------------------------------------------------------------------------------------------------------------------------------
   !< Add two Euler fields.
   !---------------------------------------------------------------------------------------------------------------------------------
-  class(euler_1D_openmp), intent(IN) :: lhs !< Left hand side.
-  class(integrand),       intent(IN) :: rhs !< Right hand side.
-  class(integrand), allocatable      :: opr !< Operator result.
-  integer(I_P)                       :: i   !< Counter.
+  class(euler_1D),  intent(IN)  :: lhs !< Left hand side.
+  class(integrand), intent(IN)  :: rhs !< Right hand side.
+  class(integrand), allocatable :: opr !< Operator result.
+  integer(I_P)                  :: i   !< Counter.
   !---------------------------------------------------------------------------------------------------------------------------------
 
   !---------------------------------------------------------------------------------------------------------------------------------
-  allocate (euler_1D_openmp :: opr)
+  allocate (euler_1D :: opr)
   select type(opr)
-  class is(euler_1D_openmp)
+  class is(euler_1D)
     opr = lhs
   endselect
-  !$OMP PARALLEL DEFAULT(NONE) PRIVATE(i) SHARED(lhs, rhs, opr)
   select type(opr)
-  class is(euler_1D_openmp)
+  class is(euler_1D)
     select type(rhs)
-    class is (euler_1D_openmp)
-      !$OMP DO
+    class is (euler_1D)
       do i=1, lhs%Ni
         opr%U(:, i) = lhs%U(:, i) + rhs%U(:, i)
       enddo
     endselect
   endselect
-  !$OMP END PARALLEL
   return
   !---------------------------------------------------------------------------------------------------------------------------------
   endfunction add_euler
@@ -514,30 +530,27 @@ contains
   !---------------------------------------------------------------------------------------------------------------------------------
   !< Subtract two Euler fields.
   !---------------------------------------------------------------------------------------------------------------------------------
-  class(euler_1D_openmp), intent(IN) :: lhs !< Left hand side.
-  class(integrand),       intent(IN) :: rhs !< Right hand side.
-  class(integrand), allocatable      :: opr !< Operator result.
-  integer(I_P)                       :: i   !< Counter.
+  class(euler_1D),  intent(IN)  :: lhs !< Left hand side.
+  class(integrand), intent(IN)  :: rhs !< Right hand side.
+  class(integrand), allocatable :: opr !< Operator result.
+  integer(I_P)                  :: i   !< Counter.
   !---------------------------------------------------------------------------------------------------------------------------------
 
   !---------------------------------------------------------------------------------------------------------------------------------
-  allocate (euler_1D_openmp :: opr)
+  allocate (euler_1D :: opr)
   select type(opr)
-  class is(euler_1D_openmp)
+  class is(euler_1D)
     opr = lhs
   endselect
-  !$OMP PARALLEL DEFAULT(NONE) PRIVATE(i) SHARED(lhs, rhs, opr)
   select type(opr)
-  class is(euler_1D_openmp)
+  class is(euler_1D)
     select type(rhs)
-    class is (euler_1D_openmp)
-      !$OMP DO
+    class is (euler_1D)
       do i=1, lhs%Ni
         opr%U(:, i) = lhs%U(:, i) - rhs%U(:, i)
       enddo
     endselect
   endselect
-  !$OMP END PARALLEL
   return
   !---------------------------------------------------------------------------------------------------------------------------------
   endfunction sub_euler
@@ -546,14 +559,14 @@ contains
   !---------------------------------------------------------------------------------------------------------------------------------
   !< Assign one Euler field to another.
   !---------------------------------------------------------------------------------------------------------------------------------
-  class(euler_1D_openmp), intent(INOUT) :: lhs !< Left hand side.
-  class(integrand),       intent(IN)    :: rhs !< Right hand side.
-  integer(I_P)                          :: i   !< Counter.
+  class(euler_1D),  intent(INOUT) :: lhs !< Left hand side.
+  class(integrand), intent(IN)    :: rhs !< Right hand side.
+  integer(I_P)                    :: i   !< Counter.
   !---------------------------------------------------------------------------------------------------------------------------------
 
   !---------------------------------------------------------------------------------------------------------------------------------
   select type(rhs)
-  class is(euler_1D_openmp)
+  class is(euler_1D)
                              lhs%ord  = rhs%ord
                              lhs%Ni   = rhs%Ni
                              lhs%Ng   = rhs%Ng
@@ -562,25 +575,14 @@ contains
                              lhs%Np   = rhs%Np
                              lhs%Dx   = rhs%Dx
                              lhs%weno = rhs%weno
-    if (allocated(rhs%U)) then
-      if (allocated(lhs%U)) deallocate(lhs%U) ; allocate(lhs%U(1:lhs%Nc, 1:lhs%Ni))
-    endif
+    if (allocated(rhs%U))    lhs%U    = rhs%U
+    if (allocated(rhs%U_L))  lhs%U_L  = rhs%U_L
+    if (allocated(rhs%U_R))  lhs%U_R  = rhs%U_R
     if (allocated(rhs%cp0))  lhs%cp0  = rhs%cp0
     if (allocated(rhs%cv0))  lhs%cv0  = rhs%cv0
     if (allocated(rhs%BC_L)) lhs%BC_L = rhs%BC_L
     if (allocated(rhs%BC_R)) lhs%BC_R = rhs%BC_R
   endselect
-  !$OMP PARALLEL DEFAULT(NONE) PRIVATE(i) SHARED(lhs, rhs)
-  select type(rhs)
-  class is(euler_1D_openmp)
-    if (allocated(rhs%U)) then
-      !$OMP DO
-      do i=1, lhs%Ni
-        lhs%U(:, i) = rhs%U(:, i)
-      enddo
-    endif
-  endselect
-  !$OMP END PARALLEL
   return
   !---------------------------------------------------------------------------------------------------------------------------------
   endsubroutine euler_assign_euler
@@ -589,14 +591,13 @@ contains
   !---------------------------------------------------------------------------------------------------------------------------------
   !< Assign one real to an Euler field.
   !---------------------------------------------------------------------------------------------------------------------------------
-  class(euler_1D_openmp), intent(INOUT) :: lhs !< Left hand side.
-  real(R_P),              intent(IN)    :: rhs !< Right hand side.
-  integer(I_P)                          :: i   !< Counter.
+  class(euler_1D), intent(INOUT) :: lhs !< Left hand side.
+  real(R_P),       intent(IN)    :: rhs !< Right hand side.
+  integer(I_P)                   :: i   !< Counter.
   !---------------------------------------------------------------------------------------------------------------------------------
 
   !---------------------------------------------------------------------------------------------------------------------------------
   if (allocated(lhs%U)) then
-    !$OMP PARALLEL DO DEFAULT(NONE) PRIVATE(i) SHARED(lhs, rhs)
     do i=1, lhs%Ni
       lhs%U(:, i) = rhs
     enddo
@@ -610,9 +611,9 @@ contains
   !---------------------------------------------------------------------------------------------------------------------------------
   !< Convert primitive variables to conservative variables.
   !---------------------------------------------------------------------------------------------------------------------------------
-  class(euler_1D_openmp), intent(IN) :: self                    !< Euler field.
-  real(R_P),              intent(IN) :: primitive(:)            !< Primitive variables.
-  real(R_P)                          :: conservative(1:self%Nc) !< Conservative variables.
+  class(euler_1D), intent(IN) :: self                    !< Euler field.
+  real(R_P),       intent(IN) :: primitive(:)            !< Primitive variables.
+  real(R_P)                   :: conservative(1:self%Nc) !< Conservative variables.
   !---------------------------------------------------------------------------------------------------------------------------------
 
   !---------------------------------------------------------------------------------------------------------------------------------
@@ -630,10 +631,10 @@ contains
   !--------------------------------------------------------------------------------------------------------------------------------
   !< Convert conservative variables to primitive variables.
   !--------------------------------------------------------------------------------------------------------------------------------
-  class(euler_1D_openmp), intent(IN) :: self                 !< Euler field.
-  real(R_P),              intent(IN) :: conservative(:)      !< Conservative variables.
-  real(R_P)                          :: primitive(1:self%Np) !< Primitive variables.
-  real(R_P), allocatable             :: c(:)                 !< Species concentration.
+  class(euler_1D), intent(IN) :: self                 !< Euler field.
+  real(R_P),       intent(IN) :: conservative(:)      !< Conservative variables.
+  real(R_P)                   :: primitive(1:self%Np) !< Primitive variables.
+  real(R_P), allocatable      :: c(:)                 !< Species concentration.
   !--------------------------------------------------------------------------------------------------------------------------------
 
   !--------------------------------------------------------------------------------------------------------------------------------
@@ -656,35 +657,50 @@ contains
   !<
   !< The boundary conditions are imposed on the primitive variables by means of the ghost cells approach.
   !--------------------------------------------------------------------------------------------------------------------------------
-  class(euler_1D_openmp), intent(IN)    :: self                                           !< Euler field.
-  real(R_P),              intent(INOUT) :: primitive(1:self%Np,1-self%Ng:self%Ni+self%Ng) !< Primitive variables [1:Np,1-Ng:Ni+Ng].
-  integer(I_P)                          :: i                                              !< Space counter.
+  class(euler_1D), intent(IN)    :: self                                           !< Euler field.
+  real(R_P),       intent(INOUT) :: primitive(1:self%Np,1-self%Ng:self%Ni+self%Ng) !< Primitive variables [1:Np,1-Ng:Ni+Ng].
+  integer(I_P)                   :: i                                              !< Space counter.
+  character(len=:), allocatable  :: bc_type                                        !< String containing BC type.
   !--------------------------------------------------------------------------------------------------------------------------------
 
   !--------------------------------------------------------------------------------------------------------------------------------
-  select case(trim(adjustl(self%BC_L)))
-    case('TRA') ! trasmissive (non reflective) BC
-      do i=1-self%Ng, 0
-        primitive(:, i) = primitive(:, -i+1)
-      enddo
-    case('REF') ! reflective BC
-      do i=1-self%Ng, 0
-        primitive(:,           i) =  primitive(:,           -i+1) ! all variables
-        primitive(self%Ns + 1, i) = -primitive(self%Ns + 1, -i+1) ! only velocity
-      enddo
-  endselect
+  bc_type = trim(adjustl(self%BC_L))
+  if ('CON' == bc_type(1:3)) then ! connection between remote images
+    do i=1-self%Ng, 0
+      primitive(:, i) = self%conservative2primitive(self%U_L(:, -i+1))
+    enddo
+  else
+    select case(bc_type(1:3))
+      case('TRA') ! trasmissive (non reflective) BC
+        do i=1-self%Ng, 0
+          primitive(:, i) = primitive(:, -i+1)
+        enddo
+      case('REF') ! reflective BC
+        do i=1-self%Ng, 0
+          primitive(:,           i) =  primitive(:,           -i+1) ! all variables
+          primitive(self%Ns + 1, i) = -primitive(self%Ns + 1, -i+1) ! only velocity
+        enddo
+    endselect
+  endif
 
-  select case(trim(adjustl(self%BC_R)))
-    case('TRA') ! trasmissive (non reflective) BC
-      do i=self%Ni+1, self%Ni+self%Ng
-        primitive(:, i) = primitive(:, self%Ni-(i-self%Ni-1))
-      enddo
-    case('REF') ! reflective BC
-      do i=self%Ni+1, self%Ni+self%Ng
-        primitive(:,           i) =  primitive(:,           self%Ni-(i-self%Ni-1)) ! all variables
-        primitive(self%Ns + 1, i) = -primitive(self%Ns + 1, self%Ni-(i-self%Ni-1)) ! only velocity
-      enddo
-  endselect
+  bc_type = trim(adjustl(self%BC_R))
+  if ('CON' == bc_type(1:3)) then ! connection between remote images
+    do i=self%Ni+1, self%Ni+self%Ng
+      primitive(:, i) = self%conservative2primitive(self%U_R(:, self%Ni-(i-self%Ni-1)))
+    enddo
+  else
+    select case(bc_type(1:3))
+      case('TRA') ! trasmissive (non reflective) BC
+        do i=self%Ni+1, self%Ni+self%Ng
+          primitive(:, i) = primitive(:, self%Ni-(i-self%Ni-1))
+        enddo
+      case('REF') ! reflective BC
+        do i=self%Ni+1, self%Ni+self%Ng
+          primitive(:,           i) =  primitive(:,           self%Ni-(i-self%Ni-1)) ! all variables
+          primitive(self%Ns + 1, i) = -primitive(self%Ns + 1, self%Ni-(i-self%Ni-1)) ! only velocity
+        enddo
+    endselect
+  endif
   return
   !--------------------------------------------------------------------------------------------------------------------------------
   endsubroutine impose_boundary_conditions
@@ -693,31 +709,28 @@ contains
   !--------------------------------------------------------------------------------------------------------------------------------
   !< Reconstruct the interfaces states (into primitive variables formulation) by the requested order of accuracy.
   !--------------------------------------------------------------------------------------------------------------------------------
-  class(euler_1D_openmp), intent(IN)    :: self                                            !< Euler field.
-  real(R_P),              intent(IN)    :: primitive(1:self%Np, 1-self%Ng:self%Ni+self%Ng) !< Primitive variables.
-  real(R_P),              intent(INOUT) :: r_primitive(1:self%Np, 1:2, 0:self%Ni+1)        !< Reconstructed primitive variables.
-  real(R_P)                             :: C(1:2, 1-self%Ng:-1+self%Ng, 1:self%Ns+2)       !< Pseudo characteristic variables.
-  real(R_P)                             :: CR(1:self%Ns+2, 1:2)                            !< Pseudo characteristic reconst. vars.
-  real(R_P)                             :: Pm(1:self%Np, 1:2)                              !< Mean of primitive variables.
-  real(R_P)                             :: LPm(1:self%Ns+2, 1:self%Ns+2, 1:2)              !< Mean left eigenvectors matrix.
-  real(R_P)                             :: RPm(1:self%Ns+2, 1:self%Ns+2, 1:2)              !< Mean right eigenvectors matrix.
-  integer(I_P)                          :: i                                               !< Counter.
-  integer(I_P)                          :: j                                               !< Counter.
-  integer(I_P)                          :: f                                               !< Counter.
-  integer(I_P)                          :: v                                               !< Counter.
+  class(euler_1D), intent(IN)    :: self                                            !< Euler field.
+  real(R_P),       intent(IN)    :: primitive(1:self%Np, 1-self%Ng:self%Ni+self%Ng) !< Primitive variables.
+  real(R_P),       intent(INOUT) :: r_primitive(1:self%Np, 1:2, 0:self%Ni+1)        !< Reconstructed primitive variables.
+  real(R_P)                      :: C(1:2, 1-self%Ng:-1+self%Ng, 1:self%Ns+2)       !< Pseudo characteristic variables.
+  real(R_P)                      :: CR(1:self%Ns+2, 1:2)                            !< Pseudo characteristic reconst. vars.
+  real(R_P)                      :: Pm(1:self%Np, 1:2)                              !< Mean of primitive variables.
+  real(R_P)                      :: LPm(1:self%Ns+2, 1:self%Ns+2, 1:2)              !< Mean left eigenvectors matrix.
+  real(R_P)                      :: RPm(1:self%Ns+2, 1:self%Ns+2, 1:2)              !< Mean right eigenvectors matrix.
+  integer(I_P)                   :: i                                               !< Counter.
+  integer(I_P)                   :: j                                               !< Counter.
+  integer(I_P)                   :: f                                               !< Counter.
+  integer(I_P)                   :: v                                               !< Counter.
   !--------------------------------------------------------------------------------------------------------------------------------
 
   !--------------------------------------------------------------------------------------------------------------------------------
-  !$OMP PARALLEL PRIVATE(i, j, f, v, Pm, LPm, RPm, C, CR) SHARED(self, primitive, r_primitive)
   select case(self%ord)
   case(1) ! 1st order piecewise constant reconstruction
-    !$OMP DO
     do i=0, self%Ni+1
       r_primitive(:, 1, i) = primitive(:, i)
       r_primitive(:, 2, i) = r_primitive(:, 1, i)
     enddo
   case(3, 5, 7) ! 3rd, 5th or 7th order WENO reconstruction
-    !$OMP DO
     do i=0, self%Ni+1
       ! trasform primitive variables to pseudo charteristic ones
       do f=1, 2
@@ -752,7 +765,6 @@ contains
       enddo
     enddo
   endselect
-  !$OMP END PARALLEL
   return
   !--------------------------------------------------------------------------------------------------------------------------------
   contains
@@ -817,23 +829,23 @@ contains
   !---------------------------------------------------------------------------------------------------------------------------------
   !< Solve the Riemann problem between the state $1$ and $4$ using the (local) Lax Friedrichs (Rusanov) solver.
   !---------------------------------------------------------------------------------------------------------------------------------
-  class(euler_1D_openmp), intent(IN)  :: self         !< Euler field.
-  real(R_P),              intent(IN)  :: p1           !< Pressure of state 1.
-  real(R_P),              intent(IN)  :: r1           !< Density of state 1.
-  real(R_P),              intent(IN)  :: u1           !< Velocity of state 1.
-  real(R_P),              intent(IN)  :: g1           !< Specific heats ratio of state 1.
-  real(R_P),              intent(IN)  :: p4           !< Pressure of state 4.
-  real(R_P),              intent(IN)  :: r4           !< Density of state 4.
-  real(R_P),              intent(IN)  :: u4           !< Velocity of state 4.
-  real(R_P),              intent(IN)  :: g4           !< Specific heats ratio of state 4.
-  real(R_P),              intent(OUT) :: F(1:self%Nc) !< Resulting fluxes.
-  real(R_P)                           :: F1(1:3)      !< State 1 fluxes.
-  real(R_P)                           :: F4(1:3)      !< State 4 fluxes.
-  real(R_P)                           :: u            !< Velocity of the intermediate states.
-  real(R_P)                           :: p            !< Pressure of the intermediate states.
-  real(R_P)                           :: S1           !< Maximum wave speed of state 1 and 4.
-  real(R_P)                           :: S4           !< Maximum wave speed of state 1 and 4.
-  real(R_P)                           :: lmax         !< Maximum wave speed estimation.
+  class(euler_1D), intent(IN)  :: self         !< Euler field.
+  real(R_P),       intent(IN)  :: p1           !< Pressure of state 1.
+  real(R_P),       intent(IN)  :: r1           !< Density of state 1.
+  real(R_P),       intent(IN)  :: u1           !< Velocity of state 1.
+  real(R_P),       intent(IN)  :: g1           !< Specific heats ratio of state 1.
+  real(R_P),       intent(IN)  :: p4           !< Pressure of state 4.
+  real(R_P),       intent(IN)  :: r4           !< Density of state 4.
+  real(R_P),       intent(IN)  :: u4           !< Velocity of state 4.
+  real(R_P),       intent(IN)  :: g4           !< Specific heats ratio of state 4.
+  real(R_P),       intent(OUT) :: F(1:self%Nc) !< Resulting fluxes.
+  real(R_P)                    :: F1(1:3)      !< State 1 fluxes.
+  real(R_P)                    :: F4(1:3)      !< State 4 fluxes.
+  real(R_P)                    :: u            !< Velocity of the intermediate states.
+  real(R_P)                    :: p            !< Pressure of the intermediate states.
+  real(R_P)                    :: S1           !< Maximum wave speed of state 1 and 4.
+  real(R_P)                    :: S4           !< Maximum wave speed of state 1 and 4.
+  real(R_P)                    :: lmax         !< Maximum wave speed estimation.
   !---------------------------------------------------------------------------------------------------------------------------------
 
   !---------------------------------------------------------------------------------------------------------------------------------
@@ -875,7 +887,7 @@ contains
   !---------------------------------------------------------------------------------------------------------------------------------
   !< Destroy field.
   !---------------------------------------------------------------------------------------------------------------------------------
-  type(euler_1D_openmp), intent(INOUT) :: self !< Euler field.
+  type(euler_1D), intent(INOUT) :: self !< Euler field.
   !---------------------------------------------------------------------------------------------------------------------------------
 
   !---------------------------------------------------------------------------------------------------------------------------------
@@ -1023,4 +1035,4 @@ contains
   return
   !---------------------------------------------------------------------------------------------------------------------------------
   endfunction H
-endmodule type_euler_1D_openmp
+endmodule type_euler_1D
