@@ -147,6 +147,7 @@ type, extends(integrand) :: euler_1D_openmp
     procedure, pass(self), public :: dt => compute_dt !< Compute the current time step, by means of CFL condition.
     ! ADT integrand deferred methods
     procedure, pass(self), public :: t => dEuler_dt                                       !< Time derivative, residuals function.
+    procedure, pass(lhs),  public :: local_error => euler_local_error                     !<||euler-euler||.
     procedure, pass(lhs),  public :: integrand_multiply_integrand => euler_multiply_euler !< Euler * Euler operator.
     procedure, pass(lhs),  public :: integrand_multiply_real => euler_multiply_real       !< Euler * real operator.
     procedure, pass(rhs),  public :: real_multiply_integrand => real_multiply_euler       !< Real * Euler operator.
@@ -356,6 +357,36 @@ contains
   return
   !---------------------------------------------------------------------------------------------------------------------------------
   endfunction dEuler_dt
+
+  function euler_local_error(lhs, rhs) result(error)
+  !---------------------------------------------------------------------------------------------------------------------------------
+  !< Estimate local truncation error between 2 euler approximations.
+  !<
+  !< The estimation is done by norm L2 of U:
+  !<
+  !< $$ error = \sqrt{ \sum_i{\sum_i{ \frac{(lhs\%U_i - rhs\%U_i)^2}{lhs\%U_i^2} }} } $$
+  !---------------------------------------------------------------------------------------------------------------------------------
+  class(euler_1D_openmp), intent(IN) :: lhs   !< Left hand side.
+  class(integrand),       intent(IN) :: rhs   !< Right hand side.
+  real(R_P)                          :: error !< Error estimation.
+  integer(I_P)                       :: i     !< Space counter.
+  integer(I_P)                       :: v     !< Variables counter.
+  !---------------------------------------------------------------------------------------------------------------------------------
+
+  !---------------------------------------------------------------------------------------------------------------------------------
+  select type(rhs)
+  class is (euler_1D_openmp)
+    error = 0._R_P
+    do i=1, lhs%Ni
+      do v=1, lhs%Nc
+        error = error + (lhs%U(v, i) - rhs%U(v, i))**2/lhs%U(v, i)**2
+      enddo
+    enddo
+    error = sqrt(error)
+  endselect
+  return
+  !---------------------------------------------------------------------------------------------------------------------------------
+  endfunction euler_local_error
 
   function euler_multiply_euler(lhs, rhs) result(opr)
   !---------------------------------------------------------------------------------------------------------------------------------

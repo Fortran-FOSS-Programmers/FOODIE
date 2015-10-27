@@ -164,6 +164,8 @@
       
       <a class="list-group-item" href="../sourcefile/burgers.f90.html">burgers.f90</a>
       
+      <a class="list-group-item" href="../sourcefile/euler-1d-caf.f90.html">euler-1D-caf.f90</a>
+      
       <a class="list-group-item" href="../sourcefile/euler-1d-openmp.f90.html">euler-1D-openmp.f90</a>
       
       <a class="list-group-item" href="../sourcefile/euler-1d-openmp_no_foodie.f90.html">euler-1D-openmp_no_foodie.f90</a>
@@ -198,11 +200,15 @@
       
       <a class="list-group-item" href="../sourcefile/type_burgers.f90.html">type_burgers.f90</a>
       
+      <a class="list-group-item" href="../sourcefile/type_euler-1d-caf.f90.html">type_euler-1D-caf.f90</a>
+      
       <a class="list-group-item" href="../sourcefile/type_euler-1d-openmp.f90.html">type_euler-1D-openmp.f90</a>
       
       <a class="list-group-item" href="../sourcefile/type_euler-1d-openmp.f90%7E2.html">type_euler-1D-openmp.f90</a>
       
       <a class="list-group-item" href="../sourcefile/type_euler-1d.f90.html">type_euler-1D.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/type_euler-1d.f90%7E2.html">type_euler-1D.f90</a>
       
       <a class="list-group-item" href="../sourcefile/type_lorenz.f90.html">type_lorenz.f90</a>
       
@@ -271,14 +277,14 @@
 
 <span class="c">!-----------------------------------------------------------------------------------------------------------------------------------</span>
 <span class="c">! setting Command Line Interface</span>
-<span class="k">call </span><span class="n">cli</span><span class="p">%</span><span class="n">init</span><span class="p">(</span><span class="n">progname</span>    <span class="o">=</span> <span class="s1">&#39;euler-1D-openmp&#39;</span><span class="p">,</span>                                                       <span class="p">&amp;</span>
+<span class="k">call </span><span class="n">cli</span><span class="p">%</span><span class="n">init</span><span class="p">(</span><span class="n">progname</span>    <span class="o">=</span> <span class="s1">&#39;euler-1D-openmp-no-foodie&#39;</span><span class="p">,</span>                                             <span class="p">&amp;</span>
               <span class="n">authors</span>     <span class="o">=</span> <span class="s1">&#39;Fortran-FOSS-Programmers&#39;</span><span class="p">,</span>                                              <span class="p">&amp;</span>
               <span class="n">license</span>     <span class="o">=</span> <span class="s1">&#39;GNU GPLv3&#39;</span><span class="p">,</span>                                                             <span class="p">&amp;</span>
-              <span class="n">description</span> <span class="o">=</span> <span class="s1">&#39;Test FOODIE library on 1D Euler equations integration, OpenMP enabled&#39;</span><span class="p">,</span> <span class="p">&amp;</span>
-              <span class="n">examples</span>    <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;euler-1D --results  &quot;</span><span class="p">,</span>                                                 <span class="p">&amp;</span>
-                             <span class="s2">&quot;euler-1D -r -t -v -p&quot;</span><span class="p">,</span>                                                 <span class="p">&amp;</span>
-                             <span class="s2">&quot;euler-1D            &quot;</span><span class="p">,</span>                                                 <span class="p">&amp;</span>
-                             <span class="s2">&quot;euler-1D --plots -r &quot;</span><span class="p">])</span>
+              <span class="n">description</span> <span class="o">=</span> <span class="s1">&#39;Test 1D Euler equations integration without FOODIE, OpenMP enabled&#39;</span><span class="p">,</span>    <span class="p">&amp;</span>
+              <span class="n">examples</span>    <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;euler-1D-openmp-no-foodie --results  &quot;</span><span class="p">,</span>                                <span class="p">&amp;</span>
+                             <span class="s2">&quot;euler-1D-openmp-no-foodie -r -t -v -p&quot;</span><span class="p">,</span>                                <span class="p">&amp;</span>
+                             <span class="s2">&quot;euler-1D-openmp-no-foodie            &quot;</span><span class="p">,</span>                                <span class="p">&amp;</span>
+                             <span class="s2">&quot;euler-1D-openmp-no-foodie --plots -r &quot;</span><span class="p">])</span>
 <span class="k">call </span><span class="n">cli</span><span class="p">%</span><span class="n">add</span><span class="p">(</span><span class="n">switch</span><span class="o">=</span><span class="s1">&#39;--Ni&#39;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s1">&#39;Number finite volumes used&#39;</span><span class="p">,</span> <span class="n">required</span><span class="o">=</span><span class="p">.</span><span class="n">false</span><span class="p">.,</span> <span class="n">act</span><span class="o">=</span><span class="s1">&#39;store&#39;</span><span class="p">,</span> <span class="n">def</span><span class="o">=</span><span class="s1">&#39;100&#39;</span><span class="p">,</span> <span class="n">error</span><span class="o">=</span><span class="n">error</span><span class="p">)</span>
 <span class="k">call </span><span class="n">cli</span><span class="p">%</span><span class="n">add</span><span class="p">(</span><span class="n">switch</span><span class="o">=</span><span class="s1">&#39;--steps&#39;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s1">&#39;Number time steps performed&#39;</span><span class="p">,</span> <span class="n">required</span><span class="o">=</span><span class="p">.</span><span class="n">false</span><span class="p">.,</span> <span class="n">act</span><span class="o">=</span><span class="s1">&#39;store&#39;</span><span class="p">,</span> <span class="n">def</span><span class="o">=</span><span class="s1">&#39;10&#39;</span><span class="p">,</span> <span class="n">error</span><span class="o">=</span><span class="n">error</span><span class="p">)</span>
 <span class="k">call </span><span class="n">cli</span><span class="p">%</span><span class="n">add</span><span class="p">(</span><span class="n">switch</span><span class="o">=</span><span class="s1">&#39;--results&#39;</span><span class="p">,</span> <span class="n">switch_ab</span><span class="o">=</span><span class="s1">&#39;-r&#39;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s1">&#39;Save results&#39;</span><span class="p">,</span> <span class="n">required</span><span class="o">=</span><span class="p">.</span><span class="n">false</span><span class="p">.,</span> <span class="n">act</span><span class="o">=</span><span class="s1">&#39;store_true&#39;</span><span class="p">,</span> <span class="n">def</span><span class="o">=</span><span class="s1">&#39;.false.&#39;</span><span class="p">,</span> <span class="p">&amp;</span>

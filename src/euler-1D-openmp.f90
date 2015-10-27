@@ -60,10 +60,10 @@ call cli%init(progname    = 'euler-1D-openmp',                                  
               authors     = 'Fortran-FOSS-Programmers',                                              &
               license     = 'GNU GPLv3',                                                             &
               description = 'Test FOODIE library on 1D Euler equations integration, OpenMP enabled', &
-              examples    = ["euler-1D --results  ",                                                 &
-                             "euler-1D -r -t -v -p",                                                 &
-                             "euler-1D            ",                                                 &
-                             "euler-1D --plots -r "])
+              examples    = ["euler-1D-openmp --results  ",                                          &
+                             "euler-1D-openmp -r -t -v -p",                                          &
+                             "euler-1D-openmp            ",                                          &
+                             "euler-1D-openmp --plots -r "])
 call cli%add(switch='--Ni', help='Number finite volumes used', required=.false., act='store', def='100', error=error)
 call cli%add(switch='--steps', help='Number time steps performed', required=.false., act='store', def='10', error=error)
 call cli%add(switch='--results', switch_ab='-r', help='Save results', required=.false., act='store_true', def='.false.', &

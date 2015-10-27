@@ -51,14 +51,14 @@ integer(I_P)                      :: steps                 !< Time steps counter
 
 !-----------------------------------------------------------------------------------------------------------------------------------
 ! setting Command Line Interface
-call cli%init(progname    = 'euler-1D-openmp',                                                       &
+call cli%init(progname    = 'euler-1D-openmp-no-foodie',                                             &
               authors     = 'Fortran-FOSS-Programmers',                                              &
               license     = 'GNU GPLv3',                                                             &
-              description = 'Test FOODIE library on 1D Euler equations integration, OpenMP enabled', &
-              examples    = ["euler-1D --results  ",                                                 &
-                             "euler-1D -r -t -v -p",                                                 &
-                             "euler-1D            ",                                                 &
-                             "euler-1D --plots -r "])
+              description = 'Test 1D Euler equations integration without FOODIE, OpenMP enabled',    &
+              examples    = ["euler-1D-openmp-no-foodie --results  ",                                &
+                             "euler-1D-openmp-no-foodie -r -t -v -p",                                &
+                             "euler-1D-openmp-no-foodie            ",                                &
+                             "euler-1D-openmp-no-foodie --plots -r "])
 call cli%add(switch='--Ni', help='Number finite volumes used', required=.false., act='store', def='100', error=error)
 call cli%add(switch='--steps', help='Number time steps performed', required=.false., act='store', def='10', error=error)
 call cli%add(switch='--results', switch_ab='-r', help='Save results', required=.false., act='store_true', def='.false.', &

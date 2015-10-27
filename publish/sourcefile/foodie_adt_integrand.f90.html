@@ -164,6 +164,8 @@
       
       <a class="list-group-item" href="../sourcefile/burgers.f90.html">burgers.f90</a>
       
+      <a class="list-group-item" href="../sourcefile/euler-1d-caf.f90.html">euler-1D-caf.f90</a>
+      
       <a class="list-group-item" href="../sourcefile/euler-1d-openmp.f90.html">euler-1D-openmp.f90</a>
       
       <a class="list-group-item" href="../sourcefile/euler-1d-openmp_no_foodie.f90.html">euler-1D-openmp_no_foodie.f90</a>
@@ -198,11 +200,15 @@
       
       <a class="list-group-item" href="../sourcefile/type_burgers.f90.html">type_burgers.f90</a>
       
+      <a class="list-group-item" href="../sourcefile/type_euler-1d-caf.f90.html">type_euler-1D-caf.f90</a>
+      
       <a class="list-group-item" href="../sourcefile/type_euler-1d-openmp.f90.html">type_euler-1D-openmp.f90</a>
       
       <a class="list-group-item" href="../sourcefile/type_euler-1d-openmp.f90%7E2.html">type_euler-1D-openmp.f90</a>
       
       <a class="list-group-item" href="../sourcefile/type_euler-1d.f90.html">type_euler-1D.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/type_euler-1d.f90%7E2.html">type_euler-1D.f90</a>
       
       <a class="list-group-item" href="../sourcefile/type_lorenz.f90.html">type_lorenz.f90</a>
       
@@ -237,6 +243,9 @@
 <span class="c">!-----------------------------------------------------------------------------------------------------------------------------------</span>
 <span class="k">type</span><span class="p">,</span> <span class="k">abstract</span> <span class="kd">::</span> <span class="n">integrand</span>
   <span class="c">!&lt; Abstract type for building FOODIE ODE integrators.</span>
+<span class="cp">#ifdef CAF</span>
+  <span class="k">class</span><span class="p">(</span><span class="o">*</span><span class="p">),</span> <span class="k">allocatable</span> <span class="kd">::</span> <span class="n">dummy_to_allow_extensions</span><span class="p">[:]</span> <span class="c">!&lt; Dummy member to allow concrete extensions with coarray members.</span>
+<span class="cp">#endif</span>
   <span class="k">contains</span>
     <span class="c">! public deferred procedures that concrete integrand-field must implement</span>
     <span class="k">procedure</span><span class="p">(</span><span class="n">time_derivative</span><span class="p">),</span>      <span class="k">pass</span><span class="p">(</span><span class="n">self</span><span class="p">),</span> <span class="k">deferred</span><span class="p">,</span> <span class="k">public</span> <span class="kd">::</span> <span class="n">t</span> <span class="c">!&lt; Time derivative, residuals.</span>

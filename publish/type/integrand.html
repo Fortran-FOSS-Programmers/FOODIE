@@ -127,6 +127,16 @@
   
   
   
+  <div class="panel panel-primary">
+    <div class="panel-heading text-left"><h3 class="panel-title">Variables</h3></div>
+    <div class="list-group">
+      
+      <a class="list-group-item" href="../type/integrand.html#variable-dummy_to_allow_extensions">dummy_to_allow_extensions</a>
+      
+    </div>
+  </div>
+  
+  
   
   
   
@@ -203,6 +213,10 @@
       
       <a class="list-group-item" href="../type/euler_1d.html">euler_1D</a>
       
+      <a class="list-group-item" href="../type/euler_1d%7E2.html">euler_1D</a>
+      
+      <a class="list-group-item" href="../type/euler_1d_caf.html">euler_1D_caf</a>
+      
       <a class="list-group-item" href="../type/euler_1d_openmp.html">euler_1D_openmp</a>
       
       <a class="list-group-item" href="../type/euler_1d_openmp%7E2.html">euler_1D_openmp</a>
@@ -235,6 +249,38 @@
     <p>Abstract type for building FOODIE ODE integrators.</p>
     <br>
     
+    
+    <section>
+    <h2>Components</h2>
+    
+<table class="table table-striped varlist">
+<thead><tr><th>Type</th><th>Visibility</th>
+
+<th>Attributes</th><th></th><th>Name</th><th></th><th>Initial</th><th></th></thead>
+
+
+
+<tbody>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-dummy_to_allow_extensions"></span>class(*),</td>
+  
+  <td>public,</td>
+  <td>allocatable</td><td>::</td>
+  <td><strong>dummy_to_allow_extensions</strong>[:]</td><td></td><td></td><td><p>Dummy member to allow concrete extensions with coarray members.</p></td>
+  
+</tr>
+
+</tbody>
+</table>
+
+    </section>
+    <br>
     
     
     
@@ -1366,6 +1412,9 @@ pass(lhs) deferred <a href='../type/integrand.html#boundprocedure-assign_integra
     <h2><span class="anchor" id="src"></span>Source Code</h2>
     <div class="highlight"><pre><span class="k">type</span><span class="p">,</span> <span class="k">abstract</span> <span class="kd">::</span> <span class="n">integrand</span>
   <span class="c">!&lt; Abstract type for building FOODIE ODE integrators.</span>
+<span class="cp">#ifdef CAF</span>
+  <span class="k">class</span><span class="p">(</span><span class="o">*</span><span class="p">),</span> <span class="k">allocatable</span> <span class="kd">::</span> <span class="n">dummy_to_allow_extensions</span><span class="p">[:]</span> <span class="c">!&lt; Dummy member to allow concrete extensions with coarray members.</span>
+<span class="cp">#endif</span>
   <span class="k">contains</span>
     <span class="c">! public deferred procedures that concrete integrand-field must implement</span>
     <span class="k">procedure</span><span class="p">(</span><span class="n">time_derivative</span><span class="p">),</span>      <span class="k">pass</span><span class="p">(</span><span class="n">self</span><span class="p">),</span> <span class="k">deferred</span><span class="p">,</span> <span class="k">public</span> <span class="kd">::</span> <span class="n">t</span> <span class="c">!&lt; Time derivative, residuals.</span>
