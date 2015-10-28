@@ -311,7 +311,7 @@ contains
   !< Test explicit embedded Runge-Kutta class of ODE solvers.
   !---------------------------------------------------------------------------------------------------------------------------------
   integer(I_P), intent(IN)      :: stages            !< Number of stages used: if negative all RK solvers are used.
-  integer, parameter            :: rk_stages=7       !< Runge-Kutta stages number.
+  integer, parameter            :: rk_stages=9       !< Runge-Kutta stages number.
   real(R_P), allocatable        :: solution(:,:)     !< Solution at each time step.
   integer(I_P)                  :: s                 !< RK stages counter.
   integer(I_P)                  :: stages_range(1:2) !< Stages used.
@@ -326,12 +326,13 @@ contains
   print "(A)", 'Integrating Oscillation equations by means of embedded Runge-Kutta class of solvers'
   stages_range = [1, rk_stages] ; if (stages>0) stages_range = [stages, stages]
   do s=stages_range(1), stages_range(2)
-    if (s==1) cycle ! 1 stages not yet implemented
-    if (s==2) cycle ! 2 stages not yet implemented
+    if (s==1) cycle ! 1 stages not allowed
+    if (s==2) cycle ! 2 stages not suited for test
     if (s==3) cycle ! 3 stages not yet implemented
     if (s==4) cycle ! 4 stages not yet implemented
     if (s==5) cycle ! 5 stages not yet implemented
     if (s==6) cycle ! 6 stages not yet implemented
+    if (s==8) cycle ! 8 stages not yet implemented
     print "(A)", ' RK-'//trim(str(.true.,s))
     title = 'Oscillation equation integration, explicit embedded Runge-Kutta, t='//str(n=t_final)//' steps='//trim(str(.true., s))
     call emd_rk_solver(stages=s, tol=tolerance, solution=solution, last_step=last_step)
@@ -779,7 +780,7 @@ contains
                                                       0.000001_R_P, &
                                                       0.0000001_R_P] !< Tolerances for embedded RK solvers.
   integer, parameter            :: ab_steps=4                        !< Adams-Bashforth steps number.
-  integer, parameter            :: emd_rk_stages=7                   !< Embedded Runge-Kutta stages number.
+  integer, parameter            :: emd_rk_stages=9                   !< Embedded Runge-Kutta stages number.
   integer, parameter            :: tvd_rk_stages=5                   !< TVD/SSP Runge-Kutta stages number.
   integer, parameter            :: ls_rk_stages=14                   !< Low storage Runge-Kutta stages number.
   integer(I_P)                  :: s                                 !< Steps/stages counter.
@@ -880,12 +881,13 @@ contains
     solver = 'emd-runge-kutta'
     call init(output=output, solution=solution)
     do s=1, emd_rk_stages
-      if (s==1) cycle ! 1 stages not yet implemented
-      if (s==2) cycle ! 2 stages not yet implemented
+      if (s==1) cycle ! 1 stages not allowed
+      if (s==2) cycle ! 2 stages not suited for test
       if (s==3) cycle ! 3 stages not yet implemented
       if (s==4) cycle ! 4 stages not yet implemented
       if (s==5) cycle ! 5 stages not yet implemented
       if (s==6) cycle ! 6 stages not yet implemented
+      if (s==8) cycle ! 8 stages not yet implemented
       title = 'Oscillation equation integration, explicit embedded Runge-Kutta t='//str(n=t_final)//' stages='//trim(str(.true., s))
       call emd_rk_solver(stages=s, tol=tolerances(d), solution=solution, last_step=last_step)
       Dt_mean(d) = t_final/real(last_step, kind=R_P)
@@ -894,12 +896,13 @@ contains
     enddo
   enddo
   do s=1, emd_rk_stages
-    if (s==1) cycle ! 1 stages not yet implemented
-    if (s==2) cycle ! 2 stages not yet implemented
+    if (s==1) cycle ! 1 stages not allowed
+    if (s==2) cycle ! 2 stages not suited for test
     if (s==3) cycle ! 3 stages not yet implemented
     if (s==4) cycle ! 4 stages not yet implemented
     if (s==5) cycle ! 5 stages not yet implemented
     if (s==6) cycle ! 6 stages not yet implemented
+    if (s==8) cycle ! 8 stages not yet implemented
     do d=1, NDt-1
       emd_rk_orders(:, s, d) = estimate_orders(solver_error=emd_rk_errors(:, s, d:d+1), Dt_used=Dt_mean(d:d+1))
     enddo

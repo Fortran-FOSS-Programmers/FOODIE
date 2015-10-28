@@ -1,7 +1,7 @@
-!< FOODIE integrator: provide an explicit class of embedded Runge-Kutta schemes, from 1st to 4th order accurate.
+!< FOODIE integrator: provide an explicit class of embedded Runge-Kutta schemes, from 2nd to 6th order accurate.
 module foodie_integrator_emd_runge_kutta
 !-----------------------------------------------------------------------------------------------------------------------------------
-!< FOODIE integrator: provide an explicit class of embedded Runge-Kutta schemes, from 1st to 4th order accurate.
+!< FOODIE integrator: provide an explicit class of embedded Runge-Kutta schemes, from 2nd to 6th order accurate.
 !<
 !< The integrators provided have the embedded pairs property allowing for automatic step size control.
 !< The schemes are explicit and defined through the extended Butcher's table syntax, see[1] .
@@ -34,8 +34,8 @@ module foodie_integrator_emd_runge_kutta
 !<  .          | .                 .                   .        .
 !<  gamma^{Ns} | alpha^{Ns,1}      alpha^{Ns,2}      ...        alpha^{Ns,Ns}
 !< ------------|-------------------------------------------------------------
-!<             | beta_p^1          beta_p^2          ...        beta_p^{Ns}
 !<             | beta_{p+1}^1      beta_{p+1}^2      ...        beta_{p+1}^{Ns}
+!<             | beta_p^1          beta_p^2          ...        beta_p^{Ns}
 !<```
 !<
 !< Because only explicit schemes are considered the Butcher table reduces to diagonal matrix:
@@ -48,8 +48,8 @@ module foodie_integrator_emd_runge_kutta
 !<  .          | .                 .                   .        .
 !<  gamma^{Ns} | alpha^{Ns,1}      alpha^{Ns,2}      ...        0
 !< ------------|-------------------------------------------------------------
-!<             | beta_p^1          beta_p^2          ...        beta_p^{Ns}
 !<             | beta_{p+1}^1      beta_{p+1}^2      ...        beta_{p+1}^{Ns}
+!<             | beta_p^1          beta_p^2          ...        beta_p^{Ns}
 !<```
 !<
 !< Moreover the following relation always holds:
@@ -57,8 +57,18 @@ module foodie_integrator_emd_runge_kutta
 !<
 !< The different schemes are selected accordingly to the number of stages used. Currently the following schemes are available:
 !<
+!<##### 2 stages, 2th order
+!< This scheme is due to Heun-Euler.
+!<```
+!<  0  | 0
+!<  1  | 1     0
+!< ----------------
+!<     | 1/2   1/2
+!<     | 1      0
+!<```
+!<
 !<##### 7 stages, 4th order
-!< This scheme is Dormand and Prince scheme, see [1].
+!< This scheme is due to Dormand and Prince, see [1].
 !<```
 !<  0    | 0             0            0             0            0              0          0
 !<  1/5  | 1/5           0            0             0            0              0          0
@@ -68,14 +78,47 @@ module foodie_integrator_emd_runge_kutta
 !<  1    | 9017/3168    -355/33       46732/5247    49/176      -5103/18656     0          0
 !<  1    | 35/384        0            500/1113      125/192     -2187/6784      11/84      0
 !< --------------------------------------------------------------------------------------------
-!<       | 35/384        0            500/1113      125/192     -2187/6784      11/84      0
 !<       | 5179/57600    0            7571/16695    393/640     -92097/339200   187/2100   1/40
+!<       | 35/384        0            500/1113      125/192     -2187/6784      11/84      0
+!<```
+!<
+!<##### 9 stages, 6th order
+!< This scheme is due to Calvo et al., see [2].
+!<```
+!<  0                 | 0                     0                      0                       0
+!<  2/15              | 2/15                  0                      0                       0
+!<  1/5               | 1/20                  3/20                   0                       0
+!<  3/10              | 3/40                  0                      9/40                    0
+!<  14/25             | 86727015/196851553    -60129073/52624712     957436434/1378352377    83886832/147842441
+!<  19/25             | -86860849/45628967    111022885/25716487     108046682/101167669     -141756746/36005461
+!<  35226607/35688279 | 77759591/16096467     -49252809/6452555      -381680111/51572984     879269579/66788831
+!<  1                 | 237564263/39280295    -100523239/10677940    -265574846/27330247     317978411/18988713
+!<  1                 | 17572349/289262523    0                      57513011/201864250      15587306/354501571
+!< --------------------------------------------------------------------------------------------------------------
+!<                    | 17572349/289262523    0                      57513011/201864250      15587306/354501571
+!<                    | 15231665/510830334    0                      59452991/116050448      -28398517/122437738
+!< ...continued...
+!<  0                 | ...    0                      0                      0                      0                      0
+!<  2/15              | ...    0                      0                      0                      0                      0
+!<  1/5               | ...    0                      0                      0                      0                      0
+!<  3/10              | ...    0                      0                      0                      0                      0
+!<  14/25             | ...    0                      0                      0                      0                      0
+!<  19/25             | ...    73139862/60170633      0                      0                      0                      0
+!<  35226607/35688279 | ...    -90453121/33722162     111179552/157155827    0                      0                      0
+!<  1                 | ...    -124494385/35453627    86822444/100138635     -12873523/724232625    0                      0
+!<  1                 | ...    71783021/234982865     29672000/180480167     65567621/127060952     -79074570/210557597    0
+!< ------------------------------------------------------------------------------------------------------------------------------
+!<                    | ...    71783021/234982865     29672000/180480167     65567621/127060952     -79074570/210557597    0
+!<                    | ...    56673824/137010559     68003849/426673583     7097631/37564021       -71226429/583093742    1/20
 !<```
 !<
 !<#### Bibliography
 !<
-!< [1] *A family of embedded Runge-Kutta formulae*, Dormand, J. R.; Prince, P. J. (1980), , Journal of Computational and
+!< [1] *A family of embedded Runge-Kutta formulae*, Dormand, J. R., Prince, P. J. (1980), Journal of Computational and
 !< Applied Mathematics 6 (1): 19--26, doi:10.1016/0771-050X(80)90013-3
+!<
+!< [2] *A New Embedded Pair of Runge-Kutta Formulas of orders 5 and 6*, M. Calvo, J.I. Montijano, L. Randez, Computers & Mathematics
+!< with Applications, Volume 20, Issue 1, 1990, Pages 15--24, ISSN 0898-1221, http://dx.doi.org/10.1016/0898-1221(90)90064-Q.
 !-----------------------------------------------------------------------------------------------------------------------------------
 
 !-----------------------------------------------------------------------------------------------------------------------------------
@@ -131,6 +174,16 @@ contains
   if (allocated(self%alph)) deallocate(self%alph) ; allocate(self%alph(1:stages, 1:stages)) ; self%alph = 0._R_P
   if (allocated(self%gamm)) deallocate(self%gamm) ; allocate(self%gamm(          1:stages)) ; self%gamm = 0._R_P
   select case(stages)
+  case(2)
+    ! HERK(2,2)
+    self%pp1_inv = 1._R_P/(2._R_P + 1._R_P)
+
+    self%beta(1, 1) =  0.5_R_P ; self%beta(1, 2) =  5._R_P
+    self%beta(2, 1) =  1._R_P  ; self%beta(2, 2) =  0._R_P
+
+    self%alph(2, 1) = 1._R_P
+
+    self%gamm(2) = 1._R_P
   case(7)
     ! DPRK(7,4)
     self%pp1_inv = 1._R_P/(4._R_P + 1._R_P)
@@ -160,6 +213,52 @@ contains
     self%gamm(5) = 8._R_P/9._R_P
     self%gamm(6) = 1._R_P
     self%gamm(7) = 1._R_P
+  case(9)
+    ! CMRK(9,6)
+    self%pp1_inv = 1._R_P/(6._R_P + 1._R_P)
+
+    self%beta(1, 1) = 17572349._R_P/289262523._R_P  ; self%beta(1, 2) = 15231665._R_P/510830334._R_P
+    self%beta(2, 1) = 0._R_P                        ; self%beta(2, 2) = 0._R_P
+    self%beta(3, 1) = 57513011._R_P/201864250._R_P  ; self%beta(3, 2) = 59452991._R_P/116050448._R_P
+    self%beta(4, 1) = 15587306._R_P/354501571._R_P  ; self%beta(4, 2) = -28398517._R_P/122437738._R_P
+    self%beta(5, 1) = 71783021._R_P/234982865._R_P  ; self%beta(5, 2) = 56673824._R_P/137010559._R_P
+    self%beta(6, 1) = 29672000._R_P/180480167._R_P  ; self%beta(6, 2) = 68003849._R_P/426673583._R_P
+    self%beta(7, 1) = 65567621._R_P/127060952._R_P  ; self%beta(7, 2) = 7097631._R_P/37564021._R_P
+    self%beta(8, 1) = -79074570._R_P/210557597._R_P ; self%beta(8, 2) = -71226429._R_P/583093742._R_P
+    self%beta(9, 1) = 0._R_P                        ; self%beta(9, 2) = 1._R_P/20._R_P
+
+    self%alph(2, 1)=2._R_P/15._R_P
+    self%alph(3, 1)=1._R_P/20._R_P               ; self%alph(3, 2)=3._R_P/20._R_P
+    self%alph(4, 1)=3._R_P/40._R_P               ; self%alph(4, 2)=0._R_P
+    self%alph(5, 1)=86727015._R_P/196851553._R_P ; self%alph(5, 2)=-60129073._R_P/52624712._R_P
+    self%alph(6, 1)=-86860849._R_P/45628967._R_P ; self%alph(6, 2)=111022885._R_P/25716487._R_P
+    self%alph(7, 1)=77759591._R_P/16096467._R_P  ; self%alph(7, 2)=-49252809._R_P/6452555._R_P
+    self%alph(8, 1)=237564263._R_P/39280295._R_P ; self%alph(8, 2)=-100523239._R_P/10677940._R_P
+    self%alph(9, 1)=17572349._R_P/289262523._R_P ; self%alph(9, 2)=0._R_P
+
+    self%alph(4, 3)=9._R_P/40._R_P
+    self%alph(5, 3)=957436434._R_P/1378352377._R_P ; self%alph(5, 4)=83886832._R_P/147842441._R_P
+    self%alph(6, 3)=108046682._R_P/101167669._R_P  ; self%alph(6, 4)=-141756746._R_P/36005461._R_P
+    self%alph(7, 3)=-381680111._R_P/51572984._R_P  ; self%alph(7, 4)=879269579._R_P/66788831._R_P
+    self%alph(8, 3)=-265574846._R_P/27330247._R_P  ; self%alph(8, 4)=317978411._R_P/18988713._R_P
+    self%alph(9, 3)=57513011._R_P/201864250._R_P   ; self%alph(9, 4)=15587306._R_P/354501571._R_P
+
+    self%alph(6, 5)=73139862._R_P/60170633._R_P
+    self%alph(7, 5)=-90453121._R_P/33722162._R_P  ; self%alph(7, 6)=111179552._R_P/157155827._R_P
+    self%alph(8, 5)=-124494385._R_P/35453627._R_P ; self%alph(8, 6)=86822444._R_P/100138635._R_P
+    self%alph(9, 5)=71783021._R_P/234982865._R_P  ; self%alph(9, 6)=29672000._R_P/180480167._R_P
+
+    self%alph(8, 7)=-12873523._R_P/724232625._R_P
+    self%alph(9, 7)=65567621._R_P/127060952._R_P ;self%alph(9, 8)=-79074570._R_P/210557597._R_P
+
+    self%gamm(2) = 2._R_P/15._R_P
+    self%gamm(3) = 1._R_P/5._R_P
+    self%gamm(4) = 3._R_P/10._R_P
+    self%gamm(5) = 14._R_P/25._R_P
+    self%gamm(6) = 19._R_P/25._R_P
+    self%gamm(7) = 35226607._R_P/35688279._R_P
+    self%gamm(8) = 1._R_P
+    self%gamm(9) = 1._R_P
   endselect
   return
   !---------------------------------------------------------------------------------------------------------------------------------
