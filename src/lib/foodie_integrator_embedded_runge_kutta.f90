@@ -67,6 +67,20 @@ module foodie_integrator_emd_runge_kutta
 !<     | 1      0
 !<```
 !<
+!<##### 6 stages, 5th order
+!< This scheme is due to Cash and Karp, see [3].
+!<```
+!<  0    | 0             0            0           0                0            0
+!<  1/5	 | 1/5           0            0           0                0            0
+!<  3/10 | 3/40	         9/40         0           0                0            0
+!<  3/5	 | 3/10	         -9/10	      6/5         0                0            0
+!<  1	   | -11/54	       5/2	        -70/27	    35/27            0            0
+!<  7/8	 | 1631/55296    175/512      575/13824   44275/110592     253/4096     0
+!< ----------------------------------------------------------------------------------------
+!<       | 37/378        0           250/621      125/594          0            512/1771
+!<       | 2825/27648    0           18575/48384  13525/55296      277/14336    1/4
+!<```
+!<
 !<##### 7 stages, 4th order
 !< This scheme is due to Dormand and Prince, see [1].
 !<```
@@ -115,10 +129,13 @@ module foodie_integrator_emd_runge_kutta
 !<#### Bibliography
 !<
 !< [1] *A family of embedded Runge-Kutta formulae*, Dormand, J. R., Prince, P. J. (1980), Journal of Computational and
-!< Applied Mathematics 6 (1): 19--26, doi:10.1016/0771-050X(80)90013-3
+!< Applied Mathematics 6 (1): 19--26, doi:10.1016/0771-050X(80)90013-3.
 !<
 !< [2] *A New Embedded Pair of Runge-Kutta Formulas of orders 5 and 6*, M. Calvo, J.I. Montijano, L. Randez, Computers & Mathematics
 !< with Applications, Volume 20, Issue 1, 1990, Pages 15--24, ISSN 0898-1221, http://dx.doi.org/10.1016/0898-1221(90)90064-Q.
+!<
+!< [3] *A variable order Runge-Kutta method for initial value problems with rapidly varying right-hand sides*, J. R. Cash,
+!< A. H. Karp, ACM Transactions on Mathematical Software, vol. 16,  pp. 201--222, 1990, doi:10.1145/79505.79507.
 !-----------------------------------------------------------------------------------------------------------------------------------
 
 !-----------------------------------------------------------------------------------------------------------------------------------
@@ -184,17 +201,42 @@ contains
     self%alph(2, 1) = 1._R_P
 
     self%gamm(2) = 1._R_P
+  case(6)
+    ! CKRK(6,5)
+    self%pp1_inv = 1._R_P/(5._R_P + 1._R_P)
+
+    self%beta(1, 1) = 37._R_P/378._R_P   ; self%beta(1, 2) = 2825._R_P/27648._R_P
+    self%beta(2, 1) = 0._R_P             ; self%beta(2, 2) = 0._R_P
+    self%beta(3, 1) = 250._R_P/621._R_P  ; self%beta(3, 2) = 18575._R_P/48384._R_P
+    self%beta(4, 1) = 125._R_P/594._R_P  ; self%beta(4, 2) = 13525._R_P/55296._R_P
+    self%beta(5, 1) = 0._R_P             ; self%beta(5, 2) = 277._R_P/14336._R_P
+    self%beta(6, 1) = 512._R_P/1771._R_P ; self%beta(6, 2) = 1._R_P/4._R_P
+
+    self%alph(2, 1)=1._R_P/5._R_P
+    self%alph(3, 1)=3._R_P/40._R_P	    ;self%alph(3, 2)= 9._R_P/40._R_P
+    self%alph(4, 1)=3._R_P/10._R_P	    ;self%alph(4, 2)= -9._R_P/10._R_P ;self%alph(4, 3)=6._R_P/5._R_P
+    self%alph(5, 1)=-11._R_P/54._R_P	  ;self%alph(5, 2)= 5._R_P/2._R_P	  ;self%alph(5, 3)=-70._R_P/27._R_P
+    self%alph(6, 1)=1631._R_P/55296._R_P;self%alph(6, 2)=175._R_P/512._R_P;self%alph(6, 3)=575._R_P/13824._R_P
+
+    self%alph(5, 4)=35._R_P/27._R_P
+    self%alph(6, 4)=44275._R_P/110592._R_P;self%alph(6, 5)=253._R_P/4096._R_P
+
+    self%gamm(2) = 1._R_P/5._R_P
+    self%gamm(3) = 3._R_P/10._R_P
+    self%gamm(4) = 3._R_P/5._R_P
+    self%gamm(5) = 1._R_P
+    self%gamm(6) = 7._R_P/8._R_P
   case(7)
     ! DPRK(7,4)
     self%pp1_inv = 1._R_P/(4._R_P + 1._R_P)
 
-    self%beta(1, 1) =   35._R_P/384._R_P    ; self%beta(1, 2) =  5179._R_P/57600._R_P
-    self%beta(2, 1) =   0._R_P              ; self%beta(2, 2) =  0._R_P
-    self%beta(3, 1) =   500._R_P/1113._R_P  ; self%beta(3, 2) =  7571._R_P/16695._R_P
-    self%beta(4, 1) =   125._R_P/192._R_P   ; self%beta(4, 2) =  393._R_P/640._R_P
-    self%beta(5, 1) =  -2187._R_P/6784._R_P ; self%beta(5, 2) = -92097._R_P/339200._R_P
-    self%beta(6, 1) =   11._R_P/84._R_P     ; self%beta(6, 2) =  187._R_P/2100._R_P
-    self%beta(7, 1) =   0._R_P              ; self%beta(7, 2) =  1._R_P/40._R_P
+    self%beta(1, 1) =  35._R_P/384._R_P    ; self%beta(1, 2) =  5179._R_P/57600._R_P
+    self%beta(2, 1) =  0._R_P              ; self%beta(2, 2) =  0._R_P
+    self%beta(3, 1) =  500._R_P/1113._R_P  ; self%beta(3, 2) =  7571._R_P/16695._R_P
+    self%beta(4, 1) =  125._R_P/192._R_P   ; self%beta(4, 2) =  393._R_P/640._R_P
+    self%beta(5, 1) = -2187._R_P/6784._R_P ; self%beta(5, 2) = -92097._R_P/339200._R_P
+    self%beta(6, 1) =  11._R_P/84._R_P     ; self%beta(6, 2) =  187._R_P/2100._R_P
+    self%beta(7, 1) =  0._R_P              ; self%beta(7, 2) =  1._R_P/40._R_P
 
     self%alph(2, 1)=1._R_P/5._R_P
     self%alph(3, 1)=3._R_P/40._R_P      ;self%alph(3, 2)= 9._R_P/40._R_P

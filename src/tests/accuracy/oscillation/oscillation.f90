@@ -331,7 +331,6 @@ contains
     if (s==3) cycle ! 3 stages not yet implemented
     if (s==4) cycle ! 4 stages not yet implemented
     if (s==5) cycle ! 5 stages not yet implemented
-    if (s==6) cycle ! 6 stages not yet implemented
     if (s==8) cycle ! 8 stages not yet implemented
     print "(A)", ' RK-'//trim(str(.true.,s))
     title = 'Oscillation equation integration, explicit embedded Runge-Kutta, t='//str(n=t_final)//' steps='//trim(str(.true., s))
@@ -886,7 +885,6 @@ contains
       if (s==3) cycle ! 3 stages not yet implemented
       if (s==4) cycle ! 4 stages not yet implemented
       if (s==5) cycle ! 5 stages not yet implemented
-      if (s==6) cycle ! 6 stages not yet implemented
       if (s==8) cycle ! 8 stages not yet implemented
       title = 'Oscillation equation integration, explicit embedded Runge-Kutta t='//str(n=t_final)//' stages='//trim(str(.true., s))
       call emd_rk_solver(stages=s, tol=tolerances(d), solution=solution, last_step=last_step)
@@ -901,7 +899,6 @@ contains
     if (s==3) cycle ! 3 stages not yet implemented
     if (s==4) cycle ! 4 stages not yet implemented
     if (s==5) cycle ! 5 stages not yet implemented
-    if (s==6) cycle ! 6 stages not yet implemented
     if (s==8) cycle ! 8 stages not yet implemented
     do d=1, NDt-1
       emd_rk_orders(:, s, d) = estimate_orders(solver_error=emd_rk_errors(:, s, d:d+1), Dt_used=Dt_mean(d:d+1))
