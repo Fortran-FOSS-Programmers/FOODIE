@@ -7,7 +7,6 @@ program integrate_euler_1D_caf
 !-----------------------------------------------------------------------------------------------------------------------------------
 use IR_Precision, only : R_P, I_P, FR_P, str, strz
 use type_euler_1D, only : euler_1D
-! use type_euler_1D_caf, only : euler_1D_caf
 use Data_Type_Command_Line_Interface, only : Type_Command_Line_Interface
 use foodie, only : adams_bashforth_integrator, &
                    euler_explicit_integrator, &
@@ -43,11 +42,11 @@ integer(I_P)                      :: profiling(1:2)        !< Tic-toc profiling 
 integer(I_P)                      :: count_rate            !< Counting rate of system clock.
 real(R_P)                         :: system_clocks         !< Profiling result.
 integer(I_P)                      :: steps                 !< Time steps counter.
+type(euler_1D)                    :: domain                !< Domain of Euler equations.
 ! coarrays-related variables
-! type(euler_1D_caf)                :: domain                !< Domain of Euler equations.
 integer(I_P)                      :: Ni_image              !< Space dimension of local image.
 #ifdef CAF
-type(euler_1D)                    :: domain[*]             !< Domain of Euler equations.
+real(R_P), allocatable            :: remote_state(:,:)[:]  !< Remote state.
 integer(I_P)                      :: Ni[*]                 !< Number of grid cells.
 integer(I_P)                      :: steps_max[*]          !< Maximum number of time steps.
 logical                           :: results[*]            !< Flag for activating results saving.
@@ -55,7 +54,6 @@ logical                           :: plots[*]              !< Flag for activatin
 logical                           :: time_serie[*]         !< Flag for activating time serie-results saving.
 logical                           :: verbose[*]            !< Flag for activating more verbose output.
 #else
-type(euler_1D)                    :: domain                !< Domain of Euler equations.
 integer(I_P)                      :: Ni                    !< Number of grid cells.
 integer(I_P)                      :: steps_max             !< Maximum number of time steps.
 logical                           :: results               !< Flag for activating results saving.
@@ -108,13 +106,10 @@ endif
 call init()
 system_clocks = 0._R_P
 do steps=1, steps_max
-  ! call domain%synchronize(me=me, we=we)
   call synchronize
   if (verbose) print "(A)", id//'    Time step: '//str(n=dt)//', Time: '//str(n=t)
-  ! dt = domain%local%dt(Nmax=steps_max, Tmax=0._R_P, t=t, CFL=CFL)
   dt = domain%dt(Nmax=steps_max, Tmax=0._R_P, t=t, CFL=CFL)
   call system_clock(profiling(1), count_rate)
-  ! call rk_integrator%integrate(U=domain%local, stage=rk_stage, dt=dt, t=t)
   call rk_integrator%integrate(U=domain, stage=rk_stage, dt=dt, t=t)
   call system_clock(profiling(2), count_rate)
   system_clocks = system_clocks + real(profiling(2) - profiling(1), kind=R_P)/count_rate
@@ -240,19 +235,25 @@ contains
   !---------------------------------------------------------------------------------------------------------------------------------
 #ifdef CAF
   if (we>1) then
+    remote_state = domain%output()
+    remote_U = remote_state
     if (me==1) then
       sync images(me+1)
-      remote_U = domain[me+1]%output(iL=1, iU=Ng)
+      remote_U(:,:) = remote_state(:,:)[me+1]
+      remote_U = remote_U(:, 1:Ng)
       call domain%set_ghost_cells(U_R=remote_U)
     else if (me==we) then
       sync images(me-1)
-      remote_U = domain[me+1]%output(iL=Ni_image-Ng+1, iU=Ni_image)
+      remote_U(:,:) = remote_state(:,:)[me-1]
+      remote_U = remote_U(:, Ni_image-Ng+1:Ni_image)
       call domain%set_ghost_cells(U_L=remote_U)
     else
       sync images([me-1, me+1])
-      remote_U = domain[me+1]%output(iL=Ni_image-Ng+1, iU=Ni_image)
+      remote_U(:,:) = remote_state(:,:)[me-1]
+      remote_U = remote_U(:, Ni_image-Ng+1:Ni_image)
       call domain%set_ghost_cells(U_L=remote_U)
-      remote_U = domain[me+1]%output(iL=1, iU=Ng)
+      remote_U(:,:) = remote_state(:,:)[me+1]
+      remote_U = remote_U(:, 1:Ng)
       call domain%set_ghost_cells(U_R=remote_U)
     endif
   endif

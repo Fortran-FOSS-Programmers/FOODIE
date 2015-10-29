@@ -631,7 +631,7 @@
     
     <div class="col-lg-9" id='text'>
     <h2>
-subroutine print_analysis(solver, time_steps, errors, orders)
+subroutine print_analysis(solver, time_steps, mean_time_steps, errors, orders)
     
     
     
@@ -675,11 +675,26 @@ subroutine print_analysis(solver, time_steps, errors, orders)
 <tr>
   
   <td><span class="anchor" id="variable-time_steps%7E2"></span>real(kind=R_P),</td>
-  <td>intent(in)</td>
-  <td></td>
+  <td>intent(in),</td>
+  <td>optional</td>
   
   <td></td><td>::</td>
   <td><strong>time_steps</strong>(:)</td><td><p>Time steps exercised.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-mean_time_steps"></span>real(kind=R_P),</td>
+  <td>intent(in),</td>
+  <td>optional</td>
+  
+  <td></td><td>::</td>
+  <td><strong>mean_time_steps</strong>(:,:)</td><td><p>Mean time steps exercised.</p></td>
   
 </tr>
 
@@ -1047,32 +1062,55 @@ implementation in a submodule of an interface in a parent module.</p>
     
     <section>
     <h2><span class="anchor" id="src"></span>Source Code</h2>
-    <div class="highlight"><pre>  <span class="k">subroutine </span><span class="n">print_analysis</span><span class="p">(</span><span class="n">solver</span><span class="p">,</span> <span class="n">time_steps</span><span class="p">,</span> <span class="n">errors</span><span class="p">,</span> <span class="n">orders</span><span class="p">)</span>
+    <div class="highlight"><pre>  <span class="k">subroutine </span><span class="n">print_analysis</span><span class="p">(</span><span class="n">solver</span><span class="p">,</span> <span class="n">time_steps</span><span class="p">,</span> <span class="n">mean_time_steps</span><span class="p">,</span> <span class="n">errors</span><span class="p">,</span> <span class="n">orders</span><span class="p">)</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
   <span class="c">!&lt; Print summary of the error analysis.</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
-  <span class="kt">character</span><span class="p">(</span><span class="o">*</span><span class="p">),</span> <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span> <span class="kd">::</span> <span class="n">solver</span>        <span class="c">!&lt; Solver name.</span>
-  <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">),</span>    <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span> <span class="kd">::</span> <span class="n">time_steps</span><span class="p">(:)</span> <span class="c">!&lt; Time steps exercised.</span>
-  <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">),</span>    <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span> <span class="kd">::</span> <span class="n">errors</span><span class="p">(:,:,:)</span> <span class="c">!&lt; Errors of the solver.</span>
-  <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">),</span>    <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span> <span class="kd">::</span> <span class="n">orders</span><span class="p">(:,:,:)</span> <span class="c">!&lt; Observed orders of the solver.</span>
-  <span class="kt">integer</span><span class="p">(</span><span class="n">I_P</span><span class="p">)</span>             <span class="kd">::</span> <span class="n">s</span>             <span class="c">!&lt; Solver index.</span>
-  <span class="kt">integer</span><span class="p">(</span><span class="n">I_P</span><span class="p">)</span>             <span class="kd">::</span> <span class="n">d</span>             <span class="c">!&lt; Time steps-exercised counter.</span>
+  <span class="kt">character</span><span class="p">(</span><span class="o">*</span><span class="p">),</span>        <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span> <span class="kd">::</span> <span class="n">solver</span>               <span class="c">!&lt; Solver name.</span>
+  <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">),</span> <span class="k">optional</span><span class="p">,</span> <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span> <span class="kd">::</span> <span class="n">time_steps</span><span class="p">(:)</span>        <span class="c">!&lt; Time steps exercised.</span>
+  <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">),</span> <span class="k">optional</span><span class="p">,</span> <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span> <span class="kd">::</span> <span class="n">mean_time_steps</span><span class="p">(:,:)</span> <span class="c">!&lt; Mean time steps exercised.</span>
+  <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">),</span>           <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span> <span class="kd">::</span> <span class="n">errors</span><span class="p">(:,:,:)</span>        <span class="c">!&lt; Errors of the solver.</span>
+  <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">),</span>           <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span> <span class="kd">::</span> <span class="n">orders</span><span class="p">(:,:,:)</span>        <span class="c">!&lt; Observed orders of the solver.</span>
+  <span class="kt">integer</span><span class="p">(</span><span class="n">I_P</span><span class="p">)</span>                    <span class="kd">::</span> <span class="n">s</span>                    <span class="c">!&lt; Solver index.</span>
+  <span class="kt">integer</span><span class="p">(</span><span class="n">I_P</span><span class="p">)</span>                    <span class="kd">::</span> <span class="n">d</span>                    <span class="c">!&lt; Time steps-exercised counter.</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
 
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
-  <span class="k">do </span><span class="n">s</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">size</span><span class="p">(</span><span class="n">errors</span><span class="p">,</span> <span class="nb">dim</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
-    <span class="k">print</span> <span class="s2">&quot;(A)&quot;</span><span class="p">,</span> <span class="n">solver</span><span class="o">//</span><span class="s1">&#39;-&#39;</span><span class="o">//</span><span class="nb">trim</span><span class="p">(</span><span class="n">str</span><span class="p">(.</span><span class="n">true</span><span class="p">.,</span><span class="n">s</span><span class="p">))</span>
-    <span class="k">do </span><span class="n">d</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">size</span><span class="p">(</span><span class="n">errors</span><span class="p">,</span> <span class="nb">dim</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
-      <span class="k">if</span> <span class="p">(</span><span class="n">d</span><span class="o">==</span><span class="mi">1</span><span class="p">)</span> <span class="k">then</span>
-<span class="k">        print</span> <span class="s2">&quot;(A,F8.1,A,F10.3,A,E10.3,A,E10.3,A)&quot;</span><span class="p">,</span> <span class="s2">&quot;  &amp; &quot;</span><span class="p">,</span> <span class="n">time_steps</span><span class="p">(</span><span class="n">d</span><span class="p">),</span> <span class="s2">&quot; &amp; &quot;</span><span class="p">,</span> <span class="n">f</span><span class="o">*</span><span class="n">time_steps</span><span class="p">(</span><span class="n">d</span><span class="p">),</span> <span class="s2">&quot; &amp; &quot;</span><span class="p">,</span> <span class="p">&amp;</span>
-                                                 <span class="n">errors</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">s</span><span class="p">,</span> <span class="n">d</span><span class="p">),</span> <span class="s2">&quot; &amp; &quot;</span> <span class="p">,</span> <span class="n">errors</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="n">s</span><span class="p">,</span> <span class="n">d</span><span class="p">),</span> <span class="s2">&quot; &amp; / &amp; /&quot;</span>
-      <span class="k">else</span>
-<span class="k">        print</span> <span class="s2">&quot;(A,F8.1,A,F10.3,A,E10.3,A,E10.3,A,F9.2,A,F9.2)&quot;</span><span class="p">,</span> <span class="s2">&quot;  &amp; &quot;</span><span class="p">,</span> <span class="n">time_steps</span><span class="p">(</span><span class="n">d</span><span class="p">),</span> <span class="s2">&quot; &amp; &quot;</span><span class="p">,</span> <span class="n">f</span><span class="o">*</span><span class="n">time_steps</span><span class="p">(</span><span class="n">d</span><span class="p">),</span> <span class="s2">&quot; &amp; &quot;</span><span class="p">,</span> <span class="p">&amp;</span>
-                                                             <span class="n">errors</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">s</span><span class="p">,</span> <span class="n">d</span><span class="p">),</span> <span class="s2">&quot; &amp; &quot;</span> <span class="p">,</span> <span class="n">errors</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="n">s</span><span class="p">,</span> <span class="n">d</span><span class="p">),</span> <span class="s2">&quot; &amp; &quot;</span><span class="p">,</span> <span class="p">&amp;</span>
-                                                             <span class="n">orders</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">s</span><span class="p">,</span> <span class="n">d</span><span class="o">-</span><span class="mi">1</span><span class="p">),</span> <span class="s2">&quot; &amp; &quot;</span> <span class="p">,</span> <span class="n">orders</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="n">s</span><span class="p">,</span> <span class="n">d</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
-      <span class="n">endif</span>
+  <span class="k">if</span> <span class="p">(</span><span class="nb">present</span><span class="p">(</span><span class="n">time_steps</span><span class="p">))</span> <span class="k">then</span>
+<span class="k">    do </span><span class="n">s</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">size</span><span class="p">(</span><span class="n">errors</span><span class="p">,</span> <span class="nb">dim</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+      <span class="k">if</span> <span class="p">(</span><span class="n">errors</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="n">s</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span><span class="o">&lt;</span><span class="mf">0._R_P</span><span class="p">)</span> <span class="k">cycle</span>
+<span class="k">      print</span> <span class="s2">&quot;(A)&quot;</span><span class="p">,</span> <span class="n">solver</span><span class="o">//</span><span class="s1">&#39;-&#39;</span><span class="o">//</span><span class="nb">trim</span><span class="p">(</span><span class="n">str</span><span class="p">(.</span><span class="n">true</span><span class="p">.,</span><span class="n">s</span><span class="p">))</span>
+      <span class="k">do </span><span class="n">d</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">size</span><span class="p">(</span><span class="n">errors</span><span class="p">,</span> <span class="nb">dim</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">d</span><span class="o">==</span><span class="mi">1</span><span class="p">)</span> <span class="k">then</span>
+<span class="k">          print</span> <span class="s2">&quot;(A,F8.1,A,F10.3,A,E10.3,A,E10.3,A)&quot;</span><span class="p">,</span> <span class="p">&amp;</span>
+            <span class="s2">&quot;  &amp; &quot;</span><span class="p">,</span> <span class="n">time_steps</span><span class="p">(</span><span class="n">d</span><span class="p">),</span> <span class="s2">&quot; &amp; &quot;</span><span class="p">,</span> <span class="n">f</span><span class="o">*</span><span class="n">time_steps</span><span class="p">(</span><span class="n">d</span><span class="p">),</span> <span class="s2">&quot; &amp; &quot;</span><span class="p">,</span> <span class="p">&amp;</span>
+            <span class="n">errors</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">s</span><span class="p">,</span> <span class="n">d</span><span class="p">),</span> <span class="s2">&quot; &amp; &quot;</span> <span class="p">,</span> <span class="n">errors</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="n">s</span><span class="p">,</span> <span class="n">d</span><span class="p">),</span> <span class="s2">&quot; &amp; / &amp; /&quot;</span>
+        <span class="k">else</span>
+<span class="k">          print</span> <span class="s2">&quot;(A,F8.1,A,F10.3,A,E10.3,A,E10.3,A,F9.2,A,F9.2)&quot;</span><span class="p">,</span> <span class="p">&amp;</span>
+            <span class="s2">&quot;  &amp; &quot;</span><span class="p">,</span> <span class="n">time_steps</span><span class="p">(</span><span class="n">d</span><span class="p">),</span> <span class="s2">&quot; &amp; &quot;</span><span class="p">,</span> <span class="n">f</span><span class="o">*</span><span class="n">time_steps</span><span class="p">(</span><span class="n">d</span><span class="p">),</span> <span class="s2">&quot; &amp; &quot;</span><span class="p">,</span> <span class="p">&amp;</span>
+            <span class="n">errors</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">s</span><span class="p">,</span> <span class="n">d</span><span class="p">),</span> <span class="s2">&quot; &amp; &quot;</span> <span class="p">,</span> <span class="n">errors</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="n">s</span><span class="p">,</span> <span class="n">d</span><span class="p">),</span> <span class="s2">&quot; &amp; &quot;</span><span class="p">,</span> <span class="p">&amp;</span>
+            <span class="n">orders</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">s</span><span class="p">,</span> <span class="n">d</span><span class="o">-</span><span class="mi">1</span><span class="p">),</span> <span class="s2">&quot; &amp; &quot;</span> <span class="p">,</span> <span class="n">orders</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="n">s</span><span class="p">,</span> <span class="n">d</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">endif</span>
+      <span class="n">enddo</span>
     <span class="n">enddo</span>
-  <span class="n">enddo</span>
+  <span class="n">elseif</span> <span class="p">(</span><span class="nb">present</span><span class="p">(</span><span class="n">mean_time_steps</span><span class="p">))</span> <span class="k">then</span>
+<span class="k">    do </span><span class="n">s</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">size</span><span class="p">(</span><span class="n">errors</span><span class="p">,</span> <span class="nb">dim</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+      <span class="k">if</span> <span class="p">(</span><span class="n">errors</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="n">s</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span><span class="o">&lt;</span><span class="mf">0._R_P</span><span class="p">)</span> <span class="k">cycle</span>
+<span class="k">      print</span> <span class="s2">&quot;(A)&quot;</span><span class="p">,</span> <span class="n">solver</span><span class="o">//</span><span class="s1">&#39;-&#39;</span><span class="o">//</span><span class="nb">trim</span><span class="p">(</span><span class="n">str</span><span class="p">(.</span><span class="n">true</span><span class="p">.,</span><span class="n">s</span><span class="p">))</span>
+      <span class="k">do </span><span class="n">d</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">size</span><span class="p">(</span><span class="n">errors</span><span class="p">,</span> <span class="nb">dim</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">d</span><span class="o">==</span><span class="mi">1</span><span class="p">)</span> <span class="k">then</span>
+<span class="k">          print</span> <span class="s2">&quot;(A,F8.1,A,F10.3,A,E10.3,A,E10.3,A)&quot;</span><span class="p">,</span> <span class="p">&amp;</span>
+            <span class="s2">&quot;  &amp; &quot;</span><span class="p">,</span> <span class="n">mean_time_steps</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">d</span><span class="p">),</span> <span class="s2">&quot; &amp; &quot;</span><span class="p">,</span> <span class="n">f</span><span class="o">*</span><span class="n">mean_time_steps</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">d</span><span class="p">),</span> <span class="s2">&quot; &amp; &quot;</span><span class="p">,</span> <span class="p">&amp;</span>
+            <span class="n">errors</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">s</span><span class="p">,</span> <span class="n">d</span><span class="p">),</span> <span class="s2">&quot; &amp; &quot;</span> <span class="p">,</span> <span class="n">errors</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="n">s</span><span class="p">,</span> <span class="n">d</span><span class="p">),</span> <span class="s2">&quot; &amp; / &amp; /&quot;</span>
+        <span class="k">else</span>
+<span class="k">          print</span> <span class="s2">&quot;(A,F8.1,A,F10.3,A,E10.3,A,E10.3,A,F9.2,A,F9.2)&quot;</span><span class="p">,</span> <span class="p">&amp;</span>
+            <span class="s2">&quot;  &amp; &quot;</span><span class="p">,</span> <span class="n">mean_time_steps</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">d</span><span class="p">),</span> <span class="s2">&quot; &amp; &quot;</span><span class="p">,</span> <span class="n">f</span><span class="o">*</span><span class="n">mean_time_steps</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">d</span><span class="p">),</span> <span class="s2">&quot; &amp; &quot;</span><span class="p">,</span> <span class="p">&amp;</span>
+            <span class="n">errors</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">s</span><span class="p">,</span> <span class="n">d</span><span class="p">),</span> <span class="s2">&quot; &amp; &quot;</span> <span class="p">,</span> <span class="n">errors</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="n">s</span><span class="p">,</span> <span class="n">d</span><span class="p">),</span> <span class="s2">&quot; &amp; &quot;</span><span class="p">,</span> <span class="p">&amp;</span>
+            <span class="n">orders</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">s</span><span class="p">,</span> <span class="n">d</span><span class="o">-</span><span class="mi">1</span><span class="p">),</span> <span class="s2">&quot; &amp; &quot;</span> <span class="p">,</span> <span class="n">orders</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="n">s</span><span class="p">,</span> <span class="n">d</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">endif</span>
+      <span class="n">enddo</span>
+    <span class="n">enddo</span>
+  <span class="n">endif</span>
   <span class="k">return</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
   <span class="n">endsubroutine</span> <span class="n">print_analysis</span>
