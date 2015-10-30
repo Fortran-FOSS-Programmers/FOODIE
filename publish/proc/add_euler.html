@@ -104,14 +104,14 @@
      
     
     
-    <li><i class="fa fa-code"></i><a href="../src/type_euler-1D.f90"> Source File</a></li>
+    <li><i class="fa fa-code"></i><a href="../src/type_euler-1D-caf.f90"> Source File</a></li>
      
   </ul>
   <ol class="breadcrumb in-well text-right">
   
-     <li><a href='../sourcefile/type_euler-1d.f90.html'>type_euler-1D.f90</a></li>
+     <li><a href='../sourcefile/type_euler-1d-caf.f90.html'>type_euler-1D-caf.f90</a></li>
   
-     <li><a href='../module/type_euler_1d.html'>type_euler_1D</a></li>
+     <li><a href='../module/type_euler_1d_caf.html'>type_euler_1D_caf</a></li>
   
      <li class="active">add_euler</li>
   </ol>
@@ -131,7 +131,7 @@
     <div class="panel-heading text-left"><h3 class="panel-title">Variables</h3></div>
     <div class="list-group">
       
-      <a class="list-group-item" href="../proc/add_euler.html#variable-i%7E13">i</a>
+      <a class="list-group-item" href="../proc/add_euler.html#variable-i%7E14">i</a>
       
     </div>
   </div>
@@ -258,8 +258,6 @@
       <a class="list-group-item" href="../proc/destroy%7E9.html">destroy</a>
       
       <a class="list-group-item" href="../proc/destroy%7E10.html">destroy</a>
-      
-      <a class="list-group-item" href="../proc/destroy%7E11.html">destroy</a>
       
       <a class="list-group-item" href="../proc/destroy_rk.html">destroy_rk</a>
       
@@ -399,8 +397,6 @@
       
       <a class="list-group-item" href="../proc/init%7E20.html">init</a>
       
-      <a class="list-group-item" href="../proc/init%7E21.html">init</a>
-      
       <a class="list-group-item" href="../proc/init_rk.html">init_rk</a>
       
       <a class="list-group-item" href="../proc/integrate.html">integrate</a>
@@ -458,8 +454,6 @@
       <a class="list-group-item" href="../proc/output%7E6.html">output</a>
       
       <a class="list-group-item" href="../proc/output%7E7.html">output</a>
-      
-      <a class="list-group-item" href="../proc/output%7E8.html">output</a>
       
       <a class="list-group-item" href="../proc/p.html">p</a>
       
@@ -544,8 +538,6 @@
       <a class="list-group-item" href="../proc/save_time_serie%7E3.html">save_time_serie</a>
       
       <a class="list-group-item" href="../proc/save_time_serie%7E4.html">save_time_serie</a>
-      
-      <a class="list-group-item" href="../proc/set_ghost_cells.html">set_ghost_cells</a>
       
       <a class="list-group-item" href="../proc/sub_burgers.html">sub_burgers</a>
       
@@ -657,7 +649,7 @@ private function add_euler(lhs, rhs) result(opr)
   
 <tr>
   
-  <td><span class="anchor" id="variable-lhs%7E17"></span>class(<a href='../type/euler_1d.html'>euler_1D</a>),</td>
+  <td><span class="anchor" id="variable-lhs%7E17"></span>class(<a href='../type/euler_1d_caf.html'>euler_1D_caf</a>),</td>
   <td>intent(in)</td>
   <td></td>
   
@@ -721,7 +713,7 @@ private function add_euler(lhs, rhs) result(opr)
   
 <tr>
   
-  <td><span class="anchor" id="variable-i%7E13"></span>integer(kind=I_P),</td>
+  <td><span class="anchor" id="variable-i%7E14"></span>integer(kind=I_P),</td>
   
   <td>public</td>
   <td></td><td>::</td>
@@ -756,22 +748,22 @@ private function add_euler(lhs, rhs) result(opr)
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
   <span class="c">!&lt; Add two Euler fields.</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
-  <span class="k">class</span><span class="p">(</span><span class="n">euler_1D</span><span class="p">),</span>  <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span>  <span class="kd">::</span> <span class="n">lhs</span> <span class="c">!&lt; Left hand side.</span>
-  <span class="k">class</span><span class="p">(</span><span class="n">integrand</span><span class="p">),</span> <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span>  <span class="kd">::</span> <span class="n">rhs</span> <span class="c">!&lt; Right hand side.</span>
-  <span class="k">class</span><span class="p">(</span><span class="n">integrand</span><span class="p">),</span> <span class="k">allocatable</span> <span class="kd">::</span> <span class="n">opr</span> <span class="c">!&lt; Operator result.</span>
-  <span class="kt">integer</span><span class="p">(</span><span class="n">I_P</span><span class="p">)</span>                  <span class="kd">::</span> <span class="n">i</span>   <span class="c">!&lt; Counter.</span>
+  <span class="k">class</span><span class="p">(</span><span class="n">euler_1D_caf</span><span class="p">),</span> <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span> <span class="kd">::</span> <span class="n">lhs</span> <span class="c">!&lt; Left hand side.</span>
+  <span class="k">class</span><span class="p">(</span><span class="n">integrand</span><span class="p">),</span>    <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span> <span class="kd">::</span> <span class="n">rhs</span> <span class="c">!&lt; Right hand side.</span>
+  <span class="k">class</span><span class="p">(</span><span class="n">integrand</span><span class="p">),</span> <span class="k">allocatable</span>   <span class="kd">::</span> <span class="n">opr</span> <span class="c">!&lt; Operator result.</span>
+  <span class="kt">integer</span><span class="p">(</span><span class="n">I_P</span><span class="p">)</span>                    <span class="kd">::</span> <span class="n">i</span>   <span class="c">!&lt; Counter.</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
 
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
-  <span class="k">allocate</span> <span class="p">(</span><span class="n">euler_1D</span> <span class="kd">::</span> <span class="n">opr</span><span class="p">)</span>
+  <span class="k">allocate</span> <span class="p">(</span><span class="n">euler_1D_caf</span> <span class="kd">::</span> <span class="n">opr</span><span class="p">)</span>
   <span class="k">select type</span><span class="p">(</span><span class="n">opr</span><span class="p">)</span>
-  <span class="k">class is</span><span class="p">(</span><span class="n">euler_1D</span><span class="p">)</span>
+  <span class="k">class is</span><span class="p">(</span><span class="n">euler_1D_caf</span><span class="p">)</span>
     <span class="n">opr</span> <span class="o">=</span> <span class="n">lhs</span>
   <span class="n">endselect</span>
   <span class="k">select type</span><span class="p">(</span><span class="n">opr</span><span class="p">)</span>
-  <span class="k">class is</span><span class="p">(</span><span class="n">euler_1D</span><span class="p">)</span>
+  <span class="k">class is</span><span class="p">(</span><span class="n">euler_1D_caf</span><span class="p">)</span>
     <span class="k">select type</span><span class="p">(</span><span class="n">rhs</span><span class="p">)</span>
-    <span class="k">class is</span> <span class="p">(</span><span class="n">euler_1D</span><span class="p">)</span>
+    <span class="k">class is</span> <span class="p">(</span><span class="n">euler_1D_caf</span><span class="p">)</span>
       <span class="k">do </span><span class="n">i</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">lhs</span><span class="p">%</span><span class="n">Ni</span>
         <span class="n">opr</span><span class="p">%</span><span class="n">U</span><span class="p">(:,</span> <span class="n">i</span><span class="p">)</span> <span class="o">=</span> <span class="n">lhs</span><span class="p">%</span><span class="n">U</span><span class="p">(:,</span> <span class="n">i</span><span class="p">)</span> <span class="o">+</span> <span class="n">rhs</span><span class="p">%</span><span class="n">U</span><span class="p">(:,</span> <span class="n">i</span><span class="p">)</span>
       <span class="n">enddo</span>

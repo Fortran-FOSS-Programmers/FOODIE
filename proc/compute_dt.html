@@ -104,14 +104,14 @@
      
     
     
-    <li><i class="fa fa-code"></i><a href="../src/type_euler-1D.f90"> Source File</a></li>
+    <li><i class="fa fa-code"></i><a href="../src/type_euler-1D-caf.f90"> Source File</a></li>
      
   </ul>
   <ol class="breadcrumb in-well text-right">
   
-     <li><a href='../sourcefile/type_euler-1d.f90.html'>type_euler-1D.f90</a></li>
+     <li><a href='../sourcefile/type_euler-1d-caf.f90.html'>type_euler-1D-caf.f90</a></li>
   
-     <li><a href='../module/type_euler_1d.html'>type_euler_1D</a></li>
+     <li><a href='../module/type_euler_1d_caf.html'>type_euler_1D_caf</a></li>
   
      <li class="active">compute_dt</li>
   </ol>
@@ -135,7 +135,7 @@
       
       <a class="list-group-item" href="../proc/compute_dt.html#variable-vmax">vmax</a>
       
-      <a class="list-group-item" href="../proc/compute_dt.html#variable-i%7E7">i</a>
+      <a class="list-group-item" href="../proc/compute_dt.html#variable-i%7E8">i</a>
       
     </div>
   </div>
@@ -262,8 +262,6 @@
       <a class="list-group-item" href="../proc/destroy%7E9.html">destroy</a>
       
       <a class="list-group-item" href="../proc/destroy%7E10.html">destroy</a>
-      
-      <a class="list-group-item" href="../proc/destroy%7E11.html">destroy</a>
       
       <a class="list-group-item" href="../proc/destroy_rk.html">destroy_rk</a>
       
@@ -403,8 +401,6 @@
       
       <a class="list-group-item" href="../proc/init%7E20.html">init</a>
       
-      <a class="list-group-item" href="../proc/init%7E21.html">init</a>
-      
       <a class="list-group-item" href="../proc/init_rk.html">init_rk</a>
       
       <a class="list-group-item" href="../proc/integrate.html">integrate</a>
@@ -462,8 +458,6 @@
       <a class="list-group-item" href="../proc/output%7E6.html">output</a>
       
       <a class="list-group-item" href="../proc/output%7E7.html">output</a>
-      
-      <a class="list-group-item" href="../proc/output%7E8.html">output</a>
       
       <a class="list-group-item" href="../proc/p.html">p</a>
       
@@ -548,8 +542,6 @@
       <a class="list-group-item" href="../proc/save_time_serie%7E3.html">save_time_serie</a>
       
       <a class="list-group-item" href="../proc/save_time_serie%7E4.html">save_time_serie</a>
-      
-      <a class="list-group-item" href="../proc/set_ghost_cells.html">set_ghost_cells</a>
       
       <a class="list-group-item" href="../proc/sub_burgers.html">sub_burgers</a>
       
@@ -661,7 +653,7 @@ private purefunction compute_dt(self, Nmax, Tmax, t, CFL) result(Dt)
   
 <tr>
   
-  <td><span class="anchor" id="variable-self%7E39"></span>class(<a href='../type/euler_1d.html'>euler_1D</a>),</td>
+  <td><span class="anchor" id="variable-self%7E35"></span>class(<a href='../type/euler_1d_caf.html'>euler_1D_caf</a>),</td>
   <td>intent(in)</td>
   <td></td>
   
@@ -922,7 +914,7 @@ implementation in a submodule of an interface in a parent module.</p>
   
 <tr>
   
-  <td><span class="anchor" id="variable-i%7E7"></span>integer(kind=I_P),</td>
+  <td><span class="anchor" id="variable-i%7E8"></span>integer(kind=I_P),</td>
   
   <td>public</td>
   <td></td><td>::</td>
@@ -957,15 +949,15 @@ implementation in a submodule of an interface in a parent module.</p>
   <span class="c">!--------------------------------------------------------------------------------------------------------------------------------</span>
   <span class="c">!&lt; Compute the current time step by means of CFL condition.</span>
   <span class="c">!--------------------------------------------------------------------------------------------------------------------------------</span>
-  <span class="k">class</span><span class="p">(</span><span class="n">euler_1D</span><span class="p">),</span> <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span> <span class="kd">::</span> <span class="n">self</span> <span class="c">!&lt; Euler field.</span>
-  <span class="kt">integer</span><span class="p">(</span><span class="n">I_P</span><span class="p">),</span>    <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span> <span class="kd">::</span> <span class="n">Nmax</span> <span class="c">!&lt; Maximun number of iterates.</span>
-  <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">),</span>       <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span> <span class="kd">::</span> <span class="n">Tmax</span> <span class="c">!&lt; Maximum time (ignored if Nmax&gt;0).</span>
-  <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">),</span>       <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span> <span class="kd">::</span> <span class="n">t</span>    <span class="c">!&lt; Time.</span>
-  <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">),</span>       <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span> <span class="kd">::</span> <span class="n">CFL</span>  <span class="c">!&lt; CFL value.</span>
-  <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">)</span>                   <span class="kd">::</span> <span class="n">Dt</span>   <span class="c">!&lt; Time step.</span>
-  <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">),</span> <span class="k">allocatable</span>      <span class="kd">::</span> <span class="n">P</span><span class="p">(:)</span> <span class="c">!&lt; Primitive variables.</span>
-  <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">)</span>                   <span class="kd">::</span> <span class="n">vmax</span> <span class="c">!&lt; Maximum propagation speed of signals.</span>
-  <span class="kt">integer</span><span class="p">(</span><span class="n">I_P</span><span class="p">)</span>                <span class="kd">::</span> <span class="n">i</span>    <span class="c">!&lt; Counter.</span>
+  <span class="k">class</span><span class="p">(</span><span class="n">euler_1D_caf</span><span class="p">),</span> <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span> <span class="kd">::</span> <span class="n">self</span> <span class="c">!&lt; Euler field.</span>
+  <span class="kt">integer</span><span class="p">(</span><span class="n">I_P</span><span class="p">),</span>        <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span> <span class="kd">::</span> <span class="n">Nmax</span> <span class="c">!&lt; Maximun number of iterates.</span>
+  <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">),</span>           <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span> <span class="kd">::</span> <span class="n">Tmax</span> <span class="c">!&lt; Maximum time (ignored if Nmax&gt;0).</span>
+  <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">),</span>           <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span> <span class="kd">::</span> <span class="n">t</span>    <span class="c">!&lt; Time.</span>
+  <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">),</span>           <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span> <span class="kd">::</span> <span class="n">CFL</span>  <span class="c">!&lt; CFL value.</span>
+  <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">)</span>                       <span class="kd">::</span> <span class="n">Dt</span>   <span class="c">!&lt; Time step.</span>
+  <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">),</span> <span class="k">allocatable</span>          <span class="kd">::</span> <span class="n">P</span><span class="p">(:)</span> <span class="c">!&lt; Primitive variables.</span>
+  <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">)</span>                       <span class="kd">::</span> <span class="n">vmax</span> <span class="c">!&lt; Maximum propagation speed of signals.</span>
+  <span class="kt">integer</span><span class="p">(</span><span class="n">I_P</span><span class="p">)</span>                    <span class="kd">::</span> <span class="n">i</span>    <span class="c">!&lt; Counter.</span>
   <span class="c">!--------------------------------------------------------------------------------------------------------------------------------</span>
 
   <span class="c">!--------------------------------------------------------------------------------------------------------------------------------</span>

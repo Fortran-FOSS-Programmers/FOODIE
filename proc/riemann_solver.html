@@ -104,14 +104,14 @@
      
     
     
-    <li><i class="fa fa-code"></i><a href="../src/type_euler-1D.f90"> Source File</a></li>
+    <li><i class="fa fa-code"></i><a href="../src/type_euler-1D-caf.f90"> Source File</a></li>
      
   </ul>
   <ol class="breadcrumb in-well text-right">
   
-     <li><a href='../sourcefile/type_euler-1d.f90.html'>type_euler-1D.f90</a></li>
+     <li><a href='../sourcefile/type_euler-1d-caf.f90.html'>type_euler-1D-caf.f90</a></li>
   
-     <li><a href='../module/type_euler_1d.html'>type_euler_1D</a></li>
+     <li><a href='../module/type_euler_1d_caf.html'>type_euler_1D_caf</a></li>
   
      <li class="active">riemann_solver</li>
   </ol>
@@ -281,8 +281,6 @@
       
       <a class="list-group-item" href="../proc/destroy%7E10.html">destroy</a>
       
-      <a class="list-group-item" href="../proc/destroy%7E11.html">destroy</a>
-      
       <a class="list-group-item" href="../proc/destroy_rk.html">destroy_rk</a>
       
       <a class="list-group-item" href="../proc/deuler_dt.html">dEuler_dt</a>
@@ -421,8 +419,6 @@
       
       <a class="list-group-item" href="../proc/init%7E20.html">init</a>
       
-      <a class="list-group-item" href="../proc/init%7E21.html">init</a>
-      
       <a class="list-group-item" href="../proc/init_rk.html">init_rk</a>
       
       <a class="list-group-item" href="../proc/integrate.html">integrate</a>
@@ -480,8 +476,6 @@
       <a class="list-group-item" href="../proc/output%7E6.html">output</a>
       
       <a class="list-group-item" href="../proc/output%7E7.html">output</a>
-      
-      <a class="list-group-item" href="../proc/output%7E8.html">output</a>
       
       <a class="list-group-item" href="../proc/p.html">p</a>
       
@@ -566,8 +560,6 @@
       <a class="list-group-item" href="../proc/save_time_serie%7E3.html">save_time_serie</a>
       
       <a class="list-group-item" href="../proc/save_time_serie%7E4.html">save_time_serie</a>
-      
-      <a class="list-group-item" href="../proc/set_ghost_cells.html">set_ghost_cells</a>
       
       <a class="list-group-item" href="../proc/sub_burgers.html">sub_burgers</a>
       
@@ -679,7 +671,7 @@ private puresubroutine riemann_solver(self, p1, r1, u1, g1, p4, r4, u4, g4, F)
   
 <tr>
   
-  <td><span class="anchor" id="variable-self%7E48"></span>class(<a href='../type/euler_1d.html'>euler_1D</a>),</td>
+  <td><span class="anchor" id="variable-self%7E44"></span>class(<a href='../type/euler_1d_caf.html'>euler_1D_caf</a>),</td>
   <td>intent(in)</td>
   <td></td>
   
@@ -851,51 +843,51 @@ private puresubroutine riemann_solver(self, p1, r1, u1, g1, p4, r4, u4, g4, F)
 <polygon fill="none" stroke="black" points="86,-70 4.26326e-14,-70 0,-44 86,-44 86,-70"/>
 <text text-anchor="middle" x="43" y="-54.55" font-family="Helvetica,sans-Serif" font-size="10.50">riemann_solver</text>
 </g>
-<!-- none~fluxes -->
-<g id="node2" class="node"><title>none~fluxes</title>
-<polygon fill="#d94e8f" stroke="#d94e8f" points="207,-114 153,-114 153,-88 207,-88 207,-114"/>
-<text text-anchor="middle" x="180" y="-98.55" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">fluxes</text>
-</g>
-<!-- proc~riemann_solver&#45;&gt;none~fluxes -->
-<g id="edge4" class="edge"><title>proc~riemann_solver&#45;&gt;none~fluxes</title>
-<path fill="none" stroke="black" d="M83.7336,-70.0823C102.501,-76.1098 124.615,-83.2122 142.913,-89.0888"/>
-<polygon fill="black" stroke="black" points="142.049,-92.4873 152.64,-92.2128 144.189,-85.8226 142.049,-92.4873"/>
-</g>
 <!-- proc~compute_inter_states -->
-<g id="node3" class="node"><title>proc~compute_inter_states</title>
+<g id="node2" class="node"><title>proc~compute_inter_states</title>
 <a xlink:href="../proc/compute_inter_states.html" xlink:title="compute_inter_states">
-<polygon fill="#d9534f" stroke="#d9534f" points="237,-70 123,-70 123,-44 237,-44 237,-70"/>
-<text text-anchor="middle" x="180" y="-54.55" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">compute_inter_states</text>
+<polygon fill="#d9534f" stroke="#d9534f" points="237,-114 123,-114 123,-88 237,-88 237,-114"/>
+<text text-anchor="middle" x="180" y="-98.55" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">compute_inter_states</text>
 </a>
 </g>
 <!-- proc~riemann_solver&#45;&gt;proc~compute_inter_states -->
-<g id="edge6" class="edge"><title>proc~riemann_solver&#45;&gt;proc~compute_inter_states</title>
-<path fill="none" stroke="black" d="M86.3477,-57C94.5739,-57 103.362,-57 112.137,-57"/>
-<polygon fill="black" stroke="black" points="112.396,-60.5001 122.396,-57 112.396,-53.5001 112.396,-60.5001"/>
+<g id="edge4" class="edge"><title>proc~riemann_solver&#45;&gt;proc~compute_inter_states</title>
+<path fill="none" stroke="black" d="M83.7336,-70.0823C98.0974,-74.6955 114.422,-79.9384 129.495,-84.7795"/>
+<polygon fill="black" stroke="black" points="128.596,-88.1666 139.187,-87.8921 130.736,-81.5018 128.596,-88.1666"/>
 </g>
 <!-- proc~e -->
-<g id="node4" class="node"><title>proc~e</title>
+<g id="node3" class="node"><title>proc~e</title>
 <a xlink:href="../proc/e.html" xlink:title="E">
-<polygon fill="#d94e8f" stroke="#d94e8f" points="207,-26 153,-26 153,-1.24345e-14 207,-3.55271e-15 207,-26"/>
-<text text-anchor="middle" x="180" y="-10.55" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">E</text>
+<polygon fill="#d94e8f" stroke="#d94e8f" points="207,-70 153,-70 153,-44 207,-44 207,-70"/>
+<text text-anchor="middle" x="180" y="-54.55" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">E</text>
 </a>
 </g>
 <!-- proc~riemann_solver&#45;&gt;proc~e -->
-<g id="edge8" class="edge"><title>proc~riemann_solver&#45;&gt;proc~e</title>
+<g id="edge6" class="edge"><title>proc~riemann_solver&#45;&gt;proc~e</title>
+<path fill="none" stroke="black" d="M86.3477,-57C104.395,-57 125.147,-57 142.523,-57"/>
+<polygon fill="black" stroke="black" points="142.851,-60.5001 152.851,-57 142.851,-53.5001 142.851,-60.5001"/>
+</g>
+<!-- none~fluxes -->
+<g id="node4" class="node"><title>none~fluxes</title>
+<polygon fill="#d94e8f" stroke="#d94e8f" points="207,-26 153,-26 153,-1.24345e-14 207,-3.55271e-15 207,-26"/>
+<text text-anchor="middle" x="180" y="-10.55" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">fluxes</text>
+</g>
+<!-- proc~riemann_solver&#45;&gt;none~fluxes -->
+<g id="edge8" class="edge"><title>proc~riemann_solver&#45;&gt;none~fluxes</title>
 <path fill="none" stroke="black" d="M83.7336,-43.9177C102.501,-37.8902 124.615,-30.7878 142.913,-24.9112"/>
 <polygon fill="black" stroke="black" points="144.189,-28.1774 152.64,-21.7872 142.049,-21.5127 144.189,-28.1774"/>
 </g>
 <!-- proc~h -->
 <g id="node5" class="node"><title>proc~h</title>
 <a xlink:href="../proc/h.html" xlink:title="H">
-<polygon fill="#d94e8f" stroke="#d94e8f" points="328,-114 274,-114 274,-88 328,-88 328,-114"/>
-<text text-anchor="middle" x="301" y="-98.55" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">H</text>
+<polygon fill="#d94e8f" stroke="#d94e8f" points="328,-26 274,-26 274,-1.24345e-14 328,-3.55271e-15 328,-26"/>
+<text text-anchor="middle" x="301" y="-10.55" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">H</text>
 </a>
 </g>
 <!-- none~fluxes&#45;&gt;proc~h -->
 <g id="edge2" class="edge"><title>none~fluxes&#45;&gt;proc~h</title>
-<path fill="none" stroke="black" d="M207.155,-101C223.891,-101 245.578,-101 263.887,-101"/>
-<polygon fill="black" stroke="black" points="263.936,-104.5 273.936,-101 263.936,-97.5001 263.936,-104.5"/>
+<path fill="none" stroke="black" d="M207.155,-13C223.891,-13 245.578,-13 263.887,-13"/>
+<polygon fill="black" stroke="black" points="263.936,-16.5001 273.936,-13 263.936,-9.5001 263.936,-16.5001"/>
 </g>
 </g>
 </svg>
@@ -1250,23 +1242,23 @@ purefunction fluxes(p, r, u, g) result(Fc)
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
   <span class="c">!&lt; Solve the Riemann problem between the state $1$ and $4$ using the (local) Lax Friedrichs (Rusanov) solver.</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
-  <span class="k">class</span><span class="p">(</span><span class="n">euler_1D</span><span class="p">),</span> <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span>  <span class="kd">::</span> <span class="n">self</span>         <span class="c">!&lt; Euler field.</span>
-  <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">),</span>       <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span>  <span class="kd">::</span> <span class="n">p1</span>           <span class="c">!&lt; Pressure of state 1.</span>
-  <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">),</span>       <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span>  <span class="kd">::</span> <span class="n">r1</span>           <span class="c">!&lt; Density of state 1.</span>
-  <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">),</span>       <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span>  <span class="kd">::</span> <span class="n">u1</span>           <span class="c">!&lt; Velocity of state 1.</span>
-  <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">),</span>       <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span>  <span class="kd">::</span> <span class="n">g1</span>           <span class="c">!&lt; Specific heats ratio of state 1.</span>
-  <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">),</span>       <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span>  <span class="kd">::</span> <span class="n">p4</span>           <span class="c">!&lt; Pressure of state 4.</span>
-  <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">),</span>       <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span>  <span class="kd">::</span> <span class="n">r4</span>           <span class="c">!&lt; Density of state 4.</span>
-  <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">),</span>       <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span>  <span class="kd">::</span> <span class="n">u4</span>           <span class="c">!&lt; Velocity of state 4.</span>
-  <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">),</span>       <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span>  <span class="kd">::</span> <span class="n">g4</span>           <span class="c">!&lt; Specific heats ratio of state 4.</span>
-  <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">),</span>       <span class="k">intent</span><span class="p">(</span><span class="n">OUT</span><span class="p">)</span> <span class="kd">::</span> <span class="n">F</span><span class="p">(</span><span class="mi">1</span><span class="p">:</span><span class="n">self</span><span class="p">%</span><span class="n">Nc</span><span class="p">)</span> <span class="c">!&lt; Resulting fluxes.</span>
-  <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">)</span>                    <span class="kd">::</span> <span class="n">F1</span><span class="p">(</span><span class="mi">1</span><span class="p">:</span><span class="mi">3</span><span class="p">)</span>      <span class="c">!&lt; State 1 fluxes.</span>
-  <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">)</span>                    <span class="kd">::</span> <span class="n">F4</span><span class="p">(</span><span class="mi">1</span><span class="p">:</span><span class="mi">3</span><span class="p">)</span>      <span class="c">!&lt; State 4 fluxes.</span>
-  <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">)</span>                    <span class="kd">::</span> <span class="n">u</span>            <span class="c">!&lt; Velocity of the intermediate states.</span>
-  <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">)</span>                    <span class="kd">::</span> <span class="n">p</span>            <span class="c">!&lt; Pressure of the intermediate states.</span>
-  <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">)</span>                    <span class="kd">::</span> <span class="n">S1</span>           <span class="c">!&lt; Maximum wave speed of state 1 and 4.</span>
-  <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">)</span>                    <span class="kd">::</span> <span class="n">S4</span>           <span class="c">!&lt; Maximum wave speed of state 1 and 4.</span>
-  <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">)</span>                    <span class="kd">::</span> <span class="n">lmax</span>         <span class="c">!&lt; Maximum wave speed estimation.</span>
+  <span class="k">class</span><span class="p">(</span><span class="n">euler_1D_caf</span><span class="p">),</span> <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span>  <span class="kd">::</span> <span class="n">self</span>         <span class="c">!&lt; Euler field.</span>
+  <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">),</span>           <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span>  <span class="kd">::</span> <span class="n">p1</span>           <span class="c">!&lt; Pressure of state 1.</span>
+  <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">),</span>           <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span>  <span class="kd">::</span> <span class="n">r1</span>           <span class="c">!&lt; Density of state 1.</span>
+  <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">),</span>           <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span>  <span class="kd">::</span> <span class="n">u1</span>           <span class="c">!&lt; Velocity of state 1.</span>
+  <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">),</span>           <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span>  <span class="kd">::</span> <span class="n">g1</span>           <span class="c">!&lt; Specific heats ratio of state 1.</span>
+  <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">),</span>           <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span>  <span class="kd">::</span> <span class="n">p4</span>           <span class="c">!&lt; Pressure of state 4.</span>
+  <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">),</span>           <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span>  <span class="kd">::</span> <span class="n">r4</span>           <span class="c">!&lt; Density of state 4.</span>
+  <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">),</span>           <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span>  <span class="kd">::</span> <span class="n">u4</span>           <span class="c">!&lt; Velocity of state 4.</span>
+  <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">),</span>           <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span>  <span class="kd">::</span> <span class="n">g4</span>           <span class="c">!&lt; Specific heats ratio of state 4.</span>
+  <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">),</span>           <span class="k">intent</span><span class="p">(</span><span class="n">OUT</span><span class="p">)</span> <span class="kd">::</span> <span class="n">F</span><span class="p">(</span><span class="mi">1</span><span class="p">:</span><span class="n">self</span><span class="p">%</span><span class="n">Nc</span><span class="p">)</span> <span class="c">!&lt; Resulting fluxes.</span>
+  <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">)</span>                        <span class="kd">::</span> <span class="n">F1</span><span class="p">(</span><span class="mi">1</span><span class="p">:</span><span class="mi">3</span><span class="p">)</span>      <span class="c">!&lt; State 1 fluxes.</span>
+  <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">)</span>                        <span class="kd">::</span> <span class="n">F4</span><span class="p">(</span><span class="mi">1</span><span class="p">:</span><span class="mi">3</span><span class="p">)</span>      <span class="c">!&lt; State 4 fluxes.</span>
+  <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">)</span>                        <span class="kd">::</span> <span class="n">u</span>            <span class="c">!&lt; Velocity of the intermediate states.</span>
+  <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">)</span>                        <span class="kd">::</span> <span class="n">p</span>            <span class="c">!&lt; Pressure of the intermediate states.</span>
+  <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">)</span>                        <span class="kd">::</span> <span class="n">S1</span>           <span class="c">!&lt; Maximum wave speed of state 1 and 4.</span>
+  <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">)</span>                        <span class="kd">::</span> <span class="n">S4</span>           <span class="c">!&lt; Maximum wave speed of state 1 and 4.</span>
+  <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">)</span>                        <span class="kd">::</span> <span class="n">lmax</span>         <span class="c">!&lt; Maximum wave speed estimation.</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
 
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>

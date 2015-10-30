@@ -104,14 +104,14 @@
      
     
     
-    <li><i class="fa fa-code"></i><a href="../src/type_euler-1D.f90"> Source File</a></li>
+    <li><i class="fa fa-code"></i><a href="../src/type_euler-1D-openmp.f90"> Source File</a></li>
      
   </ul>
   <ol class="breadcrumb in-well text-right">
   
-     <li><a href='../sourcefile/type_euler-1d.f90.html'>type_euler-1D.f90</a></li>
+     <li><a href='../sourcefile/type_euler-1d-openmp.f90.html'>type_euler-1D-openmp.f90</a></li>
   
-     <li><a href='../module/type_euler_1d.html'>type_euler_1D</a></li>
+     <li><a href='../module/type_euler_1d_openmp_no_foodie.html'>type_euler_1D_openmp_no_foodie</a></li>
   
      <li class="active">output</li>
   </ol>
@@ -131,7 +131,7 @@
     <div class="panel-heading text-left"><h3 class="panel-title">Variables</h3></div>
     <div class="list-group">
       
-      <a class="list-group-item" href="../proc/output%7E3.html#variable-i%7E6">i</a>
+      <a class="list-group-item" href="../proc/output%7E3.html#variable-i%7E25">i</a>
       
     </div>
   </div>
@@ -258,8 +258,6 @@
       <a class="list-group-item" href="../proc/destroy%7E9.html">destroy</a>
       
       <a class="list-group-item" href="../proc/destroy%7E10.html">destroy</a>
-      
-      <a class="list-group-item" href="../proc/destroy%7E11.html">destroy</a>
       
       <a class="list-group-item" href="../proc/destroy_rk.html">destroy_rk</a>
       
@@ -399,8 +397,6 @@
       
       <a class="list-group-item" href="../proc/init%7E20.html">init</a>
       
-      <a class="list-group-item" href="../proc/init%7E21.html">init</a>
-      
       <a class="list-group-item" href="../proc/init_rk.html">init_rk</a>
       
       <a class="list-group-item" href="../proc/integrate.html">integrate</a>
@@ -458,8 +454,6 @@
       <a class="list-group-item" href="../proc/output%7E6.html">output</a>
       
       <a class="list-group-item" href="../proc/output%7E7.html">output</a>
-      
-      <a class="list-group-item" href="../proc/output%7E8.html">output</a>
       
       <a class="list-group-item" href="../proc/p.html">p</a>
       
@@ -545,8 +539,6 @@
       
       <a class="list-group-item" href="../proc/save_time_serie%7E4.html">save_time_serie</a>
       
-      <a class="list-group-item" href="../proc/set_ghost_cells.html">set_ghost_cells</a>
-      
       <a class="list-group-item" href="../proc/sub_burgers.html">sub_burgers</a>
       
       <a class="list-group-item" href="../proc/sub_euler.html">sub_euler</a>
@@ -629,7 +621,7 @@
     
     <div class="col-lg-9" id='text'>
     <h2>
-private purefunction output(self, iL, iU) result(state)
+private purefunction output(self) result(state)
     
     
     
@@ -657,42 +649,12 @@ private purefunction output(self, iL, iU) result(state)
   
 <tr>
   
-  <td><span class="anchor" id="variable-self%7E38"></span>class(<a href='../type/euler_1d.html'>euler_1D</a>),</td>
+  <td><span class="anchor" id="variable-self%7E46"></span>class(<a href='../type/euler_1d_openmp.html'>euler_1D_openmp</a>),</td>
   <td>intent(in)</td>
   <td></td>
   
   <td></td><td>::</td>
   <td><strong>self</strong></td><td><p>Euler field.</p></td>
-  
-</tr>
-
-  
-  
-  
-  
-<tr>
-  
-  <td><span class="anchor" id="variable-il"></span>integer(kind=I_P),</td>
-  <td>intent(in),</td>
-  <td>optional</td>
-  
-  <td></td><td>::</td>
-  <td><strong>iL</strong></td><td><p>Lower bound of extracted domain.</p></td>
-  
-</tr>
-
-  
-  
-  
-  
-<tr>
-  
-  <td><span class="anchor" id="variable-iu"></span>integer(kind=I_P),</td>
-  <td>intent(in),</td>
-  <td>optional</td>
-  
-  <td></td><td>::</td>
-  <td><strong>iU</strong></td><td><p>Upper bound of extracted domain.</p></td>
   
 </tr>
 
@@ -736,7 +698,7 @@ private purefunction output(self, iL, iU) result(state)
   
 <tr>
   
-  <td><span class="anchor" id="variable-i%7E6"></span>integer(kind=I_P),</td>
+  <td><span class="anchor" id="variable-i%7E25"></span>integer(kind=I_P),</td>
   
   <td>public</td>
   <td></td><td>::</td>
@@ -767,29 +729,20 @@ private purefunction output(self, iL, iU) result(state)
     
     <section>
     <h2><span class="anchor" id="src"></span>Source Code</h2>
-    <div class="highlight"><pre>  <span class="k">pure function </span><span class="n">output</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">iL</span><span class="p">,</span> <span class="n">iU</span><span class="p">)</span> <span class="k">result</span><span class="p">(</span><span class="n">state</span><span class="p">)</span>
+    <div class="highlight"><pre>  <span class="k">pure function </span><span class="n">output</span><span class="p">(</span><span class="n">self</span><span class="p">)</span> <span class="k">result</span><span class="p">(</span><span class="n">state</span><span class="p">)</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
   <span class="c">!&lt; Output the Euler field state (primitive variables).</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
-  <span class="k">class</span><span class="p">(</span><span class="n">euler_1D</span><span class="p">),</span> <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span>            <span class="kd">::</span> <span class="n">self</span>  <span class="c">!&lt; Euler field.</span>
-  <span class="kt">integer</span><span class="p">(</span><span class="n">I_P</span><span class="p">),</span>    <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">),</span> <span class="k">optional</span>  <span class="kd">::</span> <span class="n">iL</span>    <span class="c">!&lt; Lower bound of extracted domain.</span>
-  <span class="kt">integer</span><span class="p">(</span><span class="n">I_P</span><span class="p">),</span>    <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">),</span> <span class="k">optional</span>  <span class="kd">::</span> <span class="n">iU</span>    <span class="c">!&lt; Upper bound of extracted domain.</span>
+  <span class="k">class</span><span class="p">(</span><span class="n">euler_1D_openmp</span><span class="p">),</span> <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span>     <span class="kd">::</span> <span class="n">self</span>  <span class="c">!&lt; Euler field.</span>
   <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">),</span> <span class="k">dimension</span><span class="p">(:,:),</span> <span class="k">allocatable</span> <span class="kd">::</span> <span class="n">state</span> <span class="c">!&lt; Euler state vector.</span>
   <span class="kt">integer</span><span class="p">(</span><span class="n">I_P</span><span class="p">)</span>                           <span class="kd">::</span> <span class="n">i</span>     <span class="c">!&lt; Counter.</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
 
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
-  <span class="k">if</span> <span class="p">(</span><span class="nb">present</span><span class="p">(</span><span class="n">iL</span><span class="p">).</span><span class="nb">and</span><span class="p">.</span><span class="nb">present</span><span class="p">(</span><span class="n">iU</span><span class="p">))</span> <span class="k">then</span>
-<span class="k">    allocate</span><span class="p">(</span><span class="n">state</span><span class="p">(</span><span class="mi">1</span><span class="p">:</span><span class="n">self</span><span class="p">%</span><span class="n">Np</span><span class="p">,</span> <span class="n">iL</span><span class="p">:</span><span class="n">iU</span><span class="p">))</span>
-    <span class="k">do </span><span class="n">i</span><span class="o">=</span><span class="n">iL</span><span class="p">,</span> <span class="n">iU</span>
-      <span class="n">state</span><span class="p">(:,</span> <span class="n">i</span><span class="p">)</span> <span class="o">=</span> <span class="n">self</span><span class="p">%</span><span class="n">conservative2primitive</span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">U</span><span class="p">(:,</span> <span class="n">i</span><span class="p">))</span>
-    <span class="n">enddo</span>
-  <span class="k">else</span>
-<span class="k">    allocate</span><span class="p">(</span><span class="n">state</span><span class="p">(</span><span class="mi">1</span><span class="p">:</span><span class="n">self</span><span class="p">%</span><span class="n">Np</span><span class="p">,</span> <span class="mi">1</span><span class="p">:</span><span class="n">self</span><span class="p">%</span><span class="n">Ni</span><span class="p">))</span>
-    <span class="k">do </span><span class="n">i</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">self</span><span class="p">%</span><span class="n">Ni</span>
-      <span class="n">state</span><span class="p">(:,</span> <span class="n">i</span><span class="p">)</span> <span class="o">=</span> <span class="n">self</span><span class="p">%</span><span class="n">conservative2primitive</span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">U</span><span class="p">(:,</span> <span class="n">i</span><span class="p">))</span>
-    <span class="n">enddo</span>
-  <span class="n">endif</span>
+  <span class="k">allocate</span><span class="p">(</span><span class="n">state</span><span class="p">(</span><span class="mi">1</span><span class="p">:</span><span class="n">self</span><span class="p">%</span><span class="n">Np</span><span class="p">,</span> <span class="mi">1</span><span class="p">:</span><span class="n">self</span><span class="p">%</span><span class="n">Ni</span><span class="p">))</span>
+  <span class="k">do </span><span class="n">i</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">self</span><span class="p">%</span><span class="n">Ni</span>
+    <span class="n">state</span><span class="p">(:,</span> <span class="n">i</span><span class="p">)</span> <span class="o">=</span> <span class="n">self</span><span class="p">%</span><span class="n">conservative2primitive</span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">U</span><span class="p">(:,</span> <span class="n">i</span><span class="p">))</span>
+  <span class="n">enddo</span>
   <span class="k">return</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
   <span class="n">endfunction</span> <span class="n">output</span>

@@ -261,8 +261,6 @@
       
       <a class="list-group-item" href="../proc/destroy%7E10.html">destroy</a>
       
-      <a class="list-group-item" href="../proc/destroy%7E11.html">destroy</a>
-      
       <a class="list-group-item" href="../proc/destroy_rk.html">destroy_rk</a>
       
       <a class="list-group-item" href="../proc/deuler_dt.html">dEuler_dt</a>
@@ -401,8 +399,6 @@
       
       <a class="list-group-item" href="../proc/init%7E20.html">init</a>
       
-      <a class="list-group-item" href="../proc/init%7E21.html">init</a>
-      
       <a class="list-group-item" href="../proc/init_rk.html">init_rk</a>
       
       <a class="list-group-item" href="../proc/integrate.html">integrate</a>
@@ -460,8 +456,6 @@
       <a class="list-group-item" href="../proc/output%7E6.html">output</a>
       
       <a class="list-group-item" href="../proc/output%7E7.html">output</a>
-      
-      <a class="list-group-item" href="../proc/output%7E8.html">output</a>
       
       <a class="list-group-item" href="../proc/p.html">p</a>
       
@@ -546,8 +540,6 @@
       <a class="list-group-item" href="../proc/save_time_serie%7E3.html">save_time_serie</a>
       
       <a class="list-group-item" href="../proc/save_time_serie%7E4.html">save_time_serie</a>
-      
-      <a class="list-group-item" href="../proc/set_ghost_cells.html">set_ghost_cells</a>
       
       <a class="list-group-item" href="../proc/sub_burgers.html">sub_burgers</a>
       
@@ -833,7 +825,7 @@ private subroutine integrate(self, U, stage, Dt, t)
     <span class="n">enddo</span>
     <span class="c">! computing new time step</span>
     <span class="k">do </span><span class="n">s</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">self</span><span class="p">%</span><span class="n">stages</span>
-      <span class="n">U</span> <span class="o">=</span> <span class="n">U</span> <span class="o">+</span>  <span class="n">stage</span><span class="p">(</span><span class="n">s</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="n">Dt</span> <span class="o">*</span> <span class="n">self</span><span class="p">%</span><span class="n">beta</span><span class="p">(</span><span class="n">s</span><span class="p">))</span>
+      <span class="n">U</span> <span class="o">=</span> <span class="n">U</span> <span class="o">+</span> <span class="n">stage</span><span class="p">(</span><span class="n">s</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="n">Dt</span> <span class="o">*</span> <span class="n">self</span><span class="p">%</span><span class="n">beta</span><span class="p">(</span><span class="n">s</span><span class="p">))</span>
     <span class="n">enddo</span>
   <span class="n">endselect</span>
   <span class="k">return</span>

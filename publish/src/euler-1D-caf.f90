@@ -6,14 +6,10 @@ program integrate_euler_1D_caf
 
 !-----------------------------------------------------------------------------------------------------------------------------------
 use IR_Precision, only : R_P, I_P, FR_P, str, strz
-use type_euler_1D, only : euler_1D
+use type_euler_1D_caf, only : euler_1D_caf
 use Data_Type_Command_Line_Interface, only : Type_Command_Line_Interface
-use foodie, only : adams_bashforth_integrator, &
-                   euler_explicit_integrator, &
-                   leapfrog_integrator, &
-                   ls_runge_kutta_integrator, &
-                   tvd_runge_kutta_integrator
-use pyplot_module, only :  pyplot
+use foodie, only : tvd_runge_kutta_integrator
+use pyplot_module, only : pyplot
 !-----------------------------------------------------------------------------------------------------------------------------------
 
 !-----------------------------------------------------------------------------------------------------------------------------------
@@ -21,14 +17,13 @@ implicit none
 type(Type_Command_Line_Interface) :: cli                   !< Command line interface handler.
 type(tvd_runge_kutta_integrator)  :: rk_integrator         !< Runge-Kutta integrator.
 integer, parameter                :: rk_stages=5           !< Runge-Kutta stages number.
-type(euler_1D)                    :: rk_stage(1:rk_stages) !< Runge-Kutta stages.
-real(R_P)                         :: dt                    !< Time step.
+type(euler_1D_caf)                :: rk_stage(1:rk_stages) !< Runge-Kutta stages.
+integer, parameter                :: ord=7                 !< Space reconstruciton order,
 real(R_P)                         :: t                     !< Time.
 real(R_P),    parameter           :: CFL=0.7_R_P           !< CFL value.
 integer(I_P), parameter           :: Ns=1                  !< Number of differnt initial gas species.
 integer(I_P), parameter           :: Nc=Ns+2               !< Number of conservative variables.
 integer(I_P), parameter           :: Np=Ns+4               !< Number of primitive variables.
-integer(I_P)                      :: Ng                    !< Number of ghost cells for boundary conditions handling.
 character(len=:), allocatable     :: BC_L                  !< Left boundary condition type.
 character(len=:), allocatable     :: BC_R                  !< Right boundary condition type.
 real(R_P)                         :: Dx                    !< Space step discretization.
@@ -42,38 +37,24 @@ integer(I_P)                      :: profiling(1:2)        !< Tic-toc profiling 
 integer(I_P)                      :: count_rate            !< Counting rate of system clock.
 real(R_P)                         :: system_clocks         !< Profiling result.
 integer(I_P)                      :: steps                 !< Time steps counter.
-type(euler_1D)                    :: domain                !< Domain of Euler equations.
+type(euler_1D_caf)                :: domain                !< Domain of Euler equations.
 ! coarrays-related variables
 integer(I_P)                      :: Ni_image              !< Space dimension of local image.
-#ifdef CAF
-real(R_P), allocatable            :: remote_state(:,:)[:]  !< Remote state.
 integer(I_P)                      :: Ni[*]                 !< Number of grid cells.
 integer(I_P)                      :: steps_max[*]          !< Maximum number of time steps.
 logical                           :: results[*]            !< Flag for activating results saving.
 logical                           :: plots[*]              !< Flag for activating plots saving.
 logical                           :: time_serie[*]         !< Flag for activating time serie-results saving.
 logical                           :: verbose[*]            !< Flag for activating more verbose output.
-#else
-integer(I_P)                      :: Ni                    !< Number of grid cells.
-integer(I_P)                      :: steps_max             !< Maximum number of time steps.
-logical                           :: results               !< Flag for activating results saving.
-logical                           :: plots                 !< Flag for activating plots saving.
-logical                           :: time_serie            !< Flag for activating time serie-results saving.
-logical                           :: verbose               !< Flag for activating more verbose output.
-#endif
+real(R_P), allocatable            :: Dt(:)[:]              !< Time step.
 integer(I_P)                      :: me                    !< ID of this_image()
 integer(I_P)                      :: we                    !< Number of CAF images used.
 character(len=:), allocatable     :: id                    !< My ID.
 !-----------------------------------------------------------------------------------------------------------------------------------
 
 !-----------------------------------------------------------------------------------------------------------------------------------
-#ifdef CAF
 me = this_image()
 we = num_images()
-#else
-me = 1
-we = 1
-#endif
 id = trim(strz(3, me))//'> '
 ! setting Command Line Interface
 call cli%init(progname    = 'euler-1D-caf',                                                       &
@@ -106,18 +87,18 @@ endif
 call init()
 system_clocks = 0._R_P
 do steps=1, steps_max
+  if (verbose) print "(A)", id//'    Time step: '//str(n=Dt(me))//', Time: '//str(n=t)
+  Dt(me) = domain%dt(Nmax=steps_max, Tmax=0._R_P, t=t, CFL=CFL)
   call synchronize
-  if (verbose) print "(A)", id//'    Time step: '//str(n=dt)//', Time: '//str(n=t)
-  dt = domain%dt(Nmax=steps_max, Tmax=0._R_P, t=t, CFL=CFL)
   call system_clock(profiling(1), count_rate)
-  call rk_integrator%integrate(U=domain, stage=rk_stage, dt=dt, t=t)
+  call rk_integrator%integrate(U=domain, stage=rk_stage, Dt=Dt(me), t=t)
   call system_clock(profiling(2), count_rate)
   system_clocks = system_clocks + real(profiling(2) - profiling(1), kind=R_P)/count_rate
-  t = t + dt
+  t = t + Dt(me)
   call save_time_serie(t=t)
 enddo
 system_clocks = system_clocks / steps_max
-if (verbose) print "(A)", id//'    Time step: '//str(n=dt)//', Time: '//str(n=t)
+if (verbose) print "(A)", id//'    Time step: '//str(n=Dt(me))//', Time: '//str(n=t)
 call save_time_serie(t=t, finish=.true.)
 call save_results(title='FOODIE test: 1D Euler equations integration, explicit TVD Runge-Kutta'// &
                         trim(str(.true., rk_stages))//' stages', &
@@ -136,7 +117,6 @@ contains
   !---------------------------------------------------------------------------------------------------------------------------------
 
   !---------------------------------------------------------------------------------------------------------------------------------
-#ifdef CAF
   ! CAF images comunications
   sync all
   if (me/=1) then
@@ -147,7 +127,6 @@ contains
     time_serie = time_serie[1]
     verbose = verbose[1]
   endif
-#endif
   ! init simulation
   if (mod(Ni, we)/=0) error stop 'error: the number of cells Ni must be a multiple of the number of CAF images used!'
   Ni_image = Ni / we
@@ -208,8 +187,9 @@ contains
   endif
   ! initialize integrator and domain
   call rk_integrator%init(stages=rk_stages)
-  call domain%init(Ni=Ni_image, Ns=Ns, Dx=Dx, BC_L=BC_L, BC_R=BC_R, initial_state=initial_state, cp0=cp0, cv0=cv0, ord=7)
-  Ng = (7 + 1) / 2
+  call domain%init(Ni=Ni_image, Ns=Ns, Dx=Dx, BC_L=BC_L, BC_R=BC_R, initial_state=initial_state, cp0=cp0, cv0=cv0, &
+                   me=me, we=we, ord=ord)
+  allocate(Dt(1:we)[*])
   ! initialize time serie file
   call save_time_serie(title='FOODIE test: 1D Euler equations integration, explicit TVD Runge-Kutta'// &
                              trim(str(.true., rk_stages))//' stages', &
@@ -229,35 +209,18 @@ contains
   !---------------------------------------------------------------------------------------------------------------------------------
   !< Synchronize CAF images.
   !---------------------------------------------------------------------------------------------------------------------------------
-  real(R_P), allocatable :: remote_U(:,:) !< Remote field.
+  integer(I_P) :: i !< Images counter.
   !---------------------------------------------------------------------------------------------------------------------------------
 
   !---------------------------------------------------------------------------------------------------------------------------------
-#ifdef CAF
   if (we>1) then
-    remote_state = domain%output()
-    remote_U = remote_state
-    if (me==1) then
-      sync images(me+1)
-      remote_U(:,:) = remote_state(:,:)[me+1]
-      remote_U = remote_U(:, 1:Ng)
-      call domain%set_ghost_cells(U_R=remote_U)
-    else if (me==we) then
-      sync images(me-1)
-      remote_U(:,:) = remote_state(:,:)[me-1]
-      remote_U = remote_U(:, Ni_image-Ng+1:Ni_image)
-      call domain%set_ghost_cells(U_L=remote_U)
-    else
-      sync images([me-1, me+1])
-      remote_U(:,:) = remote_state(:,:)[me-1]
-      remote_U = remote_U(:, Ni_image-Ng+1:Ni_image)
-      call domain%set_ghost_cells(U_L=remote_U)
-      remote_U(:,:) = remote_state(:,:)[me+1]
-      remote_U = remote_U(:, 1:Ng)
-      call domain%set_ghost_cells(U_R=remote_U)
-    endif
+    sync all
+    ! reduction on minumum value of Dt
+    do i=1, we
+      if (i/=me) Dt(i) = Dt(i)[i]
+      Dt(me) = min(Dt(me), Dt(i))
+    enddo
   endif
-#endif
   return
   !---------------------------------------------------------------------------------------------------------------------------------
   endsubroutine synchronize
@@ -279,7 +242,8 @@ contains
   if (results) then
     open(newunit=rawfile, file=filename//'.dat')
     write(rawfile, '(A)')'# '//title
-    write(rawfile, '(A)')'# VARIABLES: "x" "rho(1)" "rho(2)"... "rho(Ns)" "u" "p" "rho" "gamma"'
+    write(rawfile, '(A)')'VARIABLES="x" "rho(1)" "u" "p" "rho" "gamma"'
+    write(rawfile, '(A)')'ZONE T="'//str(n=t)//'"'
     do i=1, Ni_image
       write(rawfile, '('//trim(str(.true.,Np+1))//'('//FR_P//',1X))')x(i), (final_state(v, i), v=1, Np)
     enddo
@@ -320,8 +284,8 @@ contains
       open(newunit=tsfile, file=filename)
       write(tsfile, '(A)')'# '//title
     endif
-    write(tsfile, '(A)')'# VARIABLES: "x" "rho(1)" "rho(2)"... "rho(Ns)" "u" "p" "rho" "gamma"'
-    write(tsfile, '(A)')'# Time: '//str(n=t)
+    write(tsfile, '(A)')'VARIABLES="x" "rho(1)" "u" "p" "rho" "gamma"'
+    write(tsfile, '(A)')'ZONE T="'//str(n=t)//'"'
     do i=1, Ni_image
       write(tsfile, '('//trim(str(.true.,Np+1))//'('//FR_P//',1X))')x(i), (final_state(v, i), v=1, Np)
     enddo
