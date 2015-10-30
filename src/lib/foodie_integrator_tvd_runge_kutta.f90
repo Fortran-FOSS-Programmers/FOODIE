@@ -234,7 +234,7 @@ contains
     enddo
     ! computing new time step
     do s=1, self%stages
-      U = U +  stage(s) * (Dt * self%beta(s))
+      U = U + stage(s) * (Dt * self%beta(s))
     enddo
   endselect
   return
