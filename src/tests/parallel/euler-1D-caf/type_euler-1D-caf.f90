@@ -166,7 +166,11 @@ type, extends(integrand) :: euler_1D_caf
     procedure, pass(self), private :: riemann_solver                !< Solve the Riemann Problem at cell interfaces.
     final                          :: finalize                      !< Finalize field.
 endtype euler_1D_caf
+#ifdef CAF
 real(R_P), allocatable :: remote_U(:,:)[:] !< CAF buffer for sharing remote conservative variables.
+#else
+real(R_P), allocatable :: remote_U(:,:)    !< CAF buffer for sharing remote conservative variables.
+#endif
 real(R_P), allocatable :: U_L(:,:)         !< Integrand (state) variables, left ghost cells [1:Nc,1:Ng].
 real(R_P), allocatable :: U_R(:,:)         !< Integrand (state) variables, right ghost cells [1:Nc,Ni-Ng+1:Ni].
 !-----------------------------------------------------------------------------------------------------------------------------------
@@ -215,7 +219,11 @@ contains
   enddo
   self%me = me
   self%we = we
+#ifdef CAF
   if (allocated(remote_U)) deallocate(remote_U) ; allocate(remote_U(1:self%Nc, 1:Ni)[*])
+#else
+  if (allocated(remote_U)) deallocate(remote_U) ; allocate(remote_U(1:self%Nc, 1:Ni))
+#endif
   if (allocated(U_L)) deallocate(U_L) ; allocate(U_L(1:self%Nc, 1:self%Ni))
   if (allocated(U_R)) deallocate(U_R) ; allocate(U_R(1:self%Nc, 1:self%Ni))
   return
@@ -410,7 +418,6 @@ contains
   class(euler_1D_caf), intent(IN)  :: lhs !< Left hand side.
   class(integrand),    intent(IN)  :: rhs !< Right hand side.
   class(integrand),    allocatable :: opr !< Operator result.
-  integer(I_P)                     :: i   !< Counter.
   !---------------------------------------------------------------------------------------------------------------------------------
 
   !---------------------------------------------------------------------------------------------------------------------------------
@@ -423,9 +430,7 @@ contains
   class is(euler_1D_caf)
     select type(rhs)
     class is (euler_1D_caf)
-      do i=1, lhs%Ni
-        opr%U(:, i) = lhs%U(:, i) * rhs%U(:, i)
-      enddo
+      opr%U = lhs%U * rhs%U
     endselect
   endselect
   return
@@ -439,7 +444,6 @@ contains
   class(euler_1D_caf), intent(IN) :: lhs !< Left hand side.
   real(R_P),           intent(IN) :: rhs !< Right hand side.
   class(integrand), allocatable   :: opr !< Operator result.
-  integer(I_P)                    :: i   !< Counter.
   !---------------------------------------------------------------------------------------------------------------------------------
 
   !---------------------------------------------------------------------------------------------------------------------------------
@@ -450,9 +454,7 @@ contains
   endselect
   select type(opr)
   class is(euler_1D_caf)
-    do i=1, lhs%Ni
-      opr%U(:, i) = lhs%U(:, i) * rhs
-    enddo
+    opr%U = lhs%U * rhs
   endselect
   return
   !---------------------------------------------------------------------------------------------------------------------------------
@@ -465,7 +467,6 @@ contains
   real(R_P),           intent(IN) :: lhs !< Left hand side.
   class(euler_1D_caf), intent(IN) :: rhs !< Right hand side.
   class(integrand), allocatable   :: opr !< Operator result.
-  integer(I_P)                    :: i   !< Counter.
   !---------------------------------------------------------------------------------------------------------------------------------
 
   !---------------------------------------------------------------------------------------------------------------------------------
@@ -476,9 +477,7 @@ contains
   endselect
   select type(opr)
   class is(euler_1D_caf)
-    do i=1, rhs%Ni
-      opr%U(:, i) = rhs%U(:, i) * lhs
-    enddo
+    opr%U = rhs%U * lhs
   endselect
   return
   !---------------------------------------------------------------------------------------------------------------------------------
@@ -491,7 +490,6 @@ contains
   class(euler_1D_caf), intent(IN) :: lhs !< Left hand side.
   class(integrand),    intent(IN) :: rhs !< Right hand side.
   class(integrand), allocatable   :: opr !< Operator result.
-  integer(I_P)                    :: i   !< Counter.
   !---------------------------------------------------------------------------------------------------------------------------------
 
   !---------------------------------------------------------------------------------------------------------------------------------
@@ -504,9 +502,7 @@ contains
   class is(euler_1D_caf)
     select type(rhs)
     class is (euler_1D_caf)
-      do i=1, lhs%Ni
-        opr%U(:, i) = lhs%U(:, i) + rhs%U(:, i)
-      enddo
+      opr%U = lhs%U + rhs%U
     endselect
   endselect
   return
@@ -520,7 +516,6 @@ contains
   class(euler_1D_caf), intent(IN)  :: lhs !< Left hand side.
   class(integrand),    intent(IN)  :: rhs !< Right hand side.
   class(integrand),    allocatable :: opr !< Operator result.
-  integer(I_P)                     :: i   !< Counter.
   !---------------------------------------------------------------------------------------------------------------------------------
 
   !---------------------------------------------------------------------------------------------------------------------------------
@@ -533,9 +528,7 @@ contains
   class is(euler_1D_caf)
     select type(rhs)
     class is (euler_1D_caf)
-      do i=1, lhs%Ni
-        opr%U(:, i) = lhs%U(:, i) - rhs%U(:, i)
-      enddo
+      opr%U = lhs%U - rhs%U
     endselect
   endselect
   return
@@ -548,7 +541,6 @@ contains
   !---------------------------------------------------------------------------------------------------------------------------------
   class(euler_1D_caf), intent(INOUT) :: lhs !< Left hand side.
   class(integrand),    intent(IN)    :: rhs !< Right hand side.
-  integer(I_P)                       :: i   !< Counter.
   !---------------------------------------------------------------------------------------------------------------------------------
 
   !---------------------------------------------------------------------------------------------------------------------------------
@@ -580,15 +572,10 @@ contains
   !---------------------------------------------------------------------------------------------------------------------------------
   class(euler_1D_caf), intent(INOUT) :: lhs !< Left hand side.
   real(R_P),           intent(IN)    :: rhs !< Right hand side.
-  integer(I_P)                       :: i   !< Counter.
   !---------------------------------------------------------------------------------------------------------------------------------
 
   !---------------------------------------------------------------------------------------------------------------------------------
-  if (allocated(lhs%U)) then
-    do i=1, lhs%Ni
-      lhs%U(:, i) = rhs
-    enddo
-  endif
+  if (allocated(lhs%U)) lhs%U = rhs
   return
   !---------------------------------------------------------------------------------------------------------------------------------
   endsubroutine euler_assign_real
@@ -647,6 +634,7 @@ contains
   !---------------------------------------------------------------------------------------------------------------------------------
 
   !---------------------------------------------------------------------------------------------------------------------------------
+#ifdef CAF
   if (self%we>1) then
     remote_U = self%U
     if (self%me==1) then
@@ -661,6 +649,7 @@ contains
       U_R(:,:) = remote_U(:,:)[self%me+1]
     endif
   endif
+#endif
   return
   !---------------------------------------------------------------------------------------------------------------------------------
   endsubroutine synchronize

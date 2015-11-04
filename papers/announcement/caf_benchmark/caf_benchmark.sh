@@ -1,5 +1,5 @@
 #!/bin/bash
-# script automotion for FOODIE's OpenMP benchmark using provided tests
+# script automotion for FOODIE's CAF benchmark using provided tests
 
 # defaults
 code='all'
@@ -31,11 +31,12 @@ function print_usage {
 function run_exe {
   # perform the code execution
   exe=$1
-  thd=$2
+  image=$2
   size=$3
   average_cpu_time=0.
   for r in $( seq $ripetitions ); do
-    cpu_time=$($exe --Ni $size --omp_threads $thd | awk '{print $2}')
+    cpu_time=$(cafrun -np $image $exe --Ni $size  | awk '{print $3}')
+    cpu_time=$(echo $cpu_time | awk '{ for(i=1; i<=NF;i++) j+=$i; print j/NF; j=0 }')
     average_cpu_time=`echo "scale=10; $average_cpu_time+$cpu_time" | bc -l`
   done
   average_cpu_time=`echo "scale=10; $average_cpu_time/$ripetitions" | bc -l`
@@ -45,27 +46,27 @@ function strong_scaling {
   # perform strong scaling analysis
   foodie=$1
   if [ "$foodie" == "yes" ]; then
-    exe='../tests-openmp/euler-1D-openmp'
+    exe='../tests-caf/euler-1D-caf'
     output='strong-scaling.dat'
   else
-    exe='../tests-openmp/euler-1D-openmp-no-foodie'
+    exe='../tests-caf/euler-1D-caf-no-foodie'
     output='strong-scaling-no-foodie.dat'
   fi
   echo "Strong scaling"
   echo 'TITLE="Strong scaling analysis, cells '$Ni'"' > $output
-  echo 'VARIABLES="OpenMP threads number" "CPU time"' >> $output
-  echo "Benchmarking without OpenMP threads"
+  echo 'VARIABLES="CAF images number" "CPU time"' >> $output
+  echo "Benchmarking without CAF images"
   average_cpu_time=$(run_exe $exe'-off' 1 $Ni)
   echo 0 $average_cpu_time >> $output
   c=1
   while [ "$c" -lt $ncores ]; do
-    echo "Benchmarking with "$c" OpenMP threads"
+    echo "Benchmarking with "$c" CAF images"
     average_cpu_time=$(run_exe $exe'-on' $c $Ni)
     echo $c $average_cpu_time >> $output
     c=$((c*2))
     if [ "$c" -gt $ncores ]; then
       # doing the last benchmark
-      echo "Benchmarking with "$ncores" OpenMP threads"
+      echo "Benchmarking with "$ncores" CAF images"
       average_cpu_time=$(run_exe $exe'-on' $ncores $Ni)
       echo $ncores $average_cpu_time >> $output
     fi
@@ -75,22 +76,22 @@ function weak_scaling {
   # perform weak scaling analysis
   foodie=$1
   if [ "$foodie" == "yes" ]; then
-    exe='../tests-openmp/euler-1D-openmp'
+    exe='../tests-caf/euler-1D-caf'
     output='weak-scaling.dat'
   else
-    exe='../tests-openmp/euler-1D-openmp-no-foodie'
+    exe='../tests-caf/euler-1D-caf-no-foodie'
     output='weak-scaling-no-foodie.dat'
   fi
   echo "Weak scaling"
   echo 'TITLE="Weak scaling analysis"' > $output
-  echo 'VARIABLES="Size" "OpenMP threads number" "CPU time"' >> $output
-  echo "Benchmarking without OpenMP threads and size "$Ni
+  echo 'VARIABLES="Size" "CAF images number" "CPU time"' >> $output
+  echo "Benchmarking without CAF images and size "$Ni
   average_cpu_time=$(run_exe $exe'-off' 1 $Ni)
   echo $Ni 0 $average_cpu_time >> $output
   c=1
   s=$Ni
   while [ "$c" -lt $ncores ]; do
-    echo "Benchmarking with "$c" OpenMP threads and size "$s
+    echo "Benchmarking with "$c" CAF images and size "$s
     average_cpu_time=$(run_exe $exe'-on' $c $s)
     echo $s $c $average_cpu_time >> $output
     c=$((c*2))
@@ -98,7 +99,7 @@ function weak_scaling {
     if [ "$c" -gt $ncores ]; then
       # doing the last benchmark
       s=$((ncores*Ni))
-      echo "Benchmarking with "$ncores" OpenMP threads and size "$s
+      echo "Benchmarking with "$ncores" CAF images and size "$s
       average_cpu_time=$(run_exe $exe'-on' $ncores $s)
       echo $s $ncores $average_cpu_time >> $output
     fi
@@ -134,24 +135,24 @@ while [ $# -gt 0 ]; do
 done
 
 # building codes
-echo "Building 1D Euler OpenMP executables"
+echo "Building 1D Euler CAF executables"
 date > builds.log
 cd ../../../
 if [ "$code" == "all" ] || [ "$code" == "foodie" ]; then
-  rm -rf papers/announcement/openmp_benchmark/tests-openmp/obj
-  rm -rf papers/announcement/openmp_benchmark/tests-openmp/mod
-  FoBiS.py build -f src/tests/parallel/euler-1D-openmp/fobos -mode benchmark-openmp-on --build_dir papers/announcement/openmp_benchmark/tests-openmp >> papers/announcement/openmp_benchmark/builds.log
-  rm -rf papers/announcement/openmp_benchmark/tests-openmp/obj
-  rm -rf papers/announcement/openmp_benchmark/tests-openmp/mod
-  FoBiS.py build -f src/tests/parallel/euler-1D-openmp/fobos -mode benchmark-openmp-off --build_dir papers/announcement/openmp_benchmark/tests-openmp >> papers/announcement/openmp_benchmark/builds.log
+  rm -rf papers/announcement/caf_benchmark/tests-caf/obj
+  rm -rf papers/announcement/caf_benchmark/tests-caf/mod
+  FoBiS.py build -f src/tests/parallel/euler-1D-caf/fobos -mode benchmark-caf-on --build_dir papers/announcement/caf_benchmark/tests-caf >> papers/announcement/caf_benchmark/builds.log
+  rm -rf papers/announcement/caf_benchmark/tests-caf/obj
+  rm -rf papers/announcement/caf_benchmark/tests-caf/mod
+  FoBiS.py build -f src/tests/parallel/euler-1D-caf/fobos -mode benchmark-caf-off --build_dir papers/announcement/caf_benchmark/tests-caf >> papers/announcement/caf_benchmark/builds.log
 fi
 if [ "$code" == "all" ] || [ "$code" == "no-foodie" ]; then
-  rm -rf papers/announcement/openmp_benchmark/tests-openmp/obj
-  rm -rf papers/announcement/openmp_benchmark/tests-openmp/mod
-  FoBiS.py build -f src/tests/parallel/euler-1D-openmp-no-foodie/fobos -mode benchmark-openmp-on --build_dir papers/announcement/openmp_benchmark/tests-openmp >> papers/announcement/openmp_benchmark/builds.log
-  rm -rf papers/announcement/openmp_benchmark/tests-openmp/obj
-  rm -rf papers/announcement/openmp_benchmark/tests-openmp/mod
-  FoBiS.py build -f src/tests/parallel/euler-1D-openmp-no-foodie/fobos -mode benchmark-openmp-off --build_dir papers/announcement/openmp_benchmark/tests-openmp >> papers/announcement/openmp_benchmark/builds.log
+  rm -rf papers/announcement/caf_benchmark/tests-caf/obj
+  rm -rf papers/announcement/caf_benchmark/tests-caf/mod
+  FoBiS.py build -f src/tests/parallel/euler-1D-caf-no-foodie/fobos -mode benchmark-caf-on --build_dir papers/announcement/caf_benchmark/tests-caf >> papers/announcement/caf_benchmark/builds.log
+  rm -rf papers/announcement/caf_benchmark/tests-caf/obj
+  rm -rf papers/announcement/caf_benchmark/tests-caf/mod
+  FoBiS.py build -f src/tests/parallel/euler-1D-caf-no-foodie/fobos -mode benchmark-caf-off --build_dir papers/announcement/caf_benchmark/tests-caf >> papers/announcement/caf_benchmark/builds.log
 fi
 cd -
 # benchmarks
@@ -161,9 +162,9 @@ ncores_cpu=`grep "^core id" /proc/cpuinfo | sort -u | wc -l`
 ncores=$((ncpus*ncores_cpu))
 echo "Available physical cores "$ncores
 
-echo "1D Euler OpenMP benchmarks"
-mkdir -p results-euler-1D-openmp
-cd results-euler-1D-openmp
+echo "1D Euler CAF benchmarks"
+mkdir -p results-euler-1D-caf
+cd results-euler-1D-caf
 if [ "$code" == "all" ] || [ "$code" == "foodie" ]; then
   echo "With FOODIE"
   if [ "$bench" == "all" ] || [ "$bench" == "strong" ]; then
@@ -183,7 +184,7 @@ if [ "$code" == "all" ] || [ "$code" == "no-foodie" ]; then
   fi
 fi
 if [ -x "$tecplot" ] ; then
-  ln -fs ../utilities-euler-1D-openmp/*lay .
+  ln -fs ../utilities-euler-1D-caf/*lay .
   ln -fs ../../utilities/lay_export* .
   for file in $( ls *lay ); do
   ./lay_export_all_f $file
