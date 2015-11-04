@@ -1,7 +1,7 @@
-!< Define Euler 1D (OpenMP enabled) field.
+!< Define Euler 1D (OpenMP enabled) field without extending FOODIE integrand.
 module type_euler_1D_openmp_no_foodie
 !-----------------------------------------------------------------------------------------------------------------------------------
-!< Define Euler 1D (OpenMP enabled) field.
+!< Define Euler 1D (OpenMP enabled) field without extending FOODIE integrand.
 !-----------------------------------------------------------------------------------------------------------------------------------
 
 !-----------------------------------------------------------------------------------------------------------------------------------
@@ -12,13 +12,15 @@ use wenoof, only : weno_factory, weno_constructor_upwind, weno_interpolator, wen
 !-----------------------------------------------------------------------------------------------------------------------------------
 implicit none
 private
-public :: euler_1D_openmp
+public :: euler_1D_omp_nf
 public :: tvd_runge_kutta_integrator
 !-----------------------------------------------------------------------------------------------------------------------------------
 
 !-----------------------------------------------------------------------------------------------------------------------------------
-type :: euler_1D_openmp
+type :: euler_1D_omp_nf
   !< Euler 1D (OpenMP enabled) PDEs system field.
+  !<
+  !< @note This object does not use FOODIE.
   !<
   !<### 1D Euler PDEs system
   !< The 1D Euler PDEs system considered is a non linear, hyperbolic (inviscid) system of conservation laws for compressible gas
@@ -124,19 +126,19 @@ type :: euler_1D_openmp
   !< + Ns+1 : momentum conservation             (r*u)
   !< + Ns+2 : energy conservation               (r*E)
   private
-  integer(I_P)                   :: ord=0           !< Space accuracy formal order.
-  integer(I_P)                   :: Ni=0            !< Space dimension.
-  integer(I_P)                   :: Ng=0            !< Number of ghost cells for boundary conditions handling.
-  integer(I_P)                   :: Ns=0            !< Number of initial species.
-  integer(I_P)                   :: Nc=0            !< Number of conservative variables, Ns+2.
-  integer(I_P)                   :: Np=0            !< Number of primitive variables, Ns+4.
-  real(R_P)                      :: Dx=0._R_P       !< Space step.
-  type(weno_interpolator_upwind) :: weno            !< WENO interpolator.
-  real(R_P),    allocatable      :: U(:,:)          !< Integrand (state) variables, whole physical domain [1:Nc,1-Ng:Ni+Ng].
-  real(R_P),    allocatable      :: cp0(:)          !< Specific heat cp of initial species [1:Ns].
-  real(R_P),    allocatable      :: cv0(:)          !< Specific heat cv of initial species [1:Ns].
-  character(:), allocatable      :: BC_L            !< Left boundary condition type.
-  character(:), allocatable      :: BC_R            !< Right boundary condition type.
+  integer(I_P)                   :: ord=0     !< Space accuracy formal order.
+  integer(I_P)                   :: Ni=0      !< Space dimension.
+  integer(I_P)                   :: Ng=0      !< Number of ghost cells for boundary conditions handling.
+  integer(I_P)                   :: Ns=0      !< Number of initial species.
+  integer(I_P)                   :: Nc=0      !< Number of conservative variables, Ns+2.
+  integer(I_P)                   :: Np=0      !< Number of primitive variables, Ns+4.
+  real(R_P)                      :: Dx=0._R_P !< Space step.
+  type(weno_interpolator_upwind) :: weno      !< WENO interpolator.
+  real(R_P),    allocatable      :: U(:,:)    !< Integrand (state) variables, whole physical domain [1:Nc,1:Ni].
+  real(R_P),    allocatable      :: cp0(:)    !< Specific heat cp of initial species [1:Ns].
+  real(R_P),    allocatable      :: cv0(:)    !< Specific heat cv of initial species [1:Ns].
+  character(:), allocatable      :: BC_L      !< Left boundary condition type.
+  character(:), allocatable      :: BC_R      !< Right boundary condition type.
   contains
     ! auxiliary methods
     procedure, pass(self), public :: init             !< Init field.
@@ -154,7 +156,7 @@ type :: euler_1D_openmp
     procedure, pass(self), private :: reconstruct_interfaces_states          !< Reconstruct interfaces states.
     procedure, pass(self), private :: riemann_solver                         !< Solve the Riemann Problem at cell interfaces.
     final                          :: finalize                               !< Finalize field.
-endtype euler_1D_openmp
+endtype euler_1D_omp_nf
 
 type :: tvd_runge_kutta_integrator
   !< TVD RK integrator.
@@ -257,8 +259,8 @@ contains
   !< @note This method can be used **after** the integrator is created (i.e. the RK coeficients are initialized).
   !---------------------------------------------------------------------------------------------------------------------------------
   class(tvd_runge_kutta_integrator), intent(IN)    :: self      !< Actual RK integrator.
-  class(euler_1D_openmp),            intent(INOUT) :: U         !< Field to be integrated.
-  class(euler_1D_openmp),            intent(INOUT) :: stage(1:) !< Runge-Kutta stages [1:stages].
+  class(euler_1D_omp_nf),            intent(INOUT) :: U         !< Field to be integrated.
+  class(euler_1D_omp_nf),            intent(INOUT) :: stage(1:) !< Runge-Kutta stages [1:stages].
   real(R_P),                         intent(IN)    :: Dt        !< Time step.
   real(R_P),                         intent(IN)    :: t         !< Time.
   integer(I_P)                                     :: s         !< First stages counter.
@@ -296,13 +298,13 @@ contains
   !---------------------------------------------------------------------------------------------------------------------------------
   endsubroutine finalize_rk
 
-  ! type bound procedures of euler_1D_openmp
+  ! type bound procedures of euler_1D_omp_nf
   ! auxiliary methods
   subroutine init(self, Ni, Ns, Dx, BC_L, BC_R, initial_state, cp0, cv0, ord)
   !---------------------------------------------------------------------------------------------------------------------------------
   !< Init field.
   !---------------------------------------------------------------------------------------------------------------------------------
-  class(euler_1D_openmp), intent(INOUT) :: self               !< Euler field.
+  class(euler_1D_omp_nf), intent(INOUT) :: self               !< Euler field.
   integer(I_P),           intent(IN)    :: Ni                 !< Space dimension.
   integer(I_P),           intent(IN)    :: Ns                 !< Number of initial species.
   real(R_P),              intent(IN)    :: Dx                 !< Space step.
@@ -329,7 +331,7 @@ contains
   self%Nc = Ns + 2
   self%Np = Ns + 4
   self%Dx = Dx
-  if (allocated(self%U)) deallocate(self%U) ; allocate(self%U  (1:self%Nc, 1:Ni))
+  if (allocated(self%U)) deallocate(self%U) ; allocate(self%U(1:self%Nc, 1:Ni))
   self%cp0 = cp0
   self%cv0 = cv0
   self%BC_L = BC_L
@@ -345,7 +347,7 @@ contains
   !---------------------------------------------------------------------------------------------------------------------------------
   !< Destroy field.
   !---------------------------------------------------------------------------------------------------------------------------------
-  class(euler_1D_openmp), intent(INOUT) :: self !< Euler field.
+  class(euler_1D_omp_nf), intent(INOUT) :: self !< Euler field.
   !---------------------------------------------------------------------------------------------------------------------------------
 
   !---------------------------------------------------------------------------------------------------------------------------------
@@ -369,7 +371,7 @@ contains
   !---------------------------------------------------------------------------------------------------------------------------------
   !< Output the Euler field state (primitive variables).
   !---------------------------------------------------------------------------------------------------------------------------------
-  class(euler_1D_openmp), intent(IN)     :: self  !< Euler field.
+  class(euler_1D_omp_nf), intent(IN)     :: self  !< Euler field.
   real(R_P), dimension(:,:), allocatable :: state !< Euler state vector.
   integer(I_P)                           :: i     !< Counter.
   !---------------------------------------------------------------------------------------------------------------------------------
@@ -387,7 +389,7 @@ contains
   !--------------------------------------------------------------------------------------------------------------------------------
   !< Compute the current time step by means of CFL condition.
   !--------------------------------------------------------------------------------------------------------------------------------
-  class(euler_1D_openmp), intent(IN) :: self !< Euler field.
+  class(euler_1D_omp_nf), intent(IN) :: self !< Euler field.
   integer(I_P),           intent(IN) :: Nmax !< Maximun number of iterates.
   real(R_P),              intent(IN) :: Tmax !< Maximum time (ignored if Nmax>0).
   real(R_P),              intent(IN) :: t    !< Time.
@@ -419,8 +421,8 @@ contains
   !---------------------------------------------------------------------------------------------------------------------------------
   !< Time derivative of Euler field, the residuals function.
   !---------------------------------------------------------------------------------------------------------------------------------
-  class(euler_1D_openmp), intent(IN) :: self      !< Euler field.
-  type(euler_1D_openmp)              :: dState_dt !< Euler field time derivative.
+  class(euler_1D_omp_nf), intent(IN) :: self      !< Euler field.
+  type(euler_1D_omp_nf)              :: dState_dt !< Euler field time derivative.
   real(R_P), allocatable             :: F(:,:)    !< Fluxes of conservative variables.
   real(R_P), allocatable             :: P(:,:)    !< Primitive variables.
   real(R_P), allocatable             :: PR(:,:,:) !< Left (1) and right (2) (reconstructed) interface values of primitive variables.
@@ -486,14 +488,14 @@ contains
   !---------------------------------------------------------------------------------------------------------------------------------
   !< Assign one Euler field to another.
   !---------------------------------------------------------------------------------------------------------------------------------
-  class(euler_1D_openmp), intent(INOUT) :: lhs !< Left hand side.
-  class(euler_1D_openmp), intent(IN)    :: rhs !< Right hand side.
+  class(euler_1D_omp_nf), intent(INOUT) :: lhs !< Left hand side.
+  class(euler_1D_omp_nf), intent(IN)    :: rhs !< Right hand side.
   integer(I_P)                          :: i   !< Counter.
   !---------------------------------------------------------------------------------------------------------------------------------
 
   !---------------------------------------------------------------------------------------------------------------------------------
   select type(rhs)
-  class is(euler_1D_openmp)
+  class is(euler_1D_omp_nf)
                              lhs%ord  = rhs%ord
                              lhs%Ni   = rhs%Ni
                              lhs%Ng   = rhs%Ng
@@ -526,7 +528,7 @@ contains
   !---------------------------------------------------------------------------------------------------------------------------------
   !< Convert primitive variables to conservative variables.
   !---------------------------------------------------------------------------------------------------------------------------------
-  class(euler_1D_openmp), intent(IN) :: self                    !< Euler field.
+  class(euler_1D_omp_nf), intent(IN) :: self                    !< Euler field.
   real(R_P),              intent(IN) :: primitive(:)            !< Primitive variables.
   real(R_P)                          :: conservative(1:self%Nc) !< Conservative variables.
   !---------------------------------------------------------------------------------------------------------------------------------
@@ -546,7 +548,7 @@ contains
   !--------------------------------------------------------------------------------------------------------------------------------
   !< Convert conservative variables to primitive variables.
   !--------------------------------------------------------------------------------------------------------------------------------
-  class(euler_1D_openmp), intent(IN) :: self                 !< Euler field.
+  class(euler_1D_omp_nf), intent(IN) :: self                 !< Euler field.
   real(R_P),              intent(IN) :: conservative(:)      !< Conservative variables.
   real(R_P)                          :: primitive(1:self%Np) !< Primitive variables.
   real(R_P), allocatable             :: c(:)                 !< Species concentration.
@@ -572,7 +574,7 @@ contains
   !<
   !< The boundary conditions are imposed on the primitive variables by means of the ghost cells approach.
   !--------------------------------------------------------------------------------------------------------------------------------
-  class(euler_1D_openmp), intent(IN)    :: self                                           !< Euler field.
+  class(euler_1D_omp_nf), intent(IN)    :: self                                           !< Euler field.
   real(R_P),              intent(INOUT) :: primitive(1:self%Np,1-self%Ng:self%Ni+self%Ng) !< Primitive variables [1:Np,1-Ng:Ni+Ng].
   integer(I_P)                          :: i                                              !< Space counter.
   !--------------------------------------------------------------------------------------------------------------------------------
@@ -609,7 +611,7 @@ contains
   !--------------------------------------------------------------------------------------------------------------------------------
   !< Reconstruct the interfaces states (into primitive variables formulation) by the requested order of accuracy.
   !--------------------------------------------------------------------------------------------------------------------------------
-  class(euler_1D_openmp), intent(IN)    :: self                                            !< Euler field.
+  class(euler_1D_omp_nf), intent(IN)    :: self                                            !< Euler field.
   real(R_P),              intent(IN)    :: primitive(1:self%Np, 1-self%Ng:self%Ni+self%Ng) !< Primitive variables.
   real(R_P),              intent(INOUT) :: r_primitive(1:self%Np, 1:2, 0:self%Ni+1)        !< Reconstructed primitive variables.
   real(R_P)                             :: C(1:2, 1-self%Ng:-1+self%Ng, 1:self%Ns+2)       !< Pseudo characteristic variables.
@@ -733,7 +735,7 @@ contains
   !---------------------------------------------------------------------------------------------------------------------------------
   !< Solve the Riemann problem between the state $1$ and $4$ using the (local) Lax Friedrichs (Rusanov) solver.
   !---------------------------------------------------------------------------------------------------------------------------------
-  class(euler_1D_openmp), intent(IN)  :: self         !< Euler field.
+  class(euler_1D_omp_nf), intent(IN)  :: self         !< Euler field.
   real(R_P),              intent(IN)  :: p1           !< Pressure of state 1.
   real(R_P),              intent(IN)  :: r1           !< Density of state 1.
   real(R_P),              intent(IN)  :: u1           !< Velocity of state 1.
@@ -791,7 +793,7 @@ contains
   !---------------------------------------------------------------------------------------------------------------------------------
   !< Destroy field.
   !---------------------------------------------------------------------------------------------------------------------------------
-  type(euler_1D_openmp), intent(INOUT) :: self !< Euler field.
+  type(euler_1D_omp_nf), intent(INOUT) :: self !< Euler field.
   !---------------------------------------------------------------------------------------------------------------------------------
 
   !---------------------------------------------------------------------------------------------------------------------------------

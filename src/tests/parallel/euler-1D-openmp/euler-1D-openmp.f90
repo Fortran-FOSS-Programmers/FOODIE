@@ -89,8 +89,9 @@ call omp_set_num_threads(omp_threads)
 ! check OpenMP parallel environment correctness
 !$OMP PARALLEL      &
 !$OMP DEFAULT(none) &
-!$OMP SHARED(omp_threads)
+!$OMP SHARED(omp_threads, verbose)
 omp_threads = omp_get_num_threads()
+if (verbose) print "(A)", ' Thread '//trim(str(.true.,omp_get_thread_num()))//' of: '//trim(str(.true.,omp_threads))//' is alive!'
 !$OMP END PARALLEL
 #endif
 call init()

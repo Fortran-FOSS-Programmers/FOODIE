@@ -6,7 +6,7 @@ program integrate_euler_1D_openmp_no_foodie
 
 !-----------------------------------------------------------------------------------------------------------------------------------
 use IR_Precision, only : R_P, I_P, FR_P, str
-use type_euler_1D_openmp_no_foodie, only : euler_1D_openmp, tvd_runge_kutta_integrator
+use type_euler_1D_openmp_no_foodie, only : euler_1D_omp_nf, tvd_runge_kutta_integrator
 use Data_Type_Command_Line_Interface, only : Type_Command_Line_Interface
 use pyplot_module, only :  pyplot
 #ifdef OPENMP
@@ -19,10 +19,10 @@ implicit none
 type(Type_Command_Line_Interface) :: cli                   !< Command line interface handler.
 type(tvd_runge_kutta_integrator)  :: rk_integrator         !< Runge-Kutta integrator.
 integer, parameter                :: rk_stages=5           !< Runge-Kutta stages number.
-type(euler_1D_openmp)             :: rk_stage(1:rk_stages) !< Runge-Kutta stages.
+type(euler_1D_omp_nf)             :: rk_stage(1:rk_stages) !< Runge-Kutta stages.
 real(R_P)                         :: dt                    !< Time step.
 real(R_P)                         :: t                     !< Time.
-type(euler_1D_openmp)             :: domain                !< Domain of Euler equations.
+type(euler_1D_omp_nf)             :: domain                !< Domain of Euler equations.
 real(R_P),    parameter           :: CFL=0.7_R_P           !< CFL value.
 integer(I_P), parameter           :: Ns=1                  !< Number of differnt initial gas species.
 integer(I_P), parameter           :: Nc=Ns+2               !< Number of conservative variables.
@@ -94,7 +94,7 @@ call domain%init(Ni=Ni, Ns=Ns, Dx=Dx, BC_L=BC_L, BC_R=BC_R, initial_state=initia
 t = 0._R_P
 call save_time_serie(title='FOODIE test: 1D Euler equations integration, explicit TVD Runge-Kutta'// &
                            trim(str(.true., rk_stages))//' stages', &
-                     filename='euler_1D_openmp_integration-tvdrk-'//trim(str(.true., rk_stages))//'-time_serie.dat', &
+                     filename='euler_1D_omp_nf_integration-tvdrk-'//trim(str(.true., rk_stages))//'-time_serie.dat', &
                      t=t)
 system_clocks = 0._R_P
 do steps=1, steps_max
@@ -112,7 +112,7 @@ if (verbose) print "(A)", '    Time step: '//str(n=dt)//', Time: '//str(n=t)
 call save_time_serie(t=t, finish=.true.)
 call save_results(title='FOODIE test: 1D Euler equations integration, explicit TVD Runge-Kutta'// &
                         trim(str(.true., rk_stages))//' stages', &
-                  filename='euler_1D_openmp_integration-tvdrk-'//trim(str(.true., rk_stages)))
+                  filename='euler_1D_omp_nf_integration-tvdrk-'//trim(str(.true., rk_stages)))
 print "(I5,A,F23.15)", omp_threads, ' ', system_clocks
 stop
 !-----------------------------------------------------------------------------------------------------------------------------------
