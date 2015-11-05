@@ -1,14 +1,13 @@
-!< Test FOODIE with the integration of Euler 1D PDEs system.
+!< Test without FOODIE with the integration of Euler 1D PDEs system by CAF paradigm.
 program integrate_euler_1D_caf
 !-----------------------------------------------------------------------------------------------------------------------------------
-!< Test FOODIE with the integration of Euler 1D PDEs system.
+!< Test without FOODIE with the integration of Euler 1D PDEs system by CAF paradigm.
 !-----------------------------------------------------------------------------------------------------------------------------------
 
 !-----------------------------------------------------------------------------------------------------------------------------------
 use IR_Precision, only : R_P, I_P, FR_P, str, strz
-use type_euler_1D_caf, only : euler_1D_caf
+use type_euler_1D_caf_no_foodie, only : euler_1D_caf_nf, tvd_runge_kutta_integrator
 use Data_Type_Command_Line_Interface, only : Type_Command_Line_Interface
-use foodie, only : tvd_runge_kutta_integrator
 use pyplot_module, only : pyplot
 !-----------------------------------------------------------------------------------------------------------------------------------
 
@@ -17,7 +16,7 @@ implicit none
 type(Type_Command_Line_Interface) :: cli                   !< Command line interface handler.
 type(tvd_runge_kutta_integrator)  :: rk_integrator         !< Runge-Kutta integrator.
 integer, parameter                :: rk_stages=5           !< Runge-Kutta stages number.
-type(euler_1D_caf)                :: rk_stage(1:rk_stages) !< Runge-Kutta stages.
+type(euler_1D_caf_nf)             :: rk_stage(1:rk_stages) !< Runge-Kutta stages.
 integer, parameter                :: ord=7                 !< Space reconstruciton order,
 real(R_P)                         :: t                     !< Time.
 real(R_P),    parameter           :: CFL=0.7_R_P           !< CFL value.
@@ -37,7 +36,7 @@ integer(I_P)                      :: profiling(1:2)        !< Tic-toc profiling 
 integer(I_P)                      :: count_rate            !< Counting rate of system clock.
 real(R_P)                         :: system_clocks         !< Profiling result.
 integer(I_P)                      :: steps                 !< Time steps counter.
-type(euler_1D_caf)                :: domain                !< Domain of Euler equations.
+type(euler_1D_caf_nf)             :: domain                !< Domain of Euler equations.
 ! coarrays-related variables
 integer(I_P)                      :: Ni_image              !< Space dimension of local image.
 #ifdef CAF
@@ -72,14 +71,14 @@ we = 1
 #endif
 id = trim(strz(3, me))//'> '
 ! setting Command Line Interface
-call cli%init(progname    = 'euler-1D-caf',                                                       &
-              authors     = 'Fortran-FOSS-Programmers',                                           &
-              license     = 'GNU GPLv3',                                                          &
-              description = 'Test FOODIE library on 1D Euler equations integration, CAF enabled', &
-              examples    = ["euler-1D-caf --results  ",                                          &
-                             "euler-1D-caf -r -t -v -p",                                          &
-                             "euler-1D-caf            ",                                          &
-                             "euler-1D-caf --plots -r "])
+call cli%init(progname    = 'euler-1D-caf-no-foodie',                                          &
+              authors     = 'Fortran-FOSS-Programmers',                                        &
+              license     = 'GNU GPLv3',                                                       &
+              description = 'Test 1D Euler equations integration without FOODIE, CAF enabled', &
+              examples    = ["euler-1D-caf-no-foodie --results  ",                             &
+                             "euler-1D-caf-no-foodie -r -t -v -p",                             &
+                             "euler-1D-caf-no-foodie            ",                             &
+                             "euler-1D-caf-no-foodie --plots -r "])
 call cli%add(switch='--Ni', help='Number finite volumes used', required=.false., act='store', def='100', error=error)
 call cli%add(switch='--steps', help='Number time steps performed', required=.false., act='store', def='30', error=error)
 call cli%add(switch='--results', switch_ab='-r', help='Save results', required=.false., act='store_true', def='.false.', &
@@ -117,7 +116,7 @@ if (verbose) print "(A)", id//'    Time step: '//str(n=Dt(me))//', Time: '//str(
 call save_time_serie(t=t, finish=.true.)
 call save_results(title='FOODIE test: 1D Euler equations integration, explicit TVD Runge-Kutta'// &
                         trim(str(.true., rk_stages))//' stages', &
-                  filename='euler_1D_caf_integration-tvdrk-'//trim(str(.true., rk_stages))//'-image-'//trim(strz(3, me)))
+                  filename='euler_1D_caf_nf_integration-tvdrk-'//trim(str(.true., rk_stages))//'-image-'//trim(strz(3, me)))
 
 print "(A,I5,A,F23.15)", id, we, ' ', system_clocks
 stop
@@ -127,8 +126,8 @@ contains
   !---------------------------------------------------------------------------------------------------------------------------------
   !< Initialize the simulation.
   !---------------------------------------------------------------------------------------------------------------------------------
-  integer(I_P)                  :: i        !< Space counter.
-  real(R_P)                     :: x_L      !< Left abscissa of local image.
+  integer(I_P) :: i   !< Space counter.
+  real(R_P)    :: x_L !< Left abscissa of local image.
   !---------------------------------------------------------------------------------------------------------------------------------
 
   !---------------------------------------------------------------------------------------------------------------------------------

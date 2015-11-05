@@ -1,7 +1,7 @@
-!< Test without FOODIE with the integration of Euler 1D PDEs system.
+!< Test without FOODIE with the integration of Euler 1D PDEs system by OpenMP paradigm.
 program integrate_euler_1D_openmp_no_foodie
 !-----------------------------------------------------------------------------------------------------------------------------------
-!< Test without FOODIE with the integration of Euler 1D PDEs system.
+!< Test without FOODIE with the integration of Euler 1D PDEs system by OpenMP paradigm.
 !-----------------------------------------------------------------------------------------------------------------------------------
 
 !-----------------------------------------------------------------------------------------------------------------------------------
@@ -51,16 +51,16 @@ integer(I_P)                      :: steps                 !< Time steps counter
 
 !-----------------------------------------------------------------------------------------------------------------------------------
 ! setting Command Line Interface
-call cli%init(progname    = 'euler-1D-openmp-no-foodie',                                             &
-              authors     = 'Fortran-FOSS-Programmers',                                              &
-              license     = 'GNU GPLv3',                                                             &
-              description = 'Test 1D Euler equations integration without FOODIE, OpenMP enabled',    &
-              examples    = ["euler-1D-openmp-no-foodie --results  ",                                &
-                             "euler-1D-openmp-no-foodie -r -t -v -p",                                &
-                             "euler-1D-openmp-no-foodie            ",                                &
+call cli%init(progname    = 'euler-1D-openmp-no-foodie',                                          &
+              authors     = 'Fortran-FOSS-Programmers',                                           &
+              license     = 'GNU GPLv3',                                                          &
+              description = 'Test 1D Euler equations integration without FOODIE, OpenMP enabled', &
+              examples    = ["euler-1D-openmp-no-foodie --results  ",                             &
+                             "euler-1D-openmp-no-foodie -r -t -v -p",                             &
+                             "euler-1D-openmp-no-foodie            ",                             &
                              "euler-1D-openmp-no-foodie --plots -r "])
 call cli%add(switch='--Ni', help='Number finite volumes used', required=.false., act='store', def='100', error=error)
-call cli%add(switch='--steps', help='Number time steps performed', required=.false., act='store', def='10', error=error)
+call cli%add(switch='--steps', help='Number time steps performed', required=.false., act='store', def='30', error=error)
 call cli%add(switch='--results', switch_ab='-r', help='Save results', required=.false., act='store_true', def='.false.', &
              error=error)
 call cli%add(switch='--plots', switch_ab='-p', help='Save plots of results', required=.false., act='store_true', def='.false.', &

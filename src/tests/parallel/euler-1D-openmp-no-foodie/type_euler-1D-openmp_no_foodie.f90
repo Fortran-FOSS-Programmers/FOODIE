@@ -141,12 +141,11 @@ type :: euler_1D_omp_nf
   character(:), allocatable      :: BC_R      !< Right boundary condition type.
   contains
     ! auxiliary methods
-    procedure, pass(self), public :: init             !< Init field.
-    procedure, pass(self), public :: destroy          !< Destroy field.
-    procedure, pass(self), public :: output           !< Extract Euler field.
-    procedure, pass(self), public :: dt => compute_dt !< Compute the current time step, by means of CFL condition.
-    ! private methods
-    generic, public :: assignment(=) => assign_integrand !< Overloading = assignament.
+    procedure, pass(self), public :: init                              !< Init field.
+    procedure, pass(self), public :: destroy                           !< Destroy field.
+    procedure, pass(self), public :: output                            !< Extract Euler field.
+    procedure, pass(self), public :: dt => compute_dt                  !< Compute the current time step, by means of CFL condition.
+    generic,               public :: assignment(=) => assign_integrand !< Overloading = assignament.
     ! private methods
     procedure, pass(self), private :: t => dEuler_dt                         !< Time derivative, residuals function.
     procedure, pass(lhs),  private :: assign_integrand => euler_assign_euler !< Euler = Euler.
