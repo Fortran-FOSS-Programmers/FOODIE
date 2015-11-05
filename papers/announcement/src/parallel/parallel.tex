@@ -7,7 +7,6 @@ To obtain such a prove, the 1D Euler PDE system described previously is numerica
 \begin{itemize}
   \item CoArray Fortran (CAF) model, for shared and distributed memory architectures;
   \item OpenMP directive-based model, for only shared memory architectures;
-  \item Message Passing Interface (MPI) library-based model, for only distributed memory architectures;
   \end{itemize}
 
 In order to measure the performances of the parallel-enabled FOODIE tests, the \emph{strong} and \emph{weak} scaling have been considered. For the strong scaling the \emph{speedup} has been computed:
@@ -38,14 +37,8 @@ where $N_1$ is the minimum size considered and $N_K$ is the size used for the te
 \end{equation}
 The maximum ideal efficiency is obviously the unity.
 
-The same 1D Euler PDE problem is also solved by parallel-enabled codes that are not based on FOODIE: their solutions provide a reference for measuring the effect of FOODIE abstraction on the parallel scaling.
+The same 1D Euler PDEs problem is also solved by parallel-enabled codes that are not based on FOODIE: their solutions provide a reference for measuring the effect of FOODIE abstraction on the parallel scaling.
 
-\subsection{CAF benchmark}\label{subsec:caf}
-
-{\color{red} To be written.}
+\input{src/parallel/caf.tex}
 
 \input{src/parallel/openmp.tex}
-
-\subsection{MPI benchmark}\label{subsec:mpi}
-
-{\color{red} To be written.}

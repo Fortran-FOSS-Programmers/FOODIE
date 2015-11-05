@@ -51,7 +51,7 @@ function strong_scaling {
     exe='../tests-openmp/euler-1D-openmp-no-foodie'
     output='strong-scaling-no-foodie.dat'
   fi
-  echo "Strong scaling"
+  echo "Strong scaling, size $Ni"
   echo 'TITLE="Strong scaling analysis, cells '$Ni'"' > $output
   echo 'VARIABLES="OpenMP threads number" "CPU time"' >> $output
   echo "Benchmarking without OpenMP threads"

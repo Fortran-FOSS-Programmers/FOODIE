@@ -33,21 +33,32 @@
 \definecolor{RoyalBlue}{cmyk}{1,0.50,0,0}
 \definecolor{gray}{cmyk}{0.01,0.01,0.01,0.01}
 \usepackage{listings}
-\lstdefinelanguage{MyFortran}[95]{Fortran}{morecomment=[l]{\#},morestring=[d]',morekeywords={procedure,pass,deferred,non_overridable,generic,class,is}}
+\lstdefinelanguage{MyFortran}[08]{Fortran}{morecomment=[l]{\#},morestring=[d]',morekeywords={procedure,pass,deferred,non_overridable,generic,class,is}}
 \lstdefinestyle{code}{%
   basicstyle=\footnotesize,%
   backgroundcolor=\color{gray},%
   language=MyFortran,%
   captionpos=b,%
   columns=fixed,%
+  keepspaces=true,%
   xleftmargin=10pt,%
   numbers=none,%
   numberstyle={\tiny},%
   keywordstyle=\color{RoyalBlue},%
-  stringstyle={\sffamily},%
+  % stringstyle={\sffamily},%
   texcl=true,%
   upquote=true,%
   commentstyle=\color{Maroon}%
+}
+
+\lstdefinestyle{codesimple}{%
+  basicstyle=\footnotesize,%
+  backgroundcolor=\color{gray},%
+  captionpos=b,%
+  columns=fixed,%
+  keepspaces=true,%
+  xleftmargin=10pt,%
+  numbers=none,%
 }
 
 \DeclareSymbolFont{extraup}{U}{zavm}{m}{n}
@@ -167,6 +178,10 @@ Numerical integration of (general) Ordinary Differential Equations system \\
 \clearpage
 
 \input{src/conclusions/conclusions.tex}
+
+\appendix
+
+\input{src/appendix/euler-1D-parallel-tests-API.tex}
 
 \bibliographystyle{mycpc2}
 \bibliography{Reference}
