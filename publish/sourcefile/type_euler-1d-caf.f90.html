@@ -166,6 +166,8 @@
       
       <a class="list-group-item" href="../sourcefile/euler-1d-caf.f90.html">euler-1D-caf.f90</a>
       
+      <a class="list-group-item" href="../sourcefile/euler-1d-caf_no_foodie.f90.html">euler-1D-caf_no_foodie.f90</a>
+      
       <a class="list-group-item" href="../sourcefile/euler-1d-openmp.f90.html">euler-1D-openmp.f90</a>
       
       <a class="list-group-item" href="../sourcefile/euler-1d-openmp_no_foodie.f90.html">euler-1D-openmp_no_foodie.f90</a>
@@ -202,9 +204,11 @@
       
       <a class="list-group-item" href="../sourcefile/type_euler-1d-caf.f90.html">type_euler-1D-caf.f90</a>
       
+      <a class="list-group-item" href="../sourcefile/type_euler-1d-caf_no_foodie.f90.html">type_euler-1D-caf_no_foodie.f90</a>
+      
       <a class="list-group-item" href="../sourcefile/type_euler-1d-openmp.f90.html">type_euler-1D-openmp.f90</a>
       
-      <a class="list-group-item" href="../sourcefile/type_euler-1d-openmp.f90%7E2.html">type_euler-1D-openmp.f90</a>
+      <a class="list-group-item" href="../sourcefile/type_euler-1d-openmp_no_foodie.f90.html">type_euler-1D-openmp_no_foodie.f90</a>
       
       <a class="list-group-item" href="../sourcefile/type_euler-1d.f90.html">type_euler-1D.f90</a>
       
@@ -218,14 +222,14 @@
   
     </div>
     <div class="col-lg-9" id='text'>
-    <p>Define Euler 1D field that is a concrete extension of the abstract integrand type.</p>
+    <p>Define Euler 1D (CAF enabled) field that is a concrete extension of the abstract integrand type.</p>
     <br>
     <section>
     <h2><span class="anchor" id="src"></span>Source Code</h2>
-    <div class="highlight"><pre><span class="c">!&lt; Define Euler 1D field that is a concrete extension of the abstract integrand type.</span>
+    <div class="highlight"><pre><span class="c">!&lt; Define Euler 1D (CAF enabled) field that is a concrete extension of the abstract integrand type.</span>
 <span class="k">module </span><span class="n">type_euler_1D_caf</span>
 <span class="c">!-----------------------------------------------------------------------------------------------------------------------------------</span>
-<span class="c">!&lt; Define Euler 1D field that is a concrete extension of the abstract integrand type.</span>
+<span class="c">!&lt; Define Euler 1D (CAF enabled) field that is a concrete extension of the abstract integrand type.</span>
 <span class="c">!-----------------------------------------------------------------------------------------------------------------------------------</span>
 
 <span class="c">!-----------------------------------------------------------------------------------------------------------------------------------</span>
@@ -350,22 +354,21 @@
   <span class="c">!&lt; + Ns+1 : momentum conservation             (r*u)</span>
   <span class="c">!&lt; + Ns+2 : energy conservation               (r*E)</span>
   <span class="k">private</span>
-<span class="k">  </span><span class="kt">integer</span><span class="p">(</span><span class="n">I_P</span><span class="p">)</span>                      <span class="kd">::</span> <span class="n">ord</span><span class="o">=</span><span class="mi">0</span>     <span class="c">!&lt; Space accuracy formal order.</span>
-  <span class="kt">integer</span><span class="p">(</span><span class="n">I_P</span><span class="p">)</span>                      <span class="kd">::</span> <span class="n">Ni</span><span class="o">=</span><span class="mi">0</span>      <span class="c">!&lt; Space dimension.</span>
-  <span class="kt">integer</span><span class="p">(</span><span class="n">I_P</span><span class="p">)</span>                      <span class="kd">::</span> <span class="n">Ng</span><span class="o">=</span><span class="mi">0</span>      <span class="c">!&lt; Number of ghost cells for boundary conditions handling.</span>
-  <span class="kt">integer</span><span class="p">(</span><span class="n">I_P</span><span class="p">)</span>                      <span class="kd">::</span> <span class="n">Ns</span><span class="o">=</span><span class="mi">0</span>      <span class="c">!&lt; Number of initial species.</span>
-  <span class="kt">integer</span><span class="p">(</span><span class="n">I_P</span><span class="p">)</span>                      <span class="kd">::</span> <span class="n">Nc</span><span class="o">=</span><span class="mi">0</span>      <span class="c">!&lt; Number of conservative variables, Ns+2.</span>
-  <span class="kt">integer</span><span class="p">(</span><span class="n">I_P</span><span class="p">)</span>                      <span class="kd">::</span> <span class="n">Np</span><span class="o">=</span><span class="mi">0</span>      <span class="c">!&lt; Number of primitive variables, Ns+4.</span>
-  <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">)</span>                         <span class="kd">::</span> <span class="n">Dx</span><span class="o">=</span><span class="mf">0._R_P</span> <span class="c">!&lt; Space step.</span>
-  <span class="k">type</span><span class="p">(</span><span class="n">weno_interpolator_upwind</span><span class="p">)</span>    <span class="kd">::</span> <span class="n">weno</span>      <span class="c">!&lt; WENO interpolator.</span>
-  <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">),</span>    <span class="k">allocatable</span>         <span class="kd">::</span> <span class="n">U</span><span class="p">(:,:)</span>    <span class="c">!&lt; Integrand (state) variables, whole physical domain [1:Nc,1:Ni].</span>
-  <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">),</span>    <span class="k">allocatable</span>         <span class="kd">::</span> <span class="n">cp0</span><span class="p">(:)</span>    <span class="c">!&lt; Specific heat cp of initial species [1:Ns].</span>
-  <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">),</span>    <span class="k">allocatable</span>         <span class="kd">::</span> <span class="n">cv0</span><span class="p">(:)</span>    <span class="c">!&lt; Specific heat cv of initial species [1:Ns].</span>
-  <span class="kt">character</span><span class="p">(:),</span> <span class="k">allocatable</span>         <span class="kd">::</span> <span class="n">BC_L</span>      <span class="c">!&lt; Left boundary condition type.</span>
-  <span class="kt">character</span><span class="p">(:),</span> <span class="k">allocatable</span>         <span class="kd">::</span> <span class="n">BC_R</span>      <span class="c">!&lt; Right boundary condition type.</span>
-  <span class="kt">integer</span><span class="p">(</span><span class="n">I_P</span><span class="p">)</span>                      <span class="kd">::</span> <span class="n">me</span><span class="o">=</span><span class="mi">0</span>      <span class="c">!&lt; ID of this_image().</span>
-  <span class="kt">integer</span><span class="p">(</span><span class="n">I_P</span><span class="p">)</span>                      <span class="kd">::</span> <span class="n">we</span><span class="o">=</span><span class="mi">0</span>      <span class="c">!&lt; Number of CAF images used.</span>
-  <span class="kt">integer</span><span class="p">(</span><span class="n">I_P</span><span class="p">)</span>                      <span class="kd">::</span> <span class="n">id</span><span class="o">=</span><span class="mi">0</span>      <span class="c">!&lt; Instance identification.</span>
+<span class="k">  </span><span class="kt">integer</span><span class="p">(</span><span class="n">I_P</span><span class="p">)</span>                   <span class="kd">::</span> <span class="n">ord</span><span class="o">=</span><span class="mi">0</span>     <span class="c">!&lt; Space accuracy formal order.</span>
+  <span class="kt">integer</span><span class="p">(</span><span class="n">I_P</span><span class="p">)</span>                   <span class="kd">::</span> <span class="n">Ni</span><span class="o">=</span><span class="mi">0</span>      <span class="c">!&lt; Space dimension.</span>
+  <span class="kt">integer</span><span class="p">(</span><span class="n">I_P</span><span class="p">)</span>                   <span class="kd">::</span> <span class="n">Ng</span><span class="o">=</span><span class="mi">0</span>      <span class="c">!&lt; Number of ghost cells for boundary conditions handling.</span>
+  <span class="kt">integer</span><span class="p">(</span><span class="n">I_P</span><span class="p">)</span>                   <span class="kd">::</span> <span class="n">Ns</span><span class="o">=</span><span class="mi">0</span>      <span class="c">!&lt; Number of initial species.</span>
+  <span class="kt">integer</span><span class="p">(</span><span class="n">I_P</span><span class="p">)</span>                   <span class="kd">::</span> <span class="n">Nc</span><span class="o">=</span><span class="mi">0</span>      <span class="c">!&lt; Number of conservative variables, Ns+2.</span>
+  <span class="kt">integer</span><span class="p">(</span><span class="n">I_P</span><span class="p">)</span>                   <span class="kd">::</span> <span class="n">Np</span><span class="o">=</span><span class="mi">0</span>      <span class="c">!&lt; Number of primitive variables, Ns+4.</span>
+  <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">)</span>                      <span class="kd">::</span> <span class="n">Dx</span><span class="o">=</span><span class="mf">0._R_P</span> <span class="c">!&lt; Space step.</span>
+  <span class="k">type</span><span class="p">(</span><span class="n">weno_interpolator_upwind</span><span class="p">)</span> <span class="kd">::</span> <span class="n">weno</span>      <span class="c">!&lt; WENO interpolator.</span>
+  <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">),</span>    <span class="k">allocatable</span>      <span class="kd">::</span> <span class="n">U</span><span class="p">(:,:)</span>    <span class="c">!&lt; Integrand (state) variables, whole physical domain [1:Nc,1:Ni].</span>
+  <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">),</span>    <span class="k">allocatable</span>      <span class="kd">::</span> <span class="n">cp0</span><span class="p">(:)</span>    <span class="c">!&lt; Specific heat cp of initial species [1:Ns].</span>
+  <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">),</span>    <span class="k">allocatable</span>      <span class="kd">::</span> <span class="n">cv0</span><span class="p">(:)</span>    <span class="c">!&lt; Specific heat cv of initial species [1:Ns].</span>
+  <span class="kt">character</span><span class="p">(:),</span> <span class="k">allocatable</span>      <span class="kd">::</span> <span class="n">BC_L</span>      <span class="c">!&lt; Left boundary condition type.</span>
+  <span class="kt">character</span><span class="p">(:),</span> <span class="k">allocatable</span>      <span class="kd">::</span> <span class="n">BC_R</span>      <span class="c">!&lt; Right boundary condition type.</span>
+  <span class="kt">integer</span><span class="p">(</span><span class="n">I_P</span><span class="p">)</span>                   <span class="kd">::</span> <span class="n">me</span><span class="o">=</span><span class="mi">0</span>      <span class="c">!&lt; ID of this_image().</span>
+  <span class="kt">integer</span><span class="p">(</span><span class="n">I_P</span><span class="p">)</span>                   <span class="kd">::</span> <span class="n">we</span><span class="o">=</span><span class="mi">0</span>      <span class="c">!&lt; Number of CAF images used.</span>
   <span class="k">contains</span>
     <span class="c">! auxiliary methods</span>
     <span class="k">procedure</span><span class="p">,</span> <span class="k">pass</span><span class="p">(</span><span class="n">self</span><span class="p">),</span> <span class="k">public</span> <span class="kd">::</span> <span class="n">init</span>             <span class="c">!&lt; Init field.</span>
@@ -391,8 +394,11 @@
     <span class="k">procedure</span><span class="p">,</span> <span class="k">pass</span><span class="p">(</span><span class="n">self</span><span class="p">),</span> <span class="k">private</span> <span class="kd">::</span> <span class="n">riemann_solver</span>                <span class="c">!&lt; Solve the Riemann Problem at cell interfaces.</span>
     <span class="k">final</span>                          <span class="kd">::</span> <span class="n">finalize</span>                      <span class="c">!&lt; Finalize field.</span>
 <span class="n">endtype</span> <span class="n">euler_1D_caf</span>
-<span class="kt">integer</span><span class="p">(</span><span class="n">I_P</span><span class="p">)</span>           <span class="kd">::</span> <span class="n">Ninstances</span><span class="o">=</span><span class="mi">0</span>     <span class="c">!&lt; Number of instances of euler_1D_caf.</span>
+<span class="cp">#ifdef CAF</span>
 <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">),</span> <span class="k">allocatable</span> <span class="kd">::</span> <span class="n">remote_U</span><span class="p">(:,:)[:]</span> <span class="c">!&lt; CAF buffer for sharing remote conservative variables.</span>
+<span class="cp">#else</span>
+<span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">),</span> <span class="k">allocatable</span> <span class="kd">::</span> <span class="n">remote_U</span><span class="p">(:,:)</span>    <span class="c">!&lt; CAF buffer for sharing remote conservative variables.</span>
+<span class="cp">#endif</span>
 <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">),</span> <span class="k">allocatable</span> <span class="kd">::</span> <span class="n">U_L</span><span class="p">(:,:)</span>         <span class="c">!&lt; Integrand (state) variables, left ghost cells [1:Nc,1:Ng].</span>
 <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">),</span> <span class="k">allocatable</span> <span class="kd">::</span> <span class="n">U_R</span><span class="p">(:,:)</span>         <span class="c">!&lt; Integrand (state) variables, right ghost cells [1:Nc,Ni-Ng+1:Ni].</span>
 <span class="c">!-----------------------------------------------------------------------------------------------------------------------------------</span>
@@ -441,9 +447,11 @@
   <span class="n">enddo</span>
   <span class="n">self</span><span class="p">%</span><span class="n">me</span> <span class="o">=</span> <span class="n">me</span>
   <span class="n">self</span><span class="p">%</span><span class="n">we</span> <span class="o">=</span> <span class="n">we</span>
-  <span class="n">Ninstances</span> <span class="o">=</span> <span class="n">Ninstances</span> <span class="o">+</span> <span class="mi">1</span>
-  <span class="n">self</span><span class="p">%</span><span class="n">id</span> <span class="o">=</span> <span class="n">Ninstances</span>
+<span class="cp">#ifdef CAF</span>
   <span class="k">if</span> <span class="p">(</span><span class="nb">allocated</span><span class="p">(</span><span class="n">remote_U</span><span class="p">))</span> <span class="k">deallocate</span><span class="p">(</span><span class="n">remote_U</span><span class="p">)</span> <span class="p">;</span> <span class="k">allocate</span><span class="p">(</span><span class="n">remote_U</span><span class="p">(</span><span class="mi">1</span><span class="p">:</span><span class="n">self</span><span class="p">%</span><span class="n">Nc</span><span class="p">,</span> <span class="mi">1</span><span class="p">:</span><span class="n">Ni</span><span class="p">)[</span><span class="o">*</span><span class="p">])</span>
+<span class="cp">#else</span>
+  <span class="k">if</span> <span class="p">(</span><span class="nb">allocated</span><span class="p">(</span><span class="n">remote_U</span><span class="p">))</span> <span class="k">deallocate</span><span class="p">(</span><span class="n">remote_U</span><span class="p">)</span> <span class="p">;</span> <span class="k">allocate</span><span class="p">(</span><span class="n">remote_U</span><span class="p">(</span><span class="mi">1</span><span class="p">:</span><span class="n">self</span><span class="p">%</span><span class="n">Nc</span><span class="p">,</span> <span class="mi">1</span><span class="p">:</span><span class="n">Ni</span><span class="p">))</span>
+<span class="cp">#endif</span>
   <span class="k">if</span> <span class="p">(</span><span class="nb">allocated</span><span class="p">(</span><span class="n">U_L</span><span class="p">))</span> <span class="k">deallocate</span><span class="p">(</span><span class="n">U_L</span><span class="p">)</span> <span class="p">;</span> <span class="k">allocate</span><span class="p">(</span><span class="n">U_L</span><span class="p">(</span><span class="mi">1</span><span class="p">:</span><span class="n">self</span><span class="p">%</span><span class="n">Nc</span><span class="p">,</span> <span class="mi">1</span><span class="p">:</span><span class="n">self</span><span class="p">%</span><span class="n">Ni</span><span class="p">))</span>
   <span class="k">if</span> <span class="p">(</span><span class="nb">allocated</span><span class="p">(</span><span class="n">U_R</span><span class="p">))</span> <span class="k">deallocate</span><span class="p">(</span><span class="n">U_R</span><span class="p">)</span> <span class="p">;</span> <span class="k">allocate</span><span class="p">(</span><span class="n">U_R</span><span class="p">(</span><span class="mi">1</span><span class="p">:</span><span class="n">self</span><span class="p">%</span><span class="n">Nc</span><span class="p">,</span> <span class="mi">1</span><span class="p">:</span><span class="n">self</span><span class="p">%</span><span class="n">Ni</span><span class="p">))</span>
   <span class="k">return</span>
@@ -472,7 +480,6 @@
   <span class="k">if</span> <span class="p">(</span><span class="nb">allocated</span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">BC_R</span><span class="p">))</span> <span class="k">deallocate</span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">BC_R</span><span class="p">)</span>
   <span class="n">self</span><span class="p">%</span><span class="n">me</span> <span class="o">=</span> <span class="mi">0</span>
   <span class="n">self</span><span class="p">%</span><span class="n">we</span> <span class="o">=</span> <span class="mi">0</span>
-  <span class="n">self</span><span class="p">%</span><span class="n">id</span> <span class="o">=</span> <span class="mi">0</span>
   <span class="k">if</span> <span class="p">(</span><span class="nb">allocated</span><span class="p">(</span><span class="n">remote_U</span><span class="p">))</span> <span class="k">deallocate</span><span class="p">(</span><span class="n">remote_U</span><span class="p">)</span>
   <span class="k">if</span> <span class="p">(</span><span class="nb">allocated</span><span class="p">(</span><span class="n">U_L</span><span class="p">))</span> <span class="k">deallocate</span><span class="p">(</span><span class="n">U_L</span><span class="p">)</span>
   <span class="k">if</span> <span class="p">(</span><span class="nb">allocated</span><span class="p">(</span><span class="n">U_R</span><span class="p">))</span> <span class="k">deallocate</span><span class="p">(</span><span class="n">U_R</span><span class="p">)</span>
@@ -484,10 +491,10 @@
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
   <span class="c">!&lt; Output the Euler field state (primitive variables).</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
-  <span class="k">class</span><span class="p">(</span><span class="n">euler_1D_caf</span><span class="p">),</span> <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span>            <span class="kd">::</span> <span class="n">self</span>         <span class="c">!&lt; Euler field.</span>
-  <span class="kt">logical</span><span class="p">,</span>             <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">),</span> <span class="k">optional</span>  <span class="kd">::</span> <span class="n">conservative</span> <span class="c">!&lt; Output conservative variables instead of primitive.</span>
-  <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">),</span> <span class="k">dimension</span><span class="p">(:,:),</span> <span class="k">allocatable</span>     <span class="kd">::</span> <span class="n">state</span>        <span class="c">!&lt; Euler state vector.</span>
-  <span class="kt">integer</span><span class="p">(</span><span class="n">I_P</span><span class="p">)</span>                               <span class="kd">::</span> <span class="n">i</span>            <span class="c">!&lt; Counter.</span>
+  <span class="k">class</span><span class="p">(</span><span class="n">euler_1D_caf</span><span class="p">),</span> <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span>        <span class="kd">::</span> <span class="n">self</span>         <span class="c">!&lt; Euler field.</span>
+  <span class="kt">logical</span><span class="p">,</span> <span class="k">optional</span><span class="p">,</span>   <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span>        <span class="kd">::</span> <span class="n">conservative</span> <span class="c">!&lt; Output conservative variables instead of primitive.</span>
+  <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">),</span> <span class="k">dimension</span><span class="p">(:,:),</span> <span class="k">allocatable</span> <span class="kd">::</span> <span class="n">state</span>        <span class="c">!&lt; Euler state vector.</span>
+  <span class="kt">integer</span><span class="p">(</span><span class="n">I_P</span><span class="p">)</span>                           <span class="kd">::</span> <span class="n">i</span>            <span class="c">!&lt; Counter.</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
 
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
@@ -639,7 +646,6 @@
   <span class="k">class</span><span class="p">(</span><span class="n">euler_1D_caf</span><span class="p">),</span> <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span>  <span class="kd">::</span> <span class="n">lhs</span> <span class="c">!&lt; Left hand side.</span>
   <span class="k">class</span><span class="p">(</span><span class="n">integrand</span><span class="p">),</span>    <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span>  <span class="kd">::</span> <span class="n">rhs</span> <span class="c">!&lt; Right hand side.</span>
   <span class="k">class</span><span class="p">(</span><span class="n">integrand</span><span class="p">),</span>    <span class="k">allocatable</span> <span class="kd">::</span> <span class="n">opr</span> <span class="c">!&lt; Operator result.</span>
-  <span class="kt">integer</span><span class="p">(</span><span class="n">I_P</span><span class="p">)</span>                     <span class="kd">::</span> <span class="n">i</span>   <span class="c">!&lt; Counter.</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
 
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
@@ -652,9 +658,7 @@
   <span class="k">class is</span><span class="p">(</span><span class="n">euler_1D_caf</span><span class="p">)</span>
     <span class="k">select type</span><span class="p">(</span><span class="n">rhs</span><span class="p">)</span>
     <span class="k">class is</span> <span class="p">(</span><span class="n">euler_1D_caf</span><span class="p">)</span>
-      <span class="k">do </span><span class="n">i</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">lhs</span><span class="p">%</span><span class="n">Ni</span>
-        <span class="n">opr</span><span class="p">%</span><span class="n">U</span><span class="p">(:,</span> <span class="n">i</span><span class="p">)</span> <span class="o">=</span> <span class="n">lhs</span><span class="p">%</span><span class="n">U</span><span class="p">(:,</span> <span class="n">i</span><span class="p">)</span> <span class="o">*</span> <span class="n">rhs</span><span class="p">%</span><span class="n">U</span><span class="p">(:,</span> <span class="n">i</span><span class="p">)</span>
-      <span class="n">enddo</span>
+      <span class="n">opr</span><span class="p">%</span><span class="n">U</span> <span class="o">=</span> <span class="n">lhs</span><span class="p">%</span><span class="n">U</span> <span class="o">*</span> <span class="n">rhs</span><span class="p">%</span><span class="n">U</span>
     <span class="n">endselect</span>
   <span class="n">endselect</span>
   <span class="k">return</span>
@@ -668,7 +672,6 @@
   <span class="k">class</span><span class="p">(</span><span class="n">euler_1D_caf</span><span class="p">),</span> <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span> <span class="kd">::</span> <span class="n">lhs</span> <span class="c">!&lt; Left hand side.</span>
   <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">),</span>           <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span> <span class="kd">::</span> <span class="n">rhs</span> <span class="c">!&lt; Right hand side.</span>
   <span class="k">class</span><span class="p">(</span><span class="n">integrand</span><span class="p">),</span> <span class="k">allocatable</span>   <span class="kd">::</span> <span class="n">opr</span> <span class="c">!&lt; Operator result.</span>
-  <span class="kt">integer</span><span class="p">(</span><span class="n">I_P</span><span class="p">)</span>                    <span class="kd">::</span> <span class="n">i</span>   <span class="c">!&lt; Counter.</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
 
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
@@ -679,9 +682,7 @@
   <span class="n">endselect</span>
   <span class="k">select type</span><span class="p">(</span><span class="n">opr</span><span class="p">)</span>
   <span class="k">class is</span><span class="p">(</span><span class="n">euler_1D_caf</span><span class="p">)</span>
-    <span class="k">do </span><span class="n">i</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">lhs</span><span class="p">%</span><span class="n">Ni</span>
-      <span class="n">opr</span><span class="p">%</span><span class="n">U</span><span class="p">(:,</span> <span class="n">i</span><span class="p">)</span> <span class="o">=</span> <span class="n">lhs</span><span class="p">%</span><span class="n">U</span><span class="p">(:,</span> <span class="n">i</span><span class="p">)</span> <span class="o">*</span> <span class="n">rhs</span>
-    <span class="n">enddo</span>
+    <span class="n">opr</span><span class="p">%</span><span class="n">U</span> <span class="o">=</span> <span class="n">lhs</span><span class="p">%</span><span class="n">U</span> <span class="o">*</span> <span class="n">rhs</span>
   <span class="n">endselect</span>
   <span class="k">return</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
@@ -694,7 +695,6 @@
   <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">),</span>           <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span> <span class="kd">::</span> <span class="n">lhs</span> <span class="c">!&lt; Left hand side.</span>
   <span class="k">class</span><span class="p">(</span><span class="n">euler_1D_caf</span><span class="p">),</span> <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span> <span class="kd">::</span> <span class="n">rhs</span> <span class="c">!&lt; Right hand side.</span>
   <span class="k">class</span><span class="p">(</span><span class="n">integrand</span><span class="p">),</span> <span class="k">allocatable</span>   <span class="kd">::</span> <span class="n">opr</span> <span class="c">!&lt; Operator result.</span>
-  <span class="kt">integer</span><span class="p">(</span><span class="n">I_P</span><span class="p">)</span>                    <span class="kd">::</span> <span class="n">i</span>   <span class="c">!&lt; Counter.</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
 
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
@@ -705,9 +705,7 @@
   <span class="n">endselect</span>
   <span class="k">select type</span><span class="p">(</span><span class="n">opr</span><span class="p">)</span>
   <span class="k">class is</span><span class="p">(</span><span class="n">euler_1D_caf</span><span class="p">)</span>
-    <span class="k">do </span><span class="n">i</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">rhs</span><span class="p">%</span><span class="n">Ni</span>
-      <span class="n">opr</span><span class="p">%</span><span class="n">U</span><span class="p">(:,</span> <span class="n">i</span><span class="p">)</span> <span class="o">=</span> <span class="n">rhs</span><span class="p">%</span><span class="n">U</span><span class="p">(:,</span> <span class="n">i</span><span class="p">)</span> <span class="o">*</span> <span class="n">lhs</span>
-    <span class="n">enddo</span>
+    <span class="n">opr</span><span class="p">%</span><span class="n">U</span> <span class="o">=</span> <span class="n">rhs</span><span class="p">%</span><span class="n">U</span> <span class="o">*</span> <span class="n">lhs</span>
   <span class="n">endselect</span>
   <span class="k">return</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
@@ -720,7 +718,6 @@
   <span class="k">class</span><span class="p">(</span><span class="n">euler_1D_caf</span><span class="p">),</span> <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span> <span class="kd">::</span> <span class="n">lhs</span> <span class="c">!&lt; Left hand side.</span>
   <span class="k">class</span><span class="p">(</span><span class="n">integrand</span><span class="p">),</span>    <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span> <span class="kd">::</span> <span class="n">rhs</span> <span class="c">!&lt; Right hand side.</span>
   <span class="k">class</span><span class="p">(</span><span class="n">integrand</span><span class="p">),</span> <span class="k">allocatable</span>   <span class="kd">::</span> <span class="n">opr</span> <span class="c">!&lt; Operator result.</span>
-  <span class="kt">integer</span><span class="p">(</span><span class="n">I_P</span><span class="p">)</span>                    <span class="kd">::</span> <span class="n">i</span>   <span class="c">!&lt; Counter.</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
 
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
@@ -733,9 +730,7 @@
   <span class="k">class is</span><span class="p">(</span><span class="n">euler_1D_caf</span><span class="p">)</span>
     <span class="k">select type</span><span class="p">(</span><span class="n">rhs</span><span class="p">)</span>
     <span class="k">class is</span> <span class="p">(</span><span class="n">euler_1D_caf</span><span class="p">)</span>
-      <span class="k">do </span><span class="n">i</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">lhs</span><span class="p">%</span><span class="n">Ni</span>
-        <span class="n">opr</span><span class="p">%</span><span class="n">U</span><span class="p">(:,</span> <span class="n">i</span><span class="p">)</span> <span class="o">=</span> <span class="n">lhs</span><span class="p">%</span><span class="n">U</span><span class="p">(:,</span> <span class="n">i</span><span class="p">)</span> <span class="o">+</span> <span class="n">rhs</span><span class="p">%</span><span class="n">U</span><span class="p">(:,</span> <span class="n">i</span><span class="p">)</span>
-      <span class="n">enddo</span>
+      <span class="n">opr</span><span class="p">%</span><span class="n">U</span> <span class="o">=</span> <span class="n">lhs</span><span class="p">%</span><span class="n">U</span> <span class="o">+</span> <span class="n">rhs</span><span class="p">%</span><span class="n">U</span>
     <span class="n">endselect</span>
   <span class="n">endselect</span>
   <span class="k">return</span>
@@ -749,7 +744,6 @@
   <span class="k">class</span><span class="p">(</span><span class="n">euler_1D_caf</span><span class="p">),</span> <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span>  <span class="kd">::</span> <span class="n">lhs</span> <span class="c">!&lt; Left hand side.</span>
   <span class="k">class</span><span class="p">(</span><span class="n">integrand</span><span class="p">),</span>    <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span>  <span class="kd">::</span> <span class="n">rhs</span> <span class="c">!&lt; Right hand side.</span>
   <span class="k">class</span><span class="p">(</span><span class="n">integrand</span><span class="p">),</span>    <span class="k">allocatable</span> <span class="kd">::</span> <span class="n">opr</span> <span class="c">!&lt; Operator result.</span>
-  <span class="kt">integer</span><span class="p">(</span><span class="n">I_P</span><span class="p">)</span>                     <span class="kd">::</span> <span class="n">i</span>   <span class="c">!&lt; Counter.</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
 
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
@@ -762,9 +756,7 @@
   <span class="k">class is</span><span class="p">(</span><span class="n">euler_1D_caf</span><span class="p">)</span>
     <span class="k">select type</span><span class="p">(</span><span class="n">rhs</span><span class="p">)</span>
     <span class="k">class is</span> <span class="p">(</span><span class="n">euler_1D_caf</span><span class="p">)</span>
-      <span class="k">do </span><span class="n">i</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">lhs</span><span class="p">%</span><span class="n">Ni</span>
-        <span class="n">opr</span><span class="p">%</span><span class="n">U</span><span class="p">(:,</span> <span class="n">i</span><span class="p">)</span> <span class="o">=</span> <span class="n">lhs</span><span class="p">%</span><span class="n">U</span><span class="p">(:,</span> <span class="n">i</span><span class="p">)</span> <span class="o">-</span> <span class="n">rhs</span><span class="p">%</span><span class="n">U</span><span class="p">(:,</span> <span class="n">i</span><span class="p">)</span>
-      <span class="n">enddo</span>
+      <span class="n">opr</span><span class="p">%</span><span class="n">U</span> <span class="o">=</span> <span class="n">lhs</span><span class="p">%</span><span class="n">U</span> <span class="o">-</span> <span class="n">rhs</span><span class="p">%</span><span class="n">U</span>
     <span class="n">endselect</span>
   <span class="n">endselect</span>
   <span class="k">return</span>
@@ -777,7 +769,6 @@
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
   <span class="k">class</span><span class="p">(</span><span class="n">euler_1D_caf</span><span class="p">),</span> <span class="k">intent</span><span class="p">(</span><span class="n">INOUT</span><span class="p">)</span> <span class="kd">::</span> <span class="n">lhs</span> <span class="c">!&lt; Left hand side.</span>
   <span class="k">class</span><span class="p">(</span><span class="n">integrand</span><span class="p">),</span>    <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span>    <span class="kd">::</span> <span class="n">rhs</span> <span class="c">!&lt; Right hand side.</span>
-  <span class="kt">integer</span><span class="p">(</span><span class="n">I_P</span><span class="p">)</span>                       <span class="kd">::</span> <span class="n">i</span>   <span class="c">!&lt; Counter.</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
 
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
@@ -809,15 +800,10 @@
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
   <span class="k">class</span><span class="p">(</span><span class="n">euler_1D_caf</span><span class="p">),</span> <span class="k">intent</span><span class="p">(</span><span class="n">INOUT</span><span class="p">)</span> <span class="kd">::</span> <span class="n">lhs</span> <span class="c">!&lt; Left hand side.</span>
   <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">),</span>           <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span>    <span class="kd">::</span> <span class="n">rhs</span> <span class="c">!&lt; Right hand side.</span>
-  <span class="kt">integer</span><span class="p">(</span><span class="n">I_P</span><span class="p">)</span>                       <span class="kd">::</span> <span class="n">i</span>   <span class="c">!&lt; Counter.</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
 
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
-  <span class="k">if</span> <span class="p">(</span><span class="nb">allocated</span><span class="p">(</span><span class="n">lhs</span><span class="p">%</span><span class="n">U</span><span class="p">))</span> <span class="k">then</span>
-<span class="k">    do </span><span class="n">i</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">lhs</span><span class="p">%</span><span class="n">Ni</span>
-      <span class="n">lhs</span><span class="p">%</span><span class="n">U</span><span class="p">(:,</span> <span class="n">i</span><span class="p">)</span> <span class="o">=</span> <span class="n">rhs</span>
-    <span class="n">enddo</span>
-  <span class="n">endif</span>
+  <span class="k">if</span> <span class="p">(</span><span class="nb">allocated</span><span class="p">(</span><span class="n">lhs</span><span class="p">%</span><span class="n">U</span><span class="p">))</span> <span class="n">lhs</span><span class="p">%</span><span class="n">U</span> <span class="o">=</span> <span class="n">rhs</span>
   <span class="k">return</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
   <span class="n">endsubroutine</span> <span class="n">euler_assign_real</span>
@@ -876,6 +862,7 @@
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
 
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+<span class="cp">#ifdef CAF</span>
   <span class="k">if</span> <span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">we</span><span class="o">&gt;</span><span class="mi">1</span><span class="p">)</span> <span class="k">then</span>
 <span class="k">    </span><span class="n">remote_U</span> <span class="o">=</span> <span class="n">self</span><span class="p">%</span><span class="n">U</span>
     <span class="k">if</span> <span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">me</span><span class="o">==</span><span class="mi">1</span><span class="p">)</span> <span class="k">then</span>
@@ -890,6 +877,7 @@
       <span class="n">U_R</span><span class="p">(:,:)</span> <span class="o">=</span> <span class="n">remote_U</span><span class="p">(:,:)[</span><span class="n">self</span><span class="p">%</span><span class="n">me</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span>
     <span class="n">endif</span>
   <span class="n">endif</span>
+<span class="cp">#endif</span>
   <span class="k">return</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
   <span class="n">endsubroutine</span> <span class="n">synchronize</span>

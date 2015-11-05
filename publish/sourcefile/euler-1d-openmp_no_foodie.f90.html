@@ -166,6 +166,8 @@
       
       <a class="list-group-item" href="../sourcefile/euler-1d-caf.f90.html">euler-1D-caf.f90</a>
       
+      <a class="list-group-item" href="../sourcefile/euler-1d-caf_no_foodie.f90.html">euler-1D-caf_no_foodie.f90</a>
+      
       <a class="list-group-item" href="../sourcefile/euler-1d-openmp.f90.html">euler-1D-openmp.f90</a>
       
       <a class="list-group-item" href="../sourcefile/euler-1d-openmp_no_foodie.f90.html">euler-1D-openmp_no_foodie.f90</a>
@@ -202,9 +204,11 @@
       
       <a class="list-group-item" href="../sourcefile/type_euler-1d-caf.f90.html">type_euler-1D-caf.f90</a>
       
+      <a class="list-group-item" href="../sourcefile/type_euler-1d-caf_no_foodie.f90.html">type_euler-1D-caf_no_foodie.f90</a>
+      
       <a class="list-group-item" href="../sourcefile/type_euler-1d-openmp.f90.html">type_euler-1D-openmp.f90</a>
       
-      <a class="list-group-item" href="../sourcefile/type_euler-1d-openmp.f90%7E2.html">type_euler-1D-openmp.f90</a>
+      <a class="list-group-item" href="../sourcefile/type_euler-1d-openmp_no_foodie.f90.html">type_euler-1D-openmp_no_foodie.f90</a>
       
       <a class="list-group-item" href="../sourcefile/type_euler-1d.f90.html">type_euler-1D.f90</a>
       
@@ -218,19 +222,19 @@
   
     </div>
     <div class="col-lg-9" id='text'>
-    <p>Test without FOODIE with the integration of Euler 1D PDEs system.</p>
+    <p>Test without FOODIE with the integration of Euler 1D PDEs system by OpenMP paradigm.</p>
     <br>
     <section>
     <h2><span class="anchor" id="src"></span>Source Code</h2>
-    <div class="highlight"><pre><span class="c">!&lt; Test without FOODIE with the integration of Euler 1D PDEs system.</span>
+    <div class="highlight"><pre><span class="c">!&lt; Test without FOODIE with the integration of Euler 1D PDEs system by OpenMP paradigm.</span>
 <span class="k">program </span><span class="n">integrate_euler_1D_openmp_no_foodie</span>
 <span class="c">!-----------------------------------------------------------------------------------------------------------------------------------</span>
-<span class="c">!&lt; Test without FOODIE with the integration of Euler 1D PDEs system.</span>
+<span class="c">!&lt; Test without FOODIE with the integration of Euler 1D PDEs system by OpenMP paradigm.</span>
 <span class="c">!-----------------------------------------------------------------------------------------------------------------------------------</span>
 
 <span class="c">!-----------------------------------------------------------------------------------------------------------------------------------</span>
 <span class="k">use </span><span class="n">IR_Precision</span><span class="p">,</span> <span class="n">only</span> <span class="p">:</span> <span class="n">R_P</span><span class="p">,</span> <span class="n">I_P</span><span class="p">,</span> <span class="n">FR_P</span><span class="p">,</span> <span class="n">str</span>
-<span class="k">use </span><span class="n">type_euler_1D_openmp_no_foodie</span><span class="p">,</span> <span class="n">only</span> <span class="p">:</span> <span class="n">euler_1D_openmp</span><span class="p">,</span> <span class="n">tvd_runge_kutta_integrator</span>
+<span class="k">use </span><span class="n">type_euler_1D_openmp_no_foodie</span><span class="p">,</span> <span class="n">only</span> <span class="p">:</span> <span class="n">euler_1D_omp_nf</span><span class="p">,</span> <span class="n">tvd_runge_kutta_integrator</span>
 <span class="k">use </span><span class="n">Data_Type_Command_Line_Interface</span><span class="p">,</span> <span class="n">only</span> <span class="p">:</span> <span class="n">Type_Command_Line_Interface</span>
 <span class="k">use </span><span class="n">pyplot_module</span><span class="p">,</span> <span class="n">only</span> <span class="p">:</span>  <span class="n">pyplot</span>
 <span class="cp">#ifdef OPENMP</span>
@@ -243,10 +247,10 @@
 <span class="k">type</span><span class="p">(</span><span class="n">Type_Command_Line_Interface</span><span class="p">)</span> <span class="kd">::</span> <span class="n">cli</span>                   <span class="c">!&lt; Command line interface handler.</span>
 <span class="k">type</span><span class="p">(</span><span class="n">tvd_runge_kutta_integrator</span><span class="p">)</span>  <span class="kd">::</span> <span class="n">rk_integrator</span>         <span class="c">!&lt; Runge-Kutta integrator.</span>
 <span class="kt">integer</span><span class="p">,</span> <span class="k">parameter</span>                <span class="kd">::</span> <span class="n">rk_stages</span><span class="o">=</span><span class="mi">5</span>           <span class="c">!&lt; Runge-Kutta stages number.</span>
-<span class="k">type</span><span class="p">(</span><span class="n">euler_1D_openmp</span><span class="p">)</span>             <span class="kd">::</span> <span class="n">rk_stage</span><span class="p">(</span><span class="mi">1</span><span class="p">:</span><span class="n">rk_stages</span><span class="p">)</span> <span class="c">!&lt; Runge-Kutta stages.</span>
+<span class="k">type</span><span class="p">(</span><span class="n">euler_1D_omp_nf</span><span class="p">)</span>             <span class="kd">::</span> <span class="n">rk_stage</span><span class="p">(</span><span class="mi">1</span><span class="p">:</span><span class="n">rk_stages</span><span class="p">)</span> <span class="c">!&lt; Runge-Kutta stages.</span>
 <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">)</span>                         <span class="kd">::</span> <span class="n">dt</span>                    <span class="c">!&lt; Time step.</span>
 <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">)</span>                         <span class="kd">::</span> <span class="n">t</span>                     <span class="c">!&lt; Time.</span>
-<span class="k">type</span><span class="p">(</span><span class="n">euler_1D_openmp</span><span class="p">)</span>             <span class="kd">::</span> <span class="n">domain</span>                <span class="c">!&lt; Domain of Euler equations.</span>
+<span class="k">type</span><span class="p">(</span><span class="n">euler_1D_omp_nf</span><span class="p">)</span>             <span class="kd">::</span> <span class="n">domain</span>                <span class="c">!&lt; Domain of Euler equations.</span>
 <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">),</span>    <span class="k">parameter</span>           <span class="kd">::</span> <span class="n">CFL</span><span class="o">=</span><span class="mf">0.7_R_P</span>           <span class="c">!&lt; CFL value.</span>
 <span class="kt">integer</span><span class="p">(</span><span class="n">I_P</span><span class="p">),</span> <span class="k">parameter</span>           <span class="kd">::</span> <span class="n">Ns</span><span class="o">=</span><span class="mi">1</span>                  <span class="c">!&lt; Number of differnt initial gas species.</span>
 <span class="kt">integer</span><span class="p">(</span><span class="n">I_P</span><span class="p">),</span> <span class="k">parameter</span>           <span class="kd">::</span> <span class="n">Nc</span><span class="o">=</span><span class="n">Ns</span><span class="o">+</span><span class="mi">2</span>               <span class="c">!&lt; Number of conservative variables.</span>
@@ -275,16 +279,16 @@
 
 <span class="c">!-----------------------------------------------------------------------------------------------------------------------------------</span>
 <span class="c">! setting Command Line Interface</span>
-<span class="k">call </span><span class="n">cli</span><span class="p">%</span><span class="n">init</span><span class="p">(</span><span class="n">progname</span>    <span class="o">=</span> <span class="s1">&#39;euler-1D-openmp-no-foodie&#39;</span><span class="p">,</span>                                             <span class="p">&amp;</span>
-              <span class="n">authors</span>     <span class="o">=</span> <span class="s1">&#39;Fortran-FOSS-Programmers&#39;</span><span class="p">,</span>                                              <span class="p">&amp;</span>
-              <span class="n">license</span>     <span class="o">=</span> <span class="s1">&#39;GNU GPLv3&#39;</span><span class="p">,</span>                                                             <span class="p">&amp;</span>
-              <span class="n">description</span> <span class="o">=</span> <span class="s1">&#39;Test 1D Euler equations integration without FOODIE, OpenMP enabled&#39;</span><span class="p">,</span>    <span class="p">&amp;</span>
-              <span class="n">examples</span>    <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;euler-1D-openmp-no-foodie --results  &quot;</span><span class="p">,</span>                                <span class="p">&amp;</span>
-                             <span class="s2">&quot;euler-1D-openmp-no-foodie -r -t -v -p&quot;</span><span class="p">,</span>                                <span class="p">&amp;</span>
-                             <span class="s2">&quot;euler-1D-openmp-no-foodie            &quot;</span><span class="p">,</span>                                <span class="p">&amp;</span>
+<span class="k">call </span><span class="n">cli</span><span class="p">%</span><span class="n">init</span><span class="p">(</span><span class="n">progname</span>    <span class="o">=</span> <span class="s1">&#39;euler-1D-openmp-no-foodie&#39;</span><span class="p">,</span>                                          <span class="p">&amp;</span>
+              <span class="n">authors</span>     <span class="o">=</span> <span class="s1">&#39;Fortran-FOSS-Programmers&#39;</span><span class="p">,</span>                                           <span class="p">&amp;</span>
+              <span class="n">license</span>     <span class="o">=</span> <span class="s1">&#39;GNU GPLv3&#39;</span><span class="p">,</span>                                                          <span class="p">&amp;</span>
+              <span class="n">description</span> <span class="o">=</span> <span class="s1">&#39;Test 1D Euler equations integration without FOODIE, OpenMP enabled&#39;</span><span class="p">,</span> <span class="p">&amp;</span>
+              <span class="n">examples</span>    <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;euler-1D-openmp-no-foodie --results  &quot;</span><span class="p">,</span>                             <span class="p">&amp;</span>
+                             <span class="s2">&quot;euler-1D-openmp-no-foodie -r -t -v -p&quot;</span><span class="p">,</span>                             <span class="p">&amp;</span>
+                             <span class="s2">&quot;euler-1D-openmp-no-foodie            &quot;</span><span class="p">,</span>                             <span class="p">&amp;</span>
                              <span class="s2">&quot;euler-1D-openmp-no-foodie --plots -r &quot;</span><span class="p">])</span>
 <span class="k">call </span><span class="n">cli</span><span class="p">%</span><span class="n">add</span><span class="p">(</span><span class="n">switch</span><span class="o">=</span><span class="s1">&#39;--Ni&#39;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s1">&#39;Number finite volumes used&#39;</span><span class="p">,</span> <span class="n">required</span><span class="o">=</span><span class="p">.</span><span class="n">false</span><span class="p">.,</span> <span class="n">act</span><span class="o">=</span><span class="s1">&#39;store&#39;</span><span class="p">,</span> <span class="n">def</span><span class="o">=</span><span class="s1">&#39;100&#39;</span><span class="p">,</span> <span class="n">error</span><span class="o">=</span><span class="n">error</span><span class="p">)</span>
-<span class="k">call </span><span class="n">cli</span><span class="p">%</span><span class="n">add</span><span class="p">(</span><span class="n">switch</span><span class="o">=</span><span class="s1">&#39;--steps&#39;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s1">&#39;Number time steps performed&#39;</span><span class="p">,</span> <span class="n">required</span><span class="o">=</span><span class="p">.</span><span class="n">false</span><span class="p">.,</span> <span class="n">act</span><span class="o">=</span><span class="s1">&#39;store&#39;</span><span class="p">,</span> <span class="n">def</span><span class="o">=</span><span class="s1">&#39;10&#39;</span><span class="p">,</span> <span class="n">error</span><span class="o">=</span><span class="n">error</span><span class="p">)</span>
+<span class="k">call </span><span class="n">cli</span><span class="p">%</span><span class="n">add</span><span class="p">(</span><span class="n">switch</span><span class="o">=</span><span class="s1">&#39;--steps&#39;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s1">&#39;Number time steps performed&#39;</span><span class="p">,</span> <span class="n">required</span><span class="o">=</span><span class="p">.</span><span class="n">false</span><span class="p">.,</span> <span class="n">act</span><span class="o">=</span><span class="s1">&#39;store&#39;</span><span class="p">,</span> <span class="n">def</span><span class="o">=</span><span class="s1">&#39;30&#39;</span><span class="p">,</span> <span class="n">error</span><span class="o">=</span><span class="n">error</span><span class="p">)</span>
 <span class="k">call </span><span class="n">cli</span><span class="p">%</span><span class="n">add</span><span class="p">(</span><span class="n">switch</span><span class="o">=</span><span class="s1">&#39;--results&#39;</span><span class="p">,</span> <span class="n">switch_ab</span><span class="o">=</span><span class="s1">&#39;-r&#39;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s1">&#39;Save results&#39;</span><span class="p">,</span> <span class="n">required</span><span class="o">=</span><span class="p">.</span><span class="n">false</span><span class="p">.,</span> <span class="n">act</span><span class="o">=</span><span class="s1">&#39;store_true&#39;</span><span class="p">,</span> <span class="n">def</span><span class="o">=</span><span class="s1">&#39;.false.&#39;</span><span class="p">,</span> <span class="p">&amp;</span>
              <span class="n">error</span><span class="o">=</span><span class="n">error</span><span class="p">)</span>
 <span class="k">call </span><span class="n">cli</span><span class="p">%</span><span class="n">add</span><span class="p">(</span><span class="n">switch</span><span class="o">=</span><span class="s1">&#39;--plots&#39;</span><span class="p">,</span> <span class="n">switch_ab</span><span class="o">=</span><span class="s1">&#39;-p&#39;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s1">&#39;Save plots of results&#39;</span><span class="p">,</span> <span class="n">required</span><span class="o">=</span><span class="p">.</span><span class="n">false</span><span class="p">.,</span> <span class="n">act</span><span class="o">=</span><span class="s1">&#39;store_true&#39;</span><span class="p">,</span> <span class="n">def</span><span class="o">=</span><span class="s1">&#39;.false.&#39;</span><span class="p">,</span> <span class="p">&amp;</span>
@@ -318,7 +322,7 @@
 <span class="n">t</span> <span class="o">=</span> <span class="mf">0._R_P</span>
 <span class="k">call </span><span class="n">save_time_serie</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s1">&#39;FOODIE test: 1D Euler equations integration, explicit TVD Runge-Kutta&#39;</span><span class="o">//</span> <span class="p">&amp;</span>
                            <span class="nb">trim</span><span class="p">(</span><span class="n">str</span><span class="p">(.</span><span class="n">true</span><span class="p">.,</span> <span class="n">rk_stages</span><span class="p">))</span><span class="o">//</span><span class="s1">&#39; stages&#39;</span><span class="p">,</span> <span class="p">&amp;</span>
-                     <span class="n">filename</span><span class="o">=</span><span class="s1">&#39;euler_1D_openmp_integration-tvdrk-&#39;</span><span class="o">//</span><span class="nb">trim</span><span class="p">(</span><span class="n">str</span><span class="p">(.</span><span class="n">true</span><span class="p">.,</span> <span class="n">rk_stages</span><span class="p">))</span><span class="o">//</span><span class="s1">&#39;-time_serie.dat&#39;</span><span class="p">,</span> <span class="p">&amp;</span>
+                     <span class="n">filename</span><span class="o">=</span><span class="s1">&#39;euler_1D_omp_nf_integration-tvdrk-&#39;</span><span class="o">//</span><span class="nb">trim</span><span class="p">(</span><span class="n">str</span><span class="p">(.</span><span class="n">true</span><span class="p">.,</span> <span class="n">rk_stages</span><span class="p">))</span><span class="o">//</span><span class="s1">&#39;-time_serie.dat&#39;</span><span class="p">,</span> <span class="p">&amp;</span>
                      <span class="n">t</span><span class="o">=</span><span class="n">t</span><span class="p">)</span>
 <span class="n">system_clocks</span> <span class="o">=</span> <span class="mf">0._R_P</span>
 <span class="k">do </span><span class="n">steps</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">steps_max</span>
@@ -336,7 +340,7 @@
 <span class="k">call </span><span class="n">save_time_serie</span><span class="p">(</span><span class="n">t</span><span class="o">=</span><span class="n">t</span><span class="p">,</span> <span class="n">finish</span><span class="o">=</span><span class="p">.</span><span class="n">true</span><span class="p">.)</span>
 <span class="k">call </span><span class="n">save_results</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s1">&#39;FOODIE test: 1D Euler equations integration, explicit TVD Runge-Kutta&#39;</span><span class="o">//</span> <span class="p">&amp;</span>
                         <span class="nb">trim</span><span class="p">(</span><span class="n">str</span><span class="p">(.</span><span class="n">true</span><span class="p">.,</span> <span class="n">rk_stages</span><span class="p">))</span><span class="o">//</span><span class="s1">&#39; stages&#39;</span><span class="p">,</span> <span class="p">&amp;</span>
-                  <span class="n">filename</span><span class="o">=</span><span class="s1">&#39;euler_1D_openmp_integration-tvdrk-&#39;</span><span class="o">//</span><span class="nb">trim</span><span class="p">(</span><span class="n">str</span><span class="p">(.</span><span class="n">true</span><span class="p">.,</span> <span class="n">rk_stages</span><span class="p">)))</span>
+                  <span class="n">filename</span><span class="o">=</span><span class="s1">&#39;euler_1D_omp_nf_integration-tvdrk-&#39;</span><span class="o">//</span><span class="nb">trim</span><span class="p">(</span><span class="n">str</span><span class="p">(.</span><span class="n">true</span><span class="p">.,</span> <span class="n">rk_stages</span><span class="p">)))</span>
 <span class="k">print</span> <span class="s2">&quot;(I5,A,F23.15)&quot;</span><span class="p">,</span> <span class="n">omp_threads</span><span class="p">,</span> <span class="s1">&#39; &#39;</span><span class="p">,</span> <span class="n">system_clocks</span>
 <span class="k">stop</span>
 <span class="c">!-----------------------------------------------------------------------------------------------------------------------------------</span>

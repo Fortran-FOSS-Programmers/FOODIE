@@ -166,6 +166,8 @@
       
       <a class="list-group-item" href="../sourcefile/euler-1d-caf.f90.html">euler-1D-caf.f90</a>
       
+      <a class="list-group-item" href="../sourcefile/euler-1d-caf_no_foodie.f90.html">euler-1D-caf_no_foodie.f90</a>
+      
       <a class="list-group-item" href="../sourcefile/euler-1d-openmp.f90.html">euler-1D-openmp.f90</a>
       
       <a class="list-group-item" href="../sourcefile/euler-1d-openmp_no_foodie.f90.html">euler-1D-openmp_no_foodie.f90</a>
@@ -202,9 +204,11 @@
       
       <a class="list-group-item" href="../sourcefile/type_euler-1d-caf.f90.html">type_euler-1D-caf.f90</a>
       
+      <a class="list-group-item" href="../sourcefile/type_euler-1d-caf_no_foodie.f90.html">type_euler-1D-caf_no_foodie.f90</a>
+      
       <a class="list-group-item" href="../sourcefile/type_euler-1d-openmp.f90.html">type_euler-1D-openmp.f90</a>
       
-      <a class="list-group-item" href="../sourcefile/type_euler-1d-openmp.f90%7E2.html">type_euler-1D-openmp.f90</a>
+      <a class="list-group-item" href="../sourcefile/type_euler-1d-openmp_no_foodie.f90.html">type_euler-1D-openmp_no_foodie.f90</a>
       
       <a class="list-group-item" href="../sourcefile/type_euler-1d.f90.html">type_euler-1D.f90</a>
       
@@ -289,7 +293,7 @@
                              <span class="s2">&quot;euler-1D-openmp            &quot;</span><span class="p">,</span>                                          <span class="p">&amp;</span>
                              <span class="s2">&quot;euler-1D-openmp --plots -r &quot;</span><span class="p">])</span>
 <span class="k">call </span><span class="n">cli</span><span class="p">%</span><span class="n">add</span><span class="p">(</span><span class="n">switch</span><span class="o">=</span><span class="s1">&#39;--Ni&#39;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s1">&#39;Number finite volumes used&#39;</span><span class="p">,</span> <span class="n">required</span><span class="o">=</span><span class="p">.</span><span class="n">false</span><span class="p">.,</span> <span class="n">act</span><span class="o">=</span><span class="s1">&#39;store&#39;</span><span class="p">,</span> <span class="n">def</span><span class="o">=</span><span class="s1">&#39;100&#39;</span><span class="p">,</span> <span class="n">error</span><span class="o">=</span><span class="n">error</span><span class="p">)</span>
-<span class="k">call </span><span class="n">cli</span><span class="p">%</span><span class="n">add</span><span class="p">(</span><span class="n">switch</span><span class="o">=</span><span class="s1">&#39;--steps&#39;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s1">&#39;Number time steps performed&#39;</span><span class="p">,</span> <span class="n">required</span><span class="o">=</span><span class="p">.</span><span class="n">false</span><span class="p">.,</span> <span class="n">act</span><span class="o">=</span><span class="s1">&#39;store&#39;</span><span class="p">,</span> <span class="n">def</span><span class="o">=</span><span class="s1">&#39;10&#39;</span><span class="p">,</span> <span class="n">error</span><span class="o">=</span><span class="n">error</span><span class="p">)</span>
+<span class="k">call </span><span class="n">cli</span><span class="p">%</span><span class="n">add</span><span class="p">(</span><span class="n">switch</span><span class="o">=</span><span class="s1">&#39;--steps&#39;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s1">&#39;Number time steps performed&#39;</span><span class="p">,</span> <span class="n">required</span><span class="o">=</span><span class="p">.</span><span class="n">false</span><span class="p">.,</span> <span class="n">act</span><span class="o">=</span><span class="s1">&#39;store&#39;</span><span class="p">,</span> <span class="n">def</span><span class="o">=</span><span class="s1">&#39;30&#39;</span><span class="p">,</span> <span class="n">error</span><span class="o">=</span><span class="n">error</span><span class="p">)</span>
 <span class="k">call </span><span class="n">cli</span><span class="p">%</span><span class="n">add</span><span class="p">(</span><span class="n">switch</span><span class="o">=</span><span class="s1">&#39;--results&#39;</span><span class="p">,</span> <span class="n">switch_ab</span><span class="o">=</span><span class="s1">&#39;-r&#39;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s1">&#39;Save results&#39;</span><span class="p">,</span> <span class="n">required</span><span class="o">=</span><span class="p">.</span><span class="n">false</span><span class="p">.,</span> <span class="n">act</span><span class="o">=</span><span class="s1">&#39;store_true&#39;</span><span class="p">,</span> <span class="n">def</span><span class="o">=</span><span class="s1">&#39;.false.&#39;</span><span class="p">,</span> <span class="p">&amp;</span>
              <span class="n">error</span><span class="o">=</span><span class="n">error</span><span class="p">)</span>
 <span class="k">call </span><span class="n">cli</span><span class="p">%</span><span class="n">add</span><span class="p">(</span><span class="n">switch</span><span class="o">=</span><span class="s1">&#39;--plots&#39;</span><span class="p">,</span> <span class="n">switch_ab</span><span class="o">=</span><span class="s1">&#39;-p&#39;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s1">&#39;Save plots of results&#39;</span><span class="p">,</span> <span class="n">required</span><span class="o">=</span><span class="p">.</span><span class="n">false</span><span class="p">.,</span> <span class="n">act</span><span class="o">=</span><span class="s1">&#39;store_true&#39;</span><span class="p">,</span> <span class="n">def</span><span class="o">=</span><span class="s1">&#39;.false.&#39;</span><span class="p">,</span> <span class="p">&amp;</span>
@@ -313,8 +317,9 @@
 <span class="c">! check OpenMP parallel environment correctness</span>
 <span class="c">!$OMP PARALLEL      &amp;</span>
 <span class="c">!$OMP DEFAULT(none) &amp;</span>
-<span class="c">!$OMP SHARED(omp_threads)</span>
+<span class="c">!$OMP SHARED(omp_threads, verbose)</span>
 <span class="n">omp_threads</span> <span class="o">=</span> <span class="n">omp_get_num_threads</span><span class="p">()</span>
+<span class="k">if</span> <span class="p">(</span><span class="n">verbose</span><span class="p">)</span> <span class="k">print</span> <span class="s2">&quot;(A)&quot;</span><span class="p">,</span> <span class="s1">&#39; Thread &#39;</span><span class="o">//</span><span class="nb">trim</span><span class="p">(</span><span class="n">str</span><span class="p">(.</span><span class="n">true</span><span class="p">.,</span><span class="n">omp_get_thread_num</span><span class="p">()))</span><span class="o">//</span><span class="s1">&#39; of: &#39;</span><span class="o">//</span><span class="nb">trim</span><span class="p">(</span><span class="n">str</span><span class="p">(.</span><span class="n">true</span><span class="p">.,</span><span class="n">omp_threads</span><span class="p">))</span><span class="o">//</span><span class="s1">&#39; is alive!&#39;</span>
 <span class="c">!$OMP END PARALLEL</span>
 <span class="cp">#endif</span>
 <span class="k">call </span><span class="n">init</span><span class="p">()</span>

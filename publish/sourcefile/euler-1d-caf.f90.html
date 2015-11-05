@@ -129,7 +129,7 @@
     <div class="panel-heading text-left"><h3 class="panel-title">Programs</h3></div>
     <div class="list-group">
       
-      <a class="list-group-item" href="../program/integrate_euler_1d_caf.html">integrate_euler_1D_caf</a>
+      <a class="list-group-item" href="../program/integrate_euler_1d_caf%7E2.html">integrate_euler_1D_caf</a>
       
     </div>
   </div>
@@ -165,6 +165,8 @@
       <a class="list-group-item" href="../sourcefile/burgers.f90.html">burgers.f90</a>
       
       <a class="list-group-item" href="../sourcefile/euler-1d-caf.f90.html">euler-1D-caf.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/euler-1d-caf_no_foodie.f90.html">euler-1D-caf_no_foodie.f90</a>
       
       <a class="list-group-item" href="../sourcefile/euler-1d-openmp.f90.html">euler-1D-openmp.f90</a>
       
@@ -202,9 +204,11 @@
       
       <a class="list-group-item" href="../sourcefile/type_euler-1d-caf.f90.html">type_euler-1D-caf.f90</a>
       
+      <a class="list-group-item" href="../sourcefile/type_euler-1d-caf_no_foodie.f90.html">type_euler-1D-caf_no_foodie.f90</a>
+      
       <a class="list-group-item" href="../sourcefile/type_euler-1d-openmp.f90.html">type_euler-1D-openmp.f90</a>
       
-      <a class="list-group-item" href="../sourcefile/type_euler-1d-openmp.f90%7E2.html">type_euler-1D-openmp.f90</a>
+      <a class="list-group-item" href="../sourcefile/type_euler-1d-openmp_no_foodie.f90.html">type_euler-1D-openmp_no_foodie.f90</a>
       
       <a class="list-group-item" href="../sourcefile/type_euler-1d.f90.html">type_euler-1D.f90</a>
       
@@ -264,6 +268,7 @@
 <span class="k">type</span><span class="p">(</span><span class="n">euler_1D_caf</span><span class="p">)</span>                <span class="kd">::</span> <span class="n">domain</span>                <span class="c">!&lt; Domain of Euler equations.</span>
 <span class="c">! coarrays-related variables</span>
 <span class="kt">integer</span><span class="p">(</span><span class="n">I_P</span><span class="p">)</span>                      <span class="kd">::</span> <span class="n">Ni_image</span>              <span class="c">!&lt; Space dimension of local image.</span>
+<span class="cp">#ifdef CAF</span>
 <span class="kt">integer</span><span class="p">(</span><span class="n">I_P</span><span class="p">)</span>                      <span class="kd">::</span> <span class="n">Ni</span><span class="p">[</span><span class="o">*</span><span class="p">]</span>                 <span class="c">!&lt; Number of grid cells.</span>
 <span class="kt">integer</span><span class="p">(</span><span class="n">I_P</span><span class="p">)</span>                      <span class="kd">::</span> <span class="n">steps_max</span><span class="p">[</span><span class="o">*</span><span class="p">]</span>          <span class="c">!&lt; Maximum number of time steps.</span>
 <span class="kt">logical</span>                           <span class="kd">::</span> <span class="n">results</span><span class="p">[</span><span class="o">*</span><span class="p">]</span>            <span class="c">!&lt; Flag for activating results saving.</span>
@@ -271,14 +276,28 @@
 <span class="kt">logical</span>                           <span class="kd">::</span> <span class="n">time_serie</span><span class="p">[</span><span class="o">*</span><span class="p">]</span>         <span class="c">!&lt; Flag for activating time serie-results saving.</span>
 <span class="kt">logical</span>                           <span class="kd">::</span> <span class="n">verbose</span><span class="p">[</span><span class="o">*</span><span class="p">]</span>            <span class="c">!&lt; Flag for activating more verbose output.</span>
 <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">),</span> <span class="k">allocatable</span>            <span class="kd">::</span> <span class="n">Dt</span><span class="p">(:)[:]</span>              <span class="c">!&lt; Time step.</span>
+<span class="cp">#else</span>
+<span class="kt">integer</span><span class="p">(</span><span class="n">I_P</span><span class="p">)</span>                      <span class="kd">::</span> <span class="n">Ni</span>                    <span class="c">!&lt; Number of grid cells.</span>
+<span class="kt">integer</span><span class="p">(</span><span class="n">I_P</span><span class="p">)</span>                      <span class="kd">::</span> <span class="n">steps_max</span>             <span class="c">!&lt; Maximum number of time steps.</span>
+<span class="kt">logical</span>                           <span class="kd">::</span> <span class="n">results</span>               <span class="c">!&lt; Flag for activating results saving.</span>
+<span class="kt">logical</span>                           <span class="kd">::</span> <span class="n">plots</span>                 <span class="c">!&lt; Flag for activating plots saving.</span>
+<span class="kt">logical</span>                           <span class="kd">::</span> <span class="n">time_serie</span>            <span class="c">!&lt; Flag for activating time serie-results saving.</span>
+<span class="kt">logical</span>                           <span class="kd">::</span> <span class="n">verbose</span>               <span class="c">!&lt; Flag for activating more verbose output.</span>
+<span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">),</span> <span class="k">allocatable</span>            <span class="kd">::</span> <span class="n">Dt</span><span class="p">(:)</span>                 <span class="c">!&lt; Time step.</span>
+<span class="cp">#endif</span>
 <span class="kt">integer</span><span class="p">(</span><span class="n">I_P</span><span class="p">)</span>                      <span class="kd">::</span> <span class="n">me</span>                    <span class="c">!&lt; ID of this_image()</span>
 <span class="kt">integer</span><span class="p">(</span><span class="n">I_P</span><span class="p">)</span>                      <span class="kd">::</span> <span class="n">we</span>                    <span class="c">!&lt; Number of CAF images used.</span>
 <span class="kt">character</span><span class="p">(</span><span class="nb">len</span><span class="o">=</span><span class="p">:),</span> <span class="k">allocatable</span>     <span class="kd">::</span> <span class="n">id</span>                    <span class="c">!&lt; My ID.</span>
 <span class="c">!-----------------------------------------------------------------------------------------------------------------------------------</span>
 
 <span class="c">!-----------------------------------------------------------------------------------------------------------------------------------</span>
+<span class="cp">#ifdef CAF</span>
 <span class="n">me</span> <span class="o">=</span> <span class="nb">this_image</span><span class="p">()</span>
 <span class="n">we</span> <span class="o">=</span> <span class="nb">num_images</span><span class="p">()</span>
+<span class="cp">#else</span>
+<span class="n">me</span> <span class="o">=</span> <span class="mi">1</span>
+<span class="n">we</span> <span class="o">=</span> <span class="mi">1</span>
+<span class="cp">#endif</span>
 <span class="n">id</span> <span class="o">=</span> <span class="nb">trim</span><span class="p">(</span><span class="n">strz</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="n">me</span><span class="p">))</span><span class="o">//</span><span class="s1">&#39;&gt; &#39;</span>
 <span class="c">! setting Command Line Interface</span>
 <span class="k">call </span><span class="n">cli</span><span class="p">%</span><span class="n">init</span><span class="p">(</span><span class="n">progname</span>    <span class="o">=</span> <span class="s1">&#39;euler-1D-caf&#39;</span><span class="p">,</span>                                                       <span class="p">&amp;</span>
@@ -290,7 +309,7 @@
                              <span class="s2">&quot;euler-1D-caf            &quot;</span><span class="p">,</span>                                          <span class="p">&amp;</span>
                              <span class="s2">&quot;euler-1D-caf --plots -r &quot;</span><span class="p">])</span>
 <span class="k">call </span><span class="n">cli</span><span class="p">%</span><span class="n">add</span><span class="p">(</span><span class="n">switch</span><span class="o">=</span><span class="s1">&#39;--Ni&#39;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s1">&#39;Number finite volumes used&#39;</span><span class="p">,</span> <span class="n">required</span><span class="o">=</span><span class="p">.</span><span class="n">false</span><span class="p">.,</span> <span class="n">act</span><span class="o">=</span><span class="s1">&#39;store&#39;</span><span class="p">,</span> <span class="n">def</span><span class="o">=</span><span class="s1">&#39;100&#39;</span><span class="p">,</span> <span class="n">error</span><span class="o">=</span><span class="n">error</span><span class="p">)</span>
-<span class="k">call </span><span class="n">cli</span><span class="p">%</span><span class="n">add</span><span class="p">(</span><span class="n">switch</span><span class="o">=</span><span class="s1">&#39;--steps&#39;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s1">&#39;Number time steps performed&#39;</span><span class="p">,</span> <span class="n">required</span><span class="o">=</span><span class="p">.</span><span class="n">false</span><span class="p">.,</span> <span class="n">act</span><span class="o">=</span><span class="s1">&#39;store&#39;</span><span class="p">,</span> <span class="n">def</span><span class="o">=</span><span class="s1">&#39;10&#39;</span><span class="p">,</span> <span class="n">error</span><span class="o">=</span><span class="n">error</span><span class="p">)</span>
+<span class="k">call </span><span class="n">cli</span><span class="p">%</span><span class="n">add</span><span class="p">(</span><span class="n">switch</span><span class="o">=</span><span class="s1">&#39;--steps&#39;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s1">&#39;Number time steps performed&#39;</span><span class="p">,</span> <span class="n">required</span><span class="o">=</span><span class="p">.</span><span class="n">false</span><span class="p">.,</span> <span class="n">act</span><span class="o">=</span><span class="s1">&#39;store&#39;</span><span class="p">,</span> <span class="n">def</span><span class="o">=</span><span class="s1">&#39;30&#39;</span><span class="p">,</span> <span class="n">error</span><span class="o">=</span><span class="n">error</span><span class="p">)</span>
 <span class="k">call </span><span class="n">cli</span><span class="p">%</span><span class="n">add</span><span class="p">(</span><span class="n">switch</span><span class="o">=</span><span class="s1">&#39;--results&#39;</span><span class="p">,</span> <span class="n">switch_ab</span><span class="o">=</span><span class="s1">&#39;-r&#39;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s1">&#39;Save results&#39;</span><span class="p">,</span> <span class="n">required</span><span class="o">=</span><span class="p">.</span><span class="n">false</span><span class="p">.,</span> <span class="n">act</span><span class="o">=</span><span class="s1">&#39;store_true&#39;</span><span class="p">,</span> <span class="n">def</span><span class="o">=</span><span class="s1">&#39;.false.&#39;</span><span class="p">,</span> <span class="p">&amp;</span>
              <span class="n">error</span><span class="o">=</span><span class="n">error</span><span class="p">)</span>
 <span class="k">call </span><span class="n">cli</span><span class="p">%</span><span class="n">add</span><span class="p">(</span><span class="n">switch</span><span class="o">=</span><span class="s1">&#39;--plots&#39;</span><span class="p">,</span> <span class="n">switch_ab</span><span class="o">=</span><span class="s1">&#39;-p&#39;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s1">&#39;Save plots of results&#39;</span><span class="p">,</span> <span class="n">required</span><span class="o">=</span><span class="p">.</span><span class="n">false</span><span class="p">.,</span> <span class="n">act</span><span class="o">=</span><span class="s1">&#39;store_true&#39;</span><span class="p">,</span> <span class="n">def</span><span class="o">=</span><span class="s1">&#39;.false.&#39;</span><span class="p">,</span> <span class="p">&amp;</span>
@@ -341,6 +360,7 @@
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
 
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+<span class="cp">#ifdef CAF</span>
   <span class="c">! CAF images comunications</span>
   <span class="k">sync all</span>
 <span class="k">  if</span> <span class="p">(</span><span class="n">me</span><span class="o">/=</span><span class="mi">1</span><span class="p">)</span> <span class="k">then</span>
@@ -351,6 +371,7 @@
     <span class="n">time_serie</span> <span class="o">=</span> <span class="n">time_serie</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
     <span class="n">verbose</span> <span class="o">=</span> <span class="n">verbose</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
   <span class="n">endif</span>
+<span class="cp">#endif</span>
   <span class="c">! init simulation</span>
   <span class="k">if</span> <span class="p">(</span><span class="nb">mod</span><span class="p">(</span><span class="n">Ni</span><span class="p">,</span> <span class="n">we</span><span class="p">)</span><span class="o">/=</span><span class="mi">0</span><span class="p">)</span> <span class="n">error</span> <span class="k">stop</span> <span class="s1">&#39;error: the number of cells Ni must be a multiple of the number of CAF images used!&#39;</span>
   <span class="n">Ni_image</span> <span class="o">=</span> <span class="n">Ni</span> <span class="o">/</span> <span class="n">we</span>
@@ -413,7 +434,11 @@
   <span class="k">call </span><span class="n">rk_integrator</span><span class="p">%</span><span class="n">init</span><span class="p">(</span><span class="n">stages</span><span class="o">=</span><span class="n">rk_stages</span><span class="p">)</span>
   <span class="k">call </span><span class="n">domain</span><span class="p">%</span><span class="n">init</span><span class="p">(</span><span class="n">Ni</span><span class="o">=</span><span class="n">Ni_image</span><span class="p">,</span> <span class="n">Ns</span><span class="o">=</span><span class="n">Ns</span><span class="p">,</span> <span class="n">Dx</span><span class="o">=</span><span class="n">Dx</span><span class="p">,</span> <span class="n">BC_L</span><span class="o">=</span><span class="n">BC_L</span><span class="p">,</span> <span class="n">BC_R</span><span class="o">=</span><span class="n">BC_R</span><span class="p">,</span> <span class="n">initial_state</span><span class="o">=</span><span class="n">initial_state</span><span class="p">,</span> <span class="n">cp0</span><span class="o">=</span><span class="n">cp0</span><span class="p">,</span> <span class="n">cv0</span><span class="o">=</span><span class="n">cv0</span><span class="p">,</span> <span class="p">&amp;</span>
                    <span class="n">me</span><span class="o">=</span><span class="n">me</span><span class="p">,</span> <span class="n">we</span><span class="o">=</span><span class="n">we</span><span class="p">,</span> <span class="n">ord</span><span class="o">=</span><span class="n">ord</span><span class="p">)</span>
+<span class="cp">#ifdef CAF</span>
   <span class="k">allocate</span><span class="p">(</span><span class="n">Dt</span><span class="p">(</span><span class="mi">1</span><span class="p">:</span><span class="n">we</span><span class="p">)[</span><span class="o">*</span><span class="p">])</span>
+<span class="cp">#else</span>
+  <span class="k">allocate</span><span class="p">(</span><span class="n">Dt</span><span class="p">(</span><span class="mi">1</span><span class="p">:</span><span class="n">we</span><span class="p">))</span>
+<span class="cp">#endif</span>
   <span class="c">! initialize time serie file</span>
   <span class="k">call </span><span class="n">save_time_serie</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s1">&#39;FOODIE test: 1D Euler equations integration, explicit TVD Runge-Kutta&#39;</span><span class="o">//</span> <span class="p">&amp;</span>
                              <span class="nb">trim</span><span class="p">(</span><span class="n">str</span><span class="p">(.</span><span class="n">true</span><span class="p">.,</span> <span class="n">rk_stages</span><span class="p">))</span><span class="o">//</span><span class="s1">&#39; stages&#39;</span><span class="p">,</span> <span class="p">&amp;</span>
@@ -437,6 +462,7 @@
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
 
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+<span class="cp">#ifdef CAF</span>
   <span class="k">if</span> <span class="p">(</span><span class="n">we</span><span class="o">&gt;</span><span class="mi">1</span><span class="p">)</span> <span class="k">then</span>
 <span class="k">    sync all</span>
     <span class="c">! reduction on minumum value of Dt</span>
@@ -445,6 +471,7 @@
       <span class="n">Dt</span><span class="p">(</span><span class="n">me</span><span class="p">)</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">Dt</span><span class="p">(</span><span class="n">me</span><span class="p">),</span> <span class="n">Dt</span><span class="p">(</span><span class="n">i</span><span class="p">))</span>
     <span class="n">enddo</span>
   <span class="n">endif</span>
+<span class="cp">#endif</span>
   <span class="k">return</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
   <span class="n">endsubroutine</span> <span class="n">synchronize</span>

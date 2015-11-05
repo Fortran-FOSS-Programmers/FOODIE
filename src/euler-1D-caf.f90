@@ -40,6 +40,7 @@ integer(I_P)                      :: steps                 !< Time steps counter
 type(euler_1D_caf)                :: domain                !< Domain of Euler equations.
 ! coarrays-related variables
 integer(I_P)                      :: Ni_image              !< Space dimension of local image.
+#ifdef CAF
 integer(I_P)                      :: Ni[*]                 !< Number of grid cells.
 integer(I_P)                      :: steps_max[*]          !< Maximum number of time steps.
 logical                           :: results[*]            !< Flag for activating results saving.
@@ -47,14 +48,28 @@ logical                           :: plots[*]              !< Flag for activatin
 logical                           :: time_serie[*]         !< Flag for activating time serie-results saving.
 logical                           :: verbose[*]            !< Flag for activating more verbose output.
 real(R_P), allocatable            :: Dt(:)[:]              !< Time step.
+#else
+integer(I_P)                      :: Ni                    !< Number of grid cells.
+integer(I_P)                      :: steps_max             !< Maximum number of time steps.
+logical                           :: results               !< Flag for activating results saving.
+logical                           :: plots                 !< Flag for activating plots saving.
+logical                           :: time_serie            !< Flag for activating time serie-results saving.
+logical                           :: verbose               !< Flag for activating more verbose output.
+real(R_P), allocatable            :: Dt(:)                 !< Time step.
+#endif
 integer(I_P)                      :: me                    !< ID of this_image()
 integer(I_P)                      :: we                    !< Number of CAF images used.
 character(len=:), allocatable     :: id                    !< My ID.
 !-----------------------------------------------------------------------------------------------------------------------------------
 
 !-----------------------------------------------------------------------------------------------------------------------------------
+#ifdef CAF
 me = this_image()
 we = num_images()
+#else
+me = 1
+we = 1
+#endif
 id = trim(strz(3, me))//'> '
 ! setting Command Line Interface
 call cli%init(progname    = 'euler-1D-caf',                                                       &
@@ -66,7 +81,7 @@ call cli%init(progname    = 'euler-1D-caf',                                     
                              "euler-1D-caf            ",                                          &
                              "euler-1D-caf --plots -r "])
 call cli%add(switch='--Ni', help='Number finite volumes used', required=.false., act='store', def='100', error=error)
-call cli%add(switch='--steps', help='Number time steps performed', required=.false., act='store', def='10', error=error)
+call cli%add(switch='--steps', help='Number time steps performed', required=.false., act='store', def='30', error=error)
 call cli%add(switch='--results', switch_ab='-r', help='Save results', required=.false., act='store_true', def='.false.', &
              error=error)
 call cli%add(switch='--plots', switch_ab='-p', help='Save plots of results', required=.false., act='store_true', def='.false.', &
@@ -117,6 +132,7 @@ contains
   !---------------------------------------------------------------------------------------------------------------------------------
 
   !---------------------------------------------------------------------------------------------------------------------------------
+#ifdef CAF
   ! CAF images comunications
   sync all
   if (me/=1) then
@@ -127,6 +143,7 @@ contains
     time_serie = time_serie[1]
     verbose = verbose[1]
   endif
+#endif
   ! init simulation
   if (mod(Ni, we)/=0) error stop 'error: the number of cells Ni must be a multiple of the number of CAF images used!'
   Ni_image = Ni / we
@@ -189,7 +206,11 @@ contains
   call rk_integrator%init(stages=rk_stages)
   call domain%init(Ni=Ni_image, Ns=Ns, Dx=Dx, BC_L=BC_L, BC_R=BC_R, initial_state=initial_state, cp0=cp0, cv0=cv0, &
                    me=me, we=we, ord=ord)
+#ifdef CAF
   allocate(Dt(1:we)[*])
+#else
+  allocate(Dt(1:we))
+#endif
   ! initialize time serie file
   call save_time_serie(title='FOODIE test: 1D Euler equations integration, explicit TVD Runge-Kutta'// &
                              trim(str(.true., rk_stages))//' stages', &
@@ -213,6 +234,7 @@ contains
   !---------------------------------------------------------------------------------------------------------------------------------
 
   !---------------------------------------------------------------------------------------------------------------------------------
+#ifdef CAF
   if (we>1) then
     sync all
     ! reduction on minumum value of Dt
@@ -221,6 +243,7 @@ contains
       Dt(me) = min(Dt(me), Dt(i))
     enddo
   endif
+#endif
   return
   !---------------------------------------------------------------------------------------------------------------------------------
   endsubroutine synchronize

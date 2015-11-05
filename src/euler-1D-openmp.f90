@@ -65,7 +65,7 @@ call cli%init(progname    = 'euler-1D-openmp',                                  
                              "euler-1D-openmp            ",                                          &
                              "euler-1D-openmp --plots -r "])
 call cli%add(switch='--Ni', help='Number finite volumes used', required=.false., act='store', def='100', error=error)
-call cli%add(switch='--steps', help='Number time steps performed', required=.false., act='store', def='10', error=error)
+call cli%add(switch='--steps', help='Number time steps performed', required=.false., act='store', def='30', error=error)
 call cli%add(switch='--results', switch_ab='-r', help='Save results', required=.false., act='store_true', def='.false.', &
              error=error)
 call cli%add(switch='--plots', switch_ab='-p', help='Save plots of results', required=.false., act='store_true', def='.false.', &
@@ -89,8 +89,9 @@ call omp_set_num_threads(omp_threads)
 ! check OpenMP parallel environment correctness
 !$OMP PARALLEL      &
 !$OMP DEFAULT(none) &
-!$OMP SHARED(omp_threads)
+!$OMP SHARED(omp_threads, verbose)
 omp_threads = omp_get_num_threads()
+if (verbose) print "(A)", ' Thread '//trim(str(.true.,omp_get_thread_num()))//' of: '//trim(str(.true.,omp_threads))//' is alive!'
 !$OMP END PARALLEL
 #endif
 call init()

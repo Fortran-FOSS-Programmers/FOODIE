@@ -1,7 +1,7 @@
-!< Define Euler 1D field that is a concrete extension of the abstract integrand type.
+!< Define Euler 1D (CAF enabled) field that is a concrete extension of the abstract integrand type.
 module type_euler_1D_caf
 !-----------------------------------------------------------------------------------------------------------------------------------
-!< Define Euler 1D field that is a concrete extension of the abstract integrand type.
+!< Define Euler 1D (CAF enabled) field that is a concrete extension of the abstract integrand type.
 !-----------------------------------------------------------------------------------------------------------------------------------
 
 !-----------------------------------------------------------------------------------------------------------------------------------
@@ -126,22 +126,21 @@ type, extends(integrand) :: euler_1D_caf
   !< + Ns+1 : momentum conservation             (r*u)
   !< + Ns+2 : energy conservation               (r*E)
   private
-  integer(I_P)                      :: ord=0     !< Space accuracy formal order.
-  integer(I_P)                      :: Ni=0      !< Space dimension.
-  integer(I_P)                      :: Ng=0      !< Number of ghost cells for boundary conditions handling.
-  integer(I_P)                      :: Ns=0      !< Number of initial species.
-  integer(I_P)                      :: Nc=0      !< Number of conservative variables, Ns+2.
-  integer(I_P)                      :: Np=0      !< Number of primitive variables, Ns+4.
-  real(R_P)                         :: Dx=0._R_P !< Space step.
-  type(weno_interpolator_upwind)    :: weno      !< WENO interpolator.
-  real(R_P),    allocatable         :: U(:,:)    !< Integrand (state) variables, whole physical domain [1:Nc,1:Ni].
-  real(R_P),    allocatable         :: cp0(:)    !< Specific heat cp of initial species [1:Ns].
-  real(R_P),    allocatable         :: cv0(:)    !< Specific heat cv of initial species [1:Ns].
-  character(:), allocatable         :: BC_L      !< Left boundary condition type.
-  character(:), allocatable         :: BC_R      !< Right boundary condition type.
-  integer(I_P)                      :: me=0      !< ID of this_image().
-  integer(I_P)                      :: we=0      !< Number of CAF images used.
-  integer(I_P)                      :: id=0      !< Instance identification.
+  integer(I_P)                   :: ord=0     !< Space accuracy formal order.
+  integer(I_P)                   :: Ni=0      !< Space dimension.
+  integer(I_P)                   :: Ng=0      !< Number of ghost cells for boundary conditions handling.
+  integer(I_P)                   :: Ns=0      !< Number of initial species.
+  integer(I_P)                   :: Nc=0      !< Number of conservative variables, Ns+2.
+  integer(I_P)                   :: Np=0      !< Number of primitive variables, Ns+4.
+  real(R_P)                      :: Dx=0._R_P !< Space step.
+  type(weno_interpolator_upwind) :: weno      !< WENO interpolator.
+  real(R_P),    allocatable      :: U(:,:)    !< Integrand (state) variables, whole physical domain [1:Nc,1:Ni].
+  real(R_P),    allocatable      :: cp0(:)    !< Specific heat cp of initial species [1:Ns].
+  real(R_P),    allocatable      :: cv0(:)    !< Specific heat cv of initial species [1:Ns].
+  character(:), allocatable      :: BC_L      !< Left boundary condition type.
+  character(:), allocatable      :: BC_R      !< Right boundary condition type.
+  integer(I_P)                   :: me=0      !< ID of this_image().
+  integer(I_P)                   :: we=0      !< Number of CAF images used.
   contains
     ! auxiliary methods
     procedure, pass(self), public :: init             !< Init field.
@@ -167,8 +166,11 @@ type, extends(integrand) :: euler_1D_caf
     procedure, pass(self), private :: riemann_solver                !< Solve the Riemann Problem at cell interfaces.
     final                          :: finalize                      !< Finalize field.
 endtype euler_1D_caf
-integer(I_P)           :: Ninstances=0     !< Number of instances of euler_1D_caf.
+#ifdef CAF
 real(R_P), allocatable :: remote_U(:,:)[:] !< CAF buffer for sharing remote conservative variables.
+#else
+real(R_P), allocatable :: remote_U(:,:)    !< CAF buffer for sharing remote conservative variables.
+#endif
 real(R_P), allocatable :: U_L(:,:)         !< Integrand (state) variables, left ghost cells [1:Nc,1:Ng].
 real(R_P), allocatable :: U_R(:,:)         !< Integrand (state) variables, right ghost cells [1:Nc,Ni-Ng+1:Ni].
 !-----------------------------------------------------------------------------------------------------------------------------------
@@ -217,9 +219,11 @@ contains
   enddo
   self%me = me
   self%we = we
-  Ninstances = Ninstances + 1
-  self%id = Ninstances
+#ifdef CAF
   if (allocated(remote_U)) deallocate(remote_U) ; allocate(remote_U(1:self%Nc, 1:Ni)[*])
+#else
+  if (allocated(remote_U)) deallocate(remote_U) ; allocate(remote_U(1:self%Nc, 1:Ni))
+#endif
   if (allocated(U_L)) deallocate(U_L) ; allocate(U_L(1:self%Nc, 1:self%Ni))
   if (allocated(U_R)) deallocate(U_R) ; allocate(U_R(1:self%Nc, 1:self%Ni))
   return
@@ -248,7 +252,6 @@ contains
   if (allocated(self%BC_R)) deallocate(self%BC_R)
   self%me = 0
   self%we = 0
-  self%id = 0
   if (allocated(remote_U)) deallocate(remote_U)
   if (allocated(U_L)) deallocate(U_L)
   if (allocated(U_R)) deallocate(U_R)
@@ -260,10 +263,10 @@ contains
   !---------------------------------------------------------------------------------------------------------------------------------
   !< Output the Euler field state (primitive variables).
   !---------------------------------------------------------------------------------------------------------------------------------
-  class(euler_1D_caf), intent(IN)            :: self         !< Euler field.
-  logical,             intent(IN), optional  :: conservative !< Output conservative variables instead of primitive.
-  real(R_P), dimension(:,:), allocatable     :: state        !< Euler state vector.
-  integer(I_P)                               :: i            !< Counter.
+  class(euler_1D_caf), intent(IN)        :: self         !< Euler field.
+  logical, optional,   intent(IN)        :: conservative !< Output conservative variables instead of primitive.
+  real(R_P), dimension(:,:), allocatable :: state        !< Euler state vector.
+  integer(I_P)                           :: i            !< Counter.
   !---------------------------------------------------------------------------------------------------------------------------------
 
   !---------------------------------------------------------------------------------------------------------------------------------
@@ -415,7 +418,6 @@ contains
   class(euler_1D_caf), intent(IN)  :: lhs !< Left hand side.
   class(integrand),    intent(IN)  :: rhs !< Right hand side.
   class(integrand),    allocatable :: opr !< Operator result.
-  integer(I_P)                     :: i   !< Counter.
   !---------------------------------------------------------------------------------------------------------------------------------
 
   !---------------------------------------------------------------------------------------------------------------------------------
@@ -428,9 +430,7 @@ contains
   class is(euler_1D_caf)
     select type(rhs)
     class is (euler_1D_caf)
-      do i=1, lhs%Ni
-        opr%U(:, i) = lhs%U(:, i) * rhs%U(:, i)
-      enddo
+      opr%U = lhs%U * rhs%U
     endselect
   endselect
   return
@@ -444,7 +444,6 @@ contains
   class(euler_1D_caf), intent(IN) :: lhs !< Left hand side.
   real(R_P),           intent(IN) :: rhs !< Right hand side.
   class(integrand), allocatable   :: opr !< Operator result.
-  integer(I_P)                    :: i   !< Counter.
   !---------------------------------------------------------------------------------------------------------------------------------
 
   !---------------------------------------------------------------------------------------------------------------------------------
@@ -455,9 +454,7 @@ contains
   endselect
   select type(opr)
   class is(euler_1D_caf)
-    do i=1, lhs%Ni
-      opr%U(:, i) = lhs%U(:, i) * rhs
-    enddo
+    opr%U = lhs%U * rhs
   endselect
   return
   !---------------------------------------------------------------------------------------------------------------------------------
@@ -470,7 +467,6 @@ contains
   real(R_P),           intent(IN) :: lhs !< Left hand side.
   class(euler_1D_caf), intent(IN) :: rhs !< Right hand side.
   class(integrand), allocatable   :: opr !< Operator result.
-  integer(I_P)                    :: i   !< Counter.
   !---------------------------------------------------------------------------------------------------------------------------------
 
   !---------------------------------------------------------------------------------------------------------------------------------
@@ -481,9 +477,7 @@ contains
   endselect
   select type(opr)
   class is(euler_1D_caf)
-    do i=1, rhs%Ni
-      opr%U(:, i) = rhs%U(:, i) * lhs
-    enddo
+    opr%U = rhs%U * lhs
   endselect
   return
   !---------------------------------------------------------------------------------------------------------------------------------
@@ -496,7 +490,6 @@ contains
   class(euler_1D_caf), intent(IN) :: lhs !< Left hand side.
   class(integrand),    intent(IN) :: rhs !< Right hand side.
   class(integrand), allocatable   :: opr !< Operator result.
-  integer(I_P)                    :: i   !< Counter.
   !---------------------------------------------------------------------------------------------------------------------------------
 
   !---------------------------------------------------------------------------------------------------------------------------------
@@ -509,9 +502,7 @@ contains
   class is(euler_1D_caf)
     select type(rhs)
     class is (euler_1D_caf)
-      do i=1, lhs%Ni
-        opr%U(:, i) = lhs%U(:, i) + rhs%U(:, i)
-      enddo
+      opr%U = lhs%U + rhs%U
     endselect
   endselect
   return
@@ -525,7 +516,6 @@ contains
   class(euler_1D_caf), intent(IN)  :: lhs !< Left hand side.
   class(integrand),    intent(IN)  :: rhs !< Right hand side.
   class(integrand),    allocatable :: opr !< Operator result.
-  integer(I_P)                     :: i   !< Counter.
   !---------------------------------------------------------------------------------------------------------------------------------
 
   !---------------------------------------------------------------------------------------------------------------------------------
@@ -538,9 +528,7 @@ contains
   class is(euler_1D_caf)
     select type(rhs)
     class is (euler_1D_caf)
-      do i=1, lhs%Ni
-        opr%U(:, i) = lhs%U(:, i) - rhs%U(:, i)
-      enddo
+      opr%U = lhs%U - rhs%U
     endselect
   endselect
   return
@@ -553,7 +541,6 @@ contains
   !---------------------------------------------------------------------------------------------------------------------------------
   class(euler_1D_caf), intent(INOUT) :: lhs !< Left hand side.
   class(integrand),    intent(IN)    :: rhs !< Right hand side.
-  integer(I_P)                       :: i   !< Counter.
   !---------------------------------------------------------------------------------------------------------------------------------
 
   !---------------------------------------------------------------------------------------------------------------------------------
@@ -585,15 +572,10 @@ contains
   !---------------------------------------------------------------------------------------------------------------------------------
   class(euler_1D_caf), intent(INOUT) :: lhs !< Left hand side.
   real(R_P),           intent(IN)    :: rhs !< Right hand side.
-  integer(I_P)                       :: i   !< Counter.
   !---------------------------------------------------------------------------------------------------------------------------------
 
   !---------------------------------------------------------------------------------------------------------------------------------
-  if (allocated(lhs%U)) then
-    do i=1, lhs%Ni
-      lhs%U(:, i) = rhs
-    enddo
-  endif
+  if (allocated(lhs%U)) lhs%U = rhs
   return
   !---------------------------------------------------------------------------------------------------------------------------------
   endsubroutine euler_assign_real
@@ -652,6 +634,7 @@ contains
   !---------------------------------------------------------------------------------------------------------------------------------
 
   !---------------------------------------------------------------------------------------------------------------------------------
+#ifdef CAF
   if (self%we>1) then
     remote_U = self%U
     if (self%me==1) then
@@ -666,6 +649,7 @@ contains
       U_R(:,:) = remote_U(:,:)[self%me+1]
     endif
   endif
+#endif
   return
   !---------------------------------------------------------------------------------------------------------------------------------
   endsubroutine synchronize

@@ -126,19 +126,19 @@ type, extends(integrand) :: euler_1D_openmp
   !< + Ns+1 : momentum conservation             (r*u)
   !< + Ns+2 : energy conservation               (r*E)
   private
-  integer(I_P)                   :: ord=0           !< Space accuracy formal order.
-  integer(I_P)                   :: Ni=0            !< Space dimension.
-  integer(I_P)                   :: Ng=0            !< Number of ghost cells for boundary conditions handling.
-  integer(I_P)                   :: Ns=0            !< Number of initial species.
-  integer(I_P)                   :: Nc=0            !< Number of conservative variables, Ns+2.
-  integer(I_P)                   :: Np=0            !< Number of primitive variables, Ns+4.
-  real(R_P)                      :: Dx=0._R_P       !< Space step.
-  type(weno_interpolator_upwind) :: weno            !< WENO interpolator.
-  real(R_P),    allocatable      :: U(:,:)          !< Integrand (state) variables, whole physical domain [1:Nc,1-Ng:Ni+Ng].
-  real(R_P),    allocatable      :: cp0(:)          !< Specific heat cp of initial species [1:Ns].
-  real(R_P),    allocatable      :: cv0(:)          !< Specific heat cv of initial species [1:Ns].
-  character(:), allocatable      :: BC_L            !< Left boundary condition type.
-  character(:), allocatable      :: BC_R            !< Right boundary condition type.
+  integer(I_P)                   :: ord=0     !< Space accuracy formal order.
+  integer(I_P)                   :: Ni=0      !< Space dimension.
+  integer(I_P)                   :: Ng=0      !< Number of ghost cells for boundary conditions handling.
+  integer(I_P)                   :: Ns=0      !< Number of initial species.
+  integer(I_P)                   :: Nc=0      !< Number of conservative variables, Ns+2.
+  integer(I_P)                   :: Np=0      !< Number of primitive variables, Ns+4.
+  real(R_P)                      :: Dx=0._R_P !< Space step.
+  type(weno_interpolator_upwind) :: weno      !< WENO interpolator.
+  real(R_P),    allocatable      :: U(:,:)    !< Integrand (state) variables, whole physical domain [1:Nc,1:Ni].
+  real(R_P),    allocatable      :: cp0(:)    !< Specific heat cp of initial species [1:Ns].
+  real(R_P),    allocatable      :: cv0(:)    !< Specific heat cv of initial species [1:Ns].
+  character(:), allocatable      :: BC_L      !< Left boundary condition type.
+  character(:), allocatable      :: BC_R      !< Right boundary condition type.
   contains
     ! auxiliary methods
     procedure, pass(self), public :: init             !< Init field.
@@ -197,7 +197,7 @@ contains
   self%Nc = Ns + 2
   self%Np = Ns + 4
   self%Dx = Dx
-  if (allocated(self%U)) deallocate(self%U) ; allocate(self%U  (1:self%Nc, 1:Ni))
+  if (allocated(self%U)) deallocate(self%U) ; allocate(self%U(1:self%Nc, 1:Ni))
   self%cp0 = cp0
   self%cv0 = cv0
   self%BC_L = BC_L
