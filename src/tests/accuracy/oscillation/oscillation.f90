@@ -11,6 +11,7 @@ use Data_Type_Command_Line_Interface, only : Type_Command_Line_Interface
 use foodie, only : adams_bashforth_integrator, &
                    adams_bashforth_moulton_integrator, &
                    adams_moulton_integrator, &
+                   bdf_integrator, &
                    emd_runge_kutta_integrator, &
                    euler_explicit_integrator, &
                    leapfrog_integrator, &
@@ -82,6 +83,8 @@ else
     call test_abm(steps=stages_steps)
   case('adams-moulton')
     call test_am(steps=stages_steps)
+  case('backward-diff-formula')
+    call test_bdf(steps=stages_steps)
   case('emd-runge-kutta')
     call test_emd_rk(stages=stages_steps)
   case('euler')
@@ -109,6 +112,7 @@ else
     print "(A)", '  + adams-bashforth'
     print "(A)", '  + adams-bashforth-moulton'
     print "(A)", '  + adams-moulton'
+    print "(A)", '  + backward-diff-formula'
     print "(A)", '  + emd-runge-kutta'
     print "(A)", '  + euler'
     print "(A)", '  + leapfrog'
@@ -305,6 +309,40 @@ contains
   return
   !---------------------------------------------------------------------------------------------------------------------------------
   endsubroutine test_am
+
+  subroutine test_bdf(steps)
+  !---------------------------------------------------------------------------------------------------------------------------------
+  !< Test implicit Backward-Differentiation-Formula class of ODE solvers.
+  !---------------------------------------------------------------------------------------------------------------------------------
+  integer(I_P), intent(IN)      :: steps            !< Number of steps used: if negative all BDF solvers are used.
+  integer, parameter            :: bdf_steps=3      !< BDF steps number.
+  real(R_P), allocatable        :: solution(:,:)    !< Solution at each time step.
+  integer(I_P)                  :: s                !< Steps counter.
+  integer(I_P)                  :: steps_range(1:2) !< Steps used.
+  character(len=:), allocatable :: output           !< Output files basename.
+  character(len=:), allocatable :: title            !< Output files title.
+  !---------------------------------------------------------------------------------------------------------------------------------
+
+  !---------------------------------------------------------------------------------------------------------------------------------
+  solver = 'bdf'
+  call init(output=output, solution=solution)
+  print "(A)", 'Integrating Oscillation equations by means of Backward-Differentiation-Formula class of solvers'
+  steps_range = [0, bdf_steps] ; if (steps>0) steps_range = [steps, steps]
+  do s=steps_range(1), steps_range(2)
+    print "(A)", ' BDF-'//trim(str(.true.,s))
+    title = 'Oscillation equation integration, implicit Backward-Differentation-Formula, t='//str(n=t_final)//&
+            ' steps='//trim(str(.true., s))
+    if (implicit_iterations>1) then
+      call bdf_solver(steps=s, solution=solution, iterations=implicit_iterations)
+    else
+      call bdf_solver(steps=s, solution=solution)
+    endif
+    call save_results(title=title, basename=output//'-'//trim(str(.true., s)), solution=solution)
+  enddo
+  print "(A)", 'Finish!'
+  return
+  !---------------------------------------------------------------------------------------------------------------------------------
+  endsubroutine test_bdf
 
   subroutine test_emd_rk(stages)
   !---------------------------------------------------------------------------------------------------------------------------------
@@ -593,6 +631,54 @@ contains
   !---------------------------------------------------------------------------------------------------------------------------------
   endsubroutine am_solver
 
+  subroutine bdf_solver(steps, iterations, solution)
+  !---------------------------------------------------------------------------------------------------------------------------------
+  !< Solve problem with implicit Bacward-Differentiation-Formula class of ODE solvers.
+  !---------------------------------------------------------------------------------------------------------------------------------
+  integer(I_P),           intent(IN)  :: steps                 !< Number of steps used: if negative all BDF solvers are used.
+  integer(I_P), optional, intent(IN)  :: iterations            !< Number of fixed point iterations.
+  real(R_P),              intent(OUT) :: solution(0:,0:)       !< Solution at each time step.
+  type(tvd_runge_kutta_integrator)    :: rk_integrator         !< Runge-Kutta integrator.
+  integer, parameter                  :: rk_stages=5           !< Runge-Kutta stages number.
+  type(oscillation)                   :: rk_stage(1:rk_stages) !< Runge-Kutta stages.
+  type(bdf_integrator)                :: integrator            !< BDF integrator.
+  type(oscillation)                   :: previous(1:steps)     !< Previous time steps solutions.
+  type(oscillation)                   :: oscillator            !< Oscillation field.
+  integer                             :: step                  !< Time steps counter.
+  !---------------------------------------------------------------------------------------------------------------------------------
+
+  !---------------------------------------------------------------------------------------------------------------------------------
+  call integrator%init(steps=steps)
+  select case(steps)
+  case(1, 2)
+    call rk_integrator%init(stages=steps+1)
+  case(3, 4, 5, 6)
+    call rk_integrator%init(stages=5)
+  endselect
+  call oscillator%init(initial_state=initial_state, f=f)
+  solution = 0._R_P
+  solution(1:space_dimension, 0) = oscillator%output()
+  step = 0
+  do while(solution(0, step)<t_final)
+    step = step + 1
+    if (steps>=step) then
+      ! time steps from 1 to s - 1 must be computed with other scheme
+      call rk_integrator%integrate(U=oscillator, stage=rk_stage, Dt=Dt, t=solution(0, step))
+      previous(step) = oscillator
+    else
+      if (steps==0) then
+        call integrator%integrate(U=oscillator, previous=previous, Dt=Dt, t=solution(0,step-1:step-1), iterations=iterations)
+      else
+        call integrator%integrate(U=oscillator, previous=previous, Dt=Dt, t=solution(0,step-steps:step-1), iterations=iterations)
+      endif
+    endif
+    solution(0, step) = step * Dt
+    solution(1:space_dimension, step) = oscillator%output()
+  enddo
+  return
+  !---------------------------------------------------------------------------------------------------------------------------------
+  endsubroutine bdf_solver
+
   subroutine emd_rk_solver(stages, tol, solution, last_step)
   !---------------------------------------------------------------------------------------------------------------------------------
   !< Solve problem with explicit embedded Runge-Kutta class of ODE solvers.
@@ -790,6 +876,7 @@ contains
                                                       0.0000001_R_P, &
                                                       0.00000001_R_P]  !< Tolerances for embedded RK solvers.
   integer, parameter            :: ab_steps=4                          !< Adams-Bashforth steps number.
+  integer, parameter            :: bdf_steps=6                         !< BDF steps number.
   integer, parameter            :: emd_rk_stages=17                    !< Embedded Runge-Kutta stages number.
   integer, parameter            :: tvd_rk_stages=5                     !< TVD/SSP Runge-Kutta stages number.
   integer, parameter            :: ls_rk_stages=14                     !< Low storage Runge-Kutta stages number.
@@ -804,6 +891,7 @@ contains
   real(R_P) :: ab_errors(1:space_dimension, 1:ab_steps, 1:NDt)            !< Adams-Bashforth errors.
   real(R_P) :: abm_errors(1:space_dimension, 1:ab_steps, 1:NDt)           !< Adams-Bashforth-Moulton errors.
   real(R_P) :: am_errors(1:space_dimension, 1:ab_steps, 1:NDt)            !< Adams-Moulton errors.
+  real(R_P) :: bdf_errors(1:space_dimension, 1:bdf_steps, 1:NDt)          !< BDF errors.
   real(R_P) :: emd_rk_errors(1:space_dimension, 1:emd_rk_stages, 1:NDt)   !< TVD/SSP Runge-Kutta errors.
   real(R_P) :: lf_errors(1:space_dimension, 1:2, 1:NDt)                   !< Leapfrog errors.
   real(R_P) :: ls_rk_errors(1:space_dimension, 1:ls_rk_stages, 1:NDt)     !< Low storage Runge-Kutta errors.
@@ -811,6 +899,7 @@ contains
   real(R_P) :: ab_orders(1:space_dimension, 1:ab_steps, 1:NDt-1)          !< Adams-Bashforth orders.
   real(R_P) :: abm_orders(1:space_dimension, 1:ab_steps, 1:NDt-1)         !< Adams-Bashforth-Moulton orders.
   real(R_P) :: am_orders(1:space_dimension, 1:ab_steps, 1:NDt-1)          !< Adams-Moulton orders.
+  real(R_P) :: bdf_orders(1:space_dimension, 1:bdf_steps, 1:NDt-1)        !< BDF orders.
   real(R_P) :: emd_rk_orders(1:space_dimension, 1:emd_rk_stages, 1:NDt-1) !< Embedded Runge-Kutta orders.
   real(R_P) :: lf_orders(1:space_dimension, 1:2, 1:NDt-1)                 !< Leapfrog orders.
   real(R_P) :: ls_rk_orders(1:space_dimension, 1:ls_rk_stages, 1:NDt-1)   !< Low storage Runge-Kutta orders.
@@ -821,6 +910,7 @@ contains
   ab_errors = -1._R_P     ; ab_orders = 0._R_P
   abm_errors = -1._R_P    ; abm_orders = 0._R_P
   am_errors = -1._R_P     ; am_orders = 0._R_P
+  bdf_errors = -1._R_P    ; bdf_orders = 0._R_P
   emd_rk_errors = -1._R_P ; emd_rk_orders = 0._R_P
   lf_errors = -1._R_P     ; lf_orders = 0._R_P
   ls_rk_errors = -1._R_P  ; ls_rk_orders = 0._R_P
@@ -882,6 +972,28 @@ contains
   do s=0, ab_steps-1
     do d=1, NDt-1
       am_orders(:, s+1, d) = estimate_orders(solver_error=am_errors(:, s+1, d:d+1), Dt_used=time_steps(d:d+1))
+    enddo
+  enddo
+  ! Analyze errors of Backward-Differentiation-Formul solvers
+  do d=1, NDt ! loop over exercised time steps
+    Dt = time_steps(d)
+    solver = 'bdf'
+    call init(output=output, solution=solution)
+    do s=1, bdf_steps
+      title = 'Oscillation equation integration, implicit Backward-Differentiation-Formula, t='//str(n=t_final)//&
+              ' steps='//trim(str(.true., s))
+      if (implicit_iterations>1) then
+        call bdf_solver(steps=s, solution=solution, iterations=implicit_iterations)
+      else
+        call bdf_solver(steps=s, solution=solution)
+      endif
+      call save_results(title=title, basename=output//'-'//trim(str(.true., s)), solution=solution)
+      bdf_errors(:, s, d) = compute_errors(solution=solution)
+    enddo
+  enddo
+  do s=1, bdf_steps
+    do d=1, NDt-1
+      bdf_orders(:, s, d) = estimate_orders(solver_error=bdf_errors(:, s, d:d+1), Dt_used=time_steps(d:d+1))
     enddo
   enddo
   ! Analyze errors of embedded Runge-Kutta solvers
@@ -1010,6 +1122,7 @@ contains
   call print_analysis(solver='adams-bashforth', time_steps=time_steps, errors=ab_errors, orders=ab_orders)
   call print_analysis(solver='adams-bashforth-moulton', time_steps=time_steps, errors=abm_errors, orders=abm_orders)
   call print_analysis(solver='adams-moulton', time_steps=time_steps, errors=am_errors, orders=am_orders)
+  call print_analysis(solver='bdf', time_steps=time_steps, errors=bdf_errors, orders=bdf_orders)
   call print_analysis(solver='emd-runge-kutta', mean_time_steps=emd_Dt_mean, errors=emd_rk_errors, orders=emd_rk_orders)
   call print_analysis(solver='leapfrog', time_steps=time_steps, errors=lf_errors, orders=lf_orders)
   call print_analysis(solver='ls-runge-kutta', time_steps=time_steps, errors=ls_rk_errors, orders=ls_rk_orders)
