@@ -1,7 +1,7 @@
-!< FOODIE integrator: provide an implicit class of Adams-Moutlon multi-step schemes, from 1st to 4rd order accurate.
+!< FOODIE integrator: provide an implicit class of Adams-Moutlon multi-step schemes, from 1st to 4th order accurate.
 module foodie_integrator_adams_moulton
 !-----------------------------------------------------------------------------------------------------------------------------------
-!< FOODIE integrator: provide an implicit class of Adams-Moutlon multi-step schemes, from 1st to 4rd order accurate.
+!< FOODIE integrator: provide an implicit class of Adams-Moutlon multi-step schemes, from 1st to 4th order accurate.
 !<
 !< Considering the following ODE system:
 !<
@@ -92,7 +92,7 @@ contains
   !< Create the actual Adams-Moulton integrator: initialize the *b* coefficients.
   !---------------------------------------------------------------------------------------------------------------------------------
   class(adams_moulton_integrator), intent(INOUT) :: self  !< AB integrator.
-  integer(I_P), intent(IN)                       :: steps !< Number of time steps used.
+  integer(I_P),                    intent(IN)    :: steps !< Number of time steps used.
   !---------------------------------------------------------------------------------------------------------------------------------
 
   !---------------------------------------------------------------------------------------------------------------------------------
@@ -148,7 +148,7 @@ contains
   integer(I_P), optional,          intent(IN)    :: iterations   !< Fixed point iterations.
   logical,      optional,          intent(IN)    :: autoupdate   !< Perform cyclic autoupdate of previous time steps.
   logical                                        :: autoupdate_  !< Perform cyclic autoupdate of previous time steps, dummy var.
-  class(integrand), allocatable                  :: delta        !< Delta RHS for fixex point iterations.
+  class(integrand), allocatable                  :: delta        !< Delta RHS for fixed point iterations.
   integer(I_P)                                   :: s            !< Steps counter.
   !---------------------------------------------------------------------------------------------------------------------------------
 
