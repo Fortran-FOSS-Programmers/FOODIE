@@ -258,431 +258,431 @@
     <br>
     <section>
     <h2><span class="anchor" id="src"></span>Source Code</h2>
-    <div class="highlight"><pre><span class="c">!&lt; Define Burgers field that is a concrete extension of the abstract integrand type.</span>
-<span class="k">module </span><span class="n">type_burgers</span>
-<span class="c">!-----------------------------------------------------------------------------------------------------------------------------------</span>
-<span class="c">!&lt; Define Burgers field that is a concrete extension of the abstract integrand type.</span>
-<span class="c">!-----------------------------------------------------------------------------------------------------------------------------------</span>
-
-<span class="c">!-----------------------------------------------------------------------------------------------------------------------------------</span>
-<span class="k">use </span><span class="n">IR_Precision</span><span class="p">,</span> <span class="n">only</span> <span class="p">:</span> <span class="n">R_P</span><span class="p">,</span> <span class="n">I_P</span>
-<span class="k">use </span><span class="n">foodie</span><span class="p">,</span> <span class="n">only</span> <span class="p">:</span> <span class="n">integrand</span>
-<span class="c">!-----------------------------------------------------------------------------------------------------------------------------------</span>
-
-<span class="c">!-----------------------------------------------------------------------------------------------------------------------------------</span>
-<span class="k">implicit none</span>
-<span class="k">private</span>
-<span class="k">public</span> <span class="kd">::</span> <span class="n">burgers</span>
-<span class="c">!-----------------------------------------------------------------------------------------------------------------------------------</span>
-
-<span class="c">!-----------------------------------------------------------------------------------------------------------------------------------</span>
-<span class="k">type</span><span class="p">,</span> <span class="k">extends</span><span class="p">(</span><span class="n">integrand</span><span class="p">)</span> <span class="kd">::</span> <span class="n">burgers</span>
-  <span class="c">!&lt; Burgers equations field.</span>
-  <span class="c">!&lt;</span>
-  <span class="c">!&lt; It is a FOODIE integrand class concrete extension.</span>
-  <span class="c">!&lt;</span>
-  <span class="c">!&lt;### Burgers PDE equation</span>
-  <span class="c">!&lt;The Burgers PDE equation is a non linear PDE widely used as numerical benchmark that can be applied to describe</span>
-  <span class="c">!&lt;a wide range of different problems, from fluid dynamics to traffic flows, see [1].</span>
-  <span class="c">!&lt;</span>
-  <span class="c">!&lt;$$</span>
-  <span class="c">!&lt;\begin{matrix}</span>
-  <span class="c">!&lt;U_t = R(U)  \Leftrightarrow U_t = F(U)_x \\</span>
-  <span class="c">!&lt;U = [u]\;\;\;</span>
-  <span class="c">!&lt;F(U) = [-\frac{1}{2}u^2+\nu u_x]</span>
-  <span class="c">!&lt;\end{matrix}</span>
-  <span class="c">!&lt;$$</span>
-  <span class="c">!&lt;</span>
-  <span class="c">!&lt;This is the viscous Burgers&#39; equation, \(\nu\) being the viscosity. This equation is of paramount relevance because it retains</span>
-  <span class="c">!&lt;complex aspects such as the hyperbolic nature of the convection term (allowing discontinuous solutions) and the diffusive nature</span>
-  <span class="c">!&lt;of the viscous term.</span>
-  <span class="c">!&lt;</span>
-  <span class="c">!&lt;#### Bibliography</span>
-  <span class="c">!&lt;</span>
-  <span class="c">!&lt;[1] *The partial differential equation ut + uux = nuxx*, Hopf, Eberhard, Communications on Pure and Applied Mathematics,</span>
-  <span class="c">!&lt; vol 3, issue 3, doi 10.1002/cpa.3160030302, pp. 201--230, 1950.</span>
-  <span class="c">!&lt;</span>
-  <span class="c">!&lt;#### State variables organization</span>
-  <span class="c">!&lt; State variable is organized as an array (rank 1) for whole physical domain.</span>
-  <span class="k">private</span>
-<span class="k">  </span><span class="kt">integer</span><span class="p">(</span><span class="n">I_P</span><span class="p">)</span>                           <span class="kd">::</span> <span class="n">dims</span><span class="o">=</span><span class="mi">0</span>    <span class="c">!&lt; Space dimensions.</span>
-  <span class="kt">integer</span><span class="p">(</span><span class="n">I_P</span><span class="p">)</span>                           <span class="kd">::</span> <span class="n">Ni</span><span class="o">=</span><span class="mi">0</span>      <span class="c">!&lt; Number of grid nodes.</span>
-  <span class="kt">integer</span><span class="p">(</span><span class="n">I_P</span><span class="p">)</span>                           <span class="kd">::</span> <span class="n">steps</span><span class="o">=</span><span class="mi">0</span>   <span class="c">!&lt; Number of time steps stored.</span>
-  <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">)</span>                              <span class="kd">::</span> <span class="n">h</span><span class="o">=</span><span class="mf">0._R_P</span>  <span class="c">!&lt; Space step discretization.</span>
-  <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">)</span>                              <span class="kd">::</span> <span class="n">nu</span><span class="o">=</span><span class="mf">0._R_P</span> <span class="c">!&lt; Viscosity.</span>
-  <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">),</span> <span class="k">dimension</span><span class="p">(:),</span>   <span class="k">allocatable</span> <span class="kd">::</span> <span class="n">U</span>         <span class="c">!&lt; Integrand (state) variables, whole physical domain, [1:Ni].</span>
-  <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">),</span> <span class="k">dimension</span><span class="p">(:,:),</span> <span class="k">allocatable</span> <span class="kd">::</span> <span class="n">previous</span>  <span class="c">!&lt; Previous time steps states, [1:Ni,1:steps].</span>
-  <span class="k">contains</span>
-    <span class="c">! auxiliary methods</span>
-    <span class="k">procedure</span><span class="p">,</span> <span class="k">pass</span><span class="p">(</span><span class="n">self</span><span class="p">),</span> <span class="k">public</span> <span class="kd">::</span> <span class="n">init</span>             <span class="c">!&lt; Init field.</span>
-    <span class="k">procedure</span><span class="p">,</span> <span class="k">pass</span><span class="p">(</span><span class="n">self</span><span class="p">),</span> <span class="k">public</span> <span class="kd">::</span> <span class="n">output</span>           <span class="c">!&lt; Extract Burgers field.</span>
-    <span class="k">procedure</span><span class="p">,</span> <span class="k">pass</span><span class="p">(</span><span class="n">self</span><span class="p">),</span> <span class="k">public</span> <span class="kd">::</span> <span class="n">dt</span> <span class="o">=&gt;</span> <span class="n">compute_dt</span> <span class="c">!&lt; Compute the current time step, by means of CFL condition.</span>
-    <span class="c">! ADT integrand deferred methods</span>
-    <span class="k">procedure</span><span class="p">,</span> <span class="k">pass</span><span class="p">(</span><span class="n">self</span><span class="p">),</span> <span class="k">public</span> <span class="kd">::</span> <span class="n">t</span> <span class="o">=&gt;</span> <span class="n">dBurgers_dt</span>                                         <span class="c">!&lt; Time derivative, residuals func.</span>
-    <span class="k">procedure</span><span class="p">,</span> <span class="k">pass</span><span class="p">(</span><span class="n">self</span><span class="p">),</span> <span class="k">public</span> <span class="kd">::</span> <span class="n">update_previous_steps</span>                                    <span class="c">!&lt; Update previous time steps.</span>
-    <span class="k">procedure</span><span class="p">,</span> <span class="k">pass</span><span class="p">(</span><span class="n">self</span><span class="p">),</span> <span class="k">public</span> <span class="kd">::</span> <span class="n">previous_step</span>                                            <span class="c">!&lt; Get a previous time step.</span>
-    <span class="k">procedure</span><span class="p">,</span> <span class="k">pass</span><span class="p">(</span><span class="n">lhs</span><span class="p">),</span>  <span class="k">public</span> <span class="kd">::</span> <span class="n">local_error</span> <span class="o">=&gt;</span> <span class="n">burgers_local_error</span>                       <span class="c">!&lt; Local error.</span>
-    <span class="k">procedure</span><span class="p">,</span> <span class="k">pass</span><span class="p">(</span><span class="n">lhs</span><span class="p">),</span>  <span class="k">public</span> <span class="kd">::</span> <span class="n">integrand_multiply_integrand</span> <span class="o">=&gt;</span> <span class="n">burgers_multiply_burgers</span> <span class="c">!&lt; Burgers * burgers operator.</span>
-    <span class="k">procedure</span><span class="p">,</span> <span class="k">pass</span><span class="p">(</span><span class="n">lhs</span><span class="p">),</span>  <span class="k">public</span> <span class="kd">::</span> <span class="n">integrand_multiply_real</span> <span class="o">=&gt;</span> <span class="n">burgers_multiply_real</span>         <span class="c">!&lt; Burgers * real operator.</span>
-    <span class="k">procedure</span><span class="p">,</span> <span class="k">pass</span><span class="p">(</span><span class="n">rhs</span><span class="p">),</span>  <span class="k">public</span> <span class="kd">::</span> <span class="n">real_multiply_integrand</span> <span class="o">=&gt;</span> <span class="n">real_multiply_burgers</span>         <span class="c">!&lt; Real * Burgers operator.</span>
-    <span class="k">procedure</span><span class="p">,</span> <span class="k">pass</span><span class="p">(</span><span class="n">lhs</span><span class="p">),</span>  <span class="k">public</span> <span class="kd">::</span> <span class="n">add</span> <span class="o">=&gt;</span> <span class="n">add_burgers</span>                                       <span class="c">!&lt; Burgers + Burgers operator.</span>
-    <span class="k">procedure</span><span class="p">,</span> <span class="k">pass</span><span class="p">(</span><span class="n">lhs</span><span class="p">),</span>  <span class="k">public</span> <span class="kd">::</span> <span class="n">sub</span> <span class="o">=&gt;</span> <span class="n">sub_burgers</span>                                       <span class="c">!&lt; Burgers - Burgers operator.</span>
-    <span class="k">procedure</span><span class="p">,</span> <span class="k">pass</span><span class="p">(</span><span class="n">lhs</span><span class="p">),</span>  <span class="k">public</span> <span class="kd">::</span> <span class="n">assign_integrand</span> <span class="o">=&gt;</span> <span class="n">burgers_assign_burgers</span>               <span class="c">!&lt; Burgers = Burgers.</span>
-    <span class="k">procedure</span><span class="p">,</span> <span class="k">pass</span><span class="p">(</span><span class="n">lhs</span><span class="p">),</span>  <span class="k">public</span> <span class="kd">::</span> <span class="n">assign_real</span> <span class="o">=&gt;</span> <span class="n">burgers_assign_real</span>                       <span class="c">!&lt; Burgers = real.</span>
-    <span class="c">! private methods</span>
-    <span class="k">procedure</span><span class="p">,</span> <span class="k">pass</span><span class="p">(</span><span class="n">self</span><span class="p">),</span> <span class="k">private</span> <span class="kd">::</span> <span class="n">x</span>  <span class="o">=&gt;</span> <span class="n">dBurgers_dx</span>   <span class="c">!&lt; 1st derivative.</span>
-    <span class="k">procedure</span><span class="p">,</span> <span class="k">pass</span><span class="p">(</span><span class="n">self</span><span class="p">),</span> <span class="k">private</span> <span class="kd">::</span> <span class="n">xx</span> <span class="o">=&gt;</span> <span class="n">d2Burgers_dx2</span> <span class="c">!&lt; 2nd derivative.</span>
-<span class="n">endtype</span> <span class="n">burgers</span>
-<span class="c">!-----------------------------------------------------------------------------------------------------------------------------------</span>
-<span class="k">contains</span>
-  <span class="c">! auxiliary methods</span>
-  <span class="k">subroutine </span><span class="n">init</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">initial_state</span><span class="p">,</span> <span class="n">Ni</span><span class="p">,</span> <span class="n">h</span><span class="p">,</span> <span class="n">nu</span><span class="p">,</span> <span class="n">steps</span><span class="p">)</span>
-  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
-  <span class="c">!&lt; Construct an initialized Burgers field.</span>
-  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
-  <span class="k">class</span><span class="p">(</span><span class="n">burgers</span><span class="p">),</span>             <span class="k">intent</span><span class="p">(</span><span class="n">INOUT</span><span class="p">)</span> <span class="kd">::</span> <span class="n">self</span>          <span class="c">!&lt; Burgers field.</span>
-  <span class="kt">integer</span><span class="p">(</span><span class="n">I_P</span><span class="p">),</span>               <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span>    <span class="kd">::</span> <span class="n">Ni</span>            <span class="c">!&lt; Number of grid nodes.</span>
-  <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">),</span> <span class="k">dimension</span><span class="p">(</span><span class="mi">1</span><span class="p">:</span><span class="n">Ni</span><span class="p">),</span> <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span>    <span class="kd">::</span> <span class="n">initial_state</span> <span class="c">!&lt; Initial state of Burgers field domain.</span>
-  <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">),</span>                  <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span>    <span class="kd">::</span> <span class="n">h</span>             <span class="c">!&lt; Space step discretization.</span>
-  <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">),</span>                  <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span>    <span class="kd">::</span> <span class="n">nu</span>            <span class="c">!&lt; Viscosity.</span>
-  <span class="kt">integer</span><span class="p">(</span><span class="n">I_P</span><span class="p">),</span> <span class="k">optional</span><span class="p">,</span>     <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span>    <span class="kd">::</span> <span class="n">steps</span>         <span class="c">!&lt; Time steps stored.</span>
-  <span class="kt">integer</span><span class="p">(</span><span class="n">I_P</span><span class="p">)</span>                              <span class="kd">::</span> <span class="n">s</span>             <span class="c">!&lt; Time steps counter.</span>
-  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
-
-  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
-  <span class="n">self</span><span class="p">%</span><span class="n">dims</span> <span class="o">=</span> <span class="n">size</span><span class="p">(</span><span class="n">initial_state</span><span class="p">)</span>
-  <span class="n">self</span><span class="p">%</span><span class="n">steps</span> <span class="o">=</span> <span class="mi">0</span> <span class="p">;</span> <span class="k">if</span> <span class="p">(</span><span class="nb">present</span><span class="p">(</span><span class="n">steps</span><span class="p">))</span> <span class="n">self</span><span class="p">%</span><span class="n">steps</span> <span class="o">=</span> <span class="n">steps</span>
-  <span class="k">if</span> <span class="p">(</span><span class="nb">allocated</span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">U</span><span class="p">))</span> <span class="k">deallocate</span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">U</span><span class="p">)</span> <span class="p">;</span> <span class="k">allocate</span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">U</span><span class="p">(</span><span class="mi">1</span><span class="p">:</span><span class="n">Ni</span><span class="p">))</span>
-  <span class="k">if</span> <span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">steps</span><span class="o">&gt;</span><span class="mi">0</span><span class="p">)</span> <span class="k">then</span>
-<span class="k">    if</span> <span class="p">(</span><span class="nb">allocated</span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">previous</span><span class="p">))</span> <span class="k">deallocate</span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">previous</span><span class="p">)</span> <span class="p">;</span> <span class="k">allocate</span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">previous</span><span class="p">(</span><span class="mi">1</span><span class="p">:</span><span class="n">Ni</span><span class="p">,</span> <span class="mi">1</span><span class="p">:</span><span class="n">self</span><span class="p">%</span><span class="n">steps</span><span class="p">))</span>
-  <span class="n">endif</span>
-  <span class="n">self</span><span class="p">%</span><span class="n">U</span> <span class="o">=</span> <span class="n">initial_state</span>
-  <span class="k">if</span> <span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">steps</span><span class="o">&gt;</span><span class="mi">0</span><span class="p">)</span> <span class="k">then</span>
-<span class="k">    do </span><span class="n">s</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">self</span><span class="p">%</span><span class="n">steps</span>
-      <span class="n">self</span><span class="p">%</span><span class="n">previous</span><span class="p">(:,</span> <span class="n">s</span><span class="p">)</span> <span class="o">=</span> <span class="n">initial_state</span>
-    <span class="n">enddo</span>
-  <span class="n">endif</span>
-  <span class="n">self</span><span class="p">%</span><span class="n">Ni</span> <span class="o">=</span> <span class="n">Ni</span>
-  <span class="n">self</span><span class="p">%</span><span class="n">h</span> <span class="o">=</span> <span class="n">h</span>
-  <span class="n">self</span><span class="p">%</span><span class="n">nu</span> <span class="o">=</span> <span class="n">nu</span>
-  <span class="k">return</span>
-  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
-  <span class="n">endsubroutine</span> <span class="n">init</span>
-
-  <span class="k">pure function </span><span class="n">output</span><span class="p">(</span><span class="n">self</span><span class="p">)</span> <span class="k">result</span><span class="p">(</span><span class="n">state</span><span class="p">)</span>
-  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
-  <span class="c">!&lt; Output the Burgers field state.</span>
-  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
-  <span class="k">class</span><span class="p">(</span><span class="n">burgers</span><span class="p">),</span> <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span>           <span class="kd">::</span> <span class="n">self</span>  <span class="c">!&lt; Burgers field.</span>
-  <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">),</span> <span class="k">dimension</span><span class="p">(:),</span> <span class="k">allocatable</span> <span class="kd">::</span> <span class="n">state</span> <span class="c">!&lt; Burgers state variable.</span>
-  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
-
-  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
-  <span class="n">state</span> <span class="o">=</span> <span class="n">self</span><span class="p">%</span><span class="n">U</span>
-  <span class="k">return</span>
-  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
-  <span class="n">endfunction</span> <span class="n">output</span>
-
-  <span class="k">pure function </span><span class="n">compute_dt</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">CFL</span><span class="p">)</span> <span class="k">result</span><span class="p">(</span><span class="n">dt</span><span class="p">)</span>
-  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
-  <span class="c">!&lt; Compute the current time step, by means of CFL condition.</span>
-  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
-  <span class="k">class</span><span class="p">(</span><span class="n">burgers</span><span class="p">),</span> <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span> <span class="kd">::</span> <span class="n">self</span> <span class="c">!&lt; Burgers field.</span>
-  <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">),</span>      <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span> <span class="kd">::</span> <span class="n">CFL</span>  <span class="c">!&lt; Courant-Friedricks-Lewi stability coefficient.</span>
-  <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">)</span>                  <span class="kd">::</span> <span class="n">dt</span>   <span class="c">!&lt; Current time step.</span>
-  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
-
-  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
-  <span class="n">dt</span> <span class="o">=</span> <span class="n">CFL</span> <span class="o">*</span> <span class="n">self</span><span class="p">%</span><span class="n">h</span><span class="o">**</span><span class="mi">2</span> <span class="o">/</span> <span class="n">self</span><span class="p">%</span><span class="n">nu</span>
-  <span class="k">return</span>
-  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
-  <span class="n">endfunction</span> <span class="n">compute_dt</span>
-
-  <span class="c">! ADT integrand deferred methods</span>
-  <span class="k">function </span><span class="n">dBurgers_dt</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">t</span><span class="p">)</span> <span class="k">result</span><span class="p">(</span><span class="n">dState_dt</span><span class="p">)</span>
-  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
-  <span class="c">!&lt; Time derivative of Burgers field, residuals function.</span>
-  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
-  <span class="k">class</span><span class="p">(</span><span class="n">burgers</span><span class="p">),</span>         <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span> <span class="kd">::</span> <span class="n">self</span>      <span class="c">!&lt; Burgers field.</span>
-  <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">),</span>    <span class="k">optional</span><span class="p">,</span> <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span> <span class="kd">::</span> <span class="n">t</span>         <span class="c">!&lt; Time.</span>
-  <span class="k">class</span><span class="p">(</span><span class="n">integrand</span><span class="p">),</span> <span class="k">allocatable</span>      <span class="kd">::</span> <span class="n">dState_dt</span> <span class="c">!&lt; Burgers field time derivative.</span>
-  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
-
-  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
-  <span class="k">allocate</span><span class="p">(</span><span class="n">burgers</span> <span class="kd">::</span> <span class="n">dState_dt</span><span class="p">)</span>
-  <span class="k">select type</span><span class="p">(</span><span class="n">dState_dt</span><span class="p">)</span>
-  <span class="k">class is</span><span class="p">(</span><span class="n">burgers</span><span class="p">)</span>
-    <span class="n">dState_dt</span> <span class="o">=</span> <span class="n">self</span>
-    <span class="n">dState_dt</span> <span class="o">=</span> <span class="n">self</span><span class="p">%</span><span class="n">xx</span><span class="p">()</span> <span class="o">*</span> <span class="n">self</span><span class="p">%</span><span class="n">nu</span>
-    <span class="n">dState_dt</span> <span class="o">=</span> <span class="n">dState_dt</span> <span class="o">-</span> <span class="n">self</span> <span class="o">*</span> <span class="n">self</span><span class="p">%</span><span class="n">x</span><span class="p">()</span>
-  <span class="n">endselect</span>
-  <span class="k">return</span>
-  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
-  <span class="n">endfunction</span> <span class="n">dBurgers_dt</span>
-
-  <span class="k">subroutine </span><span class="n">update_previous_steps</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">filter</span><span class="p">,</span> <span class="n">weights</span><span class="p">)</span>
-  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
-  <span class="c">!&lt; Update previous time steps.</span>
-  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
-  <span class="k">class</span><span class="p">(</span><span class="n">burgers</span><span class="p">),</span>             <span class="k">intent</span><span class="p">(</span><span class="n">INOUT</span><span class="p">)</span> <span class="kd">::</span> <span class="n">self</span>       <span class="c">!&lt; Burgers field.</span>
-  <span class="k">class</span><span class="p">(</span><span class="n">integrand</span><span class="p">),</span> <span class="k">optional</span><span class="p">,</span> <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span>    <span class="kd">::</span> <span class="n">filter</span>     <span class="c">!&lt; Filter field displacement.</span>
-  <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">),</span>        <span class="k">optional</span><span class="p">,</span> <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span>    <span class="kd">::</span> <span class="n">weights</span><span class="p">(:)</span> <span class="c">!&lt; Weights for filtering the steps.</span>
-  <span class="kt">integer</span><span class="p">(</span><span class="n">I_P</span><span class="p">)</span>                              <span class="kd">::</span> <span class="n">s</span>          <span class="c">!&lt; Time steps counter.</span>
-  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
-
-  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
-  <span class="k">if</span> <span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">steps</span><span class="o">&gt;</span><span class="mi">0</span><span class="p">)</span> <span class="k">then</span>
-<span class="k">    do </span><span class="n">s</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">self</span><span class="p">%</span><span class="n">steps</span> <span class="o">-</span> <span class="mi">1</span>
-      <span class="n">self</span><span class="p">%</span><span class="n">previous</span><span class="p">(:,</span> <span class="n">s</span><span class="p">)</span> <span class="o">=</span> <span class="n">self</span><span class="p">%</span><span class="n">previous</span><span class="p">(:,</span> <span class="n">s</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
-    <span class="n">enddo</span>
-    <span class="n">self</span><span class="p">%</span><span class="n">previous</span><span class="p">(:,</span> <span class="n">self</span><span class="p">%</span><span class="n">steps</span><span class="p">)</span> <span class="o">=</span> <span class="n">self</span><span class="p">%</span><span class="n">U</span>
-  <span class="n">endif</span>
-  <span class="k">if</span> <span class="p">(</span><span class="nb">present</span><span class="p">(</span><span class="n">filter</span><span class="p">).</span><span class="nb">and</span><span class="p">.</span><span class="nb">present</span><span class="p">(</span><span class="n">weights</span><span class="p">))</span> <span class="k">then</span>
-<span class="k">    select type</span><span class="p">(</span><span class="n">filter</span><span class="p">)</span>
-    <span class="k">class is</span><span class="p">(</span><span class="n">burgers</span><span class="p">)</span>
-      <span class="k">do </span><span class="n">s</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">self</span><span class="p">%</span><span class="n">steps</span>
-        <span class="n">self</span><span class="p">%</span><span class="n">previous</span><span class="p">(:,</span> <span class="n">s</span><span class="p">)</span> <span class="o">=</span> <span class="n">self</span><span class="p">%</span><span class="n">previous</span><span class="p">(:,</span> <span class="n">s</span><span class="p">)</span> <span class="o">+</span> <span class="n">filter</span><span class="p">%</span><span class="n">U</span> <span class="o">*</span> <span class="n">weights</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
-      <span class="n">enddo</span>
-    <span class="n">endselect</span>
-  <span class="n">endif</span>
-  <span class="k">return</span>
-  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
-  <span class="n">endsubroutine</span> <span class="n">update_previous_steps</span>
-
-  <span class="k">function </span><span class="n">previous_step</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">n</span><span class="p">)</span> <span class="k">result</span><span class="p">(</span><span class="n">previous</span><span class="p">)</span>
-  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
-  <span class="c">!&lt; Extract previous time solution of Burgers field.</span>
-  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
-  <span class="k">class</span><span class="p">(</span><span class="n">burgers</span><span class="p">),</span> <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span>    <span class="kd">::</span> <span class="n">self</span>     <span class="c">!&lt; Burgers field.</span>
-  <span class="kt">integer</span><span class="p">(</span><span class="n">I_P</span><span class="p">),</span>   <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span>    <span class="kd">::</span> <span class="n">n</span>        <span class="c">!&lt; Time level.</span>
-  <span class="k">class</span><span class="p">(</span><span class="n">integrand</span><span class="p">),</span> <span class="k">allocatable</span> <span class="kd">::</span> <span class="n">previous</span> <span class="c">!&lt; Previous time solution of Burgers field.</span>
-  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
-
-  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
-  <span class="k">allocate</span><span class="p">(</span><span class="n">burgers</span> <span class="kd">::</span> <span class="n">previous</span><span class="p">)</span>
-  <span class="k">select type</span><span class="p">(</span><span class="n">previous</span><span class="p">)</span>
-  <span class="k">class is</span><span class="p">(</span><span class="n">burgers</span><span class="p">)</span>
-    <span class="n">previous</span> <span class="o">=</span> <span class="n">self</span>
-    <span class="n">previous</span><span class="p">%</span><span class="n">U</span> <span class="o">=</span> <span class="n">self</span><span class="p">%</span><span class="n">previous</span><span class="p">(:,</span> <span class="n">n</span><span class="p">)</span>
-  <span class="n">endselect</span>
-  <span class="k">return</span>
-  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
-  <span class="n">endfunction</span> <span class="n">previous_step</span>
-
-  <span class="k">function </span><span class="n">burgers_local_error</span><span class="p">(</span><span class="n">lhs</span><span class="p">,</span> <span class="n">rhs</span><span class="p">)</span> <span class="k">result</span><span class="p">(</span><span class="n">error</span><span class="p">)</span>
-  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
-  <span class="c">!&lt; Estimate local truncation error between 2 burgers approximations.</span>
-  <span class="c">!&lt;</span>
-  <span class="c">!&lt; The estimation is done by norm L2 of U:</span>
-  <span class="c">!&lt;</span>
-  <span class="c">!&lt; $$ error = \sqrt{ \sum_i{ \frac{(lhs\%U_i - rhs\%U_i)^2}{lhs\%U_i^2} }} $$</span>
-  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
-  <span class="k">class</span><span class="p">(</span><span class="n">burgers</span><span class="p">),</span> <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span> <span class="kd">::</span> <span class="n">lhs</span>   <span class="c">!&lt; Left hand side.</span>
-  <span class="k">class</span><span class="p">(</span><span class="n">integrand</span><span class="p">),</span>   <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span> <span class="kd">::</span> <span class="n">rhs</span>   <span class="c">!&lt; Right hand side.</span>
-  <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">)</span>                      <span class="kd">::</span> <span class="n">error</span> <span class="c">!&lt; Error estimation.</span>
-  <span class="kt">integer</span><span class="p">(</span><span class="n">I_P</span><span class="p">)</span>                   <span class="kd">::</span> <span class="n">i</span>     <span class="c">!&lt; Space counter.</span>
-  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
-
-  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
-  <span class="k">select type</span><span class="p">(</span><span class="n">rhs</span><span class="p">)</span>
-  <span class="k">class is</span> <span class="p">(</span><span class="n">burgers</span><span class="p">)</span>
-    <span class="n">error</span> <span class="o">=</span> <span class="mf">0._R_P</span>
-    <span class="k">do </span><span class="n">i</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">lhs</span><span class="p">%</span><span class="n">dims</span>
-      <span class="n">error</span> <span class="o">=</span> <span class="n">error</span> <span class="o">+</span> <span class="p">(</span><span class="n">lhs</span><span class="p">%</span><span class="n">U</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="o">-</span> <span class="n">rhs</span><span class="p">%</span><span class="n">U</span><span class="p">(</span><span class="n">i</span><span class="p">))</span><span class="o">**</span><span class="mi">2</span><span class="o">/</span><span class="n">lhs</span><span class="p">%</span><span class="n">U</span><span class="p">(</span><span class="n">i</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span>
-    <span class="n">enddo</span>
-    <span class="n">error</span> <span class="o">=</span> <span class="nb">sqrt</span><span class="p">(</span><span class="n">error</span><span class="p">)</span>
-  <span class="n">endselect</span>
-  <span class="k">return</span>
-  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
-  <span class="n">endfunction</span> <span class="n">burgers_local_error</span>
-
-  <span class="k">function </span><span class="n">burgers_multiply_burgers</span><span class="p">(</span><span class="n">lhs</span><span class="p">,</span> <span class="n">rhs</span><span class="p">)</span> <span class="k">result</span><span class="p">(</span><span class="n">opr</span><span class="p">)</span>
-  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
-  <span class="c">!&lt; Multiply a Burgers field by another one.</span>
-  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
-  <span class="k">class</span><span class="p">(</span><span class="n">burgers</span><span class="p">),</span>   <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span>  <span class="kd">::</span> <span class="n">lhs</span> <span class="c">!&lt; Left hand side.</span>
-  <span class="k">class</span><span class="p">(</span><span class="n">integrand</span><span class="p">),</span> <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span>  <span class="kd">::</span> <span class="n">rhs</span> <span class="c">!&lt; Right hand side.</span>
-  <span class="k">class</span><span class="p">(</span><span class="n">integrand</span><span class="p">),</span> <span class="k">allocatable</span> <span class="kd">::</span> <span class="n">opr</span> <span class="c">!&lt; Operator result.</span>
-  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
-
-  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
-  <span class="k">allocate</span><span class="p">(</span><span class="n">burgers</span> <span class="kd">::</span> <span class="n">opr</span><span class="p">)</span>
-  <span class="k">select type</span><span class="p">(</span><span class="n">opr</span><span class="p">)</span>
-  <span class="k">class is</span><span class="p">(</span><span class="n">burgers</span><span class="p">)</span>
-    <span class="n">opr</span> <span class="o">=</span> <span class="n">lhs</span>
-    <span class="k">select type</span><span class="p">(</span><span class="n">rhs</span><span class="p">)</span>
-    <span class="k">class is</span> <span class="p">(</span><span class="n">burgers</span><span class="p">)</span>
-      <span class="n">opr</span><span class="p">%</span><span class="n">U</span> <span class="o">=</span> <span class="n">lhs</span><span class="p">%</span><span class="n">U</span> <span class="o">*</span> <span class="n">rhs</span><span class="p">%</span><span class="n">U</span>
-    <span class="n">endselect</span>
-  <span class="n">endselect</span>
-  <span class="k">return</span>
-  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
-  <span class="n">endfunction</span> <span class="n">burgers_multiply_burgers</span>
-
-  <span class="k">function </span><span class="n">burgers_multiply_real</span><span class="p">(</span><span class="n">lhs</span><span class="p">,</span> <span class="n">rhs</span><span class="p">)</span> <span class="k">result</span><span class="p">(</span><span class="n">opr</span><span class="p">)</span>
-  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
-  <span class="c">!&lt; Multiply a Burgers field by a real scalar.</span>
-  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
-  <span class="k">class</span><span class="p">(</span><span class="n">burgers</span><span class="p">),</span> <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span>    <span class="kd">::</span> <span class="n">lhs</span> <span class="c">!&lt; Left hand side.</span>
-  <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">),</span>      <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span>    <span class="kd">::</span> <span class="n">rhs</span> <span class="c">!&lt; Right hand side.</span>
-  <span class="k">class</span><span class="p">(</span><span class="n">integrand</span><span class="p">),</span> <span class="k">allocatable</span> <span class="kd">::</span> <span class="n">opr</span> <span class="c">!&lt; Operator result.</span>
-  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
-
-  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
-  <span class="k">allocate</span><span class="p">(</span><span class="n">burgers</span> <span class="kd">::</span> <span class="n">opr</span><span class="p">)</span>
-  <span class="k">select type</span><span class="p">(</span><span class="n">opr</span><span class="p">)</span>
-  <span class="k">class is</span><span class="p">(</span><span class="n">burgers</span><span class="p">)</span>
-    <span class="n">opr</span> <span class="o">=</span> <span class="n">lhs</span>
-    <span class="n">opr</span><span class="p">%</span><span class="n">U</span> <span class="o">=</span> <span class="n">lhs</span><span class="p">%</span><span class="n">U</span> <span class="o">*</span> <span class="n">rhs</span>
-  <span class="n">endselect</span>
-  <span class="k">return</span>
-  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
-  <span class="n">endfunction</span> <span class="n">burgers_multiply_real</span>
-
-  <span class="k">function </span><span class="n">real_multiply_burgers</span><span class="p">(</span><span class="n">lhs</span><span class="p">,</span> <span class="n">rhs</span><span class="p">)</span> <span class="k">result</span><span class="p">(</span><span class="n">opr</span><span class="p">)</span>
-  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
-  <span class="c">!&lt; Multiply a real scalar by a Burgers field.</span>
-  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
-  <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">),</span>      <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span>    <span class="kd">::</span> <span class="n">lhs</span> <span class="c">!&lt; Left hand side.</span>
-  <span class="k">class</span><span class="p">(</span><span class="n">burgers</span><span class="p">),</span> <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span>    <span class="kd">::</span> <span class="n">rhs</span> <span class="c">!&lt; Right hand side.</span>
-  <span class="k">class</span><span class="p">(</span><span class="n">integrand</span><span class="p">),</span> <span class="k">allocatable</span> <span class="kd">::</span> <span class="n">opr</span> <span class="c">!&lt; Operator result.</span>
-  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
-
-  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
-  <span class="k">allocate</span><span class="p">(</span><span class="n">burgers</span> <span class="kd">::</span> <span class="n">opr</span><span class="p">)</span>
-  <span class="k">select type</span><span class="p">(</span><span class="n">opr</span><span class="p">)</span>
-  <span class="k">class is</span><span class="p">(</span><span class="n">burgers</span><span class="p">)</span>
-    <span class="n">opr</span> <span class="o">=</span> <span class="n">rhs</span>
-    <span class="n">opr</span><span class="p">%</span><span class="n">U</span> <span class="o">=</span> <span class="n">rhs</span><span class="p">%</span><span class="n">U</span> <span class="o">*</span> <span class="n">lhs</span>
-  <span class="n">endselect</span>
-  <span class="k">return</span>
-  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
-  <span class="n">endfunction</span> <span class="n">real_multiply_burgers</span>
-
-  <span class="k">function </span><span class="n">add_burgers</span><span class="p">(</span><span class="n">lhs</span><span class="p">,</span> <span class="n">rhs</span><span class="p">)</span> <span class="k">result</span><span class="p">(</span><span class="n">opr</span><span class="p">)</span>
-  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
-  <span class="c">!&lt; Add two Burgers fields.</span>
-  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
-  <span class="k">class</span><span class="p">(</span><span class="n">burgers</span><span class="p">),</span>   <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span>  <span class="kd">::</span> <span class="n">lhs</span> <span class="c">!&lt; Left hand side.</span>
-  <span class="k">class</span><span class="p">(</span><span class="n">integrand</span><span class="p">),</span> <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span>  <span class="kd">::</span> <span class="n">rhs</span> <span class="c">!&lt; Right hand side.</span>
-  <span class="k">class</span><span class="p">(</span><span class="n">integrand</span><span class="p">),</span> <span class="k">allocatable</span> <span class="kd">::</span> <span class="n">opr</span> <span class="c">!&lt; Operator result.</span>
-  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
-
-  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
-  <span class="k">allocate</span><span class="p">(</span><span class="n">burgers</span> <span class="kd">::</span> <span class="n">opr</span><span class="p">)</span>
-  <span class="k">select type</span><span class="p">(</span><span class="n">opr</span><span class="p">)</span>
-  <span class="k">class is</span><span class="p">(</span><span class="n">burgers</span><span class="p">)</span>
-    <span class="n">opr</span> <span class="o">=</span> <span class="n">lhs</span>
-    <span class="k">select type</span><span class="p">(</span><span class="n">rhs</span><span class="p">)</span>
-    <span class="k">class is</span> <span class="p">(</span><span class="n">burgers</span><span class="p">)</span>
-      <span class="n">opr</span><span class="p">%</span><span class="n">U</span> <span class="o">=</span> <span class="n">lhs</span><span class="p">%</span><span class="n">U</span> <span class="o">+</span> <span class="n">rhs</span><span class="p">%</span><span class="n">U</span>
-    <span class="n">endselect</span>
-  <span class="n">endselect</span>
-  <span class="k">return</span>
-  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
-  <span class="n">endfunction</span> <span class="n">add_burgers</span>
-
-  <span class="k">function </span><span class="n">sub_burgers</span><span class="p">(</span><span class="n">lhs</span><span class="p">,</span> <span class="n">rhs</span><span class="p">)</span> <span class="k">result</span><span class="p">(</span><span class="n">opr</span><span class="p">)</span>
-  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
-  <span class="c">!&lt; Subtract two Burgers fields.</span>
-  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
-  <span class="k">class</span><span class="p">(</span><span class="n">burgers</span><span class="p">),</span>   <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span>  <span class="kd">::</span> <span class="n">lhs</span> <span class="c">!&lt; Left hand side.</span>
-  <span class="k">class</span><span class="p">(</span><span class="n">integrand</span><span class="p">),</span> <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span>  <span class="kd">::</span> <span class="n">rhs</span> <span class="c">!&lt; Right hand side.</span>
-  <span class="k">class</span><span class="p">(</span><span class="n">integrand</span><span class="p">),</span> <span class="k">allocatable</span> <span class="kd">::</span> <span class="n">opr</span> <span class="c">!&lt; Operator result.</span>
-  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
-
-  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
-  <span class="k">allocate</span><span class="p">(</span><span class="n">burgers</span> <span class="kd">::</span> <span class="n">opr</span><span class="p">)</span>
-  <span class="k">select type</span><span class="p">(</span><span class="n">opr</span><span class="p">)</span>
-  <span class="k">class is</span><span class="p">(</span><span class="n">burgers</span><span class="p">)</span>
-    <span class="n">opr</span> <span class="o">=</span> <span class="n">lhs</span>
-    <span class="k">select type</span><span class="p">(</span><span class="n">rhs</span><span class="p">)</span>
-    <span class="k">class is</span> <span class="p">(</span><span class="n">burgers</span><span class="p">)</span>
-      <span class="n">opr</span><span class="p">%</span><span class="n">U</span> <span class="o">=</span> <span class="n">lhs</span><span class="p">%</span><span class="n">U</span> <span class="o">-</span> <span class="n">rhs</span><span class="p">%</span><span class="n">U</span>
-    <span class="n">endselect</span>
-  <span class="n">endselect</span>
-  <span class="k">return</span>
-  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
-  <span class="n">endfunction</span> <span class="n">sub_burgers</span>
-
-  <span class="k">subroutine </span><span class="n">burgers_assign_burgers</span><span class="p">(</span><span class="n">lhs</span><span class="p">,</span> <span class="n">rhs</span><span class="p">)</span>
-  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
-  <span class="c">!&lt; Assign one Burgers field to another.</span>
-  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
-  <span class="k">class</span><span class="p">(</span><span class="n">burgers</span><span class="p">),</span>   <span class="k">intent</span><span class="p">(</span><span class="n">INOUT</span><span class="p">)</span> <span class="kd">::</span> <span class="n">lhs</span> <span class="c">!&lt; Left hand side.</span>
-  <span class="k">class</span><span class="p">(</span><span class="n">integrand</span><span class="p">),</span> <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span>    <span class="kd">::</span> <span class="n">rhs</span> <span class="c">!&lt; Right hand side.</span>
-  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
-
-  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
-  <span class="k">select type</span><span class="p">(</span><span class="n">rhs</span><span class="p">)</span>
-  <span class="k">class is</span> <span class="p">(</span><span class="n">burgers</span><span class="p">)</span>
-    <span class="n">lhs</span><span class="p">%</span><span class="n">Ni</span> <span class="o">=</span> <span class="n">rhs</span><span class="p">%</span><span class="n">Ni</span>
-    <span class="n">lhs</span><span class="p">%</span><span class="n">steps</span> <span class="o">=</span> <span class="n">rhs</span><span class="p">%</span><span class="n">steps</span>
-    <span class="n">lhs</span><span class="p">%</span><span class="n">h</span> <span class="o">=</span> <span class="n">rhs</span><span class="p">%</span><span class="n">h</span>
-    <span class="n">lhs</span><span class="p">%</span><span class="n">nu</span> <span class="o">=</span> <span class="n">rhs</span><span class="p">%</span><span class="n">nu</span>
-    <span class="k">if</span> <span class="p">(</span><span class="nb">allocated</span><span class="p">(</span><span class="n">rhs</span><span class="p">%</span><span class="n">U</span><span class="p">))</span> <span class="n">lhs</span><span class="p">%</span><span class="n">U</span> <span class="o">=</span> <span class="n">rhs</span><span class="p">%</span><span class="n">U</span>
-    <span class="k">if</span> <span class="p">(</span><span class="nb">allocated</span><span class="p">(</span><span class="n">rhs</span><span class="p">%</span><span class="n">previous</span><span class="p">))</span> <span class="n">lhs</span><span class="p">%</span><span class="n">previous</span> <span class="o">=</span> <span class="n">rhs</span><span class="p">%</span><span class="n">previous</span>
-  <span class="n">endselect</span>
-  <span class="k">return</span>
-  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
-  <span class="n">endsubroutine</span> <span class="n">burgers_assign_burgers</span>
-
-  <span class="k">subroutine </span><span class="n">burgers_assign_real</span><span class="p">(</span><span class="n">lhs</span><span class="p">,</span> <span class="n">rhs</span><span class="p">)</span>
-  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
-  <span class="c">!&lt; Assign one real to a Burgers field.</span>
-  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
-  <span class="k">class</span><span class="p">(</span><span class="n">burgers</span><span class="p">),</span> <span class="k">intent</span><span class="p">(</span><span class="n">INOUT</span><span class="p">)</span> <span class="kd">::</span> <span class="n">lhs</span> <span class="c">!&lt; Left hand side.</span>
-  <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">),</span>      <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span>    <span class="kd">::</span> <span class="n">rhs</span> <span class="c">!&lt; Right hand side.</span>
-  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
-
-  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
-  <span class="k">if</span> <span class="p">(</span><span class="nb">allocated</span><span class="p">(</span><span class="n">lhs</span><span class="p">%</span><span class="n">U</span><span class="p">))</span> <span class="n">lhs</span><span class="p">%</span><span class="n">U</span> <span class="o">=</span> <span class="n">rhs</span>
-  <span class="k">if</span> <span class="p">(</span><span class="nb">allocated</span><span class="p">(</span><span class="n">lhs</span><span class="p">%</span><span class="n">previous</span><span class="p">))</span> <span class="n">lhs</span><span class="p">%</span><span class="n">previous</span> <span class="o">=</span> <span class="n">rhs</span>
-  <span class="k">return</span>
-  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
-  <span class="n">endsubroutine</span> <span class="n">burgers_assign_real</span>
-
-  <span class="c">! private methods</span>
-  <span class="k">function </span><span class="n">dBurgers_dx</span><span class="p">(</span><span class="n">self</span><span class="p">)</span> <span class="k">result</span><span class="p">(</span><span class="n">derivative</span><span class="p">)</span>
-  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
-  <span class="c">!&lt; Compute the first order spatial derivative of Burgers field.</span>
-  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
-  <span class="k">class</span><span class="p">(</span><span class="n">burgers</span><span class="p">),</span>    <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span> <span class="kd">::</span> <span class="n">self</span>       <span class="c">!&lt; Burgers field.</span>
-  <span class="k">type</span><span class="p">(</span><span class="n">burgers</span><span class="p">)</span>                 <span class="kd">::</span> <span class="n">derivative</span> <span class="c">!&lt; Burgers field derivative.</span>
-  <span class="kt">integer</span><span class="p">(</span><span class="n">I_P</span><span class="p">)</span>                  <span class="kd">::</span> <span class="n">i</span>          <span class="c">!&lt; Counter.</span>
-  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
-
-  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
-  <span class="n">derivative</span> <span class="o">=</span> <span class="n">self</span>
-  <span class="k">do </span><span class="n">i</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">self</span><span class="p">%</span><span class="n">Ni</span> <span class="o">-</span> <span class="mi">1</span>
-    <span class="n">derivative</span><span class="p">%</span><span class="n">U</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="o">=</span> <span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">U</span><span class="p">(</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span> <span class="o">-</span> <span class="n">self</span><span class="p">%</span><span class="n">U</span><span class="p">(</span><span class="n">i</span><span class="o">-</span><span class="mi">1</span><span class="p">))</span><span class="o">/</span><span class="p">(</span><span class="mf">2._R_P</span> <span class="o">*</span> <span class="n">self</span><span class="p">%</span><span class="n">h</span><span class="p">)</span>
-  <span class="n">enddo</span>
-  <span class="n">derivative</span><span class="p">%</span><span class="n">U</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">=</span> <span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">U</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span> <span class="o">-</span> <span class="n">self</span><span class="p">%</span><span class="n">U</span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">Ni</span><span class="p">))</span><span class="o">/</span><span class="p">(</span><span class="mf">2._R_P</span> <span class="o">*</span> <span class="n">self</span><span class="p">%</span><span class="n">h</span><span class="p">)</span>
-  <span class="n">derivative</span><span class="p">%</span><span class="n">U</span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">Ni</span><span class="p">)</span> <span class="o">=</span> <span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">U</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">-</span> <span class="n">self</span><span class="p">%</span><span class="n">U</span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">Ni</span><span class="o">-</span><span class="mi">1</span><span class="p">))</span><span class="o">/</span><span class="p">(</span><span class="mf">2._R_P</span> <span class="o">*</span> <span class="n">self</span><span class="p">%</span><span class="n">h</span><span class="p">)</span>
-  <span class="k">return</span>
-  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
-  <span class="n">endfunction</span>
-
-  <span class="k">function </span><span class="n">d2Burgers_dx2</span><span class="p">(</span><span class="n">self</span><span class="p">)</span> <span class="k">result</span><span class="p">(</span><span class="n">derivative</span><span class="p">)</span>
-  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
-  <span class="c">!&lt; Compute the second order spatial derivative of Burgers field.</span>
-  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
-  <span class="k">class</span><span class="p">(</span><span class="n">burgers</span><span class="p">),</span>    <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span> <span class="kd">::</span> <span class="n">self</span>       <span class="c">!&lt; Burgers field.</span>
-  <span class="k">type</span><span class="p">(</span><span class="n">burgers</span><span class="p">)</span>                 <span class="kd">::</span> <span class="n">derivative</span> <span class="c">!&lt; Burgers field derivative.</span>
-  <span class="kt">integer</span><span class="p">(</span><span class="n">I_P</span><span class="p">)</span>                  <span class="kd">::</span> <span class="n">i</span>          <span class="c">!&lt; Counter.</span>
-  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
-
-  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
-  <span class="n">derivative</span> <span class="o">=</span> <span class="n">self</span>
-  <span class="k">do </span><span class="n">i</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">self</span><span class="p">%</span><span class="n">Ni</span> <span class="o">-</span> <span class="mi">1</span>
-    <span class="n">derivative</span><span class="p">%</span><span class="n">U</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="o">=</span> <span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">U</span><span class="p">(</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span> <span class="o">-</span> <span class="mf">2._R_P</span> <span class="o">*</span> <span class="n">self</span><span class="p">%</span><span class="n">U</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="o">+</span> <span class="n">self</span><span class="p">%</span><span class="n">U</span><span class="p">(</span><span class="n">i</span><span class="o">-</span><span class="mi">1</span><span class="p">))</span><span class="o">/</span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">h</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
-  <span class="n">enddo</span>
-  <span class="n">derivative</span><span class="p">%</span><span class="n">U</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">=</span> <span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">U</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span> <span class="o">-</span> <span class="mf">2._R_P</span> <span class="o">*</span> <span class="n">self</span><span class="p">%</span><span class="n">U</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">+</span> <span class="n">self</span><span class="p">%</span><span class="n">U</span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">Ni</span><span class="p">))</span><span class="o">/</span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">h</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
-  <span class="n">derivative</span><span class="p">%</span><span class="n">U</span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">Ni</span><span class="p">)</span> <span class="o">=</span> <span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">U</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">-</span> <span class="mf">2._R_P</span> <span class="o">*</span> <span class="n">self</span><span class="p">%</span><span class="n">U</span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">Ni</span><span class="p">)</span> <span class="o">+</span> <span class="n">self</span><span class="p">%</span><span class="n">U</span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">Ni</span><span class="o">-</span><span class="mi">1</span><span class="p">))</span><span class="o">/</span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">h</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
-  <span class="k">return</span>
-  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
-  <span class="n">endfunction</span>
-<span class="n">endmodule</span> <span class="n">type_burgers</span>
+    <div class="hl"><pre><a name="ln-1"></a><span class="c">!&lt; Define Burgers field that is a concrete extension of the abstract integrand type.</span>
+<a name="ln-2"></a><span class="k">module </span><span class="n">type_burgers</span>
+<a name="ln-3"></a><span class="c">!-----------------------------------------------------------------------------------------------------------------------------------</span>
+<a name="ln-4"></a><span class="c">!&lt; Define Burgers field that is a concrete extension of the abstract integrand type.</span>
+<a name="ln-5"></a><span class="c">!-----------------------------------------------------------------------------------------------------------------------------------</span>
+<a name="ln-6"></a>
+<a name="ln-7"></a><span class="c">!-----------------------------------------------------------------------------------------------------------------------------------</span>
+<a name="ln-8"></a><span class="k">use </span><span class="n">IR_Precision</span><span class="p">,</span> <span class="n">only</span> <span class="p">:</span> <span class="n">R_P</span><span class="p">,</span> <span class="n">I_P</span>
+<a name="ln-9"></a><span class="k">use </span><span class="n">foodie</span><span class="p">,</span> <span class="n">only</span> <span class="p">:</span> <span class="n">integrand</span>
+<a name="ln-10"></a><span class="c">!-----------------------------------------------------------------------------------------------------------------------------------</span>
+<a name="ln-11"></a>
+<a name="ln-12"></a><span class="c">!-----------------------------------------------------------------------------------------------------------------------------------</span>
+<a name="ln-13"></a><span class="k">implicit none</span>
+<a name="ln-14"></a><span class="k">private</span>
+<a name="ln-15"></a><span class="k">public</span> <span class="kd">::</span> <span class="n">burgers</span>
+<a name="ln-16"></a><span class="c">!-----------------------------------------------------------------------------------------------------------------------------------</span>
+<a name="ln-17"></a>
+<a name="ln-18"></a><span class="c">!-----------------------------------------------------------------------------------------------------------------------------------</span>
+<a name="ln-19"></a><span class="k">type</span><span class="p">,</span> <span class="k">extends</span><span class="p">(</span><span class="n">integrand</span><span class="p">)</span> <span class="kd">::</span> <span class="n">burgers</span>
+<a name="ln-20"></a>  <span class="c">!&lt; Burgers equations field.</span>
+<a name="ln-21"></a>  <span class="c">!&lt;</span>
+<a name="ln-22"></a>  <span class="c">!&lt; It is a FOODIE integrand class concrete extension.</span>
+<a name="ln-23"></a>  <span class="c">!&lt;</span>
+<a name="ln-24"></a>  <span class="c">!&lt;### Burgers PDE equation</span>
+<a name="ln-25"></a>  <span class="c">!&lt;The Burgers PDE equation is a non linear PDE widely used as numerical benchmark that can be applied to describe</span>
+<a name="ln-26"></a>  <span class="c">!&lt;a wide range of different problems, from fluid dynamics to traffic flows, see [1].</span>
+<a name="ln-27"></a>  <span class="c">!&lt;</span>
+<a name="ln-28"></a>  <span class="c">!&lt;$$</span>
+<a name="ln-29"></a>  <span class="c">!&lt;\begin{matrix}</span>
+<a name="ln-30"></a>  <span class="c">!&lt;U_t = R(U)  \Leftrightarrow U_t = F(U)_x \\</span>
+<a name="ln-31"></a>  <span class="c">!&lt;U = [u]\;\;\;</span>
+<a name="ln-32"></a>  <span class="c">!&lt;F(U) = [-\frac{1}{2}u^2+\nu u_x]</span>
+<a name="ln-33"></a>  <span class="c">!&lt;\end{matrix}</span>
+<a name="ln-34"></a>  <span class="c">!&lt;$$</span>
+<a name="ln-35"></a>  <span class="c">!&lt;</span>
+<a name="ln-36"></a>  <span class="c">!&lt;This is the viscous Burgers&#39; equation, \(\nu\) being the viscosity. This equation is of paramount relevance because it retains</span>
+<a name="ln-37"></a>  <span class="c">!&lt;complex aspects such as the hyperbolic nature of the convection term (allowing discontinuous solutions) and the diffusive nature</span>
+<a name="ln-38"></a>  <span class="c">!&lt;of the viscous term.</span>
+<a name="ln-39"></a>  <span class="c">!&lt;</span>
+<a name="ln-40"></a>  <span class="c">!&lt;#### Bibliography</span>
+<a name="ln-41"></a>  <span class="c">!&lt;</span>
+<a name="ln-42"></a>  <span class="c">!&lt;[1] *The partial differential equation ut + uux = nuxx*, Hopf, Eberhard, Communications on Pure and Applied Mathematics,</span>
+<a name="ln-43"></a>  <span class="c">!&lt; vol 3, issue 3, doi 10.1002/cpa.3160030302, pp. 201--230, 1950.</span>
+<a name="ln-44"></a>  <span class="c">!&lt;</span>
+<a name="ln-45"></a>  <span class="c">!&lt;#### State variables organization</span>
+<a name="ln-46"></a>  <span class="c">!&lt; State variable is organized as an array (rank 1) for whole physical domain.</span>
+<a name="ln-47"></a>  <span class="k">private</span>
+<a name="ln-48"></a><span class="k">  </span><span class="kt">integer</span><span class="p">(</span><span class="n">I_P</span><span class="p">)</span>                           <span class="kd">::</span> <span class="n">dims</span><span class="o">=</span><span class="mi">0</span>    <span class="c">!&lt; Space dimensions.</span>
+<a name="ln-49"></a>  <span class="kt">integer</span><span class="p">(</span><span class="n">I_P</span><span class="p">)</span>                           <span class="kd">::</span> <span class="n">Ni</span><span class="o">=</span><span class="mi">0</span>      <span class="c">!&lt; Number of grid nodes.</span>
+<a name="ln-50"></a>  <span class="kt">integer</span><span class="p">(</span><span class="n">I_P</span><span class="p">)</span>                           <span class="kd">::</span> <span class="n">steps</span><span class="o">=</span><span class="mi">0</span>   <span class="c">!&lt; Number of time steps stored.</span>
+<a name="ln-51"></a>  <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">)</span>                              <span class="kd">::</span> <span class="n">h</span><span class="o">=</span><span class="mf">0._R_P</span>  <span class="c">!&lt; Space step discretization.</span>
+<a name="ln-52"></a>  <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">)</span>                              <span class="kd">::</span> <span class="n">nu</span><span class="o">=</span><span class="mf">0._R_P</span> <span class="c">!&lt; Viscosity.</span>
+<a name="ln-53"></a>  <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">),</span> <span class="k">dimension</span><span class="p">(:),</span>   <span class="k">allocatable</span> <span class="kd">::</span> <span class="n">U</span>         <span class="c">!&lt; Integrand (state) variables, whole physical domain, [1:Ni].</span>
+<a name="ln-54"></a>  <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">),</span> <span class="k">dimension</span><span class="p">(:,:),</span> <span class="k">allocatable</span> <span class="kd">::</span> <span class="n">previous</span>  <span class="c">!&lt; Previous time steps states, [1:Ni,1:steps].</span>
+<a name="ln-55"></a>  <span class="k">contains</span>
+<a name="ln-56"></a>    <span class="c">! auxiliary methods</span>
+<a name="ln-57"></a>    <span class="k">procedure</span><span class="p">,</span> <span class="k">pass</span><span class="p">(</span><span class="n">self</span><span class="p">),</span> <span class="k">public</span> <span class="kd">::</span> <span class="n">init</span>             <span class="c">!&lt; Init field.</span>
+<a name="ln-58"></a>    <span class="k">procedure</span><span class="p">,</span> <span class="k">pass</span><span class="p">(</span><span class="n">self</span><span class="p">),</span> <span class="k">public</span> <span class="kd">::</span> <span class="n">output</span>           <span class="c">!&lt; Extract Burgers field.</span>
+<a name="ln-59"></a>    <span class="k">procedure</span><span class="p">,</span> <span class="k">pass</span><span class="p">(</span><span class="n">self</span><span class="p">),</span> <span class="k">public</span> <span class="kd">::</span> <span class="n">dt</span> <span class="o">=&gt;</span> <span class="n">compute_dt</span> <span class="c">!&lt; Compute the current time step, by means of CFL condition.</span>
+<a name="ln-60"></a>    <span class="c">! ADT integrand deferred methods</span>
+<a name="ln-61"></a>    <span class="k">procedure</span><span class="p">,</span> <span class="k">pass</span><span class="p">(</span><span class="n">self</span><span class="p">),</span> <span class="k">public</span> <span class="kd">::</span> <span class="n">t</span> <span class="o">=&gt;</span> <span class="n">dBurgers_dt</span>                                         <span class="c">!&lt; Time derivative, residuals func.</span>
+<a name="ln-62"></a>    <span class="k">procedure</span><span class="p">,</span> <span class="k">pass</span><span class="p">(</span><span class="n">self</span><span class="p">),</span> <span class="k">public</span> <span class="kd">::</span> <span class="n">update_previous_steps</span>                                    <span class="c">!&lt; Update previous time steps.</span>
+<a name="ln-63"></a>    <span class="k">procedure</span><span class="p">,</span> <span class="k">pass</span><span class="p">(</span><span class="n">self</span><span class="p">),</span> <span class="k">public</span> <span class="kd">::</span> <span class="n">previous_step</span>                                            <span class="c">!&lt; Get a previous time step.</span>
+<a name="ln-64"></a>    <span class="k">procedure</span><span class="p">,</span> <span class="k">pass</span><span class="p">(</span><span class="n">lhs</span><span class="p">),</span>  <span class="k">public</span> <span class="kd">::</span> <span class="n">local_error</span> <span class="o">=&gt;</span> <span class="n">burgers_local_error</span>                       <span class="c">!&lt; Local error.</span>
+<a name="ln-65"></a>    <span class="k">procedure</span><span class="p">,</span> <span class="k">pass</span><span class="p">(</span><span class="n">lhs</span><span class="p">),</span>  <span class="k">public</span> <span class="kd">::</span> <span class="n">integrand_multiply_integrand</span> <span class="o">=&gt;</span> <span class="n">burgers_multiply_burgers</span> <span class="c">!&lt; Burgers * burgers operator.</span>
+<a name="ln-66"></a>    <span class="k">procedure</span><span class="p">,</span> <span class="k">pass</span><span class="p">(</span><span class="n">lhs</span><span class="p">),</span>  <span class="k">public</span> <span class="kd">::</span> <span class="n">integrand_multiply_real</span> <span class="o">=&gt;</span> <span class="n">burgers_multiply_real</span>         <span class="c">!&lt; Burgers * real operator.</span>
+<a name="ln-67"></a>    <span class="k">procedure</span><span class="p">,</span> <span class="k">pass</span><span class="p">(</span><span class="n">rhs</span><span class="p">),</span>  <span class="k">public</span> <span class="kd">::</span> <span class="n">real_multiply_integrand</span> <span class="o">=&gt;</span> <span class="n">real_multiply_burgers</span>         <span class="c">!&lt; Real * Burgers operator.</span>
+<a name="ln-68"></a>    <span class="k">procedure</span><span class="p">,</span> <span class="k">pass</span><span class="p">(</span><span class="n">lhs</span><span class="p">),</span>  <span class="k">public</span> <span class="kd">::</span> <span class="n">add</span> <span class="o">=&gt;</span> <span class="n">add_burgers</span>                                       <span class="c">!&lt; Burgers + Burgers operator.</span>
+<a name="ln-69"></a>    <span class="k">procedure</span><span class="p">,</span> <span class="k">pass</span><span class="p">(</span><span class="n">lhs</span><span class="p">),</span>  <span class="k">public</span> <span class="kd">::</span> <span class="n">sub</span> <span class="o">=&gt;</span> <span class="n">sub_burgers</span>                                       <span class="c">!&lt; Burgers - Burgers operator.</span>
+<a name="ln-70"></a>    <span class="k">procedure</span><span class="p">,</span> <span class="k">pass</span><span class="p">(</span><span class="n">lhs</span><span class="p">),</span>  <span class="k">public</span> <span class="kd">::</span> <span class="n">assign_integrand</span> <span class="o">=&gt;</span> <span class="n">burgers_assign_burgers</span>               <span class="c">!&lt; Burgers = Burgers.</span>
+<a name="ln-71"></a>    <span class="k">procedure</span><span class="p">,</span> <span class="k">pass</span><span class="p">(</span><span class="n">lhs</span><span class="p">),</span>  <span class="k">public</span> <span class="kd">::</span> <span class="n">assign_real</span> <span class="o">=&gt;</span> <span class="n">burgers_assign_real</span>                       <span class="c">!&lt; Burgers = real.</span>
+<a name="ln-72"></a>    <span class="c">! private methods</span>
+<a name="ln-73"></a>    <span class="k">procedure</span><span class="p">,</span> <span class="k">pass</span><span class="p">(</span><span class="n">self</span><span class="p">),</span> <span class="k">private</span> <span class="kd">::</span> <span class="n">x</span>  <span class="o">=&gt;</span> <span class="n">dBurgers_dx</span>   <span class="c">!&lt; 1st derivative.</span>
+<a name="ln-74"></a>    <span class="k">procedure</span><span class="p">,</span> <span class="k">pass</span><span class="p">(</span><span class="n">self</span><span class="p">),</span> <span class="k">private</span> <span class="kd">::</span> <span class="n">xx</span> <span class="o">=&gt;</span> <span class="n">d2Burgers_dx2</span> <span class="c">!&lt; 2nd derivative.</span>
+<a name="ln-75"></a><span class="n">endtype</span> <span class="n">burgers</span>
+<a name="ln-76"></a><span class="c">!-----------------------------------------------------------------------------------------------------------------------------------</span>
+<a name="ln-77"></a><span class="k">contains</span>
+<a name="ln-78"></a>  <span class="c">! auxiliary methods</span>
+<a name="ln-79"></a>  <span class="k">subroutine </span><span class="n">init</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">initial_state</span><span class="p">,</span> <span class="n">Ni</span><span class="p">,</span> <span class="n">h</span><span class="p">,</span> <span class="n">nu</span><span class="p">,</span> <span class="n">steps</span><span class="p">)</span>
+<a name="ln-80"></a>  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+<a name="ln-81"></a>  <span class="c">!&lt; Construct an initialized Burgers field.</span>
+<a name="ln-82"></a>  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+<a name="ln-83"></a>  <span class="k">class</span><span class="p">(</span><span class="n">burgers</span><span class="p">),</span>             <span class="k">intent</span><span class="p">(</span><span class="n">INOUT</span><span class="p">)</span> <span class="kd">::</span> <span class="n">self</span>          <span class="c">!&lt; Burgers field.</span>
+<a name="ln-84"></a>  <span class="kt">integer</span><span class="p">(</span><span class="n">I_P</span><span class="p">),</span>               <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span>    <span class="kd">::</span> <span class="n">Ni</span>            <span class="c">!&lt; Number of grid nodes.</span>
+<a name="ln-85"></a>  <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">),</span> <span class="k">dimension</span><span class="p">(</span><span class="mi">1</span><span class="p">:</span><span class="n">Ni</span><span class="p">),</span> <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span>    <span class="kd">::</span> <span class="n">initial_state</span> <span class="c">!&lt; Initial state of Burgers field domain.</span>
+<a name="ln-86"></a>  <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">),</span>                  <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span>    <span class="kd">::</span> <span class="n">h</span>             <span class="c">!&lt; Space step discretization.</span>
+<a name="ln-87"></a>  <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">),</span>                  <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span>    <span class="kd">::</span> <span class="n">nu</span>            <span class="c">!&lt; Viscosity.</span>
+<a name="ln-88"></a>  <span class="kt">integer</span><span class="p">(</span><span class="n">I_P</span><span class="p">),</span> <span class="k">optional</span><span class="p">,</span>     <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span>    <span class="kd">::</span> <span class="n">steps</span>         <span class="c">!&lt; Time steps stored.</span>
+<a name="ln-89"></a>  <span class="kt">integer</span><span class="p">(</span><span class="n">I_P</span><span class="p">)</span>                              <span class="kd">::</span> <span class="n">s</span>             <span class="c">!&lt; Time steps counter.</span>
+<a name="ln-90"></a>  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+<a name="ln-91"></a>
+<a name="ln-92"></a>  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+<a name="ln-93"></a>  <span class="n">self</span><span class="p">%</span><span class="n">dims</span> <span class="o">=</span> <span class="n">size</span><span class="p">(</span><span class="n">initial_state</span><span class="p">)</span>
+<a name="ln-94"></a>  <span class="n">self</span><span class="p">%</span><span class="n">steps</span> <span class="o">=</span> <span class="mi">0</span> <span class="p">;</span> <span class="k">if</span> <span class="p">(</span><span class="nb">present</span><span class="p">(</span><span class="n">steps</span><span class="p">))</span> <span class="n">self</span><span class="p">%</span><span class="n">steps</span> <span class="o">=</span> <span class="n">steps</span>
+<a name="ln-95"></a>  <span class="k">if</span> <span class="p">(</span><span class="nb">allocated</span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">U</span><span class="p">))</span> <span class="k">deallocate</span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">U</span><span class="p">)</span> <span class="p">;</span> <span class="k">allocate</span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">U</span><span class="p">(</span><span class="mi">1</span><span class="p">:</span><span class="n">Ni</span><span class="p">))</span>
+<a name="ln-96"></a>  <span class="k">if</span> <span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">steps</span><span class="o">&gt;</span><span class="mi">0</span><span class="p">)</span> <span class="k">then</span>
+<a name="ln-97"></a><span class="k">    if</span> <span class="p">(</span><span class="nb">allocated</span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">previous</span><span class="p">))</span> <span class="k">deallocate</span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">previous</span><span class="p">)</span> <span class="p">;</span> <span class="k">allocate</span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">previous</span><span class="p">(</span><span class="mi">1</span><span class="p">:</span><span class="n">Ni</span><span class="p">,</span> <span class="mi">1</span><span class="p">:</span><span class="n">self</span><span class="p">%</span><span class="n">steps</span><span class="p">))</span>
+<a name="ln-98"></a>  <span class="n">endif</span>
+<a name="ln-99"></a>  <span class="n">self</span><span class="p">%</span><span class="n">U</span> <span class="o">=</span> <span class="n">initial_state</span>
+<a name="ln-100"></a>  <span class="k">if</span> <span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">steps</span><span class="o">&gt;</span><span class="mi">0</span><span class="p">)</span> <span class="k">then</span>
+<a name="ln-101"></a><span class="k">    do </span><span class="n">s</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">self</span><span class="p">%</span><span class="n">steps</span>
+<a name="ln-102"></a>      <span class="n">self</span><span class="p">%</span><span class="n">previous</span><span class="p">(:,</span> <span class="n">s</span><span class="p">)</span> <span class="o">=</span> <span class="n">initial_state</span>
+<a name="ln-103"></a>    <span class="n">enddo</span>
+<a name="ln-104"></a>  <span class="n">endif</span>
+<a name="ln-105"></a>  <span class="n">self</span><span class="p">%</span><span class="n">Ni</span> <span class="o">=</span> <span class="n">Ni</span>
+<a name="ln-106"></a>  <span class="n">self</span><span class="p">%</span><span class="n">h</span> <span class="o">=</span> <span class="n">h</span>
+<a name="ln-107"></a>  <span class="n">self</span><span class="p">%</span><span class="n">nu</span> <span class="o">=</span> <span class="n">nu</span>
+<a name="ln-108"></a>  <span class="k">return</span>
+<a name="ln-109"></a>  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+<a name="ln-110"></a>  <span class="n">endsubroutine</span> <span class="n">init</span>
+<a name="ln-111"></a>
+<a name="ln-112"></a>  <span class="k">pure function </span><span class="n">output</span><span class="p">(</span><span class="n">self</span><span class="p">)</span> <span class="k">result</span><span class="p">(</span><span class="n">state</span><span class="p">)</span>
+<a name="ln-113"></a>  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+<a name="ln-114"></a>  <span class="c">!&lt; Output the Burgers field state.</span>
+<a name="ln-115"></a>  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+<a name="ln-116"></a>  <span class="k">class</span><span class="p">(</span><span class="n">burgers</span><span class="p">),</span> <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span>           <span class="kd">::</span> <span class="n">self</span>  <span class="c">!&lt; Burgers field.</span>
+<a name="ln-117"></a>  <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">),</span> <span class="k">dimension</span><span class="p">(:),</span> <span class="k">allocatable</span> <span class="kd">::</span> <span class="n">state</span> <span class="c">!&lt; Burgers state variable.</span>
+<a name="ln-118"></a>  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+<a name="ln-119"></a>
+<a name="ln-120"></a>  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+<a name="ln-121"></a>  <span class="n">state</span> <span class="o">=</span> <span class="n">self</span><span class="p">%</span><span class="n">U</span>
+<a name="ln-122"></a>  <span class="k">return</span>
+<a name="ln-123"></a>  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+<a name="ln-124"></a>  <span class="n">endfunction</span> <span class="n">output</span>
+<a name="ln-125"></a>
+<a name="ln-126"></a>  <span class="k">pure function </span><span class="n">compute_dt</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">CFL</span><span class="p">)</span> <span class="k">result</span><span class="p">(</span><span class="n">dt</span><span class="p">)</span>
+<a name="ln-127"></a>  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+<a name="ln-128"></a>  <span class="c">!&lt; Compute the current time step, by means of CFL condition.</span>
+<a name="ln-129"></a>  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+<a name="ln-130"></a>  <span class="k">class</span><span class="p">(</span><span class="n">burgers</span><span class="p">),</span> <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span> <span class="kd">::</span> <span class="n">self</span> <span class="c">!&lt; Burgers field.</span>
+<a name="ln-131"></a>  <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">),</span>      <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span> <span class="kd">::</span> <span class="n">CFL</span>  <span class="c">!&lt; Courant-Friedricks-Lewi stability coefficient.</span>
+<a name="ln-132"></a>  <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">)</span>                  <span class="kd">::</span> <span class="n">dt</span>   <span class="c">!&lt; Current time step.</span>
+<a name="ln-133"></a>  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+<a name="ln-134"></a>
+<a name="ln-135"></a>  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+<a name="ln-136"></a>  <span class="n">dt</span> <span class="o">=</span> <span class="n">CFL</span> <span class="o">*</span> <span class="n">self</span><span class="p">%</span><span class="n">h</span><span class="o">**</span><span class="mi">2</span> <span class="o">/</span> <span class="n">self</span><span class="p">%</span><span class="n">nu</span>
+<a name="ln-137"></a>  <span class="k">return</span>
+<a name="ln-138"></a>  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+<a name="ln-139"></a>  <span class="n">endfunction</span> <span class="n">compute_dt</span>
+<a name="ln-140"></a>
+<a name="ln-141"></a>  <span class="c">! ADT integrand deferred methods</span>
+<a name="ln-142"></a>  <span class="k">function </span><span class="n">dBurgers_dt</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">t</span><span class="p">)</span> <span class="k">result</span><span class="p">(</span><span class="n">dState_dt</span><span class="p">)</span>
+<a name="ln-143"></a>  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+<a name="ln-144"></a>  <span class="c">!&lt; Time derivative of Burgers field, residuals function.</span>
+<a name="ln-145"></a>  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+<a name="ln-146"></a>  <span class="k">class</span><span class="p">(</span><span class="n">burgers</span><span class="p">),</span>         <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span> <span class="kd">::</span> <span class="n">self</span>      <span class="c">!&lt; Burgers field.</span>
+<a name="ln-147"></a>  <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">),</span>    <span class="k">optional</span><span class="p">,</span> <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span> <span class="kd">::</span> <span class="n">t</span>         <span class="c">!&lt; Time.</span>
+<a name="ln-148"></a>  <span class="k">class</span><span class="p">(</span><span class="n">integrand</span><span class="p">),</span> <span class="k">allocatable</span>      <span class="kd">::</span> <span class="n">dState_dt</span> <span class="c">!&lt; Burgers field time derivative.</span>
+<a name="ln-149"></a>  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+<a name="ln-150"></a>
+<a name="ln-151"></a>  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+<a name="ln-152"></a>  <span class="k">allocate</span><span class="p">(</span><span class="n">burgers</span> <span class="kd">::</span> <span class="n">dState_dt</span><span class="p">)</span>
+<a name="ln-153"></a>  <span class="k">select type</span><span class="p">(</span><span class="n">dState_dt</span><span class="p">)</span>
+<a name="ln-154"></a>  <span class="k">class is</span><span class="p">(</span><span class="n">burgers</span><span class="p">)</span>
+<a name="ln-155"></a>    <span class="n">dState_dt</span> <span class="o">=</span> <span class="n">self</span>
+<a name="ln-156"></a>    <span class="n">dState_dt</span> <span class="o">=</span> <span class="n">self</span><span class="p">%</span><span class="n">xx</span><span class="p">()</span> <span class="o">*</span> <span class="n">self</span><span class="p">%</span><span class="n">nu</span>
+<a name="ln-157"></a>    <span class="n">dState_dt</span> <span class="o">=</span> <span class="n">dState_dt</span> <span class="o">-</span> <span class="n">self</span> <span class="o">*</span> <span class="n">self</span><span class="p">%</span><span class="n">x</span><span class="p">()</span>
+<a name="ln-158"></a>  <span class="n">endselect</span>
+<a name="ln-159"></a>  <span class="k">return</span>
+<a name="ln-160"></a>  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+<a name="ln-161"></a>  <span class="n">endfunction</span> <span class="n">dBurgers_dt</span>
+<a name="ln-162"></a>
+<a name="ln-163"></a>  <span class="k">subroutine </span><span class="n">update_previous_steps</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">filter</span><span class="p">,</span> <span class="n">weights</span><span class="p">)</span>
+<a name="ln-164"></a>  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+<a name="ln-165"></a>  <span class="c">!&lt; Update previous time steps.</span>
+<a name="ln-166"></a>  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+<a name="ln-167"></a>  <span class="k">class</span><span class="p">(</span><span class="n">burgers</span><span class="p">),</span>             <span class="k">intent</span><span class="p">(</span><span class="n">INOUT</span><span class="p">)</span> <span class="kd">::</span> <span class="n">self</span>       <span class="c">!&lt; Burgers field.</span>
+<a name="ln-168"></a>  <span class="k">class</span><span class="p">(</span><span class="n">integrand</span><span class="p">),</span> <span class="k">optional</span><span class="p">,</span> <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span>    <span class="kd">::</span> <span class="n">filter</span>     <span class="c">!&lt; Filter field displacement.</span>
+<a name="ln-169"></a>  <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">),</span>        <span class="k">optional</span><span class="p">,</span> <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span>    <span class="kd">::</span> <span class="n">weights</span><span class="p">(:)</span> <span class="c">!&lt; Weights for filtering the steps.</span>
+<a name="ln-170"></a>  <span class="kt">integer</span><span class="p">(</span><span class="n">I_P</span><span class="p">)</span>                              <span class="kd">::</span> <span class="n">s</span>          <span class="c">!&lt; Time steps counter.</span>
+<a name="ln-171"></a>  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+<a name="ln-172"></a>
+<a name="ln-173"></a>  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+<a name="ln-174"></a>  <span class="k">if</span> <span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">steps</span><span class="o">&gt;</span><span class="mi">0</span><span class="p">)</span> <span class="k">then</span>
+<a name="ln-175"></a><span class="k">    do </span><span class="n">s</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">self</span><span class="p">%</span><span class="n">steps</span> <span class="o">-</span> <span class="mi">1</span>
+<a name="ln-176"></a>      <span class="n">self</span><span class="p">%</span><span class="n">previous</span><span class="p">(:,</span> <span class="n">s</span><span class="p">)</span> <span class="o">=</span> <span class="n">self</span><span class="p">%</span><span class="n">previous</span><span class="p">(:,</span> <span class="n">s</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+<a name="ln-177"></a>    <span class="n">enddo</span>
+<a name="ln-178"></a>    <span class="n">self</span><span class="p">%</span><span class="n">previous</span><span class="p">(:,</span> <span class="n">self</span><span class="p">%</span><span class="n">steps</span><span class="p">)</span> <span class="o">=</span> <span class="n">self</span><span class="p">%</span><span class="n">U</span>
+<a name="ln-179"></a>  <span class="n">endif</span>
+<a name="ln-180"></a>  <span class="k">if</span> <span class="p">(</span><span class="nb">present</span><span class="p">(</span><span class="n">filter</span><span class="p">).</span><span class="nb">and</span><span class="p">.</span><span class="nb">present</span><span class="p">(</span><span class="n">weights</span><span class="p">))</span> <span class="k">then</span>
+<a name="ln-181"></a><span class="k">    select type</span><span class="p">(</span><span class="n">filter</span><span class="p">)</span>
+<a name="ln-182"></a>    <span class="k">class is</span><span class="p">(</span><span class="n">burgers</span><span class="p">)</span>
+<a name="ln-183"></a>      <span class="k">do </span><span class="n">s</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">self</span><span class="p">%</span><span class="n">steps</span>
+<a name="ln-184"></a>        <span class="n">self</span><span class="p">%</span><span class="n">previous</span><span class="p">(:,</span> <span class="n">s</span><span class="p">)</span> <span class="o">=</span> <span class="n">self</span><span class="p">%</span><span class="n">previous</span><span class="p">(:,</span> <span class="n">s</span><span class="p">)</span> <span class="o">+</span> <span class="n">filter</span><span class="p">%</span><span class="n">U</span> <span class="o">*</span> <span class="n">weights</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
+<a name="ln-185"></a>      <span class="n">enddo</span>
+<a name="ln-186"></a>    <span class="n">endselect</span>
+<a name="ln-187"></a>  <span class="n">endif</span>
+<a name="ln-188"></a>  <span class="k">return</span>
+<a name="ln-189"></a>  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+<a name="ln-190"></a>  <span class="n">endsubroutine</span> <span class="n">update_previous_steps</span>
+<a name="ln-191"></a>
+<a name="ln-192"></a>  <span class="k">function </span><span class="n">previous_step</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">n</span><span class="p">)</span> <span class="k">result</span><span class="p">(</span><span class="n">previous</span><span class="p">)</span>
+<a name="ln-193"></a>  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+<a name="ln-194"></a>  <span class="c">!&lt; Extract previous time solution of Burgers field.</span>
+<a name="ln-195"></a>  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+<a name="ln-196"></a>  <span class="k">class</span><span class="p">(</span><span class="n">burgers</span><span class="p">),</span> <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span>    <span class="kd">::</span> <span class="n">self</span>     <span class="c">!&lt; Burgers field.</span>
+<a name="ln-197"></a>  <span class="kt">integer</span><span class="p">(</span><span class="n">I_P</span><span class="p">),</span>   <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span>    <span class="kd">::</span> <span class="n">n</span>        <span class="c">!&lt; Time level.</span>
+<a name="ln-198"></a>  <span class="k">class</span><span class="p">(</span><span class="n">integrand</span><span class="p">),</span> <span class="k">allocatable</span> <span class="kd">::</span> <span class="n">previous</span> <span class="c">!&lt; Previous time solution of Burgers field.</span>
+<a name="ln-199"></a>  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+<a name="ln-200"></a>
+<a name="ln-201"></a>  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+<a name="ln-202"></a>  <span class="k">allocate</span><span class="p">(</span><span class="n">burgers</span> <span class="kd">::</span> <span class="n">previous</span><span class="p">)</span>
+<a name="ln-203"></a>  <span class="k">select type</span><span class="p">(</span><span class="n">previous</span><span class="p">)</span>
+<a name="ln-204"></a>  <span class="k">class is</span><span class="p">(</span><span class="n">burgers</span><span class="p">)</span>
+<a name="ln-205"></a>    <span class="n">previous</span> <span class="o">=</span> <span class="n">self</span>
+<a name="ln-206"></a>    <span class="n">previous</span><span class="p">%</span><span class="n">U</span> <span class="o">=</span> <span class="n">self</span><span class="p">%</span><span class="n">previous</span><span class="p">(:,</span> <span class="n">n</span><span class="p">)</span>
+<a name="ln-207"></a>  <span class="n">endselect</span>
+<a name="ln-208"></a>  <span class="k">return</span>
+<a name="ln-209"></a>  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+<a name="ln-210"></a>  <span class="n">endfunction</span> <span class="n">previous_step</span>
+<a name="ln-211"></a>
+<a name="ln-212"></a>  <span class="k">function </span><span class="n">burgers_local_error</span><span class="p">(</span><span class="n">lhs</span><span class="p">,</span> <span class="n">rhs</span><span class="p">)</span> <span class="k">result</span><span class="p">(</span><span class="n">error</span><span class="p">)</span>
+<a name="ln-213"></a>  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+<a name="ln-214"></a>  <span class="c">!&lt; Estimate local truncation error between 2 burgers approximations.</span>
+<a name="ln-215"></a>  <span class="c">!&lt;</span>
+<a name="ln-216"></a>  <span class="c">!&lt; The estimation is done by norm L2 of U:</span>
+<a name="ln-217"></a>  <span class="c">!&lt;</span>
+<a name="ln-218"></a>  <span class="c">!&lt; $$ error = \sqrt{ \sum_i{ \frac{(lhs\%U_i - rhs\%U_i)^2}{lhs\%U_i^2} }} $$</span>
+<a name="ln-219"></a>  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+<a name="ln-220"></a>  <span class="k">class</span><span class="p">(</span><span class="n">burgers</span><span class="p">),</span> <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span> <span class="kd">::</span> <span class="n">lhs</span>   <span class="c">!&lt; Left hand side.</span>
+<a name="ln-221"></a>  <span class="k">class</span><span class="p">(</span><span class="n">integrand</span><span class="p">),</span>   <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span> <span class="kd">::</span> <span class="n">rhs</span>   <span class="c">!&lt; Right hand side.</span>
+<a name="ln-222"></a>  <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">)</span>                      <span class="kd">::</span> <span class="n">error</span> <span class="c">!&lt; Error estimation.</span>
+<a name="ln-223"></a>  <span class="kt">integer</span><span class="p">(</span><span class="n">I_P</span><span class="p">)</span>                   <span class="kd">::</span> <span class="n">i</span>     <span class="c">!&lt; Space counter.</span>
+<a name="ln-224"></a>  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+<a name="ln-225"></a>
+<a name="ln-226"></a>  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+<a name="ln-227"></a>  <span class="k">select type</span><span class="p">(</span><span class="n">rhs</span><span class="p">)</span>
+<a name="ln-228"></a>  <span class="k">class is</span> <span class="p">(</span><span class="n">burgers</span><span class="p">)</span>
+<a name="ln-229"></a>    <span class="n">error</span> <span class="o">=</span> <span class="mf">0._R_P</span>
+<a name="ln-230"></a>    <span class="k">do </span><span class="n">i</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">lhs</span><span class="p">%</span><span class="n">dims</span>
+<a name="ln-231"></a>      <span class="n">error</span> <span class="o">=</span> <span class="n">error</span> <span class="o">+</span> <span class="p">(</span><span class="n">lhs</span><span class="p">%</span><span class="n">U</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="o">-</span> <span class="n">rhs</span><span class="p">%</span><span class="n">U</span><span class="p">(</span><span class="n">i</span><span class="p">))</span><span class="o">**</span><span class="mi">2</span><span class="o">/</span><span class="n">lhs</span><span class="p">%</span><span class="n">U</span><span class="p">(</span><span class="n">i</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span>
+<a name="ln-232"></a>    <span class="n">enddo</span>
+<a name="ln-233"></a>    <span class="n">error</span> <span class="o">=</span> <span class="nb">sqrt</span><span class="p">(</span><span class="n">error</span><span class="p">)</span>
+<a name="ln-234"></a>  <span class="n">endselect</span>
+<a name="ln-235"></a>  <span class="k">return</span>
+<a name="ln-236"></a>  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+<a name="ln-237"></a>  <span class="n">endfunction</span> <span class="n">burgers_local_error</span>
+<a name="ln-238"></a>
+<a name="ln-239"></a>  <span class="k">function </span><span class="n">burgers_multiply_burgers</span><span class="p">(</span><span class="n">lhs</span><span class="p">,</span> <span class="n">rhs</span><span class="p">)</span> <span class="k">result</span><span class="p">(</span><span class="n">opr</span><span class="p">)</span>
+<a name="ln-240"></a>  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+<a name="ln-241"></a>  <span class="c">!&lt; Multiply a Burgers field by another one.</span>
+<a name="ln-242"></a>  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+<a name="ln-243"></a>  <span class="k">class</span><span class="p">(</span><span class="n">burgers</span><span class="p">),</span>   <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span>  <span class="kd">::</span> <span class="n">lhs</span> <span class="c">!&lt; Left hand side.</span>
+<a name="ln-244"></a>  <span class="k">class</span><span class="p">(</span><span class="n">integrand</span><span class="p">),</span> <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span>  <span class="kd">::</span> <span class="n">rhs</span> <span class="c">!&lt; Right hand side.</span>
+<a name="ln-245"></a>  <span class="k">class</span><span class="p">(</span><span class="n">integrand</span><span class="p">),</span> <span class="k">allocatable</span> <span class="kd">::</span> <span class="n">opr</span> <span class="c">!&lt; Operator result.</span>
+<a name="ln-246"></a>  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+<a name="ln-247"></a>
+<a name="ln-248"></a>  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+<a name="ln-249"></a>  <span class="k">allocate</span><span class="p">(</span><span class="n">burgers</span> <span class="kd">::</span> <span class="n">opr</span><span class="p">)</span>
+<a name="ln-250"></a>  <span class="k">select type</span><span class="p">(</span><span class="n">opr</span><span class="p">)</span>
+<a name="ln-251"></a>  <span class="k">class is</span><span class="p">(</span><span class="n">burgers</span><span class="p">)</span>
+<a name="ln-252"></a>    <span class="n">opr</span> <span class="o">=</span> <span class="n">lhs</span>
+<a name="ln-253"></a>    <span class="k">select type</span><span class="p">(</span><span class="n">rhs</span><span class="p">)</span>
+<a name="ln-254"></a>    <span class="k">class is</span> <span class="p">(</span><span class="n">burgers</span><span class="p">)</span>
+<a name="ln-255"></a>      <span class="n">opr</span><span class="p">%</span><span class="n">U</span> <span class="o">=</span> <span class="n">lhs</span><span class="p">%</span><span class="n">U</span> <span class="o">*</span> <span class="n">rhs</span><span class="p">%</span><span class="n">U</span>
+<a name="ln-256"></a>    <span class="n">endselect</span>
+<a name="ln-257"></a>  <span class="n">endselect</span>
+<a name="ln-258"></a>  <span class="k">return</span>
+<a name="ln-259"></a>  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+<a name="ln-260"></a>  <span class="n">endfunction</span> <span class="n">burgers_multiply_burgers</span>
+<a name="ln-261"></a>
+<a name="ln-262"></a>  <span class="k">function </span><span class="n">burgers_multiply_real</span><span class="p">(</span><span class="n">lhs</span><span class="p">,</span> <span class="n">rhs</span><span class="p">)</span> <span class="k">result</span><span class="p">(</span><span class="n">opr</span><span class="p">)</span>
+<a name="ln-263"></a>  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+<a name="ln-264"></a>  <span class="c">!&lt; Multiply a Burgers field by a real scalar.</span>
+<a name="ln-265"></a>  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+<a name="ln-266"></a>  <span class="k">class</span><span class="p">(</span><span class="n">burgers</span><span class="p">),</span> <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span>    <span class="kd">::</span> <span class="n">lhs</span> <span class="c">!&lt; Left hand side.</span>
+<a name="ln-267"></a>  <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">),</span>      <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span>    <span class="kd">::</span> <span class="n">rhs</span> <span class="c">!&lt; Right hand side.</span>
+<a name="ln-268"></a>  <span class="k">class</span><span class="p">(</span><span class="n">integrand</span><span class="p">),</span> <span class="k">allocatable</span> <span class="kd">::</span> <span class="n">opr</span> <span class="c">!&lt; Operator result.</span>
+<a name="ln-269"></a>  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+<a name="ln-270"></a>
+<a name="ln-271"></a>  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+<a name="ln-272"></a>  <span class="k">allocate</span><span class="p">(</span><span class="n">burgers</span> <span class="kd">::</span> <span class="n">opr</span><span class="p">)</span>
+<a name="ln-273"></a>  <span class="k">select type</span><span class="p">(</span><span class="n">opr</span><span class="p">)</span>
+<a name="ln-274"></a>  <span class="k">class is</span><span class="p">(</span><span class="n">burgers</span><span class="p">)</span>
+<a name="ln-275"></a>    <span class="n">opr</span> <span class="o">=</span> <span class="n">lhs</span>
+<a name="ln-276"></a>    <span class="n">opr</span><span class="p">%</span><span class="n">U</span> <span class="o">=</span> <span class="n">lhs</span><span class="p">%</span><span class="n">U</span> <span class="o">*</span> <span class="n">rhs</span>
+<a name="ln-277"></a>  <span class="n">endselect</span>
+<a name="ln-278"></a>  <span class="k">return</span>
+<a name="ln-279"></a>  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+<a name="ln-280"></a>  <span class="n">endfunction</span> <span class="n">burgers_multiply_real</span>
+<a name="ln-281"></a>
+<a name="ln-282"></a>  <span class="k">function </span><span class="n">real_multiply_burgers</span><span class="p">(</span><span class="n">lhs</span><span class="p">,</span> <span class="n">rhs</span><span class="p">)</span> <span class="k">result</span><span class="p">(</span><span class="n">opr</span><span class="p">)</span>
+<a name="ln-283"></a>  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+<a name="ln-284"></a>  <span class="c">!&lt; Multiply a real scalar by a Burgers field.</span>
+<a name="ln-285"></a>  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+<a name="ln-286"></a>  <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">),</span>      <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span>    <span class="kd">::</span> <span class="n">lhs</span> <span class="c">!&lt; Left hand side.</span>
+<a name="ln-287"></a>  <span class="k">class</span><span class="p">(</span><span class="n">burgers</span><span class="p">),</span> <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span>    <span class="kd">::</span> <span class="n">rhs</span> <span class="c">!&lt; Right hand side.</span>
+<a name="ln-288"></a>  <span class="k">class</span><span class="p">(</span><span class="n">integrand</span><span class="p">),</span> <span class="k">allocatable</span> <span class="kd">::</span> <span class="n">opr</span> <span class="c">!&lt; Operator result.</span>
+<a name="ln-289"></a>  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+<a name="ln-290"></a>
+<a name="ln-291"></a>  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+<a name="ln-292"></a>  <span class="k">allocate</span><span class="p">(</span><span class="n">burgers</span> <span class="kd">::</span> <span class="n">opr</span><span class="p">)</span>
+<a name="ln-293"></a>  <span class="k">select type</span><span class="p">(</span><span class="n">opr</span><span class="p">)</span>
+<a name="ln-294"></a>  <span class="k">class is</span><span class="p">(</span><span class="n">burgers</span><span class="p">)</span>
+<a name="ln-295"></a>    <span class="n">opr</span> <span class="o">=</span> <span class="n">rhs</span>
+<a name="ln-296"></a>    <span class="n">opr</span><span class="p">%</span><span class="n">U</span> <span class="o">=</span> <span class="n">rhs</span><span class="p">%</span><span class="n">U</span> <span class="o">*</span> <span class="n">lhs</span>
+<a name="ln-297"></a>  <span class="n">endselect</span>
+<a name="ln-298"></a>  <span class="k">return</span>
+<a name="ln-299"></a>  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+<a name="ln-300"></a>  <span class="n">endfunction</span> <span class="n">real_multiply_burgers</span>
+<a name="ln-301"></a>
+<a name="ln-302"></a>  <span class="k">function </span><span class="n">add_burgers</span><span class="p">(</span><span class="n">lhs</span><span class="p">,</span> <span class="n">rhs</span><span class="p">)</span> <span class="k">result</span><span class="p">(</span><span class="n">opr</span><span class="p">)</span>
+<a name="ln-303"></a>  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+<a name="ln-304"></a>  <span class="c">!&lt; Add two Burgers fields.</span>
+<a name="ln-305"></a>  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+<a name="ln-306"></a>  <span class="k">class</span><span class="p">(</span><span class="n">burgers</span><span class="p">),</span>   <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span>  <span class="kd">::</span> <span class="n">lhs</span> <span class="c">!&lt; Left hand side.</span>
+<a name="ln-307"></a>  <span class="k">class</span><span class="p">(</span><span class="n">integrand</span><span class="p">),</span> <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span>  <span class="kd">::</span> <span class="n">rhs</span> <span class="c">!&lt; Right hand side.</span>
+<a name="ln-308"></a>  <span class="k">class</span><span class="p">(</span><span class="n">integrand</span><span class="p">),</span> <span class="k">allocatable</span> <span class="kd">::</span> <span class="n">opr</span> <span class="c">!&lt; Operator result.</span>
+<a name="ln-309"></a>  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+<a name="ln-310"></a>
+<a name="ln-311"></a>  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+<a name="ln-312"></a>  <span class="k">allocate</span><span class="p">(</span><span class="n">burgers</span> <span class="kd">::</span> <span class="n">opr</span><span class="p">)</span>
+<a name="ln-313"></a>  <span class="k">select type</span><span class="p">(</span><span class="n">opr</span><span class="p">)</span>
+<a name="ln-314"></a>  <span class="k">class is</span><span class="p">(</span><span class="n">burgers</span><span class="p">)</span>
+<a name="ln-315"></a>    <span class="n">opr</span> <span class="o">=</span> <span class="n">lhs</span>
+<a name="ln-316"></a>    <span class="k">select type</span><span class="p">(</span><span class="n">rhs</span><span class="p">)</span>
+<a name="ln-317"></a>    <span class="k">class is</span> <span class="p">(</span><span class="n">burgers</span><span class="p">)</span>
+<a name="ln-318"></a>      <span class="n">opr</span><span class="p">%</span><span class="n">U</span> <span class="o">=</span> <span class="n">lhs</span><span class="p">%</span><span class="n">U</span> <span class="o">+</span> <span class="n">rhs</span><span class="p">%</span><span class="n">U</span>
+<a name="ln-319"></a>    <span class="n">endselect</span>
+<a name="ln-320"></a>  <span class="n">endselect</span>
+<a name="ln-321"></a>  <span class="k">return</span>
+<a name="ln-322"></a>  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+<a name="ln-323"></a>  <span class="n">endfunction</span> <span class="n">add_burgers</span>
+<a name="ln-324"></a>
+<a name="ln-325"></a>  <span class="k">function </span><span class="n">sub_burgers</span><span class="p">(</span><span class="n">lhs</span><span class="p">,</span> <span class="n">rhs</span><span class="p">)</span> <span class="k">result</span><span class="p">(</span><span class="n">opr</span><span class="p">)</span>
+<a name="ln-326"></a>  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+<a name="ln-327"></a>  <span class="c">!&lt; Subtract two Burgers fields.</span>
+<a name="ln-328"></a>  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+<a name="ln-329"></a>  <span class="k">class</span><span class="p">(</span><span class="n">burgers</span><span class="p">),</span>   <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span>  <span class="kd">::</span> <span class="n">lhs</span> <span class="c">!&lt; Left hand side.</span>
+<a name="ln-330"></a>  <span class="k">class</span><span class="p">(</span><span class="n">integrand</span><span class="p">),</span> <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span>  <span class="kd">::</span> <span class="n">rhs</span> <span class="c">!&lt; Right hand side.</span>
+<a name="ln-331"></a>  <span class="k">class</span><span class="p">(</span><span class="n">integrand</span><span class="p">),</span> <span class="k">allocatable</span> <span class="kd">::</span> <span class="n">opr</span> <span class="c">!&lt; Operator result.</span>
+<a name="ln-332"></a>  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+<a name="ln-333"></a>
+<a name="ln-334"></a>  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+<a name="ln-335"></a>  <span class="k">allocate</span><span class="p">(</span><span class="n">burgers</span> <span class="kd">::</span> <span class="n">opr</span><span class="p">)</span>
+<a name="ln-336"></a>  <span class="k">select type</span><span class="p">(</span><span class="n">opr</span><span class="p">)</span>
+<a name="ln-337"></a>  <span class="k">class is</span><span class="p">(</span><span class="n">burgers</span><span class="p">)</span>
+<a name="ln-338"></a>    <span class="n">opr</span> <span class="o">=</span> <span class="n">lhs</span>
+<a name="ln-339"></a>    <span class="k">select type</span><span class="p">(</span><span class="n">rhs</span><span class="p">)</span>
+<a name="ln-340"></a>    <span class="k">class is</span> <span class="p">(</span><span class="n">burgers</span><span class="p">)</span>
+<a name="ln-341"></a>      <span class="n">opr</span><span class="p">%</span><span class="n">U</span> <span class="o">=</span> <span class="n">lhs</span><span class="p">%</span><span class="n">U</span> <span class="o">-</span> <span class="n">rhs</span><span class="p">%</span><span class="n">U</span>
+<a name="ln-342"></a>    <span class="n">endselect</span>
+<a name="ln-343"></a>  <span class="n">endselect</span>
+<a name="ln-344"></a>  <span class="k">return</span>
+<a name="ln-345"></a>  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+<a name="ln-346"></a>  <span class="n">endfunction</span> <span class="n">sub_burgers</span>
+<a name="ln-347"></a>
+<a name="ln-348"></a>  <span class="k">subroutine </span><span class="n">burgers_assign_burgers</span><span class="p">(</span><span class="n">lhs</span><span class="p">,</span> <span class="n">rhs</span><span class="p">)</span>
+<a name="ln-349"></a>  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+<a name="ln-350"></a>  <span class="c">!&lt; Assign one Burgers field to another.</span>
+<a name="ln-351"></a>  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+<a name="ln-352"></a>  <span class="k">class</span><span class="p">(</span><span class="n">burgers</span><span class="p">),</span>   <span class="k">intent</span><span class="p">(</span><span class="n">INOUT</span><span class="p">)</span> <span class="kd">::</span> <span class="n">lhs</span> <span class="c">!&lt; Left hand side.</span>
+<a name="ln-353"></a>  <span class="k">class</span><span class="p">(</span><span class="n">integrand</span><span class="p">),</span> <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span>    <span class="kd">::</span> <span class="n">rhs</span> <span class="c">!&lt; Right hand side.</span>
+<a name="ln-354"></a>  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+<a name="ln-355"></a>
+<a name="ln-356"></a>  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+<a name="ln-357"></a>  <span class="k">select type</span><span class="p">(</span><span class="n">rhs</span><span class="p">)</span>
+<a name="ln-358"></a>  <span class="k">class is</span> <span class="p">(</span><span class="n">burgers</span><span class="p">)</span>
+<a name="ln-359"></a>    <span class="n">lhs</span><span class="p">%</span><span class="n">Ni</span> <span class="o">=</span> <span class="n">rhs</span><span class="p">%</span><span class="n">Ni</span>
+<a name="ln-360"></a>    <span class="n">lhs</span><span class="p">%</span><span class="n">steps</span> <span class="o">=</span> <span class="n">rhs</span><span class="p">%</span><span class="n">steps</span>
+<a name="ln-361"></a>    <span class="n">lhs</span><span class="p">%</span><span class="n">h</span> <span class="o">=</span> <span class="n">rhs</span><span class="p">%</span><span class="n">h</span>
+<a name="ln-362"></a>    <span class="n">lhs</span><span class="p">%</span><span class="n">nu</span> <span class="o">=</span> <span class="n">rhs</span><span class="p">%</span><span class="n">nu</span>
+<a name="ln-363"></a>    <span class="k">if</span> <span class="p">(</span><span class="nb">allocated</span><span class="p">(</span><span class="n">rhs</span><span class="p">%</span><span class="n">U</span><span class="p">))</span> <span class="n">lhs</span><span class="p">%</span><span class="n">U</span> <span class="o">=</span> <span class="n">rhs</span><span class="p">%</span><span class="n">U</span>
+<a name="ln-364"></a>    <span class="k">if</span> <span class="p">(</span><span class="nb">allocated</span><span class="p">(</span><span class="n">rhs</span><span class="p">%</span><span class="n">previous</span><span class="p">))</span> <span class="n">lhs</span><span class="p">%</span><span class="n">previous</span> <span class="o">=</span> <span class="n">rhs</span><span class="p">%</span><span class="n">previous</span>
+<a name="ln-365"></a>  <span class="n">endselect</span>
+<a name="ln-366"></a>  <span class="k">return</span>
+<a name="ln-367"></a>  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+<a name="ln-368"></a>  <span class="n">endsubroutine</span> <span class="n">burgers_assign_burgers</span>
+<a name="ln-369"></a>
+<a name="ln-370"></a>  <span class="k">subroutine </span><span class="n">burgers_assign_real</span><span class="p">(</span><span class="n">lhs</span><span class="p">,</span> <span class="n">rhs</span><span class="p">)</span>
+<a name="ln-371"></a>  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+<a name="ln-372"></a>  <span class="c">!&lt; Assign one real to a Burgers field.</span>
+<a name="ln-373"></a>  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+<a name="ln-374"></a>  <span class="k">class</span><span class="p">(</span><span class="n">burgers</span><span class="p">),</span> <span class="k">intent</span><span class="p">(</span><span class="n">INOUT</span><span class="p">)</span> <span class="kd">::</span> <span class="n">lhs</span> <span class="c">!&lt; Left hand side.</span>
+<a name="ln-375"></a>  <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">),</span>      <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span>    <span class="kd">::</span> <span class="n">rhs</span> <span class="c">!&lt; Right hand side.</span>
+<a name="ln-376"></a>  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+<a name="ln-377"></a>
+<a name="ln-378"></a>  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+<a name="ln-379"></a>  <span class="k">if</span> <span class="p">(</span><span class="nb">allocated</span><span class="p">(</span><span class="n">lhs</span><span class="p">%</span><span class="n">U</span><span class="p">))</span> <span class="n">lhs</span><span class="p">%</span><span class="n">U</span> <span class="o">=</span> <span class="n">rhs</span>
+<a name="ln-380"></a>  <span class="k">if</span> <span class="p">(</span><span class="nb">allocated</span><span class="p">(</span><span class="n">lhs</span><span class="p">%</span><span class="n">previous</span><span class="p">))</span> <span class="n">lhs</span><span class="p">%</span><span class="n">previous</span> <span class="o">=</span> <span class="n">rhs</span>
+<a name="ln-381"></a>  <span class="k">return</span>
+<a name="ln-382"></a>  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+<a name="ln-383"></a>  <span class="n">endsubroutine</span> <span class="n">burgers_assign_real</span>
+<a name="ln-384"></a>
+<a name="ln-385"></a>  <span class="c">! private methods</span>
+<a name="ln-386"></a>  <span class="k">function </span><span class="n">dBurgers_dx</span><span class="p">(</span><span class="n">self</span><span class="p">)</span> <span class="k">result</span><span class="p">(</span><span class="n">derivative</span><span class="p">)</span>
+<a name="ln-387"></a>  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+<a name="ln-388"></a>  <span class="c">!&lt; Compute the first order spatial derivative of Burgers field.</span>
+<a name="ln-389"></a>  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+<a name="ln-390"></a>  <span class="k">class</span><span class="p">(</span><span class="n">burgers</span><span class="p">),</span>    <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span> <span class="kd">::</span> <span class="n">self</span>       <span class="c">!&lt; Burgers field.</span>
+<a name="ln-391"></a>  <span class="k">type</span><span class="p">(</span><span class="n">burgers</span><span class="p">)</span>                 <span class="kd">::</span> <span class="n">derivative</span> <span class="c">!&lt; Burgers field derivative.</span>
+<a name="ln-392"></a>  <span class="kt">integer</span><span class="p">(</span><span class="n">I_P</span><span class="p">)</span>                  <span class="kd">::</span> <span class="n">i</span>          <span class="c">!&lt; Counter.</span>
+<a name="ln-393"></a>  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+<a name="ln-394"></a>
+<a name="ln-395"></a>  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+<a name="ln-396"></a>  <span class="n">derivative</span> <span class="o">=</span> <span class="n">self</span>
+<a name="ln-397"></a>  <span class="k">do </span><span class="n">i</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">self</span><span class="p">%</span><span class="n">Ni</span> <span class="o">-</span> <span class="mi">1</span>
+<a name="ln-398"></a>    <span class="n">derivative</span><span class="p">%</span><span class="n">U</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="o">=</span> <span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">U</span><span class="p">(</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span> <span class="o">-</span> <span class="n">self</span><span class="p">%</span><span class="n">U</span><span class="p">(</span><span class="n">i</span><span class="o">-</span><span class="mi">1</span><span class="p">))</span><span class="o">/</span><span class="p">(</span><span class="mf">2._R_P</span> <span class="o">*</span> <span class="n">self</span><span class="p">%</span><span class="n">h</span><span class="p">)</span>
+<a name="ln-399"></a>  <span class="n">enddo</span>
+<a name="ln-400"></a>  <span class="n">derivative</span><span class="p">%</span><span class="n">U</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">=</span> <span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">U</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span> <span class="o">-</span> <span class="n">self</span><span class="p">%</span><span class="n">U</span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">Ni</span><span class="p">))</span><span class="o">/</span><span class="p">(</span><span class="mf">2._R_P</span> <span class="o">*</span> <span class="n">self</span><span class="p">%</span><span class="n">h</span><span class="p">)</span>
+<a name="ln-401"></a>  <span class="n">derivative</span><span class="p">%</span><span class="n">U</span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">Ni</span><span class="p">)</span> <span class="o">=</span> <span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">U</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">-</span> <span class="n">self</span><span class="p">%</span><span class="n">U</span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">Ni</span><span class="o">-</span><span class="mi">1</span><span class="p">))</span><span class="o">/</span><span class="p">(</span><span class="mf">2._R_P</span> <span class="o">*</span> <span class="n">self</span><span class="p">%</span><span class="n">h</span><span class="p">)</span>
+<a name="ln-402"></a>  <span class="k">return</span>
+<a name="ln-403"></a>  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+<a name="ln-404"></a>  <span class="n">endfunction</span>
+<a name="ln-405"></a>
+<a name="ln-406"></a>  <span class="k">function </span><span class="n">d2Burgers_dx2</span><span class="p">(</span><span class="n">self</span><span class="p">)</span> <span class="k">result</span><span class="p">(</span><span class="n">derivative</span><span class="p">)</span>
+<a name="ln-407"></a>  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+<a name="ln-408"></a>  <span class="c">!&lt; Compute the second order spatial derivative of Burgers field.</span>
+<a name="ln-409"></a>  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+<a name="ln-410"></a>  <span class="k">class</span><span class="p">(</span><span class="n">burgers</span><span class="p">),</span>    <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span> <span class="kd">::</span> <span class="n">self</span>       <span class="c">!&lt; Burgers field.</span>
+<a name="ln-411"></a>  <span class="k">type</span><span class="p">(</span><span class="n">burgers</span><span class="p">)</span>                 <span class="kd">::</span> <span class="n">derivative</span> <span class="c">!&lt; Burgers field derivative.</span>
+<a name="ln-412"></a>  <span class="kt">integer</span><span class="p">(</span><span class="n">I_P</span><span class="p">)</span>                  <span class="kd">::</span> <span class="n">i</span>          <span class="c">!&lt; Counter.</span>
+<a name="ln-413"></a>  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+<a name="ln-414"></a>
+<a name="ln-415"></a>  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+<a name="ln-416"></a>  <span class="n">derivative</span> <span class="o">=</span> <span class="n">self</span>
+<a name="ln-417"></a>  <span class="k">do </span><span class="n">i</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">self</span><span class="p">%</span><span class="n">Ni</span> <span class="o">-</span> <span class="mi">1</span>
+<a name="ln-418"></a>    <span class="n">derivative</span><span class="p">%</span><span class="n">U</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="o">=</span> <span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">U</span><span class="p">(</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span> <span class="o">-</span> <span class="mf">2._R_P</span> <span class="o">*</span> <span class="n">self</span><span class="p">%</span><span class="n">U</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="o">+</span> <span class="n">self</span><span class="p">%</span><span class="n">U</span><span class="p">(</span><span class="n">i</span><span class="o">-</span><span class="mi">1</span><span class="p">))</span><span class="o">/</span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">h</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
+<a name="ln-419"></a>  <span class="n">enddo</span>
+<a name="ln-420"></a>  <span class="n">derivative</span><span class="p">%</span><span class="n">U</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">=</span> <span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">U</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span> <span class="o">-</span> <span class="mf">2._R_P</span> <span class="o">*</span> <span class="n">self</span><span class="p">%</span><span class="n">U</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">+</span> <span class="n">self</span><span class="p">%</span><span class="n">U</span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">Ni</span><span class="p">))</span><span class="o">/</span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">h</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
+<a name="ln-421"></a>  <span class="n">derivative</span><span class="p">%</span><span class="n">U</span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">Ni</span><span class="p">)</span> <span class="o">=</span> <span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">U</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">-</span> <span class="mf">2._R_P</span> <span class="o">*</span> <span class="n">self</span><span class="p">%</span><span class="n">U</span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">Ni</span><span class="p">)</span> <span class="o">+</span> <span class="n">self</span><span class="p">%</span><span class="n">U</span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">Ni</span><span class="o">-</span><span class="mi">1</span><span class="p">))</span><span class="o">/</span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">h</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
+<a name="ln-422"></a>  <span class="k">return</span>
+<a name="ln-423"></a>  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+<a name="ln-424"></a>  <span class="n">endfunction</span>
+<a name="ln-425"></a><span class="n">endmodule</span> <span class="n">type_burgers</span>
 </pre></div>
 
     </section>
@@ -692,8 +692,9 @@
     <hr>
     <footer>
         <div class="row">
-        <div class="col-md-6">&copy; 2015 FOODIE was written by Fortran-FOSS-Programmers Group. </div>
-        <div class="col-md-6"><span class="pull-right">Documentation generated by <a href="https://github.com/cmacmackin/ford">FORD</a>.</span></div>
+        <div class="col-md-4">&copy; 2015 </div>
+	<div class="col-md-4"><span class="text-center"> FOODIE was developed by Fortran-FOSS-Programmers Group</span></div>
+        <div class="col-md-4"><span class="pull-right">Documentation generated by <a href="https://github.com/cmacmackin/ford">FORD</a></span></div>
         </div>
         <br>
     </footer>

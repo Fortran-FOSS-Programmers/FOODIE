@@ -258,45 +258,45 @@
     <br>
     <section>
     <h2><span class="anchor" id="src"></span>Source Code</h2>
-    <div class="highlight"><pre><span class="c">!&lt; Testing program for IR_Precision, Pure Fortran (2003+) library for ensuring codes portability</span>
-<span class="k">program </span><span class="n">Test_Driver</span>
-<span class="c">!-----------------------------------------------------------------------------------------------------------------------------------</span>
-<span class="c">!&lt; Testing program for IR_Precision, Pure Fortran (2003+) library for ensuring codes portability</span>
-<span class="c">!&lt;</span>
-<span class="c">!&lt;### Usage</span>
-<span class="c">!&lt;```bash</span>
-<span class="c">!&lt; ./Test_Driver</span>
-<span class="c">!&lt;```</span>
-<span class="c">!-----------------------------------------------------------------------------------------------------------------------------------</span>
-<span class="k">USE </span><span class="n">IR_Precision</span>
-<span class="k">USE</span><span class="p">,</span> <span class="k">intrinsic</span><span class="kd">::</span> <span class="n">ISO_FORTRAN_ENV</span><span class="p">,</span> <span class="n">only</span><span class="p">:</span> <span class="n">stdout</span><span class="o">=&gt;</span><span class="n">OUTPUT_UNIT</span>
-<span class="c">!-----------------------------------------------------------------------------------------------------------------------------------</span>
-
-<span class="c">!-----------------------------------------------------------------------------------------------------------------------------------</span>
-<span class="k">implicit none</span>
-<span class="c">!-----------------------------------------------------------------------------------------------------------------------------------</span>
-
-<span class="c">!-----------------------------------------------------------------------------------------------------------------------------------</span>
-<span class="c">! initialize IR_Precision</span>
-<span class="k">call </span><span class="n">IR_Init</span>
-<span class="c">! print main IR_Precision values</span>
-<span class="k">call </span><span class="n">IR_Print</span><span class="p">(</span><span class="n">unit</span><span class="o">=</span><span class="n">stdout</span><span class="p">)</span>
-
-<span class="k">print</span> <span class="s2">&quot;(A)&quot;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span>
-<span class="k">print</span> <span class="s2">&quot;(A)&quot;</span><span class="p">,</span> <span class="s1">&#39;Testing IR_Precision tools&#39;</span>
-<span class="k">print</span> <span class="s2">&quot;(A)&quot;</span><span class="p">,</span> <span class="s1">&#39;Casting real-to-string: &#39;</span><span class="o">//</span><span class="n">str</span><span class="p">(</span><span class="n">n</span><span class="o">=</span><span class="mf">1._R8P</span><span class="p">)</span>
-<span class="k">print</span> <span class="s2">&quot;(A)&quot;</span><span class="p">,</span> <span class="s1">&#39;Casting integer-to-string: &#39;</span><span class="o">//</span><span class="n">str</span><span class="p">(</span><span class="n">n</span><span class="o">=</span><span class="mi">11_I8P</span><span class="p">)</span>
-<span class="k">print</span> <span class="s2">&quot;(A,&quot;</span><span class="o">//</span><span class="n">FR8P</span><span class="o">//</span><span class="s2">&quot;)&quot;</span><span class="p">,</span> <span class="s1">&#39;Casting string-to-real: &#39;</span><span class="p">,</span><span class="n">cton</span><span class="p">(</span><span class="n">str</span><span class="o">=</span><span class="s1">&#39;2.2d0&#39;</span><span class="p">,</span><span class="n">knd</span><span class="o">=</span><span class="mf">1._R8P</span><span class="p">)</span>
-<span class="k">print</span> <span class="s2">&quot;(A,&quot;</span><span class="o">//</span><span class="n">FI4P</span><span class="o">//</span><span class="s2">&quot;)&quot;</span><span class="p">,</span> <span class="s1">&#39;Casting integer-to-string: &#39;</span><span class="p">,</span><span class="n">cton</span><span class="p">(</span><span class="n">str</span><span class="o">=</span><span class="s1">&#39;43&#39;</span><span class="p">,</span><span class="n">knd</span><span class="o">=</span><span class="mi">1_I4P</span><span class="p">)</span>
-<span class="k">print</span> <span class="s2">&quot;(A)&quot;</span><span class="p">,</span> <span class="s1">&#39;Casting integer-to-string with zero padding: &#39;</span><span class="o">//</span><span class="nb">trim</span><span class="p">(</span><span class="n">strz</span><span class="p">(</span><span class="n">nz_pad</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span><span class="n">n</span><span class="o">=</span><span class="mi">34_I8P</span><span class="p">))</span>
-<span class="c">! print &quot;(A)&quot;, &#39;Casting real-to-bit_string: &#39;//bstr(n=1._R4P)</span>
-<span class="k">print</span> <span class="s2">&quot;(A)&quot;</span><span class="p">,</span> <span class="s1">&#39;Casting integer-to-bit_string: &#39;</span><span class="o">//</span><span class="n">bstr</span><span class="p">(</span><span class="n">n</span><span class="o">=</span><span class="mi">1_I4P</span><span class="p">)</span>
-<span class="c">! print &quot;(A,&quot;//FR4P//&quot;)&quot;, &#39;Casting bit_string-to-real: &#39;,bcton(bstr=&#39;00111111100000000000000000000000&#39;,knd=1._R4P)</span>
-<span class="k">print</span> <span class="s2">&quot;(A,&quot;</span><span class="o">//</span><span class="n">FI4P</span><span class="o">//</span><span class="s2">&quot;)&quot;</span><span class="p">,</span> <span class="s1">&#39;Casting bit_string-to-integer: &#39;</span><span class="p">,</span><span class="n">bcton</span><span class="p">(</span><span class="n">bstr</span><span class="o">=</span><span class="s1">&#39;00000000000000000000000000000001&#39;</span><span class="p">,</span><span class="n">knd</span><span class="o">=</span><span class="mi">1_I4P</span><span class="p">)</span>
-<span class="k">print</span> <span class="s2">&quot;(A)&quot;</span><span class="p">,</span> <span class="s1">&#39;Number of digit of 1023: &#39;</span><span class="o">//</span><span class="n">str</span><span class="p">(</span><span class="n">n</span><span class="o">=</span><span class="n">digit</span><span class="p">(</span><span class="mi">1023_I4P</span><span class="p">))</span>
-<span class="k">stop</span>
-<span class="c">!-----------------------------------------------------------------------------------------------------------------------------------</span>
-<span class="n">endprogram</span> <span class="n">Test_Driver</span>
+    <div class="hl"><pre><a name="ln-1"></a><span class="c">!&lt; Testing program for IR_Precision, Pure Fortran (2003+) library for ensuring codes portability</span>
+<a name="ln-2"></a><span class="k">program </span><span class="n">Test_Driver</span>
+<a name="ln-3"></a><span class="c">!-----------------------------------------------------------------------------------------------------------------------------------</span>
+<a name="ln-4"></a><span class="c">!&lt; Testing program for IR_Precision, Pure Fortran (2003+) library for ensuring codes portability</span>
+<a name="ln-5"></a><span class="c">!&lt;</span>
+<a name="ln-6"></a><span class="c">!&lt;### Usage</span>
+<a name="ln-7"></a><span class="c">!&lt;```bash</span>
+<a name="ln-8"></a><span class="c">!&lt; ./Test_Driver</span>
+<a name="ln-9"></a><span class="c">!&lt;```</span>
+<a name="ln-10"></a><span class="c">!-----------------------------------------------------------------------------------------------------------------------------------</span>
+<a name="ln-11"></a><span class="k">USE </span><span class="n">IR_Precision</span>
+<a name="ln-12"></a><span class="k">USE</span><span class="p">,</span> <span class="k">intrinsic</span><span class="kd">::</span> <span class="n">ISO_FORTRAN_ENV</span><span class="p">,</span> <span class="n">only</span><span class="p">:</span> <span class="n">stdout</span><span class="o">=&gt;</span><span class="n">OUTPUT_UNIT</span>
+<a name="ln-13"></a><span class="c">!-----------------------------------------------------------------------------------------------------------------------------------</span>
+<a name="ln-14"></a>
+<a name="ln-15"></a><span class="c">!-----------------------------------------------------------------------------------------------------------------------------------</span>
+<a name="ln-16"></a><span class="k">implicit none</span>
+<a name="ln-17"></a><span class="c">!-----------------------------------------------------------------------------------------------------------------------------------</span>
+<a name="ln-18"></a>
+<a name="ln-19"></a><span class="c">!-----------------------------------------------------------------------------------------------------------------------------------</span>
+<a name="ln-20"></a><span class="c">! initialize IR_Precision</span>
+<a name="ln-21"></a><span class="k">call </span><span class="n">IR_Init</span>
+<a name="ln-22"></a><span class="c">! print main IR_Precision values</span>
+<a name="ln-23"></a><span class="k">call </span><span class="n">IR_Print</span><span class="p">(</span><span class="n">unit</span><span class="o">=</span><span class="n">stdout</span><span class="p">)</span>
+<a name="ln-24"></a>
+<a name="ln-25"></a><span class="k">print</span> <span class="s2">&quot;(A)&quot;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span>
+<a name="ln-26"></a><span class="k">print</span> <span class="s2">&quot;(A)&quot;</span><span class="p">,</span> <span class="s1">&#39;Testing IR_Precision tools&#39;</span>
+<a name="ln-27"></a><span class="k">print</span> <span class="s2">&quot;(A)&quot;</span><span class="p">,</span> <span class="s1">&#39;Casting real-to-string: &#39;</span><span class="o">//</span><span class="n">str</span><span class="p">(</span><span class="n">n</span><span class="o">=</span><span class="mf">1._R8P</span><span class="p">)</span>
+<a name="ln-28"></a><span class="k">print</span> <span class="s2">&quot;(A)&quot;</span><span class="p">,</span> <span class="s1">&#39;Casting integer-to-string: &#39;</span><span class="o">//</span><span class="n">str</span><span class="p">(</span><span class="n">n</span><span class="o">=</span><span class="mi">11_I8P</span><span class="p">)</span>
+<a name="ln-29"></a><span class="k">print</span> <span class="s2">&quot;(A,&quot;</span><span class="o">//</span><span class="n">FR8P</span><span class="o">//</span><span class="s2">&quot;)&quot;</span><span class="p">,</span> <span class="s1">&#39;Casting string-to-real: &#39;</span><span class="p">,</span><span class="n">cton</span><span class="p">(</span><span class="n">str</span><span class="o">=</span><span class="s1">&#39;2.2d0&#39;</span><span class="p">,</span><span class="n">knd</span><span class="o">=</span><span class="mf">1._R8P</span><span class="p">)</span>
+<a name="ln-30"></a><span class="k">print</span> <span class="s2">&quot;(A,&quot;</span><span class="o">//</span><span class="n">FI4P</span><span class="o">//</span><span class="s2">&quot;)&quot;</span><span class="p">,</span> <span class="s1">&#39;Casting integer-to-string: &#39;</span><span class="p">,</span><span class="n">cton</span><span class="p">(</span><span class="n">str</span><span class="o">=</span><span class="s1">&#39;43&#39;</span><span class="p">,</span><span class="n">knd</span><span class="o">=</span><span class="mi">1_I4P</span><span class="p">)</span>
+<a name="ln-31"></a><span class="k">print</span> <span class="s2">&quot;(A)&quot;</span><span class="p">,</span> <span class="s1">&#39;Casting integer-to-string with zero padding: &#39;</span><span class="o">//</span><span class="nb">trim</span><span class="p">(</span><span class="n">strz</span><span class="p">(</span><span class="n">nz_pad</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span><span class="n">n</span><span class="o">=</span><span class="mi">34_I8P</span><span class="p">))</span>
+<a name="ln-32"></a><span class="c">! print &quot;(A)&quot;, &#39;Casting real-to-bit_string: &#39;//bstr(n=1._R4P)</span>
+<a name="ln-33"></a><span class="k">print</span> <span class="s2">&quot;(A)&quot;</span><span class="p">,</span> <span class="s1">&#39;Casting integer-to-bit_string: &#39;</span><span class="o">//</span><span class="n">bstr</span><span class="p">(</span><span class="n">n</span><span class="o">=</span><span class="mi">1_I4P</span><span class="p">)</span>
+<a name="ln-34"></a><span class="c">! print &quot;(A,&quot;//FR4P//&quot;)&quot;, &#39;Casting bit_string-to-real: &#39;,bcton(bstr=&#39;00111111100000000000000000000000&#39;,knd=1._R4P)</span>
+<a name="ln-35"></a><span class="k">print</span> <span class="s2">&quot;(A,&quot;</span><span class="o">//</span><span class="n">FI4P</span><span class="o">//</span><span class="s2">&quot;)&quot;</span><span class="p">,</span> <span class="s1">&#39;Casting bit_string-to-integer: &#39;</span><span class="p">,</span><span class="n">bcton</span><span class="p">(</span><span class="n">bstr</span><span class="o">=</span><span class="s1">&#39;00000000000000000000000000000001&#39;</span><span class="p">,</span><span class="n">knd</span><span class="o">=</span><span class="mi">1_I4P</span><span class="p">)</span>
+<a name="ln-36"></a><span class="k">print</span> <span class="s2">&quot;(A)&quot;</span><span class="p">,</span> <span class="s1">&#39;Number of digit of 1023: &#39;</span><span class="o">//</span><span class="n">str</span><span class="p">(</span><span class="n">n</span><span class="o">=</span><span class="n">digit</span><span class="p">(</span><span class="mi">1023_I4P</span><span class="p">))</span>
+<a name="ln-37"></a><span class="k">stop</span>
+<a name="ln-38"></a><span class="c">!-----------------------------------------------------------------------------------------------------------------------------------</span>
+<a name="ln-39"></a><span class="n">endprogram</span> <span class="n">Test_Driver</span>
 </pre></div>
 
     </section>
@@ -306,8 +306,9 @@
     <hr>
     <footer>
         <div class="row">
-        <div class="col-md-6">&copy; 2015 FOODIE was written by Fortran-FOSS-Programmers Group. </div>
-        <div class="col-md-6"><span class="pull-right">Documentation generated by <a href="https://github.com/cmacmackin/ford">FORD</a>.</span></div>
+        <div class="col-md-4">&copy; 2015 </div>
+	<div class="col-md-4"><span class="text-center"> FOODIE was developed by Fortran-FOSS-Programmers Group</span></div>
+        <div class="col-md-4"><span class="pull-right">Documentation generated by <a href="https://github.com/cmacmackin/ford">FORD</a></span></div>
         </div>
         <br>
     </footer>

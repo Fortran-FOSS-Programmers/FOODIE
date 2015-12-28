@@ -210,6 +210,8 @@
           
           <a class="list-group-item" href="../type/euler_1d.html#boundprocedure-t%7E8">t</a>
           
+          <a class="list-group-item" href="../type/euler_1d.html#boundprocedure-local_error%7E6">local_error</a>
+          
           <a class="list-group-item" href="../type/euler_1d.html#boundprocedure-update_previous_steps%7E2">update_previous_steps</a>
           
           <a class="list-group-item" href="../type/euler_1d.html#boundprocedure-previous_step%7E2">previous_step</a>
@@ -1134,7 +1136,7 @@ private subroutine <a href='../proc/init%7E22.html'>init</a>(self, Ni, Ns, Dx, B
          
     
     <h3>
-private puresubroutine <a href='../proc/destroy%7E12.html'>destroy</a>(self)
+private pure subroutine <a href='../proc/destroy%7E12.html'>destroy</a>(self)
     
     
     
@@ -1211,7 +1213,7 @@ private puresubroutine <a href='../proc/destroy%7E12.html'>destroy</a>(self)
          
     
     <h3>
-private purefunction <a href='../proc/output%7E7.html'>output</a>(self) result(state)
+private pure function <a href='../proc/output%7E7.html'>output</a>(self) result(state)
     
     
     
@@ -1297,7 +1299,7 @@ private purefunction <a href='../proc/output%7E7.html'>output</a>(self) result(s
          
     
     <h3>
-private purefunction <a href='../proc/compute_dt%7E6.html'>compute_dt</a>(self, Nmax, Tmax, t, CFL) result(Dt)
+private pure function <a href='../proc/compute_dt%7E6.html'>compute_dt</a>(self, Nmax, Tmax, t, CFL) result(Dt)
     
     
     
@@ -1515,6 +1517,107 @@ private function <a href='../proc/deuler_dt%7E5.html'>dEuler_dt</a>(self, t) res
 
        
        <p>Time derivative of Euler field, the residuals function.</p>
+        
+
+      
+      </li>
+    
+  </ul>
+</div>
+
+    
+	   
+<div class="panel panel-default">
+  <div class="panel-heading codesum"><span class="anchor" id="boundprocedure-local_error%7E6"></span><h3>procedure, public, pass(lhs) :: <strong>local_error</strong>  => <a href='../proc/euler_local_error%7E3.html'>euler_local_error</a> 
+    
+  </h3></div>
+  
+  <div class="panel-body">
+    
+
+
+    <p>Local error.</p>
+  </div>
+  
+  <ul class="list-group">
+    
+      <li class="list-group-item">
+      
+         
+    
+    <h3>
+private function <a href='../proc/euler_local_error%7E3.html'>euler_local_error</a>(lhs, rhs) result(error)
+    
+    
+    
+</h3>
+    
+    <h4>Arguments</h4>
+    
+      
+      
+<table class="table table-striped varlist">
+<thead><tr><th>Type</th>
+<th>Intent</th><th>Optional</th>
+<th>Attributes</th><th></th><th>Name</th><th></th></thead>
+
+
+
+<tbody>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>class(<a href='../type/euler_1d.html'>euler_1D</a>),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>lhs</strong></td><td><p>Left hand side.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>class(<a href='../type/integrand.html'>integrand</a>),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>rhs</strong></td><td><p>Right hand side.</p></td>
+  
+</tr>
+
+</tbody>
+</table>
+
+      
+    
+    
+
+  
+  
+  
+  
+     <h4>Return Value <small>real(kind=R_P)
+  </small></h4>
+  <p>Error estimation.</p>
+    
+    
+    <h4>Description</h4>
+       
+       
+
+
+       
+       <p>Estimate local truncation error between 2 euler approximations.</p>
         
 
       
@@ -2441,7 +2544,7 @@ private subroutine <a href='../proc/euler_assign_real%7E3.html'>euler_assign_rea
          
     
     <h3>
-private purefunction <a href='../proc/primitive2conservative%7E5.html'>primitive2conservative</a>(self, primitive) result(conservative)
+private pure function <a href='../proc/primitive2conservative%7E5.html'>primitive2conservative</a>(self, primitive) result(conservative)
     
     
     
@@ -2542,7 +2645,7 @@ private purefunction <a href='../proc/primitive2conservative%7E5.html'>primitive
          
     
     <h3>
-private purefunction <a href='../proc/conservative2primitive%7E5.html'>conservative2primitive</a>(self, conservative) result(primitive)
+private pure function <a href='../proc/conservative2primitive%7E5.html'>conservative2primitive</a>(self, conservative) result(primitive)
     
     
     
@@ -2643,7 +2746,7 @@ private purefunction <a href='../proc/conservative2primitive%7E5.html'>conservat
          
     
     <h3>
-private puresubroutine <a href='../proc/impose_boundary_conditions%7E5.html'>impose_boundary_conditions</a>(self, primitive)
+private pure subroutine <a href='../proc/impose_boundary_conditions%7E5.html'>impose_boundary_conditions</a>(self, primitive)
     
     
     
@@ -2735,7 +2838,7 @@ private puresubroutine <a href='../proc/impose_boundary_conditions%7E5.html'>imp
          
     
     <h3>
-private puresubroutine <a href='../proc/reconstruct_interfaces_states%7E5.html'>reconstruct_interfaces_states</a>(self, primitive, r_primitive)
+private pure subroutine <a href='../proc/reconstruct_interfaces_states%7E5.html'>reconstruct_interfaces_states</a>(self, primitive, r_primitive)
     
     
     
@@ -2842,7 +2945,7 @@ private puresubroutine <a href='../proc/reconstruct_interfaces_states%7E5.html'>
          
     
     <h3>
-private puresubroutine <a href='../proc/riemann_solver%7E5.html'>riemann_solver</a>(self, p1, r1, u1, g1, p4, r4, u4, g4, F)
+private pure subroutine <a href='../proc/riemann_solver%7E5.html'>riemann_solver</a>(self, p1, r1, u1, g1, p4, r4, u4, g4, F)
     
     
     
@@ -3172,6 +3275,7 @@ private puresubroutine <a href='../proc/riemann_solver%7E5.html'>riemann_solver<
     <span class="k">procedure</span><span class="p">,</span> <span class="k">pass</span><span class="p">(</span><span class="n">self</span><span class="p">),</span> <span class="k">public</span> <span class="kd">::</span> <span class="n">dt</span> <span class="o">=&gt;</span> <span class="n">compute_dt</span> <span class="c">!&lt; Compute the current time step, by means of CFL condition.</span>
     <span class="c">! ADT integrand deferred methods</span>
     <span class="k">procedure</span><span class="p">,</span> <span class="k">pass</span><span class="p">(</span><span class="n">self</span><span class="p">),</span> <span class="k">public</span> <span class="kd">::</span> <span class="n">t</span> <span class="o">=&gt;</span> <span class="n">dEuler_dt</span>                                       <span class="c">!&lt; Time derivative, residuals function.</span>
+    <span class="k">procedure</span><span class="p">,</span> <span class="k">pass</span><span class="p">(</span><span class="n">lhs</span><span class="p">),</span>  <span class="k">public</span> <span class="kd">::</span> <span class="n">local_error</span> <span class="o">=&gt;</span> <span class="n">euler_local_error</span>                     <span class="c">!&lt; Local error.</span>
     <span class="k">procedure</span><span class="p">,</span> <span class="k">pass</span><span class="p">(</span><span class="n">self</span><span class="p">),</span> <span class="k">public</span> <span class="kd">::</span> <span class="n">update_previous_steps</span>                                <span class="c">!&lt; Update previous time steps.</span>
     <span class="k">procedure</span><span class="p">,</span> <span class="k">pass</span><span class="p">(</span><span class="n">self</span><span class="p">),</span> <span class="k">public</span> <span class="kd">::</span> <span class="n">previous_step</span>                                        <span class="c">!&lt; Get a previous time step.</span>
     <span class="k">procedure</span><span class="p">,</span> <span class="k">pass</span><span class="p">(</span><span class="n">lhs</span><span class="p">),</span>  <span class="k">public</span> <span class="kd">::</span> <span class="n">integrand_multiply_integrand</span> <span class="o">=&gt;</span> <span class="n">euler_multiply_euler</span> <span class="c">!&lt; Euler * Euler operator.</span>
@@ -3200,8 +3304,9 @@ private puresubroutine <a href='../proc/riemann_solver%7E5.html'>riemann_solver<
     <hr>
     <footer>
         <div class="row">
-        <div class="col-md-6">&copy; 2015 FOODIE was written by Fortran-FOSS-Programmers Group. </div>
-        <div class="col-md-6"><span class="pull-right">Documentation generated by <a href="https://github.com/cmacmackin/ford">FORD</a>.</span></div>
+        <div class="col-md-4">&copy; 2015 </div>
+	<div class="col-md-4"><span class="text-center"> FOODIE was developed by Fortran-FOSS-Programmers Group</span></div>
+        <div class="col-md-4"><span class="pull-right">Documentation generated by <a href="https://github.com/cmacmackin/ford">FORD</a></span></div>
         </div>
         <br>
     </footer>

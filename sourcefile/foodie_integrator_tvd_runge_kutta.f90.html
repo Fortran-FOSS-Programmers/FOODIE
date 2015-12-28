@@ -258,263 +258,263 @@
     <br>
     <section>
     <h2><span class="anchor" id="src"></span>Source Code</h2>
-    <div class="highlight"><pre><span class="c">!&lt; FOODIE integrator: provide an explicit class of TVD or SSP Runge-Kutta schemes, from 1st to 4th order accurate.</span>
-<span class="k">module </span><span class="n">foodie_integrator_tvd_runge_kutta</span>
-<span class="c">!-----------------------------------------------------------------------------------------------------------------------------------</span>
-<span class="c">!&lt; FOODIE integrator: provide an explicit class of TVD or SSP Runge-Kutta schemes, from 1st to 4th order accurate.</span>
-<span class="c">!&lt;</span>
-<span class="c">!&lt; The integrators provided have the Total Variation Diminishing (TVD) property or the Strong Stability Preserving (SSP)</span>
-<span class="c">!&lt; one. The schemes are explicit and defined through the Butcher&#39;s table syntax, see[1] .</span>
-<span class="c">!&lt;</span>
-<span class="c">!&lt; Considering the following ODE system:</span>
-<span class="c">!&lt;</span>
-<span class="c">!&lt; $$ U_t = R(t,U) $$</span>
-<span class="c">!&lt;</span>
-<span class="c">!&lt; where \(U_t = \frac{dU}{dt}\), *U* is the vector of *state* variables being a function of the time-like independent variable</span>
-<span class="c">!&lt; *t*, *R* is the (vectorial) residual function, the class of schemes implemented are written in the form:</span>
-<span class="c">!&lt;</span>
-<span class="c">!&lt; $$ U^{n+1} = U^n +\Delta t \sum_{s=1}^{Ns}\beta^s K^s $$</span>
-<span class="c">!&lt;</span>
-<span class="c">!&lt; where Ns is the number of stages used and \(K^s\) is the \(s^{th}\) stage computed as:</span>
-<span class="c">!&lt;</span>
-<span class="c">!&lt; $$ K^s = R\left( t^n+\gamma^s \Delta t, U^n +\Delta t \sum_{i=1}^{s-1}\alpha^{s,i} K^i \right) $$</span>
-<span class="c">!&lt;</span>
-<span class="c">!&lt; @note The value of \(\Delta t\) must be provided, it not being computed by the integrator.</span>
-<span class="c">!&lt;</span>
-<span class="c">!&lt; The schemes are explicit thus the above summation is up to \(s-1\). The coefficients \(\beta\), \(\alpha\) and \(\gamma\) are</span>
-<span class="c">!&lt; given in the Butcher table form:</span>
-<span class="c">!&lt;</span>
-<span class="c">!&lt;```</span>
-<span class="c">!&lt;  gamma^1    | alpha^{1,1}       alpha^{1,2}       ...        alpha^{1,Ns}</span>
-<span class="c">!&lt;  gamma^2    | alpha^{2,1}       alpha^{2,2}       ...        alpha^{2,Ns}</span>
-<span class="c">!&lt;  .          | .                 .                 .          .</span>
-<span class="c">!&lt;  .          | .                 .                  .         .</span>
-<span class="c">!&lt;  .          | .                 .                   .        .</span>
-<span class="c">!&lt;  gamma^{Ns} | alpha^{Ns,1}      alpha^{Ns,2}      ...        alpha^{Ns,Ns}</span>
-<span class="c">!&lt; ------------|-------------------------------------------------------------</span>
-<span class="c">!&lt;             | beta^1            beta^2            ...        beta^{Ns}</span>
-<span class="c">!&lt;```</span>
-<span class="c">!&lt;</span>
-<span class="c">!&lt; Because only explicit schemes are considered the Butcher table reduces to diagonal matrix:</span>
-<span class="c">!&lt;</span>
-<span class="c">!&lt;```</span>
-<span class="c">!&lt;  gamma^1    | 0                 0                 ...        0</span>
-<span class="c">!&lt;  gamma^2    | alpha^{2,1}       0                 ...        0</span>
-<span class="c">!&lt;  .          | .                 .                 .          .</span>
-<span class="c">!&lt;  .          | .                 .                  .         .</span>
-<span class="c">!&lt;  .          | .                 .                   .        .</span>
-<span class="c">!&lt;  gamma^{Ns} | alpha^{Ns,1}      alpha^{Ns,2}      ...        0</span>
-<span class="c">!&lt; ------------|-------------------------------------------------------------</span>
-<span class="c">!&lt;             | beta^1            beta^2            ...        beta^{Ns}</span>
-<span class="c">!&lt;```</span>
-<span class="c">!&lt;</span>
-<span class="c">!&lt; Moreover the following relation always holds:</span>
-<span class="c">!&lt; \( \gamma^s = \sum_{i=1}^{Ns}\alpha^{s,i} \)</span>
-<span class="c">!&lt;</span>
-<span class="c">!&lt; The different schemes are selected accordingly to the number of stages used. Currently the following schemes are available:</span>
-<span class="c">!&lt;</span>
-<span class="c">!&lt;##### 1 stage, Explicit Forward Euler, 1st order</span>
-<span class="c">!&lt; This scheme is TVD and reverts to Explicit Forward Euler, it being 1st order.</span>
-<span class="c">!&lt;```</span>
-<span class="c">!&lt;  0 | 0</span>
-<span class="c">!&lt; ---|---</span>
-<span class="c">!&lt;    | 1</span>
-<span class="c">!&lt;```</span>
-<span class="c">!&lt;</span>
-<span class="c">!&lt;##### 2 stages, SSP, 2nd order</span>
-<span class="c">!&lt; This scheme is an optmial SSP(2, 2) without low-storage algorithm, see [2].</span>
-<span class="c">!&lt;```</span>
-<span class="c">!&lt;  0 | 0     0</span>
-<span class="c">!&lt;  1 | 1     0</span>
-<span class="c">!&lt; ---|-----------</span>
-<span class="c">!&lt;    | 1/2   1/2</span>
-<span class="c">!&lt;```</span>
-<span class="c">!&lt;</span>
-<span class="c">!&lt;##### 3 stages, SSP, 3rd order</span>
-<span class="c">!&lt; This scheme is an optmial SSP(3, 3) without low-storage algorithm, see [2].</span>
-<span class="c">!&lt;```</span>
-<span class="c">!&lt;  0   | 0     0     0</span>
-<span class="c">!&lt;  1   | 1     0     0</span>
-<span class="c">!&lt;  1/2 | 1/4   1/4   0</span>
-<span class="c">!&lt; -----|-----------------</span>
-<span class="c">!&lt;      | 1/6   1/6   1/3</span>
-<span class="c">!&lt;```</span>
-<span class="c">!&lt;</span>
-<span class="c">!&lt;##### 5 stages, SSP, 4th order</span>
-<span class="c">!&lt; This scheme is an optmial SSP(5, 4) without low-storage algorithm, see [2].</span>
-<span class="c">!&lt;```</span>
-<span class="c">!&lt;  0                | 0                  0                  0                  0                  0</span>
-<span class="c">!&lt;  0.39175222700392 | 0.39175222700392   0                  0                  0                  0</span>
-<span class="c">!&lt;  0.58607968896780 | 0.21766909633821   0.36841059262959   0                  0                  0</span>
-<span class="c">!&lt;  0.47454236302687 | 0.08269208670950   0.13995850206999   0.25189177424738   0                  0</span>
-<span class="c">!&lt;  0.93501063100924 | 0.06796628370320   0.11503469844438   0.20703489864929   0.54497475021237   0</span>
-<span class="c">!&lt; ------------------|---------------------------------------------------------------------------------------------</span>
-<span class="c">!&lt;                   | 0.14681187618661   0.24848290924556   0.10425883036650   0.27443890091960   0.22600748319395</span>
-<span class="c">!&lt;```</span>
-<span class="c">!&lt;</span>
-<span class="c">!&lt;#### Bibliography</span>
-<span class="c">!&lt;</span>
-<span class="c">!&lt; [1] *Coefficients for the study of Runge-Kutta integration processes*, Butcher, J.C., J. Austral. Math. Soc., Vol. 3,</span>
-<span class="c">!&lt; pages: 185--201, 1963.</span>
-<span class="c">!&lt;</span>
-<span class="c">!&lt; [2] *High Order Strong Stability Preserving Time Discretizations*, Gottlieb, S., Ketcheson, D. I., Shu, C.W., Journal of</span>
-<span class="c">!&lt; Scientific Computing, vol. 38, N. 3, 2009, pp. 251-289.</span>
-<span class="c">!-----------------------------------------------------------------------------------------------------------------------------------</span>
-
-<span class="c">!-----------------------------------------------------------------------------------------------------------------------------------</span>
-<span class="k">use </span><span class="n">foodie_kinds</span><span class="p">,</span> <span class="n">only</span> <span class="p">:</span> <span class="n">R_P</span><span class="p">,</span> <span class="n">I_P</span>
-<span class="k">use </span><span class="n">foodie_adt_integrand</span><span class="p">,</span> <span class="n">only</span> <span class="p">:</span> <span class="n">integrand</span>
-<span class="c">!-----------------------------------------------------------------------------------------------------------------------------------</span>
-
-<span class="c">!-----------------------------------------------------------------------------------------------------------------------------------</span>
-<span class="k">implicit none</span>
-<span class="k">private</span>
-<span class="k">public</span> <span class="kd">::</span> <span class="n">tvd_runge_kutta_integrator</span>
-<span class="c">!-----------------------------------------------------------------------------------------------------------------------------------</span>
-
-<span class="c">!-----------------------------------------------------------------------------------------------------------------------------------</span>
-<span class="k">type</span> <span class="kd">::</span> <span class="n">tvd_runge_kutta_integrator</span>
-  <span class="c">!&lt; FOODIE integrator: provide an explicit class of TVD or SSP Runge-Kutta schemes, from 1st to 4th order accurate.</span>
-  <span class="c">!&lt;</span>
-  <span class="c">!&lt; @note The integrator must be created or initialized (initialize the RK coefficients) before used.</span>
-  <span class="kt">integer</span><span class="p">(</span><span class="n">I_P</span><span class="p">)</span>           <span class="kd">::</span> <span class="n">stages</span><span class="o">=</span><span class="mi">0</span>  <span class="c">!&lt; Number of stages.</span>
-  <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">),</span> <span class="k">allocatable</span> <span class="kd">::</span> <span class="n">alph</span><span class="p">(:,:)</span> <span class="c">!&lt; \(\alpha\) Butcher&#39;s coefficients.</span>
-  <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">),</span> <span class="k">allocatable</span> <span class="kd">::</span> <span class="n">beta</span><span class="p">(:)</span>   <span class="c">!&lt; \(\beta\) Butcher&#39;s coefficients.</span>
-  <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">),</span> <span class="k">allocatable</span> <span class="kd">::</span> <span class="n">gamm</span><span class="p">(:)</span>   <span class="c">!&lt; \(\gamma\) Butcher&#39;s coefficients.</span>
-  <span class="k">contains</span>
-<span class="k">    procedure</span><span class="p">,</span> <span class="k">pass</span><span class="p">(</span><span class="n">self</span><span class="p">),</span> <span class="k">public</span> <span class="kd">::</span> <span class="n">destroy</span>   <span class="c">!&lt; Destroy the integrator.</span>
-    <span class="k">procedure</span><span class="p">,</span> <span class="k">pass</span><span class="p">(</span><span class="n">self</span><span class="p">),</span> <span class="k">public</span> <span class="kd">::</span> <span class="n">init</span>      <span class="c">!&lt; Initialize (create) the integrator.</span>
-    <span class="k">procedure</span><span class="p">,</span> <span class="k">pass</span><span class="p">(</span><span class="n">self</span><span class="p">),</span> <span class="k">public</span> <span class="kd">::</span> <span class="n">integrate</span> <span class="c">!&lt; Integrate integrand field.</span>
-    <span class="k">final</span>                         <span class="kd">::</span> <span class="n">finalize</span>  <span class="c">!&lt; Finalize object.</span>
-<span class="n">endtype</span> <span class="n">tvd_runge_kutta_integrator</span>
-<span class="c">!-----------------------------------------------------------------------------------------------------------------------------------</span>
-<span class="k">contains</span>
-  <span class="c">! public methods</span>
-  <span class="k">elemental subroutine </span><span class="n">init</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">stages</span><span class="p">)</span>
-  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
-  <span class="c">!&lt; Create the actual RK integrator: initialize the Butcher&#39; table coefficients.</span>
-  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
-  <span class="k">class</span><span class="p">(</span><span class="n">tvd_runge_kutta_integrator</span><span class="p">),</span> <span class="k">intent</span><span class="p">(</span><span class="n">INOUT</span><span class="p">)</span> <span class="kd">::</span> <span class="n">self</span>   <span class="c">!&lt; RK integrator.</span>
-  <span class="kt">integer</span><span class="p">(</span><span class="n">I_P</span><span class="p">),</span>                      <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span>    <span class="kd">::</span> <span class="n">stages</span> <span class="c">!&lt; Number of stages used.</span>
-  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
-
-  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
-  <span class="k">if</span> <span class="p">(</span><span class="n">stages</span><span class="o">&lt;</span><span class="mi">1</span><span class="p">)</span> <span class="k">return</span> <span class="c">! error print should be added</span>
-  <span class="n">self</span><span class="p">%</span><span class="n">stages</span> <span class="o">=</span> <span class="n">stages</span>
-  <span class="k">if</span> <span class="p">(</span><span class="nb">allocated</span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">beta</span><span class="p">))</span> <span class="k">deallocate</span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">beta</span><span class="p">)</span> <span class="p">;</span> <span class="k">allocate</span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">beta</span><span class="p">(</span><span class="mi">1</span><span class="p">:</span><span class="n">stages</span>          <span class="p">))</span> <span class="p">;</span> <span class="n">self</span><span class="p">%</span><span class="n">beta</span> <span class="o">=</span> <span class="mf">0._R_P</span>
-  <span class="k">if</span> <span class="p">(</span><span class="nb">allocated</span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">alph</span><span class="p">))</span> <span class="k">deallocate</span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">alph</span><span class="p">)</span> <span class="p">;</span> <span class="k">allocate</span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">alph</span><span class="p">(</span><span class="mi">1</span><span class="p">:</span><span class="n">stages</span><span class="p">,</span> <span class="mi">1</span><span class="p">:</span><span class="n">stages</span><span class="p">))</span> <span class="p">;</span> <span class="n">self</span><span class="p">%</span><span class="n">alph</span> <span class="o">=</span> <span class="mf">0._R_P</span>
-  <span class="k">if</span> <span class="p">(</span><span class="nb">allocated</span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">gamm</span><span class="p">))</span> <span class="k">deallocate</span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">gamm</span><span class="p">)</span> <span class="p">;</span> <span class="k">allocate</span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">gamm</span><span class="p">(</span>          <span class="mi">1</span><span class="p">:</span><span class="n">stages</span><span class="p">))</span> <span class="p">;</span> <span class="n">self</span><span class="p">%</span><span class="n">gamm</span> <span class="o">=</span> <span class="mf">0._R_P</span>
-  <span class="k">select case</span><span class="p">(</span><span class="n">stages</span><span class="p">)</span>
-  <span class="k">case</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
-    <span class="c">! RK(1,1) Forward-Euler</span>
-    <span class="n">self</span><span class="p">%</span><span class="n">beta</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">=</span> <span class="mf">1._R_P</span>
-  <span class="k">case</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
-    <span class="c">! SSPRK(2,2)</span>
-    <span class="n">self</span><span class="p">%</span><span class="n">beta</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">=</span> <span class="mf">0.5_R_P</span>
-    <span class="n">self</span><span class="p">%</span><span class="n">beta</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span> <span class="o">=</span> <span class="mf">0.5_R_P</span>
-
-    <span class="n">self</span><span class="p">%</span><span class="n">alph</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span> <span class="o">=</span> <span class="mf">1._R_P</span>
-
-    <span class="n">self</span><span class="p">%</span><span class="n">gamm</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span> <span class="o">=</span> <span class="mf">1._R_P</span>
-  <span class="k">case</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
-    <span class="c">! SSPRK(3,3)</span>
-    <span class="n">self</span><span class="p">%</span><span class="n">beta</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">=</span> <span class="mf">1._R_P</span><span class="o">/</span><span class="mf">6._R_P</span>
-    <span class="n">self</span><span class="p">%</span><span class="n">beta</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span> <span class="o">=</span> <span class="mf">1._R_P</span><span class="o">/</span><span class="mf">6._R_P</span>
-    <span class="n">self</span><span class="p">%</span><span class="n">beta</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span> <span class="o">=</span> <span class="mf">2._R_P</span><span class="o">/</span><span class="mf">3._R_P</span>
-
-    <span class="n">self</span><span class="p">%</span><span class="n">alph</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span> <span class="o">=</span> <span class="mf">1._R_P</span>
-    <span class="n">self</span><span class="p">%</span><span class="n">alph</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span> <span class="o">=</span> <span class="mf">0.25_R_P</span> <span class="p">;</span> <span class="n">self</span><span class="p">%</span><span class="n">alph</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span> <span class="o">=</span> <span class="mf">0.25_R_P</span>
-
-    <span class="n">self</span><span class="p">%</span><span class="n">gamm</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span> <span class="o">=</span> <span class="mf">1._R_P</span>
-    <span class="n">self</span><span class="p">%</span><span class="n">gamm</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span> <span class="o">=</span> <span class="mf">0.5_R_P</span>
-  <span class="k">case</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
-    <span class="c">! SSPRK(5,4)</span>
-    <span class="n">self</span><span class="p">%</span><span class="n">beta</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">=</span> <span class="mf">0.14681187618661_R_P</span>
-    <span class="n">self</span><span class="p">%</span><span class="n">beta</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span> <span class="o">=</span> <span class="mf">0.24848290924556_R_P</span>
-    <span class="n">self</span><span class="p">%</span><span class="n">beta</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span> <span class="o">=</span> <span class="mf">0.10425883036650_R_P</span>
-    <span class="n">self</span><span class="p">%</span><span class="n">beta</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span> <span class="o">=</span> <span class="mf">0.27443890091960_R_P</span>
-    <span class="n">self</span><span class="p">%</span><span class="n">beta</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span> <span class="o">=</span> <span class="mf">0.22600748319395_R_P</span>
-
-    <span class="n">self</span><span class="p">%</span><span class="n">alph</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span><span class="o">=</span><span class="mf">0.39175222700392_R_P</span>
-    <span class="n">self</span><span class="p">%</span><span class="n">alph</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span><span class="o">=</span><span class="mf">0.21766909633821_R_P</span><span class="p">;</span><span class="n">self</span><span class="p">%</span><span class="n">alph</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span><span class="o">=</span><span class="mf">0.36841059262959_R_P</span>
-    <span class="n">self</span><span class="p">%</span><span class="n">alph</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span><span class="o">=</span><span class="mf">0.08269208670950_R_P</span><span class="p">;</span><span class="n">self</span><span class="p">%</span><span class="n">alph</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span><span class="o">=</span><span class="mf">0.13995850206999_R_P</span><span class="p">;</span><span class="n">self</span><span class="p">%</span><span class="n">alph</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span><span class="o">=</span><span class="mf">0.25189177424738_R_P</span>
-    <span class="n">self</span><span class="p">%</span><span class="n">alph</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span><span class="o">=</span><span class="mf">0.06796628370320_R_P</span><span class="p">;</span><span class="n">self</span><span class="p">%</span><span class="n">alph</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span><span class="o">=</span><span class="mf">0.11503469844438_R_P</span><span class="p">;</span><span class="n">self</span><span class="p">%</span><span class="n">alph</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span><span class="o">=</span><span class="mf">0.20703489864929_R_P</span>
-    <span class="n">self</span><span class="p">%</span><span class="n">alph</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">4</span><span class="p">)</span><span class="o">=</span><span class="mf">0.54497475021237_R_P</span>
-
-    <span class="n">self</span><span class="p">%</span><span class="n">gamm</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span> <span class="o">=</span> <span class="mf">0.39175222700392_R_P</span>
-    <span class="n">self</span><span class="p">%</span><span class="n">gamm</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span> <span class="o">=</span> <span class="mf">0.58607968896780_R_P</span>
-    <span class="n">self</span><span class="p">%</span><span class="n">gamm</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span> <span class="o">=</span> <span class="mf">0.47454236302687_R_P</span>
-    <span class="n">self</span><span class="p">%</span><span class="n">gamm</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span> <span class="o">=</span> <span class="mf">0.93501063100924_R_P</span>
-  <span class="n">endselect</span>
-  <span class="k">return</span>
-  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
-  <span class="n">endsubroutine</span> <span class="n">init</span>
-
-  <span class="k">elemental subroutine </span><span class="n">destroy</span><span class="p">(</span><span class="n">self</span><span class="p">)</span>
-  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
-  <span class="c">!&lt; Destroy the integrator.</span>
-  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
-  <span class="k">class</span><span class="p">(</span><span class="n">tvd_runge_kutta_integrator</span><span class="p">),</span> <span class="k">intent</span><span class="p">(</span><span class="n">INOUT</span><span class="p">)</span> <span class="kd">::</span> <span class="n">self</span> <span class="c">!&lt; Integrator.</span>
-  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
-
-  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
-  <span class="n">self</span><span class="p">%</span><span class="n">stages</span> <span class="o">=</span> <span class="mi">0</span>
-  <span class="k">if</span> <span class="p">(</span><span class="nb">allocated</span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">alph</span><span class="p">))</span> <span class="k">deallocate</span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">alph</span><span class="p">)</span>
-  <span class="k">if</span> <span class="p">(</span><span class="nb">allocated</span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">beta</span><span class="p">))</span> <span class="k">deallocate</span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">beta</span><span class="p">)</span>
-  <span class="k">if</span> <span class="p">(</span><span class="nb">allocated</span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">gamm</span><span class="p">))</span> <span class="k">deallocate</span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">gamm</span><span class="p">)</span>
-  <span class="k">return</span>
-  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
-  <span class="n">endsubroutine</span> <span class="n">destroy</span>
-
-  <span class="k">subroutine </span><span class="n">integrate</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">U</span><span class="p">,</span> <span class="n">stage</span><span class="p">,</span> <span class="n">Dt</span><span class="p">,</span> <span class="n">t</span><span class="p">)</span>
-  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
-  <span class="c">!&lt; Integrate field with explicit TVD (or SSP) Runge-Kutta scheme.</span>
-  <span class="c">!&lt;</span>
-  <span class="c">!&lt; @note This method can be used **after** the integrator is created (i.e. the RK coefficients are initialized).</span>
-  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
-  <span class="k">class</span><span class="p">(</span><span class="n">tvd_runge_kutta_integrator</span><span class="p">),</span> <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span>    <span class="kd">::</span> <span class="n">self</span>      <span class="c">!&lt; Actual RK integrator.</span>
-  <span class="k">class</span><span class="p">(</span><span class="n">integrand</span><span class="p">),</span>                  <span class="k">intent</span><span class="p">(</span><span class="n">INOUT</span><span class="p">)</span> <span class="kd">::</span> <span class="n">U</span>         <span class="c">!&lt; Field to be integrated.</span>
-  <span class="k">class</span><span class="p">(</span><span class="n">integrand</span><span class="p">),</span>                  <span class="k">intent</span><span class="p">(</span><span class="n">INOUT</span><span class="p">)</span> <span class="kd">::</span> <span class="n">stage</span><span class="p">(</span><span class="mi">1</span><span class="p">:)</span> <span class="c">!&lt; Runge-Kutta stages [1:stages].</span>
-  <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">),</span>                         <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span>    <span class="kd">::</span> <span class="n">Dt</span>        <span class="c">!&lt; Time step.</span>
-  <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">),</span>                         <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span>    <span class="kd">::</span> <span class="n">t</span>         <span class="c">!&lt; Time.</span>
-  <span class="kt">integer</span><span class="p">(</span><span class="n">I_P</span><span class="p">)</span>                                     <span class="kd">::</span> <span class="n">s</span>         <span class="c">!&lt; First stages counter.</span>
-  <span class="kt">integer</span><span class="p">(</span><span class="n">I_P</span><span class="p">)</span>                                     <span class="kd">::</span> <span class="n">ss</span>        <span class="c">!&lt; Second stages counter.</span>
-  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
-
-  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
-  <span class="k">select type</span><span class="p">(</span><span class="n">stage</span><span class="p">)</span>
-  <span class="k">class is</span><span class="p">(</span><span class="n">integrand</span><span class="p">)</span>
-    <span class="c">! computing stages</span>
-    <span class="k">do </span><span class="n">s</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">self</span><span class="p">%</span><span class="n">stages</span>
-      <span class="n">stage</span><span class="p">(</span><span class="n">s</span><span class="p">)</span> <span class="o">=</span> <span class="n">U</span>
-      <span class="k">do </span><span class="n">ss</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">s</span> <span class="o">-</span> <span class="mi">1</span>
-        <span class="n">stage</span><span class="p">(</span><span class="n">s</span><span class="p">)</span> <span class="o">=</span> <span class="n">stage</span><span class="p">(</span><span class="n">s</span><span class="p">)</span> <span class="o">+</span> <span class="n">stage</span><span class="p">(</span><span class="n">ss</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="n">Dt</span> <span class="o">*</span> <span class="n">self</span><span class="p">%</span><span class="n">alph</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">ss</span><span class="p">))</span>
-      <span class="n">enddo</span>
-      <span class="n">stage</span><span class="p">(</span><span class="n">s</span><span class="p">)</span> <span class="o">=</span> <span class="n">stage</span><span class="p">(</span><span class="n">s</span><span class="p">)%</span><span class="n">t</span><span class="p">(</span><span class="n">t</span><span class="o">=</span><span class="n">t</span> <span class="o">+</span> <span class="n">self</span><span class="p">%</span><span class="n">gamm</span><span class="p">(</span><span class="n">s</span><span class="p">)</span> <span class="o">*</span> <span class="n">Dt</span><span class="p">)</span>
-    <span class="n">enddo</span>
-    <span class="c">! computing new time step</span>
-    <span class="k">do </span><span class="n">s</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">self</span><span class="p">%</span><span class="n">stages</span>
-      <span class="n">U</span> <span class="o">=</span> <span class="n">U</span> <span class="o">+</span> <span class="n">stage</span><span class="p">(</span><span class="n">s</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="n">Dt</span> <span class="o">*</span> <span class="n">self</span><span class="p">%</span><span class="n">beta</span><span class="p">(</span><span class="n">s</span><span class="p">))</span>
-    <span class="n">enddo</span>
-  <span class="n">endselect</span>
-  <span class="k">return</span>
-  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
-  <span class="n">endsubroutine</span> <span class="n">integrate</span>
-
-  <span class="c">! private methods</span>
-  <span class="k">elemental subroutine </span><span class="n">finalize</span><span class="p">(</span><span class="n">self</span><span class="p">)</span>
-  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
-  <span class="c">!&lt; Finalize object.</span>
-  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
-  <span class="k">type</span><span class="p">(</span><span class="n">tvd_runge_kutta_integrator</span><span class="p">),</span> <span class="k">intent</span><span class="p">(</span><span class="n">INOUT</span><span class="p">)</span> <span class="kd">::</span> <span class="n">self</span> <span class="c">!&lt; Integrator.</span>
-  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
-
-  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
-  <span class="k">call </span><span class="n">self</span><span class="p">%</span><span class="n">destroy</span>
-  <span class="k">return</span>
-  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
-  <span class="n">endsubroutine</span> <span class="n">finalize</span>
-<span class="n">endmodule</span> <span class="n">foodie_integrator_tvd_runge_kutta</span>
+    <div class="hl"><pre><a name="ln-1"></a><span class="c">!&lt; FOODIE integrator: provide an explicit class of TVD or SSP Runge-Kutta schemes, from 1st to 4th order accurate.</span>
+<a name="ln-2"></a><span class="k">module </span><span class="n">foodie_integrator_tvd_runge_kutta</span>
+<a name="ln-3"></a><span class="c">!-----------------------------------------------------------------------------------------------------------------------------------</span>
+<a name="ln-4"></a><span class="c">!&lt; FOODIE integrator: provide an explicit class of TVD or SSP Runge-Kutta schemes, from 1st to 4th order accurate.</span>
+<a name="ln-5"></a><span class="c">!&lt;</span>
+<a name="ln-6"></a><span class="c">!&lt; The integrators provided have the Total Variation Diminishing (TVD) property or the Strong Stability Preserving (SSP)</span>
+<a name="ln-7"></a><span class="c">!&lt; one. The schemes are explicit and defined through the Butcher&#39;s table syntax, see[1] .</span>
+<a name="ln-8"></a><span class="c">!&lt;</span>
+<a name="ln-9"></a><span class="c">!&lt; Considering the following ODE system:</span>
+<a name="ln-10"></a><span class="c">!&lt;</span>
+<a name="ln-11"></a><span class="c">!&lt; $$ U_t = R(t,U) $$</span>
+<a name="ln-12"></a><span class="c">!&lt;</span>
+<a name="ln-13"></a><span class="c">!&lt; where \(U_t = \frac{dU}{dt}\), *U* is the vector of *state* variables being a function of the time-like independent variable</span>
+<a name="ln-14"></a><span class="c">!&lt; *t*, *R* is the (vectorial) residual function, the class of schemes implemented are written in the form:</span>
+<a name="ln-15"></a><span class="c">!&lt;</span>
+<a name="ln-16"></a><span class="c">!&lt; $$ U^{n+1} = U^n +\Delta t \sum_{s=1}^{Ns}\beta^s K^s $$</span>
+<a name="ln-17"></a><span class="c">!&lt;</span>
+<a name="ln-18"></a><span class="c">!&lt; where Ns is the number of stages used and \(K^s\) is the \(s^{th}\) stage computed as:</span>
+<a name="ln-19"></a><span class="c">!&lt;</span>
+<a name="ln-20"></a><span class="c">!&lt; $$ K^s = R\left( t^n+\gamma^s \Delta t, U^n +\Delta t \sum_{i=1}^{s-1}\alpha^{s,i} K^i \right) $$</span>
+<a name="ln-21"></a><span class="c">!&lt;</span>
+<a name="ln-22"></a><span class="c">!&lt; @note The value of \(\Delta t\) must be provided, it not being computed by the integrator.</span>
+<a name="ln-23"></a><span class="c">!&lt;</span>
+<a name="ln-24"></a><span class="c">!&lt; The schemes are explicit thus the above summation is up to \(s-1\). The coefficients \(\beta\), \(\alpha\) and \(\gamma\) are</span>
+<a name="ln-25"></a><span class="c">!&lt; given in the Butcher table form:</span>
+<a name="ln-26"></a><span class="c">!&lt;</span>
+<a name="ln-27"></a><span class="c">!&lt;```</span>
+<a name="ln-28"></a><span class="c">!&lt;  gamma^1    | alpha^{1,1}       alpha^{1,2}       ...        alpha^{1,Ns}</span>
+<a name="ln-29"></a><span class="c">!&lt;  gamma^2    | alpha^{2,1}       alpha^{2,2}       ...        alpha^{2,Ns}</span>
+<a name="ln-30"></a><span class="c">!&lt;  .          | .                 .                 .          .</span>
+<a name="ln-31"></a><span class="c">!&lt;  .          | .                 .                  .         .</span>
+<a name="ln-32"></a><span class="c">!&lt;  .          | .                 .                   .        .</span>
+<a name="ln-33"></a><span class="c">!&lt;  gamma^{Ns} | alpha^{Ns,1}      alpha^{Ns,2}      ...        alpha^{Ns,Ns}</span>
+<a name="ln-34"></a><span class="c">!&lt; ------------|-------------------------------------------------------------</span>
+<a name="ln-35"></a><span class="c">!&lt;             | beta^1            beta^2            ...        beta^{Ns}</span>
+<a name="ln-36"></a><span class="c">!&lt;```</span>
+<a name="ln-37"></a><span class="c">!&lt;</span>
+<a name="ln-38"></a><span class="c">!&lt; Because only explicit schemes are considered the Butcher table reduces to diagonal matrix:</span>
+<a name="ln-39"></a><span class="c">!&lt;</span>
+<a name="ln-40"></a><span class="c">!&lt;```</span>
+<a name="ln-41"></a><span class="c">!&lt;  gamma^1    | 0                 0                 ...        0</span>
+<a name="ln-42"></a><span class="c">!&lt;  gamma^2    | alpha^{2,1}       0                 ...        0</span>
+<a name="ln-43"></a><span class="c">!&lt;  .          | .                 .                 .          .</span>
+<a name="ln-44"></a><span class="c">!&lt;  .          | .                 .                  .         .</span>
+<a name="ln-45"></a><span class="c">!&lt;  .          | .                 .                   .        .</span>
+<a name="ln-46"></a><span class="c">!&lt;  gamma^{Ns} | alpha^{Ns,1}      alpha^{Ns,2}      ...        0</span>
+<a name="ln-47"></a><span class="c">!&lt; ------------|-------------------------------------------------------------</span>
+<a name="ln-48"></a><span class="c">!&lt;             | beta^1            beta^2            ...        beta^{Ns}</span>
+<a name="ln-49"></a><span class="c">!&lt;```</span>
+<a name="ln-50"></a><span class="c">!&lt;</span>
+<a name="ln-51"></a><span class="c">!&lt; Moreover the following relation always holds:</span>
+<a name="ln-52"></a><span class="c">!&lt; \( \gamma^s = \sum_{i=1}^{Ns}\alpha^{s,i} \)</span>
+<a name="ln-53"></a><span class="c">!&lt;</span>
+<a name="ln-54"></a><span class="c">!&lt; The different schemes are selected accordingly to the number of stages used. Currently the following schemes are available:</span>
+<a name="ln-55"></a><span class="c">!&lt;</span>
+<a name="ln-56"></a><span class="c">!&lt;##### 1 stage, Explicit Forward Euler, 1st order</span>
+<a name="ln-57"></a><span class="c">!&lt; This scheme is TVD and reverts to Explicit Forward Euler, it being 1st order.</span>
+<a name="ln-58"></a><span class="c">!&lt;```</span>
+<a name="ln-59"></a><span class="c">!&lt;  0 | 0</span>
+<a name="ln-60"></a><span class="c">!&lt; ---|---</span>
+<a name="ln-61"></a><span class="c">!&lt;    | 1</span>
+<a name="ln-62"></a><span class="c">!&lt;```</span>
+<a name="ln-63"></a><span class="c">!&lt;</span>
+<a name="ln-64"></a><span class="c">!&lt;##### 2 stages, SSP, 2nd order</span>
+<a name="ln-65"></a><span class="c">!&lt; This scheme is an optmial SSP(2, 2) without low-storage algorithm, see [2].</span>
+<a name="ln-66"></a><span class="c">!&lt;```</span>
+<a name="ln-67"></a><span class="c">!&lt;  0 | 0     0</span>
+<a name="ln-68"></a><span class="c">!&lt;  1 | 1     0</span>
+<a name="ln-69"></a><span class="c">!&lt; ---|-----------</span>
+<a name="ln-70"></a><span class="c">!&lt;    | 1/2   1/2</span>
+<a name="ln-71"></a><span class="c">!&lt;```</span>
+<a name="ln-72"></a><span class="c">!&lt;</span>
+<a name="ln-73"></a><span class="c">!&lt;##### 3 stages, SSP, 3rd order</span>
+<a name="ln-74"></a><span class="c">!&lt; This scheme is an optmial SSP(3, 3) without low-storage algorithm, see [2].</span>
+<a name="ln-75"></a><span class="c">!&lt;```</span>
+<a name="ln-76"></a><span class="c">!&lt;  0   | 0     0     0</span>
+<a name="ln-77"></a><span class="c">!&lt;  1   | 1     0     0</span>
+<a name="ln-78"></a><span class="c">!&lt;  1/2 | 1/4   1/4   0</span>
+<a name="ln-79"></a><span class="c">!&lt; -----|-----------------</span>
+<a name="ln-80"></a><span class="c">!&lt;      | 1/6   1/6   1/3</span>
+<a name="ln-81"></a><span class="c">!&lt;```</span>
+<a name="ln-82"></a><span class="c">!&lt;</span>
+<a name="ln-83"></a><span class="c">!&lt;##### 5 stages, SSP, 4th order</span>
+<a name="ln-84"></a><span class="c">!&lt; This scheme is an optmial SSP(5, 4) without low-storage algorithm, see [2].</span>
+<a name="ln-85"></a><span class="c">!&lt;```</span>
+<a name="ln-86"></a><span class="c">!&lt;  0                | 0                  0                  0                  0                  0</span>
+<a name="ln-87"></a><span class="c">!&lt;  0.39175222700392 | 0.39175222700392   0                  0                  0                  0</span>
+<a name="ln-88"></a><span class="c">!&lt;  0.58607968896780 | 0.21766909633821   0.36841059262959   0                  0                  0</span>
+<a name="ln-89"></a><span class="c">!&lt;  0.47454236302687 | 0.08269208670950   0.13995850206999   0.25189177424738   0                  0</span>
+<a name="ln-90"></a><span class="c">!&lt;  0.93501063100924 | 0.06796628370320   0.11503469844438   0.20703489864929   0.54497475021237   0</span>
+<a name="ln-91"></a><span class="c">!&lt; ------------------|---------------------------------------------------------------------------------------------</span>
+<a name="ln-92"></a><span class="c">!&lt;                   | 0.14681187618661   0.24848290924556   0.10425883036650   0.27443890091960   0.22600748319395</span>
+<a name="ln-93"></a><span class="c">!&lt;```</span>
+<a name="ln-94"></a><span class="c">!&lt;</span>
+<a name="ln-95"></a><span class="c">!&lt;#### Bibliography</span>
+<a name="ln-96"></a><span class="c">!&lt;</span>
+<a name="ln-97"></a><span class="c">!&lt; [1] *Coefficients for the study of Runge-Kutta integration processes*, Butcher, J.C., J. Austral. Math. Soc., Vol. 3,</span>
+<a name="ln-98"></a><span class="c">!&lt; pages: 185--201, 1963.</span>
+<a name="ln-99"></a><span class="c">!&lt;</span>
+<a name="ln-100"></a><span class="c">!&lt; [2] *High Order Strong Stability Preserving Time Discretizations*, Gottlieb, S., Ketcheson, D. I., Shu, C.W., Journal of</span>
+<a name="ln-101"></a><span class="c">!&lt; Scientific Computing, vol. 38, N. 3, 2009, pp. 251-289.</span>
+<a name="ln-102"></a><span class="c">!-----------------------------------------------------------------------------------------------------------------------------------</span>
+<a name="ln-103"></a>
+<a name="ln-104"></a><span class="c">!-----------------------------------------------------------------------------------------------------------------------------------</span>
+<a name="ln-105"></a><span class="k">use </span><span class="n">foodie_kinds</span><span class="p">,</span> <span class="n">only</span> <span class="p">:</span> <span class="n">R_P</span><span class="p">,</span> <span class="n">I_P</span>
+<a name="ln-106"></a><span class="k">use </span><span class="n">foodie_adt_integrand</span><span class="p">,</span> <span class="n">only</span> <span class="p">:</span> <span class="n">integrand</span>
+<a name="ln-107"></a><span class="c">!-----------------------------------------------------------------------------------------------------------------------------------</span>
+<a name="ln-108"></a>
+<a name="ln-109"></a><span class="c">!-----------------------------------------------------------------------------------------------------------------------------------</span>
+<a name="ln-110"></a><span class="k">implicit none</span>
+<a name="ln-111"></a><span class="k">private</span>
+<a name="ln-112"></a><span class="k">public</span> <span class="kd">::</span> <span class="n">tvd_runge_kutta_integrator</span>
+<a name="ln-113"></a><span class="c">!-----------------------------------------------------------------------------------------------------------------------------------</span>
+<a name="ln-114"></a>
+<a name="ln-115"></a><span class="c">!-----------------------------------------------------------------------------------------------------------------------------------</span>
+<a name="ln-116"></a><span class="k">type</span> <span class="kd">::</span> <span class="n">tvd_runge_kutta_integrator</span>
+<a name="ln-117"></a>  <span class="c">!&lt; FOODIE integrator: provide an explicit class of TVD or SSP Runge-Kutta schemes, from 1st to 4th order accurate.</span>
+<a name="ln-118"></a>  <span class="c">!&lt;</span>
+<a name="ln-119"></a>  <span class="c">!&lt; @note The integrator must be created or initialized (initialize the RK coefficients) before used.</span>
+<a name="ln-120"></a>  <span class="kt">integer</span><span class="p">(</span><span class="n">I_P</span><span class="p">)</span>           <span class="kd">::</span> <span class="n">stages</span><span class="o">=</span><span class="mi">0</span>  <span class="c">!&lt; Number of stages.</span>
+<a name="ln-121"></a>  <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">),</span> <span class="k">allocatable</span> <span class="kd">::</span> <span class="n">alph</span><span class="p">(:,:)</span> <span class="c">!&lt; \(\alpha\) Butcher&#39;s coefficients.</span>
+<a name="ln-122"></a>  <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">),</span> <span class="k">allocatable</span> <span class="kd">::</span> <span class="n">beta</span><span class="p">(:)</span>   <span class="c">!&lt; \(\beta\) Butcher&#39;s coefficients.</span>
+<a name="ln-123"></a>  <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">),</span> <span class="k">allocatable</span> <span class="kd">::</span> <span class="n">gamm</span><span class="p">(:)</span>   <span class="c">!&lt; \(\gamma\) Butcher&#39;s coefficients.</span>
+<a name="ln-124"></a>  <span class="k">contains</span>
+<a name="ln-125"></a><span class="k">    procedure</span><span class="p">,</span> <span class="k">pass</span><span class="p">(</span><span class="n">self</span><span class="p">),</span> <span class="k">public</span> <span class="kd">::</span> <span class="n">destroy</span>   <span class="c">!&lt; Destroy the integrator.</span>
+<a name="ln-126"></a>    <span class="k">procedure</span><span class="p">,</span> <span class="k">pass</span><span class="p">(</span><span class="n">self</span><span class="p">),</span> <span class="k">public</span> <span class="kd">::</span> <span class="n">init</span>      <span class="c">!&lt; Initialize (create) the integrator.</span>
+<a name="ln-127"></a>    <span class="k">procedure</span><span class="p">,</span> <span class="k">pass</span><span class="p">(</span><span class="n">self</span><span class="p">),</span> <span class="k">public</span> <span class="kd">::</span> <span class="n">integrate</span> <span class="c">!&lt; Integrate integrand field.</span>
+<a name="ln-128"></a>    <span class="k">final</span>                         <span class="kd">::</span> <span class="n">finalize</span>  <span class="c">!&lt; Finalize object.</span>
+<a name="ln-129"></a><span class="n">endtype</span> <span class="n">tvd_runge_kutta_integrator</span>
+<a name="ln-130"></a><span class="c">!-----------------------------------------------------------------------------------------------------------------------------------</span>
+<a name="ln-131"></a><span class="k">contains</span>
+<a name="ln-132"></a>  <span class="c">! public methods</span>
+<a name="ln-133"></a>  <span class="k">elemental subroutine </span><span class="n">init</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">stages</span><span class="p">)</span>
+<a name="ln-134"></a>  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+<a name="ln-135"></a>  <span class="c">!&lt; Create the actual RK integrator: initialize the Butcher&#39; table coefficients.</span>
+<a name="ln-136"></a>  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+<a name="ln-137"></a>  <span class="k">class</span><span class="p">(</span><span class="n">tvd_runge_kutta_integrator</span><span class="p">),</span> <span class="k">intent</span><span class="p">(</span><span class="n">INOUT</span><span class="p">)</span> <span class="kd">::</span> <span class="n">self</span>   <span class="c">!&lt; RK integrator.</span>
+<a name="ln-138"></a>  <span class="kt">integer</span><span class="p">(</span><span class="n">I_P</span><span class="p">),</span>                      <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span>    <span class="kd">::</span> <span class="n">stages</span> <span class="c">!&lt; Number of stages used.</span>
+<a name="ln-139"></a>  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+<a name="ln-140"></a>
+<a name="ln-141"></a>  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+<a name="ln-142"></a>  <span class="k">if</span> <span class="p">(</span><span class="n">stages</span><span class="o">&lt;</span><span class="mi">1</span><span class="p">)</span> <span class="k">return</span> <span class="c">! error print should be added</span>
+<a name="ln-143"></a>  <span class="n">self</span><span class="p">%</span><span class="n">stages</span> <span class="o">=</span> <span class="n">stages</span>
+<a name="ln-144"></a>  <span class="k">if</span> <span class="p">(</span><span class="nb">allocated</span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">beta</span><span class="p">))</span> <span class="k">deallocate</span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">beta</span><span class="p">)</span> <span class="p">;</span> <span class="k">allocate</span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">beta</span><span class="p">(</span><span class="mi">1</span><span class="p">:</span><span class="n">stages</span>          <span class="p">))</span> <span class="p">;</span> <span class="n">self</span><span class="p">%</span><span class="n">beta</span> <span class="o">=</span> <span class="mf">0._R_P</span>
+<a name="ln-145"></a>  <span class="k">if</span> <span class="p">(</span><span class="nb">allocated</span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">alph</span><span class="p">))</span> <span class="k">deallocate</span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">alph</span><span class="p">)</span> <span class="p">;</span> <span class="k">allocate</span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">alph</span><span class="p">(</span><span class="mi">1</span><span class="p">:</span><span class="n">stages</span><span class="p">,</span> <span class="mi">1</span><span class="p">:</span><span class="n">stages</span><span class="p">))</span> <span class="p">;</span> <span class="n">self</span><span class="p">%</span><span class="n">alph</span> <span class="o">=</span> <span class="mf">0._R_P</span>
+<a name="ln-146"></a>  <span class="k">if</span> <span class="p">(</span><span class="nb">allocated</span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">gamm</span><span class="p">))</span> <span class="k">deallocate</span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">gamm</span><span class="p">)</span> <span class="p">;</span> <span class="k">allocate</span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">gamm</span><span class="p">(</span>          <span class="mi">1</span><span class="p">:</span><span class="n">stages</span><span class="p">))</span> <span class="p">;</span> <span class="n">self</span><span class="p">%</span><span class="n">gamm</span> <span class="o">=</span> <span class="mf">0._R_P</span>
+<a name="ln-147"></a>  <span class="k">select case</span><span class="p">(</span><span class="n">stages</span><span class="p">)</span>
+<a name="ln-148"></a>  <span class="k">case</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+<a name="ln-149"></a>    <span class="c">! RK(1,1) Forward-Euler</span>
+<a name="ln-150"></a>    <span class="n">self</span><span class="p">%</span><span class="n">beta</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">=</span> <span class="mf">1._R_P</span>
+<a name="ln-151"></a>  <span class="k">case</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+<a name="ln-152"></a>    <span class="c">! SSPRK(2,2)</span>
+<a name="ln-153"></a>    <span class="n">self</span><span class="p">%</span><span class="n">beta</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">=</span> <span class="mf">0.5_R_P</span>
+<a name="ln-154"></a>    <span class="n">self</span><span class="p">%</span><span class="n">beta</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span> <span class="o">=</span> <span class="mf">0.5_R_P</span>
+<a name="ln-155"></a>
+<a name="ln-156"></a>    <span class="n">self</span><span class="p">%</span><span class="n">alph</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span> <span class="o">=</span> <span class="mf">1._R_P</span>
+<a name="ln-157"></a>
+<a name="ln-158"></a>    <span class="n">self</span><span class="p">%</span><span class="n">gamm</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span> <span class="o">=</span> <span class="mf">1._R_P</span>
+<a name="ln-159"></a>  <span class="k">case</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
+<a name="ln-160"></a>    <span class="c">! SSPRK(3,3)</span>
+<a name="ln-161"></a>    <span class="n">self</span><span class="p">%</span><span class="n">beta</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">=</span> <span class="mf">1._R_P</span><span class="o">/</span><span class="mf">6._R_P</span>
+<a name="ln-162"></a>    <span class="n">self</span><span class="p">%</span><span class="n">beta</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span> <span class="o">=</span> <span class="mf">1._R_P</span><span class="o">/</span><span class="mf">6._R_P</span>
+<a name="ln-163"></a>    <span class="n">self</span><span class="p">%</span><span class="n">beta</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span> <span class="o">=</span> <span class="mf">2._R_P</span><span class="o">/</span><span class="mf">3._R_P</span>
+<a name="ln-164"></a>
+<a name="ln-165"></a>    <span class="n">self</span><span class="p">%</span><span class="n">alph</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span> <span class="o">=</span> <span class="mf">1._R_P</span>
+<a name="ln-166"></a>    <span class="n">self</span><span class="p">%</span><span class="n">alph</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span> <span class="o">=</span> <span class="mf">0.25_R_P</span> <span class="p">;</span> <span class="n">self</span><span class="p">%</span><span class="n">alph</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span> <span class="o">=</span> <span class="mf">0.25_R_P</span>
+<a name="ln-167"></a>
+<a name="ln-168"></a>    <span class="n">self</span><span class="p">%</span><span class="n">gamm</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span> <span class="o">=</span> <span class="mf">1._R_P</span>
+<a name="ln-169"></a>    <span class="n">self</span><span class="p">%</span><span class="n">gamm</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span> <span class="o">=</span> <span class="mf">0.5_R_P</span>
+<a name="ln-170"></a>  <span class="k">case</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
+<a name="ln-171"></a>    <span class="c">! SSPRK(5,4)</span>
+<a name="ln-172"></a>    <span class="n">self</span><span class="p">%</span><span class="n">beta</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">=</span> <span class="mf">0.14681187618661_R_P</span>
+<a name="ln-173"></a>    <span class="n">self</span><span class="p">%</span><span class="n">beta</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span> <span class="o">=</span> <span class="mf">0.24848290924556_R_P</span>
+<a name="ln-174"></a>    <span class="n">self</span><span class="p">%</span><span class="n">beta</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span> <span class="o">=</span> <span class="mf">0.10425883036650_R_P</span>
+<a name="ln-175"></a>    <span class="n">self</span><span class="p">%</span><span class="n">beta</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span> <span class="o">=</span> <span class="mf">0.27443890091960_R_P</span>
+<a name="ln-176"></a>    <span class="n">self</span><span class="p">%</span><span class="n">beta</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span> <span class="o">=</span> <span class="mf">0.22600748319395_R_P</span>
+<a name="ln-177"></a>
+<a name="ln-178"></a>    <span class="n">self</span><span class="p">%</span><span class="n">alph</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span><span class="o">=</span><span class="mf">0.39175222700392_R_P</span>
+<a name="ln-179"></a>    <span class="n">self</span><span class="p">%</span><span class="n">alph</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span><span class="o">=</span><span class="mf">0.21766909633821_R_P</span><span class="p">;</span><span class="n">self</span><span class="p">%</span><span class="n">alph</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span><span class="o">=</span><span class="mf">0.36841059262959_R_P</span>
+<a name="ln-180"></a>    <span class="n">self</span><span class="p">%</span><span class="n">alph</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span><span class="o">=</span><span class="mf">0.08269208670950_R_P</span><span class="p">;</span><span class="n">self</span><span class="p">%</span><span class="n">alph</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span><span class="o">=</span><span class="mf">0.13995850206999_R_P</span><span class="p">;</span><span class="n">self</span><span class="p">%</span><span class="n">alph</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span><span class="o">=</span><span class="mf">0.25189177424738_R_P</span>
+<a name="ln-181"></a>    <span class="n">self</span><span class="p">%</span><span class="n">alph</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span><span class="o">=</span><span class="mf">0.06796628370320_R_P</span><span class="p">;</span><span class="n">self</span><span class="p">%</span><span class="n">alph</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span><span class="o">=</span><span class="mf">0.11503469844438_R_P</span><span class="p">;</span><span class="n">self</span><span class="p">%</span><span class="n">alph</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span><span class="o">=</span><span class="mf">0.20703489864929_R_P</span>
+<a name="ln-182"></a>    <span class="n">self</span><span class="p">%</span><span class="n">alph</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">4</span><span class="p">)</span><span class="o">=</span><span class="mf">0.54497475021237_R_P</span>
+<a name="ln-183"></a>
+<a name="ln-184"></a>    <span class="n">self</span><span class="p">%</span><span class="n">gamm</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span> <span class="o">=</span> <span class="mf">0.39175222700392_R_P</span>
+<a name="ln-185"></a>    <span class="n">self</span><span class="p">%</span><span class="n">gamm</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span> <span class="o">=</span> <span class="mf">0.58607968896780_R_P</span>
+<a name="ln-186"></a>    <span class="n">self</span><span class="p">%</span><span class="n">gamm</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span> <span class="o">=</span> <span class="mf">0.47454236302687_R_P</span>
+<a name="ln-187"></a>    <span class="n">self</span><span class="p">%</span><span class="n">gamm</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span> <span class="o">=</span> <span class="mf">0.93501063100924_R_P</span>
+<a name="ln-188"></a>  <span class="n">endselect</span>
+<a name="ln-189"></a>  <span class="k">return</span>
+<a name="ln-190"></a>  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+<a name="ln-191"></a>  <span class="n">endsubroutine</span> <span class="n">init</span>
+<a name="ln-192"></a>
+<a name="ln-193"></a>  <span class="k">elemental subroutine </span><span class="n">destroy</span><span class="p">(</span><span class="n">self</span><span class="p">)</span>
+<a name="ln-194"></a>  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+<a name="ln-195"></a>  <span class="c">!&lt; Destroy the integrator.</span>
+<a name="ln-196"></a>  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+<a name="ln-197"></a>  <span class="k">class</span><span class="p">(</span><span class="n">tvd_runge_kutta_integrator</span><span class="p">),</span> <span class="k">intent</span><span class="p">(</span><span class="n">INOUT</span><span class="p">)</span> <span class="kd">::</span> <span class="n">self</span> <span class="c">!&lt; Integrator.</span>
+<a name="ln-198"></a>  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+<a name="ln-199"></a>
+<a name="ln-200"></a>  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+<a name="ln-201"></a>  <span class="n">self</span><span class="p">%</span><span class="n">stages</span> <span class="o">=</span> <span class="mi">0</span>
+<a name="ln-202"></a>  <span class="k">if</span> <span class="p">(</span><span class="nb">allocated</span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">alph</span><span class="p">))</span> <span class="k">deallocate</span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">alph</span><span class="p">)</span>
+<a name="ln-203"></a>  <span class="k">if</span> <span class="p">(</span><span class="nb">allocated</span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">beta</span><span class="p">))</span> <span class="k">deallocate</span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">beta</span><span class="p">)</span>
+<a name="ln-204"></a>  <span class="k">if</span> <span class="p">(</span><span class="nb">allocated</span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">gamm</span><span class="p">))</span> <span class="k">deallocate</span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">gamm</span><span class="p">)</span>
+<a name="ln-205"></a>  <span class="k">return</span>
+<a name="ln-206"></a>  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+<a name="ln-207"></a>  <span class="n">endsubroutine</span> <span class="n">destroy</span>
+<a name="ln-208"></a>
+<a name="ln-209"></a>  <span class="k">subroutine </span><span class="n">integrate</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">U</span><span class="p">,</span> <span class="n">stage</span><span class="p">,</span> <span class="n">Dt</span><span class="p">,</span> <span class="n">t</span><span class="p">)</span>
+<a name="ln-210"></a>  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+<a name="ln-211"></a>  <span class="c">!&lt; Integrate field with explicit TVD (or SSP) Runge-Kutta scheme.</span>
+<a name="ln-212"></a>  <span class="c">!&lt;</span>
+<a name="ln-213"></a>  <span class="c">!&lt; @note This method can be used **after** the integrator is created (i.e. the RK coefficients are initialized).</span>
+<a name="ln-214"></a>  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+<a name="ln-215"></a>  <span class="k">class</span><span class="p">(</span><span class="n">tvd_runge_kutta_integrator</span><span class="p">),</span> <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span>    <span class="kd">::</span> <span class="n">self</span>      <span class="c">!&lt; Actual RK integrator.</span>
+<a name="ln-216"></a>  <span class="k">class</span><span class="p">(</span><span class="n">integrand</span><span class="p">),</span>                  <span class="k">intent</span><span class="p">(</span><span class="n">INOUT</span><span class="p">)</span> <span class="kd">::</span> <span class="n">U</span>         <span class="c">!&lt; Field to be integrated.</span>
+<a name="ln-217"></a>  <span class="k">class</span><span class="p">(</span><span class="n">integrand</span><span class="p">),</span>                  <span class="k">intent</span><span class="p">(</span><span class="n">INOUT</span><span class="p">)</span> <span class="kd">::</span> <span class="n">stage</span><span class="p">(</span><span class="mi">1</span><span class="p">:)</span> <span class="c">!&lt; Runge-Kutta stages [1:stages].</span>
+<a name="ln-218"></a>  <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">),</span>                         <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span>    <span class="kd">::</span> <span class="n">Dt</span>        <span class="c">!&lt; Time step.</span>
+<a name="ln-219"></a>  <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">),</span>                         <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span>    <span class="kd">::</span> <span class="n">t</span>         <span class="c">!&lt; Time.</span>
+<a name="ln-220"></a>  <span class="kt">integer</span><span class="p">(</span><span class="n">I_P</span><span class="p">)</span>                                     <span class="kd">::</span> <span class="n">s</span>         <span class="c">!&lt; First stages counter.</span>
+<a name="ln-221"></a>  <span class="kt">integer</span><span class="p">(</span><span class="n">I_P</span><span class="p">)</span>                                     <span class="kd">::</span> <span class="n">ss</span>        <span class="c">!&lt; Second stages counter.</span>
+<a name="ln-222"></a>  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+<a name="ln-223"></a>
+<a name="ln-224"></a>  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+<a name="ln-225"></a>  <span class="k">select type</span><span class="p">(</span><span class="n">stage</span><span class="p">)</span>
+<a name="ln-226"></a>  <span class="k">class is</span><span class="p">(</span><span class="n">integrand</span><span class="p">)</span>
+<a name="ln-227"></a>    <span class="c">! computing stages</span>
+<a name="ln-228"></a>    <span class="k">do </span><span class="n">s</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">self</span><span class="p">%</span><span class="n">stages</span>
+<a name="ln-229"></a>      <span class="n">stage</span><span class="p">(</span><span class="n">s</span><span class="p">)</span> <span class="o">=</span> <span class="n">U</span>
+<a name="ln-230"></a>      <span class="k">do </span><span class="n">ss</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">s</span> <span class="o">-</span> <span class="mi">1</span>
+<a name="ln-231"></a>        <span class="n">stage</span><span class="p">(</span><span class="n">s</span><span class="p">)</span> <span class="o">=</span> <span class="n">stage</span><span class="p">(</span><span class="n">s</span><span class="p">)</span> <span class="o">+</span> <span class="n">stage</span><span class="p">(</span><span class="n">ss</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="n">Dt</span> <span class="o">*</span> <span class="n">self</span><span class="p">%</span><span class="n">alph</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">ss</span><span class="p">))</span>
+<a name="ln-232"></a>      <span class="n">enddo</span>
+<a name="ln-233"></a>      <span class="n">stage</span><span class="p">(</span><span class="n">s</span><span class="p">)</span> <span class="o">=</span> <span class="n">stage</span><span class="p">(</span><span class="n">s</span><span class="p">)%</span><span class="n">t</span><span class="p">(</span><span class="n">t</span><span class="o">=</span><span class="n">t</span> <span class="o">+</span> <span class="n">self</span><span class="p">%</span><span class="n">gamm</span><span class="p">(</span><span class="n">s</span><span class="p">)</span> <span class="o">*</span> <span class="n">Dt</span><span class="p">)</span>
+<a name="ln-234"></a>    <span class="n">enddo</span>
+<a name="ln-235"></a>    <span class="c">! computing new time step</span>
+<a name="ln-236"></a>    <span class="k">do </span><span class="n">s</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">self</span><span class="p">%</span><span class="n">stages</span>
+<a name="ln-237"></a>      <span class="n">U</span> <span class="o">=</span> <span class="n">U</span> <span class="o">+</span> <span class="n">stage</span><span class="p">(</span><span class="n">s</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="n">Dt</span> <span class="o">*</span> <span class="n">self</span><span class="p">%</span><span class="n">beta</span><span class="p">(</span><span class="n">s</span><span class="p">))</span>
+<a name="ln-238"></a>    <span class="n">enddo</span>
+<a name="ln-239"></a>  <span class="n">endselect</span>
+<a name="ln-240"></a>  <span class="k">return</span>
+<a name="ln-241"></a>  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+<a name="ln-242"></a>  <span class="n">endsubroutine</span> <span class="n">integrate</span>
+<a name="ln-243"></a>
+<a name="ln-244"></a>  <span class="c">! private methods</span>
+<a name="ln-245"></a>  <span class="k">elemental subroutine </span><span class="n">finalize</span><span class="p">(</span><span class="n">self</span><span class="p">)</span>
+<a name="ln-246"></a>  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+<a name="ln-247"></a>  <span class="c">!&lt; Finalize object.</span>
+<a name="ln-248"></a>  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+<a name="ln-249"></a>  <span class="k">type</span><span class="p">(</span><span class="n">tvd_runge_kutta_integrator</span><span class="p">),</span> <span class="k">intent</span><span class="p">(</span><span class="n">INOUT</span><span class="p">)</span> <span class="kd">::</span> <span class="n">self</span> <span class="c">!&lt; Integrator.</span>
+<a name="ln-250"></a>  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+<a name="ln-251"></a>
+<a name="ln-252"></a>  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+<a name="ln-253"></a>  <span class="k">call </span><span class="n">self</span><span class="p">%</span><span class="n">destroy</span>
+<a name="ln-254"></a>  <span class="k">return</span>
+<a name="ln-255"></a>  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+<a name="ln-256"></a>  <span class="n">endsubroutine</span> <span class="n">finalize</span>
+<a name="ln-257"></a><span class="n">endmodule</span> <span class="n">foodie_integrator_tvd_runge_kutta</span>
 </pre></div>
 
     </section>
@@ -524,8 +524,9 @@
     <hr>
     <footer>
         <div class="row">
-        <div class="col-md-6">&copy; 2015 FOODIE was written by Fortran-FOSS-Programmers Group. </div>
-        <div class="col-md-6"><span class="pull-right">Documentation generated by <a href="https://github.com/cmacmackin/ford">FORD</a>.</span></div>
+        <div class="col-md-4">&copy; 2015 </div>
+	<div class="col-md-4"><span class="text-center"> FOODIE was developed by Fortran-FOSS-Programmers Group</span></div>
+        <div class="col-md-4"><span class="pull-right">Documentation generated by <a href="https://github.com/cmacmackin/ford">FORD</a></span></div>
         </div>
         <br>
     </footer>

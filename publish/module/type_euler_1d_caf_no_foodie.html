@@ -1137,7 +1137,7 @@ implementation in a submodule of an interface in a parent module.</p>
     
   <div class="panel panel-default">
   <div class="panel-heading codesum"><span class="anchor" id="proc-output%7E2"></span><h3>
-private purefunction <a href='../proc/output%7E2.html'>output</a>(self, conservative) result(state)
+private pure function <a href='../proc/output%7E2.html'>output</a>(self, conservative) result(state)
     
     
     
@@ -1220,7 +1220,7 @@ private purefunction <a href='../proc/output%7E2.html'>output</a>(self, conserva
     
   <div class="panel panel-default">
   <div class="panel-heading codesum"><span class="anchor" id="proc-compute_dt"></span><h3>
-private purefunction <a href='../proc/compute_dt.html'>compute_dt</a>(self, Nmax, Tmax, t, CFL) result(Dt)
+private pure function <a href='../proc/compute_dt.html'>compute_dt</a>(self, Nmax, Tmax, t, CFL) result(Dt)
     
     
     
@@ -1416,7 +1416,7 @@ private function <a href='../proc/deuler_dt.html'>dEuler_dt</a>(self) result(dSt
     
   <div class="panel panel-default">
   <div class="panel-heading codesum"><span class="anchor" id="proc-primitive2conservative"></span><h3>
-private purefunction <a href='../proc/primitive2conservative.html'>primitive2conservative</a>(self, primitive) result(conservative)
+private pure function <a href='../proc/primitive2conservative.html'>primitive2conservative</a>(self, primitive) result(conservative)
     
     
     
@@ -1499,7 +1499,7 @@ private purefunction <a href='../proc/primitive2conservative.html'>primitive2con
     
   <div class="panel panel-default">
   <div class="panel-heading codesum"><span class="anchor" id="proc-conservative2primitive"></span><h3>
-private purefunction <a href='../proc/conservative2primitive.html'>conservative2primitive</a>(self, conservative) result(primitive)
+private pure function <a href='../proc/conservative2primitive.html'>conservative2primitive</a>(self, conservative) result(primitive)
     
     
     
@@ -1582,7 +1582,7 @@ private purefunction <a href='../proc/conservative2primitive.html'>conservative2
     
   <div class="panel panel-default">
   <div class="panel-heading codesum"><span class="anchor" id="proc-p"></span><h3>
-private elementalfunction <a href='../proc/p.html'>p</a>(r, a, g) result(pressure)
+private elemental function <a href='../proc/p.html'>p</a>(r, a, g) result(pressure)
     
     
     
@@ -1680,7 +1680,7 @@ private elementalfunction <a href='../proc/p.html'>p</a>(r, a, g) result(pressur
     
   <div class="panel panel-default">
   <div class="panel-heading codesum"><span class="anchor" id="proc-r"></span><h3>
-private elementalfunction <a href='../proc/r.html'>r</a>(p, a, g) result(density)
+private elemental function <a href='../proc/r.html'>r</a>(p, a, g) result(density)
     
     
     
@@ -1778,7 +1778,7 @@ private elementalfunction <a href='../proc/r.html'>r</a>(p, a, g) result(density
     
   <div class="panel panel-default">
   <div class="panel-heading codesum"><span class="anchor" id="proc-a"></span><h3>
-private elementalfunction <a href='../proc/a.html'>a</a>(p, r, g) result(ss)
+private elemental function <a href='../proc/a.html'>a</a>(p, r, g) result(ss)
     
     
     
@@ -1876,7 +1876,7 @@ private elementalfunction <a href='../proc/a.html'>a</a>(p, r, g) result(ss)
     
   <div class="panel panel-default">
   <div class="panel-heading codesum"><span class="anchor" id="proc-e"></span><h3>
-private elementalfunction <a href='../proc/e.html'>E</a>(p, r, u, g) result(energy)
+private elemental function <a href='../proc/e.html'>E</a>(p, r, u, g) result(energy)
     
     
     
@@ -1992,7 +1992,7 @@ $$</p>
     
   <div class="panel panel-default">
   <div class="panel-heading codesum"><span class="anchor" id="proc-h"></span><h3>
-private elementalfunction <a href='../proc/h.html'>H</a>(p, r, u, g) result(entalpy)
+private elemental function <a href='../proc/h.html'>H</a>(p, r, u, g) result(entalpy)
     
     
     
@@ -2116,7 +2116,7 @@ $$</p>
     
   <div class="panel panel-default">
   <div class="panel-heading codesum"><span class="anchor" id="proc-init_rk"></span><h3>
-private elementalsubroutine <a href='../proc/init_rk.html'>init_rk</a>(self, stages)
+private elemental subroutine <a href='../proc/init_rk.html'>init_rk</a>(self, stages)
     
     
     
@@ -2190,7 +2190,7 @@ private elementalsubroutine <a href='../proc/init_rk.html'>init_rk</a>(self, sta
     
   <div class="panel panel-default">
   <div class="panel-heading codesum"><span class="anchor" id="proc-destroy_rk"></span><h3>
-private elementalsubroutine <a href='../proc/destroy_rk.html'>destroy_rk</a>(self)
+private elemental subroutine <a href='../proc/destroy_rk.html'>destroy_rk</a>(self)
     
     
     
@@ -2368,7 +2368,7 @@ private subroutine <a href='../proc/integrate_rk.html'>integrate_rk</a>(self, U,
     
   <div class="panel panel-default">
   <div class="panel-heading codesum"><span class="anchor" id="proc-finalize_rk"></span><h3>
-private elementalsubroutine <a href='../proc/finalize_rk.html'>finalize_rk</a>(self)
+private elemental subroutine <a href='../proc/finalize_rk.html'>finalize_rk</a>(self)
     
     
     
@@ -3006,7 +3006,7 @@ private subroutine <a href='../proc/reconstruct_interfaces_states.html'>reconstr
     
   <div class="panel panel-default">
   <div class="panel-heading codesum"><span class="anchor" id="proc-riemann_solver"></span><h3>
-private puresubroutine <a href='../proc/riemann_solver.html'>riemann_solver</a>(self, p1, r1, u1, g1, p4, r4, u4, g4, F)
+private pure subroutine <a href='../proc/riemann_solver.html'>riemann_solver</a>(self, p1, r1, u1, g1, p4, r4, u4, g4, F)
     
     
     
@@ -3259,7 +3259,7 @@ private subroutine <a href='../proc/finalize%7E8.html'>finalize</a>(self)
     
   <div class="panel panel-default">
   <div class="panel-heading codesum"><span class="anchor" id="proc-compute_inter_states"></span><h3>
-private puresubroutine <a href='../proc/compute_inter_states.html'>compute_inter_states</a>(r1, p1, u1, g1, r4, p4, u4, g4, p, S, S1, S4)
+private pure subroutine <a href='../proc/compute_inter_states.html'>compute_inter_states</a>(r1, p1, u1, g1, r4, p4, u4, g4, p, S, S1, S4)
     
     
     
@@ -3491,8 +3491,9 @@ private puresubroutine <a href='../proc/compute_inter_states.html'>compute_inter
     <hr>
     <footer>
         <div class="row">
-        <div class="col-md-6">&copy; 2015 FOODIE was written by Fortran-FOSS-Programmers Group. </div>
-        <div class="col-md-6"><span class="pull-right">Documentation generated by <a href="https://github.com/cmacmackin/ford">FORD</a>.</span></div>
+        <div class="col-md-4">&copy; 2015 </div>
+	<div class="col-md-4"><span class="text-center"> FOODIE was developed by Fortran-FOSS-Programmers Group</span></div>
+        <div class="col-md-4"><span class="pull-right">Documentation generated by <a href="https://github.com/cmacmackin/ford">FORD</a></span></div>
         </div>
         <br>
     </footer>

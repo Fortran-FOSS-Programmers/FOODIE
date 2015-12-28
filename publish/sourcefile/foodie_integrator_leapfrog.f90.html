@@ -258,115 +258,115 @@
     <br>
     <section>
     <h2><span class="anchor" id="src"></span>Source Code</h2>
-    <div class="highlight"><pre><span class="c">!&lt; FOODIE integrator: provide an explicit class of leapfrog multi-step schemes, 2nd order accurate.</span>
-<span class="k">module </span><span class="n">foodie_integrator_leapfrog</span>
-<span class="c">!-----------------------------------------------------------------------------------------------------------------------------------</span>
-<span class="c">!&lt; FOODIE integrator: provide an explicit class of leapfrog multi-step schemes, 2nd order accurate.</span>
-<span class="c">!&lt;</span>
-<span class="c">!&lt; Considering the following ODE system:</span>
-<span class="c">!&lt;</span>
-<span class="c">!&lt; $$ U_t = R(t,U) $$</span>
-<span class="c">!&lt;</span>
-<span class="c">!&lt; where \(U_t = \frac{dU}{dt}\), *U* is the vector of *state* variables being a function of the time-like independent variable</span>
-<span class="c">!&lt; *t*, *R* is the (vectorial) residual function, the leapfrog class scheme implemented (see [3]) is:</span>
-<span class="c">!&lt;</span>
-<span class="c">!&lt; $$ U^{n+2} = U^{n} + 2\Delta t \cdot R(t^{n+1}, U^{n+1}) $$</span>
-<span class="c">!&lt;</span>
-<span class="c">!&lt; Optionally, the Robert-Asselin-Williams (RAW) filter (see [3]) is applied to the computed integration steps:</span>
-<span class="c">!&lt; $$ \Delta = \frac{\nu}{2}(U^{n} - 2 U^{n+1} + U^{n+2}) $$</span>
-<span class="c">!&lt; $$ U^{n+1} = U^{n+1} + \Delta * \alpha $$</span>
-<span class="c">!&lt; $$ U^{n+2} = U^{n+2} + \Delta * (\alpha-1) $$</span>
-<span class="c">!&lt; Note that for \(\alpha=1\) the filter reverts back to the standard Robert-Asselin scheme.</span>
-<span class="c">!&lt; The filter coefficients should be taken as \(\nu \in (0,1]\) and \(\alpha \in (0.5,1]\). The default values are</span>
-<span class="c">!&lt;</span>
-<span class="c">!&lt;  + \(\nu=0.01\)</span>
-<span class="c">!&lt;  + \(\alpha=0.53\)</span>
-<span class="c">!&lt;</span>
-<span class="c">!&lt; @note The value of \(\Delta t\) must be provided, it not being computed by the integrator.</span>
-<span class="c">!&lt;</span>
-<span class="c">!&lt; The schemes are explicit. The filter coefficients \(\nu,\,\alpha \) define the actual scheme.</span>
-<span class="c">!&lt;</span>
-<span class="c">!&lt;#### Bibliography</span>
-<span class="c">!&lt;</span>
-<span class="c">!&lt; [1] *The integration of a low order spectral form of the primitive meteorological equations*, Robert, A. J., J. Meteor. Soc.</span>
-<span class="c">!&lt; Japan,vol. 44, pages 237--245, 1966.</span>
-<span class="c">!&lt;</span>
-<span class="c">!&lt; [2] *Frequency filter for time integrations*, Asselin, R., Monthly Weather Review, vol. 100, pages 487--490, 1972.</span>
-<span class="c">!&lt;</span>
-<span class="c">!&lt; [3] *The RAW filter: An improvement to the Robert–Asselin filter in semi-implicit integrations*, Williams, P.D., Monthly</span>
-<span class="c">!&lt; Weather Review, vol. 139(6), pages 1996--2007, June 2011.</span>
-<span class="c">!-----------------------------------------------------------------------------------------------------------------------------------</span>
-
-<span class="c">!-----------------------------------------------------------------------------------------------------------------------------------</span>
-<span class="k">use </span><span class="n">foodie_kinds</span><span class="p">,</span> <span class="n">only</span> <span class="p">:</span> <span class="n">R_P</span><span class="p">,</span> <span class="n">I_P</span>
-<span class="k">use </span><span class="n">foodie_adt_integrand</span><span class="p">,</span> <span class="n">only</span> <span class="p">:</span> <span class="n">integrand</span>
-<span class="c">!-----------------------------------------------------------------------------------------------------------------------------------</span>
-
-<span class="c">!-----------------------------------------------------------------------------------------------------------------------------------</span>
-<span class="k">implicit none</span>
-<span class="k">private</span>
-<span class="k">public</span> <span class="kd">::</span> <span class="n">leapfrog_integrator</span>
-<span class="c">!-----------------------------------------------------------------------------------------------------------------------------------</span>
-
-<span class="c">!-----------------------------------------------------------------------------------------------------------------------------------</span>
-<span class="k">type</span> <span class="kd">::</span> <span class="n">leapfrog_integrator</span>
-  <span class="c">!&lt; FOODIE integrator: provide an explicit class of leapfrog multi-step schemes, 2nd order accurate.</span>
-  <span class="c">!&lt;</span>
-  <span class="c">!&lt; @note The integrator could be used without initialialization (initialize the time filter coefficients) if the defulat values</span>
-  <span class="c">!&lt; are suitable for the problem.</span>
-  <span class="k">private</span>
-<span class="k">  </span><span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">)</span> <span class="kd">::</span> <span class="n">nu</span><span class="o">=</span><span class="mf">0.01_R_P</span>    <span class="c">!&lt; Robert-Asselin filter coefficient.</span>
-  <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">)</span> <span class="kd">::</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.53_R_P</span> <span class="c">!&lt; Robert-Asselin-Williams filter coefficient.</span>
-  <span class="k">contains</span>
-<span class="k">    procedure</span><span class="p">,</span> <span class="k">pass</span><span class="p">(</span><span class="n">self</span><span class="p">),</span> <span class="k">public</span> <span class="kd">::</span> <span class="n">init</span>      <span class="c">!&lt; Initialize (create) the integrator.</span>
-    <span class="k">procedure</span><span class="p">,</span> <span class="k">pass</span><span class="p">(</span><span class="n">self</span><span class="p">),</span> <span class="k">public</span> <span class="kd">::</span> <span class="n">integrate</span> <span class="c">!&lt; Integrate integrand field.</span>
-<span class="n">endtype</span> <span class="n">leapfrog_integrator</span>
-<span class="c">!-----------------------------------------------------------------------------------------------------------------------------------</span>
-<span class="k">contains</span>
-  <span class="c">! public methods</span>
-  <span class="k">elemental subroutine </span><span class="n">init</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">nu</span><span class="p">,</span> <span class="n">alpha</span><span class="p">)</span>
-  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
-  <span class="c">!&lt; Create the actual leapfrog integrator: initialize the filter coefficient.</span>
-  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
-  <span class="k">class</span><span class="p">(</span><span class="n">leapfrog_integrator</span><span class="p">),</span> <span class="k">intent</span><span class="p">(</span><span class="n">INOUT</span><span class="p">)</span> <span class="kd">::</span> <span class="n">self</span>  <span class="c">!&lt; LF integrator.</span>
-  <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">),</span> <span class="k">optional</span><span class="p">,</span>        <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span>    <span class="kd">::</span> <span class="n">nu</span>    <span class="c">!&lt; Williams-Robert-Asselin filter coefficient.</span>
-  <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">),</span> <span class="k">optional</span><span class="p">,</span>        <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span>    <span class="kd">::</span> <span class="n">alpha</span> <span class="c">!&lt; Robert-Asselin filter coefficient.</span>
-  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
-
-  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
-  <span class="n">self</span><span class="p">%</span><span class="n">nu</span> <span class="o">=</span> <span class="mf">0.01_R_P</span>
-  <span class="n">self</span><span class="p">%</span><span class="n">alpha</span> <span class="o">=</span> <span class="mf">0.53_R_P</span>
-  <span class="k">if</span> <span class="p">(</span><span class="nb">present</span><span class="p">(</span><span class="n">nu</span><span class="p">))</span> <span class="n">self</span><span class="p">%</span><span class="n">nu</span> <span class="o">=</span> <span class="n">nu</span>
-  <span class="k">if</span> <span class="p">(</span><span class="nb">present</span><span class="p">(</span><span class="n">alpha</span><span class="p">))</span> <span class="n">self</span><span class="p">%</span><span class="n">alpha</span> <span class="o">=</span> <span class="n">alpha</span>
-  <span class="k">return</span>
-  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
-  <span class="n">endsubroutine</span> <span class="n">init</span>
-
-  <span class="k">subroutine </span><span class="n">integrate</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">U</span><span class="p">,</span> <span class="n">previous</span><span class="p">,</span> <span class="n">Dt</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="n">filter</span><span class="p">)</span>
-  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
-  <span class="c">!&lt; Integrate field with leapfrog class scheme.</span>
-  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
-  <span class="k">class</span><span class="p">(</span><span class="n">leapfrog_integrator</span><span class="p">),</span> <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span>    <span class="kd">::</span> <span class="n">self</span>          <span class="c">!&lt; LF integrator.</span>
-  <span class="k">class</span><span class="p">(</span><span class="n">integrand</span><span class="p">),</span>           <span class="k">intent</span><span class="p">(</span><span class="n">INOUT</span><span class="p">)</span> <span class="kd">::</span> <span class="n">U</span>             <span class="c">!&lt; Field to be integrated.</span>
-  <span class="k">class</span><span class="p">(</span><span class="n">integrand</span><span class="p">),</span>           <span class="k">intent</span><span class="p">(</span><span class="n">INOUT</span><span class="p">)</span> <span class="kd">::</span> <span class="n">previous</span><span class="p">(</span><span class="mi">1</span><span class="p">:</span><span class="mi">2</span><span class="p">)</span> <span class="c">!&lt; Previous time steps solutions of integrand field.</span>
-  <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">),</span>                  <span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span>    <span class="kd">::</span> <span class="n">Dt</span>            <span class="c">!&lt; Time step.</span>
-  <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">),</span>                  <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span>    <span class="kd">::</span> <span class="n">t</span>             <span class="c">!&lt; Time.</span>
-  <span class="k">class</span><span class="p">(</span><span class="n">integrand</span><span class="p">),</span> <span class="k">optional</span><span class="p">,</span> <span class="k">intent</span><span class="p">(</span><span class="n">INOUT</span><span class="p">)</span> <span class="kd">::</span> <span class="n">filter</span>        <span class="c">!&lt; Filter field displacement.</span>
-  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
-
-  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
-  <span class="n">U</span> <span class="o">=</span> <span class="n">previous</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">+</span> <span class="n">previous</span><span class="p">(</span><span class="mi">2</span><span class="p">)%</span><span class="n">t</span><span class="p">(</span><span class="n">t</span><span class="o">=</span><span class="n">t</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="n">Dt</span> <span class="o">*</span> <span class="mf">2._R_P</span><span class="p">)</span>
-  <span class="k">if</span> <span class="p">(</span><span class="nb">present</span><span class="p">(</span><span class="n">filter</span><span class="p">))</span> <span class="k">then</span>
-<span class="k">    </span><span class="n">filter</span> <span class="o">=</span> <span class="p">(</span><span class="n">previous</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">-</span> <span class="n">previous</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span> <span class="o">*</span> <span class="mf">2._R_P</span> <span class="o">+</span> <span class="n">U</span><span class="p">)</span> <span class="o">*</span> <span class="n">self</span><span class="p">%</span><span class="n">nu</span> <span class="o">*</span> <span class="mf">0.5_R_P</span>
-    <span class="n">previous</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span> <span class="o">=</span> <span class="n">previous</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span> <span class="o">+</span> <span class="n">filter</span> <span class="o">*</span> <span class="n">self</span><span class="p">%</span><span class="n">alpha</span>
-    <span class="n">U</span> <span class="o">=</span> <span class="n">U</span> <span class="o">+</span> <span class="n">filter</span> <span class="o">*</span> <span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">alpha</span> <span class="o">-</span> <span class="mf">1._R_P</span><span class="p">)</span>
-  <span class="n">endif</span>
-  <span class="n">previous</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">=</span> <span class="n">previous</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
-  <span class="n">previous</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span> <span class="o">=</span> <span class="n">U</span>
-  <span class="k">return</span>
-  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
-  <span class="n">endsubroutine</span> <span class="n">integrate</span>
-<span class="n">endmodule</span> <span class="n">foodie_integrator_leapfrog</span>
+    <div class="hl"><pre><a name="ln-1"></a><span class="c">!&lt; FOODIE integrator: provide an explicit class of leapfrog multi-step schemes, 2nd order accurate.</span>
+<a name="ln-2"></a><span class="k">module </span><span class="n">foodie_integrator_leapfrog</span>
+<a name="ln-3"></a><span class="c">!-----------------------------------------------------------------------------------------------------------------------------------</span>
+<a name="ln-4"></a><span class="c">!&lt; FOODIE integrator: provide an explicit class of leapfrog multi-step schemes, 2nd order accurate.</span>
+<a name="ln-5"></a><span class="c">!&lt;</span>
+<a name="ln-6"></a><span class="c">!&lt; Considering the following ODE system:</span>
+<a name="ln-7"></a><span class="c">!&lt;</span>
+<a name="ln-8"></a><span class="c">!&lt; $$ U_t = R(t,U) $$</span>
+<a name="ln-9"></a><span class="c">!&lt;</span>
+<a name="ln-10"></a><span class="c">!&lt; where \(U_t = \frac{dU}{dt}\), *U* is the vector of *state* variables being a function of the time-like independent variable</span>
+<a name="ln-11"></a><span class="c">!&lt; *t*, *R* is the (vectorial) residual function, the leapfrog class scheme implemented (see [3]) is:</span>
+<a name="ln-12"></a><span class="c">!&lt;</span>
+<a name="ln-13"></a><span class="c">!&lt; $$ U^{n+2} = U^{n} + 2\Delta t \cdot R(t^{n+1}, U^{n+1}) $$</span>
+<a name="ln-14"></a><span class="c">!&lt;</span>
+<a name="ln-15"></a><span class="c">!&lt; Optionally, the Robert-Asselin-Williams (RAW) filter (see [3]) is applied to the computed integration steps:</span>
+<a name="ln-16"></a><span class="c">!&lt; $$ \Delta = \frac{\nu}{2}(U^{n} - 2 U^{n+1} + U^{n+2}) $$</span>
+<a name="ln-17"></a><span class="c">!&lt; $$ U^{n+1} = U^{n+1} + \Delta * \alpha $$</span>
+<a name="ln-18"></a><span class="c">!&lt; $$ U^{n+2} = U^{n+2} + \Delta * (\alpha-1) $$</span>
+<a name="ln-19"></a><span class="c">!&lt; Note that for \(\alpha=1\) the filter reverts back to the standard Robert-Asselin scheme.</span>
+<a name="ln-20"></a><span class="c">!&lt; The filter coefficients should be taken as \(\nu \in (0,1]\) and \(\alpha \in (0.5,1]\). The default values are</span>
+<a name="ln-21"></a><span class="c">!&lt;</span>
+<a name="ln-22"></a><span class="c">!&lt;  + \(\nu=0.01\)</span>
+<a name="ln-23"></a><span class="c">!&lt;  + \(\alpha=0.53\)</span>
+<a name="ln-24"></a><span class="c">!&lt;</span>
+<a name="ln-25"></a><span class="c">!&lt; @note The value of \(\Delta t\) must be provided, it not being computed by the integrator.</span>
+<a name="ln-26"></a><span class="c">!&lt;</span>
+<a name="ln-27"></a><span class="c">!&lt; The schemes are explicit. The filter coefficients \(\nu,\,\alpha \) define the actual scheme.</span>
+<a name="ln-28"></a><span class="c">!&lt;</span>
+<a name="ln-29"></a><span class="c">!&lt;#### Bibliography</span>
+<a name="ln-30"></a><span class="c">!&lt;</span>
+<a name="ln-31"></a><span class="c">!&lt; [1] *The integration of a low order spectral form of the primitive meteorological equations*, Robert, A. J., J. Meteor. Soc.</span>
+<a name="ln-32"></a><span class="c">!&lt; Japan,vol. 44, pages 237--245, 1966.</span>
+<a name="ln-33"></a><span class="c">!&lt;</span>
+<a name="ln-34"></a><span class="c">!&lt; [2] *Frequency filter for time integrations*, Asselin, R., Monthly Weather Review, vol. 100, pages 487--490, 1972.</span>
+<a name="ln-35"></a><span class="c">!&lt;</span>
+<a name="ln-36"></a><span class="c">!&lt; [3] *The RAW filter: An improvement to the Robert–Asselin filter in semi-implicit integrations*, Williams, P.D., Monthly</span>
+<a name="ln-37"></a><span class="c">!&lt; Weather Review, vol. 139(6), pages 1996--2007, June 2011.</span>
+<a name="ln-38"></a><span class="c">!-----------------------------------------------------------------------------------------------------------------------------------</span>
+<a name="ln-39"></a>
+<a name="ln-40"></a><span class="c">!-----------------------------------------------------------------------------------------------------------------------------------</span>
+<a name="ln-41"></a><span class="k">use </span><span class="n">foodie_kinds</span><span class="p">,</span> <span class="n">only</span> <span class="p">:</span> <span class="n">R_P</span><span class="p">,</span> <span class="n">I_P</span>
+<a name="ln-42"></a><span class="k">use </span><span class="n">foodie_adt_integrand</span><span class="p">,</span> <span class="n">only</span> <span class="p">:</span> <span class="n">integrand</span>
+<a name="ln-43"></a><span class="c">!-----------------------------------------------------------------------------------------------------------------------------------</span>
+<a name="ln-44"></a>
+<a name="ln-45"></a><span class="c">!-----------------------------------------------------------------------------------------------------------------------------------</span>
+<a name="ln-46"></a><span class="k">implicit none</span>
+<a name="ln-47"></a><span class="k">private</span>
+<a name="ln-48"></a><span class="k">public</span> <span class="kd">::</span> <span class="n">leapfrog_integrator</span>
+<a name="ln-49"></a><span class="c">!-----------------------------------------------------------------------------------------------------------------------------------</span>
+<a name="ln-50"></a>
+<a name="ln-51"></a><span class="c">!-----------------------------------------------------------------------------------------------------------------------------------</span>
+<a name="ln-52"></a><span class="k">type</span> <span class="kd">::</span> <span class="n">leapfrog_integrator</span>
+<a name="ln-53"></a>  <span class="c">!&lt; FOODIE integrator: provide an explicit class of leapfrog multi-step schemes, 2nd order accurate.</span>
+<a name="ln-54"></a>  <span class="c">!&lt;</span>
+<a name="ln-55"></a>  <span class="c">!&lt; @note The integrator could be used without initialialization (initialize the time filter coefficients) if the defulat values</span>
+<a name="ln-56"></a>  <span class="c">!&lt; are suitable for the problem.</span>
+<a name="ln-57"></a>  <span class="k">private</span>
+<a name="ln-58"></a><span class="k">  </span><span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">)</span> <span class="kd">::</span> <span class="n">nu</span><span class="o">=</span><span class="mf">0.01_R_P</span>    <span class="c">!&lt; Robert-Asselin filter coefficient.</span>
+<a name="ln-59"></a>  <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">)</span> <span class="kd">::</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.53_R_P</span> <span class="c">!&lt; Robert-Asselin-Williams filter coefficient.</span>
+<a name="ln-60"></a>  <span class="k">contains</span>
+<a name="ln-61"></a><span class="k">    procedure</span><span class="p">,</span> <span class="k">pass</span><span class="p">(</span><span class="n">self</span><span class="p">),</span> <span class="k">public</span> <span class="kd">::</span> <span class="n">init</span>      <span class="c">!&lt; Initialize (create) the integrator.</span>
+<a name="ln-62"></a>    <span class="k">procedure</span><span class="p">,</span> <span class="k">pass</span><span class="p">(</span><span class="n">self</span><span class="p">),</span> <span class="k">public</span> <span class="kd">::</span> <span class="n">integrate</span> <span class="c">!&lt; Integrate integrand field.</span>
+<a name="ln-63"></a><span class="n">endtype</span> <span class="n">leapfrog_integrator</span>
+<a name="ln-64"></a><span class="c">!-----------------------------------------------------------------------------------------------------------------------------------</span>
+<a name="ln-65"></a><span class="k">contains</span>
+<a name="ln-66"></a>  <span class="c">! public methods</span>
+<a name="ln-67"></a>  <span class="k">elemental subroutine </span><span class="n">init</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">nu</span><span class="p">,</span> <span class="n">alpha</span><span class="p">)</span>
+<a name="ln-68"></a>  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+<a name="ln-69"></a>  <span class="c">!&lt; Create the actual leapfrog integrator: initialize the filter coefficient.</span>
+<a name="ln-70"></a>  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+<a name="ln-71"></a>  <span class="k">class</span><span class="p">(</span><span class="n">leapfrog_integrator</span><span class="p">),</span> <span class="k">intent</span><span class="p">(</span><span class="n">INOUT</span><span class="p">)</span> <span class="kd">::</span> <span class="n">self</span>  <span class="c">!&lt; LF integrator.</span>
+<a name="ln-72"></a>  <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">),</span> <span class="k">optional</span><span class="p">,</span>        <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span>    <span class="kd">::</span> <span class="n">nu</span>    <span class="c">!&lt; Williams-Robert-Asselin filter coefficient.</span>
+<a name="ln-73"></a>  <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">),</span> <span class="k">optional</span><span class="p">,</span>        <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span>    <span class="kd">::</span> <span class="n">alpha</span> <span class="c">!&lt; Robert-Asselin filter coefficient.</span>
+<a name="ln-74"></a>  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+<a name="ln-75"></a>
+<a name="ln-76"></a>  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+<a name="ln-77"></a>  <span class="n">self</span><span class="p">%</span><span class="n">nu</span> <span class="o">=</span> <span class="mf">0.01_R_P</span>
+<a name="ln-78"></a>  <span class="n">self</span><span class="p">%</span><span class="n">alpha</span> <span class="o">=</span> <span class="mf">0.53_R_P</span>
+<a name="ln-79"></a>  <span class="k">if</span> <span class="p">(</span><span class="nb">present</span><span class="p">(</span><span class="n">nu</span><span class="p">))</span> <span class="n">self</span><span class="p">%</span><span class="n">nu</span> <span class="o">=</span> <span class="n">nu</span>
+<a name="ln-80"></a>  <span class="k">if</span> <span class="p">(</span><span class="nb">present</span><span class="p">(</span><span class="n">alpha</span><span class="p">))</span> <span class="n">self</span><span class="p">%</span><span class="n">alpha</span> <span class="o">=</span> <span class="n">alpha</span>
+<a name="ln-81"></a>  <span class="k">return</span>
+<a name="ln-82"></a>  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+<a name="ln-83"></a>  <span class="n">endsubroutine</span> <span class="n">init</span>
+<a name="ln-84"></a>
+<a name="ln-85"></a>  <span class="k">subroutine </span><span class="n">integrate</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">U</span><span class="p">,</span> <span class="n">previous</span><span class="p">,</span> <span class="n">Dt</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="n">filter</span><span class="p">)</span>
+<a name="ln-86"></a>  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+<a name="ln-87"></a>  <span class="c">!&lt; Integrate field with leapfrog class scheme.</span>
+<a name="ln-88"></a>  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+<a name="ln-89"></a>  <span class="k">class</span><span class="p">(</span><span class="n">leapfrog_integrator</span><span class="p">),</span> <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span>    <span class="kd">::</span> <span class="n">self</span>          <span class="c">!&lt; LF integrator.</span>
+<a name="ln-90"></a>  <span class="k">class</span><span class="p">(</span><span class="n">integrand</span><span class="p">),</span>           <span class="k">intent</span><span class="p">(</span><span class="n">INOUT</span><span class="p">)</span> <span class="kd">::</span> <span class="n">U</span>             <span class="c">!&lt; Field to be integrated.</span>
+<a name="ln-91"></a>  <span class="k">class</span><span class="p">(</span><span class="n">integrand</span><span class="p">),</span>           <span class="k">intent</span><span class="p">(</span><span class="n">INOUT</span><span class="p">)</span> <span class="kd">::</span> <span class="n">previous</span><span class="p">(</span><span class="mi">1</span><span class="p">:</span><span class="mi">2</span><span class="p">)</span> <span class="c">!&lt; Previous time steps solutions of integrand field.</span>
+<a name="ln-92"></a>  <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">),</span>                  <span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span>    <span class="kd">::</span> <span class="n">Dt</span>            <span class="c">!&lt; Time step.</span>
+<a name="ln-93"></a>  <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">),</span>                  <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span>    <span class="kd">::</span> <span class="n">t</span>             <span class="c">!&lt; Time.</span>
+<a name="ln-94"></a>  <span class="k">class</span><span class="p">(</span><span class="n">integrand</span><span class="p">),</span> <span class="k">optional</span><span class="p">,</span> <span class="k">intent</span><span class="p">(</span><span class="n">INOUT</span><span class="p">)</span> <span class="kd">::</span> <span class="n">filter</span>        <span class="c">!&lt; Filter field displacement.</span>
+<a name="ln-95"></a>  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+<a name="ln-96"></a>
+<a name="ln-97"></a>  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+<a name="ln-98"></a>  <span class="n">U</span> <span class="o">=</span> <span class="n">previous</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">+</span> <span class="n">previous</span><span class="p">(</span><span class="mi">2</span><span class="p">)%</span><span class="n">t</span><span class="p">(</span><span class="n">t</span><span class="o">=</span><span class="n">t</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="n">Dt</span> <span class="o">*</span> <span class="mf">2._R_P</span><span class="p">)</span>
+<a name="ln-99"></a>  <span class="k">if</span> <span class="p">(</span><span class="nb">present</span><span class="p">(</span><span class="n">filter</span><span class="p">))</span> <span class="k">then</span>
+<a name="ln-100"></a><span class="k">    </span><span class="n">filter</span> <span class="o">=</span> <span class="p">(</span><span class="n">previous</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">-</span> <span class="n">previous</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span> <span class="o">*</span> <span class="mf">2._R_P</span> <span class="o">+</span> <span class="n">U</span><span class="p">)</span> <span class="o">*</span> <span class="n">self</span><span class="p">%</span><span class="n">nu</span> <span class="o">*</span> <span class="mf">0.5_R_P</span>
+<a name="ln-101"></a>    <span class="n">previous</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span> <span class="o">=</span> <span class="n">previous</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span> <span class="o">+</span> <span class="n">filter</span> <span class="o">*</span> <span class="n">self</span><span class="p">%</span><span class="n">alpha</span>
+<a name="ln-102"></a>    <span class="n">U</span> <span class="o">=</span> <span class="n">U</span> <span class="o">+</span> <span class="n">filter</span> <span class="o">*</span> <span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">alpha</span> <span class="o">-</span> <span class="mf">1._R_P</span><span class="p">)</span>
+<a name="ln-103"></a>  <span class="n">endif</span>
+<a name="ln-104"></a>  <span class="n">previous</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">=</span> <span class="n">previous</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+<a name="ln-105"></a>  <span class="n">previous</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span> <span class="o">=</span> <span class="n">U</span>
+<a name="ln-106"></a>  <span class="k">return</span>
+<a name="ln-107"></a>  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+<a name="ln-108"></a>  <span class="n">endsubroutine</span> <span class="n">integrate</span>
+<a name="ln-109"></a><span class="n">endmodule</span> <span class="n">foodie_integrator_leapfrog</span>
 </pre></div>
 
     </section>
@@ -376,8 +376,9 @@
     <hr>
     <footer>
         <div class="row">
-        <div class="col-md-6">&copy; 2015 FOODIE was written by Fortran-FOSS-Programmers Group. </div>
-        <div class="col-md-6"><span class="pull-right">Documentation generated by <a href="https://github.com/cmacmackin/ford">FORD</a>.</span></div>
+        <div class="col-md-4">&copy; 2015 </div>
+	<div class="col-md-4"><span class="text-center"> FOODIE was developed by Fortran-FOSS-Programmers Group</span></div>
+        <div class="col-md-4"><span class="pull-right">Documentation generated by <a href="https://github.com/cmacmackin/ford">FORD</a></span></div>
         </div>
         <br>
     </footer>
