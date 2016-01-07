@@ -26,6 +26,7 @@ type(Type_Command_Line_Interface) :: cli                                        
 integer,   parameter              :: space_dimension=2                                 !< Space dimensions.
 real(R_P), parameter              :: initial_state(1:space_dimension)=[0._R_P, 1._R_P] !< Initial state.
 real(R_P)                         :: f                                                 !< Oscillation frequency.
+real(R_P)                         :: amplitude                                         !< Oscillation amplitude.
 real(R_P)                         :: t_final                                           !< Final time.
 real(R_P)                         :: Dt                                                !< Time step.
 real(R_P)                         :: tolerance                                         !< Tolerance on local truncation error.
@@ -40,7 +41,7 @@ logical                           :: errors_analysis                            
 !-----------------------------------------------------------------------------------------------------------------------------------
 
 !-----------------------------------------------------------------------------------------------------------------------------------
-! setting Command Line Interface
+! set Command Line Interface
 call cli%init(progname    = 'oscillation',                                              &
               authors     = 'Fortran-FOSS-Programmers',                                 &
               license     = 'GNU GPLv3',                                                &
@@ -60,7 +61,7 @@ call cli%add(switch='--results', switch_ab='-r', help='Save results', required=.
 call cli%add(switch='--plots', switch_ab='-p', help='Save plots of results', required=.false., act='store_true', def='.false.')
 call cli%add(switch='--output', help='Output files basename', required=.false., act='store', def='unset')
 call cli%add(switch='--errors_analysis', help='Peform errors analysis', required=.false., act='store_true', def='.false.')
-! parsing Command Line Interface
+! parse Command Line Interface
 call cli%parse(error=error)
 call cli%get(switch='-s', val=solver, error=error) ; if (error/=0) stop
 call cli%get(switch='--ss', val=stages_steps, error=error) ; if (error/=0) stop
@@ -73,6 +74,7 @@ call cli%get(switch='-r', val=results, error=error) ; if (error/=0) stop
 call cli%get(switch='-p', val=plots, error=error) ; if (error/=0) stop
 call cli%get(switch='--output', val=output_cli, error=error) ; if (error/=0) stop
 call cli%get(switch='--errors_analysis', val=errors_analysis, error=error) ; if (error/=0) stop
+! run tests
 if (errors_analysis) then
   call perform_errors_analysis
 else
@@ -153,7 +155,8 @@ contains
       output = 'oscillation_integration-'//trim(str(.true.,n=tolerance))//'-tolerance-'//trim(adjustl(solver))
     endif
   endif
-  if (allocated(solution)) deallocate(solution) ; allocate(solution(0:space_dimension, 0:int(t_final/Dt)))
+  if (allocated(solution)) deallocate(solution) ; allocate(solution(0:space_dimension+2, 0:int(t_final/Dt)))
+  amplitude = sqrt(initial_state(1)**2 + initial_state(2)**2)
   return
   !---------------------------------------------------------------------------------------------------------------------------------
   endsubroutine init
@@ -173,33 +176,49 @@ contains
   !---------------------------------------------------------------------------------------------------------------------------------
   endfunction exact_solution
 
+  function compute_amplitude_phase(sol) result(ap)
+  !---------------------------------------------------------------------------------------------------------------------------------
+  !< Compute amplitude and phase of the solution.
+  !---------------------------------------------------------------------------------------------------------------------------------
+  real(R_P), intent(IN) :: sol(1:2) !< Solution.
+  real(R_P)             :: ap(1:2)  !< Amplitude and phase.
+  !---------------------------------------------------------------------------------------------------------------------------------
+
+  !---------------------------------------------------------------------------------------------------------------------------------
+  ap(1) = sqrt(sol(1)**2 + sol(2)**2)
+  ap(2) = atan(-sol(1) / sol(2))
+  return
+  !---------------------------------------------------------------------------------------------------------------------------------
+  endfunction compute_amplitude_phase
+
   subroutine save_results(title, basename, solution)
   !---------------------------------------------------------------------------------------------------------------------------------
   !< Save plots of results.
   !---------------------------------------------------------------------------------------------------------------------------------
-  character(*), intent(IN) :: title                     !< Plot title.
-  character(*), intent(IN) :: basename                  !< Output files basename.
-  real(R_P),    intent(IN) :: solution(0:,0:)           !< Solution at each time step.
-  integer(I_P)             :: rawfile                   !< Raw file unit for saving results.
-  real(R_P)                :: ex_sol(1:space_dimension) !< Exact solution.
-  type(pyplot)             :: plt                       !< Plot file handler.
-  integer(I_P)             :: i                         !< Counter.
-  integer(I_P)             :: s                         !< Counter.
+  character(*), intent(IN) :: title                       !< Plot title.
+  character(*), intent(IN) :: basename                    !< Output files basename.
+  real(R_P),    intent(IN) :: solution(0:,0:)             !< Solution at each time step.
+  integer(I_P)             :: rawfile                     !< Raw file unit for saving results.
+  real(R_P)                :: ex_sol(1:space_dimension+2) !< Exact solution.
+  type(pyplot)             :: plt                         !< Plot file handler.
+  integer(I_P)             :: i                           !< Counter.
+  integer(I_P)             :: s                           !< Counter.
   !---------------------------------------------------------------------------------------------------------------------------------
 
   !---------------------------------------------------------------------------------------------------------------------------------
   if (results) then
     open(newunit=rawfile, file=basename//'.dat')
     write(rawfile, '(A)')'TITLE="'//title//'"'
-    write(rawfile, '(A)')'VARIABLES="t" "x" "y"'
+    write(rawfile, '(A)')'VARIABLES="t" "x" "y" "amplitude" "phase"'
     write(rawfile, '(A)')'ZONE T="FOODIE time serie"'
     do s=0, ubound(solution, dim=2)
-      write(rawfile, '(3('//FR_P//',1X))')(solution(i, s), i=0, space_dimension)
+      write(rawfile, '(5('//FR_P//',1X))')(solution(i, s), i=0, space_dimension + 2)
     enddo
     write(rawfile, '(A)')'ZONE T="Exact solution"'
     do s=0, ubound(solution, dim=2)
-      ex_sol = exact_solution(t=solution(0, s))
-      write(rawfile, '(3('//FR_P//',1X))')solution(0, s), (ex_sol(i), i=1, space_dimension)
+      ex_sol(1:2) = exact_solution(t=solution(0, s))
+      ex_sol(3:4) = compute_amplitude_phase(ex_sol(1:2))
+      write(rawfile, '(5('//FR_P//',1X))')solution(0, s), (ex_sol(i), i=1, space_dimension+2)
     enddo
     close(rawfile)
   endif
@@ -523,6 +542,7 @@ contains
   call oscillator%init(initial_state=initial_state, f=f)
   solution = 0._R_P
   solution(1:space_dimension, 0) = oscillator%output()
+  solution(space_dimension+1:space_dimension+2, 0) = compute_amplitude_phase(solution(1:space_dimension, 0))
   step = 0
   do while(solution(0, step)<t_final)
     step = step + 1
@@ -535,6 +555,7 @@ contains
     endif
     solution(0, step) = step * Dt
     solution(1:space_dimension, step) = oscillator%output()
+    solution(space_dimension+1:space_dimension+2, step) = compute_amplitude_phase(solution(1:space_dimension, step))
   enddo
   return
   !---------------------------------------------------------------------------------------------------------------------------------
@@ -566,6 +587,7 @@ contains
   call oscillator%init(initial_state=initial_state, f=f)
   solution = 0._R_P
   solution(1:space_dimension, 0) = oscillator%output()
+  solution(space_dimension+1:space_dimension+2, 0) = compute_amplitude_phase(solution(1:space_dimension, 0))
   step = 0
   do while(solution(0, step)<t_final)
     step = step + 1
@@ -578,6 +600,7 @@ contains
     endif
     solution(0, step) = step * Dt
     solution(1:space_dimension, step) = oscillator%output()
+    solution(space_dimension+1:space_dimension+2, step) = compute_amplitude_phase(solution(1:space_dimension, step))
   enddo
   return
   !---------------------------------------------------------------------------------------------------------------------------------
@@ -610,6 +633,7 @@ contains
   call oscillator%init(initial_state=initial_state, f=f)
   solution = 0._R_P
   solution(1:space_dimension, 0) = oscillator%output()
+  solution(space_dimension+1:space_dimension+2, 0) = compute_amplitude_phase(solution(1:space_dimension, 0))
   step = 0
   do while(solution(0, step)<t_final)
     step = step + 1
@@ -626,6 +650,7 @@ contains
     endif
     solution(0, step) = step * Dt
     solution(1:space_dimension, step) = oscillator%output()
+    solution(space_dimension+1:space_dimension+2, step) = compute_amplitude_phase(solution(1:space_dimension, step))
   enddo
   return
   !---------------------------------------------------------------------------------------------------------------------------------
@@ -658,6 +683,7 @@ contains
   call oscillator%init(initial_state=initial_state, f=f)
   solution = 0._R_P
   solution(1:space_dimension, 0) = oscillator%output()
+  solution(space_dimension+1:space_dimension+2, 0) = compute_amplitude_phase(solution(1:space_dimension, 0))
   step = 0
   do while(solution(0, step)<t_final)
     step = step + 1
@@ -674,6 +700,7 @@ contains
     endif
     solution(0, step) = step * Dt
     solution(1:space_dimension, step) = oscillator%output()
+    solution(space_dimension+1:space_dimension+2, step) = compute_amplitude_phase(solution(1:space_dimension, step))
   enddo
   return
   !---------------------------------------------------------------------------------------------------------------------------------
@@ -700,12 +727,14 @@ contains
   call oscillator%init(initial_state=initial_state, f=f)
   solution = 0._R_P
   solution(1:space_dimension, 0) = oscillator%output()
+  solution(space_dimension+1:space_dimension+2, 0) = compute_amplitude_phase(solution(1:space_dimension, 0))
   step = 0
   do while(solution(0, step)<t_final)
     step = step + 1
     call rk_integrator%integrate(U=oscillator, stage=rk_stage, Dt=Dt_a, t=solution(0, step))
     solution(0, step) = solution(0, step - 1) + Dt_a
     solution(1:space_dimension, step) = oscillator%output()
+    solution(space_dimension+1:space_dimension+2, step) = compute_amplitude_phase(solution(1:space_dimension, step))
   enddo
   last_step = step
   return
@@ -726,12 +755,14 @@ contains
   call oscillator%init(initial_state=initial_state, f=f)
   solution = 0._R_P
   solution(1:space_dimension, 0) = oscillator%output()
+  solution(space_dimension+1:space_dimension+2, 0) = compute_amplitude_phase(solution(1:space_dimension, 0))
   step = 0
   do while(solution(0, step)<t_final)
     step = step + 1
     call euler_integrator%integrate(U=oscillator, Dt=Dt, t=solution(0, step))
     solution(0, step) = step * Dt
     solution(1:space_dimension, step) = oscillator%output()
+    solution(space_dimension+1:space_dimension+2, step) = compute_amplitude_phase(solution(1:space_dimension, step))
   enddo
   return
   !---------------------------------------------------------------------------------------------------------------------------------
@@ -761,6 +792,7 @@ contains
   call oscillator%init(initial_state=initial_state, f=f)
   solution = 0._R_P
   solution(1:space_dimension, 0) = oscillator%output()
+  solution(space_dimension+1:space_dimension+2, 0) = compute_amplitude_phase(solution(1:space_dimension, 0))
   step = 0
   do while(solution(0, step)<t_final)
     step = step + 1
@@ -777,6 +809,7 @@ contains
     endif
     solution(0, step) = step * Dt
     solution(1:space_dimension, step) = oscillator%output()
+    solution(space_dimension+1:space_dimension+2, step) = compute_amplitude_phase(solution(1:space_dimension, step))
   enddo
   return
   !---------------------------------------------------------------------------------------------------------------------------------
@@ -800,12 +833,14 @@ contains
   call oscillator%init(initial_state=initial_state, f=f)
   solution = 0._R_P
   solution(1:space_dimension, 0) = oscillator%output()
+  solution(space_dimension+1:space_dimension+2, 0) = compute_amplitude_phase(solution(1:space_dimension, 0))
   step = 0
   do while(solution(0, step)<t_final)
     step = step + 1
     call rk_integrator%integrate(U=oscillator, stage=rk_stage, Dt=Dt, t=solution(0, step))
     solution(0, step) = step * Dt
     solution(1:space_dimension, step) = oscillator%output()
+    solution(space_dimension+1:space_dimension+2, step) = compute_amplitude_phase(solution(1:space_dimension, step))
   enddo
   return
   !---------------------------------------------------------------------------------------------------------------------------------
@@ -828,12 +863,14 @@ contains
   call oscillator%init(initial_state=initial_state, f=f)
   solution = 0._R_P
   solution(1:space_dimension, 0) = oscillator%output()
+  solution(space_dimension+1:space_dimension+2, 0) = compute_amplitude_phase(solution(1:space_dimension, 0))
   step = 0
   do while(solution(0, step)<t_final)
     step = step + 1
     call rk_integrator%integrate(U=oscillator, stage=rk_stage, Dt=Dt, t=solution(0, step))
     solution(0, step) = step * Dt
     solution(1:space_dimension, step) = oscillator%output()
+    solution(space_dimension+1:space_dimension+2, step) = compute_amplitude_phase(solution(1:space_dimension, step))
   enddo
   return
   !---------------------------------------------------------------------------------------------------------------------------------

@@ -327,8 +327,8 @@
 <a name="ln-67"></a><span class="n">endtype</span> <span class="n">oscillation</span>
 <a name="ln-68"></a><span class="c">!-----------------------------------------------------------------------------------------------------------------------------------</span>
 <a name="ln-69"></a><span class="k">contains</span>
-<a name="ln-70"></a>    <span class="c">! auxiliary methods</span>
-<a name="ln-71"></a>  <span class="k">subroutine </span><span class="n">init</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">initial_state</span><span class="p">,</span> <span class="n">f</span><span class="p">)</span>
+<a name="ln-70"></a>  <span class="c">! auxiliary methods</span>
+<a name="ln-71"></a>  <span class="k">pure subroutine </span><span class="n">init</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">initial_state</span><span class="p">,</span> <span class="n">f</span><span class="p">)</span>
 <a name="ln-72"></a>  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
 <a name="ln-73"></a>  <span class="c">!&lt; Construct an initialized Oscillation field.</span>
 <a name="ln-74"></a>  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
@@ -359,8 +359,8 @@
 <a name="ln-99"></a>  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
 <a name="ln-100"></a>  <span class="n">endfunction</span> <span class="n">output</span>
 <a name="ln-101"></a>
-<a name="ln-102"></a>    <span class="c">! ADT integrand deferred methods</span>
-<a name="ln-103"></a>  <span class="k">function </span><span class="n">dOscillation_dt</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">t</span><span class="p">)</span> <span class="k">result</span><span class="p">(</span><span class="n">dState_dt</span><span class="p">)</span>
+<a name="ln-102"></a>  <span class="c">! ADT integrand deferred methods</span>
+<a name="ln-103"></a>  <span class="k">pure function </span><span class="n">dOscillation_dt</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">t</span><span class="p">)</span> <span class="k">result</span><span class="p">(</span><span class="n">dState_dt</span><span class="p">)</span>
 <a name="ln-104"></a>  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
 <a name="ln-105"></a>  <span class="c">!&lt; Time derivative of Oscillation field.</span>
 <a name="ln-106"></a>  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
@@ -381,7 +381,7 @@
 <a name="ln-121"></a>  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
 <a name="ln-122"></a>  <span class="n">endfunction</span> <span class="n">dOscillation_dt</span>
 <a name="ln-123"></a>
-<a name="ln-124"></a>  <span class="k">function </span><span class="n">oscillation_local_error</span><span class="p">(</span><span class="n">lhs</span><span class="p">,</span> <span class="n">rhs</span><span class="p">)</span> <span class="k">result</span><span class="p">(</span><span class="n">error</span><span class="p">)</span>
+<a name="ln-124"></a>  <span class="k">pure function </span><span class="n">oscillation_local_error</span><span class="p">(</span><span class="n">lhs</span><span class="p">,</span> <span class="n">rhs</span><span class="p">)</span> <span class="k">result</span><span class="p">(</span><span class="n">error</span><span class="p">)</span>
 <a name="ln-125"></a>  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
 <a name="ln-126"></a>  <span class="c">!&lt; Estimate local truncation error between 2 oscillation approximations.</span>
 <a name="ln-127"></a>  <span class="c">!&lt;</span>
@@ -408,7 +408,7 @@
 <a name="ln-148"></a>  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
 <a name="ln-149"></a>  <span class="n">endfunction</span> <span class="n">oscillation_local_error</span>
 <a name="ln-150"></a>
-<a name="ln-151"></a>  <span class="k">function </span><span class="n">oscillation_multiply_oscillation</span><span class="p">(</span><span class="n">lhs</span><span class="p">,</span> <span class="n">rhs</span><span class="p">)</span> <span class="k">result</span><span class="p">(</span><span class="n">opr</span><span class="p">)</span>
+<a name="ln-151"></a>  <span class="k">pure function </span><span class="n">oscillation_multiply_oscillation</span><span class="p">(</span><span class="n">lhs</span><span class="p">,</span> <span class="n">rhs</span><span class="p">)</span> <span class="k">result</span><span class="p">(</span><span class="n">opr</span><span class="p">)</span>
 <a name="ln-152"></a>  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
 <a name="ln-153"></a>  <span class="c">!&lt; Multiply a oscillation field by another one.</span>
 <a name="ln-154"></a>  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
@@ -431,7 +431,7 @@
 <a name="ln-171"></a>  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
 <a name="ln-172"></a>  <span class="n">endfunction</span> <span class="n">oscillation_multiply_oscillation</span>
 <a name="ln-173"></a>
-<a name="ln-174"></a>  <span class="k">function </span><span class="n">oscillation_multiply_real</span><span class="p">(</span><span class="n">lhs</span><span class="p">,</span> <span class="n">rhs</span><span class="p">)</span> <span class="k">result</span><span class="p">(</span><span class="n">opr</span><span class="p">)</span>
+<a name="ln-174"></a>  <span class="k">pure function </span><span class="n">oscillation_multiply_real</span><span class="p">(</span><span class="n">lhs</span><span class="p">,</span> <span class="n">rhs</span><span class="p">)</span> <span class="k">result</span><span class="p">(</span><span class="n">opr</span><span class="p">)</span>
 <a name="ln-175"></a>  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
 <a name="ln-176"></a>  <span class="c">!&lt; Multiply a Oscillation field by a real scalar.</span>
 <a name="ln-177"></a>  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
@@ -451,7 +451,7 @@
 <a name="ln-191"></a>  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
 <a name="ln-192"></a>  <span class="n">endfunction</span> <span class="n">oscillation_multiply_real</span>
 <a name="ln-193"></a>
-<a name="ln-194"></a>  <span class="k">function </span><span class="n">real_multiply_oscillation</span><span class="p">(</span><span class="n">lhs</span><span class="p">,</span> <span class="n">rhs</span><span class="p">)</span> <span class="k">result</span><span class="p">(</span><span class="n">opr</span><span class="p">)</span>
+<a name="ln-194"></a>  <span class="k">pure function </span><span class="n">real_multiply_oscillation</span><span class="p">(</span><span class="n">lhs</span><span class="p">,</span> <span class="n">rhs</span><span class="p">)</span> <span class="k">result</span><span class="p">(</span><span class="n">opr</span><span class="p">)</span>
 <a name="ln-195"></a>  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
 <a name="ln-196"></a>  <span class="c">!&lt; Multiply a real scalar by a Oscillation field.</span>
 <a name="ln-197"></a>  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
@@ -471,7 +471,7 @@
 <a name="ln-211"></a>  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
 <a name="ln-212"></a>  <span class="n">endfunction</span> <span class="n">real_multiply_oscillation</span>
 <a name="ln-213"></a>
-<a name="ln-214"></a>  <span class="k">function </span><span class="n">add_oscillation</span><span class="p">(</span><span class="n">lhs</span><span class="p">,</span> <span class="n">rhs</span><span class="p">)</span> <span class="k">result</span><span class="p">(</span><span class="n">opr</span><span class="p">)</span>
+<a name="ln-214"></a>  <span class="k">pure function </span><span class="n">add_oscillation</span><span class="p">(</span><span class="n">lhs</span><span class="p">,</span> <span class="n">rhs</span><span class="p">)</span> <span class="k">result</span><span class="p">(</span><span class="n">opr</span><span class="p">)</span>
 <a name="ln-215"></a>  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
 <a name="ln-216"></a>  <span class="c">!&lt; Add two Oscillation fields.</span>
 <a name="ln-217"></a>  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
@@ -494,7 +494,7 @@
 <a name="ln-234"></a>  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
 <a name="ln-235"></a>  <span class="n">endfunction</span> <span class="n">add_Oscillation</span>
 <a name="ln-236"></a>
-<a name="ln-237"></a>  <span class="k">function </span><span class="n">sub_oscillation</span><span class="p">(</span><span class="n">lhs</span><span class="p">,</span> <span class="n">rhs</span><span class="p">)</span> <span class="k">result</span><span class="p">(</span><span class="n">opr</span><span class="p">)</span>
+<a name="ln-237"></a>  <span class="k">pure function </span><span class="n">sub_oscillation</span><span class="p">(</span><span class="n">lhs</span><span class="p">,</span> <span class="n">rhs</span><span class="p">)</span> <span class="k">result</span><span class="p">(</span><span class="n">opr</span><span class="p">)</span>
 <a name="ln-238"></a>  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
 <a name="ln-239"></a>  <span class="c">!&lt; Subtract two Oscillation fields.</span>
 <a name="ln-240"></a>  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
@@ -517,7 +517,7 @@
 <a name="ln-257"></a>  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
 <a name="ln-258"></a>  <span class="n">endfunction</span> <span class="n">sub_Oscillation</span>
 <a name="ln-259"></a>
-<a name="ln-260"></a>  <span class="k">subroutine </span><span class="n">oscillation_assign_oscillation</span><span class="p">(</span><span class="n">lhs</span><span class="p">,</span> <span class="n">rhs</span><span class="p">)</span>
+<a name="ln-260"></a>  <span class="k">pure subroutine </span><span class="n">oscillation_assign_oscillation</span><span class="p">(</span><span class="n">lhs</span><span class="p">,</span> <span class="n">rhs</span><span class="p">)</span>
 <a name="ln-261"></a>  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
 <a name="ln-262"></a>  <span class="c">!&lt; Assign one Oscillation field to another.</span>
 <a name="ln-263"></a>  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
@@ -545,7 +545,7 @@
     <hr>
     <footer>
         <div class="row">
-        <div class="col-md-4">&copy; 2015 </div>
+        <div class="col-md-4">&copy; 2016 </div>
 	<div class="col-md-4"><span class="text-center"> FOODIE was developed by Fortran-FOSS-Programmers Group</span></div>
         <div class="col-md-4"><span class="pull-right">Documentation generated by <a href="https://github.com/cmacmackin/ford">FORD</a></span></div>
         </div>
