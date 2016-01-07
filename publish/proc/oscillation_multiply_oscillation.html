@@ -961,6 +961,9 @@ private pure function oscillation_multiply_oscillation(lhs, rhs) result(opr)
     <section>
     <h2><span class="anchor" id="src"></span>Source Code</h2>
     <div class="highlight"><pre>  <span class="k">pure function </span><span class="n">oscillation_multiply_oscillation</span><span class="p">(</span><span class="n">lhs</span><span class="p">,</span> <span class="n">rhs</span><span class="p">)</span> <span class="k">result</span><span class="p">(</span><span class="n">opr</span><span class="p">)</span>
+<span class="cp">#else</span>
+  <span class="k">function </span><span class="n">oscillation_multiply_oscillation</span><span class="p">(</span><span class="n">lhs</span><span class="p">,</span> <span class="n">rhs</span><span class="p">)</span> <span class="k">result</span><span class="p">(</span><span class="n">opr</span><span class="p">)</span>
+<span class="cp">#endif</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
   <span class="c">!&lt; Multiply a oscillation field by another one.</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
