@@ -100,7 +100,11 @@ contains
   endfunction output
 
   ! ADT integrand deferred methods
+#ifdef PURE
   pure function dOscillation_dt(self, t) result(dState_dt)
+#else
+  function dOscillation_dt(self, t) result(dState_dt)
+#endif
   !---------------------------------------------------------------------------------------------------------------------------------
   !< Time derivative of Oscillation field.
   !---------------------------------------------------------------------------------------------------------------------------------
@@ -121,7 +125,11 @@ contains
   !---------------------------------------------------------------------------------------------------------------------------------
   endfunction dOscillation_dt
 
+#ifdef PURE
   pure function oscillation_local_error(lhs, rhs) result(error)
+#else
+  function oscillation_local_error(lhs, rhs) result(error)
+#endif
   !---------------------------------------------------------------------------------------------------------------------------------
   !< Estimate local truncation error between 2 oscillation approximations.
   !<
@@ -148,7 +156,11 @@ contains
   !---------------------------------------------------------------------------------------------------------------------------------
   endfunction oscillation_local_error
 
+#ifdef PURE
   pure function oscillation_multiply_oscillation(lhs, rhs) result(opr)
+#else
+  function oscillation_multiply_oscillation(lhs, rhs) result(opr)
+#endif
   !---------------------------------------------------------------------------------------------------------------------------------
   !< Multiply a oscillation field by another one.
   !---------------------------------------------------------------------------------------------------------------------------------
@@ -171,7 +183,11 @@ contains
   !---------------------------------------------------------------------------------------------------------------------------------
   endfunction oscillation_multiply_oscillation
 
+#ifdef PURE
   pure function oscillation_multiply_real(lhs, rhs) result(opr)
+#else
+  function oscillation_multiply_real(lhs, rhs) result(opr)
+#endif
   !---------------------------------------------------------------------------------------------------------------------------------
   !< Multiply a Oscillation field by a real scalar.
   !---------------------------------------------------------------------------------------------------------------------------------
@@ -191,7 +207,11 @@ contains
   !---------------------------------------------------------------------------------------------------------------------------------
   endfunction oscillation_multiply_real
 
+#ifdef PURE
   pure function real_multiply_oscillation(lhs, rhs) result(opr)
+#else
+  function real_multiply_oscillation(lhs, rhs) result(opr)
+#endif
   !---------------------------------------------------------------------------------------------------------------------------------
   !< Multiply a real scalar by a Oscillation field.
   !---------------------------------------------------------------------------------------------------------------------------------
@@ -211,7 +231,11 @@ contains
   !---------------------------------------------------------------------------------------------------------------------------------
   endfunction real_multiply_oscillation
 
+#ifdef PURE
   pure function add_oscillation(lhs, rhs) result(opr)
+#else
+  function add_oscillation(lhs, rhs) result(opr)
+#endif
   !---------------------------------------------------------------------------------------------------------------------------------
   !< Add two Oscillation fields.
   !---------------------------------------------------------------------------------------------------------------------------------
@@ -234,7 +258,11 @@ contains
   !---------------------------------------------------------------------------------------------------------------------------------
   endfunction add_Oscillation
 
+#ifdef PURE
   pure function sub_oscillation(lhs, rhs) result(opr)
+#else
+  function sub_oscillation(lhs, rhs) result(opr)
+#endif
   !---------------------------------------------------------------------------------------------------------------------------------
   !< Subtract two Oscillation fields.
   !---------------------------------------------------------------------------------------------------------------------------------
@@ -257,7 +285,11 @@ contains
   !---------------------------------------------------------------------------------------------------------------------------------
   endfunction sub_Oscillation
 
+#ifdef PURE
   pure subroutine oscillation_assign_oscillation(lhs, rhs)
+#else
+  subroutine oscillation_assign_oscillation(lhs, rhs)
+#endif
   !---------------------------------------------------------------------------------------------------------------------------------
   !< Assign one Oscillation field to another.
   !---------------------------------------------------------------------------------------------------------------------------------
