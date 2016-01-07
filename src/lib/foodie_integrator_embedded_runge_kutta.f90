@@ -340,9 +340,9 @@ contains
     self%beta(6, 1) = 512._R_P/1771._R_P ; self%beta(6, 2) = 1._R_P/4._R_P
 
     self%alph(2, 1)=1._R_P/5._R_P
-    self%alph(3, 1)=3._R_P/40._R_P	    ;self%alph(3, 2)= 9._R_P/40._R_P
-    self%alph(4, 1)=3._R_P/10._R_P	    ;self%alph(4, 2)= -9._R_P/10._R_P ;self%alph(4, 3)=6._R_P/5._R_P
-    self%alph(5, 1)=-11._R_P/54._R_P	  ;self%alph(5, 2)= 5._R_P/2._R_P	  ;self%alph(5, 3)=-70._R_P/27._R_P
+    self%alph(3, 1)=3._R_P/40._R_P      ;self%alph(3, 2)= 9._R_P/40._R_P
+    self%alph(4, 1)=3._R_P/10._R_P      ;self%alph(4, 2)= -9._R_P/10._R_P ;self%alph(4, 3)=6._R_P/5._R_P
+    self%alph(5, 1)=-11._R_P/54._R_P    ;self%alph(5, 2)= 5._R_P/2._R_P   ;self%alph(5, 3)=-70._R_P/27._R_P
     self%alph(6, 1)=1631._R_P/55296._R_P;self%alph(6, 2)=175._R_P/512._R_P;self%alph(6, 3)=575._R_P/13824._R_P
 
     self%alph(5, 4)=35._R_P/27._R_P

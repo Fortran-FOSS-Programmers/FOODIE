@@ -3,6 +3,8 @@ modes = foodie-static-opencoarrays-gnu foodie-static-opencoarrays-gnu-debug
         foodie-static-gnu foodie-static-gnu-debug foodie-shared-gnu foodie-shared-gnu-debug
         foodie-static-intel foodie-static-intel-debug foodie-shared-intel foodie-shared-intel-debug
         foodie-static-gnu-coverage
+        foodie-static-gnu-pure foodie-static-gnu-debug-pure foodie-static-gnu-coverage-pure
+        foodie-static-intel-pure foodie-static-intel-debug-pure
 
 [common-variables]
 $CSHARED_GNU = -cpp -c -fPIC -frealloc-lhs
@@ -16,201 +18,167 @@ $OPTIMIZE    = -O2
 
 # main modes
 [foodie-static-opencoarrays-gnu]
-help            = Build FOODIE library in static release mode with OpenCoarrays-GNU gfortran
-compiler        = opencoarrays-gnu
-cflags          = $CSTATIC_GNU $OPTIMIZE
-lflags          = $OPTIMIZE
-preproc         = -DCAF
-cflags_heritage = True
-build_dir       = ./build/lib/
-mod_dir         = mod
-obj_dir         = obj
-src             = src/lib/
-target          = foodie.f90
-output          = libfoodie.a
-mklib           = static
-colors          = True
-quiet           = False
-log             = True
-jobs            = 10
+help     = Build FOODIE library in static release mode with OpenCoarrays-GNU gfortran
+compiler = opencoarrays-gnu
+cflags   = $CSTATIC_GNU $OPTIMIZE
+lflags   = $OPTIMIZE
+preproc  = -DCAF
+mklib    = static
+output   = libfoodie.a
+template = template-common
 
 [foodie-static-opencoarrays-gnu-debug]
-help            = Build FOODIE library in static release mode with OpenCoarrays-GNU gfortran
-compiler        = opencoarrays-gnu
-cflags          = $CSTATIC_GNU $DEBUG_GNU
-lflags          = $DEBUG_GNU
-preproc         = -DCAF
-cflags_heritage = True
-build_dir       = ./build/lib/
-mod_dir         = mod
-obj_dir         = obj
-src             = src/lib/
-target          = foodie.f90
-output          = libfoodie.a
-mklib           = static
-colors          = True
-quiet           = False
-log             = True
-jobs            = 10
+help     = Build FOODIE library in static release mode with OpenCoarrays-GNU gfortran
+compiler = opencoarrays-gnu
+cflags   = $CSTATIC_GNU $DEBUG_GNU
+lflags   = $DEBUG_GNU
+preproc  = -DCAF
+mklib    = static
+output   = libfoodie.a
+template = template-common
 
 [foodie-static-gnu]
-help            = Build FOODIE library in static release mode with GNU gfortran
-compiler        = gnu
-cflags          = $CSTATIC_GNU $OPTIMIZE
-lflags          = $OPTIMIZE
-cflags_heritage = True
-build_dir       = ./build/lib/
-mod_dir         = mod
-obj_dir         = obj
-src             = src/lib/
-target          = foodie.f90
-output          = libfoodie.a
-mklib           = static
-colors          = True
-quiet           = False
-log             = True
-jobs            = 10
+help     = Build FOODIE library in static release mode with GNU gfortran
+compiler = gnu
+cflags   = $CSTATIC_GNU $OPTIMIZE
+lflags   = $OPTIMIZE
+mklib    = static
+output   = libfoodie.a
+template = template-common
 
 [foodie-static-gnu-debug]
-help            = Build FOODIE library in static debug mode with GNU gfortran
-compiler        = gnu
-cflags          = $CSTATIC_GNU $DEBUG_GNU
-lflags          = $DEBUG_GNU
-cflags_heritage = True
-build_dir       = ./build/lib/
-mod_dir         = mod
-obj_dir         = obj
-src             = src/lib/
-target          = foodie.f90
-output          = libfoodie.a
-mklib           = static
-colors          = True
-quiet           = False
-log             = True
-jobs            = 10
+help     = Build FOODIE library in static debug mode with GNU gfortran
+compiler = gnu
+cflags   = $CSTATIC_GNU $DEBUG_GNU
+lflags   = $DEBUG_GNU
+mklib    = static
+output   = libfoodie.a
+template = template-common
 
 [foodie-shared-gnu]
-help            = Build FOODIE library in shared release mode with GNU gfortran
-compiler        = gnu
-cflags          = $CSHARED_GNU $OPTIMIZE
-lflags          = $LSHARED
-cflags_heritage = True
-build_dir       = ./build/lib/
-mod_dir         = mod
-obj_dir         = obj
-src             = src/lib/
-target          = foodie.f90
-output          = libfoodie.so
-mklib           = shared
-colors          = True
-quiet           = False
-log             = True
-jobs            = 10
+help     = Build FOODIE library in shared release mode with GNU gfortran
+compiler = gnu
+cflags   = $CSHARED_GNU $OPTIMIZE
+lflags   = $LSHARED
+mklib    = shared
+output   = libfoodie.so
+template = template-common
 
 [foodie-shared-gnu-debug]
-help            = Build FOODIE library in shared debug mode with GNU gfortran
-compiler        = gnu
-cflags          = $CSHARED_GNU $DEBUG_GNU
-lflags          = $LSHARED $DEBUG_GNU
-cflags_heritage = True
-build_dir       = ./build/lib/
-mod_dir         = mod
-obj_dir         = obj
-src             = src/lib/
-target          = foodie.f90
-output          = libfoodie.so
-mklib           = shared
-colors          = True
-quiet           = False
-log             = True
-jobs            = 10
+help     = Build FOODIE library in shared debug mode with GNU gfortran
+compiler = gnu
+cflags   = $CSHARED_GNU $DEBUG_GNU
+lflags   = $LSHARED $DEBUG_GNU
+mklib    = shared
+output   = libfoodie.so
+template = template-common
 
 [foodie-static-intel]
-help            = Build FOODIE library in static release mode with Intel Fortran
-compiler        = intel
-cflags          = $CSTATIC_INT $OPTIMIZE
-lflags          = $OPTIMIZE
-cflags_heritage = True
-build_dir       = ./build/lib/
-mod_dir         = mod
-obj_dir         = obj
-src             = src/lib/
-target          = foodie.f90
-output          = libfoodie.a
-mklib           = static
-colors          = True
-quiet           = False
-log             = True
-jobs            = 10
+help     = Build FOODIE library in static release mode with Intel Fortran
+compiler = intel
+cflags   = $CSTATIC_INT $OPTIMIZE
+lflags   = $OPTIMIZE
+mklib    = static
+output   = libfoodie.a
+template = template-common
 
 [foodie-static-intel-debug]
-help            = Build FOODIE library in static debug mode with Intel Fortran
-compiler        = intel
-cflags          = $CSTATIC_INT $DEBUG_INT
-lflags          = $DEBUG_INT
-cflags_heritage = True
-build_dir       = ./build/lib/
-mod_dir         = mod
-obj_dir         = obj
-src             = src/lib/
-target          = foodie.f90
-output          = libfoodie.a
-mklib           = static
-colors          = True
-quiet           = False
-log             = True
-jobs            = 10
+help     = Build FOODIE library in static debug mode with Intel Fortran
+compiler = intel
+cflags   = $CSTATIC_INT $DEBUG_INT
+lflags   = $DEBUG_INT
+mklib    = static
+output   = libfoodie.a
+template = template-common
 
 [foodie-shared-intel]
-help            = Build FOODIE library in shared release mode with Intel Fortran
-compiler        = intel
-cflags          = $CSHARED_INT $OPTIMIZE
-lflags          = $LSHARED
-cflags_heritage = True
-build_dir       = ./build/lib/
-mod_dir         = mod
-obj_dir         = obj
-src             = src/lib/
-target          = foodie.f90
-output          = libfoodie.so
-mklib           = shared
-colors          = True
-quiet           = False
-log             = True
-jobs            = 10
+help     = Build FOODIE library in shared release mode with Intel Fortran
+compiler = intel
+cflags   = $CSHARED_INT $OPTIMIZE
+lflags   = $LSHARED
+mklib    = shared
+output   = libfoodie.so
+template = template-common
 
 [foodie-shared-intel-debug]
-help            = Build FOODIE library in shared debug mode with Intel Fortran
-compiler        = intel
-cflags          = $CSHARED_INT $DEBUG_INT
-lflags          = $LSHARED $DEBUG_INT
-cflags_heritage = True
-build_dir       = ./build/lib/
-mod_dir         = mod
-obj_dir         = obj
-src             = src/lib/
-target          = foodie.f90
-output          = libfoodie.so
-mklib           = shared
-colors          = True
-quiet           = False
-log             = True
-jobs            = 10
+help     = Build FOODIE library in shared debug mode with Intel Fortran
+compiler = intel
+cflags   = $CSHARED_INT $DEBUG_INT
+lflags   = $LSHARED $DEBUG_INT
+mklib    = shared
+output   = libfoodie.so
+template = template-common
 
 [foodie-static-gnu-coverage]
-help            = Build FOODIE library in static release coverage mode with GNU gfortran
-compiler        = gnu
-cflags          = $CSTATIC_GNU $OPTIMIZE
-lflags          = $OPTIMIZE
-coverage        = True
+help     = Build FOODIE library in static release coverage mode with GNU gfortran
+compiler = gnu
+cflags   = $CSTATIC_GNU $OPTIMIZE
+lflags   = $OPTIMIZE
+mklib    = static
+output   = libfoodie.a
+coverage = True
+template = template-common
+
+# pure modes for testing FOODIE ADT with "pure" procedures
+[foodie-static-gnu-pure]
+help     = Build FOODIE library in static release mode with GNU gfortran
+compiler = gnu
+cflags   = $CSTATIC_GNU $OPTIMIZE
+lflags   = $OPTIMIZE
+preproc  = -DPURE
+mklib    = static
+output   = libfoodie.a
+template = template-common
+
+[foodie-static-gnu-debug-pure]
+help     = Build FOODIE library in static debug mode with GNU gfortran
+compiler = gnu
+cflags   = $CSTATIC_GNU $DEBUG_GNU
+lflags   = $DEBUG_GNU
+preproc  = -DPURE
+mklib    = static
+output   = libfoodie.a
+template = template-common
+
+[foodie-static-gnu-coverage-pure]
+help     = Build FOODIE library in static release coverage mode with GNU gfortran
+compiler = gnu
+cflags   = $CSTATIC_GNU $OPTIMIZE
+lflags   = $OPTIMIZE
+preproc  = -DPURE
+mklib    = static
+output   = libfoodie.a
+coverage = True
+template = template-common
+
+[foodie-static-intel-pure]
+help     = Build FOODIE library in static release mode with Intel Fortran
+compiler = intel
+cflags   = $CSTATIC_INT $OPTIMIZE
+lflags   = $OPTIMIZE
+preproc  = -DPURE
+mklib    = static
+output   = libfoodie.a
+template = template-common
+
+[foodie-static-intel-debug-pure]
+help     = Build FOODIE library in static debug mode with Intel Fortran
+compiler = intel
+cflags   = $CSTATIC_INT $DEBUG_INT
+lflags   = $DEBUG_INT
+preproc  = -DPURE
+mklib    = static
+output   = libfoodie.a
+template = template-common
+
+# templates
+[template-common]
 cflags_heritage = True
 build_dir       = ./build/lib/
 mod_dir         = mod
 obj_dir         = obj
 src             = src/lib/
 target          = foodie.f90
-output          = libfoodie.a
-mklib           = static
 colors          = True
 quiet           = False
 log             = True
