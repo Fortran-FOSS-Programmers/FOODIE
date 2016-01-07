@@ -1,6 +1,6 @@
 #!MC 1120
-# Created by Tecplot 360 build 11.3.29.563 
-$!VarSet |LFDSFN1| = '"errors_analysis-oscillation-0.100000000000000E-002-tolerance-emd-runge-kutta-9.dat" "errors_analysis-oscillation-0.100000000000000E-003-tolerance-emd-runge-kutta-9.dat" "errors_analysis-oscillation-0.100000000000000E-004-tolerance-emd-runge-kutta-9.dat" "errors_analysis-oscillation-0.100000000000000E-005-tolerance-emd-runge-kutta-9.dat" "errors_analysis-oscillation-0.100000000000000E-006-tolerance-emd-runge-kutta-9.dat" "errors_analysis-oscillation-0.100000000000000E-007-tolerance-emd-runge-kutta-9.dat"'
+# Created by Tecplot 360 build 11.3.29.563
+$!VarSet |LFDSFN1| = '"errors_analysis-oscillation-0000000200-time_steps-adams-bashforth-moulton-2.dat" "errors_analysis-oscillation-0000000400-time_steps-adams-bashforth-moulton-2.dat" "errors_analysis-oscillation-0000000800-time_steps-adams-bashforth-moulton-2.dat" "errors_analysis-oscillation-0000001600-time_steps-adams-bashforth-moulton-2.dat" "errors_analysis-oscillation-0000003125-time_steps-adams-bashforth-moulton-2.dat" "errors_analysis-oscillation-0000010000-time_steps-adams-bashforth-moulton-2.dat"'
 $!VarSet |LFDSVL1| = '"t" "x" "y" "amplitude" "phase"'
 $!SETSTYLEBASE FACTORY
 $!GLOBALLINKING 
@@ -893,22 +893,22 @@ $!REMOVEVAR |LFDSVL1|
 $!REMOVEVAR |LFDSFN1|
 $!RENAMEDATASETZONE 
   ZONE = 11
-  NAME = 'Tolerance 10^-6'
+  NAME = 'Dt 100'
 $!RENAMEDATASETZONE 
   ZONE = 9
-  NAME = 'Tolerance 10^-5'
+  NAME = 'Dt 320'
 $!RENAMEDATASETZONE 
   ZONE = 7
-  NAME = 'Tolerance 10^-4'
+  NAME = 'Dt 625'
 $!RENAMEDATASETZONE 
   ZONE = 5
-  NAME = 'Tolerance 10^-3'
+  NAME = 'Dt 1250'
 $!RENAMEDATASETZONE 
   ZONE = 3
-  NAME = 'Tolerance 10^-2'
+  NAME = 'Dt 2500'
 $!RENAMEDATASETZONE 
   ZONE = 1
-  NAME = 'Tolerance 10^-1'
+  NAME = 'Dt 5000'
 $!FRAMELAYOUT 
   SHOWBORDER = NO
   SHOWHEADER = NO
@@ -952,7 +952,7 @@ $!LINEMAP  [1]
     {
     ZONE = 1
     XAXISVAR = 1
-    YAXISVAR = 3
+    YAXISVAR = 5
     }
   LINES
     {
@@ -985,7 +985,7 @@ $!LINEMAP  [2]
     {
     ZONE = 3
     XAXISVAR = 1
-    YAXISVAR = 3
+    YAXISVAR = 5
     }
   LINES
     {
@@ -1018,7 +1018,7 @@ $!LINEMAP  [3]
     {
     ZONE = 5
     XAXISVAR = 1
-    YAXISVAR = 3
+    YAXISVAR = 5
     }
   LINES
     {
@@ -1051,7 +1051,7 @@ $!LINEMAP  [4]
     {
     ZONE = 7
     XAXISVAR = 1
-    YAXISVAR = 3
+    YAXISVAR = 5
     }
   LINES
     {
@@ -1085,7 +1085,7 @@ $!LINEMAP  [5]
     {
     ZONE = 9
     XAXISVAR = 1
-    YAXISVAR = 3
+    YAXISVAR = 5
     }
   LINES
     {
@@ -1119,7 +1119,7 @@ $!LINEMAP  [6]
     {
     ZONE = 11
     XAXISVAR = 1
-    YAXISVAR = 3
+    YAXISVAR = 5
     }
   LINES
     {
@@ -1153,7 +1153,7 @@ $!LINEMAP  [7]
     {
     ZONE = 2
     XAXISVAR = 1
-    YAXISVAR = 3
+    YAXISVAR = 5
     }
   LINES
     {
@@ -1185,7 +1185,6 @@ $!XYLINEAXIS
   DEPXTOYRATIO = 1
   VIEWPORTPOSITION
     {
-    X1 = 10
     Y1 = 14.911
     X2 = 90
     Y2 = 90
@@ -1231,7 +1230,6 @@ $!XYLINEAXIS
         FONT = HELV
         HEIGHT = 6.6
         }
-      OFFSET = 5
       }
     AXISLINE
       {
@@ -1242,10 +1240,9 @@ $!XYLINEAXIS
 $!XYLINEAXIS 
   YDETAIL 1
     {
-    RANGEMIN = -1.5
-    RANGEMAX = 1.5
-    AUTOGRID = NO
-    GRSPACING = 0.5
+    RANGEMIN = -2
+    RANGEMAX = 2
+    GRSPACING = 1
     TICKS
       {
       LINETHICKNESS = 0.1
@@ -1275,7 +1272,6 @@ $!XYLINEAXIS
         FONT = HELV
         HEIGHT = 6.6
         }
-      OFFSET = 4
       }
     AXISLINE
       {
@@ -1312,6 +1308,11 @@ $!GLOBALLINEPLOT
     }
   LEGEND
     {
+    TEXTSHAPE
+      {
+      FONT = HELV
+      HEIGHT = 3.8
+      }
     BOX
       {
       BOXTYPE = FILLED
@@ -1320,8 +1321,8 @@ $!GLOBALLINEPLOT
       }
     XYPOS
       {
-      X = 93.565
-      Y = 92.264
+      X = 50
+      Y = 93
       }
     }
 $!LINEMAP  [1]
@@ -1330,7 +1331,7 @@ $!LINEMAP  [1]
     {
     ZONE = 1
     XAXISVAR = 1
-    YAXISVAR = 3
+    YAXISVAR = 5
     }
   LINES
     {
@@ -1363,7 +1364,7 @@ $!LINEMAP  [2]
     {
     ZONE = 3
     XAXISVAR = 1
-    YAXISVAR = 3
+    YAXISVAR = 5
     }
   LINES
     {
@@ -1396,7 +1397,7 @@ $!LINEMAP  [3]
     {
     ZONE = 5
     XAXISVAR = 1
-    YAXISVAR = 3
+    YAXISVAR = 5
     }
   LINES
     {
@@ -1429,7 +1430,7 @@ $!LINEMAP  [4]
     {
     ZONE = 7
     XAXISVAR = 1
-    YAXISVAR = 3
+    YAXISVAR = 5
     }
   LINES
     {
@@ -1446,7 +1447,7 @@ $!LINEMAP  [4]
     FILLMODE = USELINECOLOR
     FILLCOLOR = RED
     SIZE = 1
-    SKIPPING = 100
+    SKIPPING = 10
     }
   BARCHARTS
     {
@@ -1463,7 +1464,7 @@ $!LINEMAP  [5]
     {
     ZONE = 9
     XAXISVAR = 1
-    YAXISVAR = 3
+    YAXISVAR = 5
     }
   LINES
     {
@@ -1480,7 +1481,7 @@ $!LINEMAP  [5]
     FILLMODE = USELINECOLOR
     FILLCOLOR = BLUE
     SIZE = 1
-    SKIPPING = 100
+    SKIPPING = 2
     }
   BARCHARTS
     {
@@ -1497,7 +1498,7 @@ $!LINEMAP  [6]
     {
     ZONE = 11
     XAXISVAR = 1
-    YAXISVAR = 3
+    YAXISVAR = 5
     }
   LINES
     {
@@ -1514,7 +1515,7 @@ $!LINEMAP  [6]
     FILLMODE = USELINECOLOR
     FILLCOLOR = YELLOW
     SIZE = 1
-    SKIPPING = 100
+    SKIPPING = 2
     }
   BARCHARTS
     {
@@ -1531,7 +1532,7 @@ $!LINEMAP  [7]
     {
     ZONE = 2
     XAXISVAR = 1
-    YAXISVAR = 3
+    YAXISVAR = 5
     }
   LINES
     {
@@ -1548,7 +1549,6 @@ $!LINEMAP  [7]
     FILLMODE = USELINECOLOR
     FILLCOLOR = RED
     SIZE = 1
-    SKIPPING = 100
     }
   BARCHARTS
     {
@@ -1563,7 +1563,7 @@ $!XYLINEAXIS
   DEPXTOYRATIO = 1
   VIEWPORTPOSITION
     {
-    X1 = 10
+    X1 = 15
     Y1 = 14.911
     X2 = 90
     Y2 = 90
@@ -1572,9 +1572,9 @@ $!XYLINEAXIS
 $!XYLINEAXIS 
   XDETAIL 1
     {
-    RANGEMIN = 800000
+    RANGEMIN = 900000
     RANGEMAX = 1000000
-    GRSPACING = 200000
+    GRSPACING = 50000
     TICKS
       {
       LINETHICKNESS = 0.1
@@ -1609,7 +1609,6 @@ $!XYLINEAXIS
         FONT = HELV
         HEIGHT = 6.6
         }
-      OFFSET = 5
       }
     AXISLINE
       {
@@ -1620,10 +1619,9 @@ $!XYLINEAXIS
 $!XYLINEAXIS 
   YDETAIL 1
     {
-    RANGEMIN = -1.5
-    RANGEMAX = 1.5
-    AUTOGRID = NO
-    GRSPACING = 0.5
+    RANGEMIN = -2
+    RANGEMAX = 2
+    GRSPACING = 1
     TICKS
       {
       LINETHICKNESS = 0.1
@@ -1653,7 +1651,7 @@ $!XYLINEAXIS
         FONT = HELV
         HEIGHT = 6.6
         }
-      OFFSET = 5
+      OFFSET = 8
       }
     AXISLINE
       {
@@ -1694,7 +1692,7 @@ $!GLOBALLINEPLOT
     TEXTSHAPE
       {
       FONT = HELV
-      HEIGHT = 4.8
+      HEIGHT = 4.5
       }
     BOX
       {
@@ -1705,8 +1703,8 @@ $!GLOBALLINEPLOT
     ROWSPACING = 1.1
     XYPOS
       {
-      X = 50
-      Y = 38
+      X = 95
+      Y = 90
       }
     }
 $!LINEMAP  [1]
@@ -1715,7 +1713,7 @@ $!LINEMAP  [1]
     {
     ZONE = 1
     XAXISVAR = 1
-    YAXISVAR = 2
+    YAXISVAR = 4
     }
   LINES
     {
@@ -1748,7 +1746,7 @@ $!LINEMAP  [2]
     {
     ZONE = 3
     XAXISVAR = 1
-    YAXISVAR = 2
+    YAXISVAR = 4
     }
   LINES
     {
@@ -1781,7 +1779,7 @@ $!LINEMAP  [3]
     {
     ZONE = 5
     XAXISVAR = 1
-    YAXISVAR = 2
+    YAXISVAR = 4
     }
   LINES
     {
@@ -1814,7 +1812,7 @@ $!LINEMAP  [4]
     {
     ZONE = 7
     XAXISVAR = 1
-    YAXISVAR = 2
+    YAXISVAR = 4
     }
   LINES
     {
@@ -1848,7 +1846,7 @@ $!LINEMAP  [5]
     {
     ZONE = 9
     XAXISVAR = 1
-    YAXISVAR = 2
+    YAXISVAR = 4
     }
   LINES
     {
@@ -1882,7 +1880,7 @@ $!LINEMAP  [6]
     {
     ZONE = 11
     XAXISVAR = 1
-    YAXISVAR = 2
+    YAXISVAR = 4
     }
   LINES
     {
@@ -1916,7 +1914,7 @@ $!LINEMAP  [7]
     {
     ZONE = 2
     XAXISVAR = 1
-    YAXISVAR = 2
+    YAXISVAR = 4
     }
   LINES
     {
@@ -1948,7 +1946,6 @@ $!XYLINEAXIS
   DEPXTOYRATIO = 1
   VIEWPORTPOSITION
     {
-    X1 = 10
     Y1 = 14.911
     X2 = 90
     Y2 = 90
@@ -2003,9 +2000,8 @@ $!XYLINEAXIS
 $!XYLINEAXIS 
   YDETAIL 1
     {
-    RANGEMIN = -1.5
-    RANGEMAX = 1.5
-    AUTOGRID = NO
+    RANGEMIN = 0
+    RANGEMAX = 2
     GRSPACING = 0.5
     TICKS
       {
@@ -2036,7 +2032,6 @@ $!XYLINEAXIS
         FONT = HELV
         HEIGHT = 6.6
         }
-      OFFSET = 4
       }
     AXISLINE
       {
@@ -2049,14 +2044,14 @@ $!LINEPLOTLAYERS
 $!ATTACHTEXT 
   ANCHORPOS
     {
-    X = 30
+    X = 20
     Y = 93
     }
   TEXTSHAPE
     {
     FONT = HELV
     }
-  TEXT = 'X-Y solutions for all time steps'
+  TEXT = 'All time steps'
 ### Frame Number 4 ###
 $!CREATENEWFRAME 
 $!FRAMELAYOUT 
@@ -2084,6 +2079,11 @@ $!GLOBALLINEPLOT
     }
   LEGEND
     {
+    TEXTSHAPE
+      {
+      FONT = HELV
+      HEIGHT = 3.8
+      }
     BOX
       {
       BOXTYPE = FILLED
@@ -2092,8 +2092,8 @@ $!GLOBALLINEPLOT
       }
     XYPOS
       {
-      X = 88.752
-      Y = 29.907
+      X = 50
+      Y = 93
       }
     }
 $!LINEMAP  [1]
@@ -2102,7 +2102,7 @@ $!LINEMAP  [1]
     {
     ZONE = 1
     XAXISVAR = 1
-    YAXISVAR = 2
+    YAXISVAR = 4
     }
   LINES
     {
@@ -2135,7 +2135,7 @@ $!LINEMAP  [2]
     {
     ZONE = 3
     XAXISVAR = 1
-    YAXISVAR = 2
+    YAXISVAR = 4
     }
   LINES
     {
@@ -2168,7 +2168,7 @@ $!LINEMAP  [3]
     {
     ZONE = 5
     XAXISVAR = 1
-    YAXISVAR = 2
+    YAXISVAR = 4
     }
   LINES
     {
@@ -2201,7 +2201,7 @@ $!LINEMAP  [4]
     {
     ZONE = 7
     XAXISVAR = 1
-    YAXISVAR = 2
+    YAXISVAR = 4
     }
   LINES
     {
@@ -2218,7 +2218,7 @@ $!LINEMAP  [4]
     FILLMODE = USELINECOLOR
     FILLCOLOR = RED
     SIZE = 1
-    SKIPPING = 100
+    SKIPPING = 10
     }
   BARCHARTS
     {
@@ -2235,7 +2235,7 @@ $!LINEMAP  [5]
     {
     ZONE = 9
     XAXISVAR = 1
-    YAXISVAR = 2
+    YAXISVAR = 4
     }
   LINES
     {
@@ -2252,7 +2252,7 @@ $!LINEMAP  [5]
     FILLMODE = USELINECOLOR
     FILLCOLOR = BLUE
     SIZE = 1
-    SKIPPING = 100
+    SKIPPING = 2
     }
   BARCHARTS
     {
@@ -2269,7 +2269,7 @@ $!LINEMAP  [6]
     {
     ZONE = 11
     XAXISVAR = 1
-    YAXISVAR = 2
+    YAXISVAR = 4
     }
   LINES
     {
@@ -2286,7 +2286,7 @@ $!LINEMAP  [6]
     FILLMODE = USELINECOLOR
     FILLCOLOR = YELLOW
     SIZE = 1
-    SKIPPING = 100
+    SKIPPING = 2
     }
   BARCHARTS
     {
@@ -2303,7 +2303,7 @@ $!LINEMAP  [7]
     {
     ZONE = 2
     XAXISVAR = 1
-    YAXISVAR = 2
+    YAXISVAR = 4
     }
   LINES
     {
@@ -2320,7 +2320,6 @@ $!LINEMAP  [7]
     FILLMODE = USELINECOLOR
     FILLCOLOR = RED
     SIZE = 1
-    SKIPPING = 100
     }
   BARCHARTS
     {
@@ -2335,7 +2334,7 @@ $!XYLINEAXIS
   DEPXTOYRATIO = 1
   VIEWPORTPOSITION
     {
-    X1 = 10
+    X1 = 15
     Y1 = 14.911
     X2 = 90
     Y2 = 90
@@ -2344,9 +2343,10 @@ $!XYLINEAXIS
 $!XYLINEAXIS 
   XDETAIL 1
     {
-    RANGEMIN = 800000
+    RANGEMIN = 900000
     RANGEMAX = 1000000
-    GRSPACING = 200000
+    AUTOGRID = NO
+    GRSPACING = 50000
     TICKS
       {
       SHOWONAXISLINE = NO
@@ -2390,10 +2390,10 @@ $!XYLINEAXIS
 $!XYLINEAXIS 
   YDETAIL 1
     {
-    RANGEMIN = -1.5
-    RANGEMAX = 1.5
+    RANGEMIN = 0
+    RANGEMAX = 2
     AUTOGRID = NO
-    GRSPACING = 0.5
+    GRSPACING = 2
     TICKS
       {
       LINETHICKNESS = 0.1
@@ -2423,7 +2423,7 @@ $!XYLINEAXIS
         FONT = HELV
         HEIGHT = 6.6
         }
-      OFFSET = 4
+      OFFSET = 8
       }
     AXISLINE
       {
@@ -2436,12 +2436,12 @@ $!LINEPLOTLAYERS
 $!ATTACHTEXT 
   ANCHORPOS
     {
-    X = 16
+    X = 20
     Y = 93
     }
   TEXTSHAPE
     {
     FONT = HELV
     }
-  TEXT = 'X-Y solutions for final time steps'
+  TEXT = 'Final time steps'
 $!SETSTYLEBASE CONFIG
