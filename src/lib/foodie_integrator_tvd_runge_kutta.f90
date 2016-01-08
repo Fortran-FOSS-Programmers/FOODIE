@@ -102,8 +102,9 @@ module foodie_integrator_tvd_runge_kutta
 !-----------------------------------------------------------------------------------------------------------------------------------
 
 !-----------------------------------------------------------------------------------------------------------------------------------
-use foodie_kinds, only : R_P, I_P
 use foodie_adt_integrand, only : integrand
+use foodie_kinds, only : R_P, I_P
+use foodie_utils, only : is_admissible
 !-----------------------------------------------------------------------------------------------------------------------------------
 
 !-----------------------------------------------------------------------------------------------------------------------------------
@@ -113,19 +114,27 @@ public :: tvd_runge_kutta_integrator
 !-----------------------------------------------------------------------------------------------------------------------------------
 
 !-----------------------------------------------------------------------------------------------------------------------------------
+character(len=99), parameter :: supported_stages='1-3,5' !< List of supported stages number. Valid format is `1-2,4,9-23...`.
+
 type :: tvd_runge_kutta_integrator
   !< FOODIE integrator: provide an explicit class of TVD or SSP Runge-Kutta schemes, from 1st to 4th order accurate.
   !<
   !< @note The integrator must be created or initialized (initialize the RK coefficients) before used.
+  !<
+  !< ### List of errors status
+  !<+ error=0 => no error;
+  !<+ error=1 => bad (unsupported) number of required stages;
   integer(I_P)           :: stages=0  !< Number of stages.
   real(R_P), allocatable :: alph(:,:) !< \(\alpha\) Butcher's coefficients.
   real(R_P), allocatable :: beta(:)   !< \(\beta\) Butcher's coefficients.
   real(R_P), allocatable :: gamm(:)   !< \(\gamma\) Butcher's coefficients.
+  integer(I_P)           :: error=0   !< Error status flag: trap occurrences of errors.
   contains
-    procedure, pass(self), public :: destroy   !< Destroy the integrator.
-    procedure, pass(self), public :: init      !< Initialize (create) the integrator.
-    procedure, pass(self), public :: integrate !< Integrate integrand field.
-    final                         :: finalize  !< Finalize object.
+    procedure, pass(self), public :: init         !< Initialize (create) the integrator.
+    procedure, pass(self), public :: destroy      !< Destroy the integrator.
+    procedure, pass(self), public :: integrate    !< Integrate integrand field.
+    procedure, nopass,     public :: is_supported !< Check if the queried number of stages is supported or not.
+    final                         :: finalize     !< Finalize object.
 endtype tvd_runge_kutta_integrator
 !-----------------------------------------------------------------------------------------------------------------------------------
 contains
@@ -139,53 +148,58 @@ contains
   !---------------------------------------------------------------------------------------------------------------------------------
 
   !---------------------------------------------------------------------------------------------------------------------------------
-  if (stages<1) return ! error print should be added
-  self%stages = stages
-  if (allocated(self%beta)) deallocate(self%beta) ; allocate(self%beta(1:stages          )) ; self%beta = 0._R_P
-  if (allocated(self%alph)) deallocate(self%alph) ; allocate(self%alph(1:stages, 1:stages)) ; self%alph = 0._R_P
-  if (allocated(self%gamm)) deallocate(self%gamm) ; allocate(self%gamm(          1:stages)) ; self%gamm = 0._R_P
-  select case(stages)
-  case(1)
-    ! RK(1,1) Forward-Euler
-    self%beta(1) = 1._R_P
-  case(2)
-    ! SSPRK(2,2)
-    self%beta(1) = 0.5_R_P
-    self%beta(2) = 0.5_R_P
+  if (self%is_supported(stages)) then
+    self%stages = stages
+    if (allocated(self%beta)) deallocate(self%beta) ; allocate(self%beta(1:stages          )) ; self%beta = 0._R_P
+    if (allocated(self%alph)) deallocate(self%alph) ; allocate(self%alph(1:stages, 1:stages)) ; self%alph = 0._R_P
+    if (allocated(self%gamm)) deallocate(self%gamm) ; allocate(self%gamm(          1:stages)) ; self%gamm = 0._R_P
+    select case(stages)
+    case(1)
+      ! RK(1,1) Forward-Euler
+      self%beta(1) = 1._R_P
+    case(2)
+      ! SSPRK(2,2)
+      self%beta(1) = 0.5_R_P
+      self%beta(2) = 0.5_R_P
 
-    self%alph(2, 1) = 1._R_P
+      self%alph(2, 1) = 1._R_P
 
-    self%gamm(2) = 1._R_P
-  case(3)
-    ! SSPRK(3,3)
-    self%beta(1) = 1._R_P/6._R_P
-    self%beta(2) = 1._R_P/6._R_P
-    self%beta(3) = 2._R_P/3._R_P
+      self%gamm(2) = 1._R_P
+    case(3)
+      ! SSPRK(3,3)
+      self%beta(1) = 1._R_P/6._R_P
+      self%beta(2) = 1._R_P/6._R_P
+      self%beta(3) = 2._R_P/3._R_P
 
-    self%alph(2, 1) = 1._R_P
-    self%alph(3, 1) = 0.25_R_P ; self%alph(3, 2) = 0.25_R_P
+      self%alph(2, 1) = 1._R_P
+      self%alph(3, 1) = 0.25_R_P ; self%alph(3, 2) = 0.25_R_P
 
-    self%gamm(2) = 1._R_P
-    self%gamm(3) = 0.5_R_P
-  case(5)
-    ! SSPRK(5,4)
-    self%beta(1) = 0.14681187618661_R_P
-    self%beta(2) = 0.24848290924556_R_P
-    self%beta(3) = 0.10425883036650_R_P
-    self%beta(4) = 0.27443890091960_R_P
-    self%beta(5) = 0.22600748319395_R_P
+      self%gamm(2) = 1._R_P
+      self%gamm(3) = 0.5_R_P
+    case(5)
+      ! SSPRK(5,4)
+      self%beta(1) = 0.14681187618661_R_P
+      self%beta(2) = 0.24848290924556_R_P
+      self%beta(3) = 0.10425883036650_R_P
+      self%beta(4) = 0.27443890091960_R_P
+      self%beta(5) = 0.22600748319395_R_P
 
-    self%alph(2, 1)=0.39175222700392_R_P
-    self%alph(3, 1)=0.21766909633821_R_P;self%alph(3, 2)=0.36841059262959_R_P
-    self%alph(4, 1)=0.08269208670950_R_P;self%alph(4, 2)=0.13995850206999_R_P;self%alph(4, 3)=0.25189177424738_R_P
-    self%alph(5, 1)=0.06796628370320_R_P;self%alph(5, 2)=0.11503469844438_R_P;self%alph(5, 3)=0.20703489864929_R_P
-    self%alph(5, 4)=0.54497475021237_R_P
+      self%alph(2, 1)=0.39175222700392_R_P
+      self%alph(3, 1)=0.21766909633821_R_P;self%alph(3, 2)=0.36841059262959_R_P
+      self%alph(4, 1)=0.08269208670950_R_P;self%alph(4, 2)=0.13995850206999_R_P;self%alph(4, 3)=0.25189177424738_R_P
+      self%alph(5, 1)=0.06796628370320_R_P;self%alph(5, 2)=0.11503469844438_R_P;self%alph(5, 3)=0.20703489864929_R_P
+      self%alph(5, 4)=0.54497475021237_R_P
 
-    self%gamm(2) = 0.39175222700392_R_P
-    self%gamm(3) = 0.58607968896780_R_P
-    self%gamm(4) = 0.47454236302687_R_P
-    self%gamm(5) = 0.93501063100924_R_P
-  endselect
+      self%gamm(2) = 0.39175222700392_R_P
+      self%gamm(3) = 0.58607968896780_R_P
+      self%gamm(4) = 0.47454236302687_R_P
+      self%gamm(5) = 0.93501063100924_R_P
+    endselect
+    self%error = 0
+  else
+    ! bad (unsupported) number of required stages
+    self%error = 1
+  endif
   return
   !---------------------------------------------------------------------------------------------------------------------------------
   endsubroutine init
@@ -202,6 +216,7 @@ contains
   if (allocated(self%alph)) deallocate(self%alph)
   if (allocated(self%beta)) deallocate(self%beta)
   if (allocated(self%gamm)) deallocate(self%gamm)
+  self%error = 0
   return
   !---------------------------------------------------------------------------------------------------------------------------------
   endsubroutine destroy
@@ -240,6 +255,20 @@ contains
   return
   !---------------------------------------------------------------------------------------------------------------------------------
   endsubroutine integrate
+
+  elemental function is_supported(stages)
+  !---------------------------------------------------------------------------------------------------------------------------------
+  !< Check if the queried number of stages is supported or not.
+  !---------------------------------------------------------------------------------------------------------------------------------
+  integer(I_P), intent(IN) :: stages       !< Number of stages used.
+  logical                  :: is_supported !< Is true is the stages number is in *supported_stages*.
+  !---------------------------------------------------------------------------------------------------------------------------------
+
+  !---------------------------------------------------------------------------------------------------------------------------------
+  is_supported = is_admissible(n=stages, adm_range=trim(supported_stages))
+  return
+  !---------------------------------------------------------------------------------------------------------------------------------
+  endfunction is_supported
 
   ! private methods
   elemental subroutine finalize(self)
