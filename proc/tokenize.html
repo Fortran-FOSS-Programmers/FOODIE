@@ -104,14 +104,14 @@
      
     
     
-    <li><i class="fa fa-code"></i><a href="../src/Data_Type_Command_Line_Interface.F90"> Source File</a></li>
+    <li><i class="fa fa-code"></i><a href="../src/foodie_utils.f90"> Source File</a></li>
      
   </ul>
   <ol class="breadcrumb in-well text-right">
   
-     <li><a href='../sourcefile/data_type_command_line_interface.f90.html'>Data_Type_Command_Line_Interface.F90</a></li>
+     <li><a href='../sourcefile/foodie_utils.f90.html'>foodie_utils.f90</a></li>
   
-     <li><a href='../module/data_type_command_line_interface.html'>Data_Type_Command_Line_Interface</a></li>
+     <li><a href='../module/foodie_utils.html'>foodie_utils</a></li>
   
      <li class="active">tokenize</li>
   </ol>
@@ -137,11 +137,11 @@
         
         <a class="list-group-item" href="../proc/tokenize.html#variable-dlen">dlen</a>
         
-        <a class="list-group-item" href="../proc/tokenize.html#variable-c%7E6">c</a>
+        <a class="list-group-item" href="../proc/tokenize.html#variable-c">c</a>
         
-        <a class="list-group-item" href="../proc/tokenize.html#variable-n%7E4">n</a>
+        <a class="list-group-item" href="../proc/tokenize.html#variable-n%7E2">n</a>
         
-        <a class="list-group-item" href="../proc/tokenize.html#variable-t%7E49">t</a>
+        <a class="list-group-item" href="../proc/tokenize.html#variable-t%7E21">t</a>
         
       </div>
     </div>
@@ -615,6 +615,20 @@
           
           <a class="list-group-item" href="../proc/interpolate.html">interpolate</a>
           
+          <a class="list-group-item" href="../proc/is_admissible.html">is_admissible</a>
+          
+          <a class="list-group-item" href="../proc/is_supported.html">is_supported</a>
+          
+          <a class="list-group-item" href="../proc/is_supported%7E2.html">is_supported</a>
+          
+          <a class="list-group-item" href="../proc/is_supported%7E3.html">is_supported</a>
+          
+          <a class="list-group-item" href="../proc/is_supported%7E4.html">is_supported</a>
+          
+          <a class="list-group-item" href="../proc/is_supported%7E5.html">is_supported</a>
+          
+          <a class="list-group-item" href="../proc/is_supported%7E6.html">is_supported</a>
+          
           <a class="list-group-item" href="../proc/leapfrog_solver.html">leapfrog_solver</a>
           
           <a class="list-group-item" href="../proc/lorenz_assign_lorenz.html">lorenz_assign_lorenz</a>
@@ -851,6 +865,8 @@
           
           <a class="list-group-item" href="../proc/tokenize.html">tokenize</a>
           
+          <a class="list-group-item" href="../proc/tokenize%7E2.html">tokenize</a>
+          
           <a class="list-group-item" href="../proc/tvd_rk_solver.html">tvd_rk_solver</a>
           
           <a class="list-group-item" href="../proc/update_previous.html">update_previous</a>
@@ -889,7 +905,7 @@
     
     <div class="col-lg-9" id='text'>
     <h2>
-private pure subroutine tokenize(strin, delimiter, toks, Nt)
+private pure subroutine tokenize(string, delimiter, toks, Nt)
     
     
     
@@ -917,12 +933,12 @@ private pure subroutine tokenize(strin, delimiter, toks, Nt)
   
 <tr>
   
-  <td><span class="anchor" id="variable-strin"></span>character(len=*),</td>
+  <td><span class="anchor" id="variable-string%7E2"></span>character(len=*),</td>
   <td>intent(in)</td>
   <td></td>
   
   <td></td><td>::</td>
-  <td><strong>strin</strong></td><td><p>String to be tokenized.</p></td>
+  <td><strong>string</strong></td><td><p>String to be tokenized.</p></td>
   
 </tr>
 
@@ -947,7 +963,7 @@ private pure subroutine tokenize(strin, delimiter, toks, Nt)
   
 <tr>
   
-  <td><span class="anchor" id="variable-toks"></span>character(len=len(strin)),</td>
+  <td><span class="anchor" id="variable-toks"></span>character(len=len(string)),</td>
   <td>intent(out),</td>
   <td></td>
   
@@ -962,7 +978,7 @@ private pure subroutine tokenize(strin, delimiter, toks, Nt)
   
 <tr>
   
-  <td><span class="anchor" id="variable-nt"></span>integer(kind=I4P),</td>
+  <td><span class="anchor" id="variable-nt"></span>integer(kind=I_P),</td>
   <td>intent(out),</td>
   <td>optional</td>
   
@@ -979,7 +995,7 @@ private pure subroutine tokenize(strin, delimiter, toks, Nt)
     
     <h3>Description</h3>
     <p>Tokenize a string in order to parse it.</p>
-<p></p><div class="alert alert-info" role="alert"><h4>Note</h4>The dummy array containing tokens must allocatable and its character elements must have the same length of the input
+<p></p><div class="alert alert-info" role="alert"><h4>Note</h4>The dummy array containing tokens must be allocatable and its character elements must have the same length of the input
  string. If the length of the delimiter is higher than the input string one then the output tokens array is allocated with
  only one element set to char(0).</div>
     
@@ -993,174 +1009,99 @@ private pure subroutine tokenize(strin, delimiter, toks, Nt)
 <!-- Generated by graphviz version 2.26.3 (20100126.1600)
  -->
 <!-- Title: proc~~tokenize~~CalledByGraph Pages: 1 -->
-<svg id="proctokenizeCalledByGraph" width="392pt" height="556pt"
- viewBox="0.00 0.00 392.00 556.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-<g id="proc~~tokenize~~CalledByGraph" class="graph" transform="scale(1 1) rotate(0) translate(4 552)">
+<svg id="proctokenizeCalledByGraph" width="284pt" height="254pt"
+ viewBox="0.00 0.00 284.00 254.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="proc~~tokenize~~CalledByGraph" class="graph" transform="scale(1 1) rotate(0) translate(4 250)">
 <title>proc~~tokenize~~CalledByGraph</title>
-<polygon fill="white" stroke="white" points="-4,5 -4,-552 389,-552 389,5 -4,5"/>
+<polygon fill="white" stroke="white" points="-4,5 -4,-250 281,-250 281,5 -4,5"/>
 <!-- proc~tokenize -->
 <g id="node1" class="node"><title>proc~tokenize</title>
-<polygon fill="none" stroke="black" points="384,-290 330,-290 330,-264 384,-264 384,-290"/>
-<text text-anchor="middle" x="357" y="-274.55" font-family="Helvetica,sans-Serif" font-size="10.50">tokenize</text>
+<polygon fill="none" stroke="black" points="276,-136 222,-136 222,-110 276,-110 276,-136"/>
+<text text-anchor="middle" x="249" y="-120.55" font-family="Helvetica,sans-Serif" font-size="10.50">tokenize</text>
 </g>
-<!-- proc~get_cla_list_varying_i1p -->
-<g id="node2" class="node"><title>proc~get_cla_list_varying_i1p</title>
-<a xlink:href="../proc/get_cla_list_varying_i1p.html" xlink:title="get_cla_list_varying_I1P">
-<polygon fill="#d9534f" stroke="#d9534f" points="287,-548 159,-548 159,-522 287,-522 287,-548"/>
-<text text-anchor="middle" x="223" y="-532.55" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">get_cla_list_varying_I1P</text>
+<!-- proc~is_admissible -->
+<g id="node2" class="node"><title>proc~is_admissible</title>
+<a xlink:href="../proc/is_admissible.html" xlink:title="is_admissible">
+<polygon fill="#d94e8f" stroke="#d94e8f" points="186,-136 110,-136 110,-110 186,-110 186,-136"/>
+<text text-anchor="middle" x="148" y="-120.55" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">is_admissible</text>
 </a>
 </g>
-<!-- proc~get_cla_list_varying_i1p&#45;&gt;proc~tokenize -->
-<g id="edge4" class="edge"><title>proc~get_cla_list_varying_i1p&#45;&gt;proc~tokenize</title>
-<path fill="none" stroke="black" d="M282.715,-521.804C286.856,-519.349 290.691,-516.442 294,-513 323.63,-482.173 345.671,-353.473 353.694,-300.222"/>
-<polygon fill="black" stroke="black" points="357.195,-300.47 355.191,-290.066 350.27,-299.449 357.195,-300.47"/>
+<!-- proc~is_admissible&#45;&gt;proc~tokenize -->
+<g id="edge14" class="edge"><title>proc~is_admissible&#45;&gt;proc~tokenize</title>
+<path fill="none" stroke="black" d="M186.184,-123C194.511,-123 203.313,-123 211.609,-123"/>
+<polygon fill="black" stroke="black" points="211.772,-126.5 221.772,-123 211.772,-119.5 211.772,-126.5"/>
 </g>
-<!-- proc~get_cla_list_varying_r4p -->
-<g id="node3" class="node"><title>proc~get_cla_list_varying_r4p</title>
-<a xlink:href="../proc/get_cla_list_varying_r4p.html" xlink:title="get_cla_list_varying_R4P">
-<polygon fill="#d9534f" stroke="#d9534f" points="289,-504 157,-504 157,-478 289,-478 289,-504"/>
-<text text-anchor="middle" x="223" y="-488.55" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">get_cla_list_varying_R4P</text>
+<!-- proc~is_supported~2 -->
+<g id="node3" class="node"><title>proc~is_supported~2</title>
+<a xlink:href="../proc/is_supported%7E2.html" xlink:title="is_supported">
+<polygon fill="#d94e8f" stroke="#d94e8f" points="74,-246 3.55271e-14,-246 0,-220 74,-220 74,-246"/>
+<text text-anchor="middle" x="37" y="-230.55" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">is_supported</text>
 </a>
 </g>
-<!-- proc~get_cla_list_varying_r4p&#45;&gt;proc~tokenize -->
-<g id="edge6" class="edge"><title>proc~get_cla_list_varying_r4p&#45;&gt;proc~tokenize</title>
-<path fill="none" stroke="black" d="M274.118,-477.958C281.471,-474.364 288.422,-469.797 294,-464 338.416,-417.843 351.559,-339.351 355.417,-300.382"/>
-<polygon fill="black" stroke="black" points="358.916,-300.548 356.293,-290.283 351.942,-299.943 358.916,-300.548"/>
+<!-- proc~is_supported~2&#45;&gt;proc~is_admissible -->
+<g id="edge2" class="edge"><title>proc~is_supported~2&#45;&gt;proc~is_admissible</title>
+<path fill="none" stroke="black" d="M61.6772,-219.909C65.9599,-217.201 70.2403,-214.193 74,-211 97.3809,-191.145 119.355,-163.42 133.187,-144.426"/>
+<polygon fill="black" stroke="black" points="136.153,-146.296 139.12,-136.125 130.458,-142.226 136.153,-146.296"/>
 </g>
-<!-- none~sanitize_args -->
-<g id="node4" class="node"><title>none~sanitize_args</title>
-<polygon fill="#d94e8f" stroke="#d94e8f" points="261,-422 185,-422 185,-396 261,-396 261,-422"/>
-<text text-anchor="middle" x="223" y="-406.55" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">sanitize_args</text>
-</g>
-<!-- none~sanitize_args&#45;&gt;proc~tokenize -->
-<g id="edge8" class="edge"><title>none~sanitize_args&#45;&gt;proc~tokenize</title>
-<path fill="none" stroke="black" d="M261.307,-402.728C272.704,-399.46 284.635,-394.505 294,-387 322.401,-364.241 340.399,-324.982 349.582,-300.039"/>
-<polygon fill="black" stroke="black" points="352.985,-300.91 352.983,-290.315 346.378,-298.599 352.985,-300.91"/>
-</g>
-<!-- proc~get_cla_list -->
-<g id="node5" class="node"><title>proc~get_cla_list</title>
-<a xlink:href="../proc/get_cla_list.html" xlink:title="get_cla_list">
-<polygon fill="#d9534f" stroke="#d9534f" points="256,-378 190,-378 190,-352 256,-352 256,-378"/>
-<text text-anchor="middle" x="223" y="-362.55" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">get_cla_list</text>
+<!-- proc~is_supported~5 -->
+<g id="node4" class="node"><title>proc~is_supported~5</title>
+<a xlink:href="../proc/is_supported%7E5.html" xlink:title="is_supported">
+<polygon fill="#d94e8f" stroke="#d94e8f" points="74,-202 3.55271e-14,-202 0,-176 74,-176 74,-202"/>
+<text text-anchor="middle" x="37" y="-186.55" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">is_supported</text>
 </a>
 </g>
-<!-- proc~get_cla_list&#45;&gt;proc~tokenize -->
-<g id="edge10" class="edge"><title>proc~get_cla_list&#45;&gt;proc~tokenize</title>
-<path fill="none" stroke="black" d="M256.301,-358.417C268.734,-355.023 282.591,-350.067 294,-343 312.912,-331.286 330.034,-312.562 341.638,-298.044"/>
-<polygon fill="black" stroke="black" points="344.458,-300.119 347.805,-290.067 338.92,-295.838 344.458,-300.119"/>
+<!-- proc~is_supported~5&#45;&gt;proc~is_admissible -->
+<g id="edge4" class="edge"><title>proc~is_supported~5&#45;&gt;proc~is_admissible</title>
+<path fill="none" stroke="black" d="M58.93,-175.961C75.6533,-166.017 98.8903,-152.2 117.437,-141.173"/>
+<polygon fill="black" stroke="black" points="119.309,-144.132 126.116,-136.012 115.731,-138.115 119.309,-144.132"/>
 </g>
-<!-- proc~get_cla_list_varying_i8p -->
-<g id="node6" class="node"><title>proc~get_cla_list_varying_i8p</title>
-<a xlink:href="../proc/get_cla_list_varying_i8p.html" xlink:title="get_cla_list_varying_I8P">
-<polygon fill="#d9534f" stroke="#d9534f" points="287,-334 159,-334 159,-308 287,-308 287,-334"/>
-<text text-anchor="middle" x="223" y="-318.55" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">get_cla_list_varying_I8P</text>
+<!-- proc~is_supported~4 -->
+<g id="node5" class="node"><title>proc~is_supported~4</title>
+<a xlink:href="../proc/is_supported%7E4.html" xlink:title="is_supported">
+<polygon fill="#d94e8f" stroke="#d94e8f" points="74,-158 3.55271e-14,-158 0,-132 74,-132 74,-158"/>
+<text text-anchor="middle" x="37" y="-142.55" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">is_supported</text>
 </a>
 </g>
-<!-- proc~get_cla_list_varying_i8p&#45;&gt;proc~tokenize -->
-<g id="edge12" class="edge"><title>proc~get_cla_list_varying_i8p&#45;&gt;proc~tokenize</title>
-<path fill="none" stroke="black" d="M265.879,-307.982C275.171,-305.087 284.93,-301.988 294,-299 302.554,-296.182 311.723,-293.047 320.344,-290.047"/>
-<polygon fill="black" stroke="black" points="321.502,-293.35 329.783,-286.741 319.188,-286.743 321.502,-293.35"/>
+<!-- proc~is_supported~4&#45;&gt;proc~is_admissible -->
+<g id="edge6" class="edge"><title>proc~is_supported~4&#45;&gt;proc~is_admissible</title>
+<path fill="none" stroke="black" d="M74.2702,-137.613C82.509,-135.98 91.3507,-134.228 99.9495,-132.524"/>
+<polygon fill="black" stroke="black" points="100.753,-135.932 109.881,-130.555 99.3917,-129.066 100.753,-135.932"/>
 </g>
-<!-- proc~get_cla_list_varying_i2p -->
-<g id="node7" class="node"><title>proc~get_cla_list_varying_i2p</title>
-<a xlink:href="../proc/get_cla_list_varying_i2p.html" xlink:title="get_cla_list_varying_I2P">
-<polygon fill="#d9534f" stroke="#d9534f" points="287,-290 159,-290 159,-264 287,-264 287,-290"/>
-<text text-anchor="middle" x="223" y="-274.55" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">get_cla_list_varying_I2P</text>
+<!-- proc~is_supported -->
+<g id="node6" class="node"><title>proc~is_supported</title>
+<a xlink:href="../proc/is_supported.html" xlink:title="is_supported">
+<polygon fill="#d94e8f" stroke="#d94e8f" points="74,-114 3.55271e-14,-114 0,-88 74,-88 74,-114"/>
+<text text-anchor="middle" x="37" y="-98.55" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">is_supported</text>
 </a>
 </g>
-<!-- proc~get_cla_list_varying_i2p&#45;&gt;proc~tokenize -->
-<g id="edge14" class="edge"><title>proc~get_cla_list_varying_i2p&#45;&gt;proc~tokenize</title>
-<path fill="none" stroke="black" d="M287.253,-277C298.419,-277 309.688,-277 319.815,-277"/>
-<polygon fill="black" stroke="black" points="319.903,-280.5 329.903,-277 319.903,-273.5 319.903,-280.5"/>
+<!-- proc~is_supported&#45;&gt;proc~is_admissible -->
+<g id="edge8" class="edge"><title>proc~is_supported&#45;&gt;proc~is_admissible</title>
+<path fill="none" stroke="black" d="M74.2702,-108.387C82.509,-110.02 91.3507,-111.772 99.9495,-113.476"/>
+<polygon fill="black" stroke="black" points="99.3917,-116.934 109.881,-115.445 100.753,-110.068 99.3917,-116.934"/>
 </g>
-<!-- proc~get_cla_list_varying_char -->
-<g id="node8" class="node"><title>proc~get_cla_list_varying_char</title>
-<a xlink:href="../proc/get_cla_list_varying_char.html" xlink:title="get_cla_list_varying_char">
-<polygon fill="#d9534f" stroke="#d9534f" points="289,-246 157,-246 157,-220 289,-220 289,-246"/>
-<text text-anchor="middle" x="223" y="-230.55" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">get_cla_list_varying_char</text>
+<!-- proc~is_supported~3 -->
+<g id="node7" class="node"><title>proc~is_supported~3</title>
+<a xlink:href="../proc/is_supported%7E3.html" xlink:title="is_supported">
+<polygon fill="#d94e8f" stroke="#d94e8f" points="74,-70 3.55271e-14,-70 0,-44 74,-44 74,-70"/>
+<text text-anchor="middle" x="37" y="-54.55" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">is_supported</text>
 </a>
 </g>
-<!-- proc~get_cla_list_varying_char&#45;&gt;proc~tokenize -->
-<g id="edge16" class="edge"><title>proc~get_cla_list_varying_char&#45;&gt;proc~tokenize</title>
-<path fill="none" stroke="black" d="M265.879,-246.018C275.171,-248.913 284.93,-252.012 294,-255 302.554,-257.818 311.723,-260.953 320.344,-263.953"/>
-<polygon fill="black" stroke="black" points="319.188,-267.257 329.783,-267.259 321.502,-260.65 319.188,-267.257"/>
+<!-- proc~is_supported~3&#45;&gt;proc~is_admissible -->
+<g id="edge10" class="edge"><title>proc~is_supported~3&#45;&gt;proc~is_admissible</title>
+<path fill="none" stroke="black" d="M58.93,-70.0395C75.6533,-79.9831 98.8903,-93.7996 117.437,-104.827"/>
+<polygon fill="black" stroke="black" points="115.731,-107.885 126.116,-109.988 119.309,-101.868 115.731,-107.885"/>
 </g>
-<!-- proc~get_cla_list_varying_r16p -->
-<g id="node9" class="node"><title>proc~get_cla_list_varying_r16p</title>
-<a xlink:href="../proc/get_cla_list_varying_r16p.html" xlink:title="get_cla_list_varying_R16P">
-<polygon fill="#d9534f" stroke="#d9534f" points="292,-202 154,-202 154,-176 292,-176 292,-202"/>
-<text text-anchor="middle" x="223" y="-186.55" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">get_cla_list_varying_R16P</text>
+<!-- proc~is_supported~6 -->
+<g id="node8" class="node"><title>proc~is_supported~6</title>
+<a xlink:href="../proc/is_supported%7E6.html" xlink:title="is_supported">
+<polygon fill="#d94e8f" stroke="#d94e8f" points="74,-26 3.55271e-14,-26 0,-1.24345e-14 74,-3.55271e-15 74,-26"/>
+<text text-anchor="middle" x="37" y="-10.55" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">is_supported</text>
 </a>
 </g>
-<!-- proc~get_cla_list_varying_r16p&#45;&gt;proc~tokenize -->
-<g id="edge18" class="edge"><title>proc~get_cla_list_varying_r16p&#45;&gt;proc~tokenize</title>
-<path fill="none" stroke="black" d="M275.906,-202.062C282.221,-204.577 288.405,-207.534 294,-211 312.912,-222.714 330.034,-241.438 341.638,-255.956"/>
-<polygon fill="black" stroke="black" points="338.92,-258.162 347.805,-263.933 344.458,-253.881 338.92,-258.162"/>
-</g>
-<!-- proc~get_args_from_string -->
-<g id="node10" class="node"><title>proc~get_args_from_string</title>
-<a xlink:href="../proc/get_args_from_string.html" xlink:title="get_args_from_string">
-<polygon fill="#d9534f" stroke="#d9534f" points="115,-442 1,-442 1,-416 115,-416 115,-442"/>
-<text text-anchor="middle" x="58" y="-426.55" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">get_args_from_string</text>
-</a>
-</g>
-<!-- proc~get_args_from_string&#45;&gt;proc~tokenize -->
-<g id="edge20" class="edge"><title>proc~get_args_from_string&#45;&gt;proc~tokenize</title>
-<path fill="none" stroke="black" d="M98.2149,-442.073C148.565,-455.792 235.318,-470.396 294,-431 337.715,-401.652 351.117,-336.025 355.211,-300.659"/>
-<polygon fill="black" stroke="black" points="358.732,-300.622 356.24,-290.324 351.767,-299.928 358.732,-300.622"/>
-</g>
-<!-- proc~get_args_from_string&#45;&gt;none~sanitize_args -->
-<g id="edge2" class="edge"><title>proc~get_args_from_string&#45;&gt;none~sanitize_args</title>
-<path fill="none" stroke="black" d="M115.709,-422.005C135.077,-419.657 156.454,-417.066 174.996,-414.819"/>
-<polygon fill="black" stroke="black" points="175.468,-418.287 184.974,-413.609 174.626,-411.338 175.468,-418.287"/>
-</g>
-<!-- proc~get_cla_list_varying_logical -->
-<g id="node11" class="node"><title>proc~get_cla_list_varying_logical</title>
-<a xlink:href="../proc/get_cla_list_varying_logical.html" xlink:title="get_cla_list_varying_logical">
-<polygon fill="#d9534f" stroke="#d9534f" points="294,-158 152,-158 152,-132 294,-132 294,-158"/>
-<text text-anchor="middle" x="223" y="-142.55" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">get_cla_list_varying_logical</text>
-</a>
-</g>
-<!-- proc~get_cla_list_varying_logical&#45;&gt;proc~tokenize -->
-<g id="edge22" class="edge"><title>proc~get_cla_list_varying_logical&#45;&gt;proc~tokenize</title>
-<path fill="none" stroke="black" d="M279.671,-158.14C284.791,-160.605 289.67,-163.53 294,-167 322.401,-189.759 340.399,-229.018 349.582,-253.961"/>
-<polygon fill="black" stroke="black" points="346.378,-255.401 352.983,-263.685 352.985,-253.09 346.378,-255.401"/>
-</g>
-<!-- proc~check_choices_cla -->
-<g id="node12" class="node"><title>proc~check_choices_cla</title>
-<a xlink:href="../proc/check_choices_cla.html" xlink:title="check_choices_cla">
-<polygon fill="#d9534f" stroke="#d9534f" points="274,-114 172,-114 172,-88 274,-88 274,-114"/>
-<text text-anchor="middle" x="223" y="-98.55" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">check_choices_cla</text>
-</a>
-</g>
-<!-- proc~check_choices_cla&#45;&gt;proc~tokenize -->
-<g id="edge24" class="edge"><title>proc~check_choices_cla&#45;&gt;proc~tokenize</title>
-<path fill="none" stroke="black" d="M274.086,-110.745C281.356,-113.784 288.29,-117.771 294,-123 332.279,-158.056 347.86,-219.771 353.747,-253.45"/>
-<polygon fill="black" stroke="black" points="350.354,-254.397 355.391,-263.718 357.266,-253.29 350.354,-254.397"/>
-</g>
-<!-- proc~get_cla_list_varying_r8p -->
-<g id="node13" class="node"><title>proc~get_cla_list_varying_r8p</title>
-<a xlink:href="../proc/get_cla_list_varying_r8p.html" xlink:title="get_cla_list_varying_R8P">
-<polygon fill="#d9534f" stroke="#d9534f" points="289,-70 157,-70 157,-44 289,-44 289,-70"/>
-<text text-anchor="middle" x="223" y="-54.55" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">get_cla_list_varying_R8P</text>
-</a>
-</g>
-<!-- proc~get_cla_list_varying_r8p&#45;&gt;proc~tokenize -->
-<g id="edge26" class="edge"><title>proc~get_cla_list_varying_r8p&#45;&gt;proc~tokenize</title>
-<path fill="none" stroke="black" d="M282.199,-70.1749C286.508,-72.6321 290.519,-75.5457 294,-79 319.126,-103.936 342.755,-207.016 352.414,-253.763"/>
-<polygon fill="black" stroke="black" points="349.043,-254.746 354.462,-263.85 355.903,-253.354 349.043,-254.746"/>
-</g>
-<!-- proc~get_cla_list_varying_i4p -->
-<g id="node14" class="node"><title>proc~get_cla_list_varying_i4p</title>
-<a xlink:href="../proc/get_cla_list_varying_i4p.html" xlink:title="get_cla_list_varying_I4P">
-<polygon fill="#d9534f" stroke="#d9534f" points="287,-26 159,-26 159,-1.24345e-14 287,-3.55271e-15 287,-26"/>
-<text text-anchor="middle" x="223" y="-10.55" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">get_cla_list_varying_I4P</text>
-</a>
-</g>
-<!-- proc~get_cla_list_varying_i4p&#45;&gt;proc~tokenize -->
-<g id="edge28" class="edge"><title>proc~get_cla_list_varying_i4p&#45;&gt;proc~tokenize</title>
-<path fill="none" stroke="black" d="M282.739,-26.1739C286.874,-28.6332 290.702,-31.5474 294,-35 324.369,-66.793 346.12,-199.767 353.879,-253.911"/>
-<polygon fill="black" stroke="black" points="350.428,-254.503 355.282,-263.921 357.36,-253.532 350.428,-254.503"/>
+<!-- proc~is_supported~6&#45;&gt;proc~is_admissible -->
+<g id="edge12" class="edge"><title>proc~is_supported~6&#45;&gt;proc~is_admissible</title>
+<path fill="none" stroke="black" d="M61.6772,-26.0912C65.9599,-28.7986 70.2403,-31.8073 74,-35 97.3809,-54.8547 119.355,-82.5802 133.187,-101.574"/>
+<polygon fill="black" stroke="black" points="130.458,-103.774 139.12,-109.875 136.153,-99.7043 130.458,-103.774"/>
 </g>
 </g>
 </svg>
@@ -1276,7 +1217,7 @@ implementation in a submodule of an interface in a parent module.</p>
   
 <tr>
   
-  <td><span class="anchor" id="variable-strsub"></span>character(len=len(strin)),</td>
+  <td><span class="anchor" id="variable-strsub"></span>character(len=len(string)),</td>
   
   <td>public</td>
   <td></td><td>::</td>
@@ -1290,7 +1231,7 @@ implementation in a submodule of an interface in a parent module.</p>
   
 <tr>
   
-  <td><span class="anchor" id="variable-dlen"></span>integer(kind=I4P),</td>
+  <td><span class="anchor" id="variable-dlen"></span>integer(kind=I_P),</td>
   
   <td>public</td>
   <td></td><td>::</td>
@@ -1304,7 +1245,7 @@ implementation in a submodule of an interface in a parent module.</p>
   
 <tr>
   
-  <td><span class="anchor" id="variable-c%7E6"></span>integer(kind=I4P),</td>
+  <td><span class="anchor" id="variable-c"></span>integer(kind=I_P),</td>
   
   <td>public</td>
   <td></td><td>::</td>
@@ -1318,7 +1259,7 @@ implementation in a submodule of an interface in a parent module.</p>
   
 <tr>
   
-  <td><span class="anchor" id="variable-n%7E4"></span>integer(kind=I4P),</td>
+  <td><span class="anchor" id="variable-n%7E2"></span>integer(kind=I_P),</td>
   
   <td>public</td>
   <td></td><td>::</td>
@@ -1332,7 +1273,7 @@ implementation in a submodule of an interface in a parent module.</p>
   
 <tr>
   
-  <td><span class="anchor" id="variable-t%7E49"></span>integer(kind=I4P),</td>
+  <td><span class="anchor" id="variable-t%7E21"></span>integer(kind=I_P),</td>
   
   <td>public</td>
   <td></td><td>::</td>
@@ -1363,42 +1304,47 @@ implementation in a submodule of an interface in a parent module.</p>
     
     <section>
     <h2><span class="anchor" id="src"></span>Source Code</h2>
-    <div class="highlight"><pre>  <span class="k">pure subroutine </span><span class="n">tokenize</span><span class="p">(</span><span class="n">strin</span><span class="p">,</span> <span class="n">delimiter</span><span class="p">,</span> <span class="n">toks</span><span class="p">,</span> <span class="n">Nt</span><span class="p">)</span>
+    <div class="highlight"><pre>  <span class="k">pure subroutine </span><span class="n">tokenize</span><span class="p">(</span><span class="n">string</span><span class="p">,</span> <span class="n">delimiter</span><span class="p">,</span> <span class="n">toks</span><span class="p">,</span> <span class="n">Nt</span><span class="p">)</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
   <span class="c">!&lt; Tokenize a string in order to parse it.</span>
   <span class="c">!&lt;</span>
-  <span class="c">!&lt; @note The dummy array containing tokens must allocatable and its character elements must have the same length of the input</span>
+  <span class="c">!&lt; @note The dummy array containing tokens must be allocatable and its character elements must have the same length of the input</span>
   <span class="c">!&lt; string. If the length of the delimiter is higher than the input string one then the output tokens array is allocated with</span>
   <span class="c">!&lt; only one element set to char(0).</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
-  <span class="kt">character</span><span class="p">(</span><span class="nb">len</span><span class="o">=*</span><span class="p">),</span>          <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span>               <span class="kd">::</span> <span class="n">strin</span>     <span class="c">!&lt; String to be tokenized.</span>
-  <span class="kt">character</span><span class="p">(</span><span class="nb">len</span><span class="o">=*</span><span class="p">),</span>          <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span>               <span class="kd">::</span> <span class="n">delimiter</span> <span class="c">!&lt; Delimiter of tokens.</span>
-  <span class="kt">character</span><span class="p">(</span><span class="nb">len</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">strin</span><span class="p">)),</span> <span class="k">intent</span><span class="p">(</span><span class="n">OUT</span><span class="p">),</span> <span class="k">allocatable</span> <span class="kd">::</span> <span class="n">toks</span><span class="p">(:)</span>   <span class="c">!&lt; Tokens.</span>
-  <span class="kt">integer</span><span class="p">(</span><span class="n">I4P</span><span class="p">),</span>              <span class="k">intent</span><span class="p">(</span><span class="n">OUT</span><span class="p">),</span> <span class="k">optional</span>    <span class="kd">::</span> <span class="n">Nt</span>        <span class="c">!&lt; Number of tokens.</span>
-  <span class="kt">character</span><span class="p">(</span><span class="nb">len</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">strin</span><span class="p">))</span>                           <span class="kd">::</span> <span class="n">strsub</span>    <span class="c">!&lt; Temporary string.</span>
-  <span class="kt">integer</span><span class="p">(</span><span class="n">I4P</span><span class="p">)</span>                                        <span class="kd">::</span> <span class="n">dlen</span>      <span class="c">!&lt; Delimiter length.</span>
-  <span class="kt">integer</span><span class="p">(</span><span class="n">I4P</span><span class="p">)</span>                                        <span class="kd">::</span> <span class="n">c</span>         <span class="c">!&lt; Counter.</span>
-  <span class="kt">integer</span><span class="p">(</span><span class="n">I4P</span><span class="p">)</span>                                        <span class="kd">::</span> <span class="n">n</span>         <span class="c">!&lt; Counter.</span>
-  <span class="kt">integer</span><span class="p">(</span><span class="n">I4P</span><span class="p">)</span>                                        <span class="kd">::</span> <span class="n">t</span>         <span class="c">!&lt; Counter.</span>
+  <span class="kt">character</span><span class="p">(</span><span class="nb">len</span><span class="o">=*</span><span class="p">),</span>                        <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span>  <span class="kd">::</span> <span class="n">string</span>    <span class="c">!&lt; String to be tokenized.</span>
+  <span class="kt">character</span><span class="p">(</span><span class="nb">len</span><span class="o">=*</span><span class="p">),</span>                        <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span>  <span class="kd">::</span> <span class="n">delimiter</span> <span class="c">!&lt; Delimiter of tokens.</span>
+  <span class="kt">character</span><span class="p">(</span><span class="nb">len</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">string</span><span class="p">)),</span> <span class="k">allocatable</span><span class="p">,</span> <span class="k">intent</span><span class="p">(</span><span class="n">OUT</span><span class="p">)</span> <span class="kd">::</span> <span class="n">toks</span><span class="p">(:)</span>   <span class="c">!&lt; Tokens.</span>
+  <span class="kt">integer</span><span class="p">(</span><span class="n">I_P</span><span class="p">),</span> <span class="k">optional</span><span class="p">,</span>                  <span class="k">intent</span><span class="p">(</span><span class="n">OUT</span><span class="p">)</span> <span class="kd">::</span> <span class="n">Nt</span>        <span class="c">!&lt; Number of tokens.</span>
+  <span class="kt">character</span><span class="p">(</span><span class="nb">len</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">string</span><span class="p">))</span>                           <span class="kd">::</span> <span class="n">strsub</span>    <span class="c">!&lt; Temporary string.</span>
+  <span class="kt">integer</span><span class="p">(</span><span class="n">I_P</span><span class="p">)</span>                                         <span class="kd">::</span> <span class="n">dlen</span>      <span class="c">!&lt; Delimiter length.</span>
+  <span class="kt">integer</span><span class="p">(</span><span class="n">I_P</span><span class="p">)</span>                                         <span class="kd">::</span> <span class="n">c</span>         <span class="c">!&lt; Counter.</span>
+  <span class="kt">integer</span><span class="p">(</span><span class="n">I_P</span><span class="p">)</span>                                         <span class="kd">::</span> <span class="n">n</span>         <span class="c">!&lt; Counter.</span>
+  <span class="kt">integer</span><span class="p">(</span><span class="n">I_P</span><span class="p">)</span>                                         <span class="kd">::</span> <span class="n">t</span>         <span class="c">!&lt; Counter.</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
 
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
-  <span class="c">! initialization</span>
+  <span class="c">! initialize</span>
   <span class="k">if</span> <span class="p">(</span><span class="nb">allocated</span><span class="p">(</span><span class="n">toks</span><span class="p">))</span> <span class="k">deallocate</span><span class="p">(</span><span class="n">toks</span><span class="p">)</span>
-  <span class="n">strsub</span> <span class="o">=</span> <span class="n">strin</span>
+  <span class="n">strsub</span> <span class="o">=</span> <span class="n">string</span>
   <span class="n">dlen</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">delimiter</span><span class="p">)</span>
-  <span class="k">if</span> <span class="p">(</span><span class="n">dlen</span><span class="o">&gt;</span><span class="nb">len</span><span class="p">(</span><span class="n">strin</span><span class="p">))</span> <span class="k">then</span>
-<span class="k">    allocate</span><span class="p">(</span><span class="n">toks</span><span class="p">(</span><span class="mi">1</span><span class="p">:</span><span class="mi">1</span><span class="p">))</span> <span class="p">;</span> <span class="n">toks</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">=</span> <span class="nb">char</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span> <span class="p">;</span> <span class="k">if</span> <span class="p">(</span><span class="nb">present</span><span class="p">(</span><span class="n">Nt</span><span class="p">))</span> <span class="n">Nt</span> <span class="o">=</span> <span class="mi">1</span> <span class="p">;</span> <span class="k">return</span>
+  <span class="k">if</span> <span class="p">(</span><span class="n">dlen</span><span class="o">&gt;</span><span class="nb">len</span><span class="p">(</span><span class="n">string</span><span class="p">))</span> <span class="k">then</span>
+<span class="k">    allocate</span><span class="p">(</span><span class="n">toks</span><span class="p">(</span><span class="mi">1</span><span class="p">:</span><span class="mi">1</span><span class="p">))</span>
+    <span class="n">toks</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">=</span> <span class="nb">char</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+    <span class="k">if</span> <span class="p">(</span><span class="nb">present</span><span class="p">(</span><span class="n">Nt</span><span class="p">))</span> <span class="n">Nt</span> <span class="o">=</span> <span class="mi">1</span>
+    <span class="k">return</span>
 <span class="k">  </span><span class="n">endif</span>
+
   <span class="c">! compute the number of tokens</span>
   <span class="n">n</span> <span class="o">=</span> <span class="mi">1</span>
-  <span class="k">do </span><span class="n">c</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="nb">len</span><span class="p">(</span><span class="n">strsub</span><span class="p">)</span><span class="o">-</span><span class="n">dlen</span> <span class="c">! loop over string characters</span>
+  <span class="k">do </span><span class="n">c</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">strsub</span><span class="p">)</span> <span class="o">-</span> <span class="n">dlen</span> <span class="c">! loop over string characters</span>
     <span class="k">if</span> <span class="p">(</span><span class="n">strsub</span><span class="p">(</span><span class="n">c</span><span class="p">:</span><span class="n">c</span><span class="o">+</span><span class="n">dlen</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">==</span><span class="n">delimiter</span><span class="p">)</span> <span class="n">n</span> <span class="o">=</span> <span class="n">n</span> <span class="o">+</span> <span class="mi">1</span>
   <span class="n">enddo</span>
   <span class="k">allocate</span><span class="p">(</span><span class="n">toks</span><span class="p">(</span><span class="mi">1</span><span class="p">:</span><span class="n">n</span><span class="p">))</span>
-  <span class="c">! tokenization</span>
-  <span class="k">do </span><span class="n">t</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">n</span> <span class="c">! loop over tokens</span>
-    <span class="n">c</span> <span class="o">=</span> <span class="nb">index</span><span class="p">(</span><span class="n">strsub</span><span class="p">,</span><span class="n">delimiter</span><span class="p">)</span>
+
+  <span class="c">! tokenize</span>
+  <span class="k">do </span><span class="n">t</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">n</span> <span class="c">! loop over tokens</span>
+    <span class="n">c</span> <span class="o">=</span> <span class="nb">index</span><span class="p">(</span><span class="n">strsub</span><span class="p">,</span> <span class="n">delimiter</span><span class="p">)</span>
     <span class="k">if</span> <span class="p">(</span><span class="n">c</span><span class="o">&gt;</span><span class="mi">0</span><span class="p">)</span> <span class="k">then</span>
 <span class="k">      </span><span class="n">toks</span><span class="p">(</span><span class="n">t</span><span class="p">)</span> <span class="o">=</span> <span class="n">strsub</span><span class="p">(</span><span class="mi">1</span><span class="p">:</span><span class="n">c</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
       <span class="n">strsub</span> <span class="o">=</span> <span class="n">strsub</span><span class="p">(</span><span class="n">c</span><span class="o">+</span><span class="n">dlen</span><span class="p">:)</span>

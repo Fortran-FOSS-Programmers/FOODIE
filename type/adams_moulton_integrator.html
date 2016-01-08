@@ -137,6 +137,8 @@
         
         <a class="list-group-item" href="../type/adams_moulton_integrator.html#variable-b%7E2">b</a>
         
+        <a class="list-group-item" href="../type/adams_moulton_integrator.html#variable-error%7E3">error</a>
+        
       </div>
     </div>
   </div>
@@ -174,13 +176,15 @@
     <div id="boundprocs" class="panel-collapse collapse">
         <div class="list-group">
           
-          <a class="list-group-item" href="../type/adams_moulton_integrator.html#boundprocedure-destroy%7E3">destroy</a>
-          
           <a class="list-group-item" href="../type/adams_moulton_integrator.html#boundprocedure-init%7E3">init</a>
+          
+          <a class="list-group-item" href="../type/adams_moulton_integrator.html#boundprocedure-destroy%7E3">destroy</a>
           
           <a class="list-group-item" href="../type/adams_moulton_integrator.html#boundprocedure-integrate%7E3">integrate</a>
           
           <a class="list-group-item" href="../type/adams_moulton_integrator.html#boundprocedure-update_previous%7E2">update_previous</a>
+          
+          <a class="list-group-item" href="../type/adams_moulton_integrator.html#boundprocedure-is_supported%7E3">is_supported</a>
           
         </div>
     </div>
@@ -274,9 +278,12 @@
     <div class="col-lg-9" id='text'>
     <h2>type, public :: adams_moulton_integrator</h2>
     
-    <p>FOODIE integrator: provide an explicit class of Adams-Moulton multi-step schemes, from 1st to 3rd order accurate.</p>
-<p></p><div class="alert alert-info" role="alert"><h4>Note</h4>The integrator must be created or initialized (initialize the <em>b</em> coefficients) before used.
- Finalize object.</div>
+    <p>FOODIE integrator: provide an explicit class of Adams-Moulton multi-step schemes, from 1st to 16th order accurate.</p>
+<p></p><div class="alert alert-info" role="alert"><h4>Note</h4>The integrator must be created or initialized (initialize the <em>b</em> coefficients) before used.</div>
+<p>### List of errors status
++ error=0 =&gt; no error;
++ error=1 =&gt; bad (unsupported) number of required time steps;
+ Finalize object.</p>
     
     
     <h3>Inherited By</h3>
@@ -445,6 +452,20 @@ implementation in a submodule of an interface in a parent module.</p>
   
 </tr>
 
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-error%7E3"></span>integer(kind=I_P),</td>
+  
+  <td>private</td>
+  <td></td><td>::</td>
+  <td><strong>error</strong></td><td> =</td><td>0</td><td><p>Error status flag: trap occurrences of errors.</p></td>
+  
+</tr>
+
 </tbody>
 </table>
 
@@ -529,83 +550,6 @@ private elemental subroutine <a href='../proc/finalize%7E3.html'>finalize</a>(se
     
 	   
 <div class="panel panel-default">
-  <div class="panel-heading codesum"><span class="anchor" id="boundprocedure-destroy%7E3"></span><h3>procedure, public, pass(self) :: <strong>destroy</strong>  
-    
-  </h3></div>
-  
-  <div class="panel-body">
-    
-
-
-    <p>Destroy the integrator.</p>
-  </div>
-  
-  <ul class="list-group">
-    
-      <li class="list-group-item">
-      
-         
-    
-    <h3>
-private elemental subroutine <a href='../proc/destroy%7E3.html'>destroy</a>(self)
-    
-    
-    
-</h3>
-    
-    <h4>Arguments</h4>
-    
-      
-      
-<table class="table table-striped varlist">
-<thead><tr><th>Type</th>
-<th>Intent</th><th>Optional</th>
-<th>Attributes</th><th></th><th>Name</th><th></th></thead>
-
-
-
-<tbody>
-
-  
-  
-  
-  
-<tr>
-  
-  <td><span class="anchor" ></span>class(<a href='../type/adams_moulton_integrator.html'>adams_moulton_integrator</a>),</td>
-  <td>intent(inout)</td>
-  <td></td>
-  
-  <td></td><td>::</td>
-  <td><strong>self</strong></td><td><p>AB integrator.</p></td>
-  
-</tr>
-
-</tbody>
-</table>
-
-      
-    
-    
-    
-    <h4>Description</h4>
-       
-       
-
-
-       
-       <p>Destroy the integrator.</p>
-        
-
-      
-      </li>
-    
-  </ul>
-</div>
-
-    
-	   
-<div class="panel panel-default">
   <div class="panel-heading codesum"><span class="anchor" id="boundprocedure-init%7E3"></span><h3>procedure, public, pass(self) :: <strong>init</strong>  
     
   </h3></div>
@@ -687,6 +631,83 @@ private elemental subroutine <a href='../proc/init%7E3.html'>init</a>(self, step
 
        
        <p>Create the actual Adams-Moulton integrator: initialize the <em>b</em> coefficients.</p>
+        
+
+      
+      </li>
+    
+  </ul>
+</div>
+
+    
+	   
+<div class="panel panel-default">
+  <div class="panel-heading codesum"><span class="anchor" id="boundprocedure-destroy%7E3"></span><h3>procedure, public, pass(self) :: <strong>destroy</strong>  
+    
+  </h3></div>
+  
+  <div class="panel-body">
+    
+
+
+    <p>Destroy the integrator.</p>
+  </div>
+  
+  <ul class="list-group">
+    
+      <li class="list-group-item">
+      
+         
+    
+    <h3>
+private elemental subroutine <a href='../proc/destroy%7E3.html'>destroy</a>(self)
+    
+    
+    
+</h3>
+    
+    <h4>Arguments</h4>
+    
+      
+      
+<table class="table table-striped varlist">
+<thead><tr><th>Type</th>
+<th>Intent</th><th>Optional</th>
+<th>Attributes</th><th></th><th>Name</th><th></th></thead>
+
+
+
+<tbody>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>class(<a href='../type/adams_moulton_integrator.html'>adams_moulton_integrator</a>),</td>
+  <td>intent(inout)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>self</strong></td><td><p>AB integrator.</p></td>
+  
+</tr>
+
+</tbody>
+</table>
+
+      
+    
+    
+    
+    <h4>Description</h4>
+       
+       
+
+
+       
+       <p>Destroy the integrator.</p>
         
 
       
@@ -970,6 +991,92 @@ private subroutine <a href='../proc/update_previous%7E2.html'>update_previous</a
 </div>
 
     
+	   
+<div class="panel panel-default">
+  <div class="panel-heading codesum"><span class="anchor" id="boundprocedure-is_supported%7E3"></span><h3>procedure, public, nopass :: <strong>is_supported</strong>  
+    
+  </h3></div>
+  
+  <div class="panel-body">
+    
+
+
+    <p>Check if the queried number of steps is supported or not.</p>
+  </div>
+  
+  <ul class="list-group">
+    
+      <li class="list-group-item">
+      
+         
+    
+    <h3>
+private elemental function <a href='../proc/is_supported%7E3.html'>is_supported</a>(steps)
+    
+    
+    
+</h3>
+    
+    <h4>Arguments</h4>
+    
+      
+      
+<table class="table table-striped varlist">
+<thead><tr><th>Type</th>
+<th>Intent</th><th>Optional</th>
+<th>Attributes</th><th></th><th>Name</th><th></th></thead>
+
+
+
+<tbody>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>integer(kind=I_P),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>steps</strong></td><td><p>Number of time steps used.</p></td>
+  
+</tr>
+
+</tbody>
+</table>
+
+      
+    
+    
+
+  
+  
+  
+  
+     <h4>Return Value <small>logical
+  </small></h4>
+  <p>Is true is the steps number is in <em>supported_steps</em>.</p>
+    
+    
+    <h4>Description</h4>
+       
+       
+
+
+       
+       <p>Check if the queried number of steps is supported or not.</p>
+        
+
+      
+      </li>
+    
+  </ul>
+</div>
+
+    
     </section>
     
     
@@ -977,17 +1084,23 @@ private subroutine <a href='../proc/update_previous%7E2.html'>update_previous</a
     <section>
     <h2><span class="anchor" id="src"></span>Source Code</h2>
     <div class="highlight"><pre><span class="k">type</span> <span class="kd">::</span> <span class="n">adams_moulton_integrator</span>
-  <span class="c">!&lt; FOODIE integrator: provide an explicit class of Adams-Moulton multi-step schemes, from 1st to 3rd order accurate.</span>
+  <span class="c">!&lt; FOODIE integrator: provide an explicit class of Adams-Moulton multi-step schemes, from 1st to 16th order accurate.</span>
   <span class="c">!&lt;</span>
   <span class="c">!&lt; @note The integrator must be created or initialized (initialize the *b* coefficients) before used.</span>
+  <span class="c">!&lt;</span>
+  <span class="c">!&lt; ### List of errors status</span>
+  <span class="c">!&lt;+ error=0 =&gt; no error;</span>
+  <span class="c">!&lt;+ error=1 =&gt; bad (unsupported) number of required time steps;</span>
   <span class="k">private</span>
 <span class="k">  </span><span class="kt">integer</span><span class="p">(</span><span class="n">I_P</span><span class="p">)</span>           <span class="kd">::</span> <span class="n">steps</span><span class="o">=-</span><span class="mi">1</span> <span class="c">!&lt; Number of time steps.</span>
   <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">),</span> <span class="k">allocatable</span> <span class="kd">::</span> <span class="n">b</span><span class="p">(:)</span>     <span class="c">!&lt; \(b\) coefficients.</span>
+  <span class="kt">integer</span><span class="p">(</span><span class="n">I_P</span><span class="p">)</span>           <span class="kd">::</span> <span class="n">error</span><span class="o">=</span><span class="mi">0</span>  <span class="c">!&lt; Error status flag: trap occurrences of errors.</span>
   <span class="k">contains</span>
-<span class="k">    procedure</span><span class="p">,</span> <span class="k">pass</span><span class="p">(</span><span class="n">self</span><span class="p">),</span> <span class="k">public</span> <span class="kd">::</span> <span class="n">destroy</span>         <span class="c">!&lt; Destroy the integrator.</span>
-    <span class="k">procedure</span><span class="p">,</span> <span class="k">pass</span><span class="p">(</span><span class="n">self</span><span class="p">),</span> <span class="k">public</span> <span class="kd">::</span> <span class="n">init</span>            <span class="c">!&lt; Initialize (create) the integrator.</span>
+<span class="k">    procedure</span><span class="p">,</span> <span class="k">pass</span><span class="p">(</span><span class="n">self</span><span class="p">),</span> <span class="k">public</span> <span class="kd">::</span> <span class="n">init</span>            <span class="c">!&lt; Initialize (create) the integrator.</span>
+    <span class="k">procedure</span><span class="p">,</span> <span class="k">pass</span><span class="p">(</span><span class="n">self</span><span class="p">),</span> <span class="k">public</span> <span class="kd">::</span> <span class="n">destroy</span>         <span class="c">!&lt; Destroy the integrator.</span>
     <span class="k">procedure</span><span class="p">,</span> <span class="k">pass</span><span class="p">(</span><span class="n">self</span><span class="p">),</span> <span class="k">public</span> <span class="kd">::</span> <span class="n">integrate</span>       <span class="c">!&lt; Integrate integrand field.</span>
     <span class="k">procedure</span><span class="p">,</span> <span class="k">pass</span><span class="p">(</span><span class="n">self</span><span class="p">),</span> <span class="k">public</span> <span class="kd">::</span> <span class="n">update_previous</span> <span class="c">!&lt; Cyclic update previous time steps.</span>
+    <span class="k">procedure</span><span class="p">,</span> <span class="k">nopass</span><span class="p">,</span>     <span class="k">public</span> <span class="kd">::</span> <span class="n">is_supported</span>    <span class="c">!&lt; Check if the queried number of steps is supported or not.</span>
     <span class="k">final</span>                         <span class="kd">::</span> <span class="n">finalize</span>        <span class="c">!&lt; Finalize object.</span>
 <span class="n">endtype</span> <span class="n">adams_moulton_integrator</span>
 </pre></div>

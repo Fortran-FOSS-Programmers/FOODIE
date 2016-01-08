@@ -78,10 +78,11 @@ module foodie_integrator_adams_bashforth_moulton
 !-----------------------------------------------------------------------------------------------------------------------------------
 
 !-----------------------------------------------------------------------------------------------------------------------------------
-use foodie_kinds, only : R_P, I_P
 use foodie_adt_integrand, only : integrand
+use foodie_kinds, only : R_P, I_P
 use foodie_integrator_adams_bashforth, only : adams_bashforth_integrator
 use foodie_integrator_adams_moulton, only : adams_moulton_integrator
+use foodie_utils, only : is_admissible
 !-----------------------------------------------------------------------------------------------------------------------------------
 
 !-----------------------------------------------------------------------------------------------------------------------------------
@@ -91,19 +92,27 @@ public :: adams_bashforth_moulton_integrator
 !-----------------------------------------------------------------------------------------------------------------------------------
 
 !-----------------------------------------------------------------------------------------------------------------------------------
+character(len=99), parameter :: supported_steps='1-16' !< List of supported steps number. Valid format is `1-2,4,9-23...`.
+
 type :: adams_bashforth_moulton_integrator
   !< FOODIE integrator: provide an explicit class of Adams-Bashforth-Moulton multi-step schemes, from 1st to 4rd order accurate.
   !<
   !< @note The integrator must be created or initialized (predictor and corrector schemes selection) before used.
+  !<
+  !< ### List of errors status
+  !<+ error=0 => no error;
+  !<+ error=1 => bad (unsupported) number of required time steps;
   private
   integer(I_P)                     :: steps=-1  !< Number of time steps.
   type(adams_bashforth_integrator) :: predictor !< Predictor solver.
   type(adams_moulton_integrator)   :: corrector !< Corrector solver.
+  integer(I_P)                     :: error=0   !< Error status flag: trap occurrences of errors.
   contains
-    procedure, pass(self), public :: destroy   !< Destroy the integrator.
-    procedure, pass(self), public :: init      !< Initialize (create) the integrator.
-    procedure, pass(self), public :: integrate !< Integrate integrand field.
-    final                         :: finalize  !< Finalize object.
+    procedure, pass(self), public :: init         !< Initialize (create) the integrator.
+    procedure, pass(self), public :: destroy      !< Destroy the integrator.
+    procedure, pass(self), public :: integrate    !< Integrate integrand field.
+    procedure, nopass,     public :: is_supported !< Check if the queried number of steps is supported or not.
+    final                         :: finalize     !< Finalize object.
 endtype adams_bashforth_moulton_integrator
 !-----------------------------------------------------------------------------------------------------------------------------------
 contains
@@ -117,9 +126,15 @@ contains
   !---------------------------------------------------------------------------------------------------------------------------------
 
   !---------------------------------------------------------------------------------------------------------------------------------
-  self%steps = steps
-  call self%predictor%init(steps=steps)
-  call self%corrector%init(steps=steps-1)
+  if (self%is_supported(steps)) then
+    self%steps = steps
+    call self%predictor%init(steps=steps)
+    call self%corrector%init(steps=steps-1)
+    self%error = 0
+  else
+    ! bad (unsupported) number of required time steps
+    self%error = 1
+  endif
   return
   !---------------------------------------------------------------------------------------------------------------------------------
   endsubroutine init
@@ -135,6 +150,7 @@ contains
   self%steps = -1
   call self%predictor%destroy
   call self%corrector%destroy
+  self%error = 0
   return
   !---------------------------------------------------------------------------------------------------------------------------------
   endsubroutine destroy
@@ -158,6 +174,20 @@ contains
   return
   !---------------------------------------------------------------------------------------------------------------------------------
   endsubroutine integrate
+
+  elemental function is_supported(steps)
+  !---------------------------------------------------------------------------------------------------------------------------------
+  !< Check if the queried number of steps is supported or not.
+  !---------------------------------------------------------------------------------------------------------------------------------
+  integer(I_P), intent(IN) :: steps        !< Number of time steps used.
+  logical                  :: is_supported !< Is true is the steps number is in *supported_steps*.
+  !---------------------------------------------------------------------------------------------------------------------------------
+
+  !---------------------------------------------------------------------------------------------------------------------------------
+  is_supported = is_admissible(n=steps, adm_range=trim(supported_steps))
+  return
+  !---------------------------------------------------------------------------------------------------------------------------------
+  endfunction is_supported
 
   ! private methods
   elemental subroutine finalize(self)

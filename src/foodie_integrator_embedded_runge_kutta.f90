@@ -266,8 +266,9 @@ module foodie_integrator_emd_runge_kutta
 !-----------------------------------------------------------------------------------------------------------------------------------
 
 !-----------------------------------------------------------------------------------------------------------------------------------
-use foodie_kinds, only : R_P, I_P
 use foodie_adt_integrand, only : integrand
+use foodie_kinds, only : R_P, I_P
+use foodie_utils, only : is_admissible
 !-----------------------------------------------------------------------------------------------------------------------------------
 
 !-----------------------------------------------------------------------------------------------------------------------------------
@@ -277,6 +278,8 @@ public :: emd_runge_kutta_integrator
 !-----------------------------------------------------------------------------------------------------------------------------------
 
 !-----------------------------------------------------------------------------------------------------------------------------------
+character(len=99), parameter :: supported_stages='2,6,7,9,17' !< List of supported stages number. Valid format is `1-2,4,9-23...`.
+
 type :: emd_runge_kutta_integrator
   !< FOODIE integrator: provide an explicit class of TVD or SSP Runge-Kutta schemes, from 1st to 4th order accurate.
   !<
@@ -284,7 +287,7 @@ type :: emd_runge_kutta_integrator
   !<
   !< ### List of errors status
   !<+ error=0 => no error;
-  !<+ error=1 => bad (unsupported) number of required time steps;
+  !<+ error=1 => bad (unsupported) number of required stages;
   real(R_P)              :: tolerance=0._R_P !< Tolerance on the local truncation error.
   real(R_P)              :: pp1_inv=0._R_P   !< 1/(p+1) where p is the accuracy order of the lower accurate scheme of the pair.
   integer(I_P)           :: stages=0         !< Number of stages.
@@ -293,11 +296,12 @@ type :: emd_runge_kutta_integrator
   real(R_P), allocatable :: gamm(:)          !< \(\gamma\) Butcher's coefficients.
   integer(I_P)           :: error=0          !< Error status flag: trap occurrences of errors.
   contains
-    procedure, pass(self), public  :: destroy   !< Destroy the integrator.
-    procedure, pass(self), public  :: init      !< Initialize (create) the integrator.
-    procedure, pass(self), public  :: integrate !< Integrate integrand field.
-    procedure, pass(self), private :: new_Dt    !< Compute new estimation of the time step Dt.
-    final                          :: finalize  !< Finalize object.
+    procedure, pass(self), public  :: init         !< Initialize (create) the integrator.
+    procedure, pass(self), public  :: destroy      !< Destroy the integrator.
+    procedure, pass(self), public  :: integrate    !< Integrate integrand field.
+    procedure, nopass,     public  :: is_supported !< Check if the queried number of stages is supported or not.
+    procedure, pass(self), private :: new_Dt       !< Compute new estimation of the time step Dt.
+    final                          :: finalize     !< Finalize object.
 endtype emd_runge_kutta_integrator
 !-----------------------------------------------------------------------------------------------------------------------------------
 contains
@@ -312,249 +316,251 @@ contains
   !---------------------------------------------------------------------------------------------------------------------------------
 
   !---------------------------------------------------------------------------------------------------------------------------------
-  if (stages<1) return ! error print should be added
-  if (present(tolerance)) then
-    self%tolerance = tolerance
+  if (self%is_supported(stages)) then
+    if (present(tolerance)) then
+      self%tolerance = tolerance
+    else
+      self%tolerance = 0.01_R_P
+    endif
+    self%stages = stages
+    if (allocated(self%beta)) deallocate(self%beta) ; allocate(self%beta(1:stages, 1:2     )) ; self%beta = 0._R_P
+    if (allocated(self%alph)) deallocate(self%alph) ; allocate(self%alph(1:stages, 1:stages)) ; self%alph = 0._R_P
+    if (allocated(self%gamm)) deallocate(self%gamm) ; allocate(self%gamm(          1:stages)) ; self%gamm = 0._R_P
+    select case(stages)
+    case(2)
+      ! HERK(2,2)
+      self%pp1_inv = 1._R_P/(2._R_P + 1._R_P)
+
+      self%beta(1, 1) =  0.5_R_P ; self%beta(1, 2) =  5._R_P
+      self%beta(2, 1) =  1._R_P  ; self%beta(2, 2) =  0._R_P
+
+      self%alph(2, 1) = 1._R_P
+
+      self%gamm(2) = 1._R_P
+    case(6)
+      ! CKRK(6,5)
+      self%pp1_inv = 1._R_P/(5._R_P + 1._R_P)
+
+      self%beta(1, 1) = 37._R_P/378._R_P   ; self%beta(1, 2) = 2825._R_P/27648._R_P
+      self%beta(2, 1) = 0._R_P             ; self%beta(2, 2) = 0._R_P
+      self%beta(3, 1) = 250._R_P/621._R_P  ; self%beta(3, 2) = 18575._R_P/48384._R_P
+      self%beta(4, 1) = 125._R_P/594._R_P  ; self%beta(4, 2) = 13525._R_P/55296._R_P
+      self%beta(5, 1) = 0._R_P             ; self%beta(5, 2) = 277._R_P/14336._R_P
+      self%beta(6, 1) = 512._R_P/1771._R_P ; self%beta(6, 2) = 1._R_P/4._R_P
+
+      self%alph(2, 1)=1._R_P/5._R_P
+      self%alph(3, 1)=3._R_P/40._R_P      ;self%alph(3, 2)= 9._R_P/40._R_P
+      self%alph(4, 1)=3._R_P/10._R_P      ;self%alph(4, 2)= -9._R_P/10._R_P ;self%alph(4, 3)=6._R_P/5._R_P
+      self%alph(5, 1)=-11._R_P/54._R_P    ;self%alph(5, 2)= 5._R_P/2._R_P   ;self%alph(5, 3)=-70._R_P/27._R_P
+      self%alph(6, 1)=1631._R_P/55296._R_P;self%alph(6, 2)=175._R_P/512._R_P;self%alph(6, 3)=575._R_P/13824._R_P
+
+      self%alph(5, 4)=35._R_P/27._R_P
+      self%alph(6, 4)=44275._R_P/110592._R_P;self%alph(6, 5)=253._R_P/4096._R_P
+
+      self%gamm(2) = 1._R_P/5._R_P
+      self%gamm(3) = 3._R_P/10._R_P
+      self%gamm(4) = 3._R_P/5._R_P
+      self%gamm(5) = 1._R_P
+      self%gamm(6) = 7._R_P/8._R_P
+    case(7)
+      ! DPRK(7,4)
+      self%pp1_inv = 1._R_P/(4._R_P + 1._R_P)
+
+      self%beta(1, 1) =   35._R_P/384._R_P    ; self%beta(1, 2) =  5179._R_P/57600._R_P
+      self%beta(2, 1) =   0._R_P              ; self%beta(2, 2) =  0._R_P
+      self%beta(3, 1) =   500._R_P/1113._R_P  ; self%beta(3, 2) =  7571._R_P/16695._R_P
+      self%beta(4, 1) =   125._R_P/192._R_P   ; self%beta(4, 2) =  393._R_P/640._R_P
+      self%beta(5, 1) =  -2187._R_P/6784._R_P ; self%beta(5, 2) = -92097._R_P/339200._R_P
+      self%beta(6, 1) =   11._R_P/84._R_P     ; self%beta(6, 2) =  187._R_P/2100._R_P
+      self%beta(7, 1) =   0._R_P              ; self%beta(7, 2) =  1._R_P/40._R_P
+
+      self%alph(2, 1)=1._R_P/5._R_P
+      self%alph(3, 1)=3._R_P/40._R_P      ;self%alph(3, 2)= 9._R_P/40._R_P
+      self%alph(4, 1)=44._R_P/45._R_P     ;self%alph(4, 2)=-56._R_P/15._R_P     ;self%alph(4, 3)=32._R_P/9._R_P
+      self%alph(5, 1)=19372._R_P/6561._R_P;self%alph(5, 2)=-25360._R_P/2187._R_P;self%alph(5, 3)=64448._R_P/6561._R_P
+      self%alph(6, 1)=9017._R_P/3168._R_P ;self%alph(6, 2)=-355._R_P/33._R_P    ;self%alph(6, 3)=46732._R_P/5247._R_P
+      self%alph(7, 1)=35._R_P/384._R_P    ;self%alph(7, 2)= 0._R_P              ;self%alph(7, 3)=500._R_P/1113._R_P
+
+      self%alph(5, 4)=-212._R_P/729._R_P
+      self%alph(6, 4)= 49._R_P/176._R_P ;self%alph(6, 5)=-5103._R_P/18656._R_P
+      self%alph(7, 4)= 125._R_P/192._R_P;self%alph(7, 5)=-2187._R_P/6784._R_P ;self%alph(7, 6)=11._R_P/84._R_P
+
+      self%gamm(2) = 1._R_P/5._R_P
+      self%gamm(3) = 3._R_P/10._R_P
+      self%gamm(4) = 4._R_P/5._R_P
+      self%gamm(5) = 8._R_P/9._R_P
+      self%gamm(6) = 1._R_P
+      self%gamm(7) = 1._R_P
+    case(9)
+      ! CMRK(9,6)
+      self%pp1_inv = 1._R_P/(6._R_P + 1._R_P)
+
+      self%beta(1, 1) = 17572349._R_P/289262523._R_P  ; self%beta(1, 2) = 15231665._R_P/510830334._R_P
+      self%beta(2, 1) = 0._R_P                        ; self%beta(2, 2) = 0._R_P
+      self%beta(3, 1) = 57513011._R_P/201864250._R_P  ; self%beta(3, 2) = 59452991._R_P/116050448._R_P
+      self%beta(4, 1) = 15587306._R_P/354501571._R_P  ; self%beta(4, 2) = -28398517._R_P/122437738._R_P
+      self%beta(5, 1) = 71783021._R_P/234982865._R_P  ; self%beta(5, 2) = 56673824._R_P/137010559._R_P
+      self%beta(6, 1) = 29672000._R_P/180480167._R_P  ; self%beta(6, 2) = 68003849._R_P/426673583._R_P
+      self%beta(7, 1) = 65567621._R_P/127060952._R_P  ; self%beta(7, 2) = 7097631._R_P/37564021._R_P
+      self%beta(8, 1) = -79074570._R_P/210557597._R_P ; self%beta(8, 2) = -71226429._R_P/583093742._R_P
+      self%beta(9, 1) = 0._R_P                        ; self%beta(9, 2) = 1._R_P/20._R_P
+
+      self%alph(2, 1)=2._R_P/15._R_P
+      self%alph(3, 1)=1._R_P/20._R_P               ; self%alph(3, 2)=3._R_P/20._R_P
+      self%alph(4, 1)=3._R_P/40._R_P               ; self%alph(4, 2)=0._R_P
+      self%alph(5, 1)=86727015._R_P/196851553._R_P ; self%alph(5, 2)=-60129073._R_P/52624712._R_P
+      self%alph(6, 1)=-86860849._R_P/45628967._R_P ; self%alph(6, 2)=111022885._R_P/25716487._R_P
+      self%alph(7, 1)=77759591._R_P/16096467._R_P  ; self%alph(7, 2)=-49252809._R_P/6452555._R_P
+      self%alph(8, 1)=237564263._R_P/39280295._R_P ; self%alph(8, 2)=-100523239._R_P/10677940._R_P
+      self%alph(9, 1)=17572349._R_P/289262523._R_P ; self%alph(9, 2)=0._R_P
+
+      self%alph(4, 3)=9._R_P/40._R_P
+      self%alph(5, 3)=957436434._R_P/1378352377._R_P ; self%alph(5, 4)=83886832._R_P/147842441._R_P
+      self%alph(6, 3)=108046682._R_P/101167669._R_P  ; self%alph(6, 4)=-141756746._R_P/36005461._R_P
+      self%alph(7, 3)=-381680111._R_P/51572984._R_P  ; self%alph(7, 4)=879269579._R_P/66788831._R_P
+      self%alph(8, 3)=-265574846._R_P/27330247._R_P  ; self%alph(8, 4)=317978411._R_P/18988713._R_P
+      self%alph(9, 3)=57513011._R_P/201864250._R_P   ; self%alph(9, 4)=15587306._R_P/354501571._R_P
+
+      self%alph(6, 5)=73139862._R_P/60170633._R_P
+      self%alph(7, 5)=-90453121._R_P/33722162._R_P  ; self%alph(7, 6)=111179552._R_P/157155827._R_P
+      self%alph(8, 5)=-124494385._R_P/35453627._R_P ; self%alph(8, 6)=86822444._R_P/100138635._R_P
+      self%alph(9, 5)=71783021._R_P/234982865._R_P  ; self%alph(9, 6)=29672000._R_P/180480167._R_P
+
+      self%alph(8, 7)=-12873523._R_P/724232625._R_P
+      self%alph(9, 7)=65567621._R_P/127060952._R_P ;self%alph(9, 8)=-79074570._R_P/210557597._R_P
+
+      self%gamm(2) = 2._R_P/15._R_P
+      self%gamm(3) = 1._R_P/5._R_P
+      self%gamm(4) = 3._R_P/10._R_P
+      self%gamm(5) = 14._R_P/25._R_P
+      self%gamm(6) = 19._R_P/25._R_P
+      self%gamm(7) = 35226607._R_P/35688279._R_P
+      self%gamm(8) = 1._R_P
+      self%gamm(9) = 1._R_P
+    case(17)
+      ! FRK(17,10)
+      self%pp1_inv = 1._R_P/(10._R_P + 1._R_P)
+
+      self%beta(1 , 1) = 0.033333333333333333333_R_P; self%beta(1 , 2) = 0.033333333333333333333_R_P
+      self%beta(2 , 1) = 0.025_R_P                  ; self%beta(2 , 2) = 1._R_P/36._R_P
+      self%beta(3 , 1) = 0.033333333333333333333_R_P; self%beta(3 , 2) = 0.033333333333333333333_R_P
+      self%beta(4 , 1) = 0._R_P                     ; self%beta(4 , 2) = 0._R_P
+      self%beta(5 , 1) = 0.05_R_P                   ; self%beta(5 , 2) = 0.05_R_P
+      self%beta(6 , 1) = 0._R_P                     ; self%beta(6 , 2) = 0._R_P
+      self%beta(7 , 1) = 0.04_R_P                   ; self%beta(7 , 2) = 0.04_R_P
+      self%beta(8 , 1) = 0._R_P                     ; self%beta(8 , 2) = 0._R_P
+      self%beta(9 , 1) = 0.189237478148923490158_R_P; self%beta(9 , 2) = 0.189237478148923490158_R_P
+      self%beta(10, 1) = 0.277429188517743176508_R_P; self%beta(10, 2) = 0.277429188517743176508_R_P
+      self%beta(11, 1) = 0.277429188517743176508_R_P; self%beta(11, 2) = 0.277429188517743176508_R_P
+      self%beta(12, 1) = 0.189237478148923490158_R_P; self%beta(12, 2) = 0.189237478148923490158_R_P
+      self%beta(13, 1) =-0.04_R_P                   ; self%beta(13, 2) =-0.04_R_P
+      self%beta(14, 1) =-0.05_R_P                   ; self%beta(14, 2) =-0.05_R_P
+      self%beta(15, 1) =-0.033333333333333333333_R_P; self%beta(15, 2) =-0.033333333333333333333_R_P
+      self%beta(16, 1) =-0.025_R_P                  ; self%beta(16, 2) =-1._R_P/36._R_P
+      self%beta(17, 1) = 0.033333333333333333333_R_P; self%beta(17, 2) = 0.033333333333333333333_R_P
+
+      self%alph(2 , 1)= 0.1_R_P
+      self%alph(3 , 1)=-0.915176561375291440520_R_P; self%alph(3 , 2)=1.454534402178273228052_R_P
+      self%alph(4 , 1)= 0.202259190301118170324_R_P; self%alph(4 , 2)=0._R_P
+      self%alph(5 , 1)= 0.184024714708643575149_R_P; self%alph(5 , 2)=0._R_P
+      self%alph(6 , 1)= 0.087900734020668133731_R_P; self%alph(6 , 2)=0._R_P
+      self%alph(7 , 1)= 0.085970050490246030218_R_P; self%alph(7 , 2)=0._R_P
+      self%alph(8 , 1)= 0.120930449125333720660_R_P; self%alph(8 , 2)=0._R_P
+      self%alph(9 , 1)= 0.110854379580391483508_R_P; self%alph(9 , 2)=0._R_P
+      self%alph(10, 1)= 0.112054414752879004829_R_P; self%alph(10, 2)=0._R_P
+      self%alph(11, 1)= 0.113976783964185986138_R_P; self%alph(11, 2)=0._R_P
+      self%alph(12, 1)= 0.079831452828019604635_R_P; self%alph(12, 2)=0._R_P
+      self%alph(13, 1)= 0.985115610164857280120_R_P; self%alph(13, 2)=0._R_P
+      self%alph(14, 1)= 0.895080295771632891049_R_P; self%alph(14, 2)=0._R_P
+      self%alph(15, 1)=-0.915176561375291440520_R_P; self%alph(15, 2)=1.454534402178273228052_R_P
+      self%alph(16, 1)= 0.1_R_P                    ; self%alph(16, 2)=0._R_P
+      self%alph(17, 1)= 0.181781300700095283888_R_P; self%alph(17, 2)=0.675_R_P
+
+      self%alph(4 , 3)= 0.606777570903354510974_R_P
+      self%alph(5 , 3)= 0.197966831227192369068_R_P; self%alph(5 , 4)=-0.072954784731363262918_R_P
+      self%alph(6 , 3)= 0._R_P                     ; self%alph(6 , 4)= 0.410459702520260645318_R_P
+      self%alph(7 , 3)= 0._R_P                     ; self%alph(7 , 4)= 0.330885963040722183948_R_P
+      self%alph(8 , 3)= 0._R_P                     ; self%alph(8 , 4)= 0._R_P
+      self%alph(9 , 3)= 0._R_P                     ; self%alph(9 , 4)= 0._R_P
+      self%alph(10, 3)= 0._R_P                     ; self%alph(10, 4)= 0._R_P
+      self%alph(11, 3)= 0._R_P                     ; self%alph(11, 4)= 0._R_P
+      self%alph(12, 3)= 0._R_P                     ; self%alph(12, 4)= 0._R_P
+      self%alph(13, 3)= 0._R_P                     ; self%alph(13, 4)= 0.330885963040722183948_R_P
+      self%alph(14, 3)= 0.197966831227192369068_R_P; self%alph(14, 4)=-0.072954784731363262918_R_P
+      self%alph(15, 3)= 0._R_P                     ; self%alph(15, 4)= 0._R_P
+      self%alph(16, 3)=-0.157178665799771163367_R_P; self%alph(16, 4)= 0._R_P
+      self%alph(17, 3)= 0.342758159847189839942_R_P; self%alph(17, 4)= 0._R_P
+
+      self%alph(6 , 5)= 0.482713753678866489204_R_P
+      self%alph(7 , 5)= 0.489662957309450192844_R_P; self%alph(7 , 6)=-0.073185637507085073678_R_P
+      self%alph(8 , 5)= 0.260124675758295622809_R_P; self%alph(8 , 6)= 0.032540262154909133015_R_P
+      self%alph(9 , 5)= 0._R_P                     ; self%alph(9 , 6)=-0.060576148825500558762_R_P
+      self%alph(10, 5)= 0._R_P                     ; self%alph(10, 6)=-0.144942775902865915672_R_P
+      self%alph(11, 5)= 0._R_P                     ; self%alph(11, 6)=-0.076881336420335693858_R_P
+      self%alph(12, 5)= 0._R_P                     ; self%alph(12, 6)=-0.052032968680060307651_R_P
+      self%alph(13, 5)= 0.489662957309450192844_R_P; self%alph(13, 6)=-1.378964865748435675821_R_P
+      self%alph(14, 5)= 0._R_P                     ; self%alph(14, 6)=-0.851236239662007619739_R_P
+      self%alph(15, 5)=-0.777333643644968233538_R_P; self%alph(15, 6)= 0._R_P
+      self%alph(16, 5)= 0._R_P                     ; self%alph(16, 6)= 0._R_P
+      self%alph(17, 5)= 0.259111214548322744512_R_P; self%alph(17, 6)=-0.358278966717952089048_R_P
+
+      self%alph(8 , 7)=-0.059578021181736100156_R_P
+      self%alph(9 , 7)= 0.321763705601778390100_R_P; self%alph(9 , 8)=0.510485725608063031577_R_P
+      self%alph(10, 7)=-0.333269719096256706589_R_P; self%alph(10, 8)=0.499269229556880061353_R_P
+      self%alph(11, 7)= 0.239527360324390649107_R_P; self%alph(11, 8)=0.397774662368094639047_R_P
+      self%alph(12, 7)=-0.057695414616854888173_R_P; self%alph(12, 8)=0.194781915712104164976_R_P
+      self%alph(13, 7)=-0.861164195027635666673_R_P; self%alph(13, 8)=5.784288136375372200229_R_P
+      self%alph(14, 7)= 0.398320112318533301719_R_P; self%alph(14, 8)=3.639372631810356060294_R_P
+      self%alph(15, 7)=-0.091089566215517606959_R_P; self%alph(15, 8)=0._R_P
+      self%alph(16, 7)= 0._R_P                     ; self%alph(16, 8)=0._R_P
+      self%alph(17, 7)=-1.045948959408833060950_R_P; self%alph(17, 8)=0.930327845415626983292_R_P
+
+      self%alph(10, 9)=0.509504608929686104236_R_P
+      self%alph(11, 9)=0.010755895687360745555_R_P; self%alph(11, 10)=-0.327769124164018874147_R_P
+      self%alph(12, 9)=0.145384923188325069727_R_P; self%alph(12, 10)=-0.078294271035167077755_R_P
+      self%alph(13, 9)=3.288077619851035668904_R_P; self%alph(13, 10)=-2.386339050931363840134_R_P
+      self%alph(14, 9)=1.548228770398303223653_R_P; self%alph(14, 10)=-2.122217147040537160260_R_P
+      self%alph(15, 9)=0._R_P                     ; self%alph(15, 10)= 0._R_P
+      self%alph(16, 9)=0._R_P                     ; self%alph(16, 10)= 0._R_P
+      self%alph(17, 9)=1.779509594317081024461_R_P; self%alph(17, 10)= 0.1_R_P
+
+      self%alph(12, 11)=-0.114503299361098912184_R_P
+      self%alph(13, 11)=-3.254793424836439186545_R_P; self%alph(13, 12)=-2.163435416864229823539_R_P
+      self%alph(14, 11)=-1.583503985453261727133_R_P; self%alph(14, 12)=-1.715616082859362649220_R_P
+      self%alph(15, 11)= 0._R_P                     ; self%alph(15, 12)= 0._R_P
+      self%alph(16, 11)= 0._R_P                     ; self%alph(16, 12)= 0._R_P
+      self%alph(17, 11)=-0.282547569539044081612_R_P; self%alph(17, 12)=-0.159327350119972549169_R_P
+
+      self%alph(14, 13)=-0.024403640575012745213_R_P
+      self%alph(15, 13)= 0.091089566215517606959_R_P; self%alph(15, 14)= 0.777333643644968233538_R_P
+      self%alph(16, 13)= 0._R_P                     ; self%alph(16, 14)= 0._R_P
+      self%alph(17, 13)=-0.145515894647001510860_R_P; self%alph(17, 14)=-0.259111214548322744512_R_P
+
+      self%alph(16, 15)= 0.157178665799771163367_R_P
+      self%alph(17, 15)=-0.342758159847189839942_R_P; self%alph(17, 16)=-0.675_R_P
+
+      self%gamm(2 ) = 0.1_R_P
+      self%gamm(3 ) = 0.539357840802981787532_R_P
+      self%gamm(4 ) = 0.809036761204472681298_R_P
+      self%gamm(5 ) = 0.309036761204472681298_R_P
+      self%gamm(6 ) = 0.981074190219795268254_R_P
+      self%gamm(7 ) = 0.833333333333333333333_R_P
+      self%gamm(8 ) = 0.354017365856802376329_R_P
+      self%gamm(9 ) = 0.882527661964732346425_R_P
+      self%gamm(10) = 0.642615758240322548157_R_P
+      self%gamm(11) = 0.357384241759677451842_R_P
+      self%gamm(12) = 0.117472338035267653574_R_P
+      self%gamm(13) = 0.833333333333333333333_R_P
+      self%gamm(14) = 0.309036761204472681298_R_P
+      self%gamm(15) = 0.539357840802981787532_R_P
+      self%gamm(16) = 0.1_R_P
+      self%gamm(17) = 1._R_P
+    endselect
+    self%error = 0
   else
-    self%tolerance = 0.01_R_P
-  endif
-  self%stages = stages
-  if (allocated(self%beta)) deallocate(self%beta) ; allocate(self%beta(1:stages, 1:2     )) ; self%beta = 0._R_P
-  if (allocated(self%alph)) deallocate(self%alph) ; allocate(self%alph(1:stages, 1:stages)) ; self%alph = 0._R_P
-  if (allocated(self%gamm)) deallocate(self%gamm) ; allocate(self%gamm(          1:stages)) ; self%gamm = 0._R_P
-  select case(stages)
-  case(2)
-    ! HERK(2,2)
-    self%pp1_inv = 1._R_P/(2._R_P + 1._R_P)
-
-    self%beta(1, 1) =  0.5_R_P ; self%beta(1, 2) =  5._R_P
-    self%beta(2, 1) =  1._R_P  ; self%beta(2, 2) =  0._R_P
-
-    self%alph(2, 1) = 1._R_P
-
-    self%gamm(2) = 1._R_P
-  case(6)
-    ! CKRK(6,5)
-    self%pp1_inv = 1._R_P/(5._R_P + 1._R_P)
-
-    self%beta(1, 1) = 37._R_P/378._R_P   ; self%beta(1, 2) = 2825._R_P/27648._R_P
-    self%beta(2, 1) = 0._R_P             ; self%beta(2, 2) = 0._R_P
-    self%beta(3, 1) = 250._R_P/621._R_P  ; self%beta(3, 2) = 18575._R_P/48384._R_P
-    self%beta(4, 1) = 125._R_P/594._R_P  ; self%beta(4, 2) = 13525._R_P/55296._R_P
-    self%beta(5, 1) = 0._R_P             ; self%beta(5, 2) = 277._R_P/14336._R_P
-    self%beta(6, 1) = 512._R_P/1771._R_P ; self%beta(6, 2) = 1._R_P/4._R_P
-
-    self%alph(2, 1)=1._R_P/5._R_P
-    self%alph(3, 1)=3._R_P/40._R_P      ;self%alph(3, 2)= 9._R_P/40._R_P
-    self%alph(4, 1)=3._R_P/10._R_P      ;self%alph(4, 2)= -9._R_P/10._R_P ;self%alph(4, 3)=6._R_P/5._R_P
-    self%alph(5, 1)=-11._R_P/54._R_P    ;self%alph(5, 2)= 5._R_P/2._R_P   ;self%alph(5, 3)=-70._R_P/27._R_P
-    self%alph(6, 1)=1631._R_P/55296._R_P;self%alph(6, 2)=175._R_P/512._R_P;self%alph(6, 3)=575._R_P/13824._R_P
-
-    self%alph(5, 4)=35._R_P/27._R_P
-    self%alph(6, 4)=44275._R_P/110592._R_P;self%alph(6, 5)=253._R_P/4096._R_P
-
-    self%gamm(2) = 1._R_P/5._R_P
-    self%gamm(3) = 3._R_P/10._R_P
-    self%gamm(4) = 3._R_P/5._R_P
-    self%gamm(5) = 1._R_P
-    self%gamm(6) = 7._R_P/8._R_P
-  case(7)
-    ! DPRK(7,4)
-    self%pp1_inv = 1._R_P/(4._R_P + 1._R_P)
-
-    self%beta(1, 1) =   35._R_P/384._R_P    ; self%beta(1, 2) =  5179._R_P/57600._R_P
-    self%beta(2, 1) =   0._R_P              ; self%beta(2, 2) =  0._R_P
-    self%beta(3, 1) =   500._R_P/1113._R_P  ; self%beta(3, 2) =  7571._R_P/16695._R_P
-    self%beta(4, 1) =   125._R_P/192._R_P   ; self%beta(4, 2) =  393._R_P/640._R_P
-    self%beta(5, 1) =  -2187._R_P/6784._R_P ; self%beta(5, 2) = -92097._R_P/339200._R_P
-    self%beta(6, 1) =   11._R_P/84._R_P     ; self%beta(6, 2) =  187._R_P/2100._R_P
-    self%beta(7, 1) =   0._R_P              ; self%beta(7, 2) =  1._R_P/40._R_P
-
-    self%alph(2, 1)=1._R_P/5._R_P
-    self%alph(3, 1)=3._R_P/40._R_P      ;self%alph(3, 2)= 9._R_P/40._R_P
-    self%alph(4, 1)=44._R_P/45._R_P     ;self%alph(4, 2)=-56._R_P/15._R_P     ;self%alph(4, 3)=32._R_P/9._R_P
-    self%alph(5, 1)=19372._R_P/6561._R_P;self%alph(5, 2)=-25360._R_P/2187._R_P;self%alph(5, 3)=64448._R_P/6561._R_P
-    self%alph(6, 1)=9017._R_P/3168._R_P ;self%alph(6, 2)=-355._R_P/33._R_P    ;self%alph(6, 3)=46732._R_P/5247._R_P
-    self%alph(7, 1)=35._R_P/384._R_P    ;self%alph(7, 2)= 0._R_P              ;self%alph(7, 3)=500._R_P/1113._R_P
-
-    self%alph(5, 4)=-212._R_P/729._R_P
-    self%alph(6, 4)= 49._R_P/176._R_P ;self%alph(6, 5)=-5103._R_P/18656._R_P
-    self%alph(7, 4)= 125._R_P/192._R_P;self%alph(7, 5)=-2187._R_P/6784._R_P ;self%alph(7, 6)=11._R_P/84._R_P
-
-    self%gamm(2) = 1._R_P/5._R_P
-    self%gamm(3) = 3._R_P/10._R_P
-    self%gamm(4) = 4._R_P/5._R_P
-    self%gamm(5) = 8._R_P/9._R_P
-    self%gamm(6) = 1._R_P
-    self%gamm(7) = 1._R_P
-  case(9)
-    ! CMRK(9,6)
-    self%pp1_inv = 1._R_P/(6._R_P + 1._R_P)
-
-    self%beta(1, 1) = 17572349._R_P/289262523._R_P  ; self%beta(1, 2) = 15231665._R_P/510830334._R_P
-    self%beta(2, 1) = 0._R_P                        ; self%beta(2, 2) = 0._R_P
-    self%beta(3, 1) = 57513011._R_P/201864250._R_P  ; self%beta(3, 2) = 59452991._R_P/116050448._R_P
-    self%beta(4, 1) = 15587306._R_P/354501571._R_P  ; self%beta(4, 2) = -28398517._R_P/122437738._R_P
-    self%beta(5, 1) = 71783021._R_P/234982865._R_P  ; self%beta(5, 2) = 56673824._R_P/137010559._R_P
-    self%beta(6, 1) = 29672000._R_P/180480167._R_P  ; self%beta(6, 2) = 68003849._R_P/426673583._R_P
-    self%beta(7, 1) = 65567621._R_P/127060952._R_P  ; self%beta(7, 2) = 7097631._R_P/37564021._R_P
-    self%beta(8, 1) = -79074570._R_P/210557597._R_P ; self%beta(8, 2) = -71226429._R_P/583093742._R_P
-    self%beta(9, 1) = 0._R_P                        ; self%beta(9, 2) = 1._R_P/20._R_P
-
-    self%alph(2, 1)=2._R_P/15._R_P
-    self%alph(3, 1)=1._R_P/20._R_P               ; self%alph(3, 2)=3._R_P/20._R_P
-    self%alph(4, 1)=3._R_P/40._R_P               ; self%alph(4, 2)=0._R_P
-    self%alph(5, 1)=86727015._R_P/196851553._R_P ; self%alph(5, 2)=-60129073._R_P/52624712._R_P
-    self%alph(6, 1)=-86860849._R_P/45628967._R_P ; self%alph(6, 2)=111022885._R_P/25716487._R_P
-    self%alph(7, 1)=77759591._R_P/16096467._R_P  ; self%alph(7, 2)=-49252809._R_P/6452555._R_P
-    self%alph(8, 1)=237564263._R_P/39280295._R_P ; self%alph(8, 2)=-100523239._R_P/10677940._R_P
-    self%alph(9, 1)=17572349._R_P/289262523._R_P ; self%alph(9, 2)=0._R_P
-
-    self%alph(4, 3)=9._R_P/40._R_P
-    self%alph(5, 3)=957436434._R_P/1378352377._R_P ; self%alph(5, 4)=83886832._R_P/147842441._R_P
-    self%alph(6, 3)=108046682._R_P/101167669._R_P  ; self%alph(6, 4)=-141756746._R_P/36005461._R_P
-    self%alph(7, 3)=-381680111._R_P/51572984._R_P  ; self%alph(7, 4)=879269579._R_P/66788831._R_P
-    self%alph(8, 3)=-265574846._R_P/27330247._R_P  ; self%alph(8, 4)=317978411._R_P/18988713._R_P
-    self%alph(9, 3)=57513011._R_P/201864250._R_P   ; self%alph(9, 4)=15587306._R_P/354501571._R_P
-
-    self%alph(6, 5)=73139862._R_P/60170633._R_P
-    self%alph(7, 5)=-90453121._R_P/33722162._R_P  ; self%alph(7, 6)=111179552._R_P/157155827._R_P
-    self%alph(8, 5)=-124494385._R_P/35453627._R_P ; self%alph(8, 6)=86822444._R_P/100138635._R_P
-    self%alph(9, 5)=71783021._R_P/234982865._R_P  ; self%alph(9, 6)=29672000._R_P/180480167._R_P
-
-    self%alph(8, 7)=-12873523._R_P/724232625._R_P
-    self%alph(9, 7)=65567621._R_P/127060952._R_P ;self%alph(9, 8)=-79074570._R_P/210557597._R_P
-
-    self%gamm(2) = 2._R_P/15._R_P
-    self%gamm(3) = 1._R_P/5._R_P
-    self%gamm(4) = 3._R_P/10._R_P
-    self%gamm(5) = 14._R_P/25._R_P
-    self%gamm(6) = 19._R_P/25._R_P
-    self%gamm(7) = 35226607._R_P/35688279._R_P
-    self%gamm(8) = 1._R_P
-    self%gamm(9) = 1._R_P
-  case(17)
-    ! FRK(17,10)
-    self%pp1_inv = 1._R_P/(10._R_P + 1._R_P)
-
-    self%beta(1 , 1) = 0.033333333333333333333_R_P; self%beta(1 , 2) = 0.033333333333333333333_R_P
-    self%beta(2 , 1) = 0.025_R_P                  ; self%beta(2 , 2) = 1._R_P/36._R_P
-    self%beta(3 , 1) = 0.033333333333333333333_R_P; self%beta(3 , 2) = 0.033333333333333333333_R_P
-    self%beta(4 , 1) = 0._R_P                     ; self%beta(4 , 2) = 0._R_P
-    self%beta(5 , 1) = 0.05_R_P                   ; self%beta(5 , 2) = 0.05_R_P
-    self%beta(6 , 1) = 0._R_P                     ; self%beta(6 , 2) = 0._R_P
-    self%beta(7 , 1) = 0.04_R_P                   ; self%beta(7 , 2) = 0.04_R_P
-    self%beta(8 , 1) = 0._R_P                     ; self%beta(8 , 2) = 0._R_P
-    self%beta(9 , 1) = 0.189237478148923490158_R_P; self%beta(9 , 2) = 0.189237478148923490158_R_P
-    self%beta(10, 1) = 0.277429188517743176508_R_P; self%beta(10, 2) = 0.277429188517743176508_R_P
-    self%beta(11, 1) = 0.277429188517743176508_R_P; self%beta(11, 2) = 0.277429188517743176508_R_P
-    self%beta(12, 1) = 0.189237478148923490158_R_P; self%beta(12, 2) = 0.189237478148923490158_R_P
-    self%beta(13, 1) =-0.04_R_P                   ; self%beta(13, 2) =-0.04_R_P
-    self%beta(14, 1) =-0.05_R_P                   ; self%beta(14, 2) =-0.05_R_P
-    self%beta(15, 1) =-0.033333333333333333333_R_P; self%beta(15, 2) =-0.033333333333333333333_R_P
-    self%beta(16, 1) =-0.025_R_P                  ; self%beta(16, 2) =-1._R_P/36._R_P
-    self%beta(17, 1) = 0.033333333333333333333_R_P; self%beta(17, 2) = 0.033333333333333333333_R_P
-
-    self%alph(2 , 1)= 0.1_R_P
-    self%alph(3 , 1)=-0.915176561375291440520_R_P; self%alph(3 , 2)=1.454534402178273228052_R_P
-    self%alph(4 , 1)= 0.202259190301118170324_R_P; self%alph(4 , 2)=0._R_P
-    self%alph(5 , 1)= 0.184024714708643575149_R_P; self%alph(5 , 2)=0._R_P
-    self%alph(6 , 1)= 0.087900734020668133731_R_P; self%alph(6 , 2)=0._R_P
-    self%alph(7 , 1)= 0.085970050490246030218_R_P; self%alph(7 , 2)=0._R_P
-    self%alph(8 , 1)= 0.120930449125333720660_R_P; self%alph(8 , 2)=0._R_P
-    self%alph(9 , 1)= 0.110854379580391483508_R_P; self%alph(9 , 2)=0._R_P
-    self%alph(10, 1)= 0.112054414752879004829_R_P; self%alph(10, 2)=0._R_P
-    self%alph(11, 1)= 0.113976783964185986138_R_P; self%alph(11, 2)=0._R_P
-    self%alph(12, 1)= 0.079831452828019604635_R_P; self%alph(12, 2)=0._R_P
-    self%alph(13, 1)= 0.985115610164857280120_R_P; self%alph(13, 2)=0._R_P
-    self%alph(14, 1)= 0.895080295771632891049_R_P; self%alph(14, 2)=0._R_P
-    self%alph(15, 1)=-0.915176561375291440520_R_P; self%alph(15, 2)=1.454534402178273228052_R_P
-    self%alph(16, 1)= 0.1_R_P                    ; self%alph(16, 2)=0._R_P
-    self%alph(17, 1)= 0.181781300700095283888_R_P; self%alph(17, 2)=0.675_R_P
-
-    self%alph(4 , 3)= 0.606777570903354510974_R_P
-    self%alph(5 , 3)= 0.197966831227192369068_R_P; self%alph(5 , 4)=-0.072954784731363262918_R_P
-    self%alph(6 , 3)= 0._R_P                     ; self%alph(6 , 4)= 0.410459702520260645318_R_P
-    self%alph(7 , 3)= 0._R_P                     ; self%alph(7 , 4)= 0.330885963040722183948_R_P
-    self%alph(8 , 3)= 0._R_P                     ; self%alph(8 , 4)= 0._R_P
-    self%alph(9 , 3)= 0._R_P                     ; self%alph(9 , 4)= 0._R_P
-    self%alph(10, 3)= 0._R_P                     ; self%alph(10, 4)= 0._R_P
-    self%alph(11, 3)= 0._R_P                     ; self%alph(11, 4)= 0._R_P
-    self%alph(12, 3)= 0._R_P                     ; self%alph(12, 4)= 0._R_P
-    self%alph(13, 3)= 0._R_P                     ; self%alph(13, 4)= 0.330885963040722183948_R_P
-    self%alph(14, 3)= 0.197966831227192369068_R_P; self%alph(14, 4)=-0.072954784731363262918_R_P
-    self%alph(15, 3)= 0._R_P                     ; self%alph(15, 4)= 0._R_P
-    self%alph(16, 3)=-0.157178665799771163367_R_P; self%alph(16, 4)= 0._R_P
-    self%alph(17, 3)= 0.342758159847189839942_R_P; self%alph(17, 4)= 0._R_P
-
-    self%alph(6 , 5)= 0.482713753678866489204_R_P
-    self%alph(7 , 5)= 0.489662957309450192844_R_P; self%alph(7 , 6)=-0.073185637507085073678_R_P
-    self%alph(8 , 5)= 0.260124675758295622809_R_P; self%alph(8 , 6)= 0.032540262154909133015_R_P
-    self%alph(9 , 5)= 0._R_P                     ; self%alph(9 , 6)=-0.060576148825500558762_R_P
-    self%alph(10, 5)= 0._R_P                     ; self%alph(10, 6)=-0.144942775902865915672_R_P
-    self%alph(11, 5)= 0._R_P                     ; self%alph(11, 6)=-0.076881336420335693858_R_P
-    self%alph(12, 5)= 0._R_P                     ; self%alph(12, 6)=-0.052032968680060307651_R_P
-    self%alph(13, 5)= 0.489662957309450192844_R_P; self%alph(13, 6)=-1.378964865748435675821_R_P
-    self%alph(14, 5)= 0._R_P                     ; self%alph(14, 6)=-0.851236239662007619739_R_P
-    self%alph(15, 5)=-0.777333643644968233538_R_P; self%alph(15, 6)= 0._R_P
-    self%alph(16, 5)= 0._R_P                     ; self%alph(16, 6)= 0._R_P
-    self%alph(17, 5)= 0.259111214548322744512_R_P; self%alph(17, 6)=-0.358278966717952089048_R_P
-
-    self%alph(8 , 7)=-0.059578021181736100156_R_P
-    self%alph(9 , 7)= 0.321763705601778390100_R_P; self%alph(9 , 8)=0.510485725608063031577_R_P
-    self%alph(10, 7)=-0.333269719096256706589_R_P; self%alph(10, 8)=0.499269229556880061353_R_P
-    self%alph(11, 7)= 0.239527360324390649107_R_P; self%alph(11, 8)=0.397774662368094639047_R_P
-    self%alph(12, 7)=-0.057695414616854888173_R_P; self%alph(12, 8)=0.194781915712104164976_R_P
-    self%alph(13, 7)=-0.861164195027635666673_R_P; self%alph(13, 8)=5.784288136375372200229_R_P
-    self%alph(14, 7)= 0.398320112318533301719_R_P; self%alph(14, 8)=3.639372631810356060294_R_P
-    self%alph(15, 7)=-0.091089566215517606959_R_P; self%alph(15, 8)=0._R_P
-    self%alph(16, 7)= 0._R_P                     ; self%alph(16, 8)=0._R_P
-    self%alph(17, 7)=-1.045948959408833060950_R_P; self%alph(17, 8)=0.930327845415626983292_R_P
-
-    self%alph(10, 9)=0.509504608929686104236_R_P
-    self%alph(11, 9)=0.010755895687360745555_R_P; self%alph(11, 10)=-0.327769124164018874147_R_P
-    self%alph(12, 9)=0.145384923188325069727_R_P; self%alph(12, 10)=-0.078294271035167077755_R_P
-    self%alph(13, 9)=3.288077619851035668904_R_P; self%alph(13, 10)=-2.386339050931363840134_R_P
-    self%alph(14, 9)=1.548228770398303223653_R_P; self%alph(14, 10)=-2.122217147040537160260_R_P
-    self%alph(15, 9)=0._R_P                     ; self%alph(15, 10)= 0._R_P
-    self%alph(16, 9)=0._R_P                     ; self%alph(16, 10)= 0._R_P
-    self%alph(17, 9)=1.779509594317081024461_R_P; self%alph(17, 10)= 0.1_R_P
-
-    self%alph(12, 11)=-0.114503299361098912184_R_P
-    self%alph(13, 11)=-3.254793424836439186545_R_P; self%alph(13, 12)=-2.163435416864229823539_R_P
-    self%alph(14, 11)=-1.583503985453261727133_R_P; self%alph(14, 12)=-1.715616082859362649220_R_P
-    self%alph(15, 11)= 0._R_P                     ; self%alph(15, 12)= 0._R_P
-    self%alph(16, 11)= 0._R_P                     ; self%alph(16, 12)= 0._R_P
-    self%alph(17, 11)=-0.282547569539044081612_R_P; self%alph(17, 12)=-0.159327350119972549169_R_P
-
-    self%alph(14, 13)=-0.024403640575012745213_R_P
-    self%alph(15, 13)= 0.091089566215517606959_R_P; self%alph(15, 14)= 0.777333643644968233538_R_P
-    self%alph(16, 13)= 0._R_P                     ; self%alph(16, 14)= 0._R_P
-    self%alph(17, 13)=-0.145515894647001510860_R_P; self%alph(17, 14)=-0.259111214548322744512_R_P
-
-    self%alph(16, 15)= 0.157178665799771163367_R_P
-    self%alph(17, 15)=-0.342758159847189839942_R_P; self%alph(17, 16)=-0.675_R_P
-
-    self%gamm(2 ) = 0.1_R_P
-    self%gamm(3 ) = 0.539357840802981787532_R_P
-    self%gamm(4 ) = 0.809036761204472681298_R_P
-    self%gamm(5 ) = 0.309036761204472681298_R_P
-    self%gamm(6 ) = 0.981074190219795268254_R_P
-    self%gamm(7 ) = 0.833333333333333333333_R_P
-    self%gamm(8 ) = 0.354017365856802376329_R_P
-    self%gamm(9 ) = 0.882527661964732346425_R_P
-    self%gamm(10) = 0.642615758240322548157_R_P
-    self%gamm(11) = 0.357384241759677451842_R_P
-    self%gamm(12) = 0.117472338035267653574_R_P
-    self%gamm(13) = 0.833333333333333333333_R_P
-    self%gamm(14) = 0.309036761204472681298_R_P
-    self%gamm(15) = 0.539357840802981787532_R_P
-    self%gamm(16) = 0.1_R_P
-    self%gamm(17) = 1._R_P
-  case default
-    ! bad (unsupported) number of required time steps
+    ! bad (unsupported) number of required stages
     self%error = 1
-  endselect
+  endif
   return
   !---------------------------------------------------------------------------------------------------------------------------------
   endsubroutine init
@@ -624,6 +630,20 @@ contains
   return
   !---------------------------------------------------------------------------------------------------------------------------------
   endsubroutine integrate
+
+  elemental function is_supported(stages)
+  !---------------------------------------------------------------------------------------------------------------------------------
+  !< Check if the queried number of stages is supported or not.
+  !---------------------------------------------------------------------------------------------------------------------------------
+  integer(I_P), intent(IN) :: stages       !< Number of stages used.
+  logical                  :: is_supported !< Is true is the stages number is in *supported_stages*.
+  !---------------------------------------------------------------------------------------------------------------------------------
+
+  !---------------------------------------------------------------------------------------------------------------------------------
+  is_supported = is_admissible(n=stages, adm_range=trim(supported_stages))
+  return
+  !---------------------------------------------------------------------------------------------------------------------------------
+  endfunction is_supported
 
   ! private methods
   elemental subroutine new_Dt(self, error, Dt)

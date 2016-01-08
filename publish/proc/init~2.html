@@ -595,6 +595,20 @@
           
           <a class="list-group-item" href="../proc/interpolate.html">interpolate</a>
           
+          <a class="list-group-item" href="../proc/is_admissible.html">is_admissible</a>
+          
+          <a class="list-group-item" href="../proc/is_supported.html">is_supported</a>
+          
+          <a class="list-group-item" href="../proc/is_supported%7E2.html">is_supported</a>
+          
+          <a class="list-group-item" href="../proc/is_supported%7E3.html">is_supported</a>
+          
+          <a class="list-group-item" href="../proc/is_supported%7E4.html">is_supported</a>
+          
+          <a class="list-group-item" href="../proc/is_supported%7E5.html">is_supported</a>
+          
+          <a class="list-group-item" href="../proc/is_supported%7E6.html">is_supported</a>
+          
           <a class="list-group-item" href="../proc/leapfrog_solver.html">leapfrog_solver</a>
           
           <a class="list-group-item" href="../proc/lorenz_assign_lorenz.html">lorenz_assign_lorenz</a>
@@ -831,6 +845,8 @@
           
           <a class="list-group-item" href="../proc/tokenize.html">tokenize</a>
           
+          <a class="list-group-item" href="../proc/tokenize%7E2.html">tokenize</a>
+          
           <a class="list-group-item" href="../proc/tvd_rk_solver.html">tvd_rk_solver</a>
           
           <a class="list-group-item" href="../proc/update_previous.html">update_previous</a>
@@ -912,7 +928,7 @@ private elemental subroutine init(self, steps)
   
 <tr>
   
-  <td><span class="anchor" id="variable-steps%7E9"></span>integer(kind=I_P),</td>
+  <td><span class="anchor" id="variable-steps%7E11"></span>integer(kind=I_P),</td>
   <td>intent(in)</td>
   <td></td>
   
@@ -960,9 +976,15 @@ private elemental subroutine init(self, steps)
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
 
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
-  <span class="n">self</span><span class="p">%</span><span class="n">steps</span> <span class="o">=</span> <span class="n">steps</span>
-  <span class="k">call </span><span class="n">self</span><span class="p">%</span><span class="n">predictor</span><span class="p">%</span><span class="n">init</span><span class="p">(</span><span class="n">steps</span><span class="o">=</span><span class="n">steps</span><span class="p">)</span>
-  <span class="k">call </span><span class="n">self</span><span class="p">%</span><span class="n">corrector</span><span class="p">%</span><span class="n">init</span><span class="p">(</span><span class="n">steps</span><span class="o">=</span><span class="n">steps</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+  <span class="k">if</span> <span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">is_supported</span><span class="p">(</span><span class="n">steps</span><span class="p">))</span> <span class="k">then</span>
+<span class="k">    </span><span class="n">self</span><span class="p">%</span><span class="n">steps</span> <span class="o">=</span> <span class="n">steps</span>
+    <span class="k">call </span><span class="n">self</span><span class="p">%</span><span class="n">predictor</span><span class="p">%</span><span class="n">init</span><span class="p">(</span><span class="n">steps</span><span class="o">=</span><span class="n">steps</span><span class="p">)</span>
+    <span class="k">call </span><span class="n">self</span><span class="p">%</span><span class="n">corrector</span><span class="p">%</span><span class="n">init</span><span class="p">(</span><span class="n">steps</span><span class="o">=</span><span class="n">steps</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">self</span><span class="p">%</span><span class="n">error</span> <span class="o">=</span> <span class="mi">0</span>
+  <span class="k">else</span>
+    <span class="c">! bad (unsupported) number of required time steps</span>
+    <span class="n">self</span><span class="p">%</span><span class="n">error</span> <span class="o">=</span> <span class="mi">1</span>
+  <span class="n">endif</span>
   <span class="k">return</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
   <span class="n">endsubroutine</span> <span class="n">init</span>

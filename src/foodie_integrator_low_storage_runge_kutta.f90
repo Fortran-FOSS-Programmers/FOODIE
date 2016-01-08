@@ -149,9 +149,9 @@ module foodie_integrator_low_storage_runge_kutta
 !-----------------------------------------------------------------------------------------------------------------------------------
 
 !-----------------------------------------------------------------------------------------------------------------------------------
-use, intrinsic:: ISO_FORTRAN_ENV, only: stderr => ERROR_UNIT
-use foodie_kinds, only : R_P, I_P, I8P
 use foodie_adt_integrand, only : integrand
+use foodie_kinds, only : R_P, I_P, I8P
+use foodie_utils, only : is_admissible
 !-----------------------------------------------------------------------------------------------------------------------------------
 
 !-----------------------------------------------------------------------------------------------------------------------------------
@@ -161,24 +161,32 @@ public :: ls_runge_kutta_integrator
 !-----------------------------------------------------------------------------------------------------------------------------------
 
 !-----------------------------------------------------------------------------------------------------------------------------------
+character(len=99), parameter :: supported_stages='1,5-7,12-14' !< List of supported stages number. Valid format is `1-2,4,9-23...`.
+
 type :: ls_runge_kutta_integrator
   !< FOODIE integrator: provide an explicit class of low storage Runge-Kutta schemes, from 1st to 4th order accurate.
   !<
   !< @note The integrator must be created or initialized (initialize the RK coefficients) before used.
+  !<
+  !< ### List of errors status
+  !<+ error=0 => no error;
+  !<+ error=1 => bad (unsupported) number of required stages;
   integer(I_P)           :: stages=0 !< Number of stages.
   real(R_P), allocatable :: A(:)     !< Low storage *A* coefficients.
   real(R_P), allocatable :: B(:)     !< Low storage *B* coefficients.
   real(R_P), allocatable :: C(:)     !< Low storage *C* coefficients.
+  integer(I_P)           :: error=0  !< Error status flag: trap occurrences of errors.
   contains
-    procedure, pass(self), public :: destroy   !< Destroy the integrator.
-    procedure, pass(self), public :: init      !< Initialize (create) the integrator.
-    procedure, pass(self), public :: integrate !< Integrate integrand field.
-    final                         :: finalize  !< Finalize object.
+    procedure, pass(self), public :: init         !< Initialize (create) the integrator.
+    procedure, pass(self), public :: destroy      !< Destroy the integrator.
+    procedure, pass(self), public :: integrate    !< Integrate integrand field.
+    procedure, nopass,     public :: is_supported !< Check if the queried number of stages is supported or not.
+    final                         :: finalize     !< Finalize object.
 endtype ls_runge_kutta_integrator
 !-----------------------------------------------------------------------------------------------------------------------------------
 contains
   ! public methods
-  subroutine init(self, stages)
+  elemental subroutine init(self, stages)
   !---------------------------------------------------------------------------------------------------------------------------------
   !< Create the actual RK integrator: initialize the Butcher' low storage table coefficients.
   !---------------------------------------------------------------------------------------------------------------------------------
@@ -187,100 +195,95 @@ contains
   !---------------------------------------------------------------------------------------------------------------------------------
 
   !---------------------------------------------------------------------------------------------------------------------------------
-  if (stages<1) return ! error print should be added
-  self%stages = stages
-  if (allocated(self%A)) deallocate(self%A) ; allocate(self%A(1:stages)) ; self%A = 0._R_P
-  if (allocated(self%B)) deallocate(self%B) ; allocate(self%B(1:stages)) ; self%B = 0._R_P
-  if (allocated(self%C)) deallocate(self%C) ; allocate(self%C(1:stages)) ; self%C = 0._R_P
-  select case(stages)
-  case(1) ! RK(1,1) Forward-Euler
-    self%B(1) = 1._R_P
-  case(5) ! LSRK(5,4)
-    self%A(1) =  0._R_P
-    self%A(2) = -real(567301805773_I8P,  kind=R_P) / real(1357537059087_I8P, kind=R_P)
-    self%A(3) = -real(2404267990393_I8P, kind=R_P) / real(2016746695238_I8P, kind=R_P)
-    self%A(4) = -real(3550918686646_I8P, kind=R_P) / real(2091501179385_I8P, kind=R_P)
-    self%A(5) = -real(1275806237668_I8P, kind=R_P) / real(842570457699_I8P,  kind=R_P)
+  if (self%is_supported(stages)) then
+    self%stages = stages
+    if (allocated(self%A)) deallocate(self%A) ; allocate(self%A(1:stages)) ; self%A = 0._R_P
+    if (allocated(self%B)) deallocate(self%B) ; allocate(self%B(1:stages)) ; self%B = 0._R_P
+    if (allocated(self%C)) deallocate(self%C) ; allocate(self%C(1:stages)) ; self%C = 0._R_P
+    select case(stages)
+    case(1) ! RK(1,1) Forward-Euler
+      self%B(1) = 1._R_P
+    case(5) ! LSRK(5,4)
+      self%A(1) =  0._R_P
+      self%A(2) = -real(567301805773_I8P,  kind=R_P) / real(1357537059087_I8P, kind=R_P)
+      self%A(3) = -real(2404267990393_I8P, kind=R_P) / real(2016746695238_I8P, kind=R_P)
+      self%A(4) = -real(3550918686646_I8P, kind=R_P) / real(2091501179385_I8P, kind=R_P)
+      self%A(5) = -real(1275806237668_I8P, kind=R_P) / real(842570457699_I8P,  kind=R_P)
 
-    self%B(1) =  real(1432997174477_I8P, kind=R_P) / real(9575080441755_I8P,  kind=R_P)
-    self%B(2) =  real(5161836677717_I8P, kind=R_P) / real(13612068292357_I8P, kind=R_P)
-    self%B(3) =  real(1720146321549_I8P, kind=R_P) / real(2090206949498_I8P,  kind=R_P)
-    self%B(4) =  real(3134564353537_I8P, kind=R_P) / real(4481467310338_I8P,  kind=R_P)
-    self%B(5) =  real(2277821191437_I8P, kind=R_P) / real(14882151754819_I8P, kind=R_P)
+      self%B(1) =  real(1432997174477_I8P, kind=R_P) / real(9575080441755_I8P,  kind=R_P)
+      self%B(2) =  real(5161836677717_I8P, kind=R_P) / real(13612068292357_I8P, kind=R_P)
+      self%B(3) =  real(1720146321549_I8P, kind=R_P) / real(2090206949498_I8P,  kind=R_P)
+      self%B(4) =  real(3134564353537_I8P, kind=R_P) / real(4481467310338_I8P,  kind=R_P)
+      self%B(5) =  real(2277821191437_I8P, kind=R_P) / real(14882151754819_I8P, kind=R_P)
 
-    self%C(1) =  0._R_P
-    self%C(2) =  real(1432997174477_I8P, kind=R_P) / real(9575080441755_I8P, kind=R_P)
-    self%C(3) =  real(2526269341429_I8P, kind=R_P) / real(6820363962896_I8P, kind=R_P)
-    self%C(4) =  real(2006345519317_I8P, kind=R_P) / real(3224310063776_I8P, kind=R_P)
-    self%C(5) =  real(2802321613138_I8P, kind=R_P) / real(2924317926251_I8P, kind=R_P)
-  case(6) ! LSRK(6,4)
-    self%A(1) =  0._R_P             ; self%B(1) = 0.122000000000_R_P ; self%C(1) = 0._R_P
-    self%A(2) = -0.691750960670_R_P ; self%B(2) = 0.477263056358_R_P ; self%C(2) = 0.122000000000_R_P
-    self%A(3) = -1.727127405211_R_P ; self%B(3) = 0.381941220320_R_P ; self%C(3) = 0.269115878630_R_P
-    self%A(4) = -0.694890150986_R_P ; self%B(4) = 0.447757195744_R_P ; self%C(4) = 0.447717183551_R_P
-    self%A(5) = -1.039942756197_R_P ; self%B(5) = 0.498614246822_R_P ; self%C(5) = 0.749979795490_R_P
-    self%A(6) = -1.531977447611_R_P ; self%B(6) = 0.186648570846_R_P ; self%C(6) = 0.898555413085_R_P
-  case(7) ! LSRK(7,4)
-    self%A(1) =  0._R_P             ; self%B(1) = 0.117322146869_R_P ; self%C(1) = 0._R_P
-    self%A(2) = -0.647900745934_R_P ; self%B(2) = 0.503270262127_R_P ; self%C(2) = 0.117322146869_R_P
-    self%A(3) = -2.704760863204_R_P ; self%B(3) = 0.233663281658_R_P ; self%C(3) = 0.294523230758_R_P
-    self%A(4) = -0.460080550118_R_P ; self%B(4) = 0.283419634625_R_P ; self%C(4) = 0.305658622131_R_P
-    self%A(5) = -0.500581787785_R_P ; self%B(5) = 0.540367414023_R_P ; self%C(5) = 0.582864148403_R_P
-    self%A(6) = -1.906532255913_R_P ; self%B(6) = 0.371499414620_R_P ; self%C(6) = 0.858664273599_R_P
-    self%A(7) = -1.450000000000_R_P ; self%B(7) = 0.136670099385_R_P ; self%C(7) = 0.868664273599_R_P
-  case(12) ! LSRK(12,4)
-    self%A(1 ) =  0._R_P                 ; self%B(1 ) = 0.0650008435125904_R_P ; self%C(1 ) = 0._R_P
-    self%A(2 ) = -0.0923311242368072_R_P ; self%B(2 ) = 0.0161459902249842_R_P ; self%C(2 ) = 0.0650008435125904_R_P
-    self%A(3 ) = -0.9441056581158819_R_P ; self%B(3 ) = 0.5758627178358159_R_P ; self%C(3 ) = 0.0796560563081853_R_P
-    self%A(4 ) = -4.3271273247576394_R_P ; self%B(4 ) = 0.1649758848361671_R_P ; self%C(4 ) = 0.1620416710085376_R_P
-    self%A(5 ) = -2.1557771329026072_R_P ; self%B(5 ) = 0.3934619494248182_R_P ; self%C(5 ) = 0.2248877362907778_R_P
-    self%A(6 ) = -0.9770727190189062_R_P ; self%B(6 ) = 0.0443509641602719_R_P ; self%C(6 ) = 0.2952293985641261_R_P
-    self%A(7 ) = -0.7581835342571139_R_P ; self%B(7 ) = 0.2074504268408778_R_P ; self%C(7 ) = 0.3318332506149405_R_P
-    self%A(8 ) = -1.7977525470825499_R_P ; self%B(8 ) = 0.6914247433015102_R_P ; self%C(8 ) = 0.4094724050198658_R_P
-    self%A(9 ) = -2.6915667972700770_R_P ; self%B(9 ) = 0.3766646883450449_R_P ; self%C(9 ) = 0.6356954475753369_R_P
-    self%A(10) = -4.6466798960268143_R_P ; self%B(10) = 0.0757190350155483_R_P ; self%C(10) = 0.6806551557645497_R_P
-    self%A(11) = -0.1539613783825189_R_P ; self%B(11) = 0.2027862031054088_R_P ; self%C(11) = 0.7143773712418350_R_P
-    self%A(12) = -0.5943293901830616_R_P ; self%B(12) = 0.2167029365631842_R_P ; self%C(12) = 0.9032588871651854_R_P
-  case(13) ! LSRK(13,4)
-    self%A(1 ) =  0._R_P                 ; self%B(1 ) = 0.0271990297818803_R_P ; self%C(1 ) = 0._R_P
-    self%A(2 ) = -0.6160178650170565_R_P ; self%B(2 ) = 0.1772488819905108_R_P ; self%C(2 ) = 0.0271990297818803_R_P
-    self%A(3 ) = -0.4449487060774118_R_P ; self%B(3 ) = 0.0378528418949694_R_P ; self%C(3 ) = 0.0952594339119365_R_P
-    self%A(4 ) = -1.0952033345276178_R_P ; self%B(4 ) = 0.6086431830142991_R_P ; self%C(4 ) = 0.1266450286591127_R_P
-    self%A(5 ) = -1.2256030785959187_R_P ; self%B(5 ) = 0.2154313974316100_R_P ; self%C(5 ) = 0.1825883045699772_R_P
-    self%A(6 ) = -0.2740182222332805_R_P ; self%B(6 ) = 0.2066152563885843_R_P ; self%C(6 ) = 0.3737511439063931_R_P
-    self%A(7 ) = -0.0411952089052647_R_P ; self%B(7 ) = 0.0415864076069797_R_P ; self%C(7 ) = 0.5301279418422206_R_P
-    self%A(8 ) = -0.1797084899153560_R_P ; self%B(8 ) = 0.0219891884310925_R_P ; self%C(8 ) = 0.5704177433952291_R_P
-    self%A(9 ) = -1.1771530652064288_R_P ; self%B(9 ) = 0.9893081222650993_R_P ; self%C(9 ) = 0.5885784947099155_R_P
-    self%A(10) = -0.4078831463120878_R_P ; self%B(10) = 0.0063199019859826_R_P ; self%C(10) = 0.6160769826246714_R_P
-    self%A(11) = -0.8295636426191777_R_P ; self%B(11) = 0.3749640721105318_R_P ; self%C(11) = 0.6223252334314046_R_P
-    self%A(12) = -4.7895970584252288_R_P ; self%B(12) = 1.6080235151003195_R_P ; self%C(12) = 0.6897593128753419_R_P
-    self%A(13) = -0.6606671432964504_R_P ; self%B(13) = 0.0961209123818189_R_P ; self%C(13) = 0.9126827615920843_R_P
-  case(14) ! LSRK(14,4)
-    self%A(1 ) =  0._R_P                 ; self%B(1 ) = 0.0367762454319673_R_P ; self%C(1 ) = 0._R_P
-    self%A(2 ) = -0.7188012108672410_R_P ; self%B(2 ) = 0.3136296607553959_R_P ; self%C(2 ) = 0.0367762454319673_R_P
-    self%A(3 ) = -0.7785331173421570_R_P ; self%B(3 ) = 0.1531848691869027_R_P ; self%C(3 ) = 0.1249685262725025_R_P
-    self%A(4 ) = -0.0053282796654044_R_P ; self%B(4 ) = 0.0030097086818182_R_P ; self%C(4 ) = 0.2446177702277698_R_P
-    self%A(5 ) = -0.8552979934029281_R_P ; self%B(5 ) = 0.3326293790646110_R_P ; self%C(5 ) = 0.2476149531070420_R_P
-    self%A(6 ) = -3.9564138245774565_R_P ; self%B(6 ) = 0.2440251405350864_R_P ; self%C(6 ) = 0.2969311120382472_R_P
-    self%A(7 ) = -1.5780575380587385_R_P ; self%B(7 ) = 0.3718879239592277_R_P ; self%C(7 ) = 0.3978149645802642_R_P
-    self%A(8 ) = -2.0837094552574054_R_P ; self%B(8 ) = 0.6204126221582444_R_P ; self%C(8 ) = 0.5270854589440328_R_P
-    self%A(9 ) = -0.7483334182761610_R_P ; self%B(9 ) = 0.1524043173028741_R_P ; self%C(9 ) = 0.6981269994175695_R_P
-    self%A(10) = -0.7032861106563359_R_P ; self%B(10) = 0.0760894927419266_R_P ; self%C(10) = 0.8190890835352128_R_P
-    self%A(11) =  0.0013917096117681_R_P ; self%B(11) = 0.0077604214040978_R_P ; self%C(11) = 0.8527059887098624_R_P
-    self%A(12) = -0.0932075369637460_R_P ; self%B(12) = 0.0024647284755382_R_P ; self%C(12) = 0.8604711817462826_R_P
-    self%A(13) = -0.9514200470875948_R_P ; self%B(13) = 0.0780348340049386_R_P ; self%C(13) = 0.8627060376969976_R_P
-    self%A(14) = -7.1151571693922548_R_P ; self%B(14) = 5.5059777270269628_R_P ; self%C(14) = 0.8734213127600976_R_P
-  case default
-    write(stderr, '(A,I3,A)')' Error: ls_runge_kutta_integrator%init: ', stages, ' is an invalid number-of-stages!'
-    write(stderr, '(A)')' Valid number of stages are:'
-    write(stderr, '(A)')'   1  => LSRK(1, 1)'
-    write(stderr, '(A)')'   5  => LSRK(5, 4)'
-    write(stderr, '(A)')'   6  => LSRK(6, 4)'
-    write(stderr, '(A)')'   7  => LSRK(7, 4)'
-    write(stderr, '(A)')'   12 => LSRK(12, 4)'
-    write(stderr, '(A)')'   13 => LSRK(13, 4)'
-    write(stderr, '(A)')'   14 => LSRK(14, 4)'
-  endselect
+      self%C(1) =  0._R_P
+      self%C(2) =  real(1432997174477_I8P, kind=R_P) / real(9575080441755_I8P, kind=R_P)
+      self%C(3) =  real(2526269341429_I8P, kind=R_P) / real(6820363962896_I8P, kind=R_P)
+      self%C(4) =  real(2006345519317_I8P, kind=R_P) / real(3224310063776_I8P, kind=R_P)
+      self%C(5) =  real(2802321613138_I8P, kind=R_P) / real(2924317926251_I8P, kind=R_P)
+    case(6) ! LSRK(6,4)
+      self%A(1) =  0._R_P             ; self%B(1) = 0.122000000000_R_P ; self%C(1) = 0._R_P
+      self%A(2) = -0.691750960670_R_P ; self%B(2) = 0.477263056358_R_P ; self%C(2) = 0.122000000000_R_P
+      self%A(3) = -1.727127405211_R_P ; self%B(3) = 0.381941220320_R_P ; self%C(3) = 0.269115878630_R_P
+      self%A(4) = -0.694890150986_R_P ; self%B(4) = 0.447757195744_R_P ; self%C(4) = 0.447717183551_R_P
+      self%A(5) = -1.039942756197_R_P ; self%B(5) = 0.498614246822_R_P ; self%C(5) = 0.749979795490_R_P
+      self%A(6) = -1.531977447611_R_P ; self%B(6) = 0.186648570846_R_P ; self%C(6) = 0.898555413085_R_P
+    case(7) ! LSRK(7,4)
+      self%A(1) =  0._R_P             ; self%B(1) = 0.117322146869_R_P ; self%C(1) = 0._R_P
+      self%A(2) = -0.647900745934_R_P ; self%B(2) = 0.503270262127_R_P ; self%C(2) = 0.117322146869_R_P
+      self%A(3) = -2.704760863204_R_P ; self%B(3) = 0.233663281658_R_P ; self%C(3) = 0.294523230758_R_P
+      self%A(4) = -0.460080550118_R_P ; self%B(4) = 0.283419634625_R_P ; self%C(4) = 0.305658622131_R_P
+      self%A(5) = -0.500581787785_R_P ; self%B(5) = 0.540367414023_R_P ; self%C(5) = 0.582864148403_R_P
+      self%A(6) = -1.906532255913_R_P ; self%B(6) = 0.371499414620_R_P ; self%C(6) = 0.858664273599_R_P
+      self%A(7) = -1.450000000000_R_P ; self%B(7) = 0.136670099385_R_P ; self%C(7) = 0.868664273599_R_P
+    case(12) ! LSRK(12,4)
+      self%A(1 ) =  0._R_P                 ; self%B(1 ) = 0.0650008435125904_R_P ; self%C(1 ) = 0._R_P
+      self%A(2 ) = -0.0923311242368072_R_P ; self%B(2 ) = 0.0161459902249842_R_P ; self%C(2 ) = 0.0650008435125904_R_P
+      self%A(3 ) = -0.9441056581158819_R_P ; self%B(3 ) = 0.5758627178358159_R_P ; self%C(3 ) = 0.0796560563081853_R_P
+      self%A(4 ) = -4.3271273247576394_R_P ; self%B(4 ) = 0.1649758848361671_R_P ; self%C(4 ) = 0.1620416710085376_R_P
+      self%A(5 ) = -2.1557771329026072_R_P ; self%B(5 ) = 0.3934619494248182_R_P ; self%C(5 ) = 0.2248877362907778_R_P
+      self%A(6 ) = -0.9770727190189062_R_P ; self%B(6 ) = 0.0443509641602719_R_P ; self%C(6 ) = 0.2952293985641261_R_P
+      self%A(7 ) = -0.7581835342571139_R_P ; self%B(7 ) = 0.2074504268408778_R_P ; self%C(7 ) = 0.3318332506149405_R_P
+      self%A(8 ) = -1.7977525470825499_R_P ; self%B(8 ) = 0.6914247433015102_R_P ; self%C(8 ) = 0.4094724050198658_R_P
+      self%A(9 ) = -2.6915667972700770_R_P ; self%B(9 ) = 0.3766646883450449_R_P ; self%C(9 ) = 0.6356954475753369_R_P
+      self%A(10) = -4.6466798960268143_R_P ; self%B(10) = 0.0757190350155483_R_P ; self%C(10) = 0.6806551557645497_R_P
+      self%A(11) = -0.1539613783825189_R_P ; self%B(11) = 0.2027862031054088_R_P ; self%C(11) = 0.7143773712418350_R_P
+      self%A(12) = -0.5943293901830616_R_P ; self%B(12) = 0.2167029365631842_R_P ; self%C(12) = 0.9032588871651854_R_P
+    case(13) ! LSRK(13,4)
+      self%A(1 ) =  0._R_P                 ; self%B(1 ) = 0.0271990297818803_R_P ; self%C(1 ) = 0._R_P
+      self%A(2 ) = -0.6160178650170565_R_P ; self%B(2 ) = 0.1772488819905108_R_P ; self%C(2 ) = 0.0271990297818803_R_P
+      self%A(3 ) = -0.4449487060774118_R_P ; self%B(3 ) = 0.0378528418949694_R_P ; self%C(3 ) = 0.0952594339119365_R_P
+      self%A(4 ) = -1.0952033345276178_R_P ; self%B(4 ) = 0.6086431830142991_R_P ; self%C(4 ) = 0.1266450286591127_R_P
+      self%A(5 ) = -1.2256030785959187_R_P ; self%B(5 ) = 0.2154313974316100_R_P ; self%C(5 ) = 0.1825883045699772_R_P
+      self%A(6 ) = -0.2740182222332805_R_P ; self%B(6 ) = 0.2066152563885843_R_P ; self%C(6 ) = 0.3737511439063931_R_P
+      self%A(7 ) = -0.0411952089052647_R_P ; self%B(7 ) = 0.0415864076069797_R_P ; self%C(7 ) = 0.5301279418422206_R_P
+      self%A(8 ) = -0.1797084899153560_R_P ; self%B(8 ) = 0.0219891884310925_R_P ; self%C(8 ) = 0.5704177433952291_R_P
+      self%A(9 ) = -1.1771530652064288_R_P ; self%B(9 ) = 0.9893081222650993_R_P ; self%C(9 ) = 0.5885784947099155_R_P
+      self%A(10) = -0.4078831463120878_R_P ; self%B(10) = 0.0063199019859826_R_P ; self%C(10) = 0.6160769826246714_R_P
+      self%A(11) = -0.8295636426191777_R_P ; self%B(11) = 0.3749640721105318_R_P ; self%C(11) = 0.6223252334314046_R_P
+      self%A(12) = -4.7895970584252288_R_P ; self%B(12) = 1.6080235151003195_R_P ; self%C(12) = 0.6897593128753419_R_P
+      self%A(13) = -0.6606671432964504_R_P ; self%B(13) = 0.0961209123818189_R_P ; self%C(13) = 0.9126827615920843_R_P
+    case(14) ! LSRK(14,4)
+      self%A(1 ) =  0._R_P                 ; self%B(1 ) = 0.0367762454319673_R_P ; self%C(1 ) = 0._R_P
+      self%A(2 ) = -0.7188012108672410_R_P ; self%B(2 ) = 0.3136296607553959_R_P ; self%C(2 ) = 0.0367762454319673_R_P
+      self%A(3 ) = -0.7785331173421570_R_P ; self%B(3 ) = 0.1531848691869027_R_P ; self%C(3 ) = 0.1249685262725025_R_P
+      self%A(4 ) = -0.0053282796654044_R_P ; self%B(4 ) = 0.0030097086818182_R_P ; self%C(4 ) = 0.2446177702277698_R_P
+      self%A(5 ) = -0.8552979934029281_R_P ; self%B(5 ) = 0.3326293790646110_R_P ; self%C(5 ) = 0.2476149531070420_R_P
+      self%A(6 ) = -3.9564138245774565_R_P ; self%B(6 ) = 0.2440251405350864_R_P ; self%C(6 ) = 0.2969311120382472_R_P
+      self%A(7 ) = -1.5780575380587385_R_P ; self%B(7 ) = 0.3718879239592277_R_P ; self%C(7 ) = 0.3978149645802642_R_P
+      self%A(8 ) = -2.0837094552574054_R_P ; self%B(8 ) = 0.6204126221582444_R_P ; self%C(8 ) = 0.5270854589440328_R_P
+      self%A(9 ) = -0.7483334182761610_R_P ; self%B(9 ) = 0.1524043173028741_R_P ; self%C(9 ) = 0.6981269994175695_R_P
+      self%A(10) = -0.7032861106563359_R_P ; self%B(10) = 0.0760894927419266_R_P ; self%C(10) = 0.8190890835352128_R_P
+      self%A(11) =  0.0013917096117681_R_P ; self%B(11) = 0.0077604214040978_R_P ; self%C(11) = 0.8527059887098624_R_P
+      self%A(12) = -0.0932075369637460_R_P ; self%B(12) = 0.0024647284755382_R_P ; self%C(12) = 0.8604711817462826_R_P
+      self%A(13) = -0.9514200470875948_R_P ; self%B(13) = 0.0780348340049386_R_P ; self%C(13) = 0.8627060376969976_R_P
+      self%A(14) = -7.1151571693922548_R_P ; self%B(14) = 5.5059777270269628_R_P ; self%C(14) = 0.8734213127600976_R_P
+    endselect
+    self%error = 0
+  else
+    ! bad (unsupported) number of required stages
+    self%error = 1
+  endif
   return
   !---------------------------------------------------------------------------------------------------------------------------------
   endsubroutine init
@@ -297,6 +300,7 @@ contains
   if (allocated(self%A)) deallocate(self%A)
   if (allocated(self%B)) deallocate(self%B)
   if (allocated(self%C)) deallocate(self%C)
+  self%error = 0
   return
   !---------------------------------------------------------------------------------------------------------------------------------
   endsubroutine destroy
@@ -330,6 +334,20 @@ contains
   return
   !---------------------------------------------------------------------------------------------------------------------------------
   endsubroutine integrate
+
+  elemental function is_supported(stages)
+  !---------------------------------------------------------------------------------------------------------------------------------
+  !< Check if the queried number of stages is supported or not.
+  !---------------------------------------------------------------------------------------------------------------------------------
+  integer(I_P), intent(IN) :: stages       !< Number of stages used.
+  logical                  :: is_supported !< Is true is the stages number is in *supported_stages*.
+  !---------------------------------------------------------------------------------------------------------------------------------
+
+  !---------------------------------------------------------------------------------------------------------------------------------
+  is_supported = is_admissible(n=stages, adm_range=trim(supported_stages))
+  return
+  !---------------------------------------------------------------------------------------------------------------------------------
+  endfunction is_supported
 
   ! private methods
   elemental subroutine finalize(self)
