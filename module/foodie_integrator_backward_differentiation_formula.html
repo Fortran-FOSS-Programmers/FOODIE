@@ -270,34 +270,34 @@
 <polygon fill="none" stroke="black" points="518,-46 260,-46 260,-20 518,-20 518,-46"/>
 <text text-anchor="middle" x="389" y="-30.55" font-family="Helvetica,sans-Serif" font-size="10.50">foodie_integrator_backward_differentiation_formula</text>
 </g>
+<!-- module~foodie_adt_integrand -->
+<g id="node2" class="node"><title>module~foodie_adt_integrand</title>
+<a xlink:href="../module/foodie_adt_integrand.html" xlink:title="foodie_adt_integrand">
+<polygon fill="#337ab7" stroke="#337ab7" points="224,-26 110,-26 110,-1.24345e-14 224,-3.55271e-15 224,-26"/>
+<text text-anchor="middle" x="167" y="-10.55" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">foodie_adt_integrand</text>
+</a>
+</g>
+<!-- module~foodie_adt_integrand&#45;&gt;module~foodie_integrator_backward_differentiation_formula -->
+<g id="edge4" class="edge"><title>module~foodie_adt_integrand&#45;&gt;module~foodie_integrator_backward_differentiation_formula</title>
+<path fill="none" stroke="black" stroke-dasharray="5,2" d="M224.171,-18.1505C232.291,-18.8821 240.919,-19.6594 249.805,-20.4599"/>
+<polygon fill="black" stroke="black" points="249.661,-23.961 259.934,-21.3725 250.289,-16.9892 249.661,-23.961"/>
+</g>
 <!-- module~foodie_kinds -->
-<g id="node2" class="node"><title>module~foodie_kinds</title>
+<g id="node3" class="node"><title>module~foodie_kinds</title>
 <a xlink:href="../module/foodie_kinds.html" xlink:title="foodie_kinds">
 <polygon fill="#337ab7" stroke="#337ab7" points="73,-46 1,-46 1,-20 73,-20 73,-46"/>
 <text text-anchor="middle" x="37" y="-30.55" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">foodie_kinds</text>
 </a>
 </g>
 <!-- module~foodie_kinds&#45;&gt;module~foodie_integrator_backward_differentiation_formula -->
-<g id="edge4" class="edge"><title>module~foodie_kinds&#45;&gt;module~foodie_integrator_backward_differentiation_formula</title>
+<g id="edge6" class="edge"><title>module~foodie_kinds&#45;&gt;module~foodie_integrator_backward_differentiation_formula</title>
 <path fill="none" stroke="black" stroke-dasharray="5,2" d="M73.7585,-34.2035C85.3524,-34.5304 98.2102,-34.8385 110,-35 155.479,-35.6229 205.131,-35.5198 249.776,-35.1394"/>
 <polygon fill="black" stroke="black" points="249.848,-38.639 259.815,-35.0486 249.784,-31.6393 249.848,-38.639"/>
-</g>
-<!-- module~foodie_adt_integrand -->
-<g id="node3" class="node"><title>module~foodie_adt_integrand</title>
-<a xlink:href="../module/foodie_adt_integrand.html" xlink:title="foodie_adt_integrand">
-<polygon fill="#337ab7" stroke="#337ab7" points="224,-26 110,-26 110,-1.24345e-14 224,-3.55271e-15 224,-26"/>
-<text text-anchor="middle" x="167" y="-10.55" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">foodie_adt_integrand</text>
-</a>
 </g>
 <!-- module~foodie_kinds&#45;&gt;module~foodie_adt_integrand -->
 <g id="edge2" class="edge"><title>module~foodie_kinds&#45;&gt;module~foodie_adt_integrand</title>
 <path fill="none" stroke="black" stroke-dasharray="5,2" d="M73.5582,-27.3757C81.7428,-26.1165 90.6769,-24.742 99.6705,-23.3584"/>
 <polygon fill="black" stroke="black" points="100.462,-26.7779 109.813,-21.798 99.3972,-19.8593 100.462,-26.7779"/>
-</g>
-<!-- module~foodie_adt_integrand&#45;&gt;module~foodie_integrator_backward_differentiation_formula -->
-<g id="edge6" class="edge"><title>module~foodie_adt_integrand&#45;&gt;module~foodie_integrator_backward_differentiation_formula</title>
-<path fill="none" stroke="black" stroke-dasharray="5,2" d="M224.171,-18.1505C232.291,-18.8821 240.919,-19.6594 249.805,-20.4599"/>
-<polygon fill="black" stroke="black" points="249.661,-23.961 259.934,-21.3725 250.289,-16.9892 249.661,-23.961"/>
 </g>
 </g>
 </svg>
@@ -393,7 +393,7 @@ implementation in a submodule of an interface in a parent module.</p>
                 </div>
                 
     
-    <p>FOODIE integrator: provide an implicit class of Backward Differentiation Formula schemes, from 1st to 4th order accurate.</p>
+    <p>FOODIE integrator: provide an implicit class of Backward Differentiation Formula schemes, from 1st to 6th order accurate.</p>
 <p>Considering the following ODE system:</p>
 <p>$$ U_t = R(t,U) $$</p>
 <p>where \(U_t = \frac{dU}{dt}\), <em>U</em> is the vector of <em>state</em> variables being a function of the time-like independent variable
@@ -402,7 +402,7 @@ implementation in a submodule of an interface in a parent module.</p>
 <p>where \(N_s\) is the number of previous steps considered.</p>
 <p></p><div class="alert alert-info" role="alert"><h4>Note</h4>The value of \(\Delta t\) must be provided, it not being computed by the integrator.</div>
 <p>The schemes are implicit. The coefficients \(\alpha_s\) and \(\beta\) define the actual scheme, that is selected accordingly
- to the number of <strong>steps</strong> used.</p>
+ to the number of <em>steps</em> used.</p>
 <p>Currently, the following schemes are available:</p>
 <table>
 <thead>
@@ -491,203 +491,202 @@ implementation in a submodule of an interface in a parent module.</p>
 <!-- Generated by graphviz version 2.26.3 (20100126.1600)
  -->
 <!-- Title: module~~foodie_integrator_backward_differentiation_formula~~UsedByGraph Pages: 1 -->
-<svg id="modulefoodie_integrator_backward_differentiation_formulaUsedByGraph" width="641pt" height="366pt"
- viewBox="0.00 0.00 641.00 366.35" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-<g id="module~~foodie_integrator_backward_differentiation_formula~~UsedByGraph" class="graph" transform="scale(0.907932 0.907932) rotate(0) translate(4 399.496)">
+<svg id="modulefoodie_integrator_backward_differentiation_formulaUsedByGraph" width="641pt" height="401pt"
+ viewBox="0.00 0.00 641.00 401.47" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="module~~foodie_integrator_backward_differentiation_formula~~UsedByGraph" class="graph" transform="scale(0.907932 0.907932) rotate(0) translate(4 438.182)">
 <title>module~~foodie_integrator_backward_differentiation_formula~~UsedByGraph</title>
-<polygon fill="white" stroke="white" points="-4,5 -4,-399.496 703,-399.496 703,5 -4,5"/>
+<polygon fill="white" stroke="white" points="-4,5 -4,-438.182 703,-438.182 703,5 -4,5"/>
 <!-- module~foodie_integrator_backward_differentiation_formula -->
 <g id="node1" class="node"><title>module~foodie_integrator_backward_differentiation_formula</title>
-<polygon fill="none" stroke="black" points="258,-207.496 1.13687e-13,-207.496 0,-181.496 258,-181.496 258,-207.496"/>
-<text text-anchor="middle" x="129" y="-192.046" font-family="Helvetica,sans-Serif" font-size="10.50">foodie_integrator_backward_differentiation_formula</text>
+<polygon fill="none" stroke="black" points="258,-231 1.13687e-13,-231 0,-205 258,-205 258,-231"/>
+<text text-anchor="middle" x="129" y="-215.55" font-family="Helvetica,sans-Serif" font-size="10.50">foodie_integrator_backward_differentiation_formula</text>
 </g>
 <!-- module~foodie -->
 <g id="node2" class="node"><title>module~foodie</title>
 <a xlink:href="../module/foodie.html" xlink:title="foodie">
-<polygon fill="#337ab7" stroke="#337ab7" points="348,-207.496 294,-207.496 294,-181.496 348,-181.496 348,-207.496"/>
-<text text-anchor="middle" x="321" y="-192.046" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">foodie</text>
+<polygon fill="#337ab7" stroke="#337ab7" points="348,-231 294,-231 294,-205 348,-205 348,-231"/>
+<text text-anchor="middle" x="321" y="-215.55" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">foodie</text>
 </a>
 </g>
 <!-- module~foodie_integrator_backward_differentiation_formula&#45;&gt;module~foodie -->
 <g id="edge38" class="edge"><title>module~foodie_integrator_backward_differentiation_formula&#45;&gt;module~foodie</title>
-<path fill="none" stroke="black" stroke-dasharray="5,2" d="M258.132,-194.496C267.273,-194.496 275.957,-194.496 283.791,-194.496"/>
-<polygon fill="black" stroke="black" points="283.911,-197.996 293.911,-194.496 283.911,-190.996 283.911,-197.996"/>
-</g>
-<!-- module~type_euler_1d_caf -->
-<g id="node3" class="node"><title>module~type_euler_1d_caf</title>
-<a xlink:href="../module/type_euler_1d_caf.html" xlink:title="type_euler_1D_caf">
-<polygon fill="#337ab7" stroke="#337ab7" points="499,-395.496 397,-395.496 397,-369.496 499,-369.496 499,-395.496"/>
-<text text-anchor="middle" x="448" y="-380.046" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">type_euler_1D_caf</text>
-</a>
-</g>
-<!-- module~foodie&#45;&gt;module~type_euler_1d_caf -->
-<g id="edge14" class="edge"><title>module~foodie&#45;&gt;module~type_euler_1d_caf</title>
-<path fill="none" stroke="black" stroke-dasharray="5,2" d="M322.645,-207.613C327.074,-237.675 341.903,-312.28 384,-355.496 387.211,-358.792 390.886,-361.706 394.816,-364.277"/>
-<polygon fill="black" stroke="black" points="393.326,-367.457 403.746,-369.376 396.798,-361.378 393.326,-367.457"/>
-</g>
-<!-- program~integrate_euler_1d_openmp -->
-<g id="node4" class="node"><title>program~integrate_euler_1d_openmp</title>
-<a xlink:href="../program/integrate_euler_1d_openmp.html" xlink:title="integrate_euler_1D_openmp">
-<polygon fill="#f0ad4e" stroke="#f0ad4e" points="697,-313.496 549,-313.496 549,-287.496 697,-287.496 697,-313.496"/>
-<text text-anchor="middle" x="623" y="-298.046" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">integrate_euler_1D_openmp</text>
-</a>
-</g>
-<!-- module~foodie&#45;&gt;program~integrate_euler_1d_openmp -->
-<g id="edge16" class="edge"><title>module~foodie&#45;&gt;program~integrate_euler_1d_openmp</title>
-<path fill="none" stroke="black" stroke-dasharray="5,2" d="M323.74,-207.529C329.857,-233.383 347.091,-291.345 384,-322.496 406.675,-341.634 420.391,-330.627 448,-341.496"/>
-<path fill="none" stroke="black" stroke-dasharray="5,2" d="M448,-341.496C459.351,-345.965 522.133,-329.676 569.278,-316.321"/>
-<polygon fill="black" stroke="black" points="570.421,-319.635 579.076,-313.524 568.5,-312.903 570.421,-319.635"/>
-</g>
-<!-- module~type_burgers -->
-<g id="node5" class="node"><title>module~type_burgers</title>
-<a xlink:href="../module/type_burgers.html" xlink:title="type_burgers">
-<polygon fill="#337ab7" stroke="#337ab7" points="486,-269.496 410,-269.496 410,-243.496 486,-243.496 486,-269.496"/>
-<text text-anchor="middle" x="448" y="-254.046" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">type_burgers</text>
-</a>
-</g>
-<!-- module~foodie&#45;&gt;module~type_burgers -->
-<g id="edge18" class="edge"><title>module~foodie&#45;&gt;module~type_burgers</title>
-<path fill="none" stroke="black" stroke-dasharray="5,2" d="M343.141,-207.565C355.079,-214.415 370.163,-222.758 384,-229.496 390.858,-232.836 398.234,-236.173 405.453,-239.306"/>
-<polygon fill="black" stroke="black" points="404.565,-242.732 415.137,-243.431 407.309,-236.292 404.565,-242.732"/>
-</g>
-<!-- program~integrate_burgers -->
-<g id="node6" class="node"><title>program~integrate_burgers</title>
-<a xlink:href="../program/integrate_burgers.html" xlink:title="integrate_burgers">
-<polygon fill="#f0ad4e" stroke="#f0ad4e" points="671,-248.496 575,-248.496 575,-222.496 671,-222.496 671,-248.496"/>
-<text text-anchor="middle" x="623" y="-233.046" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">integrate_burgers</text>
-</a>
-</g>
-<!-- module~foodie&#45;&gt;program~integrate_burgers -->
-<g id="edge20" class="edge"><title>module~foodie&#45;&gt;program~integrate_burgers</title>
-<path fill="none" stroke="black" stroke-dasharray="5,2" d="M348.066,-198.171C396.509,-204.747 499.055,-218.669 564.3,-227.527"/>
-<polygon fill="black" stroke="black" points="564.058,-231.026 574.438,-228.903 564.999,-224.09 564.058,-231.026"/>
-</g>
-<!-- module~type_euler_1d -->
-<g id="node7" class="node"><title>module~type_euler_1d</title>
-<a xlink:href="../module/type_euler_1d.html" xlink:title="type_euler_1D">
-<polygon fill="#337ab7" stroke="#337ab7" points="489,-187.496 407,-187.496 407,-161.496 489,-161.496 489,-187.496"/>
-<text text-anchor="middle" x="448" y="-172.046" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">type_euler_1D</text>
-</a>
-</g>
-<!-- module~foodie&#45;&gt;module~type_euler_1d -->
-<g id="edge22" class="edge"><title>module~foodie&#45;&gt;module~type_euler_1d</title>
-<path fill="none" stroke="black" stroke-dasharray="5,2" d="M348.245,-190.206C362.368,-187.982 380.091,-185.191 396.664,-182.581"/>
-<polygon fill="black" stroke="black" points="397.459,-185.999 406.793,-180.986 396.37,-179.084 397.459,-185.999"/>
-</g>
-<!-- program~integrate_euler_1d_caf~2 -->
-<g id="node8" class="node"><title>program~integrate_euler_1d_caf~2</title>
-<a xlink:href="../program/integrate_euler_1d_caf%7E2.html" xlink:title="integrate_euler_1D_caf">
-<polygon fill="#f0ad4e" stroke="#f0ad4e" points="685,-357.496 561,-357.496 561,-331.496 685,-331.496 685,-357.496"/>
-<text text-anchor="middle" x="623" y="-342.046" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">integrate_euler_1D_caf</text>
-</a>
-</g>
-<!-- module~foodie&#45;&gt;program~integrate_euler_1d_caf~2 -->
-<g id="edge24" class="edge"><title>module~foodie&#45;&gt;program~integrate_euler_1d_caf~2</title>
-<path fill="none" stroke="black" stroke-dasharray="5,2" d="M448,-341.496C480.019,-354.102 517.954,-356.142 550.306,-354.498"/>
-<polygon fill="black" stroke="black" points="550.842,-357.971 560.6,-353.843 550.398,-350.985 550.842,-357.971"/>
-</g>
-<!-- program~integrate_oscillation -->
-<g id="node9" class="node"><title>program~integrate_oscillation</title>
-<a xlink:href="../program/integrate_oscillation.html" xlink:title="integrate_oscillation">
-<polygon fill="#f0ad4e" stroke="#f0ad4e" points="676,-105.496 570,-105.496 570,-79.4962 676,-79.4962 676,-105.496"/>
-<text text-anchor="middle" x="623" y="-90.0462" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">integrate_oscillation</text>
-</a>
-</g>
-<!-- module~foodie&#45;&gt;program~integrate_oscillation -->
-<g id="edge26" class="edge"><title>module~foodie&#45;&gt;program~integrate_oscillation</title>
-<path fill="none" stroke="black" stroke-dasharray="5,2" d="M337.557,-181.446C349.81,-172.305 367.217,-160.362 384,-152.496 410.867,-139.904 419.467,-141.638 448,-133.496"/>
-<path fill="none" stroke="black" stroke-dasharray="5,2" d="M448,-133.496C484.576,-123.059 525.995,-113.266 559.353,-105.87"/>
-<polygon fill="black" stroke="black" points="560.418,-109.22 569.433,-103.654 558.914,-102.383 560.418,-109.22"/>
-</g>
-<!-- module~type_lorenz -->
-<g id="node10" class="node"><title>module~type_lorenz</title>
-<a xlink:href="../module/type_lorenz.html" xlink:title="type_lorenz">
-<polygon fill="#337ab7" stroke="#337ab7" points="482,-61.4962 414,-61.4962 414,-35.4962 482,-35.4962 482,-61.4962"/>
-<text text-anchor="middle" x="448" y="-46.0462" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">type_lorenz</text>
-</a>
-</g>
-<!-- module~foodie&#45;&gt;module~type_lorenz -->
-<g id="edge28" class="edge"><title>module~foodie&#45;&gt;module~type_lorenz</title>
-<path fill="none" stroke="black" stroke-dasharray="5,2" d="M324.18,-181.22C330.886,-156.029 348.838,-101.082 384,-70.4962 389.79,-65.4599 396.791,-61.5614 404.009,-58.548"/>
-<polygon fill="black" stroke="black" points="405.684,-61.6635 413.892,-54.9636 403.298,-55.0829 405.684,-61.6635"/>
-</g>
-<!-- module~type_oscillation -->
-<g id="node11" class="node"><title>module~type_oscillation</title>
-<a xlink:href="../module/type_oscillation.html" xlink:title="type_oscillation">
-<polygon fill="#337ab7" stroke="#337ab7" points="490,-105.496 406,-105.496 406,-79.4962 490,-79.4962 490,-105.496"/>
-<text text-anchor="middle" x="448" y="-90.0462" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">type_oscillation</text>
-</a>
-</g>
-<!-- module~foodie&#45;&gt;module~type_oscillation -->
-<g id="edge30" class="edge"><title>module~foodie&#45;&gt;module~type_oscillation</title>
-<path fill="none" stroke="black" stroke-dasharray="5,2" d="M329.108,-181.465C339.879,-165.073 360.328,-136.963 384,-119.496 388.787,-115.964 394.105,-112.791 399.572,-109.969"/>
-<polygon fill="black" stroke="black" points="401.324,-113.012 408.846,-105.551 398.313,-106.692 401.324,-113.012"/>
-</g>
-<!-- module~type_euler_1d_openmp -->
-<g id="node12" class="node"><title>module~type_euler_1d_openmp</title>
-<a xlink:href="../module/type_euler_1d_openmp.html" xlink:title="type_euler_1D_openmp">
-<polygon fill="#337ab7" stroke="#337ab7" points="511,-313.496 385,-313.496 385,-287.496 511,-287.496 511,-313.496"/>
-<text text-anchor="middle" x="448" y="-298.046" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">type_euler_1D_openmp</text>
-</a>
-</g>
-<!-- module~foodie&#45;&gt;module~type_euler_1d_openmp -->
-<g id="edge32" class="edge"><title>module~foodie&#45;&gt;module~type_euler_1d_openmp</title>
-<path fill="none" stroke="black" stroke-dasharray="5,2" d="M327.51,-207.511C337.329,-225.876 357.618,-259.294 384,-278.496 386.078,-280.009 388.268,-281.423 390.536,-282.746"/>
-<polygon fill="black" stroke="black" points="389.103,-285.944 399.597,-287.402 392.302,-279.718 389.103,-285.944"/>
+<path fill="none" stroke="black" stroke-dasharray="5,2" d="M258.132,-218C267.273,-218 275.957,-218 283.791,-218"/>
+<polygon fill="black" stroke="black" points="283.911,-221.5 293.911,-218 283.911,-214.5 283.911,-221.5"/>
 </g>
 <!-- program~integrate_euler_1d -->
-<g id="node13" class="node"><title>program~integrate_euler_1d</title>
+<g id="node3" class="node"><title>program~integrate_euler_1d</title>
 <a xlink:href="../program/integrate_euler_1d.html" xlink:title="integrate_euler_1D">
-<polygon fill="#f0ad4e" stroke="#f0ad4e" points="675,-149.496 571,-149.496 571,-123.496 675,-123.496 675,-149.496"/>
-<text text-anchor="middle" x="623" y="-134.046" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">integrate_euler_1D</text>
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="675,-418 571,-418 571,-392 675,-392 675,-418"/>
+<text text-anchor="middle" x="623" y="-402.55" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">integrate_euler_1D</text>
 </a>
 </g>
 <!-- module~foodie&#45;&gt;program~integrate_euler_1d -->
-<g id="edge34" class="edge"><title>module~foodie&#45;&gt;program~integrate_euler_1d</title>
-<path fill="none" stroke="black" stroke-dasharray="5,2" d="M448,-133.496C484.279,-123.144 526.53,-123.539 560.427,-126.691"/>
-<polygon fill="black" stroke="black" points="560.356,-130.203 570.663,-127.749 561.076,-123.24 560.356,-130.203"/>
+<g id="edge14" class="edge"><title>module~foodie&#45;&gt;program~integrate_euler_1d</title>
+<path fill="none" stroke="black" stroke-dasharray="5,2" d="M323.359,-231.209C330.683,-270.561 354.328,-385.614 384,-407 439.5,-447.002 522.646,-434.649 574.806,-420.786"/>
+<polygon fill="black" stroke="black" points="575.789,-424.145 584.49,-418.1 573.918,-417.4 575.789,-424.145"/>
 </g>
 <!-- program~integrate_lorenz -->
-<g id="node14" class="node"><title>program~integrate_lorenz</title>
+<g id="node4" class="node"><title>program~integrate_lorenz</title>
 <a xlink:href="../program/integrate_lorenz.html" xlink:title="integrate_lorenz">
-<polygon fill="#f0ad4e" stroke="#f0ad4e" points="668,-41.4962 578,-41.4962 578,-15.4962 668,-15.4962 668,-41.4962"/>
-<text text-anchor="middle" x="623" y="-26.0462" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">integrate_lorenz</text>
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="668,-336 578,-336 578,-310 668,-310 668,-336"/>
+<text text-anchor="middle" x="623" y="-320.55" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">integrate_lorenz</text>
 </a>
 </g>
 <!-- module~foodie&#45;&gt;program~integrate_lorenz -->
-<g id="edge36" class="edge"><title>module~foodie&#45;&gt;program~integrate_lorenz</title>
-<path fill="none" stroke="black" stroke-dasharray="5,2" d="M323.885,-181.462C332.185,-145.28 357.245,-45.0375 384,-26.4962 439.911,12.2498 522.222,0.552165 574.194,-12.8727"/>
-<polygon fill="black" stroke="black" points="573.283,-16.252 583.849,-15.4768 575.106,-9.49348 573.283,-16.252"/>
+<g id="edge16" class="edge"><title>module~foodie&#45;&gt;program~integrate_lorenz</title>
+<path fill="none" stroke="black" stroke-dasharray="5,2" d="M324.209,-231.239C330.779,-255.061 348.255,-304.565 384,-325 440.399,-357.242 517.205,-349.299 568.363,-338.265"/>
+<polygon fill="black" stroke="black" points="569.259,-341.65 578.239,-336.027 567.712,-334.823 569.259,-341.65"/>
 </g>
-<!-- module~type_euler_1d_caf&#45;&gt;program~integrate_euler_1d_caf~2 -->
-<g id="edge2" class="edge"><title>module~type_euler_1d_caf&#45;&gt;program~integrate_euler_1d_caf~2</title>
-<path fill="none" stroke="black" stroke-dasharray="5,2" d="M499.559,-371.3C516.318,-367.662 535.205,-363.56 553.073,-359.68"/>
-<polygon fill="black" stroke="black" points="553.845,-363.094 562.874,-357.552 552.359,-356.254 553.845,-363.094"/>
+<!-- module~type_lorenz -->
+<g id="node5" class="node"><title>module~type_lorenz</title>
+<a xlink:href="../module/type_lorenz.html" xlink:title="type_lorenz">
+<polygon fill="#337ab7" stroke="#337ab7" points="482,-316 414,-316 414,-290 482,-290 482,-316"/>
+<text text-anchor="middle" x="448" y="-300.55" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">type_lorenz</text>
+</a>
 </g>
-<!-- module~type_burgers&#45;&gt;program~integrate_burgers -->
-<g id="edge4" class="edge"><title>module~type_burgers&#45;&gt;program~integrate_burgers</title>
-<path fill="none" stroke="black" stroke-dasharray="5,2" d="M486.404,-251.888C509.232,-249.148 538.651,-245.618 564.337,-242.536"/>
-<polygon fill="black" stroke="black" points="564.833,-246.001 574.344,-241.335 563.999,-239.051 564.833,-246.001"/>
+<!-- module~foodie&#45;&gt;module~type_lorenz -->
+<g id="edge18" class="edge"><title>module~foodie&#45;&gt;module~type_lorenz</title>
+<path fill="none" stroke="black" stroke-dasharray="5,2" d="M331.016,-231.097C342.438,-245.217 362.353,-267.481 384,-281 390.235,-284.894 397.244,-288.198 404.278,-290.969"/>
+<polygon fill="black" stroke="black" points="403.219,-294.308 413.813,-294.421 405.602,-287.726 403.219,-294.308"/>
 </g>
-<!-- module~type_euler_1d&#45;&gt;program~integrate_euler_1d -->
-<g id="edge6" class="edge"><title>module~type_euler_1d&#45;&gt;program~integrate_euler_1d</title>
-<path fill="none" stroke="black" stroke-dasharray="5,2" d="M489.03,-165.587C510.422,-160.942 537.034,-155.163 560.89,-149.983"/>
-<polygon fill="black" stroke="black" points="561.892,-153.347 570.922,-147.805 560.407,-146.506 561.892,-153.347"/>
+<!-- module~type_euler_1d_openmp -->
+<g id="node6" class="node"><title>module~type_euler_1d_openmp</title>
+<a xlink:href="../module/type_euler_1d_openmp.html" xlink:title="type_euler_1D_openmp">
+<polygon fill="#337ab7" stroke="#337ab7" points="511,-272 385,-272 385,-246 511,-246 511,-272"/>
+<text text-anchor="middle" x="448" y="-256.55" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">type_euler_1D_openmp</text>
+</a>
+</g>
+<!-- module~foodie&#45;&gt;module~type_euler_1d_openmp -->
+<g id="edge20" class="edge"><title>module~foodie&#45;&gt;module~type_euler_1d_openmp</title>
+<path fill="none" stroke="black" stroke-dasharray="5,2" d="M348.245,-226.796C362.623,-231.437 380.732,-237.284 397.561,-242.717"/>
+<polygon fill="black" stroke="black" points="396.692,-246.114 407.284,-245.856 398.843,-239.453 396.692,-246.114"/>
+</g>
+<!-- module~type_euler_1d_caf -->
+<g id="node7" class="node"><title>module~type_euler_1d_caf</title>
+<a xlink:href="../module/type_euler_1d_caf.html" xlink:title="type_euler_1D_caf">
+<polygon fill="#337ab7" stroke="#337ab7" points="499,-190 397,-190 397,-164 499,-164 499,-190"/>
+<text text-anchor="middle" x="448" y="-174.55" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">type_euler_1D_caf</text>
+</a>
+</g>
+<!-- module~foodie&#45;&gt;module~type_euler_1d_caf -->
+<g id="edge22" class="edge"><title>module~foodie&#45;&gt;module~type_euler_1d_caf</title>
+<path fill="none" stroke="black" stroke-dasharray="5,2" d="M348.245,-209.204C362.623,-204.563 380.732,-198.716 397.561,-193.283"/>
+<polygon fill="black" stroke="black" points="398.843,-196.547 407.284,-190.144 396.692,-189.886 398.843,-196.547"/>
+</g>
+<!-- program~integrate_burgers -->
+<g id="node8" class="node"><title>program~integrate_burgers</title>
+<a xlink:href="../program/integrate_burgers.html" xlink:title="integrate_burgers">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="671,-108 575,-108 575,-82 671,-82 671,-108"/>
+<text text-anchor="middle" x="623" y="-92.55" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">integrate_burgers</text>
+</a>
+</g>
+<!-- module~foodie&#45;&gt;program~integrate_burgers -->
+<g id="edge24" class="edge"><title>module~foodie&#45;&gt;program~integrate_burgers</title>
+<path fill="none" stroke="black" stroke-dasharray="5,2" d="M330.704,-204.986C341.997,-190.725 361.937,-168.135 384,-155 409.495,-139.821 420.034,-145.916 448,-136"/>
+<path fill="none" stroke="black" stroke-dasharray="5,2" d="M448,-136C485.877,-122.57 529.934,-112.276 564.367,-105.362"/>
+<polygon fill="black" stroke="black" points="565.131,-108.779 574.267,-103.413 563.779,-101.911 565.131,-108.779"/>
+</g>
+<!-- module~type_burgers -->
+<g id="node9" class="node"><title>module~type_burgers</title>
+<a xlink:href="../module/type_burgers.html" xlink:title="type_burgers">
+<polygon fill="#337ab7" stroke="#337ab7" points="486,-108 410,-108 410,-82 486,-82 486,-108"/>
+<text text-anchor="middle" x="448" y="-92.55" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">type_burgers</text>
+</a>
+</g>
+<!-- module~foodie&#45;&gt;module~type_burgers -->
+<g id="edge26" class="edge"><title>module~foodie&#45;&gt;module~type_burgers</title>
+<path fill="none" stroke="black" stroke-dasharray="5,2" d="M326.61,-204.73C335.822,-184.374 355.972,-145.352 384,-122 388.925,-117.897 394.564,-114.333 400.408,-111.263"/>
+<polygon fill="black" stroke="black" points="402.169,-114.3 409.688,-106.836 399.155,-107.983 402.169,-114.3"/>
+</g>
+<!-- program~integrate_euler_1d_openmp -->
+<g id="node10" class="node"><title>program~integrate_euler_1d_openmp</title>
+<a xlink:href="../program/integrate_euler_1d_openmp.html" xlink:title="integrate_euler_1D_openmp">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="697,-251 549,-251 549,-225 697,-225 697,-251"/>
+<text text-anchor="middle" x="623" y="-235.55" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">integrate_euler_1D_openmp</text>
+</a>
+</g>
+<!-- module~foodie&#45;&gt;program~integrate_euler_1d_openmp -->
+<g id="edge28" class="edge"><title>module~foodie&#45;&gt;program~integrate_euler_1d_openmp</title>
+<path fill="none" stroke="black" stroke-dasharray="5,2" d="M348.066,-219.792C390.462,-222.6 474.298,-228.152 538.302,-232.391"/>
+<polygon fill="black" stroke="black" points="538.185,-235.891 548.395,-233.059 538.648,-228.906 538.185,-235.891"/>
+</g>
+<!-- program~integrate_euler_1d_caf~2 -->
+<g id="node11" class="node"><title>program~integrate_euler_1d_caf~2</title>
+<a xlink:href="../program/integrate_euler_1d_caf%7E2.html" xlink:title="integrate_euler_1D_caf">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="685,-152 561,-152 561,-126 685,-126 685,-152"/>
+<text text-anchor="middle" x="623" y="-136.55" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">integrate_euler_1D_caf</text>
+</a>
+</g>
+<!-- module~foodie&#45;&gt;program~integrate_euler_1d_caf~2 -->
+<g id="edge30" class="edge"><title>module~foodie&#45;&gt;program~integrate_euler_1d_caf~2</title>
+<path fill="none" stroke="black" stroke-dasharray="5,2" d="M448,-136C480.433,-124.501 518.416,-123.762 550.692,-126.514"/>
+<polygon fill="black" stroke="black" points="550.663,-130.028 560.957,-127.521 551.347,-123.061 550.663,-130.028"/>
+</g>
+<!-- module~type_euler_1d -->
+<g id="node12" class="node"><title>module~type_euler_1d</title>
+<a xlink:href="../module/type_euler_1d.html" xlink:title="type_euler_1D">
+<polygon fill="#337ab7" stroke="#337ab7" points="489,-398 407,-398 407,-372 489,-372 489,-398"/>
+<text text-anchor="middle" x="448" y="-382.55" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">type_euler_1D</text>
+</a>
+</g>
+<!-- module~foodie&#45;&gt;module~type_euler_1d -->
+<g id="edge32" class="edge"><title>module~foodie&#45;&gt;module~type_euler_1d</title>
+<path fill="none" stroke="black" stroke-dasharray="5,2" d="M323.511,-231.035C329.378,-258.185 346.436,-321.313 384,-358 388.044,-361.95 392.753,-365.358 397.748,-368.291"/>
+<polygon fill="black" stroke="black" points="396.476,-371.574 406.965,-373.072 399.699,-365.361 396.476,-371.574"/>
+</g>
+<!-- program~integrate_oscillation -->
+<g id="node13" class="node"><title>program~integrate_oscillation</title>
+<a xlink:href="../program/integrate_oscillation.html" xlink:title="integrate_oscillation">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="676,-45 570,-45 570,-19 676,-19 676,-45"/>
+<text text-anchor="middle" x="623" y="-29.55" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">integrate_oscillation</text>
+</a>
+</g>
+<!-- module~foodie&#45;&gt;program~integrate_oscillation -->
+<g id="edge34" class="edge"><title>module~foodie&#45;&gt;program~integrate_oscillation</title>
+<path fill="none" stroke="black" stroke-dasharray="5,2" d="M322.589,-204.651C326.798,-175.635 341.033,-106.721 384,-73 410.627,-52.1033 498.097,-41.282 559.472,-36.1234"/>
+<polygon fill="black" stroke="black" points="559.78,-39.61 569.465,-35.3137 559.215,-32.6328 559.78,-39.61"/>
+</g>
+<!-- module~type_oscillation -->
+<g id="node14" class="node"><title>module~type_oscillation</title>
+<a xlink:href="../module/type_oscillation.html" xlink:title="type_oscillation">
+<polygon fill="#337ab7" stroke="#337ab7" points="490,-26 406,-26 406,-1.24345e-14 490,-3.55271e-15 490,-26"/>
+<text text-anchor="middle" x="448" y="-10.55" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">type_oscillation</text>
+</a>
+</g>
+<!-- module~foodie&#45;&gt;module~type_oscillation -->
+<g id="edge36" class="edge"><title>module~foodie&#45;&gt;module~type_oscillation</title>
+<path fill="none" stroke="black" stroke-dasharray="5,2" d="M322.064,-204.974C325.36,-172.801 338.13,-88.6621 384,-40 387.579,-36.2033 391.776,-32.9188 396.28,-30.0817"/>
+<polygon fill="black" stroke="black" points="398.16,-33.0427 405.239,-25.1603 394.789,-26.9074 398.16,-33.0427"/>
 </g>
 <!-- module~type_lorenz&#45;&gt;program~integrate_lorenz -->
-<g id="edge8" class="edge"><title>module~type_lorenz&#45;&gt;program~integrate_lorenz</title>
-<path fill="none" stroke="black" stroke-dasharray="5,2" d="M482.157,-44.5925C506.519,-41.8083 539.803,-38.0045 567.898,-34.7936"/>
-<polygon fill="black" stroke="black" points="568.449,-38.2534 577.987,-33.6405 567.655,-31.2987 568.449,-38.2534"/>
-</g>
-<!-- module~type_oscillation&#45;&gt;program~integrate_oscillation -->
-<g id="edge10" class="edge"><title>module~type_oscillation&#45;&gt;program~integrate_oscillation</title>
-<path fill="none" stroke="black" stroke-dasharray="5,2" d="M490.81,-92.4962C511.343,-92.4962 536.365,-92.4962 559.092,-92.4962"/>
-<polygon fill="black" stroke="black" points="559.348,-95.9963 569.348,-92.4962 559.348,-88.9963 559.348,-95.9963"/>
+<g id="edge2" class="edge"><title>module~type_lorenz&#45;&gt;program~integrate_lorenz</title>
+<path fill="none" stroke="black" stroke-dasharray="5,2" d="M482.157,-306.904C506.519,-309.688 539.803,-313.492 567.898,-316.703"/>
+<polygon fill="black" stroke="black" points="567.655,-320.198 577.987,-317.856 568.449,-313.243 567.655,-320.198"/>
 </g>
 <!-- module~type_euler_1d_openmp&#45;&gt;program~integrate_euler_1d_openmp -->
-<g id="edge12" class="edge"><title>module~type_euler_1d_openmp&#45;&gt;program~integrate_euler_1d_openmp</title>
-<path fill="none" stroke="black" stroke-dasharray="5,2" d="M511.674,-300.496C520.337,-300.496 529.337,-300.496 538.297,-300.496"/>
-<polygon fill="black" stroke="black" points="538.378,-303.996 548.378,-300.496 538.378,-296.996 538.378,-303.996"/>
+<g id="edge4" class="edge"><title>module~type_euler_1d_openmp&#45;&gt;program~integrate_euler_1d_openmp</title>
+<path fill="none" stroke="black" stroke-dasharray="5,2" d="M511.674,-251.359C520.337,-250.32 529.337,-249.24 538.297,-248.164"/>
+<polygon fill="black" stroke="black" points="538.866,-251.621 548.378,-246.955 538.032,-244.671 538.866,-251.621"/>
+</g>
+<!-- module~type_euler_1d_caf&#45;&gt;program~integrate_euler_1d_caf~2 -->
+<g id="edge6" class="edge"><title>module~type_euler_1d_caf&#45;&gt;program~integrate_euler_1d_caf~2</title>
+<path fill="none" stroke="black" stroke-dasharray="5,2" d="M499.559,-165.804C516.318,-162.165 535.205,-158.064 553.073,-154.184"/>
+<polygon fill="black" stroke="black" points="553.845,-157.598 562.874,-152.056 552.359,-150.758 553.845,-157.598"/>
+</g>
+<!-- module~type_burgers&#45;&gt;program~integrate_burgers -->
+<g id="edge8" class="edge"><title>module~type_burgers&#45;&gt;program~integrate_burgers</title>
+<path fill="none" stroke="black" stroke-dasharray="5,2" d="M486.404,-95C509.232,-95 538.651,-95 564.337,-95"/>
+<polygon fill="black" stroke="black" points="564.345,-98.5001 574.344,-95 564.344,-91.5001 564.345,-98.5001"/>
+</g>
+<!-- module~type_euler_1d&#45;&gt;program~integrate_euler_1d -->
+<g id="edge10" class="edge"><title>module~type_euler_1d&#45;&gt;program~integrate_euler_1d</title>
+<path fill="none" stroke="black" stroke-dasharray="5,2" d="M489.03,-389.689C510.422,-392.134 537.034,-395.175 560.89,-397.902"/>
+<polygon fill="black" stroke="black" points="560.589,-401.39 570.922,-399.048 561.384,-394.435 560.589,-401.39"/>
+</g>
+<!-- module~type_oscillation&#45;&gt;program~integrate_oscillation -->
+<g id="edge12" class="edge"><title>module~type_oscillation&#45;&gt;program~integrate_oscillation</title>
+<path fill="none" stroke="black" stroke-dasharray="5,2" d="M490.81,-17.6479C511.436,-19.8873 536.59,-22.6184 559.399,-25.0947"/>
+<polygon fill="black" stroke="black" points="559.028,-28.575 569.348,-26.1749 559.784,-21.6159 559.028,-28.575"/>
 </g>
 </g>
 </svg>
@@ -831,7 +830,7 @@ implementation in a submodule of an interface in a parent module.</p>
   
   <td>private</td>
   <td></td><td>::</td>
-  <td><strong>steps</strong></td><td> =</td><td>-1</td><td><p>Number of time steps.</p></td>
+  <td><strong>steps</strong></td><td> =</td><td>0</td><td><p>Number of time steps.</p></td>
   
 </tr>
 
@@ -859,7 +858,21 @@ implementation in a submodule of an interface in a parent module.</p>
   
   <td>private</td>
   <td></td><td>::</td>
-  <td><strong>b</strong></td><td> =</td><td>0._R_P</td><td><p>\(\beta\) coefficient.</p></td>
+  <td><strong>b</strong></td><td> =</td><td>0.0_R_P</td><td><p>\(\beta\) coefficient.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-error%7E2"></span>integer(kind=I_P),</td>
+  
+  <td>private</td>
+  <td></td><td>::</td>
+  <td><strong>error</strong></td><td> =</td><td>0</td><td><p>Error status flag: trap occurrences of errors.</p></td>
   
 </tr>
 

@@ -929,6 +929,8 @@ private elemental subroutine init(self, steps)
     
     <h3>Description</h3>
     <p>Create the actual Adams-Bashforth integrator: initialize the <em>b</em> coefficients.</p>
+<p></p><div class="alert alert-info" role="alert"><h4>Note</h4>If the integrator is initialized with a bad (unsupported) number of required time steps the initialization fails and
+ the integrator error status is updated consistently for external-provided errors handling.</div>
     
     
      
@@ -954,6 +956,9 @@ private elemental subroutine init(self, steps)
     <div class="highlight"><pre>  <span class="k">elemental subroutine </span><span class="n">init</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">steps</span><span class="p">)</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
   <span class="c">!&lt; Create the actual Adams-Bashforth integrator: initialize the *b* coefficients.</span>
+  <span class="c">!&lt;</span>
+  <span class="c">!&lt; @note If the integrator is initialized with a bad (unsupported) number of required time steps the initialization fails and</span>
+  <span class="c">!&lt; the integrator error status is updated consistently for external-provided errors handling.</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
   <span class="k">class</span><span class="p">(</span><span class="n">adams_bashforth_integrator</span><span class="p">),</span> <span class="k">intent</span><span class="p">(</span><span class="n">INOUT</span><span class="p">)</span> <span class="kd">::</span> <span class="n">self</span>  <span class="c">!&lt; AB integrator.</span>
   <span class="kt">integer</span><span class="p">(</span><span class="n">I_P</span><span class="p">),</span> <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span>                         <span class="kd">::</span> <span class="n">steps</span> <span class="c">!&lt; Number of time steps used.</span>
@@ -1116,6 +1121,9 @@ private elemental subroutine init(self, steps)
     <span class="n">self</span><span class="p">%</span><span class="n">b</span><span class="p">(</span><span class="mi">14</span><span class="p">)</span> <span class="o">=</span> <span class="mi">962209690951533</span><span class="mf">7.0_R_P</span><span class="o">/</span><span class="mi">6276836966400</span><span class="mf">0.0_R_P</span>
     <span class="n">self</span><span class="p">%</span><span class="n">b</span><span class="p">(</span><span class="mi">15</span><span class="p">)</span> <span class="o">=</span> <span class="o">-</span><span class="mi">216156767124884</span><span class="mf">9.0_R_P</span><span class="o">/</span><span class="mi">6276836966400</span><span class="mf">0.0_R_P</span>
     <span class="n">self</span><span class="p">%</span><span class="n">b</span><span class="p">(</span><span class="mi">16</span><span class="p">)</span> <span class="o">=</span> <span class="mi">36255512642707</span><span class="mf">3.0_R_P</span><span class="o">/</span><span class="mi">6276836966400</span><span class="mf">0.0_R_P</span>
+  <span class="k">case </span><span class="n">default</span>
+    <span class="c">! bad (unsupported) number of required time steps</span>
+    <span class="n">self</span><span class="p">%</span><span class="n">error</span> <span class="o">=</span> <span class="mi">1</span>
   <span class="n">endselect</span>
   <span class="k">return</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>

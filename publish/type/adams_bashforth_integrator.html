@@ -137,6 +137,8 @@
         
         <a class="list-group-item" href="../type/adams_bashforth_integrator.html#variable-b">b</a>
         
+        <a class="list-group-item" href="../type/adams_bashforth_integrator.html#variable-error">error</a>
+        
       </div>
     </div>
   </div>
@@ -275,8 +277,11 @@
     <h2>type, public :: adams_bashforth_integrator</h2>
     
     <p>FOODIE integrator: provide an explicit class of Adams-Bashforth multi-step schemes, from 1st to 16th order accurate.</p>
-<p></p><div class="alert alert-info" role="alert"><h4>Note</h4>The integrator must be created or initialized (initialize the <em>b</em> coefficients) before used.
- Finalize object.</div>
+<p></p><div class="alert alert-info" role="alert"><h4>Note</h4>The integrator must be created or initialized (initialize the <em>b</em> coefficients) before used.</div>
+<p>### List of errors status
++ error=0 =&gt; no error;
++ error=1 =&gt; bad (unsupported) number of required time steps;
+ Finalize object.</p>
     
     
     <h3>Inherited By</h3>
@@ -441,7 +446,21 @@ implementation in a submodule of an interface in a parent module.</p>
   
   <td>private,</td>
   <td>allocatable</td><td>::</td>
-  <td><strong>b</strong>(:)</td><td></td><td></td><td><p>\(b\) coefficients.</p></td>
+  <td><strong>b</strong>(:)</td><td></td><td></td><td><p><em>b</em> coefficients.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-error"></span>integer(kind=I_P),</td>
+  
+  <td>private</td>
+  <td></td><td>::</td>
+  <td><strong>error</strong></td><td> =</td><td>0</td><td><p>Error status flag: trap occurrences of errors.</p></td>
   
 </tr>
 
@@ -965,9 +984,14 @@ private subroutine <a href='../proc/update_previous.html'>update_previous</a>(se
   <span class="c">!&lt; FOODIE integrator: provide an explicit class of Adams-Bashforth multi-step schemes, from 1st to 16th order accurate.</span>
   <span class="c">!&lt;</span>
   <span class="c">!&lt; @note The integrator must be created or initialized (initialize the *b* coefficients) before used.</span>
+  <span class="c">!&lt;</span>
+  <span class="c">!&lt; ### List of errors status</span>
+  <span class="c">!&lt;+ error=0 =&gt; no error;</span>
+  <span class="c">!&lt;+ error=1 =&gt; bad (unsupported) number of required time steps;</span>
   <span class="k">private</span>
 <span class="k">  </span><span class="kt">integer</span><span class="p">(</span><span class="n">I_P</span><span class="p">)</span>           <span class="kd">::</span> <span class="n">steps</span><span class="o">=</span><span class="mi">0</span> <span class="c">!&lt; Number of time steps.</span>
-  <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">),</span> <span class="k">allocatable</span> <span class="kd">::</span> <span class="n">b</span><span class="p">(:)</span>    <span class="c">!&lt; \(b\) coefficients.</span>
+  <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">),</span> <span class="k">allocatable</span> <span class="kd">::</span> <span class="n">b</span><span class="p">(:)</span>    <span class="c">!&lt; *b* coefficients.</span>
+  <span class="kt">integer</span><span class="p">(</span><span class="n">I_P</span><span class="p">)</span>           <span class="kd">::</span> <span class="n">error</span><span class="o">=</span><span class="mi">0</span> <span class="c">!&lt; Error status flag: trap occurrences of errors.</span>
   <span class="k">contains</span>
 <span class="k">    procedure</span><span class="p">,</span> <span class="k">pass</span><span class="p">(</span><span class="n">self</span><span class="p">),</span> <span class="k">public</span> <span class="kd">::</span> <span class="n">destroy</span>         <span class="c">!&lt; Destroy the integrator.</span>
     <span class="k">procedure</span><span class="p">,</span> <span class="k">pass</span><span class="p">(</span><span class="n">self</span><span class="p">),</span> <span class="k">public</span> <span class="kd">::</span> <span class="n">init</span>            <span class="c">!&lt; Initialize (create) the integrator.</span>

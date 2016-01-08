@@ -139,6 +139,8 @@
         
         <a class="list-group-item" href="../type/bdf_integrator.html#variable-b%7E3">b</a>
         
+        <a class="list-group-item" href="../type/bdf_integrator.html#variable-error%7E2">error</a>
+        
       </div>
     </div>
   </div>
@@ -278,8 +280,11 @@
     
     <p>FOODIE integrator: provide an implicit class of Backward-Differentiation-Formula multi-step schemes, from 1st to 6th order
  accurate.</p>
-<p></p><div class="alert alert-info" role="alert"><h4>Note</h4>The integrator must be created or initialized (initialize the <em>alpha</em> and <em>beta</em> coefficients) before used.
- Finalize object.</div>
+<p></p><div class="alert alert-info" role="alert"><h4>Note</h4>The integrator must be created or initialized (initialize the <em>alpha</em> and <em>beta</em> coefficients) before used.</div>
+<p>### List of errors status
++ error=0 =&gt; no error;
++ error=1 =&gt; bad (unsupported) number of required time steps;
+ Finalize object.</p>
     <br>
     
     
@@ -305,7 +310,7 @@
   
   <td>private</td>
   <td></td><td>::</td>
-  <td><strong>steps</strong></td><td> =</td><td>-1</td><td><p>Number of time steps.</p></td>
+  <td><strong>steps</strong></td><td> =</td><td>0</td><td><p>Number of time steps.</p></td>
   
 </tr>
 
@@ -333,7 +338,21 @@
   
   <td>private</td>
   <td></td><td>::</td>
-  <td><strong>b</strong></td><td> =</td><td>0._R_P</td><td><p>\(\beta\) coefficient.</p></td>
+  <td><strong>b</strong></td><td> =</td><td>0.0_R_P</td><td><p>\(\beta\) coefficient.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-error%7E2"></span>integer(kind=I_P),</td>
+  
+  <td>private</td>
+  <td></td><td>::</td>
+  <td><strong>error</strong></td><td> =</td><td>0</td><td><p>Error status flag: trap occurrences of errors.</p></td>
   
 </tr>
 
@@ -873,10 +892,15 @@ private subroutine <a href='../proc/update_previous%7E3.html'>update_previous</a
   <span class="c">!&lt; accurate.</span>
   <span class="c">!&lt;</span>
   <span class="c">!&lt; @note The integrator must be created or initialized (initialize the *alpha* and *beta* coefficients) before used.</span>
+  <span class="c">!&lt;</span>
+  <span class="c">!&lt; ### List of errors status</span>
+  <span class="c">!&lt;+ error=0 =&gt; no error;</span>
+  <span class="c">!&lt;+ error=1 =&gt; bad (unsupported) number of required time steps;</span>
   <span class="k">private</span>
-<span class="k">  </span><span class="kt">integer</span><span class="p">(</span><span class="n">I_P</span><span class="p">)</span>           <span class="kd">::</span> <span class="n">steps</span><span class="o">=-</span><span class="mi">1</span> <span class="c">!&lt; Number of time steps.</span>
-  <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">),</span> <span class="k">allocatable</span> <span class="kd">::</span> <span class="n">a</span><span class="p">(:)</span>     <span class="c">!&lt; \(\alpha\) coefficients.</span>
-  <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">)</span>              <span class="kd">::</span> <span class="n">b</span><span class="o">=</span><span class="mf">0._R_P</span> <span class="c">!&lt; \(\beta\) coefficient.</span>
+<span class="k">  </span><span class="kt">integer</span><span class="p">(</span><span class="n">I_P</span><span class="p">)</span>           <span class="kd">::</span> <span class="n">steps</span><span class="o">=</span><span class="mi">0</span>   <span class="c">!&lt; Number of time steps.</span>
+  <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">),</span> <span class="k">allocatable</span> <span class="kd">::</span> <span class="n">a</span><span class="p">(:)</span>      <span class="c">!&lt; \(\alpha\) coefficients.</span>
+  <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">)</span>              <span class="kd">::</span> <span class="n">b</span><span class="o">=</span><span class="mf">0.0_R_P</span> <span class="c">!&lt; \(\beta\) coefficient.</span>
+  <span class="kt">integer</span><span class="p">(</span><span class="n">I_P</span><span class="p">)</span>           <span class="kd">::</span> <span class="n">error</span><span class="o">=</span><span class="mi">0</span>   <span class="c">!&lt; Error status flag: trap occurrences of errors.</span>
   <span class="k">contains</span>
 <span class="k">    procedure</span><span class="p">,</span> <span class="k">pass</span><span class="p">(</span><span class="n">self</span><span class="p">),</span> <span class="k">public</span> <span class="kd">::</span> <span class="n">destroy</span>         <span class="c">!&lt; Destroy the integrator.</span>
     <span class="k">procedure</span><span class="p">,</span> <span class="k">pass</span><span class="p">(</span><span class="n">self</span><span class="p">),</span> <span class="k">public</span> <span class="kd">::</span> <span class="n">init</span>            <span class="c">!&lt; Initialize (create) the integrator.</span>

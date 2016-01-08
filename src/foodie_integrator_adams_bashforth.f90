@@ -16,46 +16,15 @@ module foodie_integrator_adams_bashforth
 !<
 !< @note The value of \(\Delta t\) must be provided, it not being computed by the integrator.
 !<
-!< The schemes are explicit. The coefficients \(b_s\) define the actual scheme, that is selected accordingly to the number of
-!< **steps** used.
-!<
-!< Currently, the following schemes are available:
-!<##### 1 step, Explicit Forward Euler, 1st order
-!< This scheme is TVD and reverts to Explicit Forward Euler, it being 1st order.
-!< The *b* coefficient is:
-!< $$b = \left[b_1\right] = \left[1\right]$$
-!< The scheme is:
-!< $$ U^{n+1} = U^n + \Delta t R(t^n,U^n) $$
-!<
-!<##### 2 steps
-!< This scheme is 2nd order.
-!< The *b* coefficients are:
-!< $$b = \left[ {\begin{array}{*{20}{c}} b_1 & b_2 \end{array}} \right] =
-!<       \left[ {\begin{array}{*{20}{c}} -\frac{1}{2} & \frac{3}{2} \end{array}} \right]$$
-!< The scheme is:
-!< $$ U^{n+2} = U^{n+1} +\Delta t \left[ \frac{3}{2} R(t^{n+1}, U^{n+1})-\frac{1}{2} R(t^{n}, U^{n})  \right] $$
-!<
-!<##### 3 steps
-!< This scheme is 3rd order.
-!< The *b* coefficients are:
-!< $$b = \left[ {\begin{array}{*{20}{c}} b_1 & b_2 & b_3 \end{array}} \right] =
-!<       \left[ {\begin{array}{*{20}{c}} \frac{5}{12} & -\frac{4}{3} & \frac{23}{12} \end{array}} \right]$$
-!< The scheme is:
-!< $$ U^{n+3} = U^{n+2} +\Delta t \left[ \frac{23}{12}R(t^{n+2}, U^{n+2}) - \frac{4}{3}R(t^{n+1}, U^{n+1})
-!< +\frac{5}{12} R(t^{n}, U^{n})  \right] $$
-!<
-!<##### 4 steps
-!< This scheme is 4th order.
-!< The *b* coefficients are:
-!< $$b = \left[ {\begin{array}{*{20}{c}} b_1 & b_2 & b_3 & b_4 \end{array}} \right] =
-!<       \left[ {\begin{array}{*{20}{c}} -\frac{9}{24} & \frac{37}{24} & -\frac{59}{24} & \frac{55}{24} \end{array}} \right]$$
-!< The scheme is:
-!< $$ U^{n+4} = U^{n+3} +\Delta t \left[ \frac{55}{24}R(t^{n+3}, U^{n+3}) - \frac{59}{24}R(t^{n+2}, U^{n+2})
-!< +\frac{37}{24} R(t^{n+1}, U^{n+1}) - \frac{9}{24} R(t^{n}, U^{n}) \right] $$
+!< The schemes are explicit. The coefficients *b* define the actual scheme, that is selected accordingly to the number of
+!< **steps** used. Currently, the schemes provided have *step in [1, 16]*. Note that the scheme using only 1 step reverts to
+!< Explicit Forward Euler. The formal order of accuracy varies consistently in *[1st, 16th]* order.
 !<
 !<#### Bibliography
 !< [1] *Cowell Type Numerical Integration As Applied to Satellite Orbit Computation*, J. L. Maury Jr.,
 !< G. P. Segal, X-553-69-46, April 1969, [NASA-TM-X-63542](http://ntrs.nasa.gov/archive/nasa/casi.ntrs.nasa.gov/19690017325.pdf).
+!<
+!< [2] *Linear multistep method*, [wikipedia article](https://en.wikipedia.org/wiki/Linear_multistep_method).
 !<
 !-----------------------------------------------------------------------------------------------------------------------------------
 
@@ -75,9 +44,14 @@ type :: adams_bashforth_integrator
   !< FOODIE integrator: provide an explicit class of Adams-Bashforth multi-step schemes, from 1st to 16th order accurate.
   !<
   !< @note The integrator must be created or initialized (initialize the *b* coefficients) before used.
+  !<
+  !< ### List of errors status
+  !<+ error=0 => no error;
+  !<+ error=1 => bad (unsupported) number of required time steps;
   private
   integer(I_P)           :: steps=0 !< Number of time steps.
-  real(R_P), allocatable :: b(:)    !< \(b\) coefficients.
+  real(R_P), allocatable :: b(:)    !< *b* coefficients.
+  integer(I_P)           :: error=0 !< Error status flag: trap occurrences of errors.
   contains
     procedure, pass(self), public :: destroy         !< Destroy the integrator.
     procedure, pass(self), public :: init            !< Initialize (create) the integrator.
@@ -91,6 +65,9 @@ contains
   elemental subroutine init(self, steps)
   !---------------------------------------------------------------------------------------------------------------------------------
   !< Create the actual Adams-Bashforth integrator: initialize the *b* coefficients.
+  !<
+  !< @note If the integrator is initialized with a bad (unsupported) number of required time steps the initialization fails and
+  !< the integrator error status is updated consistently for external-provided errors handling.
   !---------------------------------------------------------------------------------------------------------------------------------
   class(adams_bashforth_integrator), intent(INOUT) :: self  !< AB integrator.
   integer(I_P), intent(IN)                         :: steps !< Number of time steps used.
@@ -253,6 +230,9 @@ contains
     self%b(14) = 9622096909515337.0_R_P/62768369664000.0_R_P
     self%b(15) = -2161567671248849.0_R_P/62768369664000.0_R_P
     self%b(16) = 362555126427073.0_R_P/62768369664000.0_R_P
+  case default
+    ! bad (unsupported) number of required time steps
+    self%error = 1
   endselect
   return
   !---------------------------------------------------------------------------------------------------------------------------------
@@ -268,6 +248,7 @@ contains
   !---------------------------------------------------------------------------------------------------------------------------------
   self%steps = 0
   if (allocated(self%b)) deallocate(self%b)
+  self%error = 0
   return
   !---------------------------------------------------------------------------------------------------------------------------------
   endsubroutine destroy

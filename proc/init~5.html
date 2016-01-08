@@ -1215,6 +1215,9 @@ private elemental subroutine init(self, stages, tolerance)
     <span class="n">self</span><span class="p">%</span><span class="n">gamm</span><span class="p">(</span><span class="mi">15</span><span class="p">)</span> <span class="o">=</span> <span class="mf">0.539357840802981787532_R_P</span>
     <span class="n">self</span><span class="p">%</span><span class="n">gamm</span><span class="p">(</span><span class="mi">16</span><span class="p">)</span> <span class="o">=</span> <span class="mf">0.1_R_P</span>
     <span class="n">self</span><span class="p">%</span><span class="n">gamm</span><span class="p">(</span><span class="mi">17</span><span class="p">)</span> <span class="o">=</span> <span class="mf">1._R_P</span>
+  <span class="k">case </span><span class="n">default</span>
+    <span class="c">! bad (unsupported) number of required time steps</span>
+    <span class="n">self</span><span class="p">%</span><span class="n">error</span> <span class="o">=</span> <span class="mi">1</span>
   <span class="n">endselect</span>
   <span class="k">return</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>

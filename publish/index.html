@@ -180,13 +180,12 @@
 </li>
 <li><input type="checkbox" disabled> comprehensive solvers set out-of-the-box:<ul class="checklist">
 <li><input type="checkbox" disabled checked> explicit schemes:<ul class="checklist">
-<li><input type="checkbox" disabled checked> <a href="http://fortran-foss-programmers.github.io/FOODIE/module/foodie_integrator_adams_bashforth.html">Adams-Bashforth</a> schemes see [7]:<ul class="checklist">
+<li><input type="checkbox" disabled checked> <a href="http://fortran-foss-programmers.github.io/FOODIE/module/foodie_integrator_adams_bashforth.html">Adams-Bashforth</a> schemes see [7, 12]:<ul class="checklist">
 <li><input type="checkbox" disabled checked> 1 step, namely the forward explicit Euler scheme, 1st order accurate;</li>
-<li><input type="checkbox" disabled checked> 2 steps, 2nd accurate;</li>
-<li><input type="checkbox" disabled checked> 3 steps, 3rd accurate;</li>
+<li><input type="checkbox" disabled checked> 2 to 16 steps, 2nd to 16th accurate, respectively;</li>
 </ul>
 </li>
-<li><input type="checkbox" disabled checked> <a href="http://fortran-foss-programmers.github.io/FOODIE/module/foodie_integrator_euler_explicit.html">Euler</a> scheme, 1st order accurate;</li>
+<li><input type="checkbox" disabled checked> <a href="http://fortran-foss-programmers.github.io/FOODIE/module/foodie_integrator_euler_explicit.html">Euler</a> (forward explicit) scheme, 1st order accurate;</li>
 <li><input type="checkbox" disabled checked> <a href="http://fortran-foss-programmers.github.io/FOODIE/module/foodie_integrator_leapfrog.html">Leapfrog</a>, 2nd order accurate:<ul class="checklist">
 <li><input type="checkbox" disabled checked> unfiltered leapfrog, 2nd order accurate, mostly unstable, see [4];</li>
 <li><input type="checkbox" disabled checked> Robert-Asselin filtered leapfrog, 1st order accurate, see [4, 5, 6];</li>
@@ -216,9 +215,12 @@
 </ul>
 </li>
 <li><input type="checkbox" disabled> <a href="http://fortran-foss-programmers.github.io/FOODIE/module/foodie_integrator_emd_runge_kutta.html">embedded (adaptive)</a> schemes:<ul class="checklist">
+<li><input type="checkbox" disabled checked> Heun-Euler, 2 stages, 2nd order accurate;</li>
 <li><input type="checkbox" disabled> Runge-Kutta-Fehlberg, 5 stages, 4th order accurate;</li>
-<li><input type="checkbox" disabled> Runge-Kutta-Cash-Karp, 5 stages, 4th order accurate;</li>
+<li><input type="checkbox" disabled checked> Runge-Kutta-Cash-Karp, 6 stages, 5th order accurate, see [13];</li>
 <li><input type="checkbox" disabled checked> Prince-Dormand, 7 stages, 4th order accurate, see [11];</li>
+<li><input type="checkbox" disabled checked> Calvo, 9 stages, 6th order accurate, see [14];</li>
+<li><input type="checkbox" disabled checked> Feagin, 17 stages, 10th order accurate, see [15];</li>
 </ul>
 </li>
 </ul>
@@ -227,10 +229,22 @@
 </li>
 <li><input type="checkbox" disabled> implicit schemes:<ul class="checklist">
 <li><input type="checkbox" disabled> Runge-Kutta schemes;</li>
+<li><input type="checkbox" disabled checked> <a href="http://fortran-foss-programmers.github.io/FOODIE/module/foodie_integrator_adams_moulton.html">Adams-Moulton</a> schemes:<ul class="checklist">
+<li><input type="checkbox" disabled checked> 0 step, 1st order accurate;</li>
+<li><input type="checkbox" disabled checked> 1 step, 2nd accurate;</li>
+<li><input type="checkbox" disabled checked> 2 steps, 3rd accurate;</li>
+<li><input type="checkbox" disabled checked> 3 steps, 4th accurate;</li>
+</ul>
+</li>
+<li><input type="checkbox" disabled checked> <a href="http://fortran-foss-programmers.github.io/FOODIE/module/foodie_integrator_backward_differentiation_formula.html">Backward Differentiation Formula</a> schemes:<ul class="checklist">
+<li><input type="checkbox" disabled checked> 1 step, namely the backward implicit Euler scheme, 1st order accurate;</li>
+<li><input type="checkbox" disabled checked> 2 to 6 steps, 2nd to 6th accurate, respectively;</li>
+</ul>
+</li>
 </ul>
 </li>
 <li><input type="checkbox" disabled> predictor-corrector schemes:<ul class="checklist">
-<li><input type="checkbox" disabled checked> Adams-Bashforth-Moulton schemes:<ul class="checklist">
+<li><input type="checkbox" disabled checked> <a href="http://fortran-foss-programmers.github.io/FOODIE/module/foodie_integrator_adams_bashforth_moulton.html">Adams-Bashforth-Moulton</a> schemes:<ul class="checklist">
 <li><input type="checkbox" disabled checked> 1 step, AB(1)-AM(0), 1st order accurate;</li>
 <li><input type="checkbox" disabled checked> 2 steps, AB(2)-AM(1), 2nd accurate;</li>
 <li><input type="checkbox" disabled checked> 3 steps, AB(3)-AM(2), 3rd accurate;</li>
@@ -274,6 +288,10 @@
 <p>[9] <em>High-accuracy large-step explicit Runge–Kutta (HALE-RK) schemes for computational aeroacoustics</em>, Vasanth Allampalli and Ray Hixon and M. Nallasamy and Scott D. Sawyer, Journal of Computational Physics, vol. 228, 2009, pp. 3837&ndash;3850.</p>
 <p>[10] <em>Efficient low-storage Runge–Kutta schemes with optimized stability regions</em>, Jens Niegemann and Richard Diehl and Kurt Busch, Journal of Computational Physics, vol. 231, 2012, pp. 364&ndash;372.</p>
 <p>[11] <em>A family of embedded Runge-Kutta formulae</em>, Dormand, J. R.; Prince, P. J. (1980), , Journal of Computational and Applied Mathematics 6 (1): 19&ndash;26, doi:10.1016/0771-050X(80)90013-3.</p>
+<p>[12] <em>Cowell Type Numerical Integration As Applied to Satellite Orbit Computation</em>, J. L. Maury Jr., G. P. Segal, X-553-69-46, April 1969, <a href="http://ntrs.nasa.gov/archive/nasa/casi.ntrs.nasa.gov/19690017325.pdf">NASA-TM-X-63542</a>.</p>
+<p>[13] <em>A variable order Runge-Kutta method for initial value problems with rapidly varying right-hand sides</em>, J. R. Cash, A. H. Karp, ACM Transactions on Mathematical Software, vol. 16,  pp. 201&ndash;222, 1990, doi:10.1145/79505.79507.</p>
+<p>[14] <em>A New Embedded Pair of Runge-Kutta Formulas of orders 5 and 6</em>, M. Calvo, J.I. Montijano, L. Randez, Computers &amp; Mathematics with Applications, Volume 20, Issue 1, 1990, Pages 15&ndash;24, ISSN 0898-1221, http://dx.doi.org/10.1016/0898-1221(90)90064-Q.</p>
+<p>[15] <em>A tenth-order Runge-Kutta method with error estimate</em>, Feagin, T., Proceedings of the IAENG Conf. on Scientific Computing. 2007.</p>
 <p>Go to <a href="#top">Top</a></p>
 <h2 id="status"><a class="toclink" href="#status">Status <a href=""><img alt="Status" src="https://img.shields.io/badge/status-beta-orange.svg"></a></a></h2>
 <p>FOODIE project is young, but developed with love. Many integrators have been implemented using the Rouson's Abstract Data Type Pattern and tested with complex problems, but the library API is still in beta testing status. Nevertheless, FOODIE is already proven to be able to integrate a wide range of different ODE problems, from pure ODEs (Lorenz and inertial oscillations equations) to complex PDEs (Burgers and Euler equations), see the documentation.</p>

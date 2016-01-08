@@ -281,12 +281,17 @@ type :: emd_runge_kutta_integrator
   !< FOODIE integrator: provide an explicit class of TVD or SSP Runge-Kutta schemes, from 1st to 4th order accurate.
   !<
   !< @note The integrator must be created or initialized (initialize the RK coefficients) before used.
+  !<
+  !< ### List of errors status
+  !<+ error=0 => no error;
+  !<+ error=1 => bad (unsupported) number of required time steps;
   real(R_P)              :: tolerance=0._R_P !< Tolerance on the local truncation error.
   real(R_P)              :: pp1_inv=0._R_P   !< 1/(p+1) where p is the accuracy order of the lower accurate scheme of the pair.
   integer(I_P)           :: stages=0         !< Number of stages.
   real(R_P), allocatable :: alph(:,:)        !< \(\alpha\) Butcher's coefficients.
   real(R_P), allocatable :: beta(:,:)        !< \(\beta\) Butcher's coefficients.
   real(R_P), allocatable :: gamm(:)          !< \(\gamma\) Butcher's coefficients.
+  integer(I_P)           :: error=0          !< Error status flag: trap occurrences of errors.
   contains
     procedure, pass(self), public  :: destroy   !< Destroy the integrator.
     procedure, pass(self), public  :: init      !< Initialize (create) the integrator.
@@ -546,6 +551,9 @@ contains
     self%gamm(15) = 0.539357840802981787532_R_P
     self%gamm(16) = 0.1_R_P
     self%gamm(17) = 1._R_P
+  case default
+    ! bad (unsupported) number of required time steps
+    self%error = 1
   endselect
   return
   !---------------------------------------------------------------------------------------------------------------------------------
@@ -564,6 +572,7 @@ contains
   if (allocated(self%alph)) deallocate(self%alph)
   if (allocated(self%beta)) deallocate(self%beta)
   if (allocated(self%gamm)) deallocate(self%gamm)
+  self%error = 0
   return
   !---------------------------------------------------------------------------------------------------------------------------------
   endsubroutine destroy
