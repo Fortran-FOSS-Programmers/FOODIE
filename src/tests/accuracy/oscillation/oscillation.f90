@@ -241,7 +241,7 @@ contains
   !< Test explicit Adams-Bashforth class of ODE solvers.
   !---------------------------------------------------------------------------------------------------------------------------------
   integer(I_P), intent(IN)      :: steps            !< Number of steps used: if negative all AB solvers are used.
-  integer, parameter            :: ab_steps=4       !< Adams-Bashforth steps number.
+  integer, parameter            :: ab_steps=8       !< Adams-Bashforth steps number.
   real(R_P), allocatable        :: solution(:,:)    !< Solution at each time step.
   integer(I_P)                  :: s                !< AB steps counter.
   integer(I_P)                  :: steps_range(1:2) !< Steps used.
@@ -536,7 +536,7 @@ contains
   select case(steps)
   case(1, 2, 3)
     call rk_integrator%init(stages=steps)
-  case(4)
+  case(4, 5, 6, 7, 8)
     call rk_integrator%init(stages=5)
   endselect
   call oscillator%init(initial_state=initial_state, f=f)
@@ -912,7 +912,7 @@ contains
                                                       0.000001_R_P,  &
                                                       0.0000001_R_P, &
                                                       0.00000001_R_P]  !< Tolerances for embedded RK solvers.
-  integer, parameter            :: ab_steps=4                          !< Adams-Bashforth steps number.
+  integer, parameter            :: ab_steps=8                          !< Adams-Bashforth steps number.
   integer, parameter            :: bdf_steps=6                         !< BDF steps number.
   integer, parameter            :: emd_rk_stages=17                    !< Embedded Runge-Kutta stages number.
   integer, parameter            :: tvd_rk_stages=5                     !< TVD/SSP Runge-Kutta stages number.

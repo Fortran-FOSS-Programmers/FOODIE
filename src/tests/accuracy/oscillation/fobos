@@ -65,12 +65,19 @@ dependon = $DEPENDS_INT_DEB
 template = template-common
 
 [errors-analysis]
-help     = Build test in release mode (for errors analysis) with GNU gfortran
-compiler = gnu
-cflags   = $CSTATIC_GNU $OPTIMIZE
-lflags   = $OPTIMIZE
-dependon = $DEPENDS_GNU
-template = template-common
+help            = Build test in release mode (for errors analysis) with GNU gfortran
+compiler        = gnu
+cflags          = $CSTATIC_GNU $OPTIMIZE
+lflags          = $OPTIMIZE
+dependon        = $DEPENDS_GNU
+cflags_heritage = True
+mod_dir         = mod
+obj_dir         = obj
+src             = src/tests/accuracy/oscillation/
+colors          = True
+quiet           = False
+log             = True
+jobs            = 10
 
 # pure modes for testing FOODIE ADT with "pure" procedures
 [gnu-pure]
