@@ -43,11 +43,7 @@ endtype integrand
 
 abstract interface
   !< Abstract type bound procedures necessary for implementing a concrete extension of the class(integrand).
-! #ifdef PURE
-  ! pure function time_derivative(self, t) result(dState_dt)
-! #else
   function time_derivative(self, t) result(dState_dt)
-! #endif
   !---------------------------------------------------------------------------------------------------------------------------------
   !< Time derivative function of integrand class, i.e. the residuals function.
   !---------------------------------------------------------------------------------------------------------------------------------
@@ -58,11 +54,7 @@ abstract interface
   !---------------------------------------------------------------------------------------------------------------------------------
   endfunction time_derivative
 
-! #ifdef PURE
-  ! pure function local_error_operator(lhs, rhs) result(error)
-! #else
   function local_error_operator(lhs, rhs) result(error)
-! #endif
   !---------------------------------------------------------------------------------------------------------------------------------
   !< Estimate local truncation error between 2 solution approximations.
   !---------------------------------------------------------------------------------------------------------------------------------
@@ -73,11 +65,7 @@ abstract interface
   !---------------------------------------------------------------------------------------------------------------------------------
   endfunction local_error_operator
 
-! #ifdef PURE
-  ! pure function integrand_op_real(lhs, rhs) result(operator_result)
-! #else
   function integrand_op_real(lhs, rhs) result(operator_result)
-! #endif
   !---------------------------------------------------------------------------------------------------------------------------------
   !< Asymmetric type operator integrand.op.real.
   !---------------------------------------------------------------------------------------------------------------------------------
@@ -88,11 +76,7 @@ abstract interface
   !---------------------------------------------------------------------------------------------------------------------------------
   endfunction integrand_op_real
 
-! #ifdef PURE
-  ! pure function real_op_integrand(lhs, rhs) result(operator_result)
-! #else
   function real_op_integrand(lhs, rhs) result(operator_result)
-! #endif
   !---------------------------------------------------------------------------------------------------------------------------------
   !< Asymmetric type operator real.op.integrand.
   !---------------------------------------------------------------------------------------------------------------------------------
@@ -103,11 +87,7 @@ abstract interface
   !---------------------------------------------------------------------------------------------------------------------------------
   endfunction real_op_integrand
 
-! #ifdef PURE
-  ! pure function symmetric_operator(lhs, rhs) result(operator_result)
-! #else
   function symmetric_operator(lhs, rhs) result(operator_result)
-! #endif
   !---------------------------------------------------------------------------------------------------------------------------------
   !< Symmetric type operator integrand.op.integrand.
   !---------------------------------------------------------------------------------------------------------------------------------
@@ -119,6 +99,7 @@ abstract interface
   endfunction symmetric_operator
 
 #ifdef PURE
+  ! declare this pure should not be necessary, but this is a temporary workaround for a possible GNU gfortran bug.
   pure subroutine assignment_integrand(lhs, rhs)
 #else
   subroutine assignment_integrand(lhs, rhs)

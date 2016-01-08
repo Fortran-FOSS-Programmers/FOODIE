@@ -303,97 +303,78 @@
 <a name="ln-43"></a>
 <a name="ln-44"></a><span class="k">abstract interface</span>
 <a name="ln-45"></a>  <span class="c">!&lt; Abstract type bound procedures necessary for implementing a concrete extension of the class(integrand).</span>
-<a name="ln-46"></a><span class="c">! #ifdef PURE</span>
-<a name="ln-47"></a>  <span class="c">! pure function time_derivative(self, t) result(dState_dt)</span>
-<a name="ln-48"></a><span class="c">! #else</span>
-<a name="ln-49"></a>  <span class="k">function </span><span class="n">time_derivative</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">t</span><span class="p">)</span> <span class="k">result</span><span class="p">(</span><span class="n">dState_dt</span><span class="p">)</span>
-<a name="ln-50"></a><span class="c">! #endif</span>
-<a name="ln-51"></a>  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
-<a name="ln-52"></a>  <span class="c">!&lt; Time derivative function of integrand class, i.e. the residuals function.</span>
-<a name="ln-53"></a>  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
-<a name="ln-54"></a>  <span class="k">import</span> <span class="kd">::</span> <span class="n">integrand</span><span class="p">,</span> <span class="n">R_P</span>
-<a name="ln-55"></a>  <span class="k">class</span><span class="p">(</span><span class="n">integrand</span><span class="p">),</span>       <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span> <span class="kd">::</span> <span class="n">self</span>      <span class="c">!&lt; Integrand field.</span>
-<a name="ln-56"></a>  <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">),</span>    <span class="k">optional</span><span class="p">,</span> <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span> <span class="kd">::</span> <span class="n">t</span>         <span class="c">!&lt; Time.</span>
-<a name="ln-57"></a>  <span class="k">class</span><span class="p">(</span><span class="n">integrand</span><span class="p">),</span> <span class="k">allocatable</span>      <span class="kd">::</span> <span class="n">dState_dt</span> <span class="c">!&lt; Result of the time derivative function of integrand field.</span>
+<a name="ln-46"></a>  <span class="k">function </span><span class="n">time_derivative</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">t</span><span class="p">)</span> <span class="k">result</span><span class="p">(</span><span class="n">dState_dt</span><span class="p">)</span>
+<a name="ln-47"></a>  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+<a name="ln-48"></a>  <span class="c">!&lt; Time derivative function of integrand class, i.e. the residuals function.</span>
+<a name="ln-49"></a>  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+<a name="ln-50"></a>  <span class="k">import</span> <span class="kd">::</span> <span class="n">integrand</span><span class="p">,</span> <span class="n">R_P</span>
+<a name="ln-51"></a>  <span class="k">class</span><span class="p">(</span><span class="n">integrand</span><span class="p">),</span>       <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span> <span class="kd">::</span> <span class="n">self</span>      <span class="c">!&lt; Integrand field.</span>
+<a name="ln-52"></a>  <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">),</span>    <span class="k">optional</span><span class="p">,</span> <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span> <span class="kd">::</span> <span class="n">t</span>         <span class="c">!&lt; Time.</span>
+<a name="ln-53"></a>  <span class="k">class</span><span class="p">(</span><span class="n">integrand</span><span class="p">),</span> <span class="k">allocatable</span>      <span class="kd">::</span> <span class="n">dState_dt</span> <span class="c">!&lt; Result of the time derivative function of integrand field.</span>
+<a name="ln-54"></a>  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+<a name="ln-55"></a>  <span class="n">endfunction</span> <span class="n">time_derivative</span>
+<a name="ln-56"></a>
+<a name="ln-57"></a>  <span class="k">function </span><span class="n">local_error_operator</span><span class="p">(</span><span class="n">lhs</span><span class="p">,</span> <span class="n">rhs</span><span class="p">)</span> <span class="k">result</span><span class="p">(</span><span class="n">error</span><span class="p">)</span>
 <a name="ln-58"></a>  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
-<a name="ln-59"></a>  <span class="n">endfunction</span> <span class="n">time_derivative</span>
-<a name="ln-60"></a>
-<a name="ln-61"></a><span class="c">! #ifdef PURE</span>
-<a name="ln-62"></a>  <span class="c">! pure function local_error_operator(lhs, rhs) result(error)</span>
-<a name="ln-63"></a><span class="c">! #else</span>
-<a name="ln-64"></a>  <span class="k">function </span><span class="n">local_error_operator</span><span class="p">(</span><span class="n">lhs</span><span class="p">,</span> <span class="n">rhs</span><span class="p">)</span> <span class="k">result</span><span class="p">(</span><span class="n">error</span><span class="p">)</span>
-<a name="ln-65"></a><span class="c">! #endif</span>
-<a name="ln-66"></a>  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
-<a name="ln-67"></a>  <span class="c">!&lt; Estimate local truncation error between 2 solution approximations.</span>
-<a name="ln-68"></a>  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
-<a name="ln-69"></a>  <span class="k">import</span> <span class="kd">::</span> <span class="n">integrand</span><span class="p">,</span> <span class="n">R_P</span>
-<a name="ln-70"></a>  <span class="k">class</span><span class="p">(</span><span class="n">integrand</span><span class="p">),</span> <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span>  <span class="kd">::</span> <span class="n">lhs</span>   <span class="c">!&lt; Left hand side.</span>
-<a name="ln-71"></a>  <span class="k">class</span><span class="p">(</span><span class="n">integrand</span><span class="p">),</span> <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span>  <span class="kd">::</span> <span class="n">rhs</span>   <span class="c">!&lt; Right hand side.</span>
-<a name="ln-72"></a>  <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">)</span>                     <span class="kd">::</span> <span class="n">error</span> <span class="c">!&lt; Error estimation.</span>
-<a name="ln-73"></a>  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
-<a name="ln-74"></a>  <span class="n">endfunction</span> <span class="n">local_error_operator</span>
-<a name="ln-75"></a>
-<a name="ln-76"></a><span class="c">! #ifdef PURE</span>
-<a name="ln-77"></a>  <span class="c">! pure function integrand_op_real(lhs, rhs) result(operator_result)</span>
-<a name="ln-78"></a><span class="c">! #else</span>
-<a name="ln-79"></a>  <span class="k">function </span><span class="n">integrand_op_real</span><span class="p">(</span><span class="n">lhs</span><span class="p">,</span> <span class="n">rhs</span><span class="p">)</span> <span class="k">result</span><span class="p">(</span><span class="n">operator_result</span><span class="p">)</span>
-<a name="ln-80"></a><span class="c">! #endif</span>
-<a name="ln-81"></a>  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
-<a name="ln-82"></a>  <span class="c">!&lt; Asymmetric type operator integrand.op.real.</span>
-<a name="ln-83"></a>  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
-<a name="ln-84"></a>  <span class="k">import</span> <span class="kd">::</span> <span class="n">integrand</span><span class="p">,</span> <span class="n">R_P</span>
-<a name="ln-85"></a>  <span class="k">class</span><span class="p">(</span><span class="n">integrand</span><span class="p">),</span> <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span>  <span class="kd">::</span> <span class="n">lhs</span>              <span class="c">!&lt; Left hand side.</span>
-<a name="ln-86"></a>  <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">),</span>        <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span>  <span class="kd">::</span> <span class="n">rhs</span>              <span class="c">!&lt; Right hand side.</span>
-<a name="ln-87"></a>  <span class="k">class</span><span class="p">(</span><span class="n">integrand</span><span class="p">),</span> <span class="k">allocatable</span> <span class="kd">::</span> <span class="n">operator_result</span>  <span class="c">!&lt; Operator result.</span>
-<a name="ln-88"></a>  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
-<a name="ln-89"></a>  <span class="n">endfunction</span> <span class="n">integrand_op_real</span>
-<a name="ln-90"></a>
-<a name="ln-91"></a><span class="c">! #ifdef PURE</span>
-<a name="ln-92"></a>  <span class="c">! pure function real_op_integrand(lhs, rhs) result(operator_result)</span>
-<a name="ln-93"></a><span class="c">! #else</span>
-<a name="ln-94"></a>  <span class="k">function </span><span class="n">real_op_integrand</span><span class="p">(</span><span class="n">lhs</span><span class="p">,</span> <span class="n">rhs</span><span class="p">)</span> <span class="k">result</span><span class="p">(</span><span class="n">operator_result</span><span class="p">)</span>
-<a name="ln-95"></a><span class="c">! #endif</span>
-<a name="ln-96"></a>  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
-<a name="ln-97"></a>  <span class="c">!&lt; Asymmetric type operator real.op.integrand.</span>
+<a name="ln-59"></a>  <span class="c">!&lt; Estimate local truncation error between 2 solution approximations.</span>
+<a name="ln-60"></a>  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+<a name="ln-61"></a>  <span class="k">import</span> <span class="kd">::</span> <span class="n">integrand</span><span class="p">,</span> <span class="n">R_P</span>
+<a name="ln-62"></a>  <span class="k">class</span><span class="p">(</span><span class="n">integrand</span><span class="p">),</span> <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span>  <span class="kd">::</span> <span class="n">lhs</span>   <span class="c">!&lt; Left hand side.</span>
+<a name="ln-63"></a>  <span class="k">class</span><span class="p">(</span><span class="n">integrand</span><span class="p">),</span> <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span>  <span class="kd">::</span> <span class="n">rhs</span>   <span class="c">!&lt; Right hand side.</span>
+<a name="ln-64"></a>  <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">)</span>                     <span class="kd">::</span> <span class="n">error</span> <span class="c">!&lt; Error estimation.</span>
+<a name="ln-65"></a>  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+<a name="ln-66"></a>  <span class="n">endfunction</span> <span class="n">local_error_operator</span>
+<a name="ln-67"></a>
+<a name="ln-68"></a>  <span class="k">function </span><span class="n">integrand_op_real</span><span class="p">(</span><span class="n">lhs</span><span class="p">,</span> <span class="n">rhs</span><span class="p">)</span> <span class="k">result</span><span class="p">(</span><span class="n">operator_result</span><span class="p">)</span>
+<a name="ln-69"></a>  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+<a name="ln-70"></a>  <span class="c">!&lt; Asymmetric type operator integrand.op.real.</span>
+<a name="ln-71"></a>  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+<a name="ln-72"></a>  <span class="k">import</span> <span class="kd">::</span> <span class="n">integrand</span><span class="p">,</span> <span class="n">R_P</span>
+<a name="ln-73"></a>  <span class="k">class</span><span class="p">(</span><span class="n">integrand</span><span class="p">),</span> <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span>  <span class="kd">::</span> <span class="n">lhs</span>              <span class="c">!&lt; Left hand side.</span>
+<a name="ln-74"></a>  <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">),</span>        <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span>  <span class="kd">::</span> <span class="n">rhs</span>              <span class="c">!&lt; Right hand side.</span>
+<a name="ln-75"></a>  <span class="k">class</span><span class="p">(</span><span class="n">integrand</span><span class="p">),</span> <span class="k">allocatable</span> <span class="kd">::</span> <span class="n">operator_result</span>  <span class="c">!&lt; Operator result.</span>
+<a name="ln-76"></a>  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+<a name="ln-77"></a>  <span class="n">endfunction</span> <span class="n">integrand_op_real</span>
+<a name="ln-78"></a>
+<a name="ln-79"></a>  <span class="k">function </span><span class="n">real_op_integrand</span><span class="p">(</span><span class="n">lhs</span><span class="p">,</span> <span class="n">rhs</span><span class="p">)</span> <span class="k">result</span><span class="p">(</span><span class="n">operator_result</span><span class="p">)</span>
+<a name="ln-80"></a>  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+<a name="ln-81"></a>  <span class="c">!&lt; Asymmetric type operator real.op.integrand.</span>
+<a name="ln-82"></a>  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+<a name="ln-83"></a>  <span class="k">import</span> <span class="kd">::</span> <span class="n">integrand</span><span class="p">,</span> <span class="n">R_P</span>
+<a name="ln-84"></a>  <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">),</span>        <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span>  <span class="kd">::</span> <span class="n">lhs</span>             <span class="c">!&lt; Left hand side.</span>
+<a name="ln-85"></a>  <span class="k">class</span><span class="p">(</span><span class="n">integrand</span><span class="p">),</span> <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span>  <span class="kd">::</span> <span class="n">rhs</span>             <span class="c">!&lt; Right hand side.</span>
+<a name="ln-86"></a>  <span class="k">class</span><span class="p">(</span><span class="n">integrand</span><span class="p">),</span> <span class="k">allocatable</span> <span class="kd">::</span> <span class="n">operator_result</span> <span class="c">!&lt; Operator result.</span>
+<a name="ln-87"></a>  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+<a name="ln-88"></a>  <span class="n">endfunction</span> <span class="n">real_op_integrand</span>
+<a name="ln-89"></a>
+<a name="ln-90"></a>  <span class="k">function </span><span class="n">symmetric_operator</span><span class="p">(</span><span class="n">lhs</span><span class="p">,</span> <span class="n">rhs</span><span class="p">)</span> <span class="k">result</span><span class="p">(</span><span class="n">operator_result</span><span class="p">)</span>
+<a name="ln-91"></a>  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+<a name="ln-92"></a>  <span class="c">!&lt; Symmetric type operator integrand.op.integrand.</span>
+<a name="ln-93"></a>  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+<a name="ln-94"></a>  <span class="k">import</span> <span class="kd">::</span> <span class="n">integrand</span>
+<a name="ln-95"></a>  <span class="k">class</span><span class="p">(</span><span class="n">integrand</span><span class="p">),</span> <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span>  <span class="kd">::</span> <span class="n">lhs</span>             <span class="c">!&lt; Left hand side.</span>
+<a name="ln-96"></a>  <span class="k">class</span><span class="p">(</span><span class="n">integrand</span><span class="p">),</span> <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span>  <span class="kd">::</span> <span class="n">rhs</span>             <span class="c">!&lt; Right hand side.</span>
+<a name="ln-97"></a>  <span class="k">class</span><span class="p">(</span><span class="n">integrand</span><span class="p">),</span> <span class="k">allocatable</span> <span class="kd">::</span> <span class="n">operator_result</span> <span class="c">!&lt; Operator result.</span>
 <a name="ln-98"></a>  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
-<a name="ln-99"></a>  <span class="k">import</span> <span class="kd">::</span> <span class="n">integrand</span><span class="p">,</span> <span class="n">R_P</span>
-<a name="ln-100"></a>  <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">),</span>        <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span>  <span class="kd">::</span> <span class="n">lhs</span>             <span class="c">!&lt; Left hand side.</span>
-<a name="ln-101"></a>  <span class="k">class</span><span class="p">(</span><span class="n">integrand</span><span class="p">),</span> <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span>  <span class="kd">::</span> <span class="n">rhs</span>             <span class="c">!&lt; Right hand side.</span>
-<a name="ln-102"></a>  <span class="k">class</span><span class="p">(</span><span class="n">integrand</span><span class="p">),</span> <span class="k">allocatable</span> <span class="kd">::</span> <span class="n">operator_result</span> <span class="c">!&lt; Operator result.</span>
-<a name="ln-103"></a>  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
-<a name="ln-104"></a>  <span class="n">endfunction</span> <span class="n">real_op_integrand</span>
-<a name="ln-105"></a>
-<a name="ln-106"></a><span class="c">! #ifdef PURE</span>
-<a name="ln-107"></a>  <span class="c">! pure function symmetric_operator(lhs, rhs) result(operator_result)</span>
-<a name="ln-108"></a><span class="c">! #else</span>
-<a name="ln-109"></a>  <span class="k">function </span><span class="n">symmetric_operator</span><span class="p">(</span><span class="n">lhs</span><span class="p">,</span> <span class="n">rhs</span><span class="p">)</span> <span class="k">result</span><span class="p">(</span><span class="n">operator_result</span><span class="p">)</span>
-<a name="ln-110"></a><span class="c">! #endif</span>
-<a name="ln-111"></a>  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
-<a name="ln-112"></a>  <span class="c">!&lt; Symmetric type operator integrand.op.integrand.</span>
+<a name="ln-99"></a>  <span class="n">endfunction</span> <span class="n">symmetric_operator</span>
+<a name="ln-100"></a>
+<a name="ln-101"></a><span class="cp">#ifdef PURE</span>
+<a name="ln-102"></a>  <span class="c">! declare this pure should not be necessary, but this is a temporary workaround for a possible GNU gfortran bug.</span>
+<a name="ln-103"></a>  <span class="k">pure subroutine </span><span class="n">assignment_integrand</span><span class="p">(</span><span class="n">lhs</span><span class="p">,</span> <span class="n">rhs</span><span class="p">)</span>
+<a name="ln-104"></a><span class="cp">#else</span>
+<a name="ln-105"></a>  <span class="k">subroutine </span><span class="n">assignment_integrand</span><span class="p">(</span><span class="n">lhs</span><span class="p">,</span> <span class="n">rhs</span><span class="p">)</span>
+<a name="ln-106"></a><span class="cp">#endif</span>
+<a name="ln-107"></a>  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+<a name="ln-108"></a>  <span class="c">!&lt; Symmetric assignment integrand = integrand.</span>
+<a name="ln-109"></a>  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+<a name="ln-110"></a>  <span class="k">import</span> <span class="kd">::</span> <span class="n">integrand</span>
+<a name="ln-111"></a>  <span class="k">class</span><span class="p">(</span><span class="n">integrand</span><span class="p">),</span> <span class="k">intent</span><span class="p">(</span><span class="n">INOUT</span><span class="p">)</span> <span class="kd">::</span> <span class="n">lhs</span> <span class="c">!&lt; Left hand side.</span>
+<a name="ln-112"></a>  <span class="k">class</span><span class="p">(</span><span class="n">integrand</span><span class="p">),</span> <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span>    <span class="kd">::</span> <span class="n">rhs</span> <span class="c">!&lt; Right hand side.</span>
 <a name="ln-113"></a>  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
-<a name="ln-114"></a>  <span class="k">import</span> <span class="kd">::</span> <span class="n">integrand</span>
-<a name="ln-115"></a>  <span class="k">class</span><span class="p">(</span><span class="n">integrand</span><span class="p">),</span> <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span>  <span class="kd">::</span> <span class="n">lhs</span>             <span class="c">!&lt; Left hand side.</span>
-<a name="ln-116"></a>  <span class="k">class</span><span class="p">(</span><span class="n">integrand</span><span class="p">),</span> <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span>  <span class="kd">::</span> <span class="n">rhs</span>             <span class="c">!&lt; Right hand side.</span>
-<a name="ln-117"></a>  <span class="k">class</span><span class="p">(</span><span class="n">integrand</span><span class="p">),</span> <span class="k">allocatable</span> <span class="kd">::</span> <span class="n">operator_result</span> <span class="c">!&lt; Operator result.</span>
-<a name="ln-118"></a>  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
-<a name="ln-119"></a>  <span class="n">endfunction</span> <span class="n">symmetric_operator</span>
-<a name="ln-120"></a>
-<a name="ln-121"></a><span class="cp">#ifdef PURE</span>
-<a name="ln-122"></a>  <span class="k">pure subroutine </span><span class="n">assignment_integrand</span><span class="p">(</span><span class="n">lhs</span><span class="p">,</span> <span class="n">rhs</span><span class="p">)</span>
-<a name="ln-123"></a><span class="cp">#else</span>
-<a name="ln-124"></a>  <span class="k">subroutine </span><span class="n">assignment_integrand</span><span class="p">(</span><span class="n">lhs</span><span class="p">,</span> <span class="n">rhs</span><span class="p">)</span>
-<a name="ln-125"></a><span class="cp">#endif</span>
-<a name="ln-126"></a>  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
-<a name="ln-127"></a>  <span class="c">!&lt; Symmetric assignment integrand = integrand.</span>
-<a name="ln-128"></a>  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
-<a name="ln-129"></a>  <span class="k">import</span> <span class="kd">::</span> <span class="n">integrand</span>
-<a name="ln-130"></a>  <span class="k">class</span><span class="p">(</span><span class="n">integrand</span><span class="p">),</span> <span class="k">intent</span><span class="p">(</span><span class="n">INOUT</span><span class="p">)</span> <span class="kd">::</span> <span class="n">lhs</span> <span class="c">!&lt; Left hand side.</span>
-<a name="ln-131"></a>  <span class="k">class</span><span class="p">(</span><span class="n">integrand</span><span class="p">),</span> <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span>    <span class="kd">::</span> <span class="n">rhs</span> <span class="c">!&lt; Right hand side.</span>
-<a name="ln-132"></a>  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
-<a name="ln-133"></a>  <span class="n">endsubroutine</span> <span class="n">assignment_integrand</span>
-<a name="ln-134"></a><span class="n">endinterface</span>
-<a name="ln-135"></a><span class="c">!-----------------------------------------------------------------------------------------------------------------------------------</span>
-<a name="ln-136"></a><span class="n">endmodule</span> <span class="n">foodie_adt_integrand</span>
+<a name="ln-114"></a>  <span class="n">endsubroutine</span> <span class="n">assignment_integrand</span>
+<a name="ln-115"></a><span class="n">endinterface</span>
+<a name="ln-116"></a><span class="c">!-----------------------------------------------------------------------------------------------------------------------------------</span>
+<a name="ln-117"></a><span class="n">endmodule</span> <span class="n">foodie_adt_integrand</span>
 </pre></div>
 
     </section>
