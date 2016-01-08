@@ -1,7 +1,7 @@
-!< FOODIE integrator: provide an implicit class of Backward Differentiation Formula schemes, from 1st to 4th order accurate.
+!< FOODIE integrator: provide an implicit class of Backward Differentiation Formula schemes, from 1st to 6th order accurate.
 module foodie_integrator_backward_differentiation_formula
 !-----------------------------------------------------------------------------------------------------------------------------------
-!< FOODIE integrator: provide an implicit class of Backward Differentiation Formula schemes, from 1st to 4th order accurate.
+!< FOODIE integrator: provide an implicit class of Backward Differentiation Formula schemes, from 1st to 6th order accurate.
 !<
 !< Considering the following ODE system:
 !<
@@ -17,7 +17,7 @@ module foodie_integrator_backward_differentiation_formula
 !< @note The value of \(\Delta t\) must be provided, it not being computed by the integrator.
 !<
 !< The schemes are implicit. The coefficients \(\alpha_s\) and \(\beta\) define the actual scheme, that is selected accordingly
-!< to the number of **steps** used.
+!< to the number of *steps* used.
 !<
 !< Currently, the following schemes are available:
 !<
@@ -51,10 +51,15 @@ type :: bdf_integrator
   !< accurate.
   !<
   !< @note The integrator must be created or initialized (initialize the *alpha* and *beta* coefficients) before used.
+  !<
+  !< ### List of errors status
+  !<+ error=0 => no error;
+  !<+ error=1 => bad (unsupported) number of required time steps;
   private
-  integer(I_P)           :: steps=-1 !< Number of time steps.
-  real(R_P), allocatable :: a(:)     !< \(\alpha\) coefficients.
-  real(R_P)              :: b=0._R_P !< \(\beta\) coefficient.
+  integer(I_P)           :: steps=0   !< Number of time steps.
+  real(R_P), allocatable :: a(:)      !< \(\alpha\) coefficients.
+  real(R_P)              :: b=0.0_R_P !< \(\beta\) coefficient.
+  integer(I_P)           :: error=0   !< Error status flag: trap occurrences of errors.
   contains
     procedure, pass(self), public :: destroy         !< Destroy the integrator.
     procedure, pass(self), public :: init            !< Initialize (create) the integrator.
@@ -75,41 +80,44 @@ contains
 
   !---------------------------------------------------------------------------------------------------------------------------------
   self%steps = steps
-  if (allocated(self%a)) deallocate(self%a) ; allocate(self%a(1:steps)) ; self%a = 0._R_P
+  if (allocated(self%a)) deallocate(self%a) ; allocate(self%a(1:steps)) ; self%a = 0.0_R_P
   select case(steps)
   case(1)
-    self%a(1) = -1._R_P
-    self%b = 1._R_P
+    self%a(1) = -1.0_R_P
+    self%b = 1.0_R_P
   case(2)
-    self%a(1) = 1._R_P/3._R_P
-    self%a(2) = -4._R_P/3._R_P
-    self%b = 2._R_P/3._R_P
+    self%a(1) = 1.0_R_P/3.0_R_P
+    self%a(2) = -4.0_R_P/3.0_R_P
+    self%b = 2.0_R_P/3.0_R_P
   case(3)
-    self%a(1) = -2._R_P/11._R_P
-    self%a(2) = 9._R_P/11._R_P
-    self%a(3) = -18._R_P/11._R_P
-    self%b = 6._R_P/11._R_P
+    self%a(1) = -2.0_R_P/11.0_R_P
+    self%a(2) = 9.0_R_P/11.0_R_P
+    self%a(3) = -18.0_R_P/11.0_R_P
+    self%b = 6.0_R_P/11.0_R_P
   case(4)
-    self%a(1) = 3._R_P/25._R_P
-    self%a(2) = -16._R_P/25._R_P
-    self%a(3) = 36._R_P/25._R_P
-    self%a(4) = -48._R_P/25._R_P
-    self%b = 12._R_P/25._R_P
+    self%a(1) = 3.0_R_P/25.0_R_P
+    self%a(2) = -16.0_R_P/25.0_R_P
+    self%a(3) = 36.0_R_P/25.0_R_P
+    self%a(4) = -48.0_R_P/25.0_R_P
+    self%b = 12.0_R_P/25.0_R_P
   case(5)
-    self%a(1) = -12._R_P/137._R_P
-    self%a(2) = 75._R_P/137._R_P
-    self%a(3) = -200._R_P/137._R_P
-    self%a(4) = 300._R_P/137._R_P
-    self%a(5) = -300._R_P/137._R_P
-    self%b = 60._R_P/137._R_P
+    self%a(1) = -12.0_R_P/137.0_R_P
+    self%a(2) = 75.0_R_P/137.0_R_P
+    self%a(3) = -200.0_R_P/137.0_R_P
+    self%a(4) = 300.0_R_P/137.0_R_P
+    self%a(5) = -300.0_R_P/137.0_R_P
+    self%b = 60.0_R_P/137.0_R_P
   case(6)
-    self%a(1) = 10._R_P/147._R_P
-    self%a(2) = -72._R_P/147._R_P
-    self%a(3) = 225._R_P/147._R_P
-    self%a(4) = -400._R_P/147._R_P
-    self%a(5) = 450._R_P/147._R_P
-    self%a(6) = -360._R_P/147._R_P
-    self%b = 60._R_P/147._R_P
+    self%a(1) = 10.0_R_P/147.0_R_P
+    self%a(2) = -72.0_R_P/147.0_R_P
+    self%a(3) = 225.0_R_P/147.0_R_P
+    self%a(4) = -400.0_R_P/147.0_R_P
+    self%a(5) = 450.0_R_P/147.0_R_P
+    self%a(6) = -360.0_R_P/147.0_R_P
+    self%b = 60.0_R_P/147.0_R_P
+  case default
+    ! bad (unsupported) number of required time steps
+    self%error = 1
   endselect
   return
   !---------------------------------------------------------------------------------------------------------------------------------
@@ -123,9 +131,10 @@ contains
   !---------------------------------------------------------------------------------------------------------------------------------
 
   !---------------------------------------------------------------------------------------------------------------------------------
-  self%steps = -1
+  self%steps = 1
   if (allocated(self%a)) deallocate(self%a)
-  self%b = -0._R_P
+  self%b = 0.0_R_P
+  self%error = 0
   return
   !---------------------------------------------------------------------------------------------------------------------------------
   endsubroutine destroy

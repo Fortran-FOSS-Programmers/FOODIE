@@ -68,11 +68,10 @@ FOODIE is aimed to be a KISS-pure-Fortran library for integrating Ordinary Diffe
     + [ ] easy building and porting on heterogeneous architectures;
 + [ ] comprehensive solvers set out-of-the-box:
     + [x] explicit schemes:
-        + [x] [Adams-Bashforth](http://fortran-foss-programmers.github.io/FOODIE/module/foodie_integrator_adams_bashforth.html) schemes see [7]:
+        + [x] [Adams-Bashforth](http://fortran-foss-programmers.github.io/FOODIE/module/foodie_integrator_adams_bashforth.html) schemes see [7, 12]:
             + [x] 1 step, namely the forward explicit Euler scheme, 1st order accurate;
-            + [x] 2 steps, 2nd accurate;
-            + [x] 3 steps, 3rd accurate;
-        + [x] [Euler](http://fortran-foss-programmers.github.io/FOODIE/module/foodie_integrator_euler_explicit.html) scheme, 1st order accurate;
+            + [x] 2 to 16 steps, 2nd to 16th accurate, respectively;
+        + [x] [Euler](http://fortran-foss-programmers.github.io/FOODIE/module/foodie_integrator_euler_explicit.html) (forward explicit) scheme, 1st order accurate;
         + [x] [Leapfrog](http://fortran-foss-programmers.github.io/FOODIE/module/foodie_integrator_leapfrog.html), 2nd order accurate:
             + [x] unfiltered leapfrog, 2nd order accurate, mostly unstable, see [4];
             + [x] Robert-Asselin filtered leapfrog, 1st order accurate, see [4, 5, 6];
@@ -96,13 +95,24 @@ FOODIE is aimed to be a KISS-pure-Fortran library for integrating Ordinary Diffe
                 + [ ] 4 stages;
                 + [x] 5 stages, 4th order accurate;
             + [ ] [embedded (adaptive)](http://fortran-foss-programmers.github.io/FOODIE/module/foodie_integrator_emd_runge_kutta.html) schemes:
+                + [x] Heun-Euler, 2 stages, 2nd order accurate;
                 + [ ] Runge-Kutta-Fehlberg, 5 stages, 4th order accurate;
-                + [ ] Runge-Kutta-Cash-Karp, 5 stages, 4th order accurate;
+                + [x] Runge-Kutta-Cash-Karp, 6 stages, 5th order accurate, see [13];
                 + [x] Prince-Dormand, 7 stages, 4th order accurate, see [11];
+                + [x] Calvo, 9 stages, 6th order accurate, see [14];
+                + [x] Feagin, 17 stages, 10th order accurate, see [15];
     + [ ] implicit schemes:
         + [ ] Runge-Kutta schemes;
+        + [x] [Adams-Moulton](http://fortran-foss-programmers.github.io/FOODIE/module/foodie_integrator_adams_moulton.html) schemes:
+            + [x] 0 step, 1st order accurate;
+            + [x] 1 step, 2nd accurate;
+            + [x] 2 steps, 3rd accurate;
+            + [x] 3 steps, 4th accurate;
+        + [x] [Backward Differentiation Formula](http://fortran-foss-programmers.github.io/FOODIE/module/foodie_integrator_backward_differentiation_formula.html) schemes:
+            + [x] 1 step, namely the backward implicit Euler scheme, 1st order accurate;
+            + [x] 2 to 6 steps, 2nd to 6th accurate, respectively;
     + [ ] predictor-corrector schemes:
-        + [x] Adams-Bashforth-Moulton schemes:
+        + [x] [Adams-Bashforth-Moulton](http://fortran-foss-programmers.github.io/FOODIE/module/foodie_integrator_adams_bashforth_moulton.html) schemes:
             + [x] 1 step, AB(1)-AM(0), 1st order accurate;
             + [x] 2 steps, AB(2)-AM(1), 2nd accurate;
             + [x] 3 steps, AB(3)-AM(2), 3rd accurate;
@@ -146,6 +156,14 @@ Any feature request is welcome.
 [10] *Efficient low-storage Runge–Kutta schemes with optimized stability regions*, Jens Niegemann and Richard Diehl and Kurt Busch, Journal of Computational Physics, vol. 231, 2012, pp. 364--372.
 
 [11] *A family of embedded Runge-Kutta formulae*, Dormand, J. R.; Prince, P. J. (1980), , Journal of Computational and Applied Mathematics 6 (1): 19--26, doi:10.1016/0771-050X(80)90013-3.
+
+[12] *Cowell Type Numerical Integration As Applied to Satellite Orbit Computation*, J. L. Maury Jr., G. P. Segal, X-553-69-46, April 1969, [NASA-TM-X-63542](http://ntrs.nasa.gov/archive/nasa/casi.ntrs.nasa.gov/19690017325.pdf).
+
+[13] *A variable order Runge-Kutta method for initial value problems with rapidly varying right-hand sides*, J. R. Cash, A. H. Karp, ACM Transactions on Mathematical Software, vol. 16,  pp. 201--222, 1990, doi:10.1145/79505.79507.
+
+[14] *A New Embedded Pair of Runge-Kutta Formulas of orders 5 and 6*, M. Calvo, J.I. Montijano, L. Randez, Computers & Mathematics with Applications, Volume 20, Issue 1, 1990, Pages 15--24, ISSN 0898-1221, http://dx.doi.org/10.1016/0898-1221(90)90064-Q.
+
+[15] *A tenth-order Runge-Kutta method with error estimate*, Feagin, T., Proceedings of the IAENG Conf. on Scientific Computing. 2007.
 
 Go to [Top](#top)
 
