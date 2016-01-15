@@ -150,6 +150,12 @@
           
           <a class="list-group-item" href="../type/euler_explicit_integrator.html#boundprocedure-integrate%7E6">integrate</a>
           
+          <a class="list-group-item" href="../type/euler_explicit_integrator.html#boundprocedure-min_stages_steps">min_stages_steps</a>
+          
+          <a class="list-group-item" href="../type/euler_explicit_integrator.html#boundprocedure-max_stages_steps">max_stages_steps</a>
+          
+          <a class="list-group-item" href="../type/euler_explicit_integrator.html#boundprocedure-is_supported%7E6">is_supported</a>
+          
         </div>
     </div>
   </div>
@@ -177,7 +183,7 @@
           
           <a class="list-group-item" href="../type/adams_moulton_integrator.html">adams_moulton_integrator</a>
           
-          <a class="list-group-item" href="../type/bdf_integrator.html">bdf_integrator</a>
+          <a class="list-group-item" href="../type/back_df_integrator.html">back_df_integrator</a>
           
           <a class="list-group-item" href="../type/burgers.html">burgers</a>
           
@@ -204,6 +210,8 @@
           <a class="list-group-item" href="../type/ls_runge_kutta_integrator.html">ls_runge_kutta_integrator</a>
           
           <a class="list-group-item" href="../type/oscillation.html">oscillation</a>
+          
+          <a class="list-group-item" href="../type/oscillation_test.html">oscillation_test</a>
           
           <a class="list-group-item" href="../type/pyplot.html">pyplot</a>
           
@@ -363,6 +371,206 @@ private subroutine <a href='../proc/integrate%7E6.html'>integrate</a>(U, Dt, t)
 </div>
 
     
+	   
+<div class="panel panel-default">
+  <div class="panel-heading codesum"><span class="anchor" id="boundprocedure-min_stages_steps"></span><h3>procedure, public, nopass :: <strong>min_stages_steps</strong>  
+    
+  </h3></div>
+  
+  <div class="panel-body">
+    
+
+
+    <p>Return the minimum number of stages/steps supported.</p>
+  </div>
+  
+  <ul class="list-group">
+    
+      <li class="list-group-item">
+      
+         
+    
+    <h3>
+private elemental function <a href='../proc/min_stages_steps.html'>min_stages_steps</a>()
+    
+    
+    
+</h3>
+    
+    <h4>Arguments</h4>
+    
+      <em>None</em>
+    
+    
+
+  
+  
+  
+  
+     <h4>Return Value <small>integer(kind=I_P)
+  </small></h4>
+  <p>Minimum number of stages/steps supported.</p>
+    
+    
+    <h4>Description</h4>
+       
+       
+
+
+       
+       <p>Return the minimum number of stages/steps supported.</p>
+        
+
+      
+      </li>
+    
+  </ul>
+</div>
+
+    
+	   
+<div class="panel panel-default">
+  <div class="panel-heading codesum"><span class="anchor" id="boundprocedure-max_stages_steps"></span><h3>procedure, public, nopass :: <strong>max_stages_steps</strong>  
+    
+  </h3></div>
+  
+  <div class="panel-body">
+    
+
+
+    <p>Return the maximum number of stages/steps supported.</p>
+  </div>
+  
+  <ul class="list-group">
+    
+      <li class="list-group-item">
+      
+         
+    
+    <h3>
+private elemental function <a href='../proc/max_stages_steps.html'>max_stages_steps</a>()
+    
+    
+    
+</h3>
+    
+    <h4>Arguments</h4>
+    
+      <em>None</em>
+    
+    
+
+  
+  
+  
+  
+     <h4>Return Value <small>integer(kind=I_P)
+  </small></h4>
+  <p>Maximum number of stages/steps supported.</p>
+    
+    
+    <h4>Description</h4>
+       
+       
+
+
+       
+       <p>Return the maximum number of stages/steps supported.</p>
+        
+
+      
+      </li>
+    
+  </ul>
+</div>
+
+    
+	   
+<div class="panel panel-default">
+  <div class="panel-heading codesum"><span class="anchor" id="boundprocedure-is_supported%7E6"></span><h3>procedure, public, nopass :: <strong>is_supported</strong>  
+    
+  </h3></div>
+  
+  <div class="panel-body">
+    
+
+
+    <p>Check if the queried number of stages/steps is supported or not.</p>
+  </div>
+  
+  <ul class="list-group">
+    
+      <li class="list-group-item">
+      
+         
+    
+    <h3>
+private elemental function <a href='../proc/is_supported%7E6.html'>is_supported</a>(stages_steps)
+    
+    
+    
+</h3>
+    
+    <h4>Arguments</h4>
+    
+      
+      
+<table class="table table-striped varlist">
+<thead><tr><th>Type</th>
+<th>Intent</th><th>Optional</th>
+<th>Attributes</th><th></th><th>Name</th><th></th></thead>
+
+
+
+<tbody>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>integer(kind=I_P),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>stages_steps</strong></td><td><p>Number of stages/steps used.</p></td>
+  
+</tr>
+
+</tbody>
+</table>
+
+      
+    
+    
+
+  
+  
+  
+  
+     <h4>Return Value <small>logical
+  </small></h4>
+  <p>Is true is the stages number is in <em>supported_stages_steps</em>.</p>
+    
+    
+    <h4>Description</h4>
+       
+       
+
+
+       
+       <p>Check if the queried number of stages/steps is supported or not.</p>
+        
+
+      
+      </li>
+    
+  </ul>
+</div>
+
+    
     </section>
     
     
@@ -373,8 +581,13 @@ private subroutine <a href='../proc/integrate%7E6.html'>integrate</a>(U, Dt, t)
   <span class="c">!&lt; FOODIE integrator: provide an explicit Euler scheme, it being 1st order accurate.</span>
   <span class="c">!&lt;</span>
   <span class="c">!&lt; @note The integrator can be used directly without any initialization.</span>
-  <span class="k">contains</span>
-<span class="k">    procedure</span><span class="p">,</span> <span class="k">nopass</span><span class="p">,</span> <span class="k">public</span> <span class="kd">::</span> <span class="n">integrate</span> <span class="c">!&lt; Integrate integrand field.</span>
+  <span class="k">private</span>
+<span class="k">  contains</span>
+<span class="k">    private</span>
+<span class="k">    procedure</span><span class="p">,</span> <span class="k">nopass</span><span class="p">,</span> <span class="k">public</span> <span class="kd">::</span> <span class="n">integrate</span>        <span class="c">!&lt; Integrate integrand field.</span>
+    <span class="k">procedure</span><span class="p">,</span> <span class="k">nopass</span><span class="p">,</span> <span class="k">public</span> <span class="kd">::</span> <span class="n">min_stages_steps</span> <span class="c">!&lt; Return the minimum number of stages/steps supported.</span>
+    <span class="k">procedure</span><span class="p">,</span> <span class="k">nopass</span><span class="p">,</span> <span class="k">public</span> <span class="kd">::</span> <span class="n">max_stages_steps</span> <span class="c">!&lt; Return the maximum number of stages/steps supported.</span>
+    <span class="k">procedure</span><span class="p">,</span> <span class="k">nopass</span><span class="p">,</span> <span class="k">public</span> <span class="kd">::</span> <span class="n">is_supported</span>     <span class="c">!&lt; Check if the queried number of stages/steps is supported or not.</span>
 <span class="n">endtype</span> <span class="n">euler_explicit_integrator</span>
 </pre></div>
 

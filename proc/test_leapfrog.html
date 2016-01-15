@@ -104,14 +104,14 @@
      
     
     
-    <li><i class="fa fa-code"></i><a href="../src/oscillation.f90"> Source File</a></li>
+    <li><i class="fa fa-code"></i><a href="../src/burgers.f90"> Source File</a></li>
      
   </ul>
   <ol class="breadcrumb in-well text-right">
   
-     <li><a href='../sourcefile/oscillation.f90.html'>oscillation.f90</a></li>
+     <li><a href='../sourcefile/burgers.f90.html'>burgers.f90</a></li>
   
-     <li><a href='../program/integrate_oscillation.html'>integrate_oscillation</a></li>
+     <li><a href='../program/integrate_burgers.html'>integrate_burgers</a></li>
   
      <li class="active">test_leapfrog</li>
   </ol>
@@ -133,11 +133,23 @@
     <div id="vars" class="panel-collapse collapse">
       <div class="list-group">
         
-        <a class="list-group-item" href="../proc/test_leapfrog.html#variable-solution%7E10">solution</a>
+        <a class="list-group-item" href="../proc/test_leapfrog.html#variable-rk_integrator%7E2">rk_integrator</a>
         
-        <a class="list-group-item" href="../proc/test_leapfrog.html#variable-output%7E16">output</a>
+        <a class="list-group-item" href="../proc/test_leapfrog.html#variable-rk_stages%7E2">rk_stages</a>
         
-        <a class="list-group-item" href="../proc/test_leapfrog.html#variable-title%7E8">title</a>
+        <a class="list-group-item" href="../proc/test_leapfrog.html#variable-rk_stage%7E3">rk_stage</a>
+        
+        <a class="list-group-item" href="../proc/test_leapfrog.html#variable-filter%7E3">filter</a>
+        
+        <a class="list-group-item" href="../proc/test_leapfrog.html#variable-lf_integrator%7E3">lf_integrator</a>
+        
+        <a class="list-group-item" href="../proc/test_leapfrog.html#variable-previous%7E14">previous</a>
+        
+        <a class="list-group-item" href="../proc/test_leapfrog.html#variable-dt%7E9">dt</a>
+        
+        <a class="list-group-item" href="../proc/test_leapfrog.html#variable-t%7E39">t</a>
+        
+        <a class="list-group-item" href="../proc/test_leapfrog.html#variable-step%7E3">step</a>
         
       </div>
     </div>
@@ -185,10 +197,6 @@
           
           <a class="list-group-item" href="../proc/a%7E5.html">a</a>
           
-          <a class="list-group-item" href="../proc/ab_solver.html">ab_solver</a>
-          
-          <a class="list-group-item" href="../proc/abm_solver.html">abm_solver</a>
-          
           <a class="list-group-item" href="../proc/add.html">add</a>
           
           <a class="list-group-item" href="../proc/add_3d_plot.html">add_3d_plot</a>
@@ -217,8 +225,6 @@
           
           <a class="list-group-item" href="../proc/add_str.html">add_str</a>
           
-          <a class="list-group-item" href="../proc/am_solver.html">am_solver</a>
-          
           <a class="list-group-item" href="../proc/assign_cla.html">assign_cla</a>
           
           <a class="list-group-item" href="../proc/assign_clasg.html">assign_clasg</a>
@@ -230,8 +236,6 @@
           <a class="list-group-item" href="../proc/assign_object.html">assign_object</a>
           
           <a class="list-group-item" href="../proc/average_solution.html">average_solution</a>
-          
-          <a class="list-group-item" href="../proc/bdf_solver.html">bdf_solver</a>
           
           <a class="list-group-item" href="../proc/burgers_assign_burgers.html">burgers_assign_burgers</a>
           
@@ -261,8 +265,6 @@
           
           <a class="list-group-item" href="../proc/check_required_clasg.html">check_required_clasg</a>
           
-          <a class="list-group-item" href="../proc/compute_amplitude_phase.html">compute_amplitude_phase</a>
-          
           <a class="list-group-item" href="../proc/compute_dt.html">compute_dt</a>
           
           <a class="list-group-item" href="../proc/compute_dt%7E2.html">compute_dt</a>
@@ -274,8 +276,6 @@
           <a class="list-group-item" href="../proc/compute_dt%7E5.html">compute_dt</a>
           
           <a class="list-group-item" href="../proc/compute_dt%7E6.html">compute_dt</a>
-          
-          <a class="list-group-item" href="../proc/compute_errors.html">compute_errors</a>
           
           <a class="list-group-item" href="../proc/compute_inter_states.html">compute_inter_states</a>
           
@@ -371,11 +371,9 @@
           
           <a class="list-group-item" href="../proc/e%7E5.html">E</a>
           
-          <a class="list-group-item" href="../proc/emd_rk_solver.html">emd_rk_solver</a>
+          <a class="list-group-item" href="../proc/error_l2.html">error_L2</a>
           
           <a class="list-group-item" href="../proc/errored.html">errored</a>
-          
-          <a class="list-group-item" href="../proc/estimate_orders.html">estimate_orders</a>
           
           <a class="list-group-item" href="../proc/euler_assign_euler.html">euler_assign_euler</a>
           
@@ -411,11 +409,11 @@
           
           <a class="list-group-item" href="../proc/euler_multiply_real%7E3.html">euler_multiply_real</a>
           
-          <a class="list-group-item" href="../proc/euler_solver.html">euler_solver</a>
-          
-          <a class="list-group-item" href="../proc/exact_solution.html">exact_solution</a>
+          <a class="list-group-item" href="../proc/exact_solution_xy.html">exact_solution_xy</a>
           
           <a class="list-group-item" href="../proc/execute.html">execute</a>
+          
+          <a class="list-group-item" href="../proc/execute%7E2.html">execute</a>
           
           <a class="list-group-item" href="../proc/finalize.html">finalize</a>
           
@@ -625,7 +623,11 @@
           
           <a class="list-group-item" href="../proc/is_supported%7E6.html">is_supported</a>
           
-          <a class="list-group-item" href="../proc/leapfrog_solver.html">leapfrog_solver</a>
+          <a class="list-group-item" href="../proc/is_supported%7E7.html">is_supported</a>
+          
+          <a class="list-group-item" href="../proc/is_supported%7E8.html">is_supported</a>
+          
+          <a class="list-group-item" href="../proc/is_supported%7E9.html">is_supported</a>
           
           <a class="list-group-item" href="../proc/lorenz_assign_lorenz.html">lorenz_assign_lorenz</a>
           
@@ -637,11 +639,47 @@
           
           <a class="list-group-item" href="../proc/lorenz_multiply_real.html">lorenz_multiply_real</a>
           
-          <a class="list-group-item" href="../proc/ls_rk_solver.html">ls_rk_solver</a>
-          
           <a class="list-group-item" href="../proc/matrix_to_string.html">matrix_to_string</a>
           
+          <a class="list-group-item" href="../proc/max_stages.html">max_stages</a>
+          
+          <a class="list-group-item" href="../proc/max_stages%7E2.html">max_stages</a>
+          
+          <a class="list-group-item" href="../proc/max_stages%7E3.html">max_stages</a>
+          
+          <a class="list-group-item" href="../proc/max_stages_steps.html">max_stages_steps</a>
+          
+          <a class="list-group-item" href="../proc/max_steps.html">max_steps</a>
+          
+          <a class="list-group-item" href="../proc/max_steps%7E2.html">max_steps</a>
+          
+          <a class="list-group-item" href="../proc/max_steps%7E3.html">max_steps</a>
+          
+          <a class="list-group-item" href="../proc/max_steps%7E4.html">max_steps</a>
+          
+          <a class="list-group-item" href="../proc/max_steps%7E5.html">max_steps</a>
+          
+          <a class="list-group-item" href="../proc/min_stages.html">min_stages</a>
+          
+          <a class="list-group-item" href="../proc/min_stages%7E2.html">min_stages</a>
+          
+          <a class="list-group-item" href="../proc/min_stages%7E3.html">min_stages</a>
+          
+          <a class="list-group-item" href="../proc/min_stages_steps.html">min_stages_steps</a>
+          
+          <a class="list-group-item" href="../proc/min_steps.html">min_steps</a>
+          
+          <a class="list-group-item" href="../proc/min_steps%7E2.html">min_steps</a>
+          
+          <a class="list-group-item" href="../proc/min_steps%7E3.html">min_steps</a>
+          
+          <a class="list-group-item" href="../proc/min_steps%7E4.html">min_steps</a>
+          
+          <a class="list-group-item" href="../proc/min_steps%7E5.html">min_steps</a>
+          
           <a class="list-group-item" href="../proc/new_dt.html">new_Dt</a>
+          
+          <a class="list-group-item" href="../proc/observed_order.html">observed_order</a>
           
           <a class="list-group-item" href="../proc/optional_int_to_string.html">optional_int_to_string</a>
           
@@ -687,8 +725,6 @@
           
           <a class="list-group-item" href="../proc/passed_clasg.html">passed_clasg</a>
           
-          <a class="list-group-item" href="../proc/perform_errors_analysis.html">perform_errors_analysis</a>
-          
           <a class="list-group-item" href="../proc/previous_step.html">previous_step</a>
           
           <a class="list-group-item" href="../proc/previous_step%7E2.html">previous_step</a>
@@ -704,8 +740,6 @@
           <a class="list-group-item" href="../proc/primitive2conservative%7E4.html">primitive2conservative</a>
           
           <a class="list-group-item" href="../proc/primitive2conservative%7E5.html">primitive2conservative</a>
-          
-          <a class="list-group-item" href="../proc/print_analysis.html">print_analysis</a>
           
           <a class="list-group-item" href="../proc/print_usage.html">print_usage</a>
           
@@ -791,6 +825,8 @@
           
           <a class="list-group-item" href="../proc/signature_clasg.html">signature_clasg</a>
           
+          <a class="list-group-item" href="../proc/solve.html">solve</a>
+          
           <a class="list-group-item" href="../proc/sub_burgers.html">sub_burgers</a>
           
           <a class="list-group-item" href="../proc/sub_euler.html">sub_euler</a>
@@ -811,21 +847,13 @@
           
           <a class="list-group-item" href="../proc/synchronize%7E4.html">synchronize</a>
           
+          <a class="list-group-item" href="../proc/test.html">test</a>
+          
           <a class="list-group-item" href="../proc/test_ab.html">test_ab</a>
           
           <a class="list-group-item" href="../proc/test_ab%7E2.html">test_ab</a>
           
           <a class="list-group-item" href="../proc/test_ab%7E3.html">test_ab</a>
-          
-          <a class="list-group-item" href="../proc/test_ab%7E4.html">test_ab</a>
-          
-          <a class="list-group-item" href="../proc/test_abm.html">test_abm</a>
-          
-          <a class="list-group-item" href="../proc/test_am.html">test_am</a>
-          
-          <a class="list-group-item" href="../proc/test_bdf.html">test_bdf</a>
-          
-          <a class="list-group-item" href="../proc/test_emd_rk.html">test_emd_rk</a>
           
           <a class="list-group-item" href="../proc/test_euler.html">test_euler</a>
           
@@ -833,15 +861,11 @@
           
           <a class="list-group-item" href="../proc/test_euler%7E3.html">test_euler</a>
           
-          <a class="list-group-item" href="../proc/test_euler%7E4.html">test_euler</a>
-          
           <a class="list-group-item" href="../proc/test_leapfrog.html">test_leapfrog</a>
           
           <a class="list-group-item" href="../proc/test_leapfrog%7E2.html">test_leapfrog</a>
           
           <a class="list-group-item" href="../proc/test_leapfrog%7E3.html">test_leapfrog</a>
-          
-          <a class="list-group-item" href="../proc/test_leapfrog%7E4.html">test_leapfrog</a>
           
           <a class="list-group-item" href="../proc/test_ls_rk.html">test_ls_rk</a>
           
@@ -849,21 +873,15 @@
           
           <a class="list-group-item" href="../proc/test_ls_rk%7E3.html">test_ls_rk</a>
           
-          <a class="list-group-item" href="../proc/test_ls_rk%7E4.html">test_ls_rk</a>
-          
           <a class="list-group-item" href="../proc/test_tvd_rk.html">test_tvd_rk</a>
           
           <a class="list-group-item" href="../proc/test_tvd_rk%7E2.html">test_tvd_rk</a>
           
           <a class="list-group-item" href="../proc/test_tvd_rk%7E3.html">test_tvd_rk</a>
           
-          <a class="list-group-item" href="../proc/test_tvd_rk%7E4.html">test_tvd_rk</a>
-          
           <a class="list-group-item" href="../proc/tokenize.html">tokenize</a>
           
           <a class="list-group-item" href="../proc/tokenize%7E2.html">tokenize</a>
-          
-          <a class="list-group-item" href="../proc/tvd_rk_solver.html">tvd_rk_solver</a>
           
           <a class="list-group-item" href="../proc/update_previous.html">update_previous</a>
           
@@ -885,6 +903,8 @@
           
           <a class="list-group-item" href="../proc/usage_clasg.html">usage_clasg</a>
           
+          <a class="list-group-item" href="../proc/used_registers.html">used_registers</a>
+          
           <a class="list-group-item" href="../proc/vec_to_string.html">vec_to_string</a>
           
           <a class="list-group-item" href="../interface/weno_constructor_upwind.html">weno_constructor_upwind</a>
@@ -901,7 +921,7 @@
     
     <div class="col-lg-9" id='text'>
     <h2>
-subroutine test_leapfrog(raw)
+subroutine test_leapfrog()
     
     
     
@@ -913,34 +933,7 @@ subroutine test_leapfrog(raw)
 
     <h3>Arguments</h3>
     
-      
-<table class="table table-striped varlist">
-<thead><tr><th>Type</th>
-<th>Intent</th><th>Optional</th>
-<th>Attributes</th><th></th><th>Name</th><th></th></thead>
-
-
-
-<tbody>
-
-  
-  
-  
-  
-<tr>
-  
-  <td><span class="anchor" id="variable-raw"></span>logical,</td>
-  <td>intent(in),</td>
-  <td>optional</td>
-  
-  <td></td><td>::</td>
-  <td><strong>raw</strong></td><td><p>Activate RAW filter.</p></td>
-  
-</tr>
-
-</tbody>
-</table>
-
+      <em>None</em>
     
     
     
@@ -956,105 +949,37 @@ subroutine test_leapfrog(raw)
 <!-- Generated by graphviz version 2.26.3 (20100126.1600)
  -->
 <!-- Title: proc~~test_leapfrog~~CallsGraph Pages: 1 -->
-<svg id="proctest_leapfrogCallsGraph" width="384pt" height="166pt"
- viewBox="0.00 0.00 384.00 166.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-<g id="proc~~test_leapfrog~~CallsGraph" class="graph" transform="scale(1 1) rotate(0) translate(4 162)">
+<svg id="proctest_leapfrogCallsGraph" width="194pt" height="78pt"
+ viewBox="0.00 0.00 194.00 78.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="proc~~test_leapfrog~~CallsGraph" class="graph" transform="scale(1 1) rotate(0) translate(4 74)">
 <title>proc~~test_leapfrog~~CallsGraph</title>
-<polygon fill="white" stroke="white" points="-4,5 -4,-162 381,-162 381,5 -4,5"/>
+<polygon fill="white" stroke="white" points="-4,5 -4,-74 191,-74 191,5 -4,5"/>
 <!-- proc~test_leapfrog -->
 <g id="node1" class="node"><title>proc~test_leapfrog</title>
-<polygon fill="none" stroke="black" points="75,-92 1,-92 1,-66 75,-66 75,-92"/>
-<text text-anchor="middle" x="38" y="-76.55" font-family="Helvetica,sans-Serif" font-size="10.50">test_leapfrog</text>
+<polygon fill="none" stroke="black" points="75,-48 1,-48 1,-22 75,-22 75,-48"/>
+<text text-anchor="middle" x="38" y="-32.55" font-family="Helvetica,sans-Serif" font-size="10.50">test_leapfrog</text>
 </g>
-<!-- proc~init~9 -->
-<g id="node2" class="node"><title>proc~init~9</title>
-<a xlink:href="../proc/init%7E9.html" xlink:title="init">
-<polygon fill="#d9534f" stroke="#d9534f" points="182,-114 128,-114 128,-88 182,-88 182,-114"/>
-<text text-anchor="middle" x="155" y="-98.55" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">init</text>
+<!-- proc~save_results~6 -->
+<g id="node2" class="node"><title>proc~save_results~6</title>
+<a xlink:href="../proc/save_results%7E6.html" xlink:title="save_results">
+<polygon fill="#d9534f" stroke="#d9534f" points="185,-70 113,-70 113,-44 185,-44 185,-70"/>
+<text text-anchor="middle" x="149" y="-54.55" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">save_results</text>
 </a>
 </g>
-<!-- proc~test_leapfrog&#45;&gt;proc~init~9 -->
-<g id="edge12" class="edge"><title>proc~test_leapfrog&#45;&gt;proc~init~9</title>
-<path fill="none" stroke="black" d="M75.6636,-86.082C89.1848,-88.6245 104.414,-91.4882 117.888,-94.0217"/>
-<polygon fill="black" stroke="black" points="117.318,-97.4757 127.792,-95.884 118.611,-90.5963 117.318,-97.4757"/>
+<!-- proc~test_leapfrog&#45;&gt;proc~save_results~6 -->
+<g id="edge2" class="edge"><title>proc~test_leapfrog&#45;&gt;proc~save_results~6</title>
+<path fill="none" stroke="black" d="M75.5795,-42.4482C84.1705,-44.1509 93.4033,-45.9808 102.324,-47.7489"/>
+<polygon fill="black" stroke="black" points="101.722,-51.1977 112.212,-49.7087 103.083,-44.3312 101.722,-51.1977"/>
 </g>
 <!-- str -->
 <g id="node3" class="node"><title>str</title>
-<polygon fill="#777777" stroke="#777777" points="332,-158 278,-158 278,-132 332,-132 332,-158"/>
-<text text-anchor="middle" x="305" y="-142.55" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">str</text>
+<polygon fill="#777777" stroke="#777777" points="176,-26 122,-26 122,-1.24345e-14 176,-3.55271e-15 176,-26"/>
+<text text-anchor="middle" x="149" y="-10.55" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">str</text>
 </g>
 <!-- proc~test_leapfrog&#45;&gt;str -->
-<g id="edge14" class="edge"><title>proc~test_leapfrog&#45;&gt;str</title>
-<path fill="none" stroke="black" d="M55.2056,-92.1146C69.5793,-102.335 91.0367,-115.937 112,-123 164.074,-140.544 228.046,-144.668 267.674,-145.347"/>
-<polygon fill="black" stroke="black" points="267.652,-148.847 277.689,-145.454 267.727,-141.847 267.652,-148.847"/>
-</g>
-<!-- proc~save_results -->
-<g id="node4" class="node"><title>proc~save_results</title>
-<a xlink:href="../proc/save_results.html" xlink:title="save_results">
-<polygon fill="#d9534f" stroke="#d9534f" points="191,-70 119,-70 119,-44 191,-44 191,-70"/>
-<text text-anchor="middle" x="155" y="-54.55" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">save_results</text>
-</a>
-</g>
-<!-- proc~test_leapfrog&#45;&gt;proc~save_results -->
-<g id="edge16" class="edge"><title>proc~test_leapfrog&#45;&gt;proc~save_results</title>
-<path fill="none" stroke="black" d="M75.6636,-71.918C85.9908,-69.9761 97.3146,-67.8468 108.092,-65.8204"/>
-<polygon fill="black" stroke="black" points="109.025,-69.2062 118.206,-63.9185 107.732,-62.3268 109.025,-69.2062"/>
-</g>
-<!-- proc~leapfrog_solver -->
-<g id="node5" class="node"><title>proc~leapfrog_solver</title>
-<a xlink:href="../proc/leapfrog_solver.html" xlink:title="leapfrog_solver">
-<polygon fill="#d9534f" stroke="#d9534f" points="198,-26 112,-26 112,-1.24345e-14 198,-3.55271e-15 198,-26"/>
-<text text-anchor="middle" x="155" y="-10.55" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">leapfrog_solver</text>
-</a>
-</g>
-<!-- proc~test_leapfrog&#45;&gt;proc~leapfrog_solver -->
-<g id="edge18" class="edge"><title>proc~test_leapfrog&#45;&gt;proc~leapfrog_solver</title>
-<path fill="none" stroke="black" d="M59.1648,-65.9298C73.852,-56.98 93.945,-44.9733 112,-35 114.395,-33.6772 116.877,-32.3342 119.387,-30.9977"/>
-<polygon fill="black" stroke="black" points="121.247,-33.9744 128.481,-26.2338 117.999,-27.7736 121.247,-33.9744"/>
-</g>
-<!-- proc~init~9&#45;&gt;str -->
-<g id="edge2" class="edge"><title>proc~init~9&#45;&gt;str</title>
-<path fill="none" stroke="black" d="M182.164,-108.968C206.194,-116.017 241.47,-126.365 268.061,-134.164"/>
-<polygon fill="black" stroke="black" points="267.204,-137.561 277.785,-137.017 269.175,-130.844 267.204,-137.561"/>
-</g>
-<!-- strz -->
-<g id="node6" class="node"><title>strz</title>
-<polygon fill="#777777" stroke="#777777" points="332,-114 278,-114 278,-88 332,-88 332,-114"/>
-<text text-anchor="middle" x="305" y="-98.55" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">strz</text>
-</g>
-<!-- proc~init~9&#45;&gt;strz -->
-<g id="edge4" class="edge"><title>proc~init~9&#45;&gt;strz</title>
-<path fill="none" stroke="black" d="M182.164,-101C206.089,-101 241.159,-101 267.709,-101"/>
-<polygon fill="black" stroke="black" points="267.785,-104.5 277.785,-101 267.785,-97.5001 267.785,-104.5"/>
-</g>
-<!-- proc~exact_solution -->
-<g id="node9" class="node"><title>proc~exact_solution</title>
-<a xlink:href="../proc/exact_solution.html" xlink:title="exact_solution">
-<polygon fill="#d94e8f" stroke="#d94e8f" points="345,-70 265,-70 265,-44 345,-44 345,-70"/>
-<text text-anchor="middle" x="305" y="-54.55" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">exact_solution</text>
-</a>
-</g>
-<!-- proc~save_results&#45;&gt;proc~exact_solution -->
-<g id="edge6" class="edge"><title>proc~save_results&#45;&gt;proc~exact_solution</title>
-<path fill="none" stroke="black" d="M191.694,-57C210.54,-57 233.797,-57 254.327,-57"/>
-<polygon fill="black" stroke="black" points="254.465,-60.5001 264.465,-57 254.465,-53.5001 254.465,-60.5001"/>
-</g>
-<!-- proc~compute_amplitude_phase -->
-<g id="node10" class="node"><title>proc~compute_amplitude_phase</title>
-<a xlink:href="../proc/compute_amplitude_phase.html" xlink:title="compute_amplitude_phase">
-<polygon fill="#d94e8f" stroke="#d94e8f" points="376,-26 234,-26 234,-1.24345e-14 376,-3.55271e-15 376,-26"/>
-<text text-anchor="middle" x="305" y="-10.55" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">compute_amplitude_phase</text>
-</a>
-</g>
-<!-- proc~save_results&#45;&gt;proc~compute_amplitude_phase -->
-<g id="edge8" class="edge"><title>proc~save_results&#45;&gt;proc~compute_amplitude_phase</title>
-<path fill="none" stroke="black" d="M191.694,-46.2364C209.501,-41.0129 231.247,-34.6342 250.909,-28.8667"/>
-<polygon fill="black" stroke="black" points="252.057,-32.1776 260.667,-26.0043 250.086,-25.4606 252.057,-32.1776"/>
-</g>
-<!-- proc~leapfrog_solver&#45;&gt;proc~compute_amplitude_phase -->
-<g id="edge10" class="edge"><title>proc~leapfrog_solver&#45;&gt;proc~compute_amplitude_phase</title>
-<path fill="none" stroke="black" d="M198.386,-13C206.346,-13 214.888,-13 223.546,-13"/>
-<polygon fill="black" stroke="black" points="223.734,-16.5001 233.734,-13 223.734,-9.5001 223.734,-16.5001"/>
+<g id="edge4" class="edge"><title>proc~test_leapfrog&#45;&gt;str</title>
+<path fill="none" stroke="black" d="M75.5795,-27.5518C87.3516,-25.2186 100.329,-22.6466 112.056,-20.3221"/>
+<polygon fill="black" stroke="black" points="112.851,-23.7329 121.979,-18.3554 111.49,-16.8665 112.851,-23.7329"/>
 </g>
 </g>
 </svg>
@@ -1159,27 +1084,27 @@ implementation in a submodule of an interface in a parent module.</p>
 <!-- Generated by graphviz version 2.26.3 (20100126.1600)
  -->
 <!-- Title: proc~~test_leapfrog~~CalledByGraph Pages: 1 -->
-<svg id="proctest_leapfrogCalledByGraph" width="228pt" height="34pt"
- viewBox="0.00 0.00 228.00 34.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<svg id="proctest_leapfrogCalledByGraph" width="218pt" height="34pt"
+ viewBox="0.00 0.00 218.00 34.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
 <g id="proc~~test_leapfrog~~CalledByGraph" class="graph" transform="scale(1 1) rotate(0) translate(4 30)">
 <title>proc~~test_leapfrog~~CalledByGraph</title>
-<polygon fill="white" stroke="white" points="-4,5 -4,-30 225,-30 225,5 -4,5"/>
+<polygon fill="white" stroke="white" points="-4,5 -4,-30 215,-30 215,5 -4,5"/>
 <!-- proc~test_leapfrog -->
 <g id="node1" class="node"><title>proc~test_leapfrog</title>
-<polygon fill="none" stroke="black" points="219,-26 145,-26 145,-1.24345e-14 219,-3.55271e-15 219,-26"/>
-<text text-anchor="middle" x="182" y="-10.55" font-family="Helvetica,sans-Serif" font-size="10.50">test_leapfrog</text>
+<polygon fill="none" stroke="black" points="209,-26 135,-26 135,-1.24345e-14 209,-3.55271e-15 209,-26"/>
+<text text-anchor="middle" x="172" y="-10.55" font-family="Helvetica,sans-Serif" font-size="10.50">test_leapfrog</text>
 </g>
-<!-- program~integrate_oscillation -->
-<g id="node2" class="node"><title>program~integrate_oscillation</title>
-<a xlink:href="../program/integrate_oscillation.html" xlink:title="integrate_oscillation">
-<polygon fill="#f0ad4e" stroke="#f0ad4e" points="107,-26 1,-26 1,-1.24345e-14 107,-3.55271e-15 107,-26"/>
-<text text-anchor="middle" x="54" y="-10.55" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">integrate_oscillation</text>
+<!-- program~integrate_burgers -->
+<g id="node2" class="node"><title>program~integrate_burgers</title>
+<a xlink:href="../program/integrate_burgers.html" xlink:title="integrate_burgers">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="97,-26 1,-26 1,-1.24345e-14 97,-3.55271e-15 97,-26"/>
+<text text-anchor="middle" x="49" y="-10.55" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">integrate_burgers</text>
 </a>
 </g>
-<!-- program~integrate_oscillation&#45;&gt;proc~test_leapfrog -->
-<g id="edge2" class="edge"><title>program~integrate_oscillation&#45;&gt;proc~test_leapfrog</title>
-<path fill="none" stroke="black" d="M107.542,-13C116.309,-13 125.344,-13 133.967,-13"/>
-<polygon fill="black" stroke="black" points="134.234,-16.5001 144.234,-13 134.234,-9.5001 134.234,-16.5001"/>
+<!-- program~integrate_burgers&#45;&gt;proc~test_leapfrog -->
+<g id="edge2" class="edge"><title>program~integrate_burgers&#45;&gt;proc~test_leapfrog</title>
+<path fill="none" stroke="black" d="M97.6129,-13C106.397,-13 115.548,-13 124.306,-13"/>
+<polygon fill="black" stroke="black" points="124.36,-16.5001 134.36,-13 124.36,-9.5001 124.36,-16.5001"/>
 </g>
 </g>
 </svg>
@@ -1295,25 +1220,11 @@ implementation in a submodule of an interface in a parent module.</p>
   
 <tr>
   
-  <td><span class="anchor" id="variable-solution%7E10"></span>real(kind=R_P),</td>
+  <td><span class="anchor" id="variable-rk_integrator%7E2"></span>type(<a href='../type/tvd_runge_kutta_integrator%7E3.html'>tvd_runge_kutta_integrator</a>),</td>
   
-  <td>public,</td>
-  <td>allocatable</td><td>::</td>
-  <td><strong>solution</strong>(:,:)</td><td></td><td></td><td><p>Solution at each time step.</p></td>
-  
-</tr>
-
-  
-  
-  
-  
-<tr>
-  
-  <td><span class="anchor" id="variable-output%7E16"></span>character(len=:),</td>
-  
-  <td>public,</td>
-  <td>allocatable</td><td>::</td>
-  <td><strong>output</strong></td><td></td><td></td><td><p>Output files basename.</p></td>
+  <td>public</td>
+  <td></td><td>::</td>
+  <td><strong>rk_integrator</strong></td><td></td><td></td><td><p>Runge-Kutta integrator.</p></td>
   
 </tr>
 
@@ -1323,11 +1234,109 @@ implementation in a submodule of an interface in a parent module.</p>
   
 <tr>
   
-  <td><span class="anchor" id="variable-title%7E8"></span>character(len=:),</td>
+  <td><span class="anchor" id="variable-rk_stages%7E2"></span>integer,</td>
   
   <td>public,</td>
-  <td>allocatable</td><td>::</td>
-  <td><strong>title</strong></td><td></td><td></td><td><p>Output files title.</p></td>
+  <td>parameter</td><td>::</td>
+  <td><strong>rk_stages</strong></td><td> =</td><td>2</td><td><p>Runge-Kutta stages number.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-rk_stage%7E3"></span>type(<a href='../type/burgers.html'>burgers</a>),</td>
+  
+  <td>public</td>
+  <td></td><td>::</td>
+  <td><strong>rk_stage</strong>(1:rk_stages)</td><td></td><td></td><td><p>Runge-Kutta stages.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-filter%7E3"></span>type(<a href='../type/burgers.html'>burgers</a>),</td>
+  
+  <td>public</td>
+  <td></td><td>::</td>
+  <td><strong>filter</strong></td><td></td><td></td><td><p>Filter displacement.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-lf_integrator%7E3"></span>type(<a href='../type/leapfrog_integrator.html'>leapfrog_integrator</a>),</td>
+  
+  <td>public</td>
+  <td></td><td>::</td>
+  <td><strong>lf_integrator</strong></td><td></td><td></td><td><p>Leapfrog integrator.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-previous%7E14"></span>type(<a href='../type/burgers.html'>burgers</a>),</td>
+  
+  <td>public</td>
+  <td></td><td>::</td>
+  <td><strong>previous</strong>(1:2)</td><td></td><td></td><td><p>Previous time steps solutions.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-dt%7E9"></span>real(kind=R_P),</td>
+  
+  <td>public</td>
+  <td></td><td>::</td>
+  <td><strong>dt</strong></td><td></td><td></td><td><p>Time step.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-t%7E39"></span>real(kind=R_P),</td>
+  
+  <td>public</td>
+  <td></td><td>::</td>
+  <td><strong>t</strong></td><td></td><td></td><td><p>Time.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-step%7E3"></span>integer,</td>
+  
+  <td>public</td>
+  <td></td><td>::</td>
+  <td><strong>step</strong></td><td></td><td></td><td><p>Time steps counter.</p></td>
   
 </tr>
 
@@ -1354,23 +1363,43 @@ implementation in a submodule of an interface in a parent module.</p>
     
     <section>
     <h2><span class="anchor" id="src"></span>Source Code</h2>
-    <div class="highlight"><pre>  <span class="k">subroutine </span><span class="n">test_leapfrog</span><span class="p">(</span><span class="n">raw</span><span class="p">)</span>
+    <div class="highlight"><pre>  <span class="k">subroutine </span><span class="n">test_leapfrog</span><span class="p">()</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
   <span class="c">!&lt; Test explicit leapfrog class of ODE solvers.</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
-  <span class="kt">logical</span><span class="p">,</span> <span class="k">optional</span><span class="p">,</span> <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span> <span class="kd">::</span> <span class="n">raw</span>           <span class="c">!&lt; Activate RAW filter.</span>
-  <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">),</span> <span class="k">allocatable</span>        <span class="kd">::</span> <span class="n">solution</span><span class="p">(:,:)</span> <span class="c">!&lt; Solution at each time step.</span>
-  <span class="kt">character</span><span class="p">(</span><span class="nb">len</span><span class="o">=</span><span class="p">:),</span> <span class="k">allocatable</span> <span class="kd">::</span> <span class="n">output</span>        <span class="c">!&lt; Output files basename.</span>
-  <span class="kt">character</span><span class="p">(</span><span class="nb">len</span><span class="o">=</span><span class="p">:),</span> <span class="k">allocatable</span> <span class="kd">::</span> <span class="n">title</span>         <span class="c">!&lt; Output files title.</span>
+  <span class="k">type</span><span class="p">(</span><span class="n">tvd_runge_kutta_integrator</span><span class="p">)</span> <span class="kd">::</span> <span class="n">rk_integrator</span>         <span class="c">!&lt; Runge-Kutta integrator.</span>
+  <span class="kt">integer</span><span class="p">,</span> <span class="k">parameter</span>               <span class="kd">::</span> <span class="n">rk_stages</span><span class="o">=</span><span class="mi">2</span>           <span class="c">!&lt; Runge-Kutta stages number.</span>
+  <span class="k">type</span><span class="p">(</span><span class="n">burgers</span><span class="p">)</span>                    <span class="kd">::</span> <span class="n">rk_stage</span><span class="p">(</span><span class="mi">1</span><span class="p">:</span><span class="n">rk_stages</span><span class="p">)</span> <span class="c">!&lt; Runge-Kutta stages.</span>
+  <span class="k">type</span><span class="p">(</span><span class="n">burgers</span><span class="p">)</span>                    <span class="kd">::</span> <span class="n">filter</span>                <span class="c">!&lt; Filter displacement.</span>
+  <span class="k">type</span><span class="p">(</span><span class="n">leapfrog_integrator</span><span class="p">)</span>        <span class="kd">::</span> <span class="n">lf_integrator</span>         <span class="c">!&lt; Leapfrog integrator.</span>
+  <span class="k">type</span><span class="p">(</span><span class="n">burgers</span><span class="p">)</span>                    <span class="kd">::</span> <span class="n">previous</span><span class="p">(</span><span class="mi">1</span><span class="p">:</span><span class="mi">2</span><span class="p">)</span>         <span class="c">!&lt; Previous time steps solutions.</span>
+  <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">)</span>                        <span class="kd">::</span> <span class="n">dt</span>                    <span class="c">!&lt; Time step.</span>
+  <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">)</span>                        <span class="kd">::</span> <span class="n">t</span>                     <span class="c">!&lt; Time.</span>
+  <span class="kt">integer</span>                          <span class="kd">::</span> <span class="n">step</span>                  <span class="c">!&lt; Time steps counter.</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
 
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
-  <span class="n">solver</span> <span class="o">=</span> <span class="s1">&#39;leapfrog&#39;</span>
-  <span class="k">call </span><span class="n">init</span><span class="p">(</span><span class="n">output</span><span class="o">=</span><span class="n">output</span><span class="p">,</span> <span class="n">solution</span><span class="o">=</span><span class="n">solution</span><span class="p">)</span>
-  <span class="k">print</span> <span class="s2">&quot;(A)&quot;</span><span class="p">,</span> <span class="s1">&#39;Integrating Oscillation equations by means of leapfrog (RAW filtered) class of solvers&#39;</span>
-  <span class="n">title</span> <span class="o">=</span> <span class="s1">&#39;Oscillation equation integration, leapfrog (RAW filtered), t=&#39;</span><span class="o">//</span><span class="n">str</span><span class="p">(</span><span class="n">n</span><span class="o">=</span><span class="n">t_final</span><span class="p">)</span>
-  <span class="k">call </span><span class="n">leapfrog_solver</span><span class="p">(</span><span class="n">solution</span><span class="o">=</span><span class="n">solution</span><span class="p">,</span> <span class="n">raw</span><span class="o">=</span><span class="n">raw</span><span class="p">)</span>
-  <span class="k">call </span><span class="n">save_results</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="n">title</span><span class="p">,</span> <span class="n">basename</span><span class="o">=</span><span class="n">output</span><span class="p">,</span> <span class="n">solution</span><span class="o">=</span><span class="n">solution</span><span class="p">)</span>
+  <span class="k">print</span> <span class="s2">&quot;(A)&quot;</span><span class="p">,</span> <span class="s1">&#39;Integrating Burgers equation by means of leapfrog (RAW filtered) class of solvers&#39;</span>
+  <span class="k">call </span><span class="n">lf_integrator</span><span class="p">%</span><span class="n">init</span><span class="p">(</span><span class="n">nu</span><span class="o">=</span><span class="mf">1.0_R_P</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0._R_P</span><span class="p">)</span>
+  <span class="k">call </span><span class="n">rk_integrator</span><span class="p">%</span><span class="n">init</span><span class="p">(</span><span class="n">stages</span><span class="o">=</span><span class="n">rk_stages</span><span class="p">)</span>
+  <span class="k">call </span><span class="n">domain</span><span class="p">%</span><span class="n">init</span><span class="p">(</span><span class="n">initial_state</span><span class="o">=</span><span class="n">initial_state</span><span class="p">,</span> <span class="n">Ni</span><span class="o">=</span><span class="n">Ni</span><span class="p">,</span> <span class="n">h</span><span class="o">=</span><span class="n">h</span><span class="p">,</span> <span class="n">nu</span><span class="o">=</span><span class="n">nu</span><span class="p">,</span> <span class="n">steps</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+  <span class="n">dt</span> <span class="o">=</span> <span class="n">domain</span><span class="p">%</span><span class="n">dt</span><span class="p">(</span><span class="n">CFL</span><span class="o">=</span><span class="n">CFL</span><span class="p">)</span>
+  <span class="n">t</span> <span class="o">=</span> <span class="mf">0._R_P</span>
+  <span class="n">step</span> <span class="o">=</span> <span class="mi">1</span>
+  <span class="k">do while</span><span class="p">(</span><span class="n">t</span><span class="o">&lt;</span><span class="n">t_final</span><span class="p">)</span>
+    <span class="k">if</span> <span class="p">(</span><span class="mi">2</span><span class="o">&gt;=</span><span class="n">step</span><span class="p">)</span> <span class="k">then</span>
+      <span class="c">! the time steps from 1 to 2 must be computed with other scheme...</span>
+      <span class="k">call </span><span class="n">rk_integrator</span><span class="p">%</span><span class="n">integrate</span><span class="p">(</span><span class="n">U</span><span class="o">=</span><span class="n">domain</span><span class="p">,</span> <span class="n">stage</span><span class="o">=</span><span class="n">rk_stage</span><span class="p">,</span> <span class="n">dt</span><span class="o">=</span><span class="n">dt</span><span class="p">,</span> <span class="n">t</span><span class="o">=</span><span class="n">t</span><span class="p">)</span>
+      <span class="n">previous</span><span class="p">(</span><span class="n">step</span><span class="p">)</span> <span class="o">=</span> <span class="n">domain</span>
+    <span class="k">else</span>
+<span class="k">      call </span><span class="n">lf_integrator</span><span class="p">%</span><span class="n">integrate</span><span class="p">(</span><span class="n">U</span><span class="o">=</span><span class="n">domain</span><span class="p">,</span> <span class="n">previous</span><span class="o">=</span><span class="n">previous</span><span class="p">,</span> <span class="n">dt</span><span class="o">=</span><span class="n">dt</span><span class="p">,</span> <span class="n">t</span><span class="o">=</span><span class="n">t</span><span class="p">,</span> <span class="n">filter</span><span class="o">=</span><span class="n">filter</span><span class="p">)</span>
+    <span class="n">endif</span>
+    <span class="n">t</span> <span class="o">=</span> <span class="n">t</span> <span class="o">+</span> <span class="n">dt</span>
+    <span class="n">step</span> <span class="o">=</span> <span class="n">step</span> <span class="o">+</span> <span class="mi">1</span>
+  <span class="n">enddo</span>
+  <span class="n">final_state</span> <span class="o">=</span> <span class="n">domain</span><span class="p">%</span><span class="n">output</span><span class="p">()</span>
+  <span class="k">call </span><span class="n">save_results</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s1">&#39;FOODIE test: Burgers equation integration, t=&#39;</span><span class="o">//</span><span class="n">str</span><span class="p">(</span><span class="n">n</span><span class="o">=</span><span class="n">t_final</span><span class="p">)</span><span class="o">//</span><span class="s1">&#39; explicit leapfrog scheme&#39;</span><span class="p">,&amp;</span>
+                    <span class="n">filename</span><span class="o">=</span><span class="s1">&#39;burgers_integration-lf-RAW-filter&#39;</span><span class="p">)</span>
   <span class="k">print</span> <span class="s2">&quot;(A)&quot;</span><span class="p">,</span> <span class="s1">&#39;Finish!&#39;</span>
   <span class="k">return</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>

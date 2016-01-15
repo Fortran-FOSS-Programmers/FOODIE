@@ -57,6 +57,8 @@ module foodie_integrator_emd_runge_kutta
 !<
 !< The different schemes are selected accordingly to the number of stages used. Currently the following schemes are available:
 !<
+!< @bug Presently, the 2 stages Heun-Euler seems to not work, **do not use it**.
+!<
 !<##### 2 stages, 2th order
 !< This scheme is due to Heun-Euler.
 !<```
@@ -267,7 +269,7 @@ module foodie_integrator_emd_runge_kutta
 
 !-----------------------------------------------------------------------------------------------------------------------------------
 use foodie_adt_integrand, only : integrand
-use foodie_kinds, only : R_P, I_P
+use foodie_kinds, only : I_P, R_P
 use foodie_utils, only : is_admissible
 !-----------------------------------------------------------------------------------------------------------------------------------
 
@@ -278,7 +280,9 @@ public :: emd_runge_kutta_integrator
 !-----------------------------------------------------------------------------------------------------------------------------------
 
 !-----------------------------------------------------------------------------------------------------------------------------------
-character(len=99), parameter :: supported_stages='2,6,7,9,17' !< List of supported stages number. Valid format is `1-2,4,9-23...`.
+character(len=99), parameter :: supported_stages='6,7,9,17' !< List of supported stages number. Valid format is `1-2,4,9-23...`.
+integer(I_P),      parameter :: min_ss=6                    !< Minimum number of stages supported.
+integer(I_P),      parameter :: max_ss=17                   !< Maximum number of stages supported.
 
 type :: emd_runge_kutta_integrator
   !< FOODIE integrator: provide an explicit class of TVD or SSP Runge-Kutta schemes, from 1st to 4th order accurate.
@@ -288,6 +292,7 @@ type :: emd_runge_kutta_integrator
   !< ### List of errors status
   !<+ error=0 => no error;
   !<+ error=1 => bad (unsupported) number of required stages;
+  private
   real(R_P)              :: tolerance=0._R_P !< Tolerance on the local truncation error.
   real(R_P)              :: pp1_inv=0._R_P   !< 1/(p+1) where p is the accuracy order of the lower accurate scheme of the pair.
   integer(I_P)           :: stages=0         !< Number of stages.
@@ -296,9 +301,12 @@ type :: emd_runge_kutta_integrator
   real(R_P), allocatable :: gamm(:)          !< \(\gamma\) Butcher's coefficients.
   integer(I_P)           :: error=0          !< Error status flag: trap occurrences of errors.
   contains
+    private
     procedure, pass(self), public  :: init         !< Initialize (create) the integrator.
     procedure, pass(self), public  :: destroy      !< Destroy the integrator.
     procedure, pass(self), public  :: integrate    !< Integrate integrand field.
+    procedure, nopass,     public  :: min_stages   !< Return the minimum number of stages supported.
+    procedure, nopass,     public  :: max_stages   !< Return the maximum number of stages supported.
     procedure, nopass,     public  :: is_supported !< Check if the queried number of stages is supported or not.
     procedure, pass(self), private :: new_Dt       !< Compute new estimation of the time step Dt.
     final                          :: finalize     !< Finalize object.
@@ -327,7 +335,7 @@ contains
     if (allocated(self%alph)) deallocate(self%alph) ; allocate(self%alph(1:stages, 1:stages)) ; self%alph = 0._R_P
     if (allocated(self%gamm)) deallocate(self%gamm) ; allocate(self%gamm(          1:stages)) ; self%gamm = 0._R_P
     select case(stages)
-    case(2)
+    case(2) ! do not use, seems to not work!
       ! HERK(2,2)
       self%pp1_inv = 1._R_P/(2._R_P + 1._R_P)
 
@@ -630,6 +638,32 @@ contains
   return
   !---------------------------------------------------------------------------------------------------------------------------------
   endsubroutine integrate
+
+  elemental function min_stages()
+  !---------------------------------------------------------------------------------------------------------------------------------
+  !< Return the minimum number of stages supported.
+  !---------------------------------------------------------------------------------------------------------------------------------
+  integer(I_P) :: min_stages !< Minimum number of stages supported.
+  !---------------------------------------------------------------------------------------------------------------------------------
+
+  !---------------------------------------------------------------------------------------------------------------------------------
+  min_stages = min_ss
+  return
+  !---------------------------------------------------------------------------------------------------------------------------------
+  endfunction min_stages
+
+  elemental function max_stages()
+  !---------------------------------------------------------------------------------------------------------------------------------
+  !< Return the maximum number of stages supported.
+  !---------------------------------------------------------------------------------------------------------------------------------
+  integer(I_P) :: max_stages !< Maximum number of stages supported.
+  !---------------------------------------------------------------------------------------------------------------------------------
+
+  !---------------------------------------------------------------------------------------------------------------------------------
+  max_stages = max_ss
+  return
+  !---------------------------------------------------------------------------------------------------------------------------------
+  endfunction max_stages
 
   elemental function is_supported(stages)
   !---------------------------------------------------------------------------------------------------------------------------------

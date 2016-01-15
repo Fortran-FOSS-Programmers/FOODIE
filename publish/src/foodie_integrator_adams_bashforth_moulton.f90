@@ -79,7 +79,7 @@ module foodie_integrator_adams_bashforth_moulton
 
 !-----------------------------------------------------------------------------------------------------------------------------------
 use foodie_adt_integrand, only : integrand
-use foodie_kinds, only : R_P, I_P
+use foodie_kinds, only : I_P, R_P
 use foodie_integrator_adams_bashforth, only : adams_bashforth_integrator
 use foodie_integrator_adams_moulton, only : adams_moulton_integrator
 use foodie_utils, only : is_admissible
@@ -93,6 +93,8 @@ public :: adams_bashforth_moulton_integrator
 
 !-----------------------------------------------------------------------------------------------------------------------------------
 character(len=99), parameter :: supported_steps='1-16' !< List of supported steps number. Valid format is `1-2,4,9-23...`.
+integer(I_P),      parameter :: min_ss=1               !< Minimum number of steps supported.
+integer(I_P),      parameter :: max_ss=16              !< Maximum number of steps supported.
 
 type :: adams_bashforth_moulton_integrator
   !< FOODIE integrator: provide an explicit class of Adams-Bashforth-Moulton multi-step schemes, from 1st to 4rd order accurate.
@@ -108,9 +110,12 @@ type :: adams_bashforth_moulton_integrator
   type(adams_moulton_integrator)   :: corrector !< Corrector solver.
   integer(I_P)                     :: error=0   !< Error status flag: trap occurrences of errors.
   contains
+    private
     procedure, pass(self), public :: init         !< Initialize (create) the integrator.
     procedure, pass(self), public :: destroy      !< Destroy the integrator.
     procedure, pass(self), public :: integrate    !< Integrate integrand field.
+    procedure, nopass,     public :: min_steps    !< Return the minimum number of steps supported.
+    procedure, nopass,     public :: max_steps    !< Return the maximum number of steps supported.
     procedure, nopass,     public :: is_supported !< Check if the queried number of steps is supported or not.
     final                         :: finalize     !< Finalize object.
 endtype adams_bashforth_moulton_integrator
@@ -174,6 +179,32 @@ contains
   return
   !---------------------------------------------------------------------------------------------------------------------------------
   endsubroutine integrate
+
+  elemental function min_steps()
+  !---------------------------------------------------------------------------------------------------------------------------------
+  !< Return the minimum number of steps supported.
+  !---------------------------------------------------------------------------------------------------------------------------------
+  integer(I_P) :: min_steps !< Minimum number of steps supported.
+  !---------------------------------------------------------------------------------------------------------------------------------
+
+  !---------------------------------------------------------------------------------------------------------------------------------
+  min_steps = min_ss
+  return
+  !---------------------------------------------------------------------------------------------------------------------------------
+  endfunction min_steps
+
+  elemental function max_steps()
+  !---------------------------------------------------------------------------------------------------------------------------------
+  !< Return the maximum number of steps supported.
+  !---------------------------------------------------------------------------------------------------------------------------------
+  integer(I_P) :: max_steps !< Maximum number of steps supported.
+  !---------------------------------------------------------------------------------------------------------------------------------
+
+  !---------------------------------------------------------------------------------------------------------------------------------
+  max_steps = max_ss
+  return
+  !---------------------------------------------------------------------------------------------------------------------------------
+  endfunction max_steps
 
   elemental function is_supported(steps)
   !---------------------------------------------------------------------------------------------------------------------------------

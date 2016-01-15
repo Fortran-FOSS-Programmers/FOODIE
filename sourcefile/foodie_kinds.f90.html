@@ -210,6 +210,8 @@
           
           <a class="list-group-item" href="../sourcefile/oscillation.f90.html">oscillation.f90</a>
           
+          <a class="list-group-item" href="../sourcefile/oscillation_t.f90.html">oscillation_t.f90</a>
+          
           <a class="list-group-item" href="../sourcefile/pyplot_module.f90.html">pyplot_module.f90</a>
           
           <a class="list-group-item" href="../sourcefile/test.f90.html">test.f90</a>
@@ -240,8 +242,6 @@
           
           <a class="list-group-item" href="../sourcefile/type_lorenz.f90.html">type_lorenz.f90</a>
           
-          <a class="list-group-item" href="../sourcefile/type_oscillation.f90.html">type_oscillation.f90</a>
-          
           <a class="list-group-item" href="../sourcefile/type_weno_interpolator.f90.html">type_weno_interpolator.f90</a>
           
           <a class="list-group-item" href="../sourcefile/type_weno_interpolator_upwind.f90.html">type_weno_interpolator_upwind.f90</a>
@@ -269,25 +269,25 @@
 <a name="ln-7"></a><span class="c">!-----------------------------------------------------------------------------------------------------------------------------------</span>
 <a name="ln-8"></a><span class="k">implicit none</span>
 <a name="ln-9"></a><span class="k">private</span>
-<a name="ln-10"></a><span class="k">public</span><span class="kd">::</span> <span class="n">R8P</span>
-<a name="ln-11"></a><span class="k">public</span><span class="kd">::</span> <span class="n">R4P</span>
-<a name="ln-12"></a><span class="k">public</span><span class="kd">::</span> <span class="n">R_P</span>
-<a name="ln-13"></a><span class="k">public</span><span class="kd">::</span> <span class="n">I8P</span>
-<a name="ln-14"></a><span class="k">public</span><span class="kd">::</span> <span class="n">I4P</span>
-<a name="ln-15"></a><span class="k">public</span><span class="kd">::</span> <span class="n">I2P</span>
-<a name="ln-16"></a><span class="k">public</span><span class="kd">::</span> <span class="n">I1P</span>
-<a name="ln-17"></a><span class="k">public</span><span class="kd">::</span> <span class="n">I_P</span>
+<a name="ln-10"></a><span class="k">public</span> <span class="kd">::</span> <span class="n">R8P</span>
+<a name="ln-11"></a><span class="k">public</span> <span class="kd">::</span> <span class="n">R4P</span>
+<a name="ln-12"></a><span class="k">public</span> <span class="kd">::</span> <span class="n">R_P</span>
+<a name="ln-13"></a><span class="k">public</span> <span class="kd">::</span> <span class="n">I8P</span>
+<a name="ln-14"></a><span class="k">public</span> <span class="kd">::</span> <span class="n">I4P</span>
+<a name="ln-15"></a><span class="k">public</span> <span class="kd">::</span> <span class="n">I2P</span>
+<a name="ln-16"></a><span class="k">public</span> <span class="kd">::</span> <span class="n">I1P</span>
+<a name="ln-17"></a><span class="k">public</span> <span class="kd">::</span> <span class="n">I_P</span>
 <a name="ln-18"></a><span class="c">!-----------------------------------------------------------------------------------------------------------------------------------</span>
 <a name="ln-19"></a>
 <a name="ln-20"></a><span class="c">!-----------------------------------------------------------------------------------------------------------------------------------</span>
-<a name="ln-21"></a><span class="kt">integer</span><span class="p">,</span> <span class="k">parameter</span><span class="kd">::</span> <span class="n">R8P</span>  <span class="o">=</span> <span class="nb">selected_real_kind</span><span class="p">(</span><span class="mi">15</span><span class="p">,</span><span class="mi">307</span><span class="p">)</span>  <span class="c">!&lt; 15  digits, range \([10^{-307} , 10^{+307}  - 1]\); 64 bits.</span>
-<a name="ln-22"></a><span class="kt">integer</span><span class="p">,</span> <span class="k">parameter</span><span class="kd">::</span> <span class="n">R4P</span>  <span class="o">=</span> <span class="nb">selected_real_kind</span><span class="p">(</span><span class="mi">6</span><span class="p">,</span><span class="mi">37</span><span class="p">)</span>    <span class="c">!&lt; 6   digits, range \([10^{-37}  , 10^{+37}   - 1]\); 32 bits.</span>
-<a name="ln-23"></a><span class="kt">integer</span><span class="p">,</span> <span class="k">parameter</span><span class="kd">::</span> <span class="n">R_P</span>  <span class="o">=</span> <span class="n">R8P</span>                         <span class="c">!&lt; Default real precision.</span>
-<a name="ln-24"></a><span class="kt">integer</span><span class="p">,</span> <span class="k">parameter</span><span class="kd">::</span> <span class="n">I8P</span>  <span class="o">=</span> <span class="nb">selected_int_kind</span><span class="p">(</span><span class="mi">18</span><span class="p">)</span>       <span class="c">!&lt; Range \([-2^{63},+2^{63} - 1]\), 19 digits plus sign; 64 bits.</span>
-<a name="ln-25"></a><span class="kt">integer</span><span class="p">,</span> <span class="k">parameter</span><span class="kd">::</span> <span class="n">I4P</span>  <span class="o">=</span> <span class="nb">selected_int_kind</span><span class="p">(</span><span class="mi">9</span><span class="p">)</span>        <span class="c">!&lt; Range \([-2^{31},+2^{31} - 1]\), 10 digits plus sign; 32 bits.</span>
-<a name="ln-26"></a><span class="kt">integer</span><span class="p">,</span> <span class="k">parameter</span><span class="kd">::</span> <span class="n">I2P</span>  <span class="o">=</span> <span class="nb">selected_int_kind</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span>        <span class="c">!&lt; Range \([-2^{15},+2^{15} - 1]\), 5  digits plus sign; 16 bits.</span>
-<a name="ln-27"></a><span class="kt">integer</span><span class="p">,</span> <span class="k">parameter</span><span class="kd">::</span> <span class="n">I1P</span>  <span class="o">=</span> <span class="nb">selected_int_kind</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>        <span class="c">!&lt; Range \([-2^{7} ,+2^{7}  - 1]\), 3  digits plus sign; 8  bits.</span>
-<a name="ln-28"></a><span class="kt">integer</span><span class="p">,</span> <span class="k">parameter</span><span class="kd">::</span> <span class="n">I_P</span>  <span class="o">=</span> <span class="n">I4P</span>                         <span class="c">!&lt; Default integer precision.</span>
+<a name="ln-21"></a><span class="kt">integer</span><span class="p">,</span> <span class="k">parameter</span> <span class="kd">::</span> <span class="n">R8P</span>  <span class="o">=</span> <span class="nb">selected_real_kind</span><span class="p">(</span><span class="mi">15</span><span class="p">,</span><span class="mi">307</span><span class="p">)</span>  <span class="c">!&lt; 15  digits, range \([10^{-307} , 10^{+307}  - 1]\); 64 bits.</span>
+<a name="ln-22"></a><span class="kt">integer</span><span class="p">,</span> <span class="k">parameter</span> <span class="kd">::</span> <span class="n">R4P</span>  <span class="o">=</span> <span class="nb">selected_real_kind</span><span class="p">(</span><span class="mi">6</span><span class="p">,</span><span class="mi">37</span><span class="p">)</span>    <span class="c">!&lt; 6   digits, range \([10^{-37}  , 10^{+37}   - 1]\); 32 bits.</span>
+<a name="ln-23"></a><span class="kt">integer</span><span class="p">,</span> <span class="k">parameter</span> <span class="kd">::</span> <span class="n">R_P</span>  <span class="o">=</span> <span class="n">R8P</span>                         <span class="c">!&lt; Default real precision.</span>
+<a name="ln-24"></a><span class="kt">integer</span><span class="p">,</span> <span class="k">parameter</span> <span class="kd">::</span> <span class="n">I8P</span>  <span class="o">=</span> <span class="nb">selected_int_kind</span><span class="p">(</span><span class="mi">18</span><span class="p">)</span>       <span class="c">!&lt; Range \([-2^{63},+2^{63} - 1]\), 19 digits plus sign; 64 bits.</span>
+<a name="ln-25"></a><span class="kt">integer</span><span class="p">,</span> <span class="k">parameter</span> <span class="kd">::</span> <span class="n">I4P</span>  <span class="o">=</span> <span class="nb">selected_int_kind</span><span class="p">(</span><span class="mi">9</span><span class="p">)</span>        <span class="c">!&lt; Range \([-2^{31},+2^{31} - 1]\), 10 digits plus sign; 32 bits.</span>
+<a name="ln-26"></a><span class="kt">integer</span><span class="p">,</span> <span class="k">parameter</span> <span class="kd">::</span> <span class="n">I2P</span>  <span class="o">=</span> <span class="nb">selected_int_kind</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span>        <span class="c">!&lt; Range \([-2^{15},+2^{15} - 1]\), 5  digits plus sign; 16 bits.</span>
+<a name="ln-27"></a><span class="kt">integer</span><span class="p">,</span> <span class="k">parameter</span> <span class="kd">::</span> <span class="n">I1P</span>  <span class="o">=</span> <span class="nb">selected_int_kind</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>        <span class="c">!&lt; Range \([-2^{7} ,+2^{7}  - 1]\), 3  digits plus sign; 8  bits.</span>
+<a name="ln-28"></a><span class="kt">integer</span><span class="p">,</span> <span class="k">parameter</span> <span class="kd">::</span> <span class="n">I_P</span>  <span class="o">=</span> <span class="n">I4P</span>                         <span class="c">!&lt; Default integer precision.</span>
 <a name="ln-29"></a><span class="c">!-----------------------------------------------------------------------------------------------------------------------------------</span>
 <a name="ln-30"></a><span class="n">endmodule</span> <span class="n">foodie_kinds</span>
 </pre></div>

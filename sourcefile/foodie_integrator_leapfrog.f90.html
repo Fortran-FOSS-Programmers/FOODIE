@@ -210,6 +210,8 @@
           
           <a class="list-group-item" href="../sourcefile/oscillation.f90.html">oscillation.f90</a>
           
+          <a class="list-group-item" href="../sourcefile/oscillation_t.f90.html">oscillation_t.f90</a>
+          
           <a class="list-group-item" href="../sourcefile/pyplot_module.f90.html">pyplot_module.f90</a>
           
           <a class="list-group-item" href="../sourcefile/test.f90.html">test.f90</a>
@@ -239,8 +241,6 @@
           <a class="list-group-item" href="../sourcefile/type_euler-1d.f90.html">type_euler-1D.f90</a>
           
           <a class="list-group-item" href="../sourcefile/type_lorenz.f90.html">type_lorenz.f90</a>
-          
-          <a class="list-group-item" href="../sourcefile/type_oscillation.f90.html">type_oscillation.f90</a>
           
           <a class="list-group-item" href="../sourcefile/type_weno_interpolator.f90.html">type_weno_interpolator.f90</a>
           
@@ -300,75 +300,124 @@
 <a name="ln-38"></a><span class="c">!-----------------------------------------------------------------------------------------------------------------------------------</span>
 <a name="ln-39"></a>
 <a name="ln-40"></a><span class="c">!-----------------------------------------------------------------------------------------------------------------------------------</span>
-<a name="ln-41"></a><span class="k">use </span><span class="n">foodie_kinds</span><span class="p">,</span> <span class="n">only</span> <span class="p">:</span> <span class="n">R_P</span><span class="p">,</span> <span class="n">I_P</span>
-<a name="ln-42"></a><span class="k">use </span><span class="n">foodie_adt_integrand</span><span class="p">,</span> <span class="n">only</span> <span class="p">:</span> <span class="n">integrand</span>
-<a name="ln-43"></a><span class="c">!-----------------------------------------------------------------------------------------------------------------------------------</span>
-<a name="ln-44"></a>
-<a name="ln-45"></a><span class="c">!-----------------------------------------------------------------------------------------------------------------------------------</span>
-<a name="ln-46"></a><span class="k">implicit none</span>
-<a name="ln-47"></a><span class="k">private</span>
-<a name="ln-48"></a><span class="k">public</span> <span class="kd">::</span> <span class="n">leapfrog_integrator</span>
-<a name="ln-49"></a><span class="c">!-----------------------------------------------------------------------------------------------------------------------------------</span>
-<a name="ln-50"></a>
-<a name="ln-51"></a><span class="c">!-----------------------------------------------------------------------------------------------------------------------------------</span>
-<a name="ln-52"></a><span class="k">type</span> <span class="kd">::</span> <span class="n">leapfrog_integrator</span>
-<a name="ln-53"></a>  <span class="c">!&lt; FOODIE integrator: provide an explicit class of leapfrog multi-step schemes, 2nd order accurate.</span>
-<a name="ln-54"></a>  <span class="c">!&lt;</span>
-<a name="ln-55"></a>  <span class="c">!&lt; @note The integrator could be used without initialialization (initialize the time filter coefficients) if the defulat values</span>
-<a name="ln-56"></a>  <span class="c">!&lt; are suitable for the problem.</span>
-<a name="ln-57"></a>  <span class="k">private</span>
-<a name="ln-58"></a><span class="k">  </span><span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">)</span> <span class="kd">::</span> <span class="n">nu</span><span class="o">=</span><span class="mf">0.01_R_P</span>    <span class="c">!&lt; Robert-Asselin filter coefficient.</span>
-<a name="ln-59"></a>  <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">)</span> <span class="kd">::</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.53_R_P</span> <span class="c">!&lt; Robert-Asselin-Williams filter coefficient.</span>
-<a name="ln-60"></a>  <span class="k">contains</span>
-<a name="ln-61"></a><span class="k">    procedure</span><span class="p">,</span> <span class="k">pass</span><span class="p">(</span><span class="n">self</span><span class="p">),</span> <span class="k">public</span> <span class="kd">::</span> <span class="n">init</span>      <span class="c">!&lt; Initialize (create) the integrator.</span>
-<a name="ln-62"></a>    <span class="k">procedure</span><span class="p">,</span> <span class="k">pass</span><span class="p">(</span><span class="n">self</span><span class="p">),</span> <span class="k">public</span> <span class="kd">::</span> <span class="n">integrate</span> <span class="c">!&lt; Integrate integrand field.</span>
-<a name="ln-63"></a><span class="n">endtype</span> <span class="n">leapfrog_integrator</span>
-<a name="ln-64"></a><span class="c">!-----------------------------------------------------------------------------------------------------------------------------------</span>
-<a name="ln-65"></a><span class="k">contains</span>
-<a name="ln-66"></a>  <span class="c">! public methods</span>
-<a name="ln-67"></a>  <span class="k">elemental subroutine </span><span class="n">init</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">nu</span><span class="p">,</span> <span class="n">alpha</span><span class="p">)</span>
-<a name="ln-68"></a>  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
-<a name="ln-69"></a>  <span class="c">!&lt; Create the actual leapfrog integrator: initialize the filter coefficient.</span>
-<a name="ln-70"></a>  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
-<a name="ln-71"></a>  <span class="k">class</span><span class="p">(</span><span class="n">leapfrog_integrator</span><span class="p">),</span> <span class="k">intent</span><span class="p">(</span><span class="n">INOUT</span><span class="p">)</span> <span class="kd">::</span> <span class="n">self</span>  <span class="c">!&lt; LF integrator.</span>
-<a name="ln-72"></a>  <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">),</span> <span class="k">optional</span><span class="p">,</span>        <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span>    <span class="kd">::</span> <span class="n">nu</span>    <span class="c">!&lt; Williams-Robert-Asselin filter coefficient.</span>
-<a name="ln-73"></a>  <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">),</span> <span class="k">optional</span><span class="p">,</span>        <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span>    <span class="kd">::</span> <span class="n">alpha</span> <span class="c">!&lt; Robert-Asselin filter coefficient.</span>
-<a name="ln-74"></a>  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
-<a name="ln-75"></a>
-<a name="ln-76"></a>  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
-<a name="ln-77"></a>  <span class="n">self</span><span class="p">%</span><span class="n">nu</span> <span class="o">=</span> <span class="mf">0.01_R_P</span>
-<a name="ln-78"></a>  <span class="n">self</span><span class="p">%</span><span class="n">alpha</span> <span class="o">=</span> <span class="mf">0.53_R_P</span>
-<a name="ln-79"></a>  <span class="k">if</span> <span class="p">(</span><span class="nb">present</span><span class="p">(</span><span class="n">nu</span><span class="p">))</span> <span class="n">self</span><span class="p">%</span><span class="n">nu</span> <span class="o">=</span> <span class="n">nu</span>
-<a name="ln-80"></a>  <span class="k">if</span> <span class="p">(</span><span class="nb">present</span><span class="p">(</span><span class="n">alpha</span><span class="p">))</span> <span class="n">self</span><span class="p">%</span><span class="n">alpha</span> <span class="o">=</span> <span class="n">alpha</span>
-<a name="ln-81"></a>  <span class="k">return</span>
-<a name="ln-82"></a>  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
-<a name="ln-83"></a>  <span class="n">endsubroutine</span> <span class="n">init</span>
+<a name="ln-41"></a><span class="k">use </span><span class="n">foodie_adt_integrand</span><span class="p">,</span> <span class="n">only</span> <span class="p">:</span> <span class="n">integrand</span>
+<a name="ln-42"></a><span class="k">use </span><span class="n">foodie_kinds</span><span class="p">,</span> <span class="n">only</span> <span class="p">:</span> <span class="n">I_P</span><span class="p">,</span> <span class="n">R_P</span>
+<a name="ln-43"></a><span class="k">use </span><span class="n">foodie_utils</span><span class="p">,</span> <span class="n">only</span> <span class="p">:</span> <span class="n">is_admissible</span>
+<a name="ln-44"></a><span class="c">!-----------------------------------------------------------------------------------------------------------------------------------</span>
+<a name="ln-45"></a>
+<a name="ln-46"></a><span class="c">!-----------------------------------------------------------------------------------------------------------------------------------</span>
+<a name="ln-47"></a><span class="k">implicit none</span>
+<a name="ln-48"></a><span class="k">private</span>
+<a name="ln-49"></a><span class="k">public</span> <span class="kd">::</span> <span class="n">leapfrog_integrator</span>
+<a name="ln-50"></a><span class="c">!-----------------------------------------------------------------------------------------------------------------------------------</span>
+<a name="ln-51"></a>
+<a name="ln-52"></a><span class="c">!-----------------------------------------------------------------------------------------------------------------------------------</span>
+<a name="ln-53"></a><span class="kt">character</span><span class="p">(</span><span class="nb">len</span><span class="o">=</span><span class="mi">99</span><span class="p">),</span> <span class="k">parameter</span> <span class="kd">::</span> <span class="n">supported_steps</span><span class="o">=</span><span class="s1">&#39;2&#39;</span> <span class="c">!&lt; List of supported steps number. Valid format is `1-2,4,9-23...`.</span>
+<a name="ln-54"></a><span class="kt">integer</span><span class="p">(</span><span class="n">I_P</span><span class="p">),</span>      <span class="k">parameter</span> <span class="kd">::</span> <span class="n">min_ss</span><span class="o">=</span><span class="mi">2</span>            <span class="c">!&lt; Minimum number of steps supported.</span>
+<a name="ln-55"></a><span class="kt">integer</span><span class="p">(</span><span class="n">I_P</span><span class="p">),</span>      <span class="k">parameter</span> <span class="kd">::</span> <span class="n">max_ss</span><span class="o">=</span><span class="mi">2</span>            <span class="c">!&lt; Maximum number of steps supported.</span>
+<a name="ln-56"></a>
+<a name="ln-57"></a><span class="k">type</span> <span class="kd">::</span> <span class="n">leapfrog_integrator</span>
+<a name="ln-58"></a>  <span class="c">!&lt; FOODIE integrator: provide an explicit class of leapfrog multi-step schemes, 2nd order accurate.</span>
+<a name="ln-59"></a>  <span class="c">!&lt;</span>
+<a name="ln-60"></a>  <span class="c">!&lt; @note The integrator could be used without initialialization (initialize the time filter coefficients) if the defulat values</span>
+<a name="ln-61"></a>  <span class="c">!&lt; are suitable for the problem.</span>
+<a name="ln-62"></a>  <span class="k">private</span>
+<a name="ln-63"></a><span class="k">  </span><span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">)</span> <span class="kd">::</span> <span class="n">nu</span><span class="o">=</span><span class="mf">0.01_R_P</span>    <span class="c">!&lt; Robert-Asselin filter coefficient.</span>
+<a name="ln-64"></a>  <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">)</span> <span class="kd">::</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.53_R_P</span> <span class="c">!&lt; Robert-Asselin-Williams filter coefficient.</span>
+<a name="ln-65"></a>  <span class="k">contains</span>
+<a name="ln-66"></a><span class="k">    private</span>
+<a name="ln-67"></a><span class="k">    procedure</span><span class="p">,</span> <span class="k">pass</span><span class="p">(</span><span class="n">self</span><span class="p">),</span> <span class="k">public</span> <span class="kd">::</span> <span class="n">init</span>         <span class="c">!&lt; Initialize (create) the integrator.</span>
+<a name="ln-68"></a>    <span class="k">procedure</span><span class="p">,</span> <span class="k">pass</span><span class="p">(</span><span class="n">self</span><span class="p">),</span> <span class="k">public</span> <span class="kd">::</span> <span class="n">integrate</span>    <span class="c">!&lt; Integrate integrand field.</span>
+<a name="ln-69"></a>    <span class="k">procedure</span><span class="p">,</span> <span class="k">nopass</span><span class="p">,</span>     <span class="k">public</span> <span class="kd">::</span> <span class="n">min_steps</span>    <span class="c">!&lt; Return the minimum number of steps supported.</span>
+<a name="ln-70"></a>    <span class="k">procedure</span><span class="p">,</span> <span class="k">nopass</span><span class="p">,</span>     <span class="k">public</span> <span class="kd">::</span> <span class="n">max_steps</span>    <span class="c">!&lt; Return the maximum number of steps supported.</span>
+<a name="ln-71"></a>    <span class="k">procedure</span><span class="p">,</span> <span class="k">nopass</span><span class="p">,</span>     <span class="k">public</span> <span class="kd">::</span> <span class="n">is_supported</span> <span class="c">!&lt; Check if the queried number of steps is supported or not.</span>
+<a name="ln-72"></a><span class="n">endtype</span> <span class="n">leapfrog_integrator</span>
+<a name="ln-73"></a><span class="c">!-----------------------------------------------------------------------------------------------------------------------------------</span>
+<a name="ln-74"></a><span class="k">contains</span>
+<a name="ln-75"></a>  <span class="c">! public methods</span>
+<a name="ln-76"></a>  <span class="k">elemental subroutine </span><span class="n">init</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">nu</span><span class="p">,</span> <span class="n">alpha</span><span class="p">)</span>
+<a name="ln-77"></a>  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+<a name="ln-78"></a>  <span class="c">!&lt; Create the actual leapfrog integrator: initialize the filter coefficient.</span>
+<a name="ln-79"></a>  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+<a name="ln-80"></a>  <span class="k">class</span><span class="p">(</span><span class="n">leapfrog_integrator</span><span class="p">),</span> <span class="k">intent</span><span class="p">(</span><span class="n">INOUT</span><span class="p">)</span> <span class="kd">::</span> <span class="n">self</span>  <span class="c">!&lt; LF integrator.</span>
+<a name="ln-81"></a>  <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">),</span> <span class="k">optional</span><span class="p">,</span>        <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span>    <span class="kd">::</span> <span class="n">nu</span>    <span class="c">!&lt; Williams-Robert-Asselin filter coefficient.</span>
+<a name="ln-82"></a>  <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">),</span> <span class="k">optional</span><span class="p">,</span>        <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span>    <span class="kd">::</span> <span class="n">alpha</span> <span class="c">!&lt; Robert-Asselin filter coefficient.</span>
+<a name="ln-83"></a>  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
 <a name="ln-84"></a>
-<a name="ln-85"></a>  <span class="k">subroutine </span><span class="n">integrate</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">U</span><span class="p">,</span> <span class="n">previous</span><span class="p">,</span> <span class="n">Dt</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="n">filter</span><span class="p">)</span>
-<a name="ln-86"></a>  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
-<a name="ln-87"></a>  <span class="c">!&lt; Integrate field with leapfrog class scheme.</span>
-<a name="ln-88"></a>  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
-<a name="ln-89"></a>  <span class="k">class</span><span class="p">(</span><span class="n">leapfrog_integrator</span><span class="p">),</span> <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span>    <span class="kd">::</span> <span class="n">self</span>          <span class="c">!&lt; LF integrator.</span>
-<a name="ln-90"></a>  <span class="k">class</span><span class="p">(</span><span class="n">integrand</span><span class="p">),</span>           <span class="k">intent</span><span class="p">(</span><span class="n">INOUT</span><span class="p">)</span> <span class="kd">::</span> <span class="n">U</span>             <span class="c">!&lt; Field to be integrated.</span>
-<a name="ln-91"></a>  <span class="k">class</span><span class="p">(</span><span class="n">integrand</span><span class="p">),</span>           <span class="k">intent</span><span class="p">(</span><span class="n">INOUT</span><span class="p">)</span> <span class="kd">::</span> <span class="n">previous</span><span class="p">(</span><span class="mi">1</span><span class="p">:</span><span class="mi">2</span><span class="p">)</span> <span class="c">!&lt; Previous time steps solutions of integrand field.</span>
-<a name="ln-92"></a>  <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">),</span>                  <span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span>    <span class="kd">::</span> <span class="n">Dt</span>            <span class="c">!&lt; Time step.</span>
-<a name="ln-93"></a>  <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">),</span>                  <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span>    <span class="kd">::</span> <span class="n">t</span>             <span class="c">!&lt; Time.</span>
-<a name="ln-94"></a>  <span class="k">class</span><span class="p">(</span><span class="n">integrand</span><span class="p">),</span> <span class="k">optional</span><span class="p">,</span> <span class="k">intent</span><span class="p">(</span><span class="n">INOUT</span><span class="p">)</span> <span class="kd">::</span> <span class="n">filter</span>        <span class="c">!&lt; Filter field displacement.</span>
+<a name="ln-85"></a>  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+<a name="ln-86"></a>  <span class="n">self</span><span class="p">%</span><span class="n">nu</span> <span class="o">=</span> <span class="mf">0.01_R_P</span>
+<a name="ln-87"></a>  <span class="n">self</span><span class="p">%</span><span class="n">alpha</span> <span class="o">=</span> <span class="mf">0.53_R_P</span>
+<a name="ln-88"></a>  <span class="k">if</span> <span class="p">(</span><span class="nb">present</span><span class="p">(</span><span class="n">nu</span><span class="p">))</span> <span class="n">self</span><span class="p">%</span><span class="n">nu</span> <span class="o">=</span> <span class="n">nu</span>
+<a name="ln-89"></a>  <span class="k">if</span> <span class="p">(</span><span class="nb">present</span><span class="p">(</span><span class="n">alpha</span><span class="p">))</span> <span class="n">self</span><span class="p">%</span><span class="n">alpha</span> <span class="o">=</span> <span class="n">alpha</span>
+<a name="ln-90"></a>  <span class="k">return</span>
+<a name="ln-91"></a>  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+<a name="ln-92"></a>  <span class="n">endsubroutine</span> <span class="n">init</span>
+<a name="ln-93"></a>
+<a name="ln-94"></a>  <span class="k">subroutine </span><span class="n">integrate</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">U</span><span class="p">,</span> <span class="n">previous</span><span class="p">,</span> <span class="n">Dt</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="n">filter</span><span class="p">)</span>
 <a name="ln-95"></a>  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
-<a name="ln-96"></a>
+<a name="ln-96"></a>  <span class="c">!&lt; Integrate field with leapfrog class scheme.</span>
 <a name="ln-97"></a>  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
-<a name="ln-98"></a>  <span class="n">U</span> <span class="o">=</span> <span class="n">previous</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">+</span> <span class="n">previous</span><span class="p">(</span><span class="mi">2</span><span class="p">)%</span><span class="n">t</span><span class="p">(</span><span class="n">t</span><span class="o">=</span><span class="n">t</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="n">Dt</span> <span class="o">*</span> <span class="mf">2._R_P</span><span class="p">)</span>
-<a name="ln-99"></a>  <span class="k">if</span> <span class="p">(</span><span class="nb">present</span><span class="p">(</span><span class="n">filter</span><span class="p">))</span> <span class="k">then</span>
-<a name="ln-100"></a><span class="k">    </span><span class="n">filter</span> <span class="o">=</span> <span class="p">(</span><span class="n">previous</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">-</span> <span class="n">previous</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span> <span class="o">*</span> <span class="mf">2._R_P</span> <span class="o">+</span> <span class="n">U</span><span class="p">)</span> <span class="o">*</span> <span class="n">self</span><span class="p">%</span><span class="n">nu</span> <span class="o">*</span> <span class="mf">0.5_R_P</span>
-<a name="ln-101"></a>    <span class="n">previous</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span> <span class="o">=</span> <span class="n">previous</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span> <span class="o">+</span> <span class="n">filter</span> <span class="o">*</span> <span class="n">self</span><span class="p">%</span><span class="n">alpha</span>
-<a name="ln-102"></a>    <span class="n">U</span> <span class="o">=</span> <span class="n">U</span> <span class="o">+</span> <span class="n">filter</span> <span class="o">*</span> <span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">alpha</span> <span class="o">-</span> <span class="mf">1._R_P</span><span class="p">)</span>
-<a name="ln-103"></a>  <span class="n">endif</span>
-<a name="ln-104"></a>  <span class="n">previous</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">=</span> <span class="n">previous</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
-<a name="ln-105"></a>  <span class="n">previous</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span> <span class="o">=</span> <span class="n">U</span>
-<a name="ln-106"></a>  <span class="k">return</span>
-<a name="ln-107"></a>  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
-<a name="ln-108"></a>  <span class="n">endsubroutine</span> <span class="n">integrate</span>
-<a name="ln-109"></a><span class="n">endmodule</span> <span class="n">foodie_integrator_leapfrog</span>
+<a name="ln-98"></a>  <span class="k">class</span><span class="p">(</span><span class="n">leapfrog_integrator</span><span class="p">),</span> <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span>    <span class="kd">::</span> <span class="n">self</span>          <span class="c">!&lt; LF integrator.</span>
+<a name="ln-99"></a>  <span class="k">class</span><span class="p">(</span><span class="n">integrand</span><span class="p">),</span>           <span class="k">intent</span><span class="p">(</span><span class="n">INOUT</span><span class="p">)</span> <span class="kd">::</span> <span class="n">U</span>             <span class="c">!&lt; Field to be integrated.</span>
+<a name="ln-100"></a>  <span class="k">class</span><span class="p">(</span><span class="n">integrand</span><span class="p">),</span>           <span class="k">intent</span><span class="p">(</span><span class="n">INOUT</span><span class="p">)</span> <span class="kd">::</span> <span class="n">previous</span><span class="p">(</span><span class="mi">1</span><span class="p">:</span><span class="mi">2</span><span class="p">)</span> <span class="c">!&lt; Previous time steps solutions of integrand field.</span>
+<a name="ln-101"></a>  <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">),</span>                  <span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span>    <span class="kd">::</span> <span class="n">Dt</span>            <span class="c">!&lt; Time step.</span>
+<a name="ln-102"></a>  <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">),</span>                  <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span>    <span class="kd">::</span> <span class="n">t</span>             <span class="c">!&lt; Time.</span>
+<a name="ln-103"></a>  <span class="k">class</span><span class="p">(</span><span class="n">integrand</span><span class="p">),</span> <span class="k">optional</span><span class="p">,</span> <span class="k">intent</span><span class="p">(</span><span class="n">INOUT</span><span class="p">)</span> <span class="kd">::</span> <span class="n">filter</span>        <span class="c">!&lt; Filter field displacement.</span>
+<a name="ln-104"></a>  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+<a name="ln-105"></a>
+<a name="ln-106"></a>  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+<a name="ln-107"></a>  <span class="n">U</span> <span class="o">=</span> <span class="n">previous</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">+</span> <span class="n">previous</span><span class="p">(</span><span class="mi">2</span><span class="p">)%</span><span class="n">t</span><span class="p">(</span><span class="n">t</span><span class="o">=</span><span class="n">t</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="n">Dt</span> <span class="o">*</span> <span class="mf">2._R_P</span><span class="p">)</span>
+<a name="ln-108"></a>  <span class="k">if</span> <span class="p">(</span><span class="nb">present</span><span class="p">(</span><span class="n">filter</span><span class="p">))</span> <span class="k">then</span>
+<a name="ln-109"></a><span class="k">    </span><span class="n">filter</span> <span class="o">=</span> <span class="p">(</span><span class="n">previous</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">-</span> <span class="n">previous</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span> <span class="o">*</span> <span class="mf">2._R_P</span> <span class="o">+</span> <span class="n">U</span><span class="p">)</span> <span class="o">*</span> <span class="n">self</span><span class="p">%</span><span class="n">nu</span> <span class="o">*</span> <span class="mf">0.5_R_P</span>
+<a name="ln-110"></a>    <span class="n">previous</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span> <span class="o">=</span> <span class="n">previous</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span> <span class="o">+</span> <span class="n">filter</span> <span class="o">*</span> <span class="n">self</span><span class="p">%</span><span class="n">alpha</span>
+<a name="ln-111"></a>    <span class="n">U</span> <span class="o">=</span> <span class="n">U</span> <span class="o">+</span> <span class="n">filter</span> <span class="o">*</span> <span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">alpha</span> <span class="o">-</span> <span class="mf">1._R_P</span><span class="p">)</span>
+<a name="ln-112"></a>  <span class="n">endif</span>
+<a name="ln-113"></a>  <span class="n">previous</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">=</span> <span class="n">previous</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+<a name="ln-114"></a>  <span class="n">previous</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span> <span class="o">=</span> <span class="n">U</span>
+<a name="ln-115"></a>  <span class="k">return</span>
+<a name="ln-116"></a>  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+<a name="ln-117"></a>  <span class="n">endsubroutine</span> <span class="n">integrate</span>
+<a name="ln-118"></a>
+<a name="ln-119"></a>  <span class="k">elemental function </span><span class="n">min_steps</span><span class="p">()</span>
+<a name="ln-120"></a>  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+<a name="ln-121"></a>  <span class="c">!&lt; Return the minimum number of steps supported.</span>
+<a name="ln-122"></a>  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+<a name="ln-123"></a>  <span class="kt">integer</span><span class="p">(</span><span class="n">I_P</span><span class="p">)</span> <span class="kd">::</span> <span class="n">min_steps</span> <span class="c">!&lt; Minimum number of steps supported.</span>
+<a name="ln-124"></a>  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+<a name="ln-125"></a>
+<a name="ln-126"></a>  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+<a name="ln-127"></a>  <span class="n">min_steps</span> <span class="o">=</span> <span class="n">min_ss</span>
+<a name="ln-128"></a>  <span class="k">return</span>
+<a name="ln-129"></a>  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+<a name="ln-130"></a>  <span class="n">endfunction</span> <span class="n">min_steps</span>
+<a name="ln-131"></a>
+<a name="ln-132"></a>  <span class="k">elemental function </span><span class="n">max_steps</span><span class="p">()</span>
+<a name="ln-133"></a>  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+<a name="ln-134"></a>  <span class="c">!&lt; Return the maximum number of steps supported.</span>
+<a name="ln-135"></a>  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+<a name="ln-136"></a>  <span class="kt">integer</span><span class="p">(</span><span class="n">I_P</span><span class="p">)</span> <span class="kd">::</span> <span class="n">max_steps</span> <span class="c">!&lt; Maximum number of steps supported.</span>
+<a name="ln-137"></a>  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+<a name="ln-138"></a>
+<a name="ln-139"></a>  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+<a name="ln-140"></a>  <span class="n">max_steps</span> <span class="o">=</span> <span class="n">max_ss</span>
+<a name="ln-141"></a>  <span class="k">return</span>
+<a name="ln-142"></a>  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+<a name="ln-143"></a>  <span class="n">endfunction</span> <span class="n">max_steps</span>
+<a name="ln-144"></a>
+<a name="ln-145"></a>  <span class="k">elemental function </span><span class="n">is_supported</span><span class="p">(</span><span class="n">steps</span><span class="p">)</span>
+<a name="ln-146"></a>  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+<a name="ln-147"></a>  <span class="c">!&lt; Check if the queried number of steps is supported or not.</span>
+<a name="ln-148"></a>  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+<a name="ln-149"></a>  <span class="kt">integer</span><span class="p">(</span><span class="n">I_P</span><span class="p">),</span> <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span> <span class="kd">::</span> <span class="n">steps</span>        <span class="c">!&lt; Number of time steps used.</span>
+<a name="ln-150"></a>  <span class="kt">logical</span>                  <span class="kd">::</span> <span class="n">is_supported</span> <span class="c">!&lt; Is true is the steps number is in *supported_steps*.</span>
+<a name="ln-151"></a>  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+<a name="ln-152"></a>
+<a name="ln-153"></a>  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+<a name="ln-154"></a>  <span class="n">is_supported</span> <span class="o">=</span> <span class="n">is_admissible</span><span class="p">(</span><span class="n">n</span><span class="o">=</span><span class="n">steps</span><span class="p">,</span> <span class="n">adm_range</span><span class="o">=</span><span class="nb">trim</span><span class="p">(</span><span class="n">supported_steps</span><span class="p">))</span>
+<a name="ln-155"></a>  <span class="k">return</span>
+<a name="ln-156"></a>  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+<a name="ln-157"></a>  <span class="n">endfunction</span> <span class="n">is_supported</span>
+<a name="ln-158"></a><span class="n">endmodule</span> <span class="n">foodie_integrator_leapfrog</span>
 </pre></div>
 
     </section>

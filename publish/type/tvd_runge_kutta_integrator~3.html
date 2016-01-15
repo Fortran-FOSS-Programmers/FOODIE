@@ -186,7 +186,11 @@
           
           <a class="list-group-item" href="../type/tvd_runge_kutta_integrator%7E3.html#boundprocedure-integrate%7E9">integrate</a>
           
-          <a class="list-group-item" href="../type/tvd_runge_kutta_integrator%7E3.html#boundprocedure-is_supported%7E6">is_supported</a>
+          <a class="list-group-item" href="../type/tvd_runge_kutta_integrator%7E3.html#boundprocedure-min_stages%7E3">min_stages</a>
+          
+          <a class="list-group-item" href="../type/tvd_runge_kutta_integrator%7E3.html#boundprocedure-max_stages%7E3">max_stages</a>
+          
+          <a class="list-group-item" href="../type/tvd_runge_kutta_integrator%7E3.html#boundprocedure-is_supported%7E9">is_supported</a>
           
         </div>
     </div>
@@ -215,7 +219,7 @@
           
           <a class="list-group-item" href="../type/adams_moulton_integrator.html">adams_moulton_integrator</a>
           
-          <a class="list-group-item" href="../type/bdf_integrator.html">bdf_integrator</a>
+          <a class="list-group-item" href="../type/back_df_integrator.html">back_df_integrator</a>
           
           <a class="list-group-item" href="../type/burgers.html">burgers</a>
           
@@ -242,6 +246,8 @@
           <a class="list-group-item" href="../type/ls_runge_kutta_integrator.html">ls_runge_kutta_integrator</a>
           
           <a class="list-group-item" href="../type/oscillation.html">oscillation</a>
+          
+          <a class="list-group-item" href="../type/oscillation_test.html">oscillation_test</a>
           
           <a class="list-group-item" href="../type/pyplot.html">pyplot</a>
           
@@ -309,7 +315,7 @@
   
   <td><span class="anchor" id="variable-stages%7E3"></span>integer(kind=I_P),</td>
   
-  <td>public</td>
+  <td>private</td>
   <td></td><td>::</td>
   <td><strong>stages</strong></td><td> =</td><td>0</td><td><p>Number of stages.</p></td>
   
@@ -323,7 +329,7 @@
   
   <td><span class="anchor" id="variable-alph%7E2"></span>real(kind=R_P),</td>
   
-  <td>public,</td>
+  <td>private,</td>
   <td>allocatable</td><td>::</td>
   <td><strong>alph</strong>(:,:)</td><td></td><td></td><td><p>\(\alpha\) Butcher's coefficients.</p></td>
   
@@ -337,7 +343,7 @@
   
   <td><span class="anchor" id="variable-beta%7E2"></span>real(kind=R_P),</td>
   
-  <td>public,</td>
+  <td>private,</td>
   <td>allocatable</td><td>::</td>
   <td><strong>beta</strong>(:)</td><td></td><td></td><td><p>\(\beta\) Butcher's coefficients.</p></td>
   
@@ -351,7 +357,7 @@
   
   <td><span class="anchor" id="variable-gamm%7E2"></span>real(kind=R_P),</td>
   
-  <td>public,</td>
+  <td>private,</td>
   <td>allocatable</td><td>::</td>
   <td><strong>gamm</strong>(:)</td><td></td><td></td><td><p>\(\gamma\) Butcher's coefficients.</p></td>
   
@@ -365,7 +371,7 @@
   
   <td><span class="anchor" id="variable-error%7E7"></span>integer(kind=I_P),</td>
   
-  <td>public</td>
+  <td>private</td>
   <td></td><td>::</td>
   <td><strong>error</strong></td><td> =</td><td>0</td><td><p>Error status flag: trap occurrences of errors.</p></td>
   
@@ -761,7 +767,121 @@ private subroutine <a href='../proc/integrate%7E9.html'>integrate</a>(self, U, s
     
 	   
 <div class="panel panel-default">
-  <div class="panel-heading codesum"><span class="anchor" id="boundprocedure-is_supported%7E6"></span><h3>procedure, public, nopass :: <strong>is_supported</strong>  
+  <div class="panel-heading codesum"><span class="anchor" id="boundprocedure-min_stages%7E3"></span><h3>procedure, public, nopass :: <strong>min_stages</strong>  
+    
+  </h3></div>
+  
+  <div class="panel-body">
+    
+
+
+    <p>Return the minimum number of stages supported.</p>
+  </div>
+  
+  <ul class="list-group">
+    
+      <li class="list-group-item">
+      
+         
+    
+    <h3>
+private elemental function <a href='../proc/min_stages%7E3.html'>min_stages</a>()
+    
+    
+    
+</h3>
+    
+    <h4>Arguments</h4>
+    
+      <em>None</em>
+    
+    
+
+  
+  
+  
+  
+     <h4>Return Value <small>integer(kind=I_P)
+  </small></h4>
+  <p>Minimum number of stages supported.</p>
+    
+    
+    <h4>Description</h4>
+       
+       
+
+
+       
+       <p>Return the minimum number of stages supported.</p>
+        
+
+      
+      </li>
+    
+  </ul>
+</div>
+
+    
+	   
+<div class="panel panel-default">
+  <div class="panel-heading codesum"><span class="anchor" id="boundprocedure-max_stages%7E3"></span><h3>procedure, public, nopass :: <strong>max_stages</strong>  
+    
+  </h3></div>
+  
+  <div class="panel-body">
+    
+
+
+    <p>Return the maximum number of stages supported.</p>
+  </div>
+  
+  <ul class="list-group">
+    
+      <li class="list-group-item">
+      
+         
+    
+    <h3>
+private elemental function <a href='../proc/max_stages%7E3.html'>max_stages</a>()
+    
+    
+    
+</h3>
+    
+    <h4>Arguments</h4>
+    
+      <em>None</em>
+    
+    
+
+  
+  
+  
+  
+     <h4>Return Value <small>integer(kind=I_P)
+  </small></h4>
+  <p>Maximum number of stages supported.</p>
+    
+    
+    <h4>Description</h4>
+       
+       
+
+
+       
+       <p>Return the maximum number of stages supported.</p>
+        
+
+      
+      </li>
+    
+  </ul>
+</div>
+
+    
+	   
+<div class="panel panel-default">
+  <div class="panel-heading codesum"><span class="anchor" id="boundprocedure-is_supported%7E9"></span><h3>procedure, public, nopass :: <strong>is_supported</strong>  
     
   </h3></div>
   
@@ -779,7 +899,7 @@ private subroutine <a href='../proc/integrate%7E9.html'>integrate</a>(self, U, s
          
     
     <h3>
-private elemental function <a href='../proc/is_supported%7E6.html'>is_supported</a>(stages)
+private elemental function <a href='../proc/is_supported%7E9.html'>is_supported</a>(stages)
     
     
     
@@ -859,15 +979,19 @@ private elemental function <a href='../proc/is_supported%7E6.html'>is_supported<
   <span class="c">!&lt; ### List of errors status</span>
   <span class="c">!&lt;+ error=0 =&gt; no error;</span>
   <span class="c">!&lt;+ error=1 =&gt; bad (unsupported) number of required stages;</span>
-  <span class="kt">integer</span><span class="p">(</span><span class="n">I_P</span><span class="p">)</span>           <span class="kd">::</span> <span class="n">stages</span><span class="o">=</span><span class="mi">0</span>  <span class="c">!&lt; Number of stages.</span>
+  <span class="k">private</span>
+<span class="k">  </span><span class="kt">integer</span><span class="p">(</span><span class="n">I_P</span><span class="p">)</span>           <span class="kd">::</span> <span class="n">stages</span><span class="o">=</span><span class="mi">0</span>  <span class="c">!&lt; Number of stages.</span>
   <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">),</span> <span class="k">allocatable</span> <span class="kd">::</span> <span class="n">alph</span><span class="p">(:,:)</span> <span class="c">!&lt; \(\alpha\) Butcher&#39;s coefficients.</span>
   <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">),</span> <span class="k">allocatable</span> <span class="kd">::</span> <span class="n">beta</span><span class="p">(:)</span>   <span class="c">!&lt; \(\beta\) Butcher&#39;s coefficients.</span>
   <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">),</span> <span class="k">allocatable</span> <span class="kd">::</span> <span class="n">gamm</span><span class="p">(:)</span>   <span class="c">!&lt; \(\gamma\) Butcher&#39;s coefficients.</span>
   <span class="kt">integer</span><span class="p">(</span><span class="n">I_P</span><span class="p">)</span>           <span class="kd">::</span> <span class="n">error</span><span class="o">=</span><span class="mi">0</span>   <span class="c">!&lt; Error status flag: trap occurrences of errors.</span>
   <span class="k">contains</span>
+<span class="k">    private</span>
 <span class="k">    procedure</span><span class="p">,</span> <span class="k">pass</span><span class="p">(</span><span class="n">self</span><span class="p">),</span> <span class="k">public</span> <span class="kd">::</span> <span class="n">init</span>         <span class="c">!&lt; Initialize (create) the integrator.</span>
     <span class="k">procedure</span><span class="p">,</span> <span class="k">pass</span><span class="p">(</span><span class="n">self</span><span class="p">),</span> <span class="k">public</span> <span class="kd">::</span> <span class="n">destroy</span>      <span class="c">!&lt; Destroy the integrator.</span>
     <span class="k">procedure</span><span class="p">,</span> <span class="k">pass</span><span class="p">(</span><span class="n">self</span><span class="p">),</span> <span class="k">public</span> <span class="kd">::</span> <span class="n">integrate</span>    <span class="c">!&lt; Integrate integrand field.</span>
+    <span class="k">procedure</span><span class="p">,</span> <span class="k">nopass</span><span class="p">,</span>     <span class="k">public</span> <span class="kd">::</span> <span class="n">min_stages</span>   <span class="c">!&lt; Return the minimum number of stages supported.</span>
+    <span class="k">procedure</span><span class="p">,</span> <span class="k">nopass</span><span class="p">,</span>     <span class="k">public</span> <span class="kd">::</span> <span class="n">max_stages</span>   <span class="c">!&lt; Return the maximum number of stages supported.</span>
     <span class="k">procedure</span><span class="p">,</span> <span class="k">nopass</span><span class="p">,</span>     <span class="k">public</span> <span class="kd">::</span> <span class="n">is_supported</span> <span class="c">!&lt; Check if the queried number of stages is supported or not.</span>
     <span class="k">final</span>                         <span class="kd">::</span> <span class="n">finalize</span>     <span class="c">!&lt; Finalize object.</span>
 <span class="n">endtype</span> <span class="n">tvd_runge_kutta_integrator</span>
