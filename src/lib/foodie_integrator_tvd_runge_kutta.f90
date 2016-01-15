@@ -115,6 +115,8 @@ public :: tvd_runge_kutta_integrator
 
 !-----------------------------------------------------------------------------------------------------------------------------------
 character(len=99), parameter :: supported_stages='1-3,5' !< List of supported stages number. Valid format is `1-2,4,9-23...`.
+integer(I_P),      parameter :: min_ss=1                 !< Minimum number of stages supported.
+integer(I_P),      parameter :: max_ss=5                 !< Maximum number of stages supported.
 
 type :: tvd_runge_kutta_integrator
   !< FOODIE integrator: provide an explicit class of TVD or SSP Runge-Kutta schemes, from 1st to 4th order accurate.
@@ -124,15 +126,19 @@ type :: tvd_runge_kutta_integrator
   !< ### List of errors status
   !<+ error=0 => no error;
   !<+ error=1 => bad (unsupported) number of required stages;
+  private
   integer(I_P)           :: stages=0  !< Number of stages.
   real(R_P), allocatable :: alph(:,:) !< \(\alpha\) Butcher's coefficients.
   real(R_P), allocatable :: beta(:)   !< \(\beta\) Butcher's coefficients.
   real(R_P), allocatable :: gamm(:)   !< \(\gamma\) Butcher's coefficients.
   integer(I_P)           :: error=0   !< Error status flag: trap occurrences of errors.
   contains
+    private
     procedure, pass(self), public :: init         !< Initialize (create) the integrator.
     procedure, pass(self), public :: destroy      !< Destroy the integrator.
     procedure, pass(self), public :: integrate    !< Integrate integrand field.
+    procedure, nopass,     public :: min_stages   !< Return the minimum number of stages supported.
+    procedure, nopass,     public :: max_stages   !< Return the maximum number of stages supported.
     procedure, nopass,     public :: is_supported !< Check if the queried number of stages is supported or not.
     final                         :: finalize     !< Finalize object.
 endtype tvd_runge_kutta_integrator
@@ -255,6 +261,32 @@ contains
   return
   !---------------------------------------------------------------------------------------------------------------------------------
   endsubroutine integrate
+
+  elemental function min_stages()
+  !---------------------------------------------------------------------------------------------------------------------------------
+  !< Return the minimum number of stages supported.
+  !---------------------------------------------------------------------------------------------------------------------------------
+  integer(I_P) :: min_stages !< Minimum number of stages supported.
+  !---------------------------------------------------------------------------------------------------------------------------------
+
+  !---------------------------------------------------------------------------------------------------------------------------------
+  min_stages = min_ss
+  return
+  !---------------------------------------------------------------------------------------------------------------------------------
+  endfunction min_stages
+
+  elemental function max_stages()
+  !---------------------------------------------------------------------------------------------------------------------------------
+  !< Return the maximum number of stages supported.
+  !---------------------------------------------------------------------------------------------------------------------------------
+  integer(I_P) :: max_stages !< Maximum number of stages supported.
+  !---------------------------------------------------------------------------------------------------------------------------------
+
+  !---------------------------------------------------------------------------------------------------------------------------------
+  max_stages = max_ss
+  return
+  !---------------------------------------------------------------------------------------------------------------------------------
+  endfunction max_stages
 
   elemental function is_supported(stages)
   !---------------------------------------------------------------------------------------------------------------------------------

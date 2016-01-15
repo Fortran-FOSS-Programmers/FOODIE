@@ -1,5 +1,5 @@
 !< Define Oscillation field that is a concrete extension of the abstract integrand type.
-module type_oscillation
+module oscillation_t
 !-----------------------------------------------------------------------------------------------------------------------------------
 !< Define Oscillation field that is a concrete extension of the abstract integrand type.
 !-----------------------------------------------------------------------------------------------------------------------------------
@@ -68,18 +68,18 @@ endtype oscillation
 !-----------------------------------------------------------------------------------------------------------------------------------
 contains
   ! auxiliary methods
-  pure subroutine init(self, initial_state, f)
+  pure subroutine init(self, initial_state, frequency)
   !---------------------------------------------------------------------------------------------------------------------------------
   !< Construct an initialized Oscillation field.
   !---------------------------------------------------------------------------------------------------------------------------------
   class(oscillation),      intent(INOUT) :: self          !< Oscillation field.
   real(R_P), dimension(:), intent(IN)    :: initial_state !< Initial state of the Oscillation field vector.
-  real(R_P),               intent(IN)    :: f             !< Frequency.
+  real(R_P),               intent(IN)    :: frequency     !< Frequency of oscillation.
   !---------------------------------------------------------------------------------------------------------------------------------
 
   !---------------------------------------------------------------------------------------------------------------------------------
   self%dims = size(initial_state)
-  self%f = f
+  self%f = frequency
   if (allocated(self%U)) deallocate(self%U) ; allocate(self%U(1:self%dims)) ; self%U = initial_state
   return
   !---------------------------------------------------------------------------------------------------------------------------------
@@ -307,4 +307,4 @@ contains
   return
   !---------------------------------------------------------------------------------------------------------------------------------
   endsubroutine oscillation_assign_oscillation
-endmodule type_oscillation
+endmodule oscillation_t

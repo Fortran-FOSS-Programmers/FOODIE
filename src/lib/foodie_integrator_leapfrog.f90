@@ -38,8 +38,9 @@ module foodie_integrator_leapfrog
 !-----------------------------------------------------------------------------------------------------------------------------------
 
 !-----------------------------------------------------------------------------------------------------------------------------------
-use foodie_kinds, only : R_P, I_P
 use foodie_adt_integrand, only : integrand
+use foodie_kinds, only : I_P, R_P
+use foodie_utils, only : is_admissible
 !-----------------------------------------------------------------------------------------------------------------------------------
 
 !-----------------------------------------------------------------------------------------------------------------------------------
@@ -49,6 +50,10 @@ public :: leapfrog_integrator
 !-----------------------------------------------------------------------------------------------------------------------------------
 
 !-----------------------------------------------------------------------------------------------------------------------------------
+character(len=99), parameter :: supported_steps='2' !< List of supported steps number. Valid format is `1-2,4,9-23...`.
+integer(I_P),      parameter :: min_ss=2            !< Minimum number of steps supported.
+integer(I_P),      parameter :: max_ss=2            !< Maximum number of steps supported.
+
 type :: leapfrog_integrator
   !< FOODIE integrator: provide an explicit class of leapfrog multi-step schemes, 2nd order accurate.
   !<
@@ -58,8 +63,12 @@ type :: leapfrog_integrator
   real(R_P) :: nu=0.01_R_P    !< Robert-Asselin filter coefficient.
   real(R_P) :: alpha=0.53_R_P !< Robert-Asselin-Williams filter coefficient.
   contains
-    procedure, pass(self), public :: init      !< Initialize (create) the integrator.
-    procedure, pass(self), public :: integrate !< Integrate integrand field.
+    private
+    procedure, pass(self), public :: init         !< Initialize (create) the integrator.
+    procedure, pass(self), public :: integrate    !< Integrate integrand field.
+    procedure, nopass,     public :: min_steps    !< Return the minimum number of steps supported.
+    procedure, nopass,     public :: max_steps    !< Return the maximum number of steps supported.
+    procedure, nopass,     public :: is_supported !< Check if the queried number of steps is supported or not.
 endtype leapfrog_integrator
 !-----------------------------------------------------------------------------------------------------------------------------------
 contains
@@ -106,4 +115,44 @@ contains
   return
   !---------------------------------------------------------------------------------------------------------------------------------
   endsubroutine integrate
+
+  elemental function min_steps()
+  !---------------------------------------------------------------------------------------------------------------------------------
+  !< Return the minimum number of steps supported.
+  !---------------------------------------------------------------------------------------------------------------------------------
+  integer(I_P) :: min_steps !< Minimum number of steps supported.
+  !---------------------------------------------------------------------------------------------------------------------------------
+
+  !---------------------------------------------------------------------------------------------------------------------------------
+  min_steps = min_ss
+  return
+  !---------------------------------------------------------------------------------------------------------------------------------
+  endfunction min_steps
+
+  elemental function max_steps()
+  !---------------------------------------------------------------------------------------------------------------------------------
+  !< Return the maximum number of steps supported.
+  !---------------------------------------------------------------------------------------------------------------------------------
+  integer(I_P) :: max_steps !< Maximum number of steps supported.
+  !---------------------------------------------------------------------------------------------------------------------------------
+
+  !---------------------------------------------------------------------------------------------------------------------------------
+  max_steps = max_ss
+  return
+  !---------------------------------------------------------------------------------------------------------------------------------
+  endfunction max_steps
+
+  elemental function is_supported(steps)
+  !---------------------------------------------------------------------------------------------------------------------------------
+  !< Check if the queried number of steps is supported or not.
+  !---------------------------------------------------------------------------------------------------------------------------------
+  integer(I_P), intent(IN) :: steps        !< Number of time steps used.
+  logical                  :: is_supported !< Is true is the steps number is in *supported_steps*.
+  !---------------------------------------------------------------------------------------------------------------------------------
+
+  !---------------------------------------------------------------------------------------------------------------------------------
+  is_supported = is_admissible(n=steps, adm_range=trim(supported_steps))
+  return
+  !---------------------------------------------------------------------------------------------------------------------------------
+  endfunction is_supported
 endmodule foodie_integrator_leapfrog
