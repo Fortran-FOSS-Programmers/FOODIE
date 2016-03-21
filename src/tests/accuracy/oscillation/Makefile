@@ -1,6 +1,6 @@
 # FOODIE Makefile
 
-OBJS = oscillation.o type_oscillation.o
+OBJS = oscillation.o oscillation_t.o
 
 .SUFFIXES: .f90 .o
 
@@ -10,8 +10,8 @@ OBJS = oscillation.o type_oscillation.o
 oscillation: oscillation.o
 	$(FC) $(OBJS) $(FCFLAGS) -L$(FLAPDIR) -lflap -L$(PYPLOTDIR) -lpyplot -L$(LIB) -lfoodie -o $@
 
-oscillation.o: oscillation.f90 type_oscillation.o
-type_oscillation.o: type_oscillation.f90
+oscillation.o: oscillation.f90 oscillation_t.o
+oscillation_t.o: oscillation_t.f90
 
 .PHONY:
 clean:
