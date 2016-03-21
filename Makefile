@@ -4,9 +4,13 @@
 ########################################################################
 # Compiler and flags
 
+### IBM XL ###
+FC      = bgxlf2008_r
+FCFLAGS = -qsuffix=cpp=f90
+
 ### GNU ###
-FC      = gfortran
-FCFLAGS = -cpp -g -O0 -C -fbacktrace
+#FC      = gfortran
+#FCFLAGS = -cpp -g -O0 -C -fbacktrace
 
 ### Intel ###
 #FC      = ifort
