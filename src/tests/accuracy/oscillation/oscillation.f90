@@ -5,7 +5,7 @@ module oscillation_test_t
 !-----------------------------------------------------------------------------------------------------------------------------------
 
 !-----------------------------------------------------------------------------------------------------------------------------------
-use Data_Type_Command_Line_Interface, only : Type_Command_Line_Interface
+use flap, only : command_line_interface
 use foodie, only : adams_bashforth_integrator,         &
                    adams_bashforth_moulton_integrator, &
                    adams_moulton_integrator,           &
@@ -47,19 +47,19 @@ type :: oscillation_test
   !<
   !< Test has only 1 public method `execute`: it executes test(s) accordingly to cli options.
   private
-  type(Type_Command_Line_Interface) :: cli                      !< Command line interface handler.
-  integer(I_P)                      :: error=0                  !< Error handler.
-  logical                           :: errors_analysis=.false.  !< Flag for activating errors analysis.
-  real(R_P)                         :: frequency=0.0_R_P        !< Oscillation frequency.
-  real(R_P)                         :: final_time=0.0_R_P       !< Final integration time.
-  integer(I_P)                      :: implicit_iterations=0    !< Number of iterations (implicit solvers).
-  character(99)                     :: output_cli='unset'       !< Output files basename.
-  logical                           :: plots=.false.            !< Flag for activating plots saving.
-  logical                           :: results=.false.          !< Flag for activating results saving.
-  character(99)                     :: solver='adams-bashforth' !< Solver used.
-  integer(I_P), allocatable         :: stages_steps(:)          !< Number of stages/steps used.
-  real(R_P),    allocatable         :: Dt(:)                    !< Time step(s) exercised.
-  real(R_P),    allocatable         :: tolerance(:)             !< Tolerance(s) exercised on local truncation error.
+  type(command_line_interface) :: cli                      !< Command line interface handler.
+  integer(I_P)                 :: error=0                  !< Error handler.
+  logical                      :: errors_analysis=.false.  !< Flag for activating errors analysis.
+  real(R_P)                    :: frequency=0.0_R_P        !< Oscillation frequency.
+  real(R_P)                    :: final_time=0.0_R_P       !< Final integration time.
+  integer(I_P)                 :: implicit_iterations=0    !< Number of iterations (implicit solvers).
+  character(99)                :: output_cli='unset'       !< Output files basename.
+  logical                      :: plots=.false.            !< Flag for activating plots saving.
+  logical                      :: results=.false.          !< Flag for activating results saving.
+  character(99)                :: solver='adams-bashforth' !< Solver used.
+  integer(I_P), allocatable    :: stages_steps(:)          !< Number of stages/steps used.
+  real(R_P),    allocatable    :: Dt(:)                    !< Time step(s) exercised.
+  real(R_P),    allocatable    :: tolerance(:)             !< Tolerance(s) exercised on local truncation error.
   contains
     private
     ! Public methods

@@ -5,33 +5,33 @@ program integrate_lorenz
 !-----------------------------------------------------------------------------------------------------------------------------------
 
 !-----------------------------------------------------------------------------------------------------------------------------------
-use IR_Precision, only : R_P, I_P, FR_P, str
-use type_lorenz, only : lorenz
-use Data_Type_Command_Line_Interface, only : Type_Command_Line_Interface
+use flap, only : command_line_interface
 use foodie, only : adams_bashforth_integrator, &
                    euler_explicit_integrator, &
                    leapfrog_integrator, &
                    ls_runge_kutta_integrator, &
                    tvd_runge_kutta_integrator
+use IR_Precision, only : R_P, I_P, FR_P, str
 use pyplot_module, only :  pyplot
+use type_lorenz, only : lorenz
 !-----------------------------------------------------------------------------------------------------------------------------------
 
 !-----------------------------------------------------------------------------------------------------------------------------------
 implicit none
-type(Type_Command_Line_Interface) :: cli                                           !< Command line interface handler.
-type(lorenz)                      :: attractor                                     !< Lorenz field.
-integer,   parameter              :: num_steps=2000                                !< Maximum time steps.
-integer,   parameter              :: space_dimension=3                             !< Space dimensions.
-real(R_P), parameter              :: sigma=10._R_P                                 !< Lorenz' \(\sigma\).
-real(R_P), parameter              :: rho=28._R_P                                   !< Lorenz' \(\rho\).
-real(R_P), parameter              :: beta=8._R_P/3._R_P                            !< Lorenz' \(\beta\).
-real(R_P), parameter              :: dt=0.01_R_P                                   !< Time step.
-real(R_P), parameter              :: initial_state(1:space_dimension)=[1., 1., 1.] !< Initial state.
-real(R_P)                         :: solution(0:space_dimension, 0:num_steps)      !< Solution at each time step.
-integer(I_P)                      :: error                                         !< Error handler.
-character(99)                     :: solver                                        !< Solver used.
-logical                           :: plots                                         !< Flag for activating plots saving.
-logical                           :: results                                       !< Flag for activating results saving.
+type(command_line_interface) :: cli                                           !< Command line interface handler.
+type(lorenz)                 :: attractor                                     !< Lorenz field.
+integer,   parameter         :: num_steps=2000                                !< Maximum time steps.
+integer,   parameter         :: space_dimension=3                             !< Space dimensions.
+real(R_P), parameter         :: sigma=10._R_P                                 !< Lorenz' \(\sigma\).
+real(R_P), parameter         :: rho=28._R_P                                   !< Lorenz' \(\rho\).
+real(R_P), parameter         :: beta=8._R_P/3._R_P                            !< Lorenz' \(\beta\).
+real(R_P), parameter         :: dt=0.01_R_P                                   !< Time step.
+real(R_P), parameter         :: initial_state(1:space_dimension)=[1., 1., 1.] !< Initial state.
+real(R_P)                    :: solution(0:space_dimension, 0:num_steps)      !< Solution at each time step.
+integer(I_P)                 :: error                                         !< Error handler.
+character(99)                :: solver                                        !< Solver used.
+logical                      :: plots                                         !< Flag for activating plots saving.
+logical                      :: results                                       !< Flag for activating results saving.
 !-----------------------------------------------------------------------------------------------------------------------------------
 
 !-----------------------------------------------------------------------------------------------------------------------------------
