@@ -5,53 +5,53 @@ program integrate_euler_1D_openmp
 !-----------------------------------------------------------------------------------------------------------------------------------
 
 !-----------------------------------------------------------------------------------------------------------------------------------
-use IR_Precision, only : R_P, I_P, FR_P, str
-use type_euler_1D_openmp, only : euler_1D_openmp
-use Data_Type_Command_Line_Interface, only : Type_Command_Line_Interface
+use flap, only : command_line_interface
 use foodie, only : adams_bashforth_integrator, &
                    euler_explicit_integrator, &
                    leapfrog_integrator, &
                    ls_runge_kutta_integrator, &
                    tvd_runge_kutta_integrator
-use pyplot_module, only :  pyplot
+use IR_Precision, only : R_P, I_P, FR_P, str
 #ifdef OPENMP
 use OMP_LIB
 #endif
+use pyplot_module, only :  pyplot
+use type_euler_1D_openmp, only : euler_1D_openmp
 !-----------------------------------------------------------------------------------------------------------------------------------
 
 !-----------------------------------------------------------------------------------------------------------------------------------
 implicit none
-type(Type_Command_Line_Interface) :: cli                   !< Command line interface handler.
-type(tvd_runge_kutta_integrator)  :: rk_integrator         !< Runge-Kutta integrator.
-integer, parameter                :: rk_stages=5           !< Runge-Kutta stages number.
-type(euler_1D_openmp)             :: rk_stage(1:rk_stages) !< Runge-Kutta stages.
-real(R_P)                         :: dt                    !< Time step.
-real(R_P)                         :: t                     !< Time.
-type(euler_1D_openmp)             :: domain                !< Domain of Euler equations.
-real(R_P),    parameter           :: CFL=0.7_R_P           !< CFL value.
-integer(I_P), parameter           :: Ns=1                  !< Number of differnt initial gas species.
-integer(I_P), parameter           :: Nc=Ns+2               !< Number of conservative variables.
-integer(I_P), parameter           :: Np=Ns+4               !< Number of primitive variables.
-character(3)                      :: BC_L                  !< Left boundary condition type.
-character(3)                      :: BC_R                  !< Right boundary condition type.
-integer(I_P)                      :: Ni                    !< Number of grid cells.
-real(R_P)                         :: Dx                    !< Space step discretization.
-real(R_P)                         :: cp0(1:Ns)             !< Specific heat at constant pressure.
-real(R_P)                         :: cv0(1:Ns)             !< Specific heat at constant volume.
-real(R_P), allocatable            :: initial_state(:,:)    !< Initial state of primitive variables.
-real(R_P), allocatable            :: x(:)                  !< Cell center x-abscissa values.
-real(R_P), allocatable            :: final_state(:,:)      !< Final state.
-integer(I_P)                      :: error                 !< Error handler.
-integer(I_P)                      :: steps_max             !< Maximum number of time steps.
-integer(I_P)                      :: omp_threads           !< Number of OpenMP threads.
-logical                           :: plots                 !< Flag for activating plots saving.
-logical                           :: results               !< Flag for activating results saving.
-logical                           :: time_serie            !< Flag for activating time serie-results saving.
-logical                           :: verbose               !< Flag for activating more verbose output.
-integer(I_P)                      :: profiling(1:2)        !< Tic-toc profiling counters.
-integer(I_P)                      :: count_rate            !< Counting rate of system clock.
-real(R_P)                         :: system_clocks         !< Profiling result.
-integer(I_P)                      :: steps                 !< Time steps counter.
+type(command_line_interface)     :: cli                   !< Command line interface handler.
+type(tvd_runge_kutta_integrator) :: rk_integrator         !< Runge-Kutta integrator.
+integer, parameter               :: rk_stages=5           !< Runge-Kutta stages number.
+type(euler_1D_openmp)            :: rk_stage(1:rk_stages) !< Runge-Kutta stages.
+real(R_P)                        :: dt                    !< Time step.
+real(R_P)                        :: t                     !< Time.
+type(euler_1D_openmp)            :: domain                !< Domain of Euler equations.
+real(R_P),    parameter          :: CFL=0.7_R_P           !< CFL value.
+integer(I_P), parameter          :: Ns=1                  !< Number of differnt initial gas species.
+integer(I_P), parameter          :: Nc=Ns+2               !< Number of conservative variables.
+integer(I_P), parameter          :: Np=Ns+4               !< Number of primitive variables.
+character(3)                     :: BC_L                  !< Left boundary condition type.
+character(3)                     :: BC_R                  !< Right boundary condition type.
+integer(I_P)                     :: Ni                    !< Number of grid cells.
+real(R_P)                        :: Dx                    !< Space step discretization.
+real(R_P)                        :: cp0(1:Ns)             !< Specific heat at constant pressure.
+real(R_P)                        :: cv0(1:Ns)             !< Specific heat at constant volume.
+real(R_P), allocatable           :: initial_state(:,:)    !< Initial state of primitive variables.
+real(R_P), allocatable           :: x(:)                  !< Cell center x-abscissa values.
+real(R_P), allocatable           :: final_state(:,:)      !< Final state.
+integer(I_P)                     :: error                 !< Error handler.
+integer(I_P)                     :: steps_max             !< Maximum number of time steps.
+integer(I_P)                     :: omp_threads           !< Number of OpenMP threads.
+logical                          :: plots                 !< Flag for activating plots saving.
+logical                          :: results               !< Flag for activating results saving.
+logical                          :: time_serie            !< Flag for activating time serie-results saving.
+logical                          :: verbose               !< Flag for activating more verbose output.
+integer(I_P)                     :: profiling(1:2)        !< Tic-toc profiling counters.
+integer(I_P)                     :: count_rate            !< Counting rate of system clock.
+real(R_P)                        :: system_clocks         !< Profiling result.
+integer(I_P)                     :: steps                 !< Time steps counter.
 !-----------------------------------------------------------------------------------------------------------------------------------
 
 !-----------------------------------------------------------------------------------------------------------------------------------

@@ -5,61 +5,61 @@ program integrate_euler_1D_caf
 !-----------------------------------------------------------------------------------------------------------------------------------
 
 !-----------------------------------------------------------------------------------------------------------------------------------
-use IR_Precision, only : R_P, I_P, FR_P, str, strz
-use type_euler_1D_caf, only : euler_1D_caf
-use Data_Type_Command_Line_Interface, only : Type_Command_Line_Interface
+use flap, only : command_line_interface
 use foodie, only : tvd_runge_kutta_integrator
+use IR_Precision, only : R_P, I_P, FR_P, str, strz
 use pyplot_module, only : pyplot
+use type_euler_1D_caf, only : euler_1D_caf
 !-----------------------------------------------------------------------------------------------------------------------------------
 
 !-----------------------------------------------------------------------------------------------------------------------------------
 implicit none
-type(Type_Command_Line_Interface) :: cli                   !< Command line interface handler.
-type(tvd_runge_kutta_integrator)  :: rk_integrator         !< Runge-Kutta integrator.
-integer, parameter                :: rk_stages=5           !< Runge-Kutta stages number.
-type(euler_1D_caf)                :: rk_stage(1:rk_stages) !< Runge-Kutta stages.
-integer, parameter                :: ord=7                 !< Space reconstruciton order,
-real(R_P)                         :: t                     !< Time.
-real(R_P),    parameter           :: CFL=0.7_R_P           !< CFL value.
-integer(I_P), parameter           :: Ns=1                  !< Number of differnt initial gas species.
-integer(I_P), parameter           :: Nc=Ns+2               !< Number of conservative variables.
-integer(I_P), parameter           :: Np=Ns+4               !< Number of primitive variables.
-character(len=:), allocatable     :: BC_L                  !< Left boundary condition type.
-character(len=:), allocatable     :: BC_R                  !< Right boundary condition type.
-real(R_P)                         :: Dx                    !< Space step discretization.
-real(R_P)                         :: cp0(1:Ns)             !< Specific heat at constant pressure.
-real(R_P)                         :: cv0(1:Ns)             !< Specific heat at constant volume.
-real(R_P), allocatable            :: initial_state(:,:)    !< Initial state of primitive variables.
-real(R_P), allocatable            :: x(:)                  !< Cell center x-abscissa values.
-real(R_P), allocatable            :: final_state(:,:)      !< Final state.
-integer(I_P)                      :: error                 !< Error handler.
-integer(I_P)                      :: profiling(1:2)        !< Tic-toc profiling counters.
-integer(I_P)                      :: count_rate            !< Counting rate of system clock.
-real(R_P)                         :: system_clocks         !< Profiling result.
-integer(I_P)                      :: steps                 !< Time steps counter.
-type(euler_1D_caf)                :: domain                !< Domain of Euler equations.
+type(command_line_interface)     :: cli                   !< Command line interface handler.
+type(tvd_runge_kutta_integrator) :: rk_integrator         !< Runge-Kutta integrator.
+integer, parameter               :: rk_stages=5           !< Runge-Kutta stages number.
+type(euler_1D_caf)               :: rk_stage(1:rk_stages) !< Runge-Kutta stages.
+integer, parameter               :: ord=7                 !< Space reconstruciton order,
+real(R_P)                        :: t                     !< Time.
+real(R_P),    parameter          :: CFL=0.7_R_P           !< CFL value.
+integer(I_P), parameter          :: Ns=1                  !< Number of differnt initial gas species.
+integer(I_P), parameter          :: Nc=Ns+2               !< Number of conservative variables.
+integer(I_P), parameter          :: Np=Ns+4               !< Number of primitive variables.
+character(len=:), allocatable    :: BC_L                  !< Left boundary condition type.
+character(len=:), allocatable    :: BC_R                  !< Right boundary condition type.
+real(R_P)                        :: Dx                    !< Space step discretization.
+real(R_P)                        :: cp0(1:Ns)             !< Specific heat at constant pressure.
+real(R_P)                        :: cv0(1:Ns)             !< Specific heat at constant volume.
+real(R_P), allocatable           :: initial_state(:,:)    !< Initial state of primitive variables.
+real(R_P), allocatable           :: x(:)                  !< Cell center x-abscissa values.
+real(R_P), allocatable           :: final_state(:,:)      !< Final state.
+integer(I_P)                     :: error                 !< Error handler.
+integer(I_P)                     :: profiling(1:2)        !< Tic-toc profiling counters.
+integer(I_P)                     :: count_rate            !< Counting rate of system clock.
+real(R_P)                        :: system_clocks         !< Profiling result.
+integer(I_P)                     :: steps                 !< Time steps counter.
+type(euler_1D_caf)               :: domain                !< Domain of Euler equations.
 ! coarrays-related variables
-integer(I_P)                      :: Ni_image              !< Space dimension of local image.
+integer(I_P)                     :: Ni_image              !< Space dimension of local image.
 #ifdef CAF
-integer(I_P)                      :: Ni[*]                 !< Number of grid cells.
-integer(I_P)                      :: steps_max[*]          !< Maximum number of time steps.
-logical                           :: results[*]            !< Flag for activating results saving.
-logical                           :: plots[*]              !< Flag for activating plots saving.
-logical                           :: time_serie[*]         !< Flag for activating time serie-results saving.
-logical                           :: verbose[*]            !< Flag for activating more verbose output.
-real(R_P), allocatable            :: Dt(:)[:]              !< Time step.
+integer(I_P)                     :: Ni[*]                 !< Number of grid cells.
+integer(I_P)                     :: steps_max[*]          !< Maximum number of time steps.
+logical                          :: results[*]            !< Flag for activating results saving.
+logical                          :: plots[*]              !< Flag for activating plots saving.
+logical                          :: time_serie[*]         !< Flag for activating time serie-results saving.
+logical                          :: verbose[*]            !< Flag for activating more verbose output.
+real(R_P), allocatable           :: Dt(:)[:]              !< Time step.
 #else
-integer(I_P)                      :: Ni                    !< Number of grid cells.
-integer(I_P)                      :: steps_max             !< Maximum number of time steps.
-logical                           :: results               !< Flag for activating results saving.
-logical                           :: plots                 !< Flag for activating plots saving.
-logical                           :: time_serie            !< Flag for activating time serie-results saving.
-logical                           :: verbose               !< Flag for activating more verbose output.
-real(R_P), allocatable            :: Dt(:)                 !< Time step.
+integer(I_P)                     :: Ni                    !< Number of grid cells.
+integer(I_P)                     :: steps_max             !< Maximum number of time steps.
+logical                          :: results               !< Flag for activating results saving.
+logical                          :: plots                 !< Flag for activating plots saving.
+logical                          :: time_serie            !< Flag for activating time serie-results saving.
+logical                          :: verbose               !< Flag for activating more verbose output.
+real(R_P), allocatable           :: Dt(:)                 !< Time step.
 #endif
-integer(I_P)                      :: me                    !< ID of this_image()
-integer(I_P)                      :: we                    !< Number of CAF images used.
-character(len=:), allocatable     :: id                    !< My ID.
+integer(I_P)                     :: me                    !< ID of this_image()
+integer(I_P)                     :: we                    !< Number of CAF images used.
+character(len=:), allocatable    :: id                    !< My ID.
 !-----------------------------------------------------------------------------------------------------------------------------------
 
 !-----------------------------------------------------------------------------------------------------------------------------------

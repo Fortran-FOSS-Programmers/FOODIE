@@ -5,33 +5,33 @@ program integrate_burgers
 !-----------------------------------------------------------------------------------------------------------------------------------
 
 !-----------------------------------------------------------------------------------------------------------------------------------
-use IR_Precision, only : R_P, I_P, FR_P, str
-use type_burgers, only : burgers
-use Data_Type_Command_Line_Interface, only : Type_Command_Line_Interface
+use flap, only : command_line_interface
 use foodie, only : adams_bashforth_integrator, &
                    euler_explicit_integrator, &
                    leapfrog_integrator, &
                    ls_runge_kutta_integrator, &
                    tvd_runge_kutta_integrator
+use IR_Precision, only : R_P, I_P, FR_P, str
 use pyplot_module, only :  pyplot
+use type_burgers, only : burgers
 !-----------------------------------------------------------------------------------------------------------------------------------
 
 !-----------------------------------------------------------------------------------------------------------------------------------
 implicit none
-type(Type_Command_Line_Interface) :: cli                 !< Command line interface handler.
-type(burgers)                     :: domain              !< Burgers field domain.
-real(R_P),    parameter           :: CFL=0.1_R_P         !< CFL value.
-real(R_P),    parameter           :: t_final=0.6_R_P     !< Final time.
-real(R_P),    parameter           :: nu=1._R_P           !< Viscosity.
-integer(I_P), parameter           :: Ni=100              !< Number of grid nodes.
-real(R_P)                         :: h                   !< Space step discretization.
-real(R_P)                         :: initial_state(1:Ni) !< Initial state.
-real(R_P)                         :: x(1:Ni)             !< Nodes values.
-real(R_P), allocatable            :: final_state(:)      !< Final state.
-integer(I_P)                      :: error               !< Error handler.
-character(99)                     :: solver              !< Solver used.
-logical                           :: plots               !< Flag for activating plots saving.
-logical                           :: results             !< Flag for activating results saving.
+type(command_line_interface) :: cli                 !< Command line interface handler.
+type(burgers)                :: domain              !< Burgers field domain.
+real(R_P),    parameter      :: CFL=0.1_R_P         !< CFL value.
+real(R_P),    parameter      :: t_final=0.6_R_P     !< Final time.
+real(R_P),    parameter      :: nu=1._R_P           !< Viscosity.
+integer(I_P), parameter      :: Ni=100              !< Number of grid nodes.
+real(R_P)                    :: h                   !< Space step discretization.
+real(R_P)                    :: initial_state(1:Ni) !< Initial state.
+real(R_P)                    :: x(1:Ni)             !< Nodes values.
+real(R_P), allocatable       :: final_state(:)      !< Final state.
+integer(I_P)                 :: error               !< Error handler.
+character(99)                :: solver              !< Solver used.
+logical                      :: plots               !< Flag for activating plots saving.
+logical                      :: results             !< Flag for activating results saving.
 !-----------------------------------------------------------------------------------------------------------------------------------
 
 !-----------------------------------------------------------------------------------------------------------------------------------
