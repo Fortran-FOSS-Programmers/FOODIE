@@ -168,8 +168,6 @@
           
           <a class="list-group-item" href="../sourcefile/burgers.f90.html">burgers.f90</a>
           
-          <a class="list-group-item" href="../sourcefile/data_type_command_line_interface.f90.html">Data_Type_Command_Line_Interface.F90</a>
-          
           <a class="list-group-item" href="../sourcefile/euler-1d-caf.f90.html">euler-1D-caf.f90</a>
           
           <a class="list-group-item" href="../sourcefile/euler-1d-caf_no_foodie.f90.html">euler-1D-caf_no_foodie.f90</a>
@@ -179,6 +177,18 @@
           <a class="list-group-item" href="../sourcefile/euler-1d-openmp_no_foodie.f90.html">euler-1D-openmp_no_foodie.f90</a>
           
           <a class="list-group-item" href="../sourcefile/euler-1d.f90.html">euler-1D.f90</a>
+          
+          <a class="list-group-item" href="../sourcefile/flap.f90.html">flap.f90</a>
+          
+          <a class="list-group-item" href="../sourcefile/flap_command_line_argument_t.f90.html">flap_command_line_argument_t.F90</a>
+          
+          <a class="list-group-item" href="../sourcefile/flap_command_line_arguments_group_t.f90.html">flap_command_line_arguments_group_t.f90</a>
+          
+          <a class="list-group-item" href="../sourcefile/flap_command_line_interface_t.f90.html">flap_command_line_interface_t.F90</a>
+          
+          <a class="list-group-item" href="../sourcefile/flap_object_t.f90.html">flap_object_t.f90</a>
+          
+          <a class="list-group-item" href="../sourcefile/flap_utils_m.f90.html">flap_utils_m.f90</a>
           
           <a class="list-group-item" href="../sourcefile/foodie.f90.html">foodie.f90</a>
           
@@ -208,21 +218,41 @@
           
           <a class="list-group-item" href="../sourcefile/lorenz.f90.html">lorenz.f90</a>
           
+          <a class="list-group-item" href="../sourcefile/modules_imports.f90.html">modules_imports.f90</a>
+          
           <a class="list-group-item" href="../sourcefile/oscillation.f90.html">oscillation.f90</a>
           
           <a class="list-group-item" href="../sourcefile/oscillation_t.f90.html">oscillation_t.f90</a>
           
+          <a class="list-group-item" href="../sourcefile/penf.f90.html">penf.F90</a>
+          
+          <a class="list-group-item" href="../sourcefile/penf.f90%7E2.html">penf.F90</a>
+          
+          <a class="list-group-item" href="../sourcefile/penf.f90%7E3.html">penf.F90</a>
+          
           <a class="list-group-item" href="../sourcefile/pyplot_module.f90.html">pyplot_module.f90</a>
           
+          <a class="list-group-item" href="../sourcefile/pyplot_module.f90%7E2.html">pyplot_module.f90</a>
+          
+          <a class="list-group-item" href="../sourcefile/sin_reconstruction.f90.html">sin_reconstruction.f90</a>
+          
           <a class="list-group-item" href="../sourcefile/test.f90.html">test.f90</a>
+          
+          <a class="list-group-item" href="../sourcefile/test.f90%7E2.html">test.f90</a>
+          
+          <a class="list-group-item" href="../sourcefile/test_all.f90.html">test_all.f90</a>
+          
+          <a class="list-group-item" href="../sourcefile/test_all.f90%7E2.html">test_all.f90</a>
+          
+          <a class="list-group-item" href="../sourcefile/test_all.f90%7E3.html">test_all.f90</a>
           
           <a class="list-group-item" href="../sourcefile/test_basic.f90.html">test_basic.f90</a>
           
           <a class="list-group-item" href="../sourcefile/test_choices_logical.f90.html">test_choices_logical.f90</a>
           
-          <a class="list-group-item" href="../sourcefile/test_driver.f90.html">Test_Driver.f90</a>
+          <a class="list-group-item" href="../sourcefile/test_hidden.f90.html">test_hidden.f90</a>
           
-          <a class="list-group-item" href="../sourcefile/test_driver.f90%7E2.html">Test_Driver.f90</a>
+          <a class="list-group-item" href="../sourcefile/test_minimal.f90.html">test_minimal.f90</a>
           
           <a class="list-group-item" href="../sourcefile/test_nested.f90.html">test_nested.f90</a>
           
@@ -260,7 +290,7 @@
     
     <section>
     <h2><span class="anchor" id="src"></span>Source Code</h2>
-    <div class="hl"><pre><a name="ln-1"></a><span class="k">module </span><span class="n">type_weno_interpolator_upwind</span>
+    <div class="hl"><pre><span></span><a name="ln-1"></a><span class="k">module </span><span class="n">type_weno_interpolator_upwind</span>
 <a name="ln-2"></a><span class="c">!-----------------------------------------------------------------------------------------------------------------------------------</span>
 <a name="ln-3"></a><span class="c">!&lt; Module providing upwind biased WENO interpolator object and constructor,</span>
 <a name="ln-4"></a><span class="c">!&lt;</span>
@@ -269,7 +299,7 @@
 <a name="ln-7"></a><span class="c">!-----------------------------------------------------------------------------------------------------------------------------------</span>
 <a name="ln-8"></a>
 <a name="ln-9"></a><span class="c">!-----------------------------------------------------------------------------------------------------------------------------------</span>
-<a name="ln-10"></a><span class="k">use </span><span class="n">IR_Precision</span><span class="p">,</span> <span class="n">only</span> <span class="p">:</span> <span class="n">I_P</span><span class="p">,</span> <span class="n">R_P</span><span class="p">,</span> <span class="n">str</span>
+<a name="ln-10"></a><span class="k">use </span><span class="n">penf</span><span class="p">,</span> <span class="n">only</span> <span class="p">:</span> <span class="n">I_P</span><span class="p">,</span> <span class="n">R_P</span><span class="p">,</span> <span class="n">str</span>
 <a name="ln-11"></a><span class="k">use </span><span class="n">type_weno_interpolator</span>
 <a name="ln-12"></a><span class="c">!-----------------------------------------------------------------------------------------------------------------------------------</span>
 <a name="ln-13"></a>
@@ -570,9 +600,9 @@
 <a name="ln-308"></a>  <span class="n">string</span> <span class="o">=</span> <span class="s1">&#39;WENO upwind-biased interpolator&#39;</span><span class="o">//</span><span class="n">nl</span>
 <a name="ln-309"></a>  <span class="n">string</span> <span class="o">=</span> <span class="n">string</span><span class="o">//</span><span class="s1">&#39;  Based on the scheme proposed by Jiang and Shu &quot;Efficient Implementation of Weighted ENO Schemes&quot;, see &#39;</span><span class="o">//</span> <span class="p">&amp;</span>
 <a name="ln-310"></a>           <span class="s1">&#39;JCP, 1996, vol. 126, pp. 202--228, doi:10.1006/jcph.1996.0130&#39;</span><span class="o">//</span><span class="n">nl</span>
-<a name="ln-311"></a>  <span class="n">string</span> <span class="o">=</span> <span class="n">string</span><span class="o">//</span><span class="s1">&#39;  Provide a formal order of accuracy equals to: &#39;</span><span class="o">//</span><span class="nb">trim</span><span class="p">(</span><span class="n">str</span><span class="p">(.</span><span class="n">true</span><span class="p">.,</span><span class="mi">2</span><span class="o">*</span><span class="n">self</span><span class="p">%</span><span class="n">S</span> <span class="o">-</span> <span class="mi">1</span><span class="p">))</span><span class="o">//</span><span class="n">nl</span>
-<a name="ln-312"></a>  <span class="n">string</span> <span class="o">=</span> <span class="n">string</span><span class="o">//</span><span class="s1">&#39;  Use &#39;</span><span class="o">//</span><span class="nb">trim</span><span class="p">(</span><span class="n">str</span><span class="p">(.</span><span class="n">true</span><span class="p">.,</span><span class="n">self</span><span class="p">%</span><span class="n">S</span><span class="p">))</span><span class="o">//</span><span class="s1">&#39; stencils composed by &#39;</span><span class="o">//</span><span class="nb">trim</span><span class="p">(</span><span class="n">str</span><span class="p">(.</span><span class="n">true</span><span class="p">.,</span><span class="n">self</span><span class="p">%</span><span class="n">S</span><span class="p">))</span><span class="o">//</span><span class="s1">&#39; values&#39;</span><span class="o">//</span><span class="n">nl</span>
-<a name="ln-313"></a>  <span class="n">string</span> <span class="o">=</span> <span class="n">string</span><span class="o">//</span><span class="s1">&#39;  The eps value used for avoiding division by zero is &#39;</span><span class="o">//</span><span class="nb">trim</span><span class="p">(</span><span class="n">str</span><span class="p">(.</span><span class="n">true</span><span class="p">.,</span><span class="n">self</span><span class="p">%</span><span class="n">eps</span><span class="p">))</span><span class="o">//</span><span class="n">nl</span>
+<a name="ln-311"></a>  <span class="n">string</span> <span class="o">=</span> <span class="n">string</span><span class="o">//</span><span class="s1">&#39;  Provide a formal order of accuracy equals to: &#39;</span><span class="o">//</span><span class="nb">trim</span><span class="p">(</span><span class="n">str</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">self</span><span class="p">%</span><span class="n">S</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="p">.</span><span class="n">true</span><span class="p">.))</span><span class="o">//</span><span class="n">nl</span>
+<a name="ln-312"></a>  <span class="n">string</span> <span class="o">=</span> <span class="n">string</span><span class="o">//</span><span class="s1">&#39;  Use &#39;</span><span class="o">//</span><span class="nb">trim</span><span class="p">(</span><span class="n">str</span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">S</span><span class="p">,</span> <span class="p">.</span><span class="n">true</span><span class="p">.))</span><span class="o">//</span><span class="s1">&#39; stencils composed by &#39;</span><span class="o">//</span><span class="nb">trim</span><span class="p">(</span><span class="n">str</span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">S</span><span class="p">,</span> <span class="p">.</span><span class="n">true</span><span class="p">.))</span><span class="o">//</span><span class="s1">&#39; values&#39;</span><span class="o">//</span><span class="n">nl</span>
+<a name="ln-313"></a>  <span class="n">string</span> <span class="o">=</span> <span class="n">string</span><span class="o">//</span><span class="s1">&#39;  The eps value used for avoiding division by zero is &#39;</span><span class="o">//</span><span class="nb">trim</span><span class="p">(</span><span class="n">str</span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">eps</span><span class="p">,</span> <span class="p">.</span><span class="n">true</span><span class="p">.))</span><span class="o">//</span><span class="n">nl</span>
 <a name="ln-314"></a>  <span class="n">string</span> <span class="o">=</span> <span class="n">string</span><span class="o">//</span><span class="s1">&#39;  The &quot;interpolate&quot; method has the following public API&#39;</span><span class="o">//</span><span class="n">nl</span>
 <a name="ln-315"></a>  <span class="n">string</span> <span class="o">=</span> <span class="n">string</span><span class="o">//</span><span class="s1">&#39;    interpolate(S, stencil, location, interpolation)&#39;</span><span class="o">//</span><span class="n">nl</span>
 <a name="ln-316"></a>  <span class="n">string</span> <span class="o">=</span> <span class="n">string</span><span class="o">//</span><span class="s1">&#39;  where:&#39;</span><span class="o">//</span><span class="n">nl</span>
@@ -714,36 +744,27 @@
 <a name="ln-452"></a>  <span class="k">class is</span><span class="p">(</span><span class="n">weno_interpolator_upwind</span><span class="p">)</span>
 <a name="ln-453"></a>    <span class="n">lhs</span><span class="p">%</span><span class="n">S</span> <span class="o">=</span> <span class="n">rhs</span><span class="p">%</span><span class="n">S</span>
 <a name="ln-454"></a>    <span class="n">lhs</span><span class="p">%</span><span class="n">eps</span> <span class="o">=</span> <span class="n">rhs</span><span class="p">%</span><span class="n">eps</span>
-<a name="ln-455"></a>    <span class="k">if</span> <span class="p">(</span><span class="nb">allocated</span><span class="p">(</span><span class="n">rhs</span><span class="p">%</span><span class="n">weights_opt</span><span class="p">))</span> <span class="k">then</span>
-<a name="ln-456"></a><span class="k">      if</span> <span class="p">(</span><span class="nb">allocated</span><span class="p">(</span><span class="n">lhs</span><span class="p">%</span><span class="n">weights_opt</span><span class="p">))</span> <span class="k">deallocate</span><span class="p">(</span><span class="n">lhs</span><span class="p">%</span><span class="n">weights_opt</span><span class="p">)</span> <span class="p">;</span> <span class="k">allocate</span><span class="p">(</span><span class="n">lhs</span><span class="p">%</span><span class="n">weights_opt</span><span class="p">(</span><span class="mi">1</span><span class="p">:</span><span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">:</span><span class="n">lhs</span><span class="p">%</span><span class="n">S</span> <span class="o">-</span> <span class="mi">1</span><span class="p">))</span>
-<a name="ln-457"></a>      <span class="n">lhs</span><span class="p">%</span><span class="n">weights_opt</span> <span class="o">=</span> <span class="n">rhs</span><span class="p">%</span><span class="n">weights_opt</span>
-<a name="ln-458"></a>    <span class="n">endif</span>
-<a name="ln-459"></a>    <span class="k">if</span> <span class="p">(</span><span class="nb">allocated</span><span class="p">(</span><span class="n">rhs</span><span class="p">%</span><span class="n">poly_coef</span><span class="p">))</span> <span class="k">then</span>
-<a name="ln-460"></a><span class="k">      if</span> <span class="p">(</span><span class="nb">allocated</span><span class="p">(</span><span class="n">lhs</span><span class="p">%</span><span class="n">poly_coef</span><span class="p">))</span> <span class="k">deallocate</span><span class="p">(</span><span class="n">lhs</span><span class="p">%</span><span class="n">poly_coef</span><span class="p">)</span> <span class="p">;</span> <span class="k">allocate</span><span class="p">(</span><span class="n">lhs</span><span class="p">%</span><span class="n">poly_coef</span><span class="p">(</span><span class="mi">1</span><span class="p">:</span><span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">:</span><span class="n">lhs</span><span class="p">%</span><span class="n">S</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">:</span><span class="n">lhs</span><span class="p">%</span><span class="n">S</span> <span class="o">-</span> <span class="mi">1</span><span class="p">))</span>
-<a name="ln-461"></a>      <span class="n">lhs</span><span class="p">%</span><span class="n">poly_coef</span> <span class="o">=</span> <span class="n">rhs</span><span class="p">%</span><span class="n">poly_coef</span>
-<a name="ln-462"></a>    <span class="n">endif</span>
-<a name="ln-463"></a>    <span class="k">if</span> <span class="p">(</span><span class="nb">allocated</span><span class="p">(</span><span class="n">rhs</span><span class="p">%</span><span class="n">smooth_coef</span><span class="p">))</span> <span class="k">then</span>
-<a name="ln-464"></a><span class="k">      if</span> <span class="p">(</span><span class="nb">allocated</span><span class="p">(</span><span class="n">lhs</span><span class="p">%</span><span class="n">smooth_coef</span><span class="p">))</span> <span class="k">deallocate</span><span class="p">(</span><span class="n">lhs</span><span class="p">%</span><span class="n">smooth_coef</span><span class="p">)</span> <span class="p">;</span> <span class="k">allocate</span><span class="p">(</span><span class="n">lhs</span><span class="p">%</span><span class="n">smooth_coef</span><span class="p">(</span><span class="mi">0</span><span class="p">:</span><span class="n">lhs</span><span class="p">%</span><span class="n">S</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">:</span><span class="n">lhs</span><span class="p">%</span><span class="n">S</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">:</span><span class="n">lhs</span><span class="p">%</span><span class="n">S</span> <span class="o">-</span> <span class="mi">1</span><span class="p">))</span>
-<a name="ln-465"></a>      <span class="n">lhs</span><span class="p">%</span><span class="n">smooth_coef</span> <span class="o">=</span> <span class="n">rhs</span><span class="p">%</span><span class="n">smooth_coef</span>
-<a name="ln-466"></a>    <span class="n">endif</span>
-<a name="ln-467"></a>  <span class="n">endselect</span>
-<a name="ln-468"></a>  <span class="k">return</span>
-<a name="ln-469"></a>  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
-<a name="ln-470"></a>  <span class="n">endsubroutine</span> <span class="n">assign_interpolator</span>
-<a name="ln-471"></a>
-<a name="ln-472"></a>  <span class="k">elemental subroutine </span><span class="n">finalize</span><span class="p">(</span><span class="n">self</span><span class="p">)</span>
+<a name="ln-455"></a>    <span class="k">if</span> <span class="p">(</span><span class="nb">allocated</span><span class="p">(</span><span class="n">rhs</span><span class="p">%</span><span class="n">weights_opt</span><span class="p">))</span> <span class="n">lhs</span><span class="p">%</span><span class="n">weights_opt</span> <span class="o">=</span> <span class="n">rhs</span><span class="p">%</span><span class="n">weights_opt</span>
+<a name="ln-456"></a>    <span class="k">if</span> <span class="p">(</span><span class="nb">allocated</span><span class="p">(</span><span class="n">rhs</span><span class="p">%</span><span class="n">poly_coef</span><span class="p">))</span> <span class="n">lhs</span><span class="p">%</span><span class="n">poly_coef</span> <span class="o">=</span> <span class="n">rhs</span><span class="p">%</span><span class="n">poly_coef</span>
+<a name="ln-457"></a>    <span class="k">if</span> <span class="p">(</span><span class="nb">allocated</span><span class="p">(</span><span class="n">rhs</span><span class="p">%</span><span class="n">smooth_coef</span><span class="p">))</span> <span class="n">lhs</span><span class="p">%</span><span class="n">smooth_coef</span> <span class="o">=</span> <span class="n">rhs</span><span class="p">%</span><span class="n">smooth_coef</span>
+<a name="ln-458"></a>  <span class="n">endselect</span>
+<a name="ln-459"></a>  <span class="k">return</span>
+<a name="ln-460"></a>  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+<a name="ln-461"></a>  <span class="n">endsubroutine</span> <span class="n">assign_interpolator</span>
+<a name="ln-462"></a>
+<a name="ln-463"></a>  <span class="k">elemental subroutine </span><span class="n">finalize</span><span class="p">(</span><span class="n">self</span><span class="p">)</span>
+<a name="ln-464"></a>  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+<a name="ln-465"></a>  <span class="c">!&lt; Finalize object.</span>
+<a name="ln-466"></a>  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+<a name="ln-467"></a>  <span class="k">type</span><span class="p">(</span><span class="n">weno_interpolator_upwind</span><span class="p">),</span> <span class="k">intent</span><span class="p">(</span><span class="n">INOUT</span><span class="p">)</span> <span class="kd">::</span> <span class="n">self</span> <span class="c">!&lt; WENO interpolator.</span>
+<a name="ln-468"></a>  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+<a name="ln-469"></a>
+<a name="ln-470"></a>  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+<a name="ln-471"></a>  <span class="k">call </span><span class="n">self</span><span class="p">%</span><span class="n">destroy</span>
+<a name="ln-472"></a>  <span class="k">return</span>
 <a name="ln-473"></a>  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
-<a name="ln-474"></a>  <span class="c">!&lt; Finalize object.</span>
-<a name="ln-475"></a>  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
-<a name="ln-476"></a>  <span class="k">type</span><span class="p">(</span><span class="n">weno_interpolator_upwind</span><span class="p">),</span> <span class="k">intent</span><span class="p">(</span><span class="n">INOUT</span><span class="p">)</span> <span class="kd">::</span> <span class="n">self</span> <span class="c">!&lt; WENO interpolator.</span>
-<a name="ln-477"></a>  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
-<a name="ln-478"></a>
-<a name="ln-479"></a>  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
-<a name="ln-480"></a>  <span class="k">call </span><span class="n">self</span><span class="p">%</span><span class="n">destroy</span>
-<a name="ln-481"></a>  <span class="k">return</span>
-<a name="ln-482"></a>  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
-<a name="ln-483"></a>  <span class="n">endsubroutine</span> <span class="n">finalize</span>
-<a name="ln-484"></a><span class="n">endmodule</span> <span class="n">type_weno_interpolator_upwind</span>
+<a name="ln-474"></a>  <span class="n">endsubroutine</span> <span class="n">finalize</span>
+<a name="ln-475"></a><span class="n">endmodule</span> <span class="n">type_weno_interpolator_upwind</span>
 </pre></div>
 
     </section>

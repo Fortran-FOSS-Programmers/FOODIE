@@ -5,7 +5,7 @@ module oscillation_test_t
 !-----------------------------------------------------------------------------------------------------------------------------------
 
 !-----------------------------------------------------------------------------------------------------------------------------------
-use Data_Type_Command_Line_Interface, only : Type_Command_Line_Interface
+use flap, only : command_line_interface
 use foodie, only : adams_bashforth_integrator,         &
                    adams_bashforth_moulton_integrator, &
                    adams_moulton_integrator,           &
@@ -15,8 +15,8 @@ use foodie, only : adams_bashforth_integrator,         &
                    leapfrog_integrator,                &
                    ls_runge_kutta_integrator,          &
                    tvd_runge_kutta_integrator
-use IR_Precision, only : I_P, R_P, FR_P, str, strz
 use oscillation_t, only : oscillation
+use penf, only : I_P, R_P, FR_P, str, strz
 use pyplot_module, only :  pyplot
 !-----------------------------------------------------------------------------------------------------------------------------------
 
@@ -47,19 +47,19 @@ type :: oscillation_test
   !<
   !< Test has only 1 public method `execute`: it executes test(s) accordingly to cli options.
   private
-  type(Type_Command_Line_Interface) :: cli                      !< Command line interface handler.
-  integer(I_P)                      :: error=0                  !< Error handler.
-  logical                           :: errors_analysis=.false.  !< Flag for activating errors analysis.
-  real(R_P)                         :: frequency=0.0_R_P        !< Oscillation frequency.
-  real(R_P)                         :: final_time=0.0_R_P       !< Final integration time.
-  integer(I_P)                      :: implicit_iterations=0    !< Number of iterations (implicit solvers).
-  character(99)                     :: output_cli='unset'       !< Output files basename.
-  logical                           :: plots=.false.            !< Flag for activating plots saving.
-  logical                           :: results=.false.          !< Flag for activating results saving.
-  character(99)                     :: solver='adams-bashforth' !< Solver used.
-  integer(I_P), allocatable         :: stages_steps(:)          !< Number of stages/steps used.
-  real(R_P),    allocatable         :: Dt(:)                    !< Time step(s) exercised.
-  real(R_P),    allocatable         :: tolerance(:)             !< Tolerance(s) exercised on local truncation error.
+  type(command_line_interface) :: cli                      !< Command line interface handler.
+  integer(I_P)                 :: error=0                  !< Error handler.
+  logical                      :: errors_analysis=.false.  !< Flag for activating errors analysis.
+  real(R_P)                    :: frequency=0.0_R_P        !< Oscillation frequency.
+  real(R_P)                    :: final_time=0.0_R_P       !< Final integration time.
+  integer(I_P)                 :: implicit_iterations=0    !< Number of iterations (implicit solvers).
+  character(99)                :: output_cli='unset'       !< Output files basename.
+  logical                      :: plots=.false.            !< Flag for activating plots saving.
+  logical                      :: results=.false.          !< Flag for activating results saving.
+  character(99)                :: solver='adams-bashforth' !< Solver used.
+  integer(I_P), allocatable    :: stages_steps(:)          !< Number of stages/steps used.
+  real(R_P),    allocatable    :: Dt(:)                    !< Time step(s) exercised.
+  real(R_P),    allocatable    :: tolerance(:)             !< Tolerance(s) exercised on local truncation error.
   contains
     private
     ! Public methods
@@ -169,14 +169,14 @@ contains
     endif
     if (.not.is_dt_valid()) then
       print "(A)", 'Error: the final integration time must be an exact multiple of the time step used!'
-      print "(A)", 'Final integration time: '//str(.true., self%final_time)
-      print "(A)", 'Time step: '//str(.true., self%Dt)
+      print "(A)", 'Final integration time: '//str(self%final_time, .true.)
+      print "(A)", 'Time step: '//str(self%Dt, .true.)
       stop
     endif
     if (size(self%stages_steps)==2) then
       if (.not.(self%stages_steps(2)>self%stages_steps(1).and.self%stages_steps(1)>=0)) then
         print "(A)", 'Error: when passing a range of stages/steps the valid format must be lower-upper (both positive)!'
-        print "(A)", 'Range passed: '//trim(str(.true., self%stages_steps(1)))//'-'//trim(str(.true., self%stages_steps(2)))
+        print "(A)", 'Range passed: '//trim(str(self%stages_steps(1), .true.))//'-'//trim(str(self%stages_steps(2), .true.))
         stop
       endif
     endif
@@ -324,7 +324,7 @@ contains
   ! test(s)
   print "(A)", trim(adjustl(solver))
   do s=stages_steps_range(1), stages_steps_range(2)
-    print "(A)", '  stages/steps '//trim(str(.true.,s))
+    print "(A)", '  stages/steps '//trim(str(s,.true.))
     if (trim(adjustl(solver))=='emd-runge-kutta') then
       do t=1, size(self%tolerance)
         call solve(solver=solver,                       &
@@ -350,7 +350,7 @@ contains
           call save_results(results=self%results,                                    &
                             plots=self%plots,                                        &
                             output_cli=self%output_cli,                              &
-                            solver=trim(adjustl(solver))//'-'//trim(str(.true., s)), &
+                            solver=trim(adjustl(solver))//'-'//trim(str(s, .true.)), &
                             frequency=self%frequency,                                &
                             solution=solution(:, 0:last_step))
         endif
@@ -379,7 +379,7 @@ contains
           call save_results(results=self%results,                                    &
                             plots=self%plots,                                        &
                             output_cli=self%output_cli,                              &
-                            solver=trim(adjustl(solver))//'-'//trim(str(.true., s)), &
+                            solver=trim(adjustl(solver))//'-'//trim(str(s, .true.)), &
                             frequency=self%frequency,                                &
                             solution=solution(:, 0:last_step))
         endif
@@ -517,7 +517,7 @@ contains
   endif
 
   if (.not.supported) then
-    print "(A)", 'The solver '//trim(adjustl(solver))//' does not support '//trim(str(.true., stages_steps))//' stages/steps'
+    print "(A)", 'The solver '//trim(adjustl(solver))//' does not support '//trim(str(stages_steps, .true.))//' stages/steps'
     if (allocated(solution)) deallocate(solution)
     return
   endif

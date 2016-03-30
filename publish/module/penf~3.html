@@ -1,0 +1,1976 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+	 
+	 <meta name="description" content="Fortran Object oriented Ordinary Differential Equations integration library">
+    
+    <meta name="author" content="Chris MacMackin" >
+    <link rel="icon" href="../favicon.png">
+
+    <title>penf &ndash; FOODIE</title>
+
+    <link href="../css/bootstrap.min.css" rel="stylesheet">
+    <link href="../css/pygments.css" rel="stylesheet">
+    <link href="../css/font-awesome.min.css" rel="stylesheet">
+    <link href="../css/local.css" rel="stylesheet">
+    
+
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+    
+    <script src="../js/jquery-2.1.3.min.js"></script>
+    <script src="../js/svg-pan-zoom.min.js"></script>
+
+    
+    <script src="../tipuesearch/tipuesearch_content.js"></script>
+    <link  href="../tipuesearch/tipuesearch.css" rel="stylesheet">
+    <script src="../tipuesearch/tipuesearch_set.js"></script>
+    <script src="../tipuesearch/tipuesearch.js"></script>
+    
+
+  </head>
+
+  <body>
+
+    <!-- Fixed navbar -->
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="../index.html">FOODIE </a>
+        </div>
+        <div id="navbar" class="navbar-collapse collapse">
+          <ul class="nav navbar-nav">
+				
+                
+            <li><a href="../lists/files.html">Source Files</a></li>
+				
+				
+            <li><a href="../lists/modules.html">Modules</a></li>
+				
+				
+            <li><a href="../lists/procedures.html">Procedures</a></li>
+				
+				
+            <li><a href="../lists/absint.html">Abstract Interfaces</a></li>
+								
+            <li><a href="../lists/types.html">Derived Types</a></li>
+				
+				
+            <li><a href="../lists/programs.html">Programs</a></li>
+				
+          </ul>
+        
+        <form action="../search.html" class="navbar-form navbar-right" role="search">
+        <div class="form-group">
+          <input type="text" class="form-control" placeholder="Search" name="q" id="tipue_search_input" autocomplete="off" required>
+        </div>
+<!--
+        <button type="submit" class="btn btn-default">Submit</button>
+-->
+        </form>
+        
+        </div><!--/.nav-collapse -->
+      </div>
+    </nav>
+
+    <div class="container">
+    
+  
+  <div class="row">
+    <h1>penf 
+    <small>Module</small>
+    
+    </h1>
+	 
+<div class="row">
+<div class="col-lg-12">
+<div class="well well-sm">
+  <ul class="list-inline" style="margin-bottom:0px;display:inline">
+     
+     
+     
+     
+    
+    
+    <li><i class="fa fa-code"></i><a href="../src/penf.F90"> Source File</a></li>
+     
+  </ul>
+  <ol class="breadcrumb in-well text-right">
+  
+     <li><a href='../sourcefile/penf.f90.html'>penf.F90</a></li>
+  
+     <li class="active">penf</li>
+  </ol>
+</div>
+</div>
+</div>
+    
+  </div>
+  
+  <div class="row">
+    <div class="col-lg-3">
+    
+<div id="sidebar">
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  <div class="panel panel-primary">
+    <div class="panel-heading text-left"><h3 class="panel-title"><a data-toggle="collapse" href="#inters">Interfaces</a></h3></div>
+    <div id="inters" class="panel-collapse collapse">
+        <div class="list-group">
+          
+          <a class="list-group-item" href="../module/penf%7E3.html#interface-bit_size%7E2">bit_size</a>
+          
+          <a class="list-group-item" href="../module/penf%7E3.html#interface-digit">digit</a>
+          
+        </div>
+    </div>
+  </div>
+  
+  
+  
+  
+  
+  <div class="panel panel-primary">
+    <div class="panel-heading text-left"><h3 class="panel-title"><a data-toggle="collapse" href="#funcs">Functions</a></h3></div>
+    <div id="funcs" class="panel-collapse collapse">
+        <div class="list-group">
+          
+          <a class="list-group-item" href="../module/penf%7E3.html#proc-digit_i8">digit_I8</a>
+          
+          <a class="list-group-item" href="../module/penf%7E3.html#proc-digit_i4">digit_I4</a>
+          
+          <a class="list-group-item" href="../module/penf%7E3.html#proc-digit_i2">digit_I2</a>
+          
+          <a class="list-group-item" href="../module/penf%7E3.html#proc-digit_i1">digit_I1</a>
+          
+        </div>
+    </div>
+  </div>
+  
+  
+  
+  <div class="panel panel-primary">
+    <div class="panel-heading text-left"><h3 class="panel-title"><a data-toggle="collapse" href="#subs">Subroutines</a></h3></div>
+    <div class="list-group">
+        <div id="subs" class="panel-collapse collapse">
+          
+          <a class="list-group-item" href="../module/penf%7E3.html#proc-check_endian">check_endian</a>
+          
+          <a class="list-group-item" href="../module/penf%7E3.html#proc-penf_init">penf_init</a>
+          
+          <a class="list-group-item" href="../module/penf%7E3.html#proc-penf_print">penf_print</a>
+          
+        </div>
+    </div>
+  </div>
+  
+  
+  
+  
+  
+  
+  
+  
+  <hr>
+  
+  <div class="panel panel-default">
+    <div class="panel-heading text-left"><h3 class="panel-title"><a data-toggle="collapse" href="#allmods">All Modules</a></h3></div>
+    <div id="allmods" class="panel-collapse collapse">
+        <div class="list-group">
+          
+          <a class="list-group-item" href="../module/flap.html">flap</a>
+          
+          <a class="list-group-item" href="../module/flap_command_line_argument_t.html">flap_command_line_argument_t</a>
+          
+          <a class="list-group-item" href="../module/flap_command_line_arguments_group_t.html">flap_command_line_arguments_group_t</a>
+          
+          <a class="list-group-item" href="../module/flap_command_line_interface_t.html">flap_command_line_interface_t</a>
+          
+          <a class="list-group-item" href="../module/flap_object_t.html">flap_object_t</a>
+          
+          <a class="list-group-item" href="../module/flap_utils_m.html">flap_utils_m</a>
+          
+          <a class="list-group-item" href="../module/foodie.html">foodie</a>
+          
+          <a class="list-group-item" href="../module/foodie_adt_integrand.html">foodie_adt_integrand</a>
+          
+          <a class="list-group-item" href="../module/foodie_integrator_adams_bashforth.html">foodie_integrator_adams_bashforth</a>
+          
+          <a class="list-group-item" href="../module/foodie_integrator_adams_bashforth_moulton.html">foodie_integrator_adams_bashforth_moulton</a>
+          
+          <a class="list-group-item" href="../module/foodie_integrator_adams_moulton.html">foodie_integrator_adams_moulton</a>
+          
+          <a class="list-group-item" href="../module/foodie_integrator_backward_differentiation_formula.html">foodie_integrator_backward_differentiation_formula</a>
+          
+          <a class="list-group-item" href="../module/foodie_integrator_emd_runge_kutta.html">foodie_integrator_emd_runge_kutta</a>
+          
+          <a class="list-group-item" href="../module/foodie_integrator_euler_explicit.html">foodie_integrator_euler_explicit</a>
+          
+          <a class="list-group-item" href="../module/foodie_integrator_leapfrog.html">foodie_integrator_leapfrog</a>
+          
+          <a class="list-group-item" href="../module/foodie_integrator_low_storage_runge_kutta.html">foodie_integrator_low_storage_runge_kutta</a>
+          
+          <a class="list-group-item" href="../module/foodie_integrator_tvd_runge_kutta.html">foodie_integrator_tvd_runge_kutta</a>
+          
+          <a class="list-group-item" href="../module/foodie_kinds.html">foodie_kinds</a>
+          
+          <a class="list-group-item" href="../module/foodie_utils.html">foodie_utils</a>
+          
+          <a class="list-group-item" href="../module/oscillation_t.html">oscillation_t</a>
+          
+          <a class="list-group-item" href="../module/oscillation_test_t.html">oscillation_test_t</a>
+          
+          <a class="list-group-item" href="../module/penf%7E3.html">penf</a>
+          
+          <a class="list-group-item" href="../module/penf%7E2.html">penf</a>
+          
+          <a class="list-group-item" href="../module/penf.html">penf</a>
+          
+          <a class="list-group-item" href="../module/penf_b_size.html">penf_b_size</a>
+          
+          <a class="list-group-item" href="../module/penf_b_size%7E3.html">penf_b_size</a>
+          
+          <a class="list-group-item" href="../module/penf_b_size%7E2.html">penf_b_size</a>
+          
+          <a class="list-group-item" href="../module/penf_global_parameters_variables%7E3.html">penf_global_parameters_variables</a>
+          
+          <a class="list-group-item" href="../module/penf_global_parameters_variables.html">penf_global_parameters_variables</a>
+          
+          <a class="list-group-item" href="../module/penf_global_parameters_variables%7E2.html">penf_global_parameters_variables</a>
+          
+          <a class="list-group-item" href="../module/penf_stringify%7E2.html">penf_stringify</a>
+          
+          <a class="list-group-item" href="../module/penf_stringify.html">penf_stringify</a>
+          
+          <a class="list-group-item" href="../module/penf_stringify%7E3.html">penf_stringify</a>
+          
+          <a class="list-group-item" href="../module/pyplot_module.html">pyplot_module</a>
+          
+          <a class="list-group-item" href="../module/pyplot_module%7E2.html">pyplot_module</a>
+          
+          <a class="list-group-item" href="../module/type_burgers.html">type_burgers</a>
+          
+          <a class="list-group-item" href="../module/type_euler_1d.html">type_euler_1D</a>
+          
+          <a class="list-group-item" href="../module/type_euler_1d_caf.html">type_euler_1D_caf</a>
+          
+          <a class="list-group-item" href="../module/type_euler_1d_caf_no_foodie.html">type_euler_1D_caf_no_foodie</a>
+          
+          <a class="list-group-item" href="../module/type_euler_1d_openmp.html">type_euler_1D_openmp</a>
+          
+          <a class="list-group-item" href="../module/type_euler_1d_openmp_no_foodie.html">type_euler_1D_openmp_no_foodie</a>
+          
+          <a class="list-group-item" href="../module/type_lorenz.html">type_lorenz</a>
+          
+          <a class="list-group-item" href="../module/type_weno_interpolator.html">type_weno_interpolator</a>
+          
+          <a class="list-group-item" href="../module/type_weno_interpolator_upwind.html">type_weno_interpolator_upwind</a>
+          
+          <a class="list-group-item" href="../module/wenoof.html">wenoof</a>
+          
+        </div>
+    </div>
+  </div>
+  
+</div>
+
+    </div>
+    
+    <div class="col-lg-9" id='text'>
+    
+    
+  
+    <ul class="list-inline">
+      <li><h4>Uses:</h4></li>
+      
+      <li><a href='../module/penf_global_parameters_variables%7E3.html'>penf_global_parameters_variables</a></li>
+      
+      <li><a href='../module/penf_b_size.html'>penf_b_size</a></li>
+      
+      <li><a href='../module/penf_stringify%7E2.html'>penf_stringify</a></li>
+      
+    </ul>
+  
+
+    
+                <div class="depgraph"><?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.26.3 (20100126.1600)
+ -->
+<!-- Title: module~~penf~3~~UsesGraph Pages: 1 -->
+<svg id="modulepenf3UsesGraph" width="512pt" height="144pt"
+ viewBox="0.00 0.00 512.00 144.34" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="module~~penf~3~~UsesGraph" class="graph" transform="scale(1 1) rotate(0) translate(4 140.337)">
+<title>module~~penf~3~~UsesGraph</title>
+<polygon fill="white" stroke="white" points="-4,5 -4,-140.337 509,-140.337 509,5 -4,5"/>
+<!-- module~penf~3 -->
+<g id="node1" class="node"><title>module~penf~3</title>
+<polygon fill="none" stroke="black" points="504,-128 450,-128 450,-102 504,-102 504,-128"/>
+<text text-anchor="middle" x="477" y="-112.55" font-family="Helvetica,sans-Serif" font-size="10.50">penf</text>
+</g>
+<!-- module~penf_b_size -->
+<g id="node2" class="node"><title>module~penf_b_size</title>
+<a xlink:href="../module/penf_b_size.html" xlink:title="penf_b_size">
+<polygon fill="#337ab7" stroke="#337ab7" points="293,-108 223,-108 223,-82 293,-82 293,-108"/>
+<text text-anchor="middle" x="258" y="-92.55" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">penf_b_size</text>
+</a>
+</g>
+<!-- module~penf_b_size&#45;&gt;module~penf~3 -->
+<g id="edge10" class="edge"><title>module~penf_b_size&#45;&gt;module~penf~3</title>
+<path fill="none" stroke="black" stroke-dasharray="5,2" d="M280.699,-108.214C303.885,-120.414 341.305,-136.572 376,-136"/>
+<path fill="none" stroke="black" stroke-dasharray="5,2" d="M376,-136C397.555,-135.644 421.168,-130.981 440.14,-126.139"/>
+<polygon fill="black" stroke="black" points="441.123,-129.499 449.88,-123.535 439.315,-122.736 441.123,-129.499"/>
+</g>
+<!-- module~penf_stringify~2 -->
+<g id="node4" class="node"><title>module~penf_stringify~2</title>
+<a xlink:href="../module/penf_stringify%7E2.html" xlink:title="penf_stringify">
+<polygon fill="#337ab7" stroke="#337ab7" points="414,-87 338,-87 338,-61 414,-61 414,-87"/>
+<text text-anchor="middle" x="376" y="-71.55" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">penf_stringify</text>
+</a>
+</g>
+<!-- module~penf_b_size&#45;&gt;module~penf_stringify~2 -->
+<g id="edge8" class="edge"><title>module~penf_b_size&#45;&gt;module~penf_stringify~2</title>
+<path fill="none" stroke="black" stroke-dasharray="5,2" d="M293.084,-88.7562C304.014,-86.8111 316.261,-84.6316 327.919,-82.5569"/>
+<polygon fill="black" stroke="black" points="328.732,-85.9672 337.964,-80.7692 327.505,-79.0755 328.732,-85.9672"/>
+</g>
+<!-- module~penf_global_parameters_variables~3 -->
+<g id="node3" class="node"><title>module~penf_global_parameters_variables~3</title>
+<a xlink:href="../module/penf_global_parameters_variables%7E3.html" xlink:title="penf_global_parameters_variables">
+<polygon fill="#337ab7" stroke="#337ab7" points="178,-108 8.52651e-14,-108 0,-82 178,-82 178,-108"/>
+<text text-anchor="middle" x="89" y="-92.55" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">penf_global_parameters_variables</text>
+</a>
+</g>
+<!-- module~penf_global_parameters_variables~3&#45;&gt;module~penf~3 -->
+<g id="edge12" class="edge"><title>module~penf_global_parameters_variables~3&#45;&gt;module~penf~3</title>
+<path fill="none" stroke="black" stroke-dasharray="5,2" d="M143.427,-108.01C200.911,-120.517 294.347,-137.347 376,-136"/>
+</g>
+<!-- module~penf_global_parameters_variables~3&#45;&gt;module~penf_b_size -->
+<g id="edge2" class="edge"><title>module~penf_global_parameters_variables~3&#45;&gt;module~penf_b_size</title>
+<path fill="none" stroke="black" stroke-dasharray="5,2" d="M178.449,-95C190.206,-95 201.835,-95 212.422,-95"/>
+<polygon fill="black" stroke="black" points="212.627,-98.5001 222.627,-95 212.627,-91.5001 212.627,-98.5001"/>
+</g>
+<!-- module~penf_global_parameters_variables~3&#45;&gt;module~penf_stringify~2 -->
+<g id="edge6" class="edge"><title>module~penf_global_parameters_variables~3&#45;&gt;module~penf_stringify~2</title>
+<path fill="none" stroke="black" stroke-dasharray="5,2" d="M150.709,-81.9431C170.794,-78.2835 193.256,-74.8116 214,-73 252.963,-69.5974 262.89,-72.7358 302,-73 310.312,-73.0562 319.149,-73.1478 327.715,-73.2534"/>
+<polygon fill="black" stroke="black" points="327.93,-76.7564 337.975,-73.3877 328.022,-69.757 327.93,-76.7564"/>
+</g>
+<!-- module~penf_stringify~2&#45;&gt;module~penf~3 -->
+<g id="edge14" class="edge"><title>module~penf_stringify~2&#45;&gt;module~penf~3</title>
+<path fill="none" stroke="black" stroke-dasharray="5,2" d="M408.235,-87.0854C418.489,-91.2481 429.905,-95.8822 440.442,-100.16"/>
+<polygon fill="black" stroke="black" points="439.231,-103.445 449.813,-103.964 441.864,-96.9595 439.231,-103.445"/>
+</g>
+<!-- iso_fortran_env -->
+<g id="node6" class="node"><title>iso_fortran_env</title>
+<a xlink:href="https://gcc.gnu.org/onlinedocs/gfortran/ISO_005fFORTRAN_005fENV.html" xlink:title="iso_fortran_env">
+<polygon fill="#337ab7" stroke="#337ab7" points="301,-26 215,-26 215,-1.24345e-14 301,-3.55271e-15 301,-26"/>
+<text text-anchor="middle" x="258" y="-10.55" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">iso_fortran_env</text>
+</a>
+</g>
+<!-- iso_fortran_env&#45;&gt;module~penf_stringify~2 -->
+<g id="edge4" class="edge"><title>iso_fortran_env&#45;&gt;module~penf_stringify~2</title>
+<path fill="none" stroke="black" stroke-dasharray="5,2" d="M283.314,-26.086C300.346,-34.8907 323.01,-46.607 341.663,-56.2498"/>
+<polygon fill="black" stroke="black" points="340.237,-59.4525 350.728,-60.9356 343.452,-53.2342 340.237,-59.4525"/>
+</g>
+</g>
+</svg>
+</div>
+                <div><a type="button" class="graph-help" data-toggle="modal" href="#graph-help-text">Help</a></div>
+                <div class="modal fade" id="graph-help-text" tabindex="-1" role="dialog">
+                  <div class="modal-dialog modal-lg" role="document">
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title" id="-graph-help-label">Graph Key</h4>
+                      </div>
+                      <div class="modal-body">
+                        
+Nodes of different colours represent the following:
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.26.3 (20100126.1600)
+ -->
+<!-- Title: Graph Key Pages: 1 -->
+<svg width="641pt" height="28pt"
+ viewBox="0.00 0.00 641.00 27.80" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="graph1" class="graph" transform="scale(0.817602 0.817602) rotate(0) translate(4 30)">
+<title>Graph Key</title>
+<polygon fill="white" stroke="white" points="-4,5 -4,-30 781,-30 781,5 -4,5"/>
+<!-- Module -->
+<g id="node1" class="node"><title>Module</title>
+<polygon fill="#337ab7" stroke="#337ab7" points="54,-26 2.13163e-14,-26 0,-1.24345e-14 54,-3.55271e-15 54,-26"/>
+<text text-anchor="middle" x="27" y="-10.55" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Module</text>
+</g>
+<!-- Submodule -->
+<g id="node2" class="node"><title>Submodule</title>
+<polygon fill="#5bc0de" stroke="#5bc0de" points="138,-26 72,-26 72,-1.24345e-14 138,-3.55271e-15 138,-26"/>
+<text text-anchor="middle" x="105" y="-10.55" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Submodule</text>
+</g>
+<!-- Type -->
+<g id="node3" class="node"><title>Type</title>
+<polygon fill="#5cb85c" stroke="#5cb85c" points="210,-26 156,-26 156,-1.24345e-14 210,-3.55271e-15 210,-26"/>
+<text text-anchor="middle" x="183" y="-10.55" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Type</text>
+</g>
+<!-- Subroutine -->
+<g id="node4" class="node"><title>Subroutine</title>
+<polygon fill="#d9534f" stroke="#d9534f" points="292,-26 228,-26 228,-1.24345e-14 292,-3.55271e-15 292,-26"/>
+<text text-anchor="middle" x="260" y="-10.55" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Subroutine</text>
+</g>
+<!-- Function -->
+<g id="node5" class="node"><title>Function</title>
+<polygon fill="#d94e8f" stroke="#d94e8f" points="364,-26 310,-26 310,-1.24345e-14 364,-3.55271e-15 364,-26"/>
+<text text-anchor="middle" x="337" y="-10.55" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Function</text>
+</g>
+<!-- Interface -->
+<g id="node6" class="node"><title>Interface</title>
+<polygon fill="#a7506f" stroke="#a7506f" points="436,-26 382,-26 382,-1.24345e-14 436,-3.55271e-15 436,-26"/>
+<text text-anchor="middle" x="409" y="-10.55" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Interface</text>
+</g>
+<!-- Unknown Procedure Type -->
+<g id="node7" class="node"><title>Unknown Procedure Type</title>
+<polygon fill="#777777" stroke="#777777" points="590,-26 454,-26 454,-1.24345e-14 590,-3.55271e-15 590,-26"/>
+<text text-anchor="middle" x="522" y="-10.55" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Unknown Procedure Type</text>
+</g>
+<!-- Program -->
+<g id="node8" class="node"><title>Program</title>
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="662,-26 608,-26 608,-1.24345e-14 662,-3.55271e-15 662,-26"/>
+<text text-anchor="middle" x="635" y="-10.55" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Program</text>
+</g>
+<!-- This Page&#39;s Entity -->
+<g id="node9" class="node"><title>This Page&#39;s Entity</title>
+<polygon fill="none" stroke="black" points="776,-26 680,-26 680,-1.24345e-14 776,-3.55271e-15 776,-26"/>
+<text text-anchor="middle" x="728" y="-10.55" font-family="Helvetica,sans-Serif" font-size="10.50">This Page&#39;s Entity</text>
+</g>
+</g>
+</svg>
+
+<h5>Module Graph</h5>
+<p>Solid arrows point from a parent (sub)module to the submodule which is
+descended from it. Dashed arrows point from a module being used to the
+module using it.</p>
+<h5>Type Graph</h5>
+<p>Solid arrows point from one derived type to another which extends
+(inherits from) it. Dashed arrows point from a derived type to another
+type containing it as a components, with a label listing the name(s) of
+said component(s).</p>
+<h5>Call Graph</h5>
+<p>Solid arrows point from a procedure to one which it calls. Dashed 
+arrows point from an interface to procedures which implement that interface.
+This could include the module procedures in a generic interface or the
+implementation in a submodule of an interface in a parent module.</p>
+
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                
+    
+    <p>Portability Environment for Fortran poor people.</p>
+    
+    
+    <h3>Used By</h3>
+    
+                <div class="depgraph"><?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.26.3 (20100126.1600)
+ -->
+<!-- Title: module~~penf~3~~UsedByGraph Pages: 1 -->
+<svg id="modulepenf3UsedByGraph" width="641pt" height="314pt"
+ viewBox="0.00 0.00 641.00 313.70" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="module~~penf~3~~UsedByGraph" class="graph" transform="scale(0.453324 0.453324) rotate(0) translate(4 688)">
+<title>module~~penf~3~~UsedByGraph</title>
+<polygon fill="white" stroke="white" points="-4,5 -4,-688 1411,-688 1411,5 -4,5"/>
+<!-- module~penf~3 -->
+<g id="node1" class="node"><title>module~penf~3</title>
+<polygon fill="none" stroke="black" points="54,-335 2.13163e-14,-335 0,-309 54,-309 54,-335"/>
+<text text-anchor="middle" x="27" y="-319.55" font-family="Helvetica,sans-Serif" font-size="10.50">penf</text>
+</g>
+<!-- module~flap_command_line_interface_t -->
+<g id="node2" class="node"><title>module~flap_command_line_interface_t</title>
+<a xlink:href="../module/flap_command_line_interface_t.html" xlink:title="flap_command_line_interface_t">
+<polygon fill="#337ab7" stroke="#337ab7" points="806,-496 644,-496 644,-470 806,-470 806,-496"/>
+<text text-anchor="middle" x="725" y="-480.55" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">flap_command_line_interface_t</text>
+</a>
+</g>
+<!-- module~penf~3&#45;&gt;module~flap_command_line_interface_t -->
+<g id="edge86" class="edge"><title>module~penf~3&#45;&gt;module~flap_command_line_interface_t</title>
+<path fill="none" stroke="black" stroke-dasharray="5,2" d="M29.7269,-335.097C37.8916,-373.052 63.2387,-481.881 90,-505 232.017,-627.69 318.496,-603.927 505,-583"/>
+<path fill="none" stroke="black" stroke-dasharray="5,2" d="M505,-583C579.905,-573.74 658.174,-528.114 698.09,-501.804"/>
+<polygon fill="black" stroke="black" points="700.11,-504.663 706.471,-496.19 696.215,-498.848 700.11,-504.663"/>
+</g>
+<!-- module~oscillation_t -->
+<g id="node3" class="node"><title>module~oscillation_t</title>
+<a xlink:href="../module/oscillation_t.html" xlink:title="oscillation_t">
+<polygon fill="#337ab7" stroke="#337ab7" points="317,-335 249,-335 249,-309 317,-309 317,-335"/>
+<text text-anchor="middle" x="283" y="-319.55" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">oscillation_t</text>
+</a>
+</g>
+<!-- module~penf~3&#45;&gt;module~oscillation_t -->
+<g id="edge88" class="edge"><title>module~penf~3&#45;&gt;module~oscillation_t</title>
+<path fill="none" stroke="black" stroke-dasharray="5,2" d="M127,-322C164.677,-320.293 207.525,-320.443 238.77,-320.935"/>
+<polygon fill="black" stroke="black" points="238.836,-324.437 248.896,-321.113 238.959,-317.438 238.836,-324.437"/>
+</g>
+<!-- program~test_basic -->
+<g id="node4" class="node"><title>program~test_basic</title>
+<a xlink:href="../program/test_basic.html" xlink:title="test_basic">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="1191,-684 1131,-684 1131,-658 1191,-658 1191,-684"/>
+<text text-anchor="middle" x="1161" y="-668.55" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">test_basic</text>
+</a>
+</g>
+<!-- module~penf~3&#45;&gt;program~test_basic -->
+<g id="edge90" class="edge"><title>module~penf~3&#45;&gt;program~test_basic</title>
+<path fill="none" stroke="black" stroke-dasharray="5,2" d="M933,-583C996.6,-584.223 1000.18,-627.375 1060,-649 1079.37,-656.001 1101.66,-661.146 1120.37,-664.692"/>
+<polygon fill="black" stroke="black" points="1119.89,-668.162 1130.36,-666.499 1121.14,-661.274 1119.89,-668.162"/>
+</g>
+<!-- module~flap_command_line_argument_t -->
+<g id="node5" class="node"><title>module~flap_command_line_argument_t</title>
+<a xlink:href="../module/flap_command_line_argument_t.html" xlink:title="flap_command_line_argument_t">
+<polygon fill="#337ab7" stroke="#337ab7" points="366,-455 200,-455 200,-429 366,-429 366,-455"/>
+<text text-anchor="middle" x="283" y="-439.55" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">flap_command_line_argument_t</text>
+</a>
+</g>
+<!-- module~penf~3&#45;&gt;module~flap_command_line_argument_t -->
+<g id="edge92" class="edge"><title>module~penf~3&#45;&gt;module~flap_command_line_argument_t</title>
+<path fill="none" stroke="black" stroke-dasharray="5,2" d="M127,-322C129.035,-321.908 214.676,-388.599 258.18,-422.585"/>
+<polygon fill="black" stroke="black" points="256.248,-425.517 266.282,-428.917 260.558,-420.001 256.248,-425.517"/>
+</g>
+<!-- program~test_all~3 -->
+<g id="node6" class="node"><title>program~test_all~3</title>
+<a xlink:href="../program/test_all%7E3.html" xlink:title="test_all">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="154,-294 100,-294 100,-268 154,-268 154,-294"/>
+<text text-anchor="middle" x="127" y="-278.55" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">test_all</text>
+</a>
+</g>
+<!-- module~penf~3&#45;&gt;program~test_all~3 -->
+<g id="edge94" class="edge"><title>module~penf~3&#45;&gt;program~test_all~3</title>
+<path fill="none" stroke="black" stroke-dasharray="5,2" d="M54.0614,-310.905C65.2892,-306.301 78.4873,-300.89 90.5478,-295.945"/>
+<polygon fill="black" stroke="black" points="91.9922,-299.136 99.9169,-292.104 89.3366,-292.659 91.9922,-299.136"/>
+</g>
+<!-- program~test_nested -->
+<g id="node7" class="node"><title>program~test_nested</title>
+<a xlink:href="../program/test_nested.html" xlink:title="test_nested">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="1195,-640 1127,-640 1127,-614 1195,-614 1195,-640"/>
+<text text-anchor="middle" x="1161" y="-624.55" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">test_nested</text>
+</a>
+</g>
+<!-- module~penf~3&#45;&gt;program~test_nested -->
+<g id="edge96" class="edge"><title>module~penf~3&#45;&gt;program~test_nested</title>
+<path fill="none" stroke="black" stroke-dasharray="5,2" d="M933,-583C951.051,-583.347 1055.48,-604.753 1116.56,-617.576"/>
+<polygon fill="black" stroke="black" points="1116.2,-621.076 1126.7,-619.71 1117.64,-614.226 1116.2,-621.076"/>
+</g>
+<!-- module~flap_command_line_arguments_group_t -->
+<g id="node8" class="node"><title>module~flap_command_line_arguments_group_t</title>
+<a xlink:href="../module/flap_command_line_arguments_group_t.html" xlink:title="flap_command_line_arguments_group_t">
+<polygon fill="#337ab7" stroke="#337ab7" points="607,-417 403,-417 403,-391 607,-391 607,-417"/>
+<text text-anchor="middle" x="505" y="-401.55" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">flap_command_line_arguments_group_t</text>
+</a>
+</g>
+<!-- module~penf~3&#45;&gt;module~flap_command_line_arguments_group_t -->
+<g id="edge98" class="edge"><title>module~penf~3&#45;&gt;module~flap_command_line_arguments_group_t</title>
+<path fill="none" stroke="black" stroke-dasharray="5,2" d="M283,-363C330.525,-371.381 383.69,-381.184 426.075,-389.103"/>
+<polygon fill="black" stroke="black" points="425.58,-392.571 436.053,-390.97 426.867,-385.691 425.58,-392.571"/>
+</g>
+<!-- program~test_all~2 -->
+<g id="node9" class="node"><title>program~test_all~2</title>
+<a xlink:href="../program/test_all%7E2.html" xlink:title="test_all">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="154,-250 100,-250 100,-224 154,-224 154,-250"/>
+<text text-anchor="middle" x="127" y="-234.55" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">test_all</text>
+</a>
+</g>
+<!-- module~penf~3&#45;&gt;program~test_all~2 -->
+<g id="edge100" class="edge"><title>module~penf~3&#45;&gt;program~test_all~2</title>
+<path fill="none" stroke="black" stroke-dasharray="5,2" d="M38.2431,-308.977C50.2444,-295.524 70.2184,-274.382 90,-259 91.3791,-257.928 92.8147,-256.868 94.2852,-255.827"/>
+<polygon fill="black" stroke="black" points="96.5153,-258.549 102.936,-250.121 92.6609,-252.706 96.5153,-258.549"/>
+</g>
+<!-- program~test_choices_logical -->
+<g id="node10" class="node"><title>program~test_choices_logical</title>
+<a xlink:href="../program/test_choices_logical.html" xlink:title="test_choices_logical">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="1215,-596 1107,-596 1107,-570 1215,-570 1215,-596"/>
+<text text-anchor="middle" x="1161" y="-580.55" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">test_choices_logical</text>
+</a>
+</g>
+<!-- module~penf~3&#45;&gt;program~test_choices_logical -->
+<g id="edge102" class="edge"><title>module~penf~3&#45;&gt;program~test_choices_logical</title>
+<path fill="none" stroke="black" stroke-dasharray="5,2" d="M933,-583C988.19,-584.061 1050.91,-583.966 1096.58,-583.66"/>
+<polygon fill="black" stroke="black" points="1096.66,-587.159 1106.63,-583.587 1096.61,-580.159 1096.66,-587.159"/>
+</g>
+<!-- program~test_minimal -->
+<g id="node11" class="node"><title>program~test_minimal</title>
+<a xlink:href="../program/test_minimal.html" xlink:title="test_minimal">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="1197,-552 1125,-552 1125,-526 1197,-526 1197,-552"/>
+<text text-anchor="middle" x="1161" y="-536.55" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">test_minimal</text>
+</a>
+</g>
+<!-- module~penf~3&#45;&gt;program~test_minimal -->
+<g id="edge104" class="edge"><title>module~penf~3&#45;&gt;program~test_minimal</title>
+<path fill="none" stroke="black" stroke-dasharray="5,2" d="M933,-583C950.849,-583.343 1053.16,-562.145 1114.5,-549.051"/>
+<polygon fill="black" stroke="black" points="1115.3,-552.46 1124.34,-546.945 1113.83,-545.615 1115.3,-552.46"/>
+</g>
+<!-- program~test_hidden -->
+<g id="node12" class="node"><title>program~test_hidden</title>
+<a xlink:href="../program/test_hidden.html" xlink:title="test_hidden">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="1195,-508 1127,-508 1127,-482 1195,-482 1195,-508"/>
+<text text-anchor="middle" x="1161" y="-492.55" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">test_hidden</text>
+</a>
+</g>
+<!-- module~penf~3&#45;&gt;program~test_hidden -->
+<g id="edge106" class="edge"><title>module~penf~3&#45;&gt;program~test_hidden</title>
+<path fill="none" stroke="black" stroke-dasharray="5,2" d="M505,-583C693.785,-559.662 742.778,-583 933,-583"/>
+<path fill="none" stroke="black" stroke-dasharray="5,2" d="M933,-583C996.6,-584.223 1000.18,-538.625 1060,-517 1078.14,-510.442 1098.86,-505.512 1116.79,-501.999"/>
+<polygon fill="black" stroke="black" points="1117.52,-505.424 1126.7,-500.143 1116.23,-498.543 1117.52,-505.424"/>
+</g>
+<!-- module~flap_object_t -->
+<g id="node13" class="node"><title>module~flap_object_t</title>
+<a xlink:href="../module/flap_object_t.html" xlink:title="flap_object_t">
+<polygon fill="#337ab7" stroke="#337ab7" points="163,-433 91,-433 91,-407 163,-407 163,-433"/>
+<text text-anchor="middle" x="127" y="-417.55" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">flap_object_t</text>
+</a>
+</g>
+<!-- module~penf~3&#45;&gt;module~flap_object_t -->
+<g id="edge108" class="edge"><title>module~penf~3&#45;&gt;module~flap_object_t</title>
+<path fill="none" stroke="black" stroke-dasharray="5,2" d="M40.4864,-335.217C57.4297,-351.821 86.6725,-380.479 106.417,-399.829"/>
+<polygon fill="black" stroke="black" points="104.135,-402.493 113.727,-406.993 109.035,-397.494 104.135,-402.493"/>
+</g>
+<!-- module~type_weno_interpolator_upwind -->
+<g id="node14" class="node"><title>module~type_weno_interpolator_upwind</title>
+<a xlink:href="../module/type_weno_interpolator_upwind.html" xlink:title="type_weno_interpolator_upwind">
+<polygon fill="#337ab7" stroke="#337ab7" points="587,-212 423,-212 423,-186 587,-186 587,-212"/>
+<text text-anchor="middle" x="505" y="-196.55" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">type_weno_interpolator_upwind</text>
+</a>
+</g>
+<!-- module~penf~3&#45;&gt;module~type_weno_interpolator_upwind -->
+<g id="edge110" class="edge"><title>module~penf~3&#45;&gt;module~type_weno_interpolator_upwind</title>
+<path fill="none" stroke="black" stroke-dasharray="5,2" d="M283,-199C327.581,-181.2 381.33,-180.72 424.775,-184.921"/>
+<polygon fill="black" stroke="black" points="424.415,-188.402 434.73,-185.981 425.157,-181.441 424.415,-188.402"/>
+</g>
+<!-- module~oscillation_test_t -->
+<g id="node15" class="node"><title>module~oscillation_test_t</title>
+<a xlink:href="../module/oscillation_test_t.html" xlink:title="oscillation_test_t">
+<polygon fill="#337ab7" stroke="#337ab7" points="1206,-376 1116,-376 1116,-350 1206,-350 1206,-376"/>
+<text text-anchor="middle" x="1161" y="-360.55" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">oscillation_test_t</text>
+</a>
+</g>
+<!-- module~penf~3&#45;&gt;module~oscillation_test_t -->
+<g id="edge112" class="edge"><title>module~penf~3&#45;&gt;module~oscillation_test_t</title>
+<path fill="none" stroke="black" stroke-dasharray="5,2" d="M127,-322C160.864,-320.772 167.243,-335.325 200,-344 236.582,-353.688 245.732,-356.428 283,-363"/>
+<path fill="none" stroke="black" stroke-dasharray="5,2" d="M283,-363C380.167,-380.134 406.509,-357.116 505,-363"/>
+</g>
+<!-- program~sin_reconstruction -->
+<g id="node16" class="node"><title>program~sin_reconstruction</title>
+<a xlink:href="../program/sin_reconstruction.html" xlink:title="sin_reconstruction">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="983,-26 883,-26 883,-1.24345e-14 983,-3.55271e-15 983,-26"/>
+<text text-anchor="middle" x="933" y="-10.55" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">sin_reconstruction</text>
+</a>
+</g>
+<!-- module~penf~3&#45;&gt;program~sin_reconstruction -->
+<g id="edge114" class="edge"><title>module~penf~3&#45;&gt;program~sin_reconstruction</title>
+<path fill="none" stroke="black" stroke-dasharray="5,2" d="M54.1784,-322.664C74.2983,-322.994 102.372,-323.116 127,-322"/>
+<path fill="none" stroke="black" stroke-dasharray="5,2" d="M127,-322C145.467,-321.163 151.419,-316.545 164,-303 191.92,-272.94 168.558,-244.355 200,-218 229.002,-193.69 247.855,-213.032 283,-199"/>
+<path fill="none" stroke="black" stroke-dasharray="5,2" d="M283,-199C493.784,-114.841 756.985,-51.7004 873.162,-25.8411"/>
+<polygon fill="black" stroke="black" points="873.934,-29.255 882.94,-23.6755 872.42,-22.4206 873.934,-29.255"/>
+</g>
+<!-- program~test_string -->
+<g id="node17" class="node"><title>program~test_string</title>
+<a xlink:href="../program/test_string.html" xlink:title="test_string">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="1192,-332 1130,-332 1130,-306 1192,-306 1192,-332"/>
+<text text-anchor="middle" x="1161" y="-316.55" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">test_string</text>
+</a>
+</g>
+<!-- module~penf~3&#45;&gt;program~test_string -->
+<g id="edge116" class="edge"><title>module~penf~3&#45;&gt;program~test_string</title>
+<path fill="none" stroke="black" stroke-dasharray="5,2" d="M127,-322C160.851,-320.466 166.476,-304.942 200,-300 272.989,-289.241 292.227,-299.119 366,-300 654.783,-303.45 1002.45,-313.948 1119.94,-317.672"/>
+<polygon fill="black" stroke="black" points="1119.83,-321.171 1129.94,-317.991 1120.06,-314.174 1119.83,-321.171"/>
+</g>
+<!-- module~flap_utils_m -->
+<g id="node18" class="node"><title>module~flap_utils_m</title>
+<a xlink:href="../module/flap_utils_m.html" xlink:title="flap_utils_m">
+<polygon fill="#337ab7" stroke="#337ab7" points="162,-496 92,-496 92,-470 162,-470 162,-496"/>
+<text text-anchor="middle" x="127" y="-480.55" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">flap_utils_m</text>
+</a>
+</g>
+<!-- module~penf~3&#45;&gt;module~flap_utils_m -->
+<g id="edge118" class="edge"><title>module~penf~3&#45;&gt;module~flap_utils_m</title>
+<path fill="none" stroke="black" stroke-dasharray="5,2" d="M32.6189,-335.221C42.5841,-358.005 64.7019,-405.712 90,-442 94.8578,-448.968 100.785,-456.024 106.459,-462.272"/>
+<polygon fill="black" stroke="black" points="104.018,-464.786 113.411,-469.686 109.124,-459.998 104.018,-464.786"/>
+</g>
+<!-- program~test_all -->
+<g id="node19" class="node"><title>program~test_all</title>
+<a xlink:href="../program/test_all.html" xlink:title="test_all">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="154,-206 100,-206 100,-180 154,-180 154,-206"/>
+<text text-anchor="middle" x="127" y="-190.55" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">test_all</text>
+</a>
+</g>
+<!-- module~penf~3&#45;&gt;program~test_all -->
+<g id="edge120" class="edge"><title>module~penf~3&#45;&gt;program~test_all</title>
+<path fill="none" stroke="black" stroke-dasharray="5,2" d="M32.2093,-308.748C41.2709,-287.023 61.7087,-243.413 90,-215 90.9195,-214.077 91.8854,-213.177 92.8871,-212.302"/>
+<polygon fill="black" stroke="black" points="95.227,-214.921 101.092,-206.097 91.0047,-209.337 95.227,-214.921"/>
+</g>
+<!-- module~type_weno_interpolator -->
+<g id="node20" class="node"><title>module~type_weno_interpolator</title>
+<a xlink:href="../module/type_weno_interpolator.html" xlink:title="type_weno_interpolator">
+<polygon fill="#337ab7" stroke="#337ab7" points="345,-253 221,-253 221,-227 345,-227 345,-253"/>
+<text text-anchor="middle" x="283" y="-237.55" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">type_weno_interpolator</text>
+</a>
+</g>
+<!-- module~penf~3&#45;&gt;module~type_weno_interpolator -->
+<g id="edge122" class="edge"><title>module~penf~3&#45;&gt;module~type_weno_interpolator</title>
+<path fill="none" stroke="black" stroke-dasharray="5,2" d="M127,-322C167.581,-320.161 165.367,-288.231 200,-267 206.306,-263.134 213.225,-259.761 220.293,-256.833"/>
+<polygon fill="black" stroke="black" points="221.902,-259.965 229.982,-253.112 219.392,-253.43 221.902,-259.965"/>
+</g>
+<!-- module~flap -->
+<g id="node21" class="node"><title>module~flap</title>
+<a xlink:href="../module/flap.html" xlink:title="flap">
+<polygon fill="#337ab7" stroke="#337ab7" points="960,-438 906,-438 906,-412 960,-412 960,-438"/>
+<text text-anchor="middle" x="933" y="-422.55" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">flap</text>
+</a>
+</g>
+<!-- module~flap_command_line_interface_t&#45;&gt;module~flap -->
+<g id="edge30" class="edge"><title>module~flap_command_line_interface_t&#45;&gt;module~flap</title>
+<path fill="none" stroke="black" stroke-dasharray="5,2" d="M771.679,-469.984C809.289,-459.496 861.444,-444.953 896.158,-435.273"/>
+<polygon fill="black" stroke="black" points="897.204,-438.615 905.897,-432.558 895.324,-431.872 897.204,-438.615"/>
+</g>
+<!-- module~oscillation_t&#45;&gt;module~oscillation_test_t -->
+<g id="edge32" class="edge"><title>module~oscillation_t&#45;&gt;module~oscillation_test_t</title>
+<path fill="none" stroke="black" stroke-dasharray="5,2" d="M317.269,-331.344C360.593,-342.456 437.659,-359.897 505,-363"/>
+<path fill="none" stroke="black" stroke-dasharray="5,2" d="M505,-363C727.027,-373.229 991.773,-367.862 1105.07,-364.733"/>
+<polygon fill="black" stroke="black" points="1105.34,-368.227 1115.24,-364.447 1105.14,-361.23 1105.34,-368.227"/>
+</g>
+<!-- module~flap_command_line_argument_t&#45;&gt;module~flap_command_line_interface_t -->
+<g id="edge38" class="edge"><title>module~flap_command_line_argument_t&#45;&gt;module~flap_command_line_interface_t</title>
+<path fill="none" stroke="black" stroke-dasharray="5,2" d="M505,-445C558.342,-447.479 617.986,-458.295 661.701,-467.757"/>
+<polygon fill="black" stroke="black" points="661.097,-471.208 671.616,-469.939 662.602,-464.372 661.097,-471.208"/>
+</g>
+<!-- module~flap_command_line_argument_t&#45;&gt;module~flap_command_line_arguments_group_t -->
+<g id="edge36" class="edge"><title>module~flap_command_line_argument_t&#45;&gt;module~flap_command_line_arguments_group_t</title>
+<path fill="none" stroke="black" stroke-dasharray="5,2" d="M359.089,-428.976C378.417,-425.667 399.317,-422.09 419.095,-418.705"/>
+<polygon fill="black" stroke="black" points="419.744,-422.144 429.01,-417.007 418.563,-415.245 419.744,-422.144"/>
+</g>
+<!-- module~flap_command_line_argument_t&#45;&gt;module~flap -->
+<g id="edge34" class="edge"><title>module~flap_command_line_argument_t&#45;&gt;module~flap</title>
+<path fill="none" stroke="black" stroke-dasharray="5,2" d="M366.058,-441.827C407.774,-442.069 459.084,-442.866 505,-445"/>
+<path fill="none" stroke="black" stroke-dasharray="5,2" d="M505,-445C602.681,-449.54 627.213,-442.106 725,-442"/>
+</g>
+<!-- module~flap_command_line_arguments_group_t&#45;&gt;module~flap_command_line_interface_t -->
+<g id="edge42" class="edge"><title>module~flap_command_line_arguments_group_t&#45;&gt;module~flap_command_line_interface_t</title>
+<path fill="none" stroke="black" stroke-dasharray="5,2" d="M568.861,-417.01C582.101,-420.732 595.743,-425.354 608,-431 625.693,-439.15 626.583,-447.276 644,-456 651.8,-459.907 660.294,-463.445 668.752,-466.576"/>
+<polygon fill="black" stroke="black" points="667.651,-469.899 678.246,-469.937 669.987,-463.3 667.651,-469.899"/>
+</g>
+<!-- module~flap_command_line_arguments_group_t&#45;&gt;module~flap -->
+<g id="edge40" class="edge"><title>module~flap_command_line_arguments_group_t&#45;&gt;module~flap</title>
+<path fill="none" stroke="black" stroke-dasharray="5,2" d="M552.229,-417.001C596.506,-428.031 664.728,-442.065 725,-442"/>
+<path fill="none" stroke="black" stroke-dasharray="5,2" d="M725,-442C784.955,-441.935 854.308,-434.851 895.859,-429.849"/>
+<polygon fill="black" stroke="black" points="896.303,-433.321 905.801,-428.628 895.449,-426.373 896.303,-433.321"/>
+</g>
+<!-- module~flap_object_t&#45;&gt;module~flap_command_line_interface_t -->
+<g id="edge48" class="edge"><title>module~flap_object_t&#45;&gt;module~flap_command_line_interface_t</title>
+<path fill="none" stroke="black" stroke-dasharray="5,2" d="M145.05,-433.112C159.327,-442.918 180.104,-455.967 200,-464 235.091,-478.168 245.345,-479.236 283,-483"/>
+<path fill="none" stroke="black" stroke-dasharray="5,2" d="M283,-483C403.76,-495.07 544.008,-492.227 633.574,-488.29"/>
+<polygon fill="black" stroke="black" points="633.869,-491.78 643.7,-487.831 633.552,-484.787 633.869,-491.78"/>
+</g>
+<!-- module~flap_object_t&#45;&gt;module~flap_command_line_argument_t -->
+<g id="edge44" class="edge"><title>module~flap_object_t&#45;&gt;module~flap_command_line_argument_t</title>
+<path fill="none" stroke="black" stroke-dasharray="5,2" d="M163.575,-425.158C171.644,-426.296 180.545,-427.551 189.741,-428.848"/>
+<polygon fill="black" stroke="black" points="189.419,-432.337 199.81,-430.268 190.397,-425.406 189.419,-432.337"/>
+</g>
+<!-- module~flap_object_t&#45;&gt;module~flap_command_line_arguments_group_t -->
+<g id="edge46" class="edge"><title>module~flap_object_t&#45;&gt;module~flap_command_line_arguments_group_t</title>
+<path fill="none" stroke="black" stroke-dasharray="5,2" d="M163.588,-418.451C215.897,-416.237 314.327,-412.071 392.11,-408.778"/>
+<polygon fill="black" stroke="black" points="392.613,-412.26 402.456,-408.341 392.317,-405.267 392.613,-412.26"/>
+</g>
+<!-- module~wenoof -->
+<g id="node53" class="node"><title>module~wenoof</title>
+<a xlink:href="../module/wenoof.html" xlink:title="wenoof">
+<polygon fill="#337ab7" stroke="#337ab7" points="752,-212 698,-212 698,-186 752,-186 752,-212"/>
+<text text-anchor="middle" x="725" y="-196.55" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">wenoof</text>
+</a>
+</g>
+<!-- module~type_weno_interpolator_upwind&#45;&gt;module~wenoof -->
+<g id="edge74" class="edge"><title>module~type_weno_interpolator_upwind&#45;&gt;module~wenoof</title>
+<path fill="none" stroke="black" stroke-dasharray="5,2" d="M587.233,-199C621.711,-199 660.083,-199 687.556,-199"/>
+<polygon fill="black" stroke="black" points="687.886,-202.5 697.886,-199 687.886,-195.5 687.886,-202.5"/>
+</g>
+<!-- program~integrate_oscillation -->
+<g id="node73" class="node"><title>program~integrate_oscillation</title>
+<a xlink:href="../program/integrate_oscillation.html" xlink:title="integrate_oscillation">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="1405,-376 1299,-376 1299,-350 1405,-350 1405,-376"/>
+<text text-anchor="middle" x="1352" y="-360.55" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">integrate_oscillation</text>
+</a>
+</g>
+<!-- module~oscillation_test_t&#45;&gt;program~integrate_oscillation -->
+<g id="edge76" class="edge"><title>module~oscillation_test_t&#45;&gt;program~integrate_oscillation</title>
+<path fill="none" stroke="black" stroke-dasharray="5,2" d="M1206.75,-363C1231.21,-363 1261.72,-363 1288.46,-363"/>
+<polygon fill="black" stroke="black" points="1288.5,-366.5 1298.5,-363 1288.5,-359.5 1288.5,-366.5"/>
+</g>
+<!-- module~flap_utils_m&#45;&gt;module~flap_command_line_interface_t -->
+<g id="edge80" class="edge"><title>module~flap_utils_m&#45;&gt;module~flap_command_line_interface_t</title>
+<path fill="none" stroke="black" stroke-dasharray="5,2" d="M162.105,-481.011C193.787,-479.689 241.633,-478.865 283,-483"/>
+</g>
+<!-- module~flap_utils_m&#45;&gt;module~flap_command_line_argument_t -->
+<g id="edge78" class="edge"><title>module~flap_utils_m&#45;&gt;module~flap_command_line_argument_t</title>
+<path fill="none" stroke="black" stroke-dasharray="5,2" d="M162.009,-473.799C180.156,-469.029 202.818,-463.074 223.607,-457.61"/>
+<polygon fill="black" stroke="black" points="224.535,-460.985 233.317,-455.058 222.756,-454.215 224.535,-460.985"/>
+</g>
+<!-- module~type_weno_interpolator&#45;&gt;module~type_weno_interpolator_upwind -->
+<g id="edge84" class="edge"><title>module~type_weno_interpolator&#45;&gt;module~type_weno_interpolator_upwind</title>
+<path fill="none" stroke="black" stroke-dasharray="5,2" d="M345.135,-228.525C369.703,-223.987 398.261,-218.713 424.387,-213.888"/>
+<polygon fill="black" stroke="black" points="425.069,-217.321 434.267,-212.063 423.797,-210.438 425.069,-217.321"/>
+</g>
+<!-- module~type_weno_interpolator&#45;&gt;module~wenoof -->
+<g id="edge82" class="edge"><title>module~type_weno_interpolator&#45;&gt;module~wenoof</title>
+<path fill="none" stroke="black" stroke-dasharray="5,2" d="M345.214,-238.717C410.786,-236.815 516.979,-232.172 608,-221 634.863,-217.703 664.856,-212.023 687.749,-207.26"/>
+<polygon fill="black" stroke="black" points="688.672,-210.642 697.731,-205.148 687.224,-203.794 688.672,-210.642"/>
+</g>
+<!-- module~flap&#45;&gt;program~test_basic -->
+<g id="edge2" class="edge"><title>module~flap&#45;&gt;program~test_basic</title>
+<path fill="none" stroke="black" stroke-dasharray="5,2" d="M942.178,-438.122C959.371,-462.993 997.116,-518.986 1024,-569 1042.46,-603.343 1029.71,-624.447 1060,-649 1076.74,-662.569 1099.99,-668.25 1119.97,-670.456"/>
+<polygon fill="black" stroke="black" points="1119.81,-673.955 1130.07,-671.317 1120.4,-666.98 1119.81,-673.955"/>
+</g>
+<!-- module~flap&#45;&gt;program~test_nested -->
+<g id="edge12" class="edge"><title>module~flap&#45;&gt;program~test_nested</title>
+<path fill="none" stroke="black" stroke-dasharray="5,2" d="M940.586,-438.197C962.512,-475.902 1026.53,-582.811 1060,-605 1076.66,-616.044 1097.94,-621.642 1116.67,-624.443"/>
+<polygon fill="black" stroke="black" points="1116.4,-627.937 1126.76,-625.728 1117.29,-620.993 1116.4,-627.937"/>
+</g>
+<!-- module~flap&#45;&gt;program~test_choices_logical -->
+<g id="edge14" class="edge"><title>module~flap&#45;&gt;program~test_choices_logical</title>
+<path fill="none" stroke="black" stroke-dasharray="5,2" d="M941.312,-438.329C959.293,-465.963 1004.68,-529.542 1060,-561 1071.2,-567.37 1084.07,-571.897 1096.78,-575.114"/>
+<polygon fill="black" stroke="black" points="1096.38,-578.613 1106.91,-577.424 1097.93,-571.788 1096.38,-578.613"/>
+</g>
+<!-- module~flap&#45;&gt;program~test_minimal -->
+<g id="edge16" class="edge"><title>module~flap&#45;&gt;program~test_minimal</title>
+<path fill="none" stroke="black" stroke-dasharray="5,2" d="M946.997,-438.213C969.165,-458.383 1014.52,-496.652 1060,-517 1076.98,-524.597 1096.77,-529.649 1114.31,-532.971"/>
+<polygon fill="black" stroke="black" points="1113.88,-536.449 1124.34,-534.733 1115.09,-529.555 1113.88,-536.449"/>
+</g>
+<!-- module~flap&#45;&gt;program~test_hidden -->
+<g id="edge26" class="edge"><title>module~flap&#45;&gt;program~test_hidden</title>
+<path fill="none" stroke="black" stroke-dasharray="5,2" d="M960.348,-436.675C985.801,-447.218 1024.97,-462.626 1060,-473 1078.27,-478.41 1098.75,-483.116 1116.48,-486.772"/>
+<polygon fill="black" stroke="black" points="1116.06,-490.259 1126.56,-488.801 1117.44,-483.396 1116.06,-490.259"/>
+</g>
+<!-- module~flap&#45;&gt;module~oscillation_test_t -->
+<g id="edge22" class="edge"><title>module~flap&#45;&gt;module~oscillation_test_t</title>
+<path fill="none" stroke="black" stroke-dasharray="5,2" d="M960.043,-415.698C985.612,-407.091 1025.15,-394.264 1060,-385 1074.58,-381.123 1090.49,-377.42 1105.27,-374.193"/>
+<polygon fill="black" stroke="black" points="1106.25,-377.563 1115.29,-372.04 1104.78,-370.719 1106.25,-377.563"/>
+</g>
+<!-- module~flap&#45;&gt;program~test_string -->
+<g id="edge24" class="edge"><title>module~flap&#45;&gt;program~test_string</title>
+<path fill="none" stroke="black" stroke-dasharray="5,2" d="M948.725,-411.768C971.684,-393.138 1016.41,-359.401 1060,-341 1078.83,-333.051 1100.9,-327.82 1119.6,-324.462"/>
+<polygon fill="black" stroke="black" points="1120.31,-327.891 1129.6,-322.784 1119.16,-320.988 1120.31,-327.891"/>
+</g>
+<!-- program~integrate_euler_1d_openmp -->
+<g id="node22" class="node"><title>program~integrate_euler_1d_openmp</title>
+<a xlink:href="../program/integrate_euler_1d_openmp.html" xlink:title="integrate_euler_1D_openmp">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="1235,-288 1087,-288 1087,-262 1235,-262 1235,-288"/>
+<text text-anchor="middle" x="1161" y="-272.55" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">integrate_euler_1D_openmp</text>
+</a>
+</g>
+<!-- module~flap&#45;&gt;program~integrate_euler_1d_openmp -->
+<g id="edge4" class="edge"><title>module~flap&#45;&gt;program~integrate_euler_1d_openmp</title>
+<path fill="none" stroke="black" stroke-dasharray="5,2" d="M942.081,-411.663C960.809,-385.263 1006.48,-326.367 1060,-297 1065.24,-294.124 1070.83,-291.624 1076.58,-289.451"/>
+<polygon fill="black" stroke="black" points="1078.07,-292.642 1086.39,-286.093 1075.8,-286.02 1078.07,-292.642"/>
+</g>
+<!-- program~integrate_burgers -->
+<g id="node23" class="node"><title>program~integrate_burgers</title>
+<a xlink:href="../program/integrate_burgers.html" xlink:title="integrate_burgers">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="1209,-464 1113,-464 1113,-438 1209,-438 1209,-464"/>
+<text text-anchor="middle" x="1161" y="-448.55" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">integrate_burgers</text>
+</a>
+</g>
+<!-- module~flap&#45;&gt;program~integrate_burgers -->
+<g id="edge6" class="edge"><title>module~flap&#45;&gt;program~integrate_burgers</title>
+<path fill="none" stroke="black" stroke-dasharray="5,2" d="M960.05,-428.085C994.923,-432.061 1056.52,-439.086 1102.36,-444.313"/>
+<polygon fill="black" stroke="black" points="1102.14,-447.81 1112.47,-445.466 1102.93,-440.855 1102.14,-447.81"/>
+</g>
+<!-- program~integrate_euler_1d_caf~2 -->
+<g id="node24" class="node"><title>program~integrate_euler_1d_caf~2</title>
+<a xlink:href="../program/integrate_euler_1d_caf%7E2.html" xlink:title="integrate_euler_1D_caf">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="1223,-134 1099,-134 1099,-108 1223,-108 1223,-134"/>
+<text text-anchor="middle" x="1161" y="-118.55" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">integrate_euler_1D_caf</text>
+</a>
+</g>
+<!-- module~flap&#45;&gt;program~integrate_euler_1d_caf~2 -->
+<g id="edge8" class="edge"><title>module~flap&#45;&gt;program~integrate_euler_1d_caf~2</title>
+<path fill="none" stroke="black" stroke-dasharray="5,2" d="M945.168,-411.703C964.583,-389.807 1002.56,-344.08 1024,-299 1050.49,-243.311 1019.75,-211.718 1060,-165 1070.19,-153.173 1084.15,-144.415 1098.44,-137.971"/>
+<polygon fill="black" stroke="black" points="1099.95,-141.133 1107.84,-134.062 1097.26,-134.67 1099.95,-141.133"/>
+</g>
+<!-- program~integrate_euler_1d_openmp_no_foodie -->
+<g id="node25" class="node"><title>program~integrate_euler_1d_openmp_no_foodie</title>
+<a xlink:href="../program/integrate_euler_1d_openmp_no_foodie.html" xlink:title="integrate_euler_1D_openmp_no_foodie">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="1262,-200 1060,-200 1060,-174 1262,-174 1262,-200"/>
+<text text-anchor="middle" x="1161" y="-184.55" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">integrate_euler_1D_openmp_no_foodie</text>
+</a>
+</g>
+<!-- module~flap&#45;&gt;program~integrate_euler_1d_openmp_no_foodie -->
+<g id="edge10" class="edge"><title>module~flap&#45;&gt;program~integrate_euler_1d_openmp_no_foodie</title>
+<path fill="none" stroke="black" stroke-dasharray="5,2" d="M944.264,-411.753C962.731,-389.562 999.806,-342.973 1024,-299 1044.77,-261.255 1027.12,-236.832 1060,-209 1061.54,-207.696 1063.14,-206.464 1064.79,-205.3"/>
+<polygon fill="black" stroke="black" points="1066.72,-208.223 1073.44,-200.032 1063.08,-202.244 1066.72,-208.223"/>
+</g>
+<!-- program~integrate_euler_1d -->
+<g id="node26" class="node"><title>program~integrate_euler_1d</title>
+<a xlink:href="../program/integrate_euler_1d.html" xlink:title="integrate_euler_1D">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="1213,-244 1109,-244 1109,-218 1213,-218 1213,-244"/>
+<text text-anchor="middle" x="1161" y="-228.55" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">integrate_euler_1D</text>
+</a>
+</g>
+<!-- module~flap&#45;&gt;program~integrate_euler_1d -->
+<g id="edge18" class="edge"><title>module~flap&#45;&gt;program~integrate_euler_1d</title>
+<path fill="none" stroke="black" stroke-dasharray="5,2" d="M942.6,-411.74C971.485,-371.875 1055.87,-255.673 1060,-253 1071.64,-245.465 1085.45,-240.474 1099.06,-237.178"/>
+<polygon fill="black" stroke="black" points="1099.86,-240.586 1108.9,-235.066 1098.39,-233.742 1099.86,-240.586"/>
+</g>
+<!-- program~integrate_lorenz -->
+<g id="node27" class="node"><title>program~integrate_lorenz</title>
+<a xlink:href="../program/integrate_lorenz.html" xlink:title="integrate_lorenz">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="1206,-420 1116,-420 1116,-394 1206,-394 1206,-420"/>
+<text text-anchor="middle" x="1161" y="-404.55" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">integrate_lorenz</text>
+</a>
+</g>
+<!-- module~flap&#45;&gt;program~integrate_lorenz -->
+<g id="edge20" class="edge"><title>module~flap&#45;&gt;program~integrate_lorenz</title>
+<path fill="none" stroke="black" stroke-dasharray="5,2" d="M960.05,-422.864C995.801,-420.042 1059.64,-415.002 1105.79,-411.359"/>
+<polygon fill="black" stroke="black" points="1106.24,-414.834 1115.93,-410.558 1105.69,-407.856 1106.24,-414.834"/>
+</g>
+<!-- program~integrate_euler_1d_caf -->
+<g id="node28" class="node"><title>program~integrate_euler_1d_caf</title>
+<a xlink:href="../program/integrate_euler_1d_caf.html" xlink:title="integrate_euler_1D_caf">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="1223,-70 1099,-70 1099,-44 1223,-44 1223,-70"/>
+<text text-anchor="middle" x="1161" y="-54.55" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">integrate_euler_1D_caf</text>
+</a>
+</g>
+<!-- module~flap&#45;&gt;program~integrate_euler_1d_caf -->
+<g id="edge28" class="edge"><title>module~flap&#45;&gt;program~integrate_euler_1d_caf</title>
+<path fill="none" stroke="black" stroke-dasharray="5,2" d="M945.612,-411.902C965.648,-390.286 1004.48,-344.944 1024,-299 1059.32,-215.875 1003.39,-169.376 1060,-99 1068.72,-88.1644 1080.71,-80.0912 1093.39,-74.0867"/>
+<polygon fill="black" stroke="black" points="1094.91,-77.2422 1102.71,-70.0702 1092.14,-70.8137 1094.91,-77.2422"/>
+</g>
+<!-- module~wenoof&#45;&gt;program~sin_reconstruction -->
+<g id="edge62" class="edge"><title>module~wenoof&#45;&gt;program~sin_reconstruction</title>
+<path fill="none" stroke="black" stroke-dasharray="5,2" d="M752.233,-196.527C769.892,-193.508 792.113,-186.817 806,-172 849.051,-126.065 797.046,-79.0747 842,-35 850.523,-26.6435 861.645,-21.271 873.173,-17.8581"/>
+<polygon fill="black" stroke="black" points="874.049,-21.2469 882.904,-15.4297 872.354,-14.4552 874.049,-21.2469"/>
+</g>
+<!-- module~type_euler_1d -->
+<g id="node54" class="node"><title>module~type_euler_1d</title>
+<a xlink:href="../module/type_euler_1d.html" xlink:title="type_euler_1D">
+<polygon fill="#337ab7" stroke="#337ab7" points="974,-246 892,-246 892,-220 974,-220 974,-246"/>
+<text text-anchor="middle" x="933" y="-230.55" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">type_euler_1D</text>
+</a>
+</g>
+<!-- module~wenoof&#45;&gt;module~type_euler_1d -->
+<g id="edge60" class="edge"><title>module~wenoof&#45;&gt;module~type_euler_1d</title>
+<path fill="none" stroke="black" stroke-dasharray="5,2" d="M752.192,-203.445C784.982,-208.805 840.787,-217.927 881.746,-224.622"/>
+<polygon fill="black" stroke="black" points="881.383,-228.109 891.817,-226.268 882.512,-221.201 881.383,-228.109"/>
+</g>
+<!-- module~type_euler_1d_openmp -->
+<g id="node55" class="node"><title>module~type_euler_1d_openmp</title>
+<a xlink:href="../module/type_euler_1d_openmp.html" xlink:title="type_euler_1D_openmp">
+<polygon fill="#337ab7" stroke="#337ab7" points="996,-290 870,-290 870,-264 996,-264 996,-290"/>
+<text text-anchor="middle" x="933" y="-274.55" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">type_euler_1D_openmp</text>
+</a>
+</g>
+<!-- module~wenoof&#45;&gt;module~type_euler_1d_openmp -->
+<g id="edge64" class="edge"><title>module~wenoof&#45;&gt;module~type_euler_1d_openmp</title>
+<path fill="none" stroke="black" stroke-dasharray="5,2" d="M748.573,-212.093C771.767,-224.537 808.478,-243.074 842,-255 848.276,-257.233 854.875,-259.315 861.533,-261.237"/>
+<polygon fill="black" stroke="black" points="860.727,-264.645 871.298,-263.937 862.592,-257.898 860.727,-264.645"/>
+</g>
+<!-- module~type_euler_1d_openmp_no_foodie -->
+<g id="node56" class="node"><title>module~type_euler_1d_openmp_no_foodie</title>
+<a xlink:href="../module/type_euler_1d_openmp_no_foodie.html" xlink:title="type_euler_1D_openmp_no_foodie">
+<polygon fill="#337ab7" stroke="#337ab7" points="1023,-202 843,-202 843,-176 1023,-176 1023,-202"/>
+<text text-anchor="middle" x="933" y="-186.55" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">type_euler_1D_openmp_no_foodie</text>
+</a>
+</g>
+<!-- module~wenoof&#45;&gt;module~type_euler_1d_openmp_no_foodie -->
+<g id="edge66" class="edge"><title>module~wenoof&#45;&gt;module~type_euler_1d_openmp_no_foodie</title>
+<path fill="none" stroke="black" stroke-dasharray="5,2" d="M752.192,-197.693C772.78,-196.703 802.44,-195.277 831.803,-193.865"/>
+<polygon fill="black" stroke="black" points="832.34,-197.344 842.161,-193.367 832.004,-190.352 832.34,-197.344"/>
+</g>
+<!-- program~module_imports -->
+<g id="node57" class="node"><title>program~module_imports</title>
+<a xlink:href="../program/module_imports.html" xlink:title="module_imports">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="977,-158 889,-158 889,-132 977,-132 977,-158"/>
+<text text-anchor="middle" x="933" y="-142.55" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">module_imports</text>
+</a>
+</g>
+<!-- module~wenoof&#45;&gt;program~module_imports -->
+<g id="edge68" class="edge"><title>module~wenoof&#45;&gt;program~module_imports</title>
+<path fill="none" stroke="black" stroke-dasharray="5,2" d="M752.361,-191.269C776.034,-184.64 811.207,-174.931 842,-167 853.682,-163.991 866.239,-160.878 878.182,-157.973"/>
+<polygon fill="black" stroke="black" points="879.14,-161.343 888.037,-155.59 877.494,-154.539 879.14,-161.343"/>
+</g>
+<!-- module~type_euler_1d_caf -->
+<g id="node58" class="node"><title>module~type_euler_1d_caf</title>
+<a xlink:href="../module/type_euler_1d_caf.html" xlink:title="type_euler_1D_caf">
+<polygon fill="#337ab7" stroke="#337ab7" points="984,-114 882,-114 882,-88 984,-88 984,-114"/>
+<text text-anchor="middle" x="933" y="-98.55" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">type_euler_1D_caf</text>
+</a>
+</g>
+<!-- module~wenoof&#45;&gt;module~type_euler_1d_caf -->
+<g id="edge70" class="edge"><title>module~wenoof&#45;&gt;module~type_euler_1d_caf</title>
+<path fill="none" stroke="black" stroke-dasharray="5,2" d="M752.091,-194.329C768.823,-190.441 790.064,-183.606 806,-172 827.844,-156.091 819.503,-137.972 842,-123 850.819,-117.131 861.045,-112.825 871.391,-109.666"/>
+<polygon fill="black" stroke="black" points="872.57,-112.972 881.304,-106.975 870.736,-106.217 872.57,-112.972"/>
+</g>
+<!-- module~type_euler_1d_caf_no_foodie -->
+<g id="node59" class="node"><title>module~type_euler_1d_caf_no_foodie</title>
+<a xlink:href="../module/type_euler_1d_caf_no_foodie.html" xlink:title="type_euler_1D_caf_no_foodie">
+<polygon fill="#337ab7" stroke="#337ab7" points="1011,-70 855,-70 855,-44 1011,-44 1011,-70"/>
+<text text-anchor="middle" x="933" y="-54.55" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">type_euler_1D_caf_no_foodie</text>
+</a>
+</g>
+<!-- module~wenoof&#45;&gt;module~type_euler_1d_caf_no_foodie -->
+<g id="edge72" class="edge"><title>module~wenoof&#45;&gt;module~type_euler_1d_caf_no_foodie</title>
+<path fill="none" stroke="black" stroke-dasharray="5,2" d="M752.091,-195.934C769.462,-192.662 791.41,-185.912 806,-172 838.077,-141.414 808.659,-108.203 842,-79 843.345,-77.822 844.742,-76.7046 846.185,-75.6447"/>
+<polygon fill="black" stroke="black" points="848.283,-78.4604 854.897,-70.1833 844.565,-72.5295 848.283,-78.4604"/>
+</g>
+<!-- module~type_euler_1d&#45;&gt;program~integrate_euler_1d -->
+<g id="edge50" class="edge"><title>module~type_euler_1d&#45;&gt;program~integrate_euler_1d</title>
+<path fill="none" stroke="black" stroke-dasharray="5,2" d="M974.025,-232.64C1008.7,-232.336 1058.91,-231.895 1098.58,-231.548"/>
+<polygon fill="black" stroke="black" points="1098.71,-235.047 1108.68,-231.459 1098.65,-228.047 1098.71,-235.047"/>
+</g>
+<!-- module~type_euler_1d_openmp&#45;&gt;program~integrate_euler_1d_openmp -->
+<g id="edge52" class="edge"><title>module~type_euler_1d_openmp&#45;&gt;program~integrate_euler_1d_openmp</title>
+<path fill="none" stroke="black" stroke-dasharray="5,2" d="M996.511,-276.443C1021.05,-276.228 1049.51,-275.978 1075.79,-275.747"/>
+<polygon fill="black" stroke="black" points="1076.15,-279.245 1086.12,-275.657 1076.09,-272.245 1076.15,-279.245"/>
+</g>
+<!-- module~type_euler_1d_openmp_no_foodie&#45;&gt;program~integrate_euler_1d_openmp_no_foodie -->
+<g id="edge54" class="edge"><title>module~type_euler_1d_openmp_no_foodie&#45;&gt;program~integrate_euler_1d_openmp_no_foodie</title>
+<path fill="none" stroke="black" stroke-dasharray="5,2" d="M1023.77,-188.204C1032.25,-188.129 1040.9,-188.053 1049.54,-187.978"/>
+<polygon fill="black" stroke="black" points="1049.7,-191.477 1059.66,-187.889 1049.63,-184.477 1049.7,-191.477"/>
+</g>
+<!-- module~type_euler_1d_caf&#45;&gt;program~integrate_euler_1d_caf~2 -->
+<g id="edge56" class="edge"><title>module~type_euler_1d_caf&#45;&gt;program~integrate_euler_1d_caf~2</title>
+<path fill="none" stroke="black" stroke-dasharray="5,2" d="M984.737,-105.538C1015.46,-108.233 1054.88,-111.691 1088.65,-114.653"/>
+<polygon fill="black" stroke="black" points="1088.66,-118.168 1098.93,-115.555 1089.27,-111.195 1088.66,-118.168"/>
+</g>
+<!-- module~type_euler_1d_caf_no_foodie&#45;&gt;program~integrate_euler_1d_caf -->
+<g id="edge58" class="edge"><title>module~type_euler_1d_caf_no_foodie&#45;&gt;program~integrate_euler_1d_caf</title>
+<path fill="none" stroke="black" stroke-dasharray="5,2" d="M1011.15,-57C1036.3,-57 1064.04,-57 1088.75,-57"/>
+<polygon fill="black" stroke="black" points="1088.78,-60.5001 1098.78,-57 1088.78,-53.5001 1088.78,-60.5001"/>
+</g>
+</g>
+</svg>
+</div>
+                <script>var panmodulepenf3UsedByGraph = svgPanZoom('#modulepenf3UsedByGraph', {
+                    zoomEnabled: true,
+                    controlIconsEnabled: true,
+                    fit: true,
+                    center: true,});
+                    </script>
+                <div><a type="button" class="graph-help" data-toggle="modal" href="#graph-help-text">Help</a></div>
+                <div class="modal fade" id="graph-help-text" tabindex="-1" role="dialog">
+                  <div class="modal-dialog modal-lg" role="document">
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title" id="-graph-help-label">Graph Key</h4>
+                      </div>
+                      <div class="modal-body">
+                        
+Nodes of different colours represent the following:
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.26.3 (20100126.1600)
+ -->
+<!-- Title: Graph Key Pages: 1 -->
+<svg width="641pt" height="28pt"
+ viewBox="0.00 0.00 641.00 27.80" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="graph1" class="graph" transform="scale(0.817602 0.817602) rotate(0) translate(4 30)">
+<title>Graph Key</title>
+<polygon fill="white" stroke="white" points="-4,5 -4,-30 781,-30 781,5 -4,5"/>
+<!-- Module -->
+<g id="node1" class="node"><title>Module</title>
+<polygon fill="#337ab7" stroke="#337ab7" points="54,-26 2.13163e-14,-26 0,-1.24345e-14 54,-3.55271e-15 54,-26"/>
+<text text-anchor="middle" x="27" y="-10.55" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Module</text>
+</g>
+<!-- Submodule -->
+<g id="node2" class="node"><title>Submodule</title>
+<polygon fill="#5bc0de" stroke="#5bc0de" points="138,-26 72,-26 72,-1.24345e-14 138,-3.55271e-15 138,-26"/>
+<text text-anchor="middle" x="105" y="-10.55" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Submodule</text>
+</g>
+<!-- Type -->
+<g id="node3" class="node"><title>Type</title>
+<polygon fill="#5cb85c" stroke="#5cb85c" points="210,-26 156,-26 156,-1.24345e-14 210,-3.55271e-15 210,-26"/>
+<text text-anchor="middle" x="183" y="-10.55" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Type</text>
+</g>
+<!-- Subroutine -->
+<g id="node4" class="node"><title>Subroutine</title>
+<polygon fill="#d9534f" stroke="#d9534f" points="292,-26 228,-26 228,-1.24345e-14 292,-3.55271e-15 292,-26"/>
+<text text-anchor="middle" x="260" y="-10.55" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Subroutine</text>
+</g>
+<!-- Function -->
+<g id="node5" class="node"><title>Function</title>
+<polygon fill="#d94e8f" stroke="#d94e8f" points="364,-26 310,-26 310,-1.24345e-14 364,-3.55271e-15 364,-26"/>
+<text text-anchor="middle" x="337" y="-10.55" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Function</text>
+</g>
+<!-- Interface -->
+<g id="node6" class="node"><title>Interface</title>
+<polygon fill="#a7506f" stroke="#a7506f" points="436,-26 382,-26 382,-1.24345e-14 436,-3.55271e-15 436,-26"/>
+<text text-anchor="middle" x="409" y="-10.55" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Interface</text>
+</g>
+<!-- Unknown Procedure Type -->
+<g id="node7" class="node"><title>Unknown Procedure Type</title>
+<polygon fill="#777777" stroke="#777777" points="590,-26 454,-26 454,-1.24345e-14 590,-3.55271e-15 590,-26"/>
+<text text-anchor="middle" x="522" y="-10.55" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Unknown Procedure Type</text>
+</g>
+<!-- Program -->
+<g id="node8" class="node"><title>Program</title>
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="662,-26 608,-26 608,-1.24345e-14 662,-3.55271e-15 662,-26"/>
+<text text-anchor="middle" x="635" y="-10.55" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Program</text>
+</g>
+<!-- This Page&#39;s Entity -->
+<g id="node9" class="node"><title>This Page&#39;s Entity</title>
+<polygon fill="none" stroke="black" points="776,-26 680,-26 680,-1.24345e-14 776,-3.55271e-15 776,-26"/>
+<text text-anchor="middle" x="728" y="-10.55" font-family="Helvetica,sans-Serif" font-size="10.50">This Page&#39;s Entity</text>
+</g>
+</g>
+</svg>
+
+<h5>Module Graph</h5>
+<p>Solid arrows point from a parent (sub)module to the submodule which is
+descended from it. Dashed arrows point from a module being used to the
+module using it.</p>
+<h5>Type Graph</h5>
+<p>Solid arrows point from one derived type to another which extends
+(inherits from) it. Dashed arrows point from a derived type to another
+type containing it as a components, with a label listing the name(s) of
+said component(s).</p>
+<h5>Call Graph</h5>
+<p>Solid arrows point from a procedure to one which it calls. Dashed 
+arrows point from an interface to procedures which implement that interface.
+This could include the module procedures in a generic interface or the
+implementation in a submodule of an interface in a parent module.</p>
+
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                
+    <br>
+    
+
+    
+    
+    
+    
+    
+    <section>
+	 <h2>Interfaces</h2>
+	 
+	   
+<div class="panel panel-default">
+  <div class="panel-heading codesum"><span class="anchor" id="interface-bit_size%7E2"></span><h3>public interface <a href='../interface/bit_size%7E2.html'>bit_size</a>
+    
+  </h3></div>
+  
+  <div class="panel-body">
+    
+    <p>Overloading of the intrinsic <em>bit_size</em> function for computing the number of bits of (also) real and character variables.</p>
+  </div>
+  
+  <ul class="list-group">
+  
+  
+  
+  
+  </ul>
+</div>
+
+    
+	   
+<div class="panel panel-default">
+  <div class="panel-heading codesum"><span class="anchor" id="interface-digit"></span><h3>public interface <a href='../interface/digit.html'>digit</a>
+    
+  </h3></div>
+  
+  <div class="panel-body">
+    
+    <p>Compute the number of digits in decimal base of the input integer.</p>
+  </div>
+  
+  <ul class="list-group">
+  
+  
+  
+    <li class="list-group-item">
+    
+    
+    <h3>
+private elemental function <a href='../proc/digit_i8.html'>digit_I8</a>(n) result(digit)
+    
+    
+    
+</h3>
+    
+    <h4>Arguments</h4>
+    
+      
+      
+<table class="table table-striped varlist">
+<thead><tr><th>Type</th>
+<th>Intent</th><th>Optional</th>
+<th>Attributes</th><th></th><th>Name</th><th></th></thead>
+
+
+
+<tbody>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>integer(kind=I8P),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>n</strong></td><td><p>Input integer.</p></td>
+  
+</tr>
+
+</tbody>
+</table>
+
+      
+    
+    
+
+  
+  
+  
+  
+     <h4>Return Value <small>integer(kind=I4P)
+  </small></h4>
+  <p>Number of digits.</p>
+    
+    
+    <h4>Description</h4>
+       
+       
+
+
+       
+       <p>Compute the number of digits in decimal base of the input integer.</p>
+        
+
+    </li>
+  
+    <li class="list-group-item">
+    
+    
+    <h3>
+private elemental function <a href='../proc/digit_i4.html'>digit_I4</a>(n) result(digit)
+    
+    
+    
+</h3>
+    
+    <h4>Arguments</h4>
+    
+      
+      
+<table class="table table-striped varlist">
+<thead><tr><th>Type</th>
+<th>Intent</th><th>Optional</th>
+<th>Attributes</th><th></th><th>Name</th><th></th></thead>
+
+
+
+<tbody>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>integer(kind=I4P),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>n</strong></td><td><p>Input integer.</p></td>
+  
+</tr>
+
+</tbody>
+</table>
+
+      
+    
+    
+
+  
+  
+  
+  
+     <h4>Return Value <small>integer(kind=I4P)
+  </small></h4>
+  <p>Number of digits.</p>
+    
+    
+    <h4>Description</h4>
+       
+       
+
+
+       
+       <p>Compute the number of digits in decimal base of the input integer.</p>
+        
+
+    </li>
+  
+    <li class="list-group-item">
+    
+    
+    <h3>
+private elemental function <a href='../proc/digit_i2.html'>digit_I2</a>(n) result(digit)
+    
+    
+    
+</h3>
+    
+    <h4>Arguments</h4>
+    
+      
+      
+<table class="table table-striped varlist">
+<thead><tr><th>Type</th>
+<th>Intent</th><th>Optional</th>
+<th>Attributes</th><th></th><th>Name</th><th></th></thead>
+
+
+
+<tbody>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>integer(kind=I2P),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>n</strong></td><td><p>Input integer.</p></td>
+  
+</tr>
+
+</tbody>
+</table>
+
+      
+    
+    
+
+  
+  
+  
+  
+     <h4>Return Value <small>integer(kind=I4P)
+  </small></h4>
+  <p>Number of digits.</p>
+    
+    
+    <h4>Description</h4>
+       
+       
+
+
+       
+       <p>Compute the number of digits in decimal base of the input integer.</p>
+        
+
+    </li>
+  
+    <li class="list-group-item">
+    
+    
+    <h3>
+private elemental function <a href='../proc/digit_i1.html'>digit_I1</a>(n) result(digit)
+    
+    
+    
+</h3>
+    
+    <h4>Arguments</h4>
+    
+      
+      
+<table class="table table-striped varlist">
+<thead><tr><th>Type</th>
+<th>Intent</th><th>Optional</th>
+<th>Attributes</th><th></th><th>Name</th><th></th></thead>
+
+
+
+<tbody>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>integer(kind=I1P),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>n</strong></td><td><p>Input integer.</p></td>
+  
+</tr>
+
+</tbody>
+</table>
+
+      
+    
+    
+
+  
+  
+  
+  
+     <h4>Return Value <small>integer(kind=I4P)
+  </small></h4>
+  <p>Number of digits.</p>
+    
+    
+    <h4>Description</h4>
+       
+       
+
+
+       
+       <p>Compute the number of digits in decimal base of the input integer.</p>
+        
+
+    </li>
+  
+  
+  </ul>
+</div>
+
+    
+    </section>
+	<br>
+    
+
+    
+    
+    
+    
+     
+    <section>
+    <h2>Functions</h2>
+    
+    
+  <div class="panel panel-default">
+  <div class="panel-heading codesum"><span class="anchor" id="proc-digit_i8"></span><h3>
+private elemental function <a href='../proc/digit_i8.html'>digit_I8</a>(n) result(digit)
+    
+    
+    
+</h3></div>
+  <div class="panel-body">
+       
+    
+    <h4>Arguments</h4>
+    
+      
+      
+<table class="table table-striped varlist">
+<thead><tr><th>Type</th>
+<th>Intent</th><th>Optional</th>
+<th>Attributes</th><th></th><th>Name</th><th></th></thead>
+
+
+
+<tbody>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>integer(kind=I8P),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>n</strong></td><td><p>Input integer.</p></td>
+  
+</tr>
+
+</tbody>
+</table>
+
+      
+    
+    
+
+  
+  
+  
+  
+     <h4>Return Value <small>integer(kind=I4P)
+  </small></h4>
+  <p>Number of digits.</p>
+    
+    
+    <h4>Description</h4>
+       
+       
+
+
+       
+       <p>Compute the number of digits in decimal base of the input integer.</p>
+        
+
+  </div>
+  </div>
+
+    
+    
+  <div class="panel panel-default">
+  <div class="panel-heading codesum"><span class="anchor" id="proc-digit_i4"></span><h3>
+private elemental function <a href='../proc/digit_i4.html'>digit_I4</a>(n) result(digit)
+    
+    
+    
+</h3></div>
+  <div class="panel-body">
+       
+    
+    <h4>Arguments</h4>
+    
+      
+      
+<table class="table table-striped varlist">
+<thead><tr><th>Type</th>
+<th>Intent</th><th>Optional</th>
+<th>Attributes</th><th></th><th>Name</th><th></th></thead>
+
+
+
+<tbody>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>integer(kind=I4P),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>n</strong></td><td><p>Input integer.</p></td>
+  
+</tr>
+
+</tbody>
+</table>
+
+      
+    
+    
+
+  
+  
+  
+  
+     <h4>Return Value <small>integer(kind=I4P)
+  </small></h4>
+  <p>Number of digits.</p>
+    
+    
+    <h4>Description</h4>
+       
+       
+
+
+       
+       <p>Compute the number of digits in decimal base of the input integer.</p>
+        
+
+  </div>
+  </div>
+
+    
+    
+  <div class="panel panel-default">
+  <div class="panel-heading codesum"><span class="anchor" id="proc-digit_i2"></span><h3>
+private elemental function <a href='../proc/digit_i2.html'>digit_I2</a>(n) result(digit)
+    
+    
+    
+</h3></div>
+  <div class="panel-body">
+       
+    
+    <h4>Arguments</h4>
+    
+      
+      
+<table class="table table-striped varlist">
+<thead><tr><th>Type</th>
+<th>Intent</th><th>Optional</th>
+<th>Attributes</th><th></th><th>Name</th><th></th></thead>
+
+
+
+<tbody>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>integer(kind=I2P),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>n</strong></td><td><p>Input integer.</p></td>
+  
+</tr>
+
+</tbody>
+</table>
+
+      
+    
+    
+
+  
+  
+  
+  
+     <h4>Return Value <small>integer(kind=I4P)
+  </small></h4>
+  <p>Number of digits.</p>
+    
+    
+    <h4>Description</h4>
+       
+       
+
+
+       
+       <p>Compute the number of digits in decimal base of the input integer.</p>
+        
+
+  </div>
+  </div>
+
+    
+    
+  <div class="panel panel-default">
+  <div class="panel-heading codesum"><span class="anchor" id="proc-digit_i1"></span><h3>
+private elemental function <a href='../proc/digit_i1.html'>digit_I1</a>(n) result(digit)
+    
+    
+    
+</h3></div>
+  <div class="panel-body">
+       
+    
+    <h4>Arguments</h4>
+    
+      
+      
+<table class="table table-striped varlist">
+<thead><tr><th>Type</th>
+<th>Intent</th><th>Optional</th>
+<th>Attributes</th><th></th><th>Name</th><th></th></thead>
+
+
+
+<tbody>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>integer(kind=I1P),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>n</strong></td><td><p>Input integer.</p></td>
+  
+</tr>
+
+</tbody>
+</table>
+
+      
+    
+    
+
+  
+  
+  
+  
+     <h4>Return Value <small>integer(kind=I4P)
+  </small></h4>
+  <p>Number of digits.</p>
+    
+    
+    <h4>Description</h4>
+       
+       
+
+
+       
+       <p>Compute the number of digits in decimal base of the input integer.</p>
+        
+
+  </div>
+  </div>
+
+    
+    </section>
+    <br>
+    
+
+    
+    <section>
+    <h2>Subroutines</h2>
+    
+    
+  <div class="panel panel-default">
+  <div class="panel-heading codesum"><span class="anchor" id="proc-check_endian"></span><h3>
+public subroutine <a href='../proc/check_endian.html'>check_endian</a>()
+    
+    
+    
+</h3></div>
+  <div class="panel-body">
+       
+    
+    <h4>Arguments</h4>
+    
+      <em>None</em>
+    
+    
+    
+    <h4>Description</h4>
+       
+       
+
+
+       
+       <p>Check the type of bit ordering (big or little endian) of the running architecture.</p>
+        
+
+  </div>
+  </div>
+
+    
+    
+  <div class="panel panel-default">
+  <div class="panel-heading codesum"><span class="anchor" id="proc-penf_init"></span><h3>
+public subroutine <a href='../proc/penf_init.html'>penf_init</a>()
+    
+    
+    
+</h3></div>
+  <div class="panel-body">
+       
+    
+    <h4>Arguments</h4>
+    
+      <em>None</em>
+    
+    
+    
+    <h4>Description</h4>
+       
+       
+
+
+       
+       <p>Initialize PENF's variables that are not initialized into the definition specification.</p>
+        
+
+  </div>
+  </div>
+
+    
+    
+  <div class="panel panel-default">
+  <div class="panel-heading codesum"><span class="anchor" id="proc-penf_print"></span><h3>
+public subroutine <a href='../proc/penf_print.html'>penf_print</a>(unit, pref, iostat, iomsg)
+    
+    
+    
+</h3></div>
+  <div class="panel-body">
+       
+    
+    <h4>Arguments</h4>
+    
+      
+      
+<table class="table table-striped varlist">
+<thead><tr><th>Type</th>
+<th>Intent</th><th>Optional</th>
+<th>Attributes</th><th></th><th>Name</th><th></th></thead>
+
+
+
+<tbody>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>integer(kind=I4P),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>unit</strong></td><td><p>Logic unit.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>character(len=*),</td>
+  <td>intent(in),</td>
+  <td>optional</td>
+  
+  <td></td><td>::</td>
+  <td><strong>pref</strong></td><td><p>Prefixing string.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>integer(kind=I4P),</td>
+  <td>intent(out),</td>
+  <td>optional</td>
+  
+  <td></td><td>::</td>
+  <td><strong>iostat</strong></td><td><p>IO error.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>character(len=*),</td>
+  <td>intent(out),</td>
+  <td>optional</td>
+  
+  <td></td><td>::</td>
+  <td><strong>iomsg</strong></td><td><p>IO error message.</p></td>
+  
+</tr>
+
+</tbody>
+</table>
+
+      
+    
+    
+    
+    <h4>Description</h4>
+       
+       
+
+
+       
+       <p>Print to the specified unit the PENF's environment data.</p>
+        
+
+  </div>
+  </div>
+
+    
+    </section>    
+    <br>
+    
+    
+    
+    </div>
+  </div>
+
+    <hr>
+    <footer>
+        <div class="row">
+        <div class="col-md-4">&copy; 2016 </div>
+	<div class="col-md-4"><span class="text-center"> FOODIE was developed by Fortran-FOSS-Programmers Group</span></div>
+        <div class="col-md-4"><span class="pull-right">Documentation generated by <a href="https://github.com/cmacmackin/ford">FORD</a></span></div>
+        </div>
+        <br>
+    </footer>
+    </div> <!-- /container -->
+
+
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+<!--
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+-->
+    <script src="../js/bootstrap.min.js"></script>
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+    <script src="../js/ie10-viewport-bug-workaround.js"></script>
+
+    <!-- MathJax JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        TeX: { extensions: ['AMSmath.js','AMSsymbols.js','noErrors.js','noUndefined.js'], equationNumbers: { autoNumber: 'AMS' } },
+        jax: ['input/TeX','input/MathML','output/HTML-CSS'],
+        extensions: ['tex2jax.js','mml2jax.js','MathMenu.js','MathZoom.js'],
+        'HTML-CSS': { 
+           styles: { '.MathJax_Display, .MathJax .mo, .MathJax .mi, .MathJax .mn': {color: '#000000 ! important'} }
+        }
+      });
+    </script>
+    <script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+  </body>
+</html>

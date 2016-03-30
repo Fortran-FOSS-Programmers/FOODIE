@@ -168,8 +168,6 @@
           
           <a class="list-group-item" href="../sourcefile/burgers.f90.html">burgers.f90</a>
           
-          <a class="list-group-item" href="../sourcefile/data_type_command_line_interface.f90.html">Data_Type_Command_Line_Interface.F90</a>
-          
           <a class="list-group-item" href="../sourcefile/euler-1d-caf.f90.html">euler-1D-caf.f90</a>
           
           <a class="list-group-item" href="../sourcefile/euler-1d-caf_no_foodie.f90.html">euler-1D-caf_no_foodie.f90</a>
@@ -179,6 +177,18 @@
           <a class="list-group-item" href="../sourcefile/euler-1d-openmp_no_foodie.f90.html">euler-1D-openmp_no_foodie.f90</a>
           
           <a class="list-group-item" href="../sourcefile/euler-1d.f90.html">euler-1D.f90</a>
+          
+          <a class="list-group-item" href="../sourcefile/flap.f90.html">flap.f90</a>
+          
+          <a class="list-group-item" href="../sourcefile/flap_command_line_argument_t.f90.html">flap_command_line_argument_t.F90</a>
+          
+          <a class="list-group-item" href="../sourcefile/flap_command_line_arguments_group_t.f90.html">flap_command_line_arguments_group_t.f90</a>
+          
+          <a class="list-group-item" href="../sourcefile/flap_command_line_interface_t.f90.html">flap_command_line_interface_t.F90</a>
+          
+          <a class="list-group-item" href="../sourcefile/flap_object_t.f90.html">flap_object_t.f90</a>
+          
+          <a class="list-group-item" href="../sourcefile/flap_utils_m.f90.html">flap_utils_m.f90</a>
           
           <a class="list-group-item" href="../sourcefile/foodie.f90.html">foodie.f90</a>
           
@@ -208,21 +218,41 @@
           
           <a class="list-group-item" href="../sourcefile/lorenz.f90.html">lorenz.f90</a>
           
+          <a class="list-group-item" href="../sourcefile/modules_imports.f90.html">modules_imports.f90</a>
+          
           <a class="list-group-item" href="../sourcefile/oscillation.f90.html">oscillation.f90</a>
           
           <a class="list-group-item" href="../sourcefile/oscillation_t.f90.html">oscillation_t.f90</a>
           
+          <a class="list-group-item" href="../sourcefile/penf.f90.html">penf.F90</a>
+          
+          <a class="list-group-item" href="../sourcefile/penf.f90%7E2.html">penf.F90</a>
+          
+          <a class="list-group-item" href="../sourcefile/penf.f90%7E3.html">penf.F90</a>
+          
           <a class="list-group-item" href="../sourcefile/pyplot_module.f90.html">pyplot_module.f90</a>
           
+          <a class="list-group-item" href="../sourcefile/pyplot_module.f90%7E2.html">pyplot_module.f90</a>
+          
+          <a class="list-group-item" href="../sourcefile/sin_reconstruction.f90.html">sin_reconstruction.f90</a>
+          
           <a class="list-group-item" href="../sourcefile/test.f90.html">test.f90</a>
+          
+          <a class="list-group-item" href="../sourcefile/test.f90%7E2.html">test.f90</a>
+          
+          <a class="list-group-item" href="../sourcefile/test_all.f90.html">test_all.f90</a>
+          
+          <a class="list-group-item" href="../sourcefile/test_all.f90%7E2.html">test_all.f90</a>
+          
+          <a class="list-group-item" href="../sourcefile/test_all.f90%7E3.html">test_all.f90</a>
           
           <a class="list-group-item" href="../sourcefile/test_basic.f90.html">test_basic.f90</a>
           
           <a class="list-group-item" href="../sourcefile/test_choices_logical.f90.html">test_choices_logical.f90</a>
           
-          <a class="list-group-item" href="../sourcefile/test_driver.f90.html">Test_Driver.f90</a>
+          <a class="list-group-item" href="../sourcefile/test_hidden.f90.html">test_hidden.f90</a>
           
-          <a class="list-group-item" href="../sourcefile/test_driver.f90%7E2.html">Test_Driver.f90</a>
+          <a class="list-group-item" href="../sourcefile/test_minimal.f90.html">test_minimal.f90</a>
           
           <a class="list-group-item" href="../sourcefile/test_nested.f90.html">test_nested.f90</a>
           
@@ -260,20 +290,20 @@
     <br>
     <section>
     <h2><span class="anchor" id="src"></span>Source Code</h2>
-    <div class="hl"><pre><a name="ln-1"></a><span class="c">!&lt; Test FLAP for bad usage of choices option with logical</span>
+    <div class="hl"><pre><span></span><a name="ln-1"></a><span class="c">!&lt; Test FLAP for bad usage of choices option with logical</span>
 <a name="ln-2"></a><span class="k">program </span><span class="n">test_choices_logical</span>
 <a name="ln-3"></a><span class="c">!-----------------------------------------------------------------------------------------------------------------------------------</span>
 <a name="ln-4"></a><span class="c">!&lt; Test FLAP for bad usage of choices option with logical</span>
 <a name="ln-5"></a><span class="c">!-----------------------------------------------------------------------------------------------------------------------------------</span>
-<a name="ln-6"></a><span class="k">USE </span><span class="n">IR_Precision</span>
-<a name="ln-7"></a><span class="k">USE </span><span class="n">Data_Type_Command_Line_Interface</span><span class="p">,</span> <span class="n">only</span><span class="p">:</span> <span class="n">Type_Command_Line_Interface</span>
+<a name="ln-6"></a><span class="k">use </span><span class="n">flap</span><span class="p">,</span> <span class="n">only</span> <span class="p">:</span> <span class="n">command_line_interface</span>
+<a name="ln-7"></a><span class="k">use </span><span class="n">penf</span>
 <a name="ln-8"></a><span class="c">!-----------------------------------------------------------------------------------------------------------------------------------</span>
 <a name="ln-9"></a>
 <a name="ln-10"></a><span class="c">!-----------------------------------------------------------------------------------------------------------------------------------</span>
 <a name="ln-11"></a><span class="k">implicit none</span>
-<a name="ln-12"></a><span class="k">type</span><span class="p">(</span><span class="n">Type_Command_Line_Interface</span><span class="p">)</span> <span class="kd">::</span> <span class="n">cli</span>   <span class="c">!&lt; Command Line Interface (CLI).</span>
-<a name="ln-13"></a><span class="kt">logical</span>                           <span class="kd">::</span> <span class="n">vbval</span> <span class="c">!&lt; Valued-boolean value.</span>
-<a name="ln-14"></a><span class="kt">integer</span><span class="p">(</span><span class="n">I4P</span><span class="p">)</span>                      <span class="kd">::</span> <span class="n">error</span> <span class="c">!&lt; Error trapping flag.</span>
+<a name="ln-12"></a><span class="k">type</span><span class="p">(</span><span class="n">command_line_interface</span><span class="p">)</span> <span class="kd">::</span> <span class="n">cli</span>   <span class="c">!&lt; Command Line Interface (CLI).</span>
+<a name="ln-13"></a><span class="kt">logical</span>                      <span class="kd">::</span> <span class="n">vbval</span> <span class="c">!&lt; Valued-boolean value.</span>
+<a name="ln-14"></a><span class="kt">integer</span><span class="p">(</span><span class="n">I4P</span><span class="p">)</span>                 <span class="kd">::</span> <span class="n">error</span> <span class="c">!&lt; Error trapping flag.</span>
 <a name="ln-15"></a><span class="c">!-----------------------------------------------------------------------------------------------------------------------------------</span>
 <a name="ln-16"></a>
 <a name="ln-17"></a><span class="c">!-----------------------------------------------------------------------------------------------------------------------------------</span>
@@ -282,7 +312,7 @@
 <a name="ln-20"></a>             <span class="n">required</span><span class="o">=</span><span class="p">.</span><span class="n">false</span><span class="p">.,</span> <span class="n">def</span><span class="o">=</span><span class="s1">&#39;.false.&#39;</span><span class="p">,</span> <span class="n">choices</span><span class="o">=</span><span class="s1">&#39;.True.,.False.&#39;</span><span class="p">,</span> <span class="n">act</span><span class="o">=</span><span class="s1">&#39;store&#39;</span><span class="p">,</span> <span class="n">error</span><span class="o">=</span><span class="n">error</span><span class="p">)</span>
 <a name="ln-21"></a><span class="k">call </span><span class="n">cli</span><span class="p">%</span><span class="n">parse</span><span class="p">(</span><span class="n">error</span><span class="o">=</span><span class="n">error</span><span class="p">)</span>
 <a name="ln-22"></a><span class="k">call </span><span class="n">cli</span><span class="p">%</span><span class="n">get</span><span class="p">(</span><span class="n">switch</span><span class="o">=</span><span class="s1">&#39;-bv&#39;</span><span class="p">,</span> <span class="n">val</span><span class="o">=</span><span class="n">vbval</span><span class="p">,</span> <span class="n">error</span><span class="o">=</span><span class="n">error</span><span class="p">)</span>
-<a name="ln-23"></a><span class="k">print</span> <span class="s2">&quot;(A)&quot;</span><span class="p">,</span> <span class="s2">&quot;Error code: &quot;</span><span class="o">//</span><span class="nb">trim</span><span class="p">(</span><span class="n">str</span><span class="p">(.</span><span class="n">true</span><span class="p">.,</span> <span class="n">error</span><span class="p">))</span>
+<a name="ln-23"></a><span class="k">print</span> <span class="s2">&quot;(A)&quot;</span><span class="p">,</span> <span class="s2">&quot;Error code: &quot;</span><span class="o">//</span><span class="nb">trim</span><span class="p">(</span><span class="n">str</span><span class="p">(</span><span class="n">error</span><span class="p">,</span> <span class="p">.</span><span class="n">true</span><span class="p">.))</span>
 <a name="ln-24"></a><span class="k">stop</span>
 <a name="ln-25"></a><span class="c">!-----------------------------------------------------------------------------------------------------------------------------------</span>
 <a name="ln-26"></a><span class="n">endprogram</span> <span class="n">test_choices_logical</span>

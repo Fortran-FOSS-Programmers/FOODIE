@@ -168,8 +168,6 @@
           
           <a class="list-group-item" href="../sourcefile/burgers.f90.html">burgers.f90</a>
           
-          <a class="list-group-item" href="../sourcefile/data_type_command_line_interface.f90.html">Data_Type_Command_Line_Interface.F90</a>
-          
           <a class="list-group-item" href="../sourcefile/euler-1d-caf.f90.html">euler-1D-caf.f90</a>
           
           <a class="list-group-item" href="../sourcefile/euler-1d-caf_no_foodie.f90.html">euler-1D-caf_no_foodie.f90</a>
@@ -179,6 +177,18 @@
           <a class="list-group-item" href="../sourcefile/euler-1d-openmp_no_foodie.f90.html">euler-1D-openmp_no_foodie.f90</a>
           
           <a class="list-group-item" href="../sourcefile/euler-1d.f90.html">euler-1D.f90</a>
+          
+          <a class="list-group-item" href="../sourcefile/flap.f90.html">flap.f90</a>
+          
+          <a class="list-group-item" href="../sourcefile/flap_command_line_argument_t.f90.html">flap_command_line_argument_t.F90</a>
+          
+          <a class="list-group-item" href="../sourcefile/flap_command_line_arguments_group_t.f90.html">flap_command_line_arguments_group_t.f90</a>
+          
+          <a class="list-group-item" href="../sourcefile/flap_command_line_interface_t.f90.html">flap_command_line_interface_t.F90</a>
+          
+          <a class="list-group-item" href="../sourcefile/flap_object_t.f90.html">flap_object_t.f90</a>
+          
+          <a class="list-group-item" href="../sourcefile/flap_utils_m.f90.html">flap_utils_m.f90</a>
           
           <a class="list-group-item" href="../sourcefile/foodie.f90.html">foodie.f90</a>
           
@@ -208,21 +218,41 @@
           
           <a class="list-group-item" href="../sourcefile/lorenz.f90.html">lorenz.f90</a>
           
+          <a class="list-group-item" href="../sourcefile/modules_imports.f90.html">modules_imports.f90</a>
+          
           <a class="list-group-item" href="../sourcefile/oscillation.f90.html">oscillation.f90</a>
           
           <a class="list-group-item" href="../sourcefile/oscillation_t.f90.html">oscillation_t.f90</a>
           
+          <a class="list-group-item" href="../sourcefile/penf.f90.html">penf.F90</a>
+          
+          <a class="list-group-item" href="../sourcefile/penf.f90%7E2.html">penf.F90</a>
+          
+          <a class="list-group-item" href="../sourcefile/penf.f90%7E3.html">penf.F90</a>
+          
           <a class="list-group-item" href="../sourcefile/pyplot_module.f90.html">pyplot_module.f90</a>
           
+          <a class="list-group-item" href="../sourcefile/pyplot_module.f90%7E2.html">pyplot_module.f90</a>
+          
+          <a class="list-group-item" href="../sourcefile/sin_reconstruction.f90.html">sin_reconstruction.f90</a>
+          
           <a class="list-group-item" href="../sourcefile/test.f90.html">test.f90</a>
+          
+          <a class="list-group-item" href="../sourcefile/test.f90%7E2.html">test.f90</a>
+          
+          <a class="list-group-item" href="../sourcefile/test_all.f90.html">test_all.f90</a>
+          
+          <a class="list-group-item" href="../sourcefile/test_all.f90%7E2.html">test_all.f90</a>
+          
+          <a class="list-group-item" href="../sourcefile/test_all.f90%7E3.html">test_all.f90</a>
           
           <a class="list-group-item" href="../sourcefile/test_basic.f90.html">test_basic.f90</a>
           
           <a class="list-group-item" href="../sourcefile/test_choices_logical.f90.html">test_choices_logical.f90</a>
           
-          <a class="list-group-item" href="../sourcefile/test_driver.f90.html">Test_Driver.f90</a>
+          <a class="list-group-item" href="../sourcefile/test_hidden.f90.html">test_hidden.f90</a>
           
-          <a class="list-group-item" href="../sourcefile/test_driver.f90%7E2.html">Test_Driver.f90</a>
+          <a class="list-group-item" href="../sourcefile/test_minimal.f90.html">test_minimal.f90</a>
           
           <a class="list-group-item" href="../sourcefile/test_nested.f90.html">test_nested.f90</a>
           
@@ -260,7 +290,7 @@
     <br>
     <section>
     <h2><span class="anchor" id="src"></span>Source Code</h2>
-    <div class="hl"><pre><a name="ln-1"></a><span class="c">!&lt; FOODIE integrator: provide an implicit class of Backward Differentiation Formula schemes, from 1st to 6th order accurate.</span>
+    <div class="hl"><pre><span></span><a name="ln-1"></a><span class="c">!&lt; FOODIE integrator: provide an implicit class of Backward Differentiation Formula schemes, from 1st to 6th order accurate.</span>
 <a name="ln-2"></a><span class="k">module </span><span class="n">foodie_integrator_backward_differentiation_formula</span>
 <a name="ln-3"></a><span class="c">!-----------------------------------------------------------------------------------------------------------------------------------</span>
 <a name="ln-4"></a><span class="c">!&lt; FOODIE integrator: provide an implicit class of Backward Differentiation Formula schemes, from 1st to 6th order accurate.</span>
@@ -442,7 +472,7 @@
 <a name="ln-180"></a>  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
 <a name="ln-181"></a>  <span class="n">endsubroutine</span> <span class="n">integrate</span>
 <a name="ln-182"></a>
-<a name="ln-183"></a>  <span class="k">elemental function </span><span class="n">min_steps</span><span class="p">()</span>
+<a name="ln-183"></a>  <span class="k">pure function </span><span class="n">min_steps</span><span class="p">()</span>
 <a name="ln-184"></a>  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
 <a name="ln-185"></a>  <span class="c">!&lt; Return the minimum number of steps supported.</span>
 <a name="ln-186"></a>  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
@@ -455,7 +485,7 @@
 <a name="ln-193"></a>  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
 <a name="ln-194"></a>  <span class="n">endfunction</span> <span class="n">min_steps</span>
 <a name="ln-195"></a>
-<a name="ln-196"></a>  <span class="k">elemental function </span><span class="n">max_steps</span><span class="p">()</span>
+<a name="ln-196"></a>  <span class="k">pure function </span><span class="n">max_steps</span><span class="p">()</span>
 <a name="ln-197"></a>  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
 <a name="ln-198"></a>  <span class="c">!&lt; Return the maximum number of steps supported.</span>
 <a name="ln-199"></a>  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>

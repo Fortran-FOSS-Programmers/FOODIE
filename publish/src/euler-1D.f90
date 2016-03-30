@@ -5,50 +5,50 @@ program integrate_euler_1D
 !-----------------------------------------------------------------------------------------------------------------------------------
 
 !-----------------------------------------------------------------------------------------------------------------------------------
-use IR_Precision, only : R_P, I_P, FR_P, str
-use type_euler_1D, only : euler_1D
-use Data_Type_Command_Line_Interface, only : Type_Command_Line_Interface
+use flap, only : command_line_interface
 use foodie, only : adams_bashforth_integrator, &
                    euler_explicit_integrator, &
                    leapfrog_integrator, &
                    ls_runge_kutta_integrator, &
                    tvd_runge_kutta_integrator
+use IR_Precision, only : R_P, I_P, FR_P, str
 use pyplot_module, only :  pyplot
+use type_euler_1D, only : euler_1D
 !-----------------------------------------------------------------------------------------------------------------------------------
 
 !-----------------------------------------------------------------------------------------------------------------------------------
 implicit none
-type(Type_Command_Line_Interface) :: cli                !< Command line interface handler.
-type(euler_1D)                    :: domain             !< Domain of Euler equations.
-integer(I_P)                      :: Ns                 !< Number of differnt initial gas species.
-integer(I_P)                      :: Nc                 !< Number of conservative variables, Nc=Ns+2.
-integer(I_P)                      :: Np                 !< Number of primitive variables, Np=Ns+4.
-integer(I_P)                      :: Ni                 !< Number of grid cells.
-real(R_P)                         :: Dx                 !< Space step discretization.
-real(R_P)                         :: CFL                !< CFL value.
-real(R_P)                         :: t_final            !< Final time.
-character(3)                      :: BC_L               !< Left boundary condition type.
-character(3)                      :: BC_R               !< Right boundary condition type.
-real(R_P), allocatable            :: cp0(:)             !< Specific heat at constant pressure [1:Ns].
-real(R_P), allocatable            :: cv0(:)             !< Specific heat at constant volume [1:Ns].
-real(R_P), allocatable            :: initial_state(:,:) !< Initial state of primitive variables [1:Np,1:Ni].
-real(R_P), allocatable            :: xcenter(:)         !< Cell center x-abscissa values, [1:Ni].
-real(R_P), allocatable            :: xnode(:)           !< Cell node x-abscissa values, [0:Ni].
-real(R_P), allocatable            :: av_xnode(:)        !< Average-grid cell node x-abscissa values, [0:Ni].
-real(R_P), allocatable            :: final_state(:,:)   !< Final state.
-real(R_P), allocatable            :: av_state(:,:)      !< Average-grid final state.
-character(len=:), allocatable     :: variables          !< Variables names list.
-character(len=:), allocatable     :: output             !< Output files basename.
-integer(I_P)                      :: error              !< Error handler.
-integer(I_P)                      :: stages_steps       !< Number of stages/steps used.
-character(99)                     :: solver             !< Solver used.
-character(99)                     :: problem            !< Problem solved.
-character(99)                     :: output_cli         !< Output files basename.
-logical                           :: plots              !< Flag for activating plots saving.
-logical                           :: results            !< Flag for activating results saving.
-logical                           :: time_serie         !< Flag for activating time serie-results saving.
-logical                           :: verbose            !< Flag for activating more verbose output.
-integer(I_P)                      :: av_Ni              !< Average the solution over an average-grid.
+type(command_line_interface)  :: cli                !< Command line interface handler.
+type(euler_1D)                :: domain             !< Domain of Euler equations.
+integer(I_P)                  :: Ns                 !< Number of differnt initial gas species.
+integer(I_P)                  :: Nc                 !< Number of conservative variables, Nc=Ns+2.
+integer(I_P)                  :: Np                 !< Number of primitive variables, Np=Ns+4.
+integer(I_P)                  :: Ni                 !< Number of grid cells.
+real(R_P)                     :: Dx                 !< Space step discretization.
+real(R_P)                     :: CFL                !< CFL value.
+real(R_P)                     :: t_final            !< Final time.
+character(3)                  :: BC_L               !< Left boundary condition type.
+character(3)                  :: BC_R               !< Right boundary condition type.
+real(R_P), allocatable        :: cp0(:)             !< Specific heat at constant pressure [1:Ns].
+real(R_P), allocatable        :: cv0(:)             !< Specific heat at constant volume [1:Ns].
+real(R_P), allocatable        :: initial_state(:,:) !< Initial state of primitive variables [1:Np,1:Ni].
+real(R_P), allocatable        :: xcenter(:)         !< Cell center x-abscissa values, [1:Ni].
+real(R_P), allocatable        :: xnode(:)           !< Cell node x-abscissa values, [0:Ni].
+real(R_P), allocatable        :: av_xnode(:)        !< Average-grid cell node x-abscissa values, [0:Ni].
+real(R_P), allocatable        :: final_state(:,:)   !< Final state.
+real(R_P), allocatable        :: av_state(:,:)      !< Average-grid final state.
+character(len=:), allocatable :: variables          !< Variables names list.
+character(len=:), allocatable :: output             !< Output files basename.
+integer(I_P)                  :: error              !< Error handler.
+integer(I_P)                  :: stages_steps       !< Number of stages/steps used.
+character(99)                 :: solver             !< Solver used.
+character(99)                 :: problem            !< Problem solved.
+character(99)                 :: output_cli         !< Output files basename.
+logical                       :: plots              !< Flag for activating plots saving.
+logical                       :: results            !< Flag for activating results saving.
+logical                       :: time_serie         !< Flag for activating time serie-results saving.
+logical                       :: verbose            !< Flag for activating more verbose output.
+integer(I_P)                  :: av_Ni              !< Average the solution over an average-grid.
 !-----------------------------------------------------------------------------------------------------------------------------------
 
 !-----------------------------------------------------------------------------------------------------------------------------------

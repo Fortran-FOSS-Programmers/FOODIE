@@ -180,8 +180,6 @@
           
           <a class="list-group-item" href="../sourcefile/burgers.f90.html">burgers.f90</a>
           
-          <a class="list-group-item" href="../sourcefile/data_type_command_line_interface.f90.html">Data_Type_Command_Line_Interface.F90</a>
-          
           <a class="list-group-item" href="../sourcefile/euler-1d-caf.f90.html">euler-1D-caf.f90</a>
           
           <a class="list-group-item" href="../sourcefile/euler-1d-caf_no_foodie.f90.html">euler-1D-caf_no_foodie.f90</a>
@@ -191,6 +189,18 @@
           <a class="list-group-item" href="../sourcefile/euler-1d-openmp_no_foodie.f90.html">euler-1D-openmp_no_foodie.f90</a>
           
           <a class="list-group-item" href="../sourcefile/euler-1d.f90.html">euler-1D.f90</a>
+          
+          <a class="list-group-item" href="../sourcefile/flap.f90.html">flap.f90</a>
+          
+          <a class="list-group-item" href="../sourcefile/flap_command_line_argument_t.f90.html">flap_command_line_argument_t.F90</a>
+          
+          <a class="list-group-item" href="../sourcefile/flap_command_line_arguments_group_t.f90.html">flap_command_line_arguments_group_t.f90</a>
+          
+          <a class="list-group-item" href="../sourcefile/flap_command_line_interface_t.f90.html">flap_command_line_interface_t.F90</a>
+          
+          <a class="list-group-item" href="../sourcefile/flap_object_t.f90.html">flap_object_t.f90</a>
+          
+          <a class="list-group-item" href="../sourcefile/flap_utils_m.f90.html">flap_utils_m.f90</a>
           
           <a class="list-group-item" href="../sourcefile/foodie.f90.html">foodie.f90</a>
           
@@ -220,21 +230,41 @@
           
           <a class="list-group-item" href="../sourcefile/lorenz.f90.html">lorenz.f90</a>
           
+          <a class="list-group-item" href="../sourcefile/modules_imports.f90.html">modules_imports.f90</a>
+          
           <a class="list-group-item" href="../sourcefile/oscillation.f90.html">oscillation.f90</a>
           
           <a class="list-group-item" href="../sourcefile/oscillation_t.f90.html">oscillation_t.f90</a>
           
+          <a class="list-group-item" href="../sourcefile/penf.f90.html">penf.F90</a>
+          
+          <a class="list-group-item" href="../sourcefile/penf.f90%7E2.html">penf.F90</a>
+          
+          <a class="list-group-item" href="../sourcefile/penf.f90%7E3.html">penf.F90</a>
+          
           <a class="list-group-item" href="../sourcefile/pyplot_module.f90.html">pyplot_module.f90</a>
           
+          <a class="list-group-item" href="../sourcefile/pyplot_module.f90%7E2.html">pyplot_module.f90</a>
+          
+          <a class="list-group-item" href="../sourcefile/sin_reconstruction.f90.html">sin_reconstruction.f90</a>
+          
           <a class="list-group-item" href="../sourcefile/test.f90.html">test.f90</a>
+          
+          <a class="list-group-item" href="../sourcefile/test.f90%7E2.html">test.f90</a>
+          
+          <a class="list-group-item" href="../sourcefile/test_all.f90.html">test_all.f90</a>
+          
+          <a class="list-group-item" href="../sourcefile/test_all.f90%7E2.html">test_all.f90</a>
+          
+          <a class="list-group-item" href="../sourcefile/test_all.f90%7E3.html">test_all.f90</a>
           
           <a class="list-group-item" href="../sourcefile/test_basic.f90.html">test_basic.f90</a>
           
           <a class="list-group-item" href="../sourcefile/test_choices_logical.f90.html">test_choices_logical.f90</a>
           
-          <a class="list-group-item" href="../sourcefile/test_driver.f90.html">Test_Driver.f90</a>
+          <a class="list-group-item" href="../sourcefile/test_hidden.f90.html">test_hidden.f90</a>
           
-          <a class="list-group-item" href="../sourcefile/test_driver.f90%7E2.html">Test_Driver.f90</a>
+          <a class="list-group-item" href="../sourcefile/test_minimal.f90.html">test_minimal.f90</a>
           
           <a class="list-group-item" href="../sourcefile/test_nested.f90.html">test_nested.f90</a>
           
@@ -272,14 +302,14 @@
     <br>
     <section>
     <h2><span class="anchor" id="src"></span>Source Code</h2>
-    <div class="hl"><pre><a name="ln-1"></a><span class="c">!&lt; Test FOODIE with the integration of Oscillation equations.</span>
+    <div class="hl"><pre><span></span><a name="ln-1"></a><span class="c">!&lt; Test FOODIE with the integration of Oscillation equations.</span>
 <a name="ln-2"></a><span class="k">module </span><span class="n">oscillation_test_t</span>
 <a name="ln-3"></a><span class="c">!-----------------------------------------------------------------------------------------------------------------------------------</span>
 <a name="ln-4"></a><span class="c">!&lt; Oscillation test handler definition.</span>
 <a name="ln-5"></a><span class="c">!-----------------------------------------------------------------------------------------------------------------------------------</span>
 <a name="ln-6"></a>
 <a name="ln-7"></a><span class="c">!-----------------------------------------------------------------------------------------------------------------------------------</span>
-<a name="ln-8"></a><span class="k">use </span><span class="n">Data_Type_Command_Line_Interface</span><span class="p">,</span> <span class="n">only</span> <span class="p">:</span> <span class="n">Type_Command_Line_Interface</span>
+<a name="ln-8"></a><span class="k">use </span><span class="n">flap</span><span class="p">,</span> <span class="n">only</span> <span class="p">:</span> <span class="n">command_line_interface</span>
 <a name="ln-9"></a><span class="k">use </span><span class="n">foodie</span><span class="p">,</span> <span class="n">only</span> <span class="p">:</span> <span class="n">adams_bashforth_integrator</span><span class="p">,</span>         <span class="p">&amp;</span>
 <a name="ln-10"></a>                   <span class="n">adams_bashforth_moulton_integrator</span><span class="p">,</span> <span class="p">&amp;</span>
 <a name="ln-11"></a>                   <span class="n">adams_moulton_integrator</span><span class="p">,</span>           <span class="p">&amp;</span>
@@ -289,8 +319,8 @@
 <a name="ln-15"></a>                   <span class="n">leapfrog_integrator</span><span class="p">,</span>                <span class="p">&amp;</span>
 <a name="ln-16"></a>                   <span class="n">ls_runge_kutta_integrator</span><span class="p">,</span>          <span class="p">&amp;</span>
 <a name="ln-17"></a>                   <span class="n">tvd_runge_kutta_integrator</span>
-<a name="ln-18"></a><span class="k">use </span><span class="n">IR_Precision</span><span class="p">,</span> <span class="n">only</span> <span class="p">:</span> <span class="n">I_P</span><span class="p">,</span> <span class="n">R_P</span><span class="p">,</span> <span class="n">FR_P</span><span class="p">,</span> <span class="n">str</span><span class="p">,</span> <span class="n">strz</span>
-<a name="ln-19"></a><span class="k">use </span><span class="n">oscillation_t</span><span class="p">,</span> <span class="n">only</span> <span class="p">:</span> <span class="n">oscillation</span>
+<a name="ln-18"></a><span class="k">use </span><span class="n">oscillation_t</span><span class="p">,</span> <span class="n">only</span> <span class="p">:</span> <span class="n">oscillation</span>
+<a name="ln-19"></a><span class="k">use </span><span class="n">penf</span><span class="p">,</span> <span class="n">only</span> <span class="p">:</span> <span class="n">I_P</span><span class="p">,</span> <span class="n">R_P</span><span class="p">,</span> <span class="n">FR_P</span><span class="p">,</span> <span class="n">str</span><span class="p">,</span> <span class="n">strz</span>
 <a name="ln-20"></a><span class="k">use </span><span class="n">pyplot_module</span><span class="p">,</span> <span class="n">only</span> <span class="p">:</span>  <span class="n">pyplot</span>
 <a name="ln-21"></a><span class="c">!-----------------------------------------------------------------------------------------------------------------------------------</span>
 <a name="ln-22"></a>
@@ -321,19 +351,19 @@
 <a name="ln-47"></a>  <span class="c">!&lt;</span>
 <a name="ln-48"></a>  <span class="c">!&lt; Test has only 1 public method `execute`: it executes test(s) accordingly to cli options.</span>
 <a name="ln-49"></a>  <span class="k">private</span>
-<a name="ln-50"></a><span class="k">  type</span><span class="p">(</span><span class="n">Type_Command_Line_Interface</span><span class="p">)</span> <span class="kd">::</span> <span class="n">cli</span>                      <span class="c">!&lt; Command line interface handler.</span>
-<a name="ln-51"></a>  <span class="kt">integer</span><span class="p">(</span><span class="n">I_P</span><span class="p">)</span>                      <span class="kd">::</span> <span class="n">error</span><span class="o">=</span><span class="mi">0</span>                  <span class="c">!&lt; Error handler.</span>
-<a name="ln-52"></a>  <span class="kt">logical</span>                           <span class="kd">::</span> <span class="n">errors_analysis</span><span class="o">=</span><span class="p">.</span><span class="n">false</span><span class="p">.</span>  <span class="c">!&lt; Flag for activating errors analysis.</span>
-<a name="ln-53"></a>  <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">)</span>                         <span class="kd">::</span> <span class="n">frequency</span><span class="o">=</span><span class="mf">0.0_R_P</span>        <span class="c">!&lt; Oscillation frequency.</span>
-<a name="ln-54"></a>  <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">)</span>                         <span class="kd">::</span> <span class="n">final_time</span><span class="o">=</span><span class="mf">0.0_R_P</span>       <span class="c">!&lt; Final integration time.</span>
-<a name="ln-55"></a>  <span class="kt">integer</span><span class="p">(</span><span class="n">I_P</span><span class="p">)</span>                      <span class="kd">::</span> <span class="n">implicit_iterations</span><span class="o">=</span><span class="mi">0</span>    <span class="c">!&lt; Number of iterations (implicit solvers).</span>
-<a name="ln-56"></a>  <span class="kt">character</span><span class="p">(</span><span class="mi">99</span><span class="p">)</span>                     <span class="kd">::</span> <span class="n">output_cli</span><span class="o">=</span><span class="s1">&#39;unset&#39;</span>       <span class="c">!&lt; Output files basename.</span>
-<a name="ln-57"></a>  <span class="kt">logical</span>                           <span class="kd">::</span> <span class="n">plots</span><span class="o">=</span><span class="p">.</span><span class="n">false</span><span class="p">.</span>            <span class="c">!&lt; Flag for activating plots saving.</span>
-<a name="ln-58"></a>  <span class="kt">logical</span>                           <span class="kd">::</span> <span class="n">results</span><span class="o">=</span><span class="p">.</span><span class="n">false</span><span class="p">.</span>          <span class="c">!&lt; Flag for activating results saving.</span>
-<a name="ln-59"></a>  <span class="kt">character</span><span class="p">(</span><span class="mi">99</span><span class="p">)</span>                     <span class="kd">::</span> <span class="n">solver</span><span class="o">=</span><span class="s1">&#39;adams-bashforth&#39;</span> <span class="c">!&lt; Solver used.</span>
-<a name="ln-60"></a>  <span class="kt">integer</span><span class="p">(</span><span class="n">I_P</span><span class="p">),</span> <span class="k">allocatable</span>         <span class="kd">::</span> <span class="n">stages_steps</span><span class="p">(:)</span>          <span class="c">!&lt; Number of stages/steps used.</span>
-<a name="ln-61"></a>  <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">),</span>    <span class="k">allocatable</span>         <span class="kd">::</span> <span class="n">Dt</span><span class="p">(:)</span>                    <span class="c">!&lt; Time step(s) exercised.</span>
-<a name="ln-62"></a>  <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">),</span>    <span class="k">allocatable</span>         <span class="kd">::</span> <span class="n">tolerance</span><span class="p">(:)</span>             <span class="c">!&lt; Tolerance(s) exercised on local truncation error.</span>
+<a name="ln-50"></a><span class="k">  type</span><span class="p">(</span><span class="n">command_line_interface</span><span class="p">)</span> <span class="kd">::</span> <span class="n">cli</span>                      <span class="c">!&lt; Command line interface handler.</span>
+<a name="ln-51"></a>  <span class="kt">integer</span><span class="p">(</span><span class="n">I_P</span><span class="p">)</span>                 <span class="kd">::</span> <span class="n">error</span><span class="o">=</span><span class="mi">0</span>                  <span class="c">!&lt; Error handler.</span>
+<a name="ln-52"></a>  <span class="kt">logical</span>                      <span class="kd">::</span> <span class="n">errors_analysis</span><span class="o">=</span><span class="p">.</span><span class="n">false</span><span class="p">.</span>  <span class="c">!&lt; Flag for activating errors analysis.</span>
+<a name="ln-53"></a>  <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">)</span>                    <span class="kd">::</span> <span class="n">frequency</span><span class="o">=</span><span class="mf">0.0_R_P</span>        <span class="c">!&lt; Oscillation frequency.</span>
+<a name="ln-54"></a>  <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">)</span>                    <span class="kd">::</span> <span class="n">final_time</span><span class="o">=</span><span class="mf">0.0_R_P</span>       <span class="c">!&lt; Final integration time.</span>
+<a name="ln-55"></a>  <span class="kt">integer</span><span class="p">(</span><span class="n">I_P</span><span class="p">)</span>                 <span class="kd">::</span> <span class="n">implicit_iterations</span><span class="o">=</span><span class="mi">0</span>    <span class="c">!&lt; Number of iterations (implicit solvers).</span>
+<a name="ln-56"></a>  <span class="kt">character</span><span class="p">(</span><span class="mi">99</span><span class="p">)</span>                <span class="kd">::</span> <span class="n">output_cli</span><span class="o">=</span><span class="s1">&#39;unset&#39;</span>       <span class="c">!&lt; Output files basename.</span>
+<a name="ln-57"></a>  <span class="kt">logical</span>                      <span class="kd">::</span> <span class="n">plots</span><span class="o">=</span><span class="p">.</span><span class="n">false</span><span class="p">.</span>            <span class="c">!&lt; Flag for activating plots saving.</span>
+<a name="ln-58"></a>  <span class="kt">logical</span>                      <span class="kd">::</span> <span class="n">results</span><span class="o">=</span><span class="p">.</span><span class="n">false</span><span class="p">.</span>          <span class="c">!&lt; Flag for activating results saving.</span>
+<a name="ln-59"></a>  <span class="kt">character</span><span class="p">(</span><span class="mi">99</span><span class="p">)</span>                <span class="kd">::</span> <span class="n">solver</span><span class="o">=</span><span class="s1">&#39;adams-bashforth&#39;</span> <span class="c">!&lt; Solver used.</span>
+<a name="ln-60"></a>  <span class="kt">integer</span><span class="p">(</span><span class="n">I_P</span><span class="p">),</span> <span class="k">allocatable</span>    <span class="kd">::</span> <span class="n">stages_steps</span><span class="p">(:)</span>          <span class="c">!&lt; Number of stages/steps used.</span>
+<a name="ln-61"></a>  <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">),</span>    <span class="k">allocatable</span>    <span class="kd">::</span> <span class="n">Dt</span><span class="p">(:)</span>                    <span class="c">!&lt; Time step(s) exercised.</span>
+<a name="ln-62"></a>  <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">),</span>    <span class="k">allocatable</span>    <span class="kd">::</span> <span class="n">tolerance</span><span class="p">(:)</span>             <span class="c">!&lt; Tolerance(s) exercised on local truncation error.</span>
 <a name="ln-63"></a>  <span class="k">contains</span>
 <a name="ln-64"></a><span class="k">    private</span>
 <a name="ln-65"></a>    <span class="c">! Public methods</span>
@@ -443,14 +473,14 @@
 <a name="ln-169"></a><span class="k">    </span><span class="n">endif</span>
 <a name="ln-170"></a>    <span class="k">if</span> <span class="p">(.</span><span class="nb">not</span><span class="p">.</span><span class="n">is_dt_valid</span><span class="p">())</span> <span class="k">then</span>
 <a name="ln-171"></a><span class="k">      print</span> <span class="s2">&quot;(A)&quot;</span><span class="p">,</span> <span class="s1">&#39;Error: the final integration time must be an exact multiple of the time step used!&#39;</span>
-<a name="ln-172"></a>      <span class="k">print</span> <span class="s2">&quot;(A)&quot;</span><span class="p">,</span> <span class="s1">&#39;Final integration time: &#39;</span><span class="o">//</span><span class="n">str</span><span class="p">(.</span><span class="n">true</span><span class="p">.,</span> <span class="n">self</span><span class="p">%</span><span class="n">final_time</span><span class="p">)</span>
-<a name="ln-173"></a>      <span class="k">print</span> <span class="s2">&quot;(A)&quot;</span><span class="p">,</span> <span class="s1">&#39;Time step: &#39;</span><span class="o">//</span><span class="n">str</span><span class="p">(.</span><span class="n">true</span><span class="p">.,</span> <span class="n">self</span><span class="p">%</span><span class="n">Dt</span><span class="p">)</span>
+<a name="ln-172"></a>      <span class="k">print</span> <span class="s2">&quot;(A)&quot;</span><span class="p">,</span> <span class="s1">&#39;Final integration time: &#39;</span><span class="o">//</span><span class="n">str</span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">final_time</span><span class="p">,</span> <span class="p">.</span><span class="n">true</span><span class="p">.)</span>
+<a name="ln-173"></a>      <span class="k">print</span> <span class="s2">&quot;(A)&quot;</span><span class="p">,</span> <span class="s1">&#39;Time step: &#39;</span><span class="o">//</span><span class="n">str</span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">Dt</span><span class="p">,</span> <span class="p">.</span><span class="n">true</span><span class="p">.)</span>
 <a name="ln-174"></a>      <span class="k">stop</span>
 <a name="ln-175"></a><span class="k">    </span><span class="n">endif</span>
 <a name="ln-176"></a>    <span class="k">if</span> <span class="p">(</span><span class="n">size</span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">stages_steps</span><span class="p">)</span><span class="o">==</span><span class="mi">2</span><span class="p">)</span> <span class="k">then</span>
 <a name="ln-177"></a><span class="k">      if</span> <span class="p">(.</span><span class="nb">not</span><span class="p">.(</span><span class="n">self</span><span class="p">%</span><span class="n">stages_steps</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span><span class="o">&gt;</span><span class="n">self</span><span class="p">%</span><span class="n">stages_steps</span><span class="p">(</span><span class="mi">1</span><span class="p">).</span><span class="nb">and</span><span class="p">.</span><span class="n">self</span><span class="p">%</span><span class="n">stages_steps</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="o">&gt;=</span><span class="mi">0</span><span class="p">))</span> <span class="k">then</span>
 <a name="ln-178"></a><span class="k">        print</span> <span class="s2">&quot;(A)&quot;</span><span class="p">,</span> <span class="s1">&#39;Error: when passing a range of stages/steps the valid format must be lower-upper (both positive)!&#39;</span>
-<a name="ln-179"></a>        <span class="k">print</span> <span class="s2">&quot;(A)&quot;</span><span class="p">,</span> <span class="s1">&#39;Range passed: &#39;</span><span class="o">//</span><span class="nb">trim</span><span class="p">(</span><span class="n">str</span><span class="p">(.</span><span class="n">true</span><span class="p">.,</span> <span class="n">self</span><span class="p">%</span><span class="n">stages_steps</span><span class="p">(</span><span class="mi">1</span><span class="p">)))</span><span class="o">//</span><span class="s1">&#39;-&#39;</span><span class="o">//</span><span class="nb">trim</span><span class="p">(</span><span class="n">str</span><span class="p">(.</span><span class="n">true</span><span class="p">.,</span> <span class="n">self</span><span class="p">%</span><span class="n">stages_steps</span><span class="p">(</span><span class="mi">2</span><span class="p">)))</span>
+<a name="ln-179"></a>        <span class="k">print</span> <span class="s2">&quot;(A)&quot;</span><span class="p">,</span> <span class="s1">&#39;Range passed: &#39;</span><span class="o">//</span><span class="nb">trim</span><span class="p">(</span><span class="n">str</span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">stages_steps</span><span class="p">(</span><span class="mi">1</span><span class="p">),</span> <span class="p">.</span><span class="n">true</span><span class="p">.))</span><span class="o">//</span><span class="s1">&#39;-&#39;</span><span class="o">//</span><span class="nb">trim</span><span class="p">(</span><span class="n">str</span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">stages_steps</span><span class="p">(</span><span class="mi">2</span><span class="p">),</span> <span class="p">.</span><span class="n">true</span><span class="p">.))</span>
 <a name="ln-180"></a>        <span class="k">stop</span>
 <a name="ln-181"></a><span class="k">      </span><span class="n">endif</span>
 <a name="ln-182"></a>    <span class="n">endif</span>
@@ -598,7 +628,7 @@
 <a name="ln-324"></a>  <span class="c">! test(s)</span>
 <a name="ln-325"></a>  <span class="k">print</span> <span class="s2">&quot;(A)&quot;</span><span class="p">,</span> <span class="nb">trim</span><span class="p">(</span><span class="nb">adjustl</span><span class="p">(</span><span class="n">solver</span><span class="p">))</span>
 <a name="ln-326"></a>  <span class="k">do </span><span class="n">s</span><span class="o">=</span><span class="n">stages_steps_range</span><span class="p">(</span><span class="mi">1</span><span class="p">),</span> <span class="n">stages_steps_range</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
-<a name="ln-327"></a>    <span class="k">print</span> <span class="s2">&quot;(A)&quot;</span><span class="p">,</span> <span class="s1">&#39;  stages/steps &#39;</span><span class="o">//</span><span class="nb">trim</span><span class="p">(</span><span class="n">str</span><span class="p">(.</span><span class="n">true</span><span class="p">.,</span><span class="n">s</span><span class="p">))</span>
+<a name="ln-327"></a>    <span class="k">print</span> <span class="s2">&quot;(A)&quot;</span><span class="p">,</span> <span class="s1">&#39;  stages/steps &#39;</span><span class="o">//</span><span class="nb">trim</span><span class="p">(</span><span class="n">str</span><span class="p">(</span><span class="n">s</span><span class="p">,.</span><span class="n">true</span><span class="p">.))</span>
 <a name="ln-328"></a>    <span class="k">if</span> <span class="p">(</span><span class="nb">trim</span><span class="p">(</span><span class="nb">adjustl</span><span class="p">(</span><span class="n">solver</span><span class="p">))</span><span class="o">==</span><span class="s1">&#39;emd-runge-kutta&#39;</span><span class="p">)</span> <span class="k">then</span>
 <a name="ln-329"></a><span class="k">      do </span><span class="n">t</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">size</span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">tolerance</span><span class="p">)</span>
 <a name="ln-330"></a>        <span class="k">call </span><span class="n">solve</span><span class="p">(</span><span class="n">solver</span><span class="o">=</span><span class="n">solver</span><span class="p">,</span>                       <span class="p">&amp;</span>
@@ -624,7 +654,7 @@
 <a name="ln-350"></a>          <span class="k">call </span><span class="n">save_results</span><span class="p">(</span><span class="n">results</span><span class="o">=</span><span class="n">self</span><span class="p">%</span><span class="n">results</span><span class="p">,</span>                                    <span class="p">&amp;</span>
 <a name="ln-351"></a>                            <span class="n">plots</span><span class="o">=</span><span class="n">self</span><span class="p">%</span><span class="n">plots</span><span class="p">,</span>                                        <span class="p">&amp;</span>
 <a name="ln-352"></a>                            <span class="n">output_cli</span><span class="o">=</span><span class="n">self</span><span class="p">%</span><span class="n">output_cli</span><span class="p">,</span>                              <span class="p">&amp;</span>
-<a name="ln-353"></a>                            <span class="n">solver</span><span class="o">=</span><span class="nb">trim</span><span class="p">(</span><span class="nb">adjustl</span><span class="p">(</span><span class="n">solver</span><span class="p">))</span><span class="o">//</span><span class="s1">&#39;-&#39;</span><span class="o">//</span><span class="nb">trim</span><span class="p">(</span><span class="n">str</span><span class="p">(.</span><span class="n">true</span><span class="p">.,</span> <span class="n">s</span><span class="p">)),</span> <span class="p">&amp;</span>
+<a name="ln-353"></a>                            <span class="n">solver</span><span class="o">=</span><span class="nb">trim</span><span class="p">(</span><span class="nb">adjustl</span><span class="p">(</span><span class="n">solver</span><span class="p">))</span><span class="o">//</span><span class="s1">&#39;-&#39;</span><span class="o">//</span><span class="nb">trim</span><span class="p">(</span><span class="n">str</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="p">.</span><span class="n">true</span><span class="p">.)),</span> <span class="p">&amp;</span>
 <a name="ln-354"></a>                            <span class="n">frequency</span><span class="o">=</span><span class="n">self</span><span class="p">%</span><span class="n">frequency</span><span class="p">,</span>                                <span class="p">&amp;</span>
 <a name="ln-355"></a>                            <span class="n">solution</span><span class="o">=</span><span class="n">solution</span><span class="p">(:,</span> <span class="mi">0</span><span class="p">:</span><span class="n">last_step</span><span class="p">))</span>
 <a name="ln-356"></a>        <span class="n">endif</span>
@@ -653,7 +683,7 @@
 <a name="ln-379"></a>          <span class="k">call </span><span class="n">save_results</span><span class="p">(</span><span class="n">results</span><span class="o">=</span><span class="n">self</span><span class="p">%</span><span class="n">results</span><span class="p">,</span>                                    <span class="p">&amp;</span>
 <a name="ln-380"></a>                            <span class="n">plots</span><span class="o">=</span><span class="n">self</span><span class="p">%</span><span class="n">plots</span><span class="p">,</span>                                        <span class="p">&amp;</span>
 <a name="ln-381"></a>                            <span class="n">output_cli</span><span class="o">=</span><span class="n">self</span><span class="p">%</span><span class="n">output_cli</span><span class="p">,</span>                              <span class="p">&amp;</span>
-<a name="ln-382"></a>                            <span class="n">solver</span><span class="o">=</span><span class="nb">trim</span><span class="p">(</span><span class="nb">adjustl</span><span class="p">(</span><span class="n">solver</span><span class="p">))</span><span class="o">//</span><span class="s1">&#39;-&#39;</span><span class="o">//</span><span class="nb">trim</span><span class="p">(</span><span class="n">str</span><span class="p">(.</span><span class="n">true</span><span class="p">.,</span> <span class="n">s</span><span class="p">)),</span> <span class="p">&amp;</span>
+<a name="ln-382"></a>                            <span class="n">solver</span><span class="o">=</span><span class="nb">trim</span><span class="p">(</span><span class="nb">adjustl</span><span class="p">(</span><span class="n">solver</span><span class="p">))</span><span class="o">//</span><span class="s1">&#39;-&#39;</span><span class="o">//</span><span class="nb">trim</span><span class="p">(</span><span class="n">str</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="p">.</span><span class="n">true</span><span class="p">.)),</span> <span class="p">&amp;</span>
 <a name="ln-383"></a>                            <span class="n">frequency</span><span class="o">=</span><span class="n">self</span><span class="p">%</span><span class="n">frequency</span><span class="p">,</span>                                <span class="p">&amp;</span>
 <a name="ln-384"></a>                            <span class="n">solution</span><span class="o">=</span><span class="n">solution</span><span class="p">(:,</span> <span class="mi">0</span><span class="p">:</span><span class="n">last_step</span><span class="p">))</span>
 <a name="ln-385"></a>        <span class="n">endif</span>
@@ -791,7 +821,7 @@
 <a name="ln-517"></a>  <span class="n">endif</span>
 <a name="ln-518"></a>
 <a name="ln-519"></a>  <span class="k">if</span> <span class="p">(.</span><span class="nb">not</span><span class="p">.</span><span class="n">supported</span><span class="p">)</span> <span class="k">then</span>
-<a name="ln-520"></a><span class="k">    print</span> <span class="s2">&quot;(A)&quot;</span><span class="p">,</span> <span class="s1">&#39;The solver &#39;</span><span class="o">//</span><span class="nb">trim</span><span class="p">(</span><span class="nb">adjustl</span><span class="p">(</span><span class="n">solver</span><span class="p">))</span><span class="o">//</span><span class="s1">&#39; does not support &#39;</span><span class="o">//</span><span class="nb">trim</span><span class="p">(</span><span class="n">str</span><span class="p">(.</span><span class="n">true</span><span class="p">.,</span> <span class="n">stages_steps</span><span class="p">))</span><span class="o">//</span><span class="s1">&#39; stages/steps&#39;</span>
+<a name="ln-520"></a><span class="k">    print</span> <span class="s2">&quot;(A)&quot;</span><span class="p">,</span> <span class="s1">&#39;The solver &#39;</span><span class="o">//</span><span class="nb">trim</span><span class="p">(</span><span class="nb">adjustl</span><span class="p">(</span><span class="n">solver</span><span class="p">))</span><span class="o">//</span><span class="s1">&#39; does not support &#39;</span><span class="o">//</span><span class="nb">trim</span><span class="p">(</span><span class="n">str</span><span class="p">(</span><span class="n">stages_steps</span><span class="p">,</span> <span class="p">.</span><span class="n">true</span><span class="p">.))</span><span class="o">//</span><span class="s1">&#39; stages/steps&#39;</span>
 <a name="ln-521"></a>    <span class="k">if</span> <span class="p">(</span><span class="nb">allocated</span><span class="p">(</span><span class="n">solution</span><span class="p">))</span> <span class="k">deallocate</span><span class="p">(</span><span class="n">solution</span><span class="p">)</span>
 <a name="ln-522"></a>    <span class="k">return</span>
 <a name="ln-523"></a><span class="k">  </span><span class="n">endif</span>

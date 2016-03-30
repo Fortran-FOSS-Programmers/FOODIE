@@ -183,7 +183,7 @@
     <div id="fins" class="panel-collapse collapse">
         <div class="list-group">
           
-          <a class="list-group-item" href="../type/euler_1d_omp_nf.html#proc-finalize%7E10">finalize</a>
+          <a class="list-group-item" href="../type/euler_1d_omp_nf.html#finalproc-finalize%7E10">finalize</a>
           
         </div>
     </div>
@@ -251,6 +251,12 @@
           
           <a class="list-group-item" href="../type/burgers.html">burgers</a>
           
+          <a class="list-group-item" href="../type/command_line_argument.html">command_line_argument</a>
+          
+          <a class="list-group-item" href="../type/command_line_arguments_group.html">command_line_arguments_group</a>
+          
+          <a class="list-group-item" href="../type/command_line_interface.html">command_line_interface</a>
+          
           <a class="list-group-item" href="../type/emd_runge_kutta_integrator.html">emd_runge_kutta_integrator</a>
           
           <a class="list-group-item" href="../type/euler_1d.html">euler_1D</a>
@@ -273,25 +279,21 @@
           
           <a class="list-group-item" href="../type/ls_runge_kutta_integrator.html">ls_runge_kutta_integrator</a>
           
+          <a class="list-group-item" href="../type/object.html">object</a>
+          
           <a class="list-group-item" href="../type/oscillation.html">oscillation</a>
           
           <a class="list-group-item" href="../type/oscillation_test.html">oscillation_test</a>
           
           <a class="list-group-item" href="../type/pyplot.html">pyplot</a>
           
+          <a class="list-group-item" href="../type/pyplot%7E2.html">pyplot</a>
+          
           <a class="list-group-item" href="../type/tvd_runge_kutta_integrator%7E3.html">tvd_runge_kutta_integrator</a>
           
           <a class="list-group-item" href="../type/tvd_runge_kutta_integrator.html">tvd_runge_kutta_integrator</a>
           
           <a class="list-group-item" href="../type/tvd_runge_kutta_integrator%7E2.html">tvd_runge_kutta_integrator</a>
-          
-          <a class="list-group-item" href="../type/type_command_line_argument.html">Type_Command_Line_Argument</a>
-          
-          <a class="list-group-item" href="../type/type_command_line_arguments_group.html">Type_Command_Line_Arguments_Group</a>
-          
-          <a class="list-group-item" href="../type/type_command_line_interface.html">Type_Command_Line_Interface</a>
-          
-          <a class="list-group-item" href="../type/type_object.html">Type_Object</a>
           
           <a class="list-group-item" href="../type/weno_constructor.html">weno_constructor</a>
           
@@ -344,13 +346,15 @@
 <polygon fill="black" stroke="black" points="323.814,-16.5001 333.814,-13 323.814,-9.5001 323.814,-16.5001"/>
 <text text-anchor="middle" x="304" y="-17.45" font-family="Helvetica,sans-Serif" font-size="9.50">weno</text>
 </g>
-<!-- weno_interpolator -->
-<g id="node3" class="node"><title>weno_interpolator</title>
+<!-- type~weno_interpolator -->
+<g id="node3" class="node"><title>type~weno_interpolator</title>
+<a xlink:href="../type/weno_interpolator.html" xlink:title="weno_interpolator">
 <polygon fill="#5cb85c" stroke="#5cb85c" points="98,-26 4.26326e-14,-26 0,-1.24345e-14 98,-3.55271e-15 98,-26"/>
 <text text-anchor="middle" x="49" y="-10.55" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">weno_interpolator</text>
+</a>
 </g>
-<!-- weno_interpolator&#45;&gt;type~weno_interpolator_upwind -->
-<g id="edge2" class="edge"><title>weno_interpolator&#45;&gt;type~weno_interpolator_upwind</title>
+<!-- type~weno_interpolator&#45;&gt;type~weno_interpolator_upwind -->
+<g id="edge2" class="edge"><title>type~weno_interpolator&#45;&gt;type~weno_interpolator_upwind</title>
 <path fill="none" stroke="black" d="M98.3594,-13C107.078,-13 116.351,-13 125.649,-13"/>
 <polygon fill="black" stroke="black" points="125.724,-16.5001 135.724,-13 125.724,-9.5001 125.724,-16.5001"/>
 </g>
@@ -515,7 +519,7 @@ $$
 <h4 id="numerical-grid-organization"><a class="toclink" href="#numerical-grid-organization">Numerical grid organization</a></h4>
 <p>The finite volume, Godunov's like approach is employed. The conservative variables (and the primitive ones) are co-located at
  the cell center. The cell and (inter)faces numeration is as follow.</p>
-<div class="codehilite"><pre>                cell            (inter)faces
+<div class="codehilite"><pre><span></span>                cell            (inter)faces
                  |                   |
                  v                   v
      |-------|-------|-.....-|-------|-------|-------|-------|-.....-|-------|-------|-------|-.....-|-------|-------|
@@ -551,8 +555,7 @@ $$
 <li>&hellip;  :</li>
 <li>Ns   : mass conservation of species Ns   (rNs)</li>
 <li>Ns+1 : momentum conservation             (r*u)</li>
-<li>Ns+2 : energy conservation               (r*E)
- Finalize field.</li>
+<li>Ns+2 : energy conservation               (r*E)</li>
 </ul>
     <br>
     
@@ -764,11 +767,19 @@ $$
     <section>
     <h2>Finalization Procedures</h2>
 	   
-    
+         
 <div class="panel panel-default">
-  <div class="panel-heading codesum"><span class="anchor" id="proc-finalize%7E10"></span><h3>final :: <strong>finalize</strong></h3></div>
+  <div class="panel-heading codesum"><span class="anchor" id="finalproc-finalize%7E10"></span><h3>final :: <strong>finalize</strong> 
+    </h3></div>
   <div class="panel-body">
-     
+    
+
+
+    <p>Finalize field.</p>
+  </div>
+  <ul class="list-group">
+     <li class="list-group-item">
+       
     
     <h3>
 private subroutine <a href='../proc/finalize%7E10.html'>finalize</a>(self)
@@ -821,10 +832,11 @@ private subroutine <a href='../proc/finalize%7E10.html'>finalize</a>(self)
        <p>Destroy field.</p>
         
 
-  </div>
+     </li>
+  </ul>
 </div>
-    
 
+         
     </section>
     <br>
     
@@ -2245,7 +2257,7 @@ private pure subroutine <a href='../proc/riemann_solver%7E3.html'>riemann_solver
     
     <section>
     <h2><span class="anchor" id="src"></span>Source Code</h2>
-    <div class="highlight"><pre><span class="k">type</span> <span class="kd">::</span> <span class="n">euler_1D_omp_nf</span>
+    <div class="highlight"><pre><span></span><span class="k">type</span> <span class="kd">::</span> <span class="n">euler_1D_omp_nf</span>
   <span class="c">!&lt; Euler 1D (OpenMP enabled) PDEs system field.</span>
   <span class="c">!&lt;</span>
   <span class="c">!&lt; @note This object does not use FOODIE.</span>

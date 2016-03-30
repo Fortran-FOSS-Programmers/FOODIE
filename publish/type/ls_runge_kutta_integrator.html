@@ -167,7 +167,7 @@
     <div id="fins" class="panel-collapse collapse">
         <div class="list-group">
           
-          <a class="list-group-item" href="../type/ls_runge_kutta_integrator.html#proc-finalize%7E6">finalize</a>
+          <a class="list-group-item" href="../type/ls_runge_kutta_integrator.html#finalproc-finalize%7E6">finalize</a>
           
         </div>
     </div>
@@ -225,6 +225,12 @@
           
           <a class="list-group-item" href="../type/burgers.html">burgers</a>
           
+          <a class="list-group-item" href="../type/command_line_argument.html">command_line_argument</a>
+          
+          <a class="list-group-item" href="../type/command_line_arguments_group.html">command_line_arguments_group</a>
+          
+          <a class="list-group-item" href="../type/command_line_interface.html">command_line_interface</a>
+          
           <a class="list-group-item" href="../type/emd_runge_kutta_integrator.html">emd_runge_kutta_integrator</a>
           
           <a class="list-group-item" href="../type/euler_1d.html">euler_1D</a>
@@ -247,25 +253,21 @@
           
           <a class="list-group-item" href="../type/ls_runge_kutta_integrator.html">ls_runge_kutta_integrator</a>
           
+          <a class="list-group-item" href="../type/object.html">object</a>
+          
           <a class="list-group-item" href="../type/oscillation.html">oscillation</a>
           
           <a class="list-group-item" href="../type/oscillation_test.html">oscillation_test</a>
           
           <a class="list-group-item" href="../type/pyplot.html">pyplot</a>
           
+          <a class="list-group-item" href="../type/pyplot%7E2.html">pyplot</a>
+          
           <a class="list-group-item" href="../type/tvd_runge_kutta_integrator%7E3.html">tvd_runge_kutta_integrator</a>
           
           <a class="list-group-item" href="../type/tvd_runge_kutta_integrator.html">tvd_runge_kutta_integrator</a>
           
           <a class="list-group-item" href="../type/tvd_runge_kutta_integrator%7E2.html">tvd_runge_kutta_integrator</a>
-          
-          <a class="list-group-item" href="../type/type_command_line_argument.html">Type_Command_Line_Argument</a>
-          
-          <a class="list-group-item" href="../type/type_command_line_arguments_group.html">Type_Command_Line_Arguments_Group</a>
-          
-          <a class="list-group-item" href="../type/type_command_line_interface.html">Type_Command_Line_Interface</a>
-          
-          <a class="list-group-item" href="../type/type_object.html">Type_Object</a>
           
           <a class="list-group-item" href="../type/weno_constructor.html">weno_constructor</a>
           
@@ -292,8 +294,7 @@
 <p></p><div class="alert alert-info" role="alert"><h4>Note</h4>The integrator must be created or initialized (initialize the RK coefficients) before used.</div>
 <p>### List of errors status
 + error=0 =&gt; no error;
-+ error=1 =&gt; bad (unsupported) number of required stages;
- Finalize object.</p>
++ error=1 =&gt; bad (unsupported) number of required stages;</p>
     <br>
     
     
@@ -392,11 +393,19 @@
     <section>
     <h2>Finalization Procedures</h2>
 	   
-    
+         
 <div class="panel panel-default">
-  <div class="panel-heading codesum"><span class="anchor" id="proc-finalize%7E6"></span><h3>final :: <strong>finalize</strong></h3></div>
+  <div class="panel-heading codesum"><span class="anchor" id="finalproc-finalize%7E6"></span><h3>final :: <strong>finalize</strong> 
+    </h3></div>
   <div class="panel-body">
-     
+    
+
+
+    <p>Finalize object.</p>
+  </div>
+  <ul class="list-group">
+     <li class="list-group-item">
+       
     
     <h3>
 private elemental subroutine <a href='../proc/finalize%7E6.html'>finalize</a>(self)
@@ -449,10 +458,11 @@ private elemental subroutine <a href='../proc/finalize%7E6.html'>finalize</a>(se
        <p>Finalize object.</p>
         
 
-  </div>
+     </li>
+  </ul>
 </div>
-    
 
+         
     </section>
     <br>
     
@@ -787,7 +797,7 @@ private subroutine <a href='../proc/integrate%7E8.html'>integrate</a>(self, U, s
          
     
     <h3>
-private elemental function <a href='../proc/used_registers.html'>used_registers</a>()
+private pure function <a href='../proc/used_registers.html'>used_registers</a>()
     
     
     
@@ -844,7 +854,7 @@ private elemental function <a href='../proc/used_registers.html'>used_registers<
          
     
     <h3>
-private elemental function <a href='../proc/min_stages%7E2.html'>min_stages</a>()
+private pure function <a href='../proc/min_stages%7E2.html'>min_stages</a>()
     
     
     
@@ -901,7 +911,7 @@ private elemental function <a href='../proc/min_stages%7E2.html'>min_stages</a>(
          
     
     <h3>
-private elemental function <a href='../proc/max_stages%7E2.html'>max_stages</a>()
+private pure function <a href='../proc/max_stages%7E2.html'>max_stages</a>()
     
     
     
@@ -1030,7 +1040,7 @@ private elemental function <a href='../proc/is_supported%7E8.html'>is_supported<
     
     <section>
     <h2><span class="anchor" id="src"></span>Source Code</h2>
-    <div class="highlight"><pre><span class="k">type</span> <span class="kd">::</span> <span class="n">ls_runge_kutta_integrator</span>
+    <div class="highlight"><pre><span></span><span class="k">type</span> <span class="kd">::</span> <span class="n">ls_runge_kutta_integrator</span>
   <span class="c">!&lt; FOODIE integrator: provide an explicit class of low storage Runge-Kutta schemes, from 1st to 4th order accurate.</span>
   <span class="c">!&lt;</span>
   <span class="c">!&lt; @note The integrator must be created or initialized (initialize the RK coefficients) before used.</span>
