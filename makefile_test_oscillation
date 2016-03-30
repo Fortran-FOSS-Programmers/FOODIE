@@ -1,0 +1,77 @@
+#!/usr/bin/make
+
+# defaults
+COMPILER = gnu
+
+# main building variables
+ifeq "$(COMPILER)" "gnu"
+  FC    = gfortran
+  OPTSC = -cpp -c -frealloc-lhs -O2  -J $(DMOD)
+  OPTSL = -J $(DMOD)
+endif
+ifeq "$(COMPILER)" "intel"
+  FC    = ifort
+  OPTSC = -c -O2 -module $(DMOD)
+  OPTSL = -module $(DMOD)
+endif
+ifeq "$(COMPILER)" "ibm"
+  FC    = bgxlf2008_r
+  OPTSC = -c -O2 -qmoddir=$(DMOD) -I$(DMOD)
+  OPTSL = -qmoddir=$(DMOD) -I$(DMOD)
+endif
+ifeq "$(COMPILER)" "cray"
+  FC    = ftn
+  OPTSC = -c -O 0 -e Z -g
+endif
+DSRC    = src/tests/accuracy/oscillation
+DOBJ    = build/tests/accuracy/oscillation/obj/
+DMOD    = build/tests/accuracy/oscillation/mod/
+DEXE    = build/tests/accuracy/oscillation/
+LIBS    =  build/lib/libfoodie.a src/third_party/lib/flap/libflap.a src/third_party/lib/pyplot-fortran/libpyplot.a src/third_party/lib/wenoof/libwenoof.a
+VPATH   = $(DSRC) $(DOBJ) $(DMOD)
+MKDIRS  = $(DBLD) $(DOBJ) $(DMOD)
+LCEXES  = $(shell echo $(EXES) | tr '[:upper:]' '[:lower:]')
+EXESPO  = $(addsuffix .o,$(LCEXES))
+EXESOBJ = $(addprefix $(DOBJ),$(EXESPO))
+
+#auxiliary variables
+COTEXT  = "Compiling $(<F)"
+LITEXT  = "Assembling $@"
+
+#building rules
+$(DEXE)OSCILLATION: $(MKDIRS) $(LIBS) $(DOBJ)oscillation.o
+	@rm -f $(filter-out $(DOBJ)oscillation.o,$(EXESOBJ))
+	@echo $(LITEXT)
+	@$(FC) $(OPTSL) $(DOBJ)*.o $(LIBS) -o $@
+EXES := $(EXES) OSCILLATION
+
+#compiling rules
+$(DOBJ)oscillation_t.o: src/tests/accuracy/oscillation/oscillation_t.f90
+	@echo $(COTEXT)
+	@$(FC) $(OPTSC) -Ibuild/lib/mod -Isrc/third_party/lib/flap/mod -Isrc/third_party/lib/pyplot-fortran/mod -Isrc/third_party/lib/wenoof/mod  $< -o $@
+
+$(DOBJ)oscillation.o: src/tests/accuracy/oscillation/oscillation.f90 \
+	$(DOBJ)oscillation_t.o
+	@echo $(COTEXT)
+	@$(FC) $(OPTSC) -Ibuild/lib/mod -Isrc/third_party/lib/flap/mod -Isrc/third_party/lib/pyplot-fortran/mod -Isrc/third_party/lib/wenoof/mod  $< -o $@
+
+#phony auxiliary rules
+.PHONY : $(MKDIRS)
+$(MKDIRS):
+	@mkdir -p $@
+.PHONY : cleanobj
+cleanobj:
+	@echo deleting objects
+	@rm -fr $(DOBJ)
+.PHONY : cleanmod
+cleanmod:
+	@echo deleting mods
+	@rm -fr $(DMOD)
+.PHONY : cleanexe
+cleanexe:
+	@echo deleting exes
+	@rm -f $(addprefix $(DEXE),$(EXES))
+.PHONY : clean
+clean: cleanobj cleanmod
+.PHONY : cleanall
+cleanall: clean cleanexe
