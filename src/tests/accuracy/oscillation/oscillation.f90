@@ -15,8 +15,8 @@ use foodie, only : adams_bashforth_integrator,         &
                    leapfrog_integrator,                &
                    ls_runge_kutta_integrator,          &
                    tvd_runge_kutta_integrator
-use IR_Precision, only : I_P, R_P, FR_P, str, strz
 use oscillation_t, only : oscillation
+use penf, only : I_P, R_P, FR_P, str, strz
 use pyplot_module, only :  pyplot
 !-----------------------------------------------------------------------------------------------------------------------------------
 
@@ -169,14 +169,14 @@ contains
     endif
     if (.not.is_dt_valid()) then
       print "(A)", 'Error: the final integration time must be an exact multiple of the time step used!'
-      print "(A)", 'Final integration time: '//str(.true., self%final_time)
-      print "(A)", 'Time step: '//str(.true., self%Dt)
+      print "(A)", 'Final integration time: '//str(self%final_time, .true.)
+      print "(A)", 'Time step: '//str(self%Dt, .true.)
       stop
     endif
     if (size(self%stages_steps)==2) then
       if (.not.(self%stages_steps(2)>self%stages_steps(1).and.self%stages_steps(1)>=0)) then
         print "(A)", 'Error: when passing a range of stages/steps the valid format must be lower-upper (both positive)!'
-        print "(A)", 'Range passed: '//trim(str(.true., self%stages_steps(1)))//'-'//trim(str(.true., self%stages_steps(2)))
+        print "(A)", 'Range passed: '//trim(str(self%stages_steps(1), .true.))//'-'//trim(str(self%stages_steps(2), .true.))
         stop
       endif
     endif
@@ -324,7 +324,7 @@ contains
   ! test(s)
   print "(A)", trim(adjustl(solver))
   do s=stages_steps_range(1), stages_steps_range(2)
-    print "(A)", '  stages/steps '//trim(str(.true.,s))
+    print "(A)", '  stages/steps '//trim(str(s,.true.))
     if (trim(adjustl(solver))=='emd-runge-kutta') then
       do t=1, size(self%tolerance)
         call solve(solver=solver,                       &
@@ -350,7 +350,7 @@ contains
           call save_results(results=self%results,                                    &
                             plots=self%plots,                                        &
                             output_cli=self%output_cli,                              &
-                            solver=trim(adjustl(solver))//'-'//trim(str(.true., s)), &
+                            solver=trim(adjustl(solver))//'-'//trim(str(s, .true.)), &
                             frequency=self%frequency,                                &
                             solution=solution(:, 0:last_step))
         endif
@@ -379,7 +379,7 @@ contains
           call save_results(results=self%results,                                    &
                             plots=self%plots,                                        &
                             output_cli=self%output_cli,                              &
-                            solver=trim(adjustl(solver))//'-'//trim(str(.true., s)), &
+                            solver=trim(adjustl(solver))//'-'//trim(str(s, .true.)), &
                             frequency=self%frequency,                                &
                             solution=solution(:, 0:last_step))
         endif
@@ -517,7 +517,7 @@ contains
   endif
 
   if (.not.supported) then
-    print "(A)", 'The solver '//trim(adjustl(solver))//' does not support '//trim(str(.true., stages_steps))//' stages/steps'
+    print "(A)", 'The solver '//trim(adjustl(solver))//' does not support '//trim(str(stages_steps, .true.))//' stages/steps'
     if (allocated(solution)) deallocate(solution)
     return
   endif
