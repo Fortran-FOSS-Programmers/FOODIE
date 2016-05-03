@@ -29,7 +29,8 @@ public :: oscillation_test
 !-----------------------------------------------------------------------------------------------------------------------------------
 integer,       parameter :: space_dimension=2                                !< Space dimensions.
 real(R_P),     parameter :: initial_state(1:space_dimension)=[0._R_P,1._R_P] !< Initial state.
-character(99), parameter :: solvers(1:10) = ["adams-bashforth        ", &
+character(99), parameter :: solvers(1:11) = ["all                    ", &
+                                             "adams-bashforth        ", &
                                              "adams-bashforth-moulton", &
                                              "adams-moulton          ", &
                                              "backward-diff-formula  ", &
@@ -84,7 +85,7 @@ contains
   if (trim(adjustl(self%solver))/='all') then
     call self%test(solver=self%solver)
   else
-    do s=1, ubound(solvers, dim=1)
+    do s=2, ubound(solvers, dim=1)
       self%solver = solvers(s)
       call self%test(solver=self%solver)
     enddo
@@ -109,7 +110,7 @@ contains
   contains
     subroutine set_cli()
     !-------------------------------------------------------------------------------------------------------------------------------
-    !< set Command Line Interface.
+    !< Set Command Line Interface.
     !-------------------------------------------------------------------------------------------------------------------------------
 
     !-------------------------------------------------------------------------------------------------------------------------------
@@ -147,20 +148,19 @@ contains
     !-------------------------------------------------------------------------------------------------------------------------------
 
     !-------------------------------------------------------------------------------------------------------------------------------
-    associate(cli => self%cli, error => self%error)
-      call cli%parse(error=error)
-      call cli%get(switch='-s', val=self%solver, error=error) ; if (error/=0) stop
-      call cli%get(switch='--iterations', val=self%implicit_iterations, error=error) ; if (error/=0) stop
-      call cli%get(switch='-f', val=self%frequency, error=error) ; if (error/=0) stop
-      call cli%get_varying(switch='--ss', val=self%stages_steps, error=error) ; if (error/=0) stop
-      call cli%get_varying(switch='-Dt', val=self%Dt, error=error) ; if (error/=0) stop
-      call cli%get_varying(switch='-tol', val=self%tolerance, error=error) ; if (error/=0) stop
-      call cli%get(switch='-tf', val=self%final_time, error=error) ; if (error/=0) stop
-      call cli%get(switch='-r', val=self%results, error=error) ; if (error/=0) stop
-      call cli%get(switch='-p', val=self%plots, error=error) ; if (error/=0) stop
-      call cli%get(switch='--output', val=self%output_cli, error=error) ; if (error/=0) stop
-      call cli%get(switch='--errors_analysis', val=self%errors_analysis, error=error) ; if (error/=0) stop
-    endassociate
+    call self%cli%parse(error=self%error)
+    call self%cli%get(switch='-s', val=self%solver, error=self%error) ; if (self%error/=0) stop
+    call self%cli%get(switch='--iterations', val=self%implicit_iterations, error=self%error) ; if (self%error/=0) stop
+    call self%cli%get(switch='-f', val=self%frequency, error=self%error) ; if (self%error/=0) stop
+    call self%cli%get_varying(switch='--ss', val=self%stages_steps, error=self%error) ; if (self%error/=0) stop
+    call self%cli%get_varying(switch='-Dt', val=self%Dt, error=self%error) ; if (self%error/=0) stop
+    call self%cli%get_varying(switch='-tol', val=self%tolerance, error=self%error) ; if (self%error/=0) stop
+    call self%cli%get(switch='-tf', val=self%final_time, error=self%error) ; if (self%error/=0) stop
+    call self%cli%get(switch='-r', val=self%results, error=self%error) ; if (self%error/=0) stop
+    call self%cli%get(switch='-p', val=self%plots, error=self%error) ; if (self%error/=0) stop
+    call self%cli%get(switch='--output', val=self%output_cli, error=self%error) ; if (self%error/=0) stop
+    call self%cli%get(switch='--errors_analysis', val=self%errors_analysis, error=self%error) ; if (self%error/=0) stop
+
     if (.not.is_solver_valid()) then
       print "(A)", 'Error: the solver "'//trim(adjustl(self%solver))//'" is unknown!'
       valid_solvers_list = list_solvers()
@@ -233,7 +233,6 @@ contains
     do s=1, ubound(solvers, dim=1)
       list = list // '  + ' // trim(adjustl(solvers(s))) // new_line('a')
     enddo
-    list = list // '  + all'
     return
     !-------------------------------------------------------------------------------------------------------------------------------
     endfunction list_solvers
@@ -643,9 +642,9 @@ contains
   !---------------------------------------------------------------------------------------------------------------------------------
   title = 'Oscillation equations integration, solver='//trim(adjustl(solver))
   if (trim(adjustl(output_cli))/='unset') then
-    basename = trim(adjustl(output_cli))//'-'//trim(strz(10, ubound(solution, dim=2)))//'-time_steps-'//trim(adjustl(solver))
+    basename = trim(adjustl(output_cli))//'-'//trim(strz(ubound(solution, dim=2), 10))//'-time_steps-'//trim(adjustl(solver))
   else
-    basename = 'oscillation_test-'//trim(strz(10, ubound(solution, dim=2)))//'-time_steps-'//trim(adjustl(solver))
+    basename = 'oscillation_test-'//trim(strz(ubound(solution, dim=2), 10))//'-time_steps-'//trim(adjustl(solver))
   endif
   if (results) then
     open(newunit=rawfile, file=basename//'.dat')

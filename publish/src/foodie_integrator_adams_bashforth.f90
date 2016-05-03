@@ -53,9 +53,9 @@ type :: adams_bashforth_integrator
   !<+ error=0 => no error;
   !<+ error=1 => bad (unsupported) number of required time steps;
   private
-  integer(I_P)                :: steps=0  !< Number of time steps.
-  real(R_P), allocatable      :: b(:)     !< *b* coefficients.
-  integer(I_P)                :: error=0  !< Error status flag: trap occurrences of errors.
+  integer(I_P)           :: steps=0  !< Number of time steps.
+  real(R_P), allocatable :: b(:)     !< *b* coefficients.
+  integer(I_P)           :: error=0  !< Error status flag: trap occurrences of errors.
   contains
     private
     procedure, pass(self), public :: init            !< Initialize (create) the integrator.
@@ -65,7 +65,6 @@ type :: adams_bashforth_integrator
     procedure, nopass,     public :: min_steps       !< Return the minimum number of steps supported.
     procedure, nopass,     public :: max_steps       !< Return the maximum number of steps supported.
     procedure, nopass,     public :: is_supported    !< Check if the queried number of steps is supported or not.
-    final                         :: finalize        !< Finalize object.
 endtype adams_bashforth_integrator
 !-----------------------------------------------------------------------------------------------------------------------------------
 contains
@@ -346,18 +345,4 @@ contains
   return
   !---------------------------------------------------------------------------------------------------------------------------------
   endfunction is_supported
-
-  ! private methods
-  elemental subroutine finalize(self)
-  !---------------------------------------------------------------------------------------------------------------------------------
-  !< Finalize object.
-  !---------------------------------------------------------------------------------------------------------------------------------
-  type(adams_bashforth_integrator), intent(INOUT) :: self !< AB integrator.
-  !---------------------------------------------------------------------------------------------------------------------------------
-
-  !---------------------------------------------------------------------------------------------------------------------------------
-  call self%destroy
-  return
-  !---------------------------------------------------------------------------------------------------------------------------------
-  endsubroutine finalize
 endmodule foodie_integrator_adams_bashforth

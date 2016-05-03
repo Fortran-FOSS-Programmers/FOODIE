@@ -157,7 +157,6 @@ type :: euler_1D_caf_nf
     procedure, pass(self), private :: impose_boundary_conditions             !< Impose boundary conditions.
     procedure, pass(self), private :: reconstruct_interfaces_states          !< Reconstruct interfaces states.
     procedure, pass(self), private :: riemann_solver                         !< Solve the Riemann Problem at cell interfaces.
-    final                          :: finalize                               !< Finalize field.
 endtype euler_1D_caf_nf
 
 type :: tvd_runge_kutta_integrator
@@ -172,7 +171,6 @@ type :: tvd_runge_kutta_integrator
     procedure, pass(self), public :: destroy => destroy_rk     !< Destroy the integrator.
     procedure, pass(self), public :: init => init_rk           !< Initialize (create) the integrator.
     procedure, pass(self), public :: integrate => integrate_rk !< Integrate integrand field.
-    final                         :: finalize_rk               !< Finalize object.
 endtype tvd_runge_kutta_integrator
 
 #ifdef CAF
@@ -293,20 +291,6 @@ contains
   return
   !---------------------------------------------------------------------------------------------------------------------------------
   endsubroutine integrate_rk
-
-  ! private methods
-  elemental subroutine finalize_rk(self)
-  !---------------------------------------------------------------------------------------------------------------------------------
-  !< Finalize object.
-  !---------------------------------------------------------------------------------------------------------------------------------
-  type(tvd_runge_kutta_integrator), intent(INOUT) :: self !< Integrator.
-  !---------------------------------------------------------------------------------------------------------------------------------
-
-  !---------------------------------------------------------------------------------------------------------------------------------
-  call self%destroy
-  return
-  !---------------------------------------------------------------------------------------------------------------------------------
-  endsubroutine finalize_rk
 
   ! type bound procedures of euler_1D_caf_nf
   ! auxiliary methods
@@ -843,19 +827,6 @@ contains
     !-------------------------------------------------------------------------------------------------------------------------------
     endfunction fluxes
   endsubroutine riemann_solver
-
-  subroutine finalize(self)
-  !---------------------------------------------------------------------------------------------------------------------------------
-  !< Destroy field.
-  !---------------------------------------------------------------------------------------------------------------------------------
-  type(euler_1D_caf_nf), intent(INOUT) :: self !< Euler field.
-  !---------------------------------------------------------------------------------------------------------------------------------
-
-  !---------------------------------------------------------------------------------------------------------------------------------
-  call self%destroy
-  return
-  !---------------------------------------------------------------------------------------------------------------------------------
-  endsubroutine finalize
 
   ! non type-bound procedures
   pure subroutine compute_inter_states(r1, p1, u1, g1, r4, p4, u4, g4, p, S, S1, S4)

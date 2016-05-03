@@ -701,34 +701,6 @@
           
           <a class="list-group-item" href="../proc/finalize%7E4.html">finalize</a>
           
-          <a class="list-group-item" href="../proc/finalize%7E5.html">finalize</a>
-          
-          <a class="list-group-item" href="../proc/finalize%7E6.html">finalize</a>
-          
-          <a class="list-group-item" href="../proc/finalize%7E7.html">finalize</a>
-          
-          <a class="list-group-item" href="../proc/finalize%7E8.html">finalize</a>
-          
-          <a class="list-group-item" href="../proc/finalize%7E9.html">finalize</a>
-          
-          <a class="list-group-item" href="../proc/finalize%7E10.html">finalize</a>
-          
-          <a class="list-group-item" href="../proc/finalize%7E11.html">finalize</a>
-          
-          <a class="list-group-item" href="../proc/finalize%7E12.html">finalize</a>
-          
-          <a class="list-group-item" href="../proc/finalize%7E13.html">finalize</a>
-          
-          <a class="list-group-item" href="../proc/finalize%7E14.html">finalize</a>
-          
-          <a class="list-group-item" href="../proc/finalize%7E15.html">finalize</a>
-          
-          <a class="list-group-item" href="../proc/finalize%7E16.html">finalize</a>
-          
-          <a class="list-group-item" href="../proc/finalize_rk.html">finalize_rk</a>
-          
-          <a class="list-group-item" href="../proc/finalize_rk%7E2.html">finalize_rk</a>
-          
           <a class="list-group-item" href="../proc/free.html">free</a>
           
           <a class="list-group-item" href="../proc/free%7E2.html">free</a>
@@ -1461,7 +1433,7 @@ private subroutine print_version(self, pref)
   
 <tr>
   
-  <td><span class="anchor" id="variable-self%7E207"></span>class(<a href='../type/object.html'>object</a>),</td>
+  <td><span class="anchor" id="variable-self%7E193"></span>class(<a href='../type/object.html'>object</a>),</td>
   <td>intent(in)</td>
   <td></td>
   
@@ -1558,12 +1530,12 @@ private subroutine print_version(self, pref)
 
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
   <span class="n">prefd</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span> <span class="p">;</span> <span class="k">if</span> <span class="p">(</span><span class="nb">present</span><span class="p">(</span><span class="n">pref</span><span class="p">))</span> <span class="n">prefd</span> <span class="o">=</span> <span class="n">pref</span>
-  <span class="k">write</span><span class="p">(</span><span class="n">stdout</span><span class="p">,</span><span class="s1">&#39;(A)&#39;</span><span class="p">)</span><span class="n">prefd</span><span class="o">//</span><span class="n">self</span><span class="p">%</span><span class="n">progname</span><span class="o">//</span><span class="s1">&#39; version &#39;</span><span class="o">//</span><span class="n">self</span><span class="p">%</span><span class="n">version</span>
+  <span class="k">write</span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">version_lun</span><span class="p">,</span><span class="s1">&#39;(A)&#39;</span><span class="p">)</span><span class="n">prefd</span><span class="o">//</span><span class="n">self</span><span class="p">%</span><span class="n">progname</span><span class="o">//</span><span class="s1">&#39; version &#39;</span><span class="o">//</span><span class="n">self</span><span class="p">%</span><span class="n">version</span>
   <span class="k">if</span> <span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">license</span> <span class="o">/=</span> <span class="s1">&#39;&#39;</span><span class="p">)</span> <span class="k">then</span>
-<span class="k">    write</span><span class="p">(</span><span class="n">stdout</span><span class="p">,</span><span class="s1">&#39;(A)&#39;</span><span class="p">)</span><span class="n">prefd</span><span class="o">//</span><span class="n">self</span><span class="p">%</span><span class="n">license</span>
+<span class="k">    write</span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">version_lun</span><span class="p">,</span><span class="s1">&#39;(A)&#39;</span><span class="p">)</span><span class="n">prefd</span><span class="o">//</span><span class="n">self</span><span class="p">%</span><span class="n">license</span>
   <span class="n">endif</span>
   <span class="k">if</span> <span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">authors</span> <span class="o">/=</span> <span class="s1">&#39;&#39;</span><span class="p">)</span> <span class="k">then</span>
-<span class="k">    write</span><span class="p">(</span><span class="n">stdout</span><span class="p">,</span><span class="s1">&#39;(A)&#39;</span><span class="p">)</span><span class="n">prefd</span><span class="o">//</span><span class="n">self</span><span class="p">%</span><span class="n">authors</span>
+<span class="k">    write</span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">version_lun</span><span class="p">,</span><span class="s1">&#39;(A)&#39;</span><span class="p">)</span><span class="n">prefd</span><span class="o">//</span><span class="n">self</span><span class="p">%</span><span class="n">authors</span>
   <span class="n">endif</span>
   <span class="k">return</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>

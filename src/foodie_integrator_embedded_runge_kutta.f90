@@ -309,7 +309,6 @@ type :: emd_runge_kutta_integrator
     procedure, nopass,     public  :: max_stages   !< Return the maximum number of stages supported.
     procedure, nopass,     public  :: is_supported !< Check if the queried number of stages is supported or not.
     procedure, pass(self), private :: new_Dt       !< Compute new estimation of the time step Dt.
-    final                          :: finalize     !< Finalize object.
 endtype emd_runge_kutta_integrator
 !-----------------------------------------------------------------------------------------------------------------------------------
 contains
@@ -700,17 +699,4 @@ contains
   return
   !---------------------------------------------------------------------------------------------------------------------------------
   endsubroutine new_Dt
-
-  elemental subroutine finalize(self)
-  !---------------------------------------------------------------------------------------------------------------------------------
-  !< Finalize object.
-  !---------------------------------------------------------------------------------------------------------------------------------
-  type(emd_runge_kutta_integrator), intent(INOUT) :: self !< Integrator.
-  !---------------------------------------------------------------------------------------------------------------------------------
-
-  !---------------------------------------------------------------------------------------------------------------------------------
-  call self%destroy
-  return
-  !---------------------------------------------------------------------------------------------------------------------------------
-  endsubroutine finalize
 endmodule foodie_integrator_emd_runge_kutta

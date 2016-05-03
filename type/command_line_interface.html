@@ -167,7 +167,7 @@
     <div id="fins" class="panel-collapse collapse">
         <div class="list-group">
           
-          <a class="list-group-item" href="../type/command_line_interface.html#finalproc-finalize%7E15">finalize</a>
+          <a class="list-group-item" href="../type/command_line_interface.html#finalproc-finalize%7E3">finalize</a>
           
         </div>
     </div>
@@ -744,7 +744,7 @@ implementation in a submodule of an interface in a parent module.</p>
 	   
          
 <div class="panel panel-default">
-  <div class="panel-heading codesum"><span class="anchor" id="finalproc-finalize%7E15"></span><h3>final :: <strong>finalize</strong> 
+  <div class="panel-heading codesum"><span class="anchor" id="finalproc-finalize%7E3"></span><h3>final :: <strong>finalize</strong> 
     </h3></div>
   <div class="panel-body">
     
@@ -757,7 +757,7 @@ implementation in a submodule of an interface in a parent module.</p>
        
     
     <h3>
-private elemental subroutine <a href='../proc/finalize%7E15.html'>finalize</a>(self)
+private elemental subroutine <a href='../proc/finalize%7E3.html'>finalize</a>(self)
     
     
     
@@ -917,7 +917,7 @@ private elemental subroutine <a href='../proc/free%7E3.html'>free</a>(self)
          
     
     <h3>
-private subroutine <a href='../proc/init%7E24.html'>init</a>(self, progname, version, help, description, license, authors, examples, epilog, disable_hv)
+private subroutine <a href='../proc/init%7E24.html'>init</a>(self, progname, version, help, description, license, authors, examples, epilog, disable_hv, usage_lun, error_lun, version_lun)
     
     
     
@@ -1083,6 +1083,51 @@ private subroutine <a href='../proc/init%7E24.html'>init</a>(self, progname, ver
   
   <td></td><td>::</td>
   <td><strong>disable_hv</strong></td><td><p>Disable automatic insert of 'help' and 'version' CLAs.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>integer(kind=I4P),</td>
+  <td>intent(in),</td>
+  <td>optional</td>
+  
+  <td></td><td>::</td>
+  <td><strong>usage_lun</strong></td><td><p>Unit number to print usage/help</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>integer(kind=I4P),</td>
+  <td>intent(in),</td>
+  <td>optional</td>
+  
+  <td></td><td>::</td>
+  <td><strong>error_lun</strong></td><td><p>Unit number to print error info</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>integer(kind=I4P),</td>
+  <td>intent(in),</td>
+  <td>optional</td>
+  
+  <td></td><td>::</td>
+  <td><strong>version_lun</strong></td><td><p>Unit number to print version/license info</p></td>
   
 </tr>
 

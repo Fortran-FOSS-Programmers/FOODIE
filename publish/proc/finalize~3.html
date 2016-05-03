@@ -104,14 +104,14 @@
      
     
     
-    <li><i class="fa fa-code"></i><a href="../src/foodie_integrator_adams_moulton.f90"> Source File</a></li>
+    <li><i class="fa fa-code"></i><a href="../src/flap_command_line_interface_t.F90"> Source File</a></li>
      
   </ul>
   <ol class="breadcrumb in-well text-right">
   
-     <li><a href='../sourcefile/foodie_integrator_adams_moulton.f90.html'>foodie_integrator_adams_moulton.f90</a></li>
+     <li><a href='../sourcefile/flap_command_line_interface_t.f90.html'>flap_command_line_interface_t.F90</a></li>
   
-     <li><a href='../module/foodie_integrator_adams_moulton.html'>foodie_integrator_adams_moulton</a></li>
+     <li><a href='../module/flap_command_line_interface_t.html'>flap_command_line_interface_t</a></li>
   
      <li class="active">finalize</li>
   </ol>
@@ -688,34 +688,6 @@
           <a class="list-group-item" href="../proc/finalize%7E3.html">finalize</a>
           
           <a class="list-group-item" href="../proc/finalize%7E4.html">finalize</a>
-          
-          <a class="list-group-item" href="../proc/finalize%7E5.html">finalize</a>
-          
-          <a class="list-group-item" href="../proc/finalize%7E6.html">finalize</a>
-          
-          <a class="list-group-item" href="../proc/finalize%7E7.html">finalize</a>
-          
-          <a class="list-group-item" href="../proc/finalize%7E8.html">finalize</a>
-          
-          <a class="list-group-item" href="../proc/finalize%7E9.html">finalize</a>
-          
-          <a class="list-group-item" href="../proc/finalize%7E10.html">finalize</a>
-          
-          <a class="list-group-item" href="../proc/finalize%7E11.html">finalize</a>
-          
-          <a class="list-group-item" href="../proc/finalize%7E12.html">finalize</a>
-          
-          <a class="list-group-item" href="../proc/finalize%7E13.html">finalize</a>
-          
-          <a class="list-group-item" href="../proc/finalize%7E14.html">finalize</a>
-          
-          <a class="list-group-item" href="../proc/finalize%7E15.html">finalize</a>
-          
-          <a class="list-group-item" href="../proc/finalize%7E16.html">finalize</a>
-          
-          <a class="list-group-item" href="../proc/finalize_rk.html">finalize_rk</a>
-          
-          <a class="list-group-item" href="../proc/finalize_rk%7E2.html">finalize_rk</a>
           
           <a class="list-group-item" href="../proc/free.html">free</a>
           
@@ -1449,12 +1421,12 @@ private elemental subroutine finalize(self)
   
 <tr>
   
-  <td><span class="anchor" id="variable-self%7E19"></span>type(<a href='../type/adams_moulton_integrator.html'>adams_moulton_integrator</a>),</td>
+  <td><span class="anchor" id="variable-self%7E191"></span>type(<a href='../type/command_line_interface.html'>command_line_interface</a>),</td>
   <td>intent(inout)</td>
   <td></td>
   
   <td></td><td>::</td>
-  <td><strong>self</strong></td><td><p>AB integrator.</p></td>
+  <td><strong>self</strong></td><td><p>CLI data.</p></td>
   
 </tr>
 
@@ -1465,7 +1437,7 @@ private elemental subroutine finalize(self)
     
     
     <h3>Description</h3>
-    <p>Finalize object.</p>
+    <p>Free dynamic memory when finalizing.</p>
     
     
      
@@ -1490,13 +1462,13 @@ private elemental subroutine finalize(self)
     <h2><span class="anchor" id="src"></span>Source Code</h2>
     <div class="highlight"><pre><span></span>  <span class="k">elemental subroutine </span><span class="n">finalize</span><span class="p">(</span><span class="n">self</span><span class="p">)</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
-  <span class="c">!&lt; Finalize object.</span>
+  <span class="c">!&lt; Free dynamic memory when finalizing.</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
-  <span class="k">type</span><span class="p">(</span><span class="n">adams_moulton_integrator</span><span class="p">),</span> <span class="k">intent</span><span class="p">(</span><span class="n">INOUT</span><span class="p">)</span> <span class="kd">::</span> <span class="n">self</span> <span class="c">!&lt; AB integrator.</span>
+  <span class="k">type</span><span class="p">(</span><span class="n">command_line_interface</span><span class="p">),</span> <span class="k">intent</span><span class="p">(</span><span class="n">inout</span><span class="p">)</span> <span class="kd">::</span> <span class="n">self</span> <span class="c">!&lt; CLI data.</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
 
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
-  <span class="k">call </span><span class="n">self</span><span class="p">%</span><span class="n">destroy</span>
+  <span class="k">call </span><span class="n">self</span><span class="p">%</span><span class="n">free</span>
   <span class="k">return</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
   <span class="n">endsubroutine</span> <span class="n">finalize</span>

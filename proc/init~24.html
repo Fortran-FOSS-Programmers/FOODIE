@@ -705,34 +705,6 @@
           
           <a class="list-group-item" href="../proc/finalize%7E4.html">finalize</a>
           
-          <a class="list-group-item" href="../proc/finalize%7E5.html">finalize</a>
-          
-          <a class="list-group-item" href="../proc/finalize%7E6.html">finalize</a>
-          
-          <a class="list-group-item" href="../proc/finalize%7E7.html">finalize</a>
-          
-          <a class="list-group-item" href="../proc/finalize%7E8.html">finalize</a>
-          
-          <a class="list-group-item" href="../proc/finalize%7E9.html">finalize</a>
-          
-          <a class="list-group-item" href="../proc/finalize%7E10.html">finalize</a>
-          
-          <a class="list-group-item" href="../proc/finalize%7E11.html">finalize</a>
-          
-          <a class="list-group-item" href="../proc/finalize%7E12.html">finalize</a>
-          
-          <a class="list-group-item" href="../proc/finalize%7E13.html">finalize</a>
-          
-          <a class="list-group-item" href="../proc/finalize%7E14.html">finalize</a>
-          
-          <a class="list-group-item" href="../proc/finalize%7E15.html">finalize</a>
-          
-          <a class="list-group-item" href="../proc/finalize%7E16.html">finalize</a>
-          
-          <a class="list-group-item" href="../proc/finalize_rk.html">finalize_rk</a>
-          
-          <a class="list-group-item" href="../proc/finalize_rk%7E2.html">finalize_rk</a>
-          
           <a class="list-group-item" href="../proc/free.html">free</a>
           
           <a class="list-group-item" href="../proc/free%7E2.html">free</a>
@@ -1437,7 +1409,7 @@
     
     <div class="col-lg-9" id='text'>
     <h2>
-private subroutine init(self, progname, version, help, description, license, authors, examples, epilog, disable_hv)
+private subroutine init(self, progname, version, help, description, license, authors, examples, epilog, disable_hv, usage_lun, error_lun, version_lun)
     
     
     
@@ -1465,7 +1437,7 @@ private subroutine init(self, progname, version, help, description, license, aut
   
 <tr>
   
-  <td><span class="anchor" id="variable-self%7E181"></span>class(<a href='../type/command_line_interface.html'>command_line_interface</a>),</td>
+  <td><span class="anchor" id="variable-self%7E167"></span>class(<a href='../type/command_line_interface.html'>command_line_interface</a>),</td>
   <td>intent(inout)</td>
   <td></td>
   
@@ -1609,6 +1581,51 @@ private subroutine init(self, progname, version, help, description, license, aut
   
 </tr>
 
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-usage_lun%7E2"></span>integer(kind=I4P),</td>
+  <td>intent(in),</td>
+  <td>optional</td>
+  
+  <td></td><td>::</td>
+  <td><strong>usage_lun</strong></td><td><p>Unit number to print usage/help</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-error_lun%7E2"></span>integer(kind=I4P),</td>
+  <td>intent(in),</td>
+  <td>optional</td>
+  
+  <td></td><td>::</td>
+  <td><strong>error_lun</strong></td><td><p>Unit number to print error info</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-version_lun%7E2"></span>integer(kind=I4P),</td>
+  <td>intent(in),</td>
+  <td>optional</td>
+  
+  <td></td><td>::</td>
+  <td><strong>version_lun</strong></td><td><p>Unit number to print version/license info</p></td>
+  
+</tr>
+
 </tbody>
 </table>
 
@@ -1699,7 +1716,8 @@ private subroutine init(self, progname, version, help, description, license, aut
     
     <section>
     <h2><span class="anchor" id="src"></span>Source Code</h2>
-    <div class="highlight"><pre><span></span>  <span class="k">subroutine </span><span class="n">init</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">progname</span><span class="p">,</span> <span class="n">version</span><span class="p">,</span> <span class="n">help</span><span class="p">,</span> <span class="n">description</span><span class="p">,</span> <span class="n">license</span><span class="p">,</span> <span class="n">authors</span><span class="p">,</span> <span class="n">examples</span><span class="p">,</span> <span class="n">epilog</span><span class="p">,</span> <span class="n">disable_hv</span><span class="p">)</span>
+    <div class="highlight"><pre><span></span>  <span class="k">subroutine </span><span class="n">init</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">progname</span><span class="p">,</span> <span class="n">version</span><span class="p">,</span> <span class="n">help</span><span class="p">,</span> <span class="n">description</span><span class="p">,</span> <span class="n">license</span><span class="p">,</span> <span class="n">authors</span><span class="p">,</span> <span class="n">examples</span><span class="p">,</span> <span class="n">epilog</span><span class="p">,</span> <span class="n">disable_hv</span><span class="p">,</span> <span class="p">&amp;</span>
+       <span class="n">usage_lun</span><span class="p">,</span> <span class="n">error_lun</span><span class="p">,</span> <span class="n">version_lun</span><span class="p">)</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
   <span class="c">!&lt; Initialize CLI.</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
@@ -1713,6 +1731,9 @@ private subroutine init(self, progname, version, help, description, license, aut
   <span class="kt">character</span><span class="p">(</span><span class="o">*</span><span class="p">),</span> <span class="k">optional</span><span class="p">,</span>        <span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span>    <span class="kd">::</span> <span class="n">examples</span><span class="p">(</span><span class="mi">1</span><span class="p">:)</span>      <span class="c">!&lt; Examples of correct usage.</span>
   <span class="kt">character</span><span class="p">(</span><span class="o">*</span><span class="p">),</span> <span class="k">optional</span><span class="p">,</span>        <span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span>    <span class="kd">::</span> <span class="n">epilog</span>            <span class="c">!&lt; Epilog message.</span>
   <span class="kt">logical</span><span class="p">,</span>      <span class="k">optional</span><span class="p">,</span>        <span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span>    <span class="kd">::</span> <span class="n">disable_hv</span>        <span class="c">!&lt; Disable automatic insert of &#39;help&#39; and &#39;version&#39; CLAs.</span>
+  <span class="kt">integer</span><span class="p">(</span><span class="n">I4P</span><span class="p">),</span> <span class="k">optional</span><span class="p">,</span>        <span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span>    <span class="kd">::</span> <span class="n">usage_lun</span>         <span class="c">!&lt; Unit number to print usage/help</span>
+  <span class="kt">integer</span><span class="p">(</span><span class="n">I4P</span><span class="p">),</span> <span class="k">optional</span><span class="p">,</span>        <span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span>    <span class="kd">::</span> <span class="n">version_lun</span>       <span class="c">!&lt; Unit number to print version/license info</span>
+  <span class="kt">integer</span><span class="p">(</span><span class="n">I4P</span><span class="p">),</span> <span class="k">optional</span><span class="p">,</span>        <span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span>    <span class="kd">::</span> <span class="n">error_lun</span>         <span class="c">!&lt; Unit number to print error info</span>
   <span class="kt">character</span><span class="p">(</span><span class="nb">len</span><span class="o">=</span><span class="p">:),</span> <span class="k">allocatable</span>                <span class="kd">::</span> <span class="n">prog_invocation</span>   <span class="c">!&lt; Complete program invocation.</span>
   <span class="kt">integer</span><span class="p">(</span><span class="n">I4P</span><span class="p">)</span>                                 <span class="kd">::</span> <span class="n">invocation_length</span> <span class="c">!&lt; Length of invocation.</span>
   <span class="kt">integer</span><span class="p">(</span><span class="n">I4P</span><span class="p">)</span>                                 <span class="kd">::</span> <span class="n">retrieval_status</span>  <span class="c">!&lt; Retrieval status.</span>
@@ -1720,6 +1741,9 @@ private subroutine init(self, progname, version, help, description, license, aut
 
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
   <span class="k">call </span><span class="n">self</span><span class="p">%</span><span class="n">free</span>
+  <span class="k">if</span> <span class="p">(</span><span class="nb">present</span><span class="p">(</span><span class="n">usage_lun</span><span class="p">))</span>   <span class="n">self</span><span class="p">%</span><span class="n">usage_lun</span>   <span class="o">=</span> <span class="n">usage_lun</span>
+  <span class="k">if</span> <span class="p">(</span><span class="nb">present</span><span class="p">(</span><span class="n">version_lun</span><span class="p">))</span> <span class="n">self</span><span class="p">%</span><span class="n">version_lun</span> <span class="o">=</span> <span class="n">version_lun</span>
+  <span class="k">if</span> <span class="p">(</span><span class="nb">present</span><span class="p">(</span><span class="n">error_lun</span><span class="p">))</span>   <span class="n">self</span><span class="p">%</span><span class="n">error_lun</span>   <span class="o">=</span> <span class="n">error_lun</span>
   <span class="k">if</span> <span class="p">(</span><span class="nb">present</span><span class="p">(</span><span class="n">progname</span><span class="p">))</span> <span class="k">then</span>
 <span class="k">    </span><span class="n">self</span><span class="p">%</span><span class="n">progname</span> <span class="o">=</span> <span class="n">progname</span>
   <span class="k">else</span>

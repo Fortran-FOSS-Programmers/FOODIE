@@ -153,6 +153,12 @@
         
         <a class="list-group-item" href="../type/object.html#variable-error%7E9">error</a>
         
+        <a class="list-group-item" href="../type/object.html#variable-usage_lun">usage_lun</a>
+        
+        <a class="list-group-item" href="../type/object.html#variable-version_lun">version_lun</a>
+        
+        <a class="list-group-item" href="../type/object.html#variable-error_lun">error_lun</a>
+        
       </div>
     </div>
   </div>
@@ -619,6 +625,48 @@ implementation in a submodule of an interface in a parent module.</p>
   
 </tr>
 
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-usage_lun"></span>integer(kind=I4P),</td>
+  
+  <td>public</td>
+  <td></td><td>::</td>
+  <td><strong>usage_lun</strong></td><td> =</td><td>stderr</td><td><p>Output unit to print help/usage messages</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-version_lun"></span>integer(kind=I4P),</td>
+  
+  <td>public</td>
+  <td></td><td>::</td>
+  <td><strong>version_lun</strong></td><td> =</td><td>stdout</td><td><p>Output unit to print version message</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-error_lun"></span>integer(kind=I4P),</td>
+  
+  <td>public</td>
+  <td></td><td>::</td>
+  <td><strong>error_lun</strong></td><td> =</td><td>stderr</td><td><p>Error unit to print error messages</p></td>
+  
+</tr>
+
 </tbody>
 </table>
 
@@ -981,16 +1029,19 @@ private elemental subroutine <a href='../proc/assign_object.html'>assign_object<
     <div class="highlight"><pre><span></span><span class="k">type</span><span class="p">,</span> <span class="k">abstract</span><span class="p">,</span> <span class="k">public</span> <span class="kd">::</span> <span class="n">object</span>
   <span class="c">!&lt; Base (abstract) class upon which FLAP&#39;s concrete classes are built.</span>
   <span class="k">private</span>
-<span class="k">  </span><span class="kt">character</span><span class="p">(</span><span class="nb">len</span><span class="o">=</span><span class="p">:),</span> <span class="k">public</span><span class="p">,</span> <span class="k">allocatable</span> <span class="kd">::</span> <span class="n">progname</span>      <span class="c">!&lt; Program name.</span>
-  <span class="kt">character</span><span class="p">(</span><span class="nb">len</span><span class="o">=</span><span class="p">:),</span> <span class="k">public</span><span class="p">,</span> <span class="k">allocatable</span> <span class="kd">::</span> <span class="n">version</span>       <span class="c">!&lt; Program version.</span>
-  <span class="kt">character</span><span class="p">(</span><span class="nb">len</span><span class="o">=</span><span class="p">:),</span> <span class="k">public</span><span class="p">,</span> <span class="k">allocatable</span> <span class="kd">::</span> <span class="n">help</span>          <span class="c">!&lt; Help message.</span>
-  <span class="kt">character</span><span class="p">(</span><span class="nb">len</span><span class="o">=</span><span class="p">:),</span> <span class="k">public</span><span class="p">,</span> <span class="k">allocatable</span> <span class="kd">::</span> <span class="n">description</span>   <span class="c">!&lt; Detailed description.</span>
-  <span class="kt">character</span><span class="p">(</span><span class="nb">len</span><span class="o">=</span><span class="p">:),</span> <span class="k">public</span><span class="p">,</span> <span class="k">allocatable</span> <span class="kd">::</span> <span class="n">license</span>       <span class="c">!&lt; License description.</span>
-  <span class="kt">character</span><span class="p">(</span><span class="nb">len</span><span class="o">=</span><span class="p">:),</span> <span class="k">public</span><span class="p">,</span> <span class="k">allocatable</span> <span class="kd">::</span> <span class="n">authors</span>       <span class="c">!&lt; Authors list.</span>
-  <span class="kt">character</span><span class="p">(</span><span class="nb">len</span><span class="o">=</span><span class="p">:),</span> <span class="k">public</span><span class="p">,</span> <span class="k">allocatable</span> <span class="kd">::</span> <span class="n">epilog</span>        <span class="c">!&lt; Epilogue message.</span>
-  <span class="kt">character</span><span class="p">(</span><span class="nb">len</span><span class="o">=</span><span class="p">:),</span> <span class="k">public</span><span class="p">,</span> <span class="k">allocatable</span> <span class="kd">::</span> <span class="n">m_exclude</span>     <span class="c">!&lt; Mutually exclude other CLA(s group).</span>
-  <span class="kt">character</span><span class="p">(</span><span class="nb">len</span><span class="o">=</span><span class="p">:),</span> <span class="k">public</span><span class="p">,</span> <span class="k">allocatable</span> <span class="kd">::</span> <span class="n">error_message</span> <span class="c">!&lt; Meaningful error message to standard-error.</span>
-  <span class="kt">integer</span><span class="p">(</span><span class="n">I4P</span><span class="p">),</span>     <span class="k">public</span>              <span class="kd">::</span> <span class="n">error</span><span class="o">=</span><span class="mi">0_I4P</span>   <span class="c">!&lt; Error trapping flag.</span>
+<span class="k">  </span><span class="kt">character</span><span class="p">(</span><span class="nb">len</span><span class="o">=</span><span class="p">:),</span> <span class="k">public</span><span class="p">,</span> <span class="k">allocatable</span> <span class="kd">::</span> <span class="n">progname</span>           <span class="c">!&lt; Program name.</span>
+  <span class="kt">character</span><span class="p">(</span><span class="nb">len</span><span class="o">=</span><span class="p">:),</span> <span class="k">public</span><span class="p">,</span> <span class="k">allocatable</span> <span class="kd">::</span> <span class="n">version</span>            <span class="c">!&lt; Program version.</span>
+  <span class="kt">character</span><span class="p">(</span><span class="nb">len</span><span class="o">=</span><span class="p">:),</span> <span class="k">public</span><span class="p">,</span> <span class="k">allocatable</span> <span class="kd">::</span> <span class="n">help</span>               <span class="c">!&lt; Help message.</span>
+  <span class="kt">character</span><span class="p">(</span><span class="nb">len</span><span class="o">=</span><span class="p">:),</span> <span class="k">public</span><span class="p">,</span> <span class="k">allocatable</span> <span class="kd">::</span> <span class="n">description</span>        <span class="c">!&lt; Detailed description.</span>
+  <span class="kt">character</span><span class="p">(</span><span class="nb">len</span><span class="o">=</span><span class="p">:),</span> <span class="k">public</span><span class="p">,</span> <span class="k">allocatable</span> <span class="kd">::</span> <span class="n">license</span>            <span class="c">!&lt; License description.</span>
+  <span class="kt">character</span><span class="p">(</span><span class="nb">len</span><span class="o">=</span><span class="p">:),</span> <span class="k">public</span><span class="p">,</span> <span class="k">allocatable</span> <span class="kd">::</span> <span class="n">authors</span>            <span class="c">!&lt; Authors list.</span>
+  <span class="kt">character</span><span class="p">(</span><span class="nb">len</span><span class="o">=</span><span class="p">:),</span> <span class="k">public</span><span class="p">,</span> <span class="k">allocatable</span> <span class="kd">::</span> <span class="n">epilog</span>             <span class="c">!&lt; Epilogue message.</span>
+  <span class="kt">character</span><span class="p">(</span><span class="nb">len</span><span class="o">=</span><span class="p">:),</span> <span class="k">public</span><span class="p">,</span> <span class="k">allocatable</span> <span class="kd">::</span> <span class="n">m_exclude</span>          <span class="c">!&lt; Mutually exclude other CLA(s group).</span>
+  <span class="kt">character</span><span class="p">(</span><span class="nb">len</span><span class="o">=</span><span class="p">:),</span> <span class="k">public</span><span class="p">,</span> <span class="k">allocatable</span> <span class="kd">::</span> <span class="n">error_message</span>      <span class="c">!&lt; Meaningful error message to standard-error.</span>
+  <span class="kt">integer</span><span class="p">(</span><span class="n">I4P</span><span class="p">),</span>     <span class="k">public</span>              <span class="kd">::</span> <span class="n">error</span><span class="o">=</span><span class="mi">0_I4P</span>        <span class="c">!&lt; Error trapping flag.</span>
+  <span class="kt">integer</span><span class="p">(</span><span class="n">I4P</span><span class="p">),</span>     <span class="k">public</span>              <span class="kd">::</span> <span class="n">usage_lun</span><span class="o">=</span><span class="n">stderr</span>   <span class="c">!&lt; Output unit to print help/usage messages</span>
+  <span class="kt">integer</span><span class="p">(</span><span class="n">I4P</span><span class="p">),</span>     <span class="k">public</span>              <span class="kd">::</span> <span class="n">version_lun</span><span class="o">=</span><span class="n">stdout</span> <span class="c">!&lt; Output unit to print version message</span>
+  <span class="kt">integer</span><span class="p">(</span><span class="n">I4P</span><span class="p">),</span>     <span class="k">public</span>              <span class="kd">::</span> <span class="n">error_lun</span><span class="o">=</span><span class="n">stderr</span>   <span class="c">!&lt; Error unit to print error messages</span>
   <span class="k">contains</span>
 <span class="k">    procedure</span> <span class="kd">::</span> <span class="n">free_object</span>         <span class="c">!&lt; Free dynamic memory.</span>
     <span class="k">procedure</span> <span class="kd">::</span> <span class="n">print_version</span>       <span class="c">!&lt; Print version.</span>

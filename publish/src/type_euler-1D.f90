@@ -5,8 +5,8 @@ module type_euler_1D
 !-----------------------------------------------------------------------------------------------------------------------------------
 
 !-----------------------------------------------------------------------------------------------------------------------------------
-use IR_Precision, only : R_P, I_P
 use foodie, only : integrand
+use penf, only : R_P, I_P
 use wenoof, only : weno_factory, weno_constructor_upwind, weno_interpolator, weno_interpolator_upwind
 !-----------------------------------------------------------------------------------------------------------------------------------
 
@@ -165,7 +165,6 @@ type, extends(integrand) :: euler_1D
     procedure, pass(self), private :: impose_boundary_conditions    !< Impose boundary conditions.
     procedure, pass(self), private :: reconstruct_interfaces_states !< Reconstruct interfaces states.
     procedure, pass(self), private :: riemann_solver                !< Solve the Riemann Problem at cell interfaces.
-    final                          :: finalize                      !< Finalize field.
 endtype euler_1D
 !-----------------------------------------------------------------------------------------------------------------------------------
 contains
@@ -851,19 +850,6 @@ contains
     !-------------------------------------------------------------------------------------------------------------------------------
     endfunction fluxes
   endsubroutine riemann_solver
-
-  subroutine finalize(self)
-  !---------------------------------------------------------------------------------------------------------------------------------
-  !< Destroy field.
-  !---------------------------------------------------------------------------------------------------------------------------------
-  type(euler_1D), intent(INOUT) :: self !< Euler field.
-  !---------------------------------------------------------------------------------------------------------------------------------
-
-  !---------------------------------------------------------------------------------------------------------------------------------
-  call self%destroy
-  return
-  !---------------------------------------------------------------------------------------------------------------------------------
-  endsubroutine finalize
 
   ! non type-bound procedures
   pure subroutine compute_inter_states(r1, p1, u1, g1, r4, p4, u4, g4, p, S, S1, S4)

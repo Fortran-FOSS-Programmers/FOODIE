@@ -178,18 +178,6 @@
   
   
   
-  <div class="panel panel-primary">
-    <div class="panel-heading text-left"><h3 class="panel-title"><a data-toggle="collapse" href="#fins">Finalization Procedures</a></h3></div>
-    <div id="fins" class="panel-collapse collapse">
-        <div class="list-group">
-          
-          <a class="list-group-item" href="../type/euler_1d_omp_nf.html#finalproc-finalize%7E10">finalize</a>
-          
-        </div>
-    </div>
-  </div>
-  
-  
   
   <div class="panel panel-primary">
     <div class="panel-heading text-left"><h3 class="panel-title"><a data-toggle="collapse" href="#boundprocs">Type-Bound Procedures</a></h3></div>
@@ -763,82 +751,6 @@ $$
     
     
     
-    
-    <section>
-    <h2>Finalization Procedures</h2>
-	   
-         
-<div class="panel panel-default">
-  <div class="panel-heading codesum"><span class="anchor" id="finalproc-finalize%7E10"></span><h3>final :: <strong>finalize</strong> 
-    </h3></div>
-  <div class="panel-body">
-    
-
-
-    <p>Finalize field.</p>
-  </div>
-  <ul class="list-group">
-     <li class="list-group-item">
-       
-    
-    <h3>
-private subroutine <a href='../proc/finalize%7E10.html'>finalize</a>(self)
-    
-    
-    
-</h3>
-    
-    <h4>Arguments</h4>
-    
-      
-      
-<table class="table table-striped varlist">
-<thead><tr><th>Type</th>
-<th>Intent</th><th>Optional</th>
-<th>Attributes</th><th></th><th>Name</th><th></th></thead>
-
-
-
-<tbody>
-
-  
-  
-  
-  
-<tr>
-  
-  <td><span class="anchor" ></span>type(<a href='../type/euler_1d_omp_nf.html'>euler_1D_omp_nf</a>),</td>
-  <td>intent(inout)</td>
-  <td></td>
-  
-  <td></td><td>::</td>
-  <td><strong>self</strong></td><td><p>Euler field.</p></td>
-  
-</tr>
-
-</tbody>
-</table>
-
-      
-    
-    
-    
-    <h4>Description</h4>
-       
-       
-
-
-       
-       <p>Destroy field.</p>
-        
-
-     </li>
-  </ul>
-</div>
-
-         
-    </section>
-    <br>
     
     
      
@@ -2394,7 +2306,6 @@ private pure subroutine <a href='../proc/riemann_solver%7E3.html'>riemann_solver
     <span class="k">procedure</span><span class="p">,</span> <span class="k">pass</span><span class="p">(</span><span class="n">self</span><span class="p">),</span> <span class="k">private</span> <span class="kd">::</span> <span class="n">impose_boundary_conditions</span>             <span class="c">!&lt; Impose boundary conditions.</span>
     <span class="k">procedure</span><span class="p">,</span> <span class="k">pass</span><span class="p">(</span><span class="n">self</span><span class="p">),</span> <span class="k">private</span> <span class="kd">::</span> <span class="n">reconstruct_interfaces_states</span>          <span class="c">!&lt; Reconstruct interfaces states.</span>
     <span class="k">procedure</span><span class="p">,</span> <span class="k">pass</span><span class="p">(</span><span class="n">self</span><span class="p">),</span> <span class="k">private</span> <span class="kd">::</span> <span class="n">riemann_solver</span>                         <span class="c">!&lt; Solve the Riemann Problem at cell interfaces.</span>
-    <span class="k">final</span>                          <span class="kd">::</span> <span class="n">finalize</span>                               <span class="c">!&lt; Finalize field.</span>
 <span class="n">endtype</span> <span class="n">euler_1D_omp_nf</span>
 </pre></div>
 
