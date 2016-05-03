@@ -140,7 +140,6 @@ type :: tvd_runge_kutta_integrator
     procedure, nopass,     public :: min_stages   !< Return the minimum number of stages supported.
     procedure, nopass,     public :: max_stages   !< Return the maximum number of stages supported.
     procedure, nopass,     public :: is_supported !< Check if the queried number of stages is supported or not.
-    final                         :: finalize     !< Finalize object.
 endtype tvd_runge_kutta_integrator
 !-----------------------------------------------------------------------------------------------------------------------------------
 contains
@@ -301,18 +300,4 @@ contains
   return
   !---------------------------------------------------------------------------------------------------------------------------------
   endfunction is_supported
-
-  ! private methods
-  elemental subroutine finalize(self)
-  !---------------------------------------------------------------------------------------------------------------------------------
-  !< Finalize object.
-  !---------------------------------------------------------------------------------------------------------------------------------
-  type(tvd_runge_kutta_integrator), intent(INOUT) :: self !< Integrator.
-  !---------------------------------------------------------------------------------------------------------------------------------
-
-  !---------------------------------------------------------------------------------------------------------------------------------
-  call self%destroy
-  return
-  !---------------------------------------------------------------------------------------------------------------------------------
-  endsubroutine finalize
 endmodule foodie_integrator_tvd_runge_kutta

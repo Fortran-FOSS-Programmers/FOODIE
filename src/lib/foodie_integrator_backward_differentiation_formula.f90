@@ -74,7 +74,6 @@ type :: back_df_integrator
     procedure, nopass,     public :: min_steps       !< Return the minimum number of steps supported.
     procedure, nopass,     public :: max_steps       !< Return the maximum number of steps supported.
     procedure, nopass,     public :: is_supported    !< Check if the queried number of steps is supported or not.
-    final                         :: finalize        !< Finalize object.
 endtype back_df_integrator
 !-----------------------------------------------------------------------------------------------------------------------------------
 contains
@@ -238,18 +237,4 @@ contains
   return
   !---------------------------------------------------------------------------------------------------------------------------------
   endsubroutine update_previous
-
-  ! private methods
-  elemental subroutine finalize(self)
-  !---------------------------------------------------------------------------------------------------------------------------------
-  !< Finalize object.
-  !---------------------------------------------------------------------------------------------------------------------------------
-  type(back_df_integrator), intent(INOUT) :: self !< BDF integrator.
-  !---------------------------------------------------------------------------------------------------------------------------------
-
-  !---------------------------------------------------------------------------------------------------------------------------------
-  call self%destroy
-  return
-  !---------------------------------------------------------------------------------------------------------------------------------
-  endsubroutine finalize
 endmodule foodie_integrator_backward_differentiation_formula
