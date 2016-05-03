@@ -11,7 +11,7 @@ use foodie, only : adams_bashforth_integrator, &
                    leapfrog_integrator, &
                    ls_runge_kutta_integrator, &
                    tvd_runge_kutta_integrator
-use IR_Precision, only : R_P, I_P, FR_P, str
+use penf, only : R_P, I_P, FR_P, str
 use pyplot_module, only :  pyplot
 use type_euler_1D, only : euler_1D
 !-----------------------------------------------------------------------------------------------------------------------------------
@@ -154,7 +154,7 @@ contains
     allocate(cv0(1:Ns))
     variables = 'VARIABLES="x"'
     do s=1, Ns
-      variables = variables//' "rho('//trim(str(.true.,s))//')"'
+      variables = variables//' "rho('//trim(str(s,.true.))//')"'
     enddo
     variables = variables//'  "u" "p" "rho" "gamma"'
     BC_L = 'TRA'
@@ -187,7 +187,7 @@ contains
     allocate(cv0(1:Ns))
     variables = 'VARIABLES="x"'
     do s=1, Ns
-      variables = variables//' "rho('//trim(str(.true.,s))//')"'
+      variables = variables//' "rho('//trim(str(s,.true.))//')"'
     enddo
     variables = variables//'  "u" "p" "rho" "gamma"'
     BC_L = 'TRA'
@@ -258,24 +258,24 @@ contains
   !---------------------------------------------------------------------------------------------------------------------------------
   if (results.or.plots) final_state = domain%output()
   if (results) then
-    open(newunit=rawfile, file=basename//'-'//trim(str(.true.,Ni))//'_cells.dat')
+    open(newunit=rawfile, file=basename//'-'//trim(str(Ni,.true.))//'_cells.dat')
     write(rawfile, '(A)')'TITLE="'//title//'"'
     write(rawfile, '(A)')variables
-    write(rawfile, '(A)')'ZONE T="FOODIE: '//trim(str(.true.,Ni))//' cells", I='//trim(str(.true.,Ni+1))//&
-                         ', J=1, K=1, DATAPACKING=BLOCK, VARLOCATION=([1]=NODAL,[2-'//trim(str(.true.,Np+1)) //']=CELLCENTERED)'
-    write(rawfile, '('//trim(str(.true.,Ni+1))//'('//FR_P//',1X))')xnode
+    write(rawfile, '(A)')'ZONE T="FOODIE: '//trim(str(Ni,.true.))//' cells", I='//trim(str(Ni+1,.true.))//&
+                         ', J=1, K=1, DATAPACKING=BLOCK, VARLOCATION=([1]=NODAL,[2-'//trim(str(Np+1,.true.)) //']=CELLCENTERED)'
+    write(rawfile, '('//trim(str(Ni+1,.true.))//'('//FR_P//',1X))')xnode
     do v=1, Np
-      write(rawfile, '('//trim(str(.true.,Ni))//'('//FR_P//',1X))')final_state(v, :)
+      write(rawfile, '('//trim(str(Ni,.true.))//'('//FR_P//',1X))')final_state(v, :)
     enddo
     if ((av_Ni>0).and.(av_Ni/=Ni)) then
-      print "(A)", ' Average solution from Ni: '//trim(str(.true.,Ni))//' to av_Ni: '//trim(str(.true.,av_Ni))
+      print "(A)", ' Average solution from Ni: '//trim(str(Ni,.true.))//' to av_Ni: '//trim(str(av_Ni,.true.))
       call average_solution
-      write(rawfile, '(A)')'ZONE T="FOODIE: '//trim(str(.true.,Ni))//' cells averaged over '//trim(str(.true.,av_Ni))//&
-                           ' cells", I='//trim(str(.true.,av_Ni+1))//&
-                           ', J=1, K=1, DATAPACKING=BLOCK, VARLOCATION=([1]=NODAL,[2-'//trim(str(.true.,Np+1)) //']=CELLCENTERED)'
-      write(rawfile, '('//trim(str(.true.,av_Ni+1))//'('//FR_P//',1X))')av_xnode
+      write(rawfile, '(A)')'ZONE T="FOODIE: '//trim(str(Ni,.true.))//' cells averaged over '//trim(str(av_Ni,.true.))//&
+                           ' cells", I='//trim(str(av_Ni+1,.true.))//&
+                           ', J=1, K=1, DATAPACKING=BLOCK, VARLOCATION=([1]=NODAL,[2-'//trim(str(Np+1,.true.)) //']=CELLCENTERED)'
+      write(rawfile, '('//trim(str(av_Ni+1,.true.))//'('//FR_P//',1X))')av_xnode
       do v=1, Np
-        write(rawfile, '('//trim(str(.true.,av_Ni))//'('//FR_P//',1X))')av_state(v, :)
+        write(rawfile, '('//trim(str(av_Ni,.true.))//'('//FR_P//',1X))')av_state(v, :)
       enddo
     endif
     close(rawfile)
@@ -283,13 +283,13 @@ contains
   if (plots) then
     call plt%initialize(grid=.true., xlabel='x', title=title)
     do v=1, Ns
-      call plt%add_plot(x=xcenter, y=final_state(v, :), label='rho('//trim(str(.true.,v))//')', linestyle='b-', linewidth=1)
+      call plt%add_plot(x=xcenter, y=final_state(v, :), label='rho('//trim(str(v,.true.))//')', linestyle='b-', linewidth=1)
     enddo
     call plt%add_plot(x=xcenter, y=final_state(Ns+1, :), label='u', linestyle='r-', linewidth=1)
     call plt%add_plot(x=xcenter, y=final_state(Ns+2, :), label='p', linestyle='g-', linewidth=1)
     call plt%add_plot(x=xcenter, y=final_state(Ns+3, :), label='rho', linestyle='o-', linewidth=1)
     call plt%add_plot(x=xcenter, y=final_state(Ns+4, :), label='gamma', linestyle='c-', linewidth=1)
-    call plt%savefig(basename//'-'//trim(str(.true.,Ni))//'_cells.png')
+    call plt%savefig(basename//'-'//trim(str(Ni,.true.))//'_cells.png')
   endif
   return
   !---------------------------------------------------------------------------------------------------------------------------------
@@ -315,13 +315,13 @@ contains
       write(tsfile, '(A)')'TITLE="'//title//'"'
     endif
     write(tsfile, '(A)')variables//' "t"'
-    write(tsfile, '(A)')'ZONE T="'//str(n=t)//'", I='//trim(str(.true.,Ni+1))//&
-                        ', J=1, K=1, DATAPACKING=BLOCK, VARLOCATION=([1]=NODAL,[2-'//trim(str(.true.,Np+2)) //']=CELLCENTERED)'
-    write(tsfile, '('//trim(str(.true.,Ni+1))//'('//FR_P//',1X))')xnode
+    write(tsfile, '(A)')'ZONE T="'//str(n=t)//'", I='//trim(str(Ni+1,.true.))//&
+                        ', J=1, K=1, DATAPACKING=BLOCK, VARLOCATION=([1]=NODAL,[2-'//trim(str(Np+2,.true.)) //']=CELLCENTERED)'
+    write(tsfile, '('//trim(str(Ni+1,.true.))//'('//FR_P//',1X))')xnode
     do v=1, Np
-      write(tsfile, '('//trim(str(.true.,Ni))//'('//FR_P//',1X))')final_state(v, :)
+      write(tsfile, '('//trim(str(Ni,.true.))//'('//FR_P//',1X))')final_state(v, :)
     enddo
-    write(tsfile, '('//trim(str(.true.,Ni))//'('//FR_P//',1X))')(t, v=1,Ni)
+    write(tsfile, '('//trim(str(Ni,.true.))//'('//FR_P//',1X))')(t, v=1,Ni)
     if (present(finish)) then
       if (finish) close(tsfile)
     endif
@@ -353,8 +353,8 @@ contains
   print "(A)", 'Integrating 1D Euler equations by means of Adams-Bashforth class of solvers'
   steps_range = [1, ab_steps] ; if (stages_steps>0) steps_range = [stages_steps, stages_steps]
   do s=steps_range(1), steps_range(2)
-    print "(A)", ' AB-'//trim(str(.true.,s))
-    title = '1D Euler equations integration, explicit Adams-Bashforth, t='//str(n=t_final)//trim(str(.true., s))//' steps'
+    print "(A)", ' AB-'//trim(str(s,.true.))
+    title = '1D Euler equations integration, explicit Adams-Bashforth, t='//str(n=t_final)//trim(str( s,.true.))//' steps'
     call ab_integrator%init(steps=s)
     select case(s)
     case(1)
@@ -368,7 +368,7 @@ contains
       call rk_integrator%init(stages=5)
     endselect
     t = 0._R_P
-    call save_time_serie(title=title, filename=output//'-'//trim(str(.true., s))//'-time_serie.dat', t=t(s))
+    call save_time_serie(title=title, filename=output//'-'//trim(str( s,.true.))//'-time_serie.dat', t=t(s))
     step = 1
     do while(t(s)<t_final)
       if (verbose) print "(A)", '    Time step: '//str(n=dt)//', Time: '//str(n=t)
@@ -393,7 +393,7 @@ contains
       call save_time_serie(t=t(s))
     enddo
     call save_time_serie(t=t(s), finish=.true.)
-    call save_results(title=title, basename=output//'-'//trim(str(.true., s)))
+    call save_results(title=title, basename=output//'-'//trim(str( s,.true.)))
   enddo
   print "(A)", 'Finish!'
   return
@@ -498,8 +498,8 @@ contains
     if (s==2) cycle ! 2 stages not yet implemented
     if (s==3) cycle ! 3 stages not yet implemented
     if (s==4) cycle ! 4 stages not yet implemented
-    print "(A)", ' RK-'//trim(str(.true.,s))
-    title = '1D Euler equations integration, explicit low storage Runge-Kutta, t='//str(n=t_final)//trim(str(.true., s))//' stages'
+    print "(A)", ' RK-'//trim(str(s,.true.))
+    title = '1D Euler equations integration, explicit low storage Runge-Kutta, t='//str(n=t_final)//trim(str( s,.true.))//' stages'
     call rk_integrator%init(stages=s)
     select case(s)
     case(1)
@@ -510,7 +510,7 @@ contains
       call domain%init(Ni=Ni, Ns=Ns, Dx=Dx, BC_L=BC_L, BC_R=BC_R, initial_state=initial_state, cp0=cp0, cv0=cv0, ord=7)
     endselect
     t = 0._R_P
-    call save_time_serie(title=title, filename=output//'-'//trim(str(.true., s))//'-time_serie.dat', t=t)
+    call save_time_serie(title=title, filename=output//'-'//trim(str( s,.true.))//'-time_serie.dat', t=t)
     do while(t<t_final)
       if (verbose) print "(A)", '    Time step: '//str(n=dt)//', Time: '//str(n=t)
       dt = domain%dt(Nmax=0, Tmax=t_final, t=t, CFL=CFL)
@@ -519,7 +519,7 @@ contains
       call save_time_serie(t=t)
     enddo
     call save_time_serie(t=t, finish=.true.)
-    call save_results(title=title, basename=output//'-'//trim(str(.true., s)))
+    call save_results(title=title, basename=output//'-'//trim(str( s,.true.)))
   enddo
   print "(A)", 'Finish!'
   return
@@ -545,8 +545,8 @@ contains
   stages_range = [1, rk_stages] ; if (stages_steps>0) stages_range = [stages_steps, stages_steps]
   do s=stages_range(1), stages_range(2)
     if (s==4) cycle ! 4 stages not yet implemented
-    print "(A)", ' RK-'//trim(str(.true.,s))
-    title = '1D Euler equations integration, explicit TVD/SSP Runge-Kutta, t='//str(n=t_final)//trim(str(.true., s))//' stages'
+    print "(A)", ' RK-'//trim(str(s,.true.))
+    title = '1D Euler equations integration, explicit TVD/SSP Runge-Kutta, t='//str(n=t_final)//trim(str( s,.true.))//' stages'
     call rk_integrator%init(stages=s)
     select case(s)
     case(1)
@@ -557,7 +557,7 @@ contains
       call domain%init(Ni=Ni, Ns=Ns, Dx=Dx, BC_L=BC_L, BC_R=BC_R, initial_state=initial_state, cp0=cp0, cv0=cv0, ord=7)
     endselect
     t = 0._R_P
-    call save_time_serie(title=title, filename=output//'-'//trim(str(.true., s))//'-time_serie.dat', &
+    call save_time_serie(title=title, filename=output//'-'//trim(str( s,.true.))//'-time_serie.dat', &
                          t=t)
     do while(t<t_final)
       if (verbose) print "(A)", '    Time step: '//str(n=dt)//', Time: '//str(n=t)
@@ -567,7 +567,7 @@ contains
       call save_time_serie(t=t)
     enddo
     call save_time_serie(t=t, finish=.true.)
-    call save_results(title=title, basename=output//'-'//trim(str(.true., s)))
+    call save_results(title=title, basename=output//'-'//trim(str( s,.true.)))
   enddo
   print "(A)", 'Finish!'
   return
