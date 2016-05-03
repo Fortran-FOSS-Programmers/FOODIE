@@ -66,7 +66,6 @@ type :: adams_moulton_integrator
     procedure, nopass,     public :: min_steps       !< Return the minimum number of steps supported.
     procedure, nopass,     public :: max_steps       !< Return the maximum number of steps supported.
     procedure, nopass,     public :: is_supported    !< Check if the queried number of steps is supported or not.
-    final                         :: finalize        !< Finalize object.
 endtype adams_moulton_integrator
 !-----------------------------------------------------------------------------------------------------------------------------------
 contains
@@ -362,18 +361,4 @@ contains
   return
   !---------------------------------------------------------------------------------------------------------------------------------
   endfunction is_supported
-
-  ! private methods
-  elemental subroutine finalize(self)
-  !---------------------------------------------------------------------------------------------------------------------------------
-  !< Finalize object.
-  !---------------------------------------------------------------------------------------------------------------------------------
-  type(adams_moulton_integrator), intent(INOUT) :: self !< AB integrator.
-  !---------------------------------------------------------------------------------------------------------------------------------
-
-  !---------------------------------------------------------------------------------------------------------------------------------
-  call self%destroy
-  return
-  !---------------------------------------------------------------------------------------------------------------------------------
-  endsubroutine finalize
 endmodule foodie_integrator_adams_moulton
