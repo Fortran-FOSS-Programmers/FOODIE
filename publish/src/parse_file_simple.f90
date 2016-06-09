@@ -1,5 +1,5 @@
 !< FoXy test.
-program fx_test1
+program parse_file_simple
 !-----------------------------------------------------------------------------------------------------------------------------------
 !< FoXy test.
 !-----------------------------------------------------------------------------------------------------------------------------------
@@ -8,12 +8,16 @@ use foxy, only: xml_file
 
 !-----------------------------------------------------------------------------------------------------------------------------------
 implicit none
-character(len=:), allocatable :: source !< String containing the source XML data.
-character(len=:), allocatable :: parsed !< String containing the parsed XML data.
-type(xml_file)                :: xfile  !< XML file handler.
+character(len=:), allocatable :: source         !< String containing the source XML data.
+character(len=:), allocatable :: parsed         !< String containing the parsed XML data.
+type(xml_file)                :: xfile          !< XML file handler.
+integer                       :: xunit          !< XML file unit.
+logical                       :: test_passed(1) !< List of passed tests.
 !-----------------------------------------------------------------------------------------------------------------------------------
 
 !-----------------------------------------------------------------------------------------------------------------------------------
+test_passed = .false.
+
 print "(A)", 'Input XML data:'
 source = '<first x="1" y="c" z="2">lorem ipsum...</first>'//new_line('a')//&
          '<second a1="2"/>'//new_line('a')//&
@@ -26,49 +30,22 @@ source = '<first x="1" y="c" z="2">lorem ipsum...</first>'//new_line('a')//&
          '  </nested2>'//new_line('a')//&
          '</fift>'
 print "(A)", source
+open(newunit=xunit, file='parse_file_simple.xml', access='STREAM', form='UNFORMATTED')
+write(unit=xunit)source
+close(unit=xunit)
 
 print "(A)", 'Parsing file'
-call xfile%parse(string=source)
+call xfile%parse(filename='parse_file_simple.xml')
 print "(A)", 'Parsed data'
 parsed = xfile%stringify()
 print "(A)", parsed
-print "(A,L1)", 'Is parsed data correct? ', trim(source)==trim(parsed)
+test_passed(1) = trim(source)==trim(parsed)
+print "(A,L1)", 'Is parsed data correct? ', test_passed(1)
 
-call xfile%tag_value(tag_name='first', tag_val=parsed)
-if (allocated(parsed)) then
-  print "(A)", 'Value of tag "first"'
-  print "(A)", parsed
-endif
+open(newunit=xunit, file='parse_file_simple.xml')
+close(unit=xunit, status='DELETE')
 
-call xfile%tag_value(tag_name='third', tag_val=parsed)
-if (allocated(parsed)) then
-  print "(A)", 'Value of tag "third"'
-  print "(A)", parsed
-endif
-
-call xfile%tag_value(tag_name='fourth', tag_val=parsed)
-if (allocated(parsed)) then
-  print "(A)", 'Value of tag "fourth"'
-  print "(A)", parsed
-endif
-
-call xfile%tag_value(tag_name='nested', tag_val=parsed)
-if (allocated(parsed)) then
-  print "(A)", 'Value of tag "nested"'
-  print "(A)", parsed
-endif
-
-call xfile%tag_value(tag_name='nested2', tag_val=parsed)
-if (allocated(parsed)) then
-  print "(A)", 'Value of tag "nested2"'
-  print "(A)", parsed
-endif
-
-call xfile%tag_value(tag_name='nested3', tag_val=parsed)
-if (allocated(parsed)) then
-  print "(A)", 'Value of tag "nested3"'
-  print "(A)", parsed
-endif
+print "(A,L1)", new_line('a')//'Are all tests passed? ', all(test_passed)
 stop
 !-----------------------------------------------------------------------------------------------------------------------------------
-endprogram fx_test1
+endprogram parse_file_simple

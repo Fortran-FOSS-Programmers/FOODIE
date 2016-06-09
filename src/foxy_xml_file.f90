@@ -20,18 +20,18 @@ type, public:: xml_file
   type(xml_tag), allocatable :: tag(:) !< XML tags array.
   contains
     ! public methods
-    procedure         :: free                !< Free dynamic memory.
-    final             :: finalize            !< Free dynamic memory when finalizing.
-    procedure         :: parse               !< Parse xml data from string or file.
-    procedure         :: tag_value           !< Return tag value of tag named *tag_name*.
-    procedure         :: stringify           !< Convert the whole file data into a string.
-    procedure, nopass :: load_file_as_stream !< Load file contents and store as single characters stream.
+    procedure :: free      !< Free dynamic memory.
+    final     :: finalize  !< Free dynamic memory when finalizing.
+    procedure :: parse     !< Parse xml data from string or file.
+    procedure :: tag_value !< Return tag value of tag named *tag_name*.
+    procedure :: stringify !< Convert the whole file data into a string.
     ! private methods
-    procedure, private :: add_tag !< Add tag to self%tag array.
+    procedure, private :: add_tag           !< Add tag to self%tag array.
+    procedure, private :: parse_from_string !< Parse xml data from string.
 endtype xml_file
 !-----------------------------------------------------------------------------------------------------------------------------------
 contains
-  ! public
+  ! public methods
   elemental subroutine free(self)
   !---------------------------------------------------------------------------------------------------------------------------------
   !< Free dynamic memory.
@@ -71,27 +71,20 @@ contains
   class(xml_file),        intent(inout) :: self     !< XML file.
   character(*), optional, intent(in)    :: string   !< String containing xml data.
   character(*), optional, intent(in)    :: filename !< File name containing xml data.
-  type(xml_tag)                         :: tag      !< Dummy xml tag.
-  integer(I4P)                          :: tstart   !< Counter for tracking string parsing.
-  integer(I4P)                          :: tend     !< Counter for tracking string parsing.
+  character(len=:), allocatable         :: source   !< String containing xml data.
   !---------------------------------------------------------------------------------------------------------------------------------
 
   !---------------------------------------------------------------------------------------------------------------------------------
   call self%free
   if (present(string)) then
-    tstart = 1
-    tend = 0
-    do while(tstart<len(string))
-      call tag%free
-      call tag%parse(source=string(tstart:), tend=tend)
-      if (tend==0) exit
-      if (tag%is_parsed()) call self%add_tag(tag)
-      tstart = tstart + tend
-    enddo
+    call self%parse_from_string(source_string=string)
   elseif (present(filename)) then
+    source = load_file_as_stream(filename=filename, fast_read=.true.)
+    call self%parse_from_string(source_string=source)
   endif
   return
   !---------------------------------------------------------------------------------------------------------------------------------
+  contains
   endsubroutine parse
 
   pure subroutine tag_value(self, tag_name, tag_val)
@@ -142,6 +135,58 @@ contains
   !---------------------------------------------------------------------------------------------------------------------------------
   endfunction stringify
 
+  ! private methods
+  elemental subroutine add_tag(self, tag)
+  !---------------------------------------------------------------------------------------------------------------------------------
+  !< Add tag to self%tag array.
+  !---------------------------------------------------------------------------------------------------------------------------------
+  class(xml_file), intent(inout) :: self       !< XML file.
+  type(xml_tag),   intent(in)    :: tag        !< XML tag.
+  type(xml_tag), allocatable     :: tag_new(:) !< New (extended) tags array.
+  !---------------------------------------------------------------------------------------------------------------------------------
+
+  !---------------------------------------------------------------------------------------------------------------------------------
+  if (self%Nt>0_I4P) then
+    allocate(tag_new(1:self%Nt + 1))
+    tag_new(1:self%Nt) = self%tag(1:self%Nt)
+    tag_new(self%Nt + 1) = tag
+  else
+    allocate(tag_new(1:1))
+    tag_new(1) = tag
+  endif
+  call move_alloc(from=tag_new, to=self%tag)
+  self%Nt = self%Nt + 1
+  if (allocated(tag_new)) deallocate(tag_new)
+  return
+  !---------------------------------------------------------------------------------------------------------------------------------
+  endsubroutine add_tag
+
+  subroutine parse_from_string(self, source_string)
+  !---------------------------------------------------------------------------------------------------------------------------------
+  !< Parse xml data from string.
+  !---------------------------------------------------------------------------------------------------------------------------------
+  class(xml_file), intent(inout) :: self          !< XML file.
+  character(*),    intent(in)    :: source_string !< String containing xml data.
+  type(xml_tag)                  :: tag           !< Dummy xml tag.
+  integer(I4P)                   :: tstart        !< Counter for tracking string parsing.
+  integer(I4P)                   :: tend          !< Counter for tracking string parsing.
+  !---------------------------------------------------------------------------------------------------------------------------------
+
+  !---------------------------------------------------------------------------------------------------------------------------------
+  tstart = 1
+  tend = 0
+  do while(tstart<len(source_string))
+    call tag%free
+    call tag%parse(source=source_string(tstart:), tend=tend)
+    if (tend==0) exit
+    if (tag%is_parsed()) call self%add_tag(tag)
+    tstart = tstart + tend
+  enddo
+  return
+  !---------------------------------------------------------------------------------------------------------------------------------
+  endsubroutine parse_from_string
+
+  ! non TBP
   function load_file_as_stream(filename, delimiter_start, delimiter_end, fast_read, iostat, iomsg) result(stream)
   !---------------------------------------------------------------------------------------------------------------------------------
   !< Load file contents and store as single characters stream.
@@ -249,30 +294,4 @@ contains
   return
   !---------------------------------------------------------------------------------------------------------------------------------
   endfunction load_file_as_stream
-
-  ! private
-  elemental subroutine add_tag(self, tag)
-  !---------------------------------------------------------------------------------------------------------------------------------
-  !< Add tag to self%tag array.
-  !---------------------------------------------------------------------------------------------------------------------------------
-  class(xml_file), intent(inout) :: self       !< XML file.
-  type(xml_tag),   intent(in)    :: tag        !< XML tag.
-  type(xml_tag), allocatable     :: tag_new(:) !< New (extended) tags array.
-  !---------------------------------------------------------------------------------------------------------------------------------
-
-  !---------------------------------------------------------------------------------------------------------------------------------
-  if (self%Nt>0_I4P) then
-    allocate(tag_new(1:self%Nt + 1))
-    tag_new(1:self%Nt) = self%tag(1:self%Nt)
-    tag_new(self%Nt + 1) = tag
-  else
-    allocate(tag_new(1:1))
-    tag_new(1) = tag
-  endif
-  call move_alloc(from=tag_new, to=self%tag)
-  self%Nt = self%Nt + 1
-  if (allocated(tag_new)) deallocate(tag_new)
-  return
-  !---------------------------------------------------------------------------------------------------------------------------------
-  endsubroutine add_tag
 endmodule foxy_xml_file
