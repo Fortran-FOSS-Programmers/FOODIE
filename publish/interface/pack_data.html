@@ -1,0 +1,4078 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+	 
+	 <meta name="description" content="Fortran XML parser for poor people">
+    
+    <meta name="author" content="Chris MacMackin" >
+    <link rel="icon" href="../favicon.png">
+
+    <title>pack_data &ndash; FoXy</title>
+
+    <link href="../css/bootstrap.min.css" rel="stylesheet">
+    <link href="../css/pygments.css" rel="stylesheet">
+    <link href="../css/font-awesome.min.css" rel="stylesheet">
+    <link href="../css/local.css" rel="stylesheet">
+    
+
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+    
+    <script src="../js/jquery-2.1.3.min.js"></script>
+    <script src="../js/svg-pan-zoom.min.js"></script>
+
+    
+    <script src="../tipuesearch/tipuesearch_content.js"></script>
+    <link  href="../tipuesearch/tipuesearch.css" rel="stylesheet">
+    <script src="../tipuesearch/tipuesearch_set.js"></script>
+    <script src="../tipuesearch/tipuesearch.js"></script>
+    
+
+  </head>
+
+  <body>
+
+    <!-- Fixed navbar -->
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="../index.html">FoXy </a>
+        </div>
+        <div id="navbar" class="navbar-collapse collapse">
+          <ul class="nav navbar-nav">
+				
+                
+            <li><a href="../lists/files.html">Source Files</a></li>
+				
+				
+            <li><a href="../lists/modules.html">Modules</a></li>
+				
+				
+            <li><a href="../lists/procedures.html">Procedures</a></li>
+				
+								
+            <li><a href="../lists/types.html">Derived Types</a></li>
+				
+				
+            <li><a href="../program/fx_test1.html">Program</a></li>
+				
+          </ul>
+        
+        <form action="../search.html" class="navbar-form navbar-right" role="search">
+        <div class="form-group">
+          <input type="text" class="form-control" placeholder="Search" name="q" id="tipue_search_input" autocomplete="off" required>
+        </div>
+<!--
+        <button type="submit" class="btn btn-default">Submit</button>
+-->
+        </form>
+        
+        </div><!--/.nav-collapse -->
+      </div>
+    </nav>
+
+    <div class="container">
+    
+  
+  <div class="row">
+    <h1>pack_data
+	 <small>Interface</small>
+    
+    </h1>
+	 
+<div class="row">
+<div class="col-lg-12">
+<div class="well well-sm">
+  <ul class="list-inline" style="margin-bottom:0px;display:inline">
+     
+     
+     
+     
+    
+    
+    <li><i class="fa fa-code"></i><a href="../src/befor64_pack_data_m.F90"> Source File</a></li>
+     
+  </ul>
+  <ol class="breadcrumb in-well text-right">
+  
+     <li><a href='../sourcefile/befor64_pack_data_m.f90.html'>befor64_pack_data_m.F90</a></li>
+  
+     <li><a href='../module/befor64_pack_data_m.html'>befor64_pack_data_m</a></li>
+  
+     <li class="active">pack_data</li>
+  </ol>
+</div>
+</div>
+</div>
+    
+  </div>
+  
+  <div class="row">
+    <div class="col-lg-3">
+    
+<div id="sidebar">
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  <div class="panel panel-primary">
+    <div class="panel-heading text-left"><h3 class="panel-title"><a data-toggle="collapse" href="#modprocs">Module Procedures</a></h3></div>
+    <div id="modprocs" class="panel-collapse collapse">
+        <div class="list-group">
+          
+          <a class="list-group-item" href="../interface/pack_data.html#moduleprocedure-pack_data_r8_r4">pack_data_R8_R4</a>
+          
+          <a class="list-group-item" href="../interface/pack_data.html#moduleprocedure-pack_data_r8_i8">pack_data_R8_I8</a>
+          
+          <a class="list-group-item" href="../interface/pack_data.html#moduleprocedure-pack_data_r8_i4">pack_data_R8_I4</a>
+          
+          <a class="list-group-item" href="../interface/pack_data.html#moduleprocedure-pack_data_r8_i2">pack_data_R8_I2</a>
+          
+          <a class="list-group-item" href="../interface/pack_data.html#moduleprocedure-pack_data_r8_i1">pack_data_R8_I1</a>
+          
+          <a class="list-group-item" href="../interface/pack_data.html#moduleprocedure-pack_data_r4_r8">pack_data_R4_R8</a>
+          
+          <a class="list-group-item" href="../interface/pack_data.html#moduleprocedure-pack_data_r4_i8">pack_data_R4_I8</a>
+          
+          <a class="list-group-item" href="../interface/pack_data.html#moduleprocedure-pack_data_r4_i4">pack_data_R4_I4</a>
+          
+          <a class="list-group-item" href="../interface/pack_data.html#moduleprocedure-pack_data_r4_i2">pack_data_R4_I2</a>
+          
+          <a class="list-group-item" href="../interface/pack_data.html#moduleprocedure-pack_data_r4_i1">pack_data_R4_I1</a>
+          
+          <a class="list-group-item" href="../interface/pack_data.html#moduleprocedure-pack_data_i8_r8">pack_data_I8_R8</a>
+          
+          <a class="list-group-item" href="../interface/pack_data.html#moduleprocedure-pack_data_i8_r4">pack_data_I8_R4</a>
+          
+          <a class="list-group-item" href="../interface/pack_data.html#moduleprocedure-pack_data_i8_i4">pack_data_I8_I4</a>
+          
+          <a class="list-group-item" href="../interface/pack_data.html#moduleprocedure-pack_data_i8_i2">pack_data_I8_I2</a>
+          
+          <a class="list-group-item" href="../interface/pack_data.html#moduleprocedure-pack_data_i8_i1">pack_data_I8_I1</a>
+          
+          <a class="list-group-item" href="../interface/pack_data.html#moduleprocedure-pack_data_i4_r8">pack_data_I4_R8</a>
+          
+          <a class="list-group-item" href="../interface/pack_data.html#moduleprocedure-pack_data_i4_r4">pack_data_I4_R4</a>
+          
+          <a class="list-group-item" href="../interface/pack_data.html#moduleprocedure-pack_data_i4_i8">pack_data_I4_I8</a>
+          
+          <a class="list-group-item" href="../interface/pack_data.html#moduleprocedure-pack_data_i4_i2">pack_data_I4_I2</a>
+          
+          <a class="list-group-item" href="../interface/pack_data.html#moduleprocedure-pack_data_i4_i1">pack_data_I4_I1</a>
+          
+          <a class="list-group-item" href="../interface/pack_data.html#moduleprocedure-pack_data_i2_r8">pack_data_I2_R8</a>
+          
+          <a class="list-group-item" href="../interface/pack_data.html#moduleprocedure-pack_data_i2_r4">pack_data_I2_R4</a>
+          
+          <a class="list-group-item" href="../interface/pack_data.html#moduleprocedure-pack_data_i2_i8">pack_data_I2_I8</a>
+          
+          <a class="list-group-item" href="../interface/pack_data.html#moduleprocedure-pack_data_i2_i4">pack_data_I2_I4</a>
+          
+          <a class="list-group-item" href="../interface/pack_data.html#moduleprocedure-pack_data_i2_i1">pack_data_I2_I1</a>
+          
+          <a class="list-group-item" href="../interface/pack_data.html#moduleprocedure-pack_data_i1_r8">pack_data_I1_R8</a>
+          
+          <a class="list-group-item" href="../interface/pack_data.html#moduleprocedure-pack_data_i1_r4">pack_data_I1_R4</a>
+          
+          <a class="list-group-item" href="../interface/pack_data.html#moduleprocedure-pack_data_i1_i8">pack_data_I1_I8</a>
+          
+          <a class="list-group-item" href="../interface/pack_data.html#moduleprocedure-pack_data_i1_i4">pack_data_I1_I4</a>
+          
+          <a class="list-group-item" href="../interface/pack_data.html#moduleprocedure-pack_data_i1_i2">pack_data_I1_I2</a>
+          
+        </div>
+    </div>
+  </div>
+  
+  
+  <hr>
+  
+  <div class="panel panel-default">
+    <div class="panel-heading text-left"><h3 class="panel-title"><a data-toggle="collapse" href="#allprocs">All Procedures</a></h3></div>
+    <div id="allprocs" class="panel-collapse collapse">
+        <div class="list-group">
+          
+          <a class="list-group-item" href="../proc/add_tag.html">add_tag</a>
+          
+          <a class="list-group-item" href="../interface/adjustl.html">adjustl</a>
+          
+          <a class="list-group-item" href="../interface/adjustr.html">adjustr</a>
+          
+          <a class="list-group-item" href="../proc/alloc_attributes.html">alloc_attributes</a>
+          
+          <a class="list-group-item" href="../proc/assign_tag.html">assign_tag</a>
+          
+          <a class="list-group-item" href="../proc/autotest.html">autotest</a>
+          
+          <a class="list-group-item" href="../interface/b64_decode.html">b64_decode</a>
+          
+          <a class="list-group-item" href="../proc/b64_decode_i1.html">b64_decode_I1</a>
+          
+          <a class="list-group-item" href="../proc/b64_decode_i1_a.html">b64_decode_I1_a</a>
+          
+          <a class="list-group-item" href="../proc/b64_decode_i2.html">b64_decode_I2</a>
+          
+          <a class="list-group-item" href="../proc/b64_decode_i2_a.html">b64_decode_I2_a</a>
+          
+          <a class="list-group-item" href="../proc/b64_decode_i4.html">b64_decode_I4</a>
+          
+          <a class="list-group-item" href="../proc/b64_decode_i4_a.html">b64_decode_I4_a</a>
+          
+          <a class="list-group-item" href="../proc/b64_decode_i8.html">b64_decode_I8</a>
+          
+          <a class="list-group-item" href="../proc/b64_decode_i8_a.html">b64_decode_I8_a</a>
+          
+          <a class="list-group-item" href="../proc/b64_decode_r16.html">b64_decode_R16</a>
+          
+          <a class="list-group-item" href="../proc/b64_decode_r16_a.html">b64_decode_R16_a</a>
+          
+          <a class="list-group-item" href="../proc/b64_decode_r4.html">b64_decode_R4</a>
+          
+          <a class="list-group-item" href="../proc/b64_decode_r4_a.html">b64_decode_R4_a</a>
+          
+          <a class="list-group-item" href="../proc/b64_decode_r8.html">b64_decode_R8</a>
+          
+          <a class="list-group-item" href="../proc/b64_decode_r8_a.html">b64_decode_R8_a</a>
+          
+          <a class="list-group-item" href="../proc/b64_decode_string.html">b64_decode_string</a>
+          
+          <a class="list-group-item" href="../proc/b64_decode_string_a.html">b64_decode_string_a</a>
+          
+          <a class="list-group-item" href="../proc/b64_decode_up.html">b64_decode_up</a>
+          
+          <a class="list-group-item" href="../interface/b64_decode_up.html">b64_decode_up</a>
+          
+          <a class="list-group-item" href="../proc/b64_decode_up_a.html">b64_decode_up_a</a>
+          
+          <a class="list-group-item" href="../interface/b64_encode.html">b64_encode</a>
+          
+          <a class="list-group-item" href="../proc/b64_encode_i1.html">b64_encode_I1</a>
+          
+          <a class="list-group-item" href="../proc/b64_encode_i1_a.html">b64_encode_I1_a</a>
+          
+          <a class="list-group-item" href="../proc/b64_encode_i2.html">b64_encode_I2</a>
+          
+          <a class="list-group-item" href="../proc/b64_encode_i2_a.html">b64_encode_I2_a</a>
+          
+          <a class="list-group-item" href="../proc/b64_encode_i4.html">b64_encode_I4</a>
+          
+          <a class="list-group-item" href="../proc/b64_encode_i4_a.html">b64_encode_I4_a</a>
+          
+          <a class="list-group-item" href="../proc/b64_encode_i8.html">b64_encode_I8</a>
+          
+          <a class="list-group-item" href="../proc/b64_encode_i8_a.html">b64_encode_I8_a</a>
+          
+          <a class="list-group-item" href="../proc/b64_encode_r16.html">b64_encode_R16</a>
+          
+          <a class="list-group-item" href="../proc/b64_encode_r16_a.html">b64_encode_R16_a</a>
+          
+          <a class="list-group-item" href="../proc/b64_encode_r4.html">b64_encode_R4</a>
+          
+          <a class="list-group-item" href="../proc/b64_encode_r4_a.html">b64_encode_R4_a</a>
+          
+          <a class="list-group-item" href="../proc/b64_encode_r8.html">b64_encode_R8</a>
+          
+          <a class="list-group-item" href="../proc/b64_encode_r8_a.html">b64_encode_R8_a</a>
+          
+          <a class="list-group-item" href="../proc/b64_encode_string.html">b64_encode_string</a>
+          
+          <a class="list-group-item" href="../proc/b64_encode_string_a.html">b64_encode_string_a</a>
+          
+          <a class="list-group-item" href="../proc/b64_encode_up.html">b64_encode_up</a>
+          
+          <a class="list-group-item" href="../interface/b64_encode_up.html">b64_encode_up</a>
+          
+          <a class="list-group-item" href="../proc/b64_encode_up_a.html">b64_encode_up_a</a>
+          
+          <a class="list-group-item" href="../proc/b64_init.html">b64_init</a>
+          
+          <a class="list-group-item" href="../proc/basedir.html">basedir</a>
+          
+          <a class="list-group-item" href="../proc/basename.html">basename</a>
+          
+          <a class="list-group-item" href="../proc/bctoi_i1p.html">bctoi_I1P</a>
+          
+          <a class="list-group-item" href="../proc/bctoi_i2p.html">bctoi_I2P</a>
+          
+          <a class="list-group-item" href="../proc/bctoi_i4p.html">bctoi_I4P</a>
+          
+          <a class="list-group-item" href="../proc/bctoi_i8p.html">bctoi_I8P</a>
+          
+          <a class="list-group-item" href="../interface/bcton.html">bcton</a>
+          
+          <a class="list-group-item" href="../proc/bctor_r16p.html">bctor_R16P</a>
+          
+          <a class="list-group-item" href="../proc/bctor_r4p.html">bctor_R4P</a>
+          
+          <a class="list-group-item" href="../proc/bctor_r8p.html">bctor_R8P</a>
+          
+          <a class="list-group-item" href="../interface/bit_size.html">bit_size</a>
+          
+          <a class="list-group-item" href="../proc/bit_size_chr.html">bit_size_chr</a>
+          
+          <a class="list-group-item" href="../proc/bit_size_r16p.html">bit_size_R16P</a>
+          
+          <a class="list-group-item" href="../proc/bit_size_r4p.html">bit_size_R4P</a>
+          
+          <a class="list-group-item" href="../proc/bit_size_r8p.html">bit_size_R8P</a>
+          
+          <a class="list-group-item" href="../interface/bstr.html">bstr</a>
+          
+          <a class="list-group-item" href="../proc/bstr_i1p.html">bstr_I1P</a>
+          
+          <a class="list-group-item" href="../proc/bstr_i2p.html">bstr_I2P</a>
+          
+          <a class="list-group-item" href="../proc/bstr_i4p.html">bstr_I4P</a>
+          
+          <a class="list-group-item" href="../proc/bstr_i8p.html">bstr_I8P</a>
+          
+          <a class="list-group-item" href="../proc/bstr_r16p.html">bstr_R16P</a>
+          
+          <a class="list-group-item" href="../proc/bstr_r4p.html">bstr_R4P</a>
+          
+          <a class="list-group-item" href="../proc/bstr_r8p.html">bstr_R8P</a>
+          
+          <a class="list-group-item" href="../interface/byte_size.html">byte_size</a>
+          
+          <a class="list-group-item" href="../proc/byte_size_chr.html">byte_size_chr</a>
+          
+          <a class="list-group-item" href="../proc/byte_size_i1p.html">byte_size_I1P</a>
+          
+          <a class="list-group-item" href="../proc/byte_size_i2p.html">byte_size_I2P</a>
+          
+          <a class="list-group-item" href="../proc/byte_size_i4p.html">byte_size_I4P</a>
+          
+          <a class="list-group-item" href="../proc/byte_size_i8p.html">byte_size_I8P</a>
+          
+          <a class="list-group-item" href="../proc/byte_size_r16p.html">byte_size_R16P</a>
+          
+          <a class="list-group-item" href="../proc/byte_size_r4p.html">byte_size_R4P</a>
+          
+          <a class="list-group-item" href="../proc/byte_size_r8p.html">byte_size_R8P</a>
+          
+          <a class="list-group-item" href="../proc/camelcase.html">camelcase</a>
+          
+          <a class="list-group-item" href="../proc/capitalize.html">capitalize</a>
+          
+          <a class="list-group-item" href="../proc/character_concat_string.html">character_concat_string</a>
+          
+          <a class="list-group-item" href="../proc/character_concat_string_string.html">character_concat_string_string</a>
+          
+          <a class="list-group-item" href="../proc/character_eq_string.html">character_eq_string</a>
+          
+          <a class="list-group-item" href="../proc/character_ge_string.html">character_ge_string</a>
+          
+          <a class="list-group-item" href="../proc/character_gt_string.html">character_gt_string</a>
+          
+          <a class="list-group-item" href="../proc/character_le_string.html">character_le_string</a>
+          
+          <a class="list-group-item" href="../proc/character_lt_string.html">character_lt_string</a>
+          
+          <a class="list-group-item" href="../proc/character_ne_string.html">character_ne_string</a>
+          
+          <a class="list-group-item" href="../proc/chars.html">chars</a>
+          
+          <a class="list-group-item" href="../proc/check_endian.html">check_endian</a>
+          
+          <a class="list-group-item" href="../interface/count.html">count</a>
+          
+          <a class="list-group-item" href="../proc/count_substring.html">count_substring</a>
+          
+          <a class="list-group-item" href="../proc/ctoi_i1p.html">ctoi_I1P</a>
+          
+          <a class="list-group-item" href="../proc/ctoi_i2p.html">ctoi_I2P</a>
+          
+          <a class="list-group-item" href="../proc/ctoi_i4p.html">ctoi_I4P</a>
+          
+          <a class="list-group-item" href="../proc/ctoi_i8p.html">ctoi_I8P</a>
+          
+          <a class="list-group-item" href="../interface/cton.html">cton</a>
+          
+          <a class="list-group-item" href="../proc/ctor_r16p.html">ctor_R16P</a>
+          
+          <a class="list-group-item" href="../proc/ctor_r4p.html">ctor_R4P</a>
+          
+          <a class="list-group-item" href="../proc/ctor_r8p.html">ctor_R8P</a>
+          
+          <a class="list-group-item" href="../proc/decode.html">decode</a>
+          
+          <a class="list-group-item" href="../proc/decode_bits.html">decode_bits</a>
+          
+          <a class="list-group-item" href="../interface/digit.html">digit</a>
+          
+          <a class="list-group-item" href="../proc/digit_i1.html">digit_I1</a>
+          
+          <a class="list-group-item" href="../proc/digit_i2.html">digit_I2</a>
+          
+          <a class="list-group-item" href="../proc/digit_i4.html">digit_I4</a>
+          
+          <a class="list-group-item" href="../proc/digit_i8.html">digit_I8</a>
+          
+          <a class="list-group-item" href="../proc/encode.html">encode</a>
+          
+          <a class="list-group-item" href="../proc/encode_bits.html">encode_bits</a>
+          
+          <a class="list-group-item" href="../proc/end_with.html">end_with</a>
+          
+          <a class="list-group-item" href="../proc/escape.html">escape</a>
+          
+          <a class="list-group-item" href="../proc/extension.html">extension</a>
+          
+          <a class="list-group-item" href="../proc/fill.html">fill</a>
+          
+          <a class="list-group-item" href="../proc/finalize.html">finalize</a>
+          
+          <a class="list-group-item" href="../proc/finalize%7E2.html">finalize</a>
+          
+          <a class="list-group-item" href="../proc/free.html">free</a>
+          
+          <a class="list-group-item" href="../proc/free%7E2.html">free</a>
+          
+          <a class="list-group-item" href="../proc/free%7E3.html">free</a>
+          
+          <a class="list-group-item" href="../proc/get.html">get</a>
+          
+          <a class="list-group-item" href="../proc/get_attributes.html">get_attributes</a>
+          
+          <a class="list-group-item" href="../proc/get_decimal_mode.html">get_decimal_mode</a>
+          
+          <a class="list-group-item" href="../proc/get_delimiter_mode.html">get_delimiter_mode</a>
+          
+          <a class="list-group-item" href="../proc/get_next_non_blank_character_any_record.html">get_next_non_blank_character_any_record</a>
+          
+          <a class="list-group-item" href="../proc/get_next_non_blank_character_this_record.html">get_next_non_blank_character_this_record</a>
+          
+          <a class="list-group-item" href="../proc/get_value.html">get_value</a>
+          
+          <a class="list-group-item" href="../interface/index.html">index</a>
+          
+          <a class="list-group-item" href="../proc/insert_character.html">insert_character</a>
+          
+          <a class="list-group-item" href="../proc/insert_string.html">insert_string</a>
+          
+          <a class="list-group-item" href="../proc/is_allocated.html">is_allocated</a>
+          
+          <a class="list-group-item" href="../proc/is_digit.html">is_digit</a>
+          
+          <a class="list-group-item" href="../proc/is_integer.html">is_integer</a>
+          
+          <a class="list-group-item" href="../proc/is_lower.html">is_lower</a>
+          
+          <a class="list-group-item" href="../proc/is_number.html">is_number</a>
+          
+          <a class="list-group-item" href="../proc/is_parsed.html">is_parsed</a>
+          
+          <a class="list-group-item" href="../proc/is_real.html">is_real</a>
+          
+          <a class="list-group-item" href="../proc/is_upper.html">is_upper</a>
+          
+          <a class="list-group-item" href="../proc/join_characters.html">join_characters</a>
+          
+          <a class="list-group-item" href="../proc/join_strings.html">join_strings</a>
+          
+          <a class="list-group-item" href="../interface/len.html">len</a>
+          
+          <a class="list-group-item" href="../interface/len_trim.html">len_trim</a>
+          
+          <a class="list-group-item" href="../proc/load_file_as_stream.html">load_file_as_stream</a>
+          
+          <a class="list-group-item" href="../proc/lower.html">lower</a>
+          
+          <a class="list-group-item" href="../interface/pack_data.html">pack_data</a>
+          
+          <a class="list-group-item" href="../proc/pack_data_i1_i2.html">pack_data_I1_I2</a>
+          
+          <a class="list-group-item" href="../proc/pack_data_i1_i4.html">pack_data_I1_I4</a>
+          
+          <a class="list-group-item" href="../proc/pack_data_i1_i8.html">pack_data_I1_I8</a>
+          
+          <a class="list-group-item" href="../proc/pack_data_i1_r4.html">pack_data_I1_R4</a>
+          
+          <a class="list-group-item" href="../proc/pack_data_i1_r8.html">pack_data_I1_R8</a>
+          
+          <a class="list-group-item" href="../proc/pack_data_i2_i1.html">pack_data_I2_I1</a>
+          
+          <a class="list-group-item" href="../proc/pack_data_i2_i4.html">pack_data_I2_I4</a>
+          
+          <a class="list-group-item" href="../proc/pack_data_i2_i8.html">pack_data_I2_I8</a>
+          
+          <a class="list-group-item" href="../proc/pack_data_i2_r4.html">pack_data_I2_R4</a>
+          
+          <a class="list-group-item" href="../proc/pack_data_i2_r8.html">pack_data_I2_R8</a>
+          
+          <a class="list-group-item" href="../proc/pack_data_i4_i1.html">pack_data_I4_I1</a>
+          
+          <a class="list-group-item" href="../proc/pack_data_i4_i2.html">pack_data_I4_I2</a>
+          
+          <a class="list-group-item" href="../proc/pack_data_i4_i8.html">pack_data_I4_I8</a>
+          
+          <a class="list-group-item" href="../proc/pack_data_i4_r4.html">pack_data_I4_R4</a>
+          
+          <a class="list-group-item" href="../proc/pack_data_i4_r8.html">pack_data_I4_R8</a>
+          
+          <a class="list-group-item" href="../proc/pack_data_i8_i1.html">pack_data_I8_I1</a>
+          
+          <a class="list-group-item" href="../proc/pack_data_i8_i2.html">pack_data_I8_I2</a>
+          
+          <a class="list-group-item" href="../proc/pack_data_i8_i4.html">pack_data_I8_I4</a>
+          
+          <a class="list-group-item" href="../proc/pack_data_i8_r4.html">pack_data_I8_R4</a>
+          
+          <a class="list-group-item" href="../proc/pack_data_i8_r8.html">pack_data_I8_R8</a>
+          
+          <a class="list-group-item" href="../proc/pack_data_r4_i1.html">pack_data_R4_I1</a>
+          
+          <a class="list-group-item" href="../proc/pack_data_r4_i2.html">pack_data_R4_I2</a>
+          
+          <a class="list-group-item" href="../proc/pack_data_r4_i4.html">pack_data_R4_I4</a>
+          
+          <a class="list-group-item" href="../proc/pack_data_r4_i8.html">pack_data_R4_I8</a>
+          
+          <a class="list-group-item" href="../proc/pack_data_r4_r8.html">pack_data_R4_R8</a>
+          
+          <a class="list-group-item" href="../proc/pack_data_r8_i1.html">pack_data_R8_I1</a>
+          
+          <a class="list-group-item" href="../proc/pack_data_r8_i2.html">pack_data_R8_I2</a>
+          
+          <a class="list-group-item" href="../proc/pack_data_r8_i4.html">pack_data_R8_I4</a>
+          
+          <a class="list-group-item" href="../proc/pack_data_r8_i8.html">pack_data_R8_I8</a>
+          
+          <a class="list-group-item" href="../proc/pack_data_r8_r4.html">pack_data_R8_R4</a>
+          
+          <a class="list-group-item" href="../proc/parse.html">parse</a>
+          
+          <a class="list-group-item" href="../proc/parse%7E2.html">parse</a>
+          
+          <a class="list-group-item" href="../proc/parse_attributes_names.html">parse_attributes_names</a>
+          
+          <a class="list-group-item" href="../proc/parse_tag_name.html">parse_tag_name</a>
+          
+          <a class="list-group-item" href="../proc/partition.html">partition</a>
+          
+          <a class="list-group-item" href="../proc/penf_init.html">penf_init</a>
+          
+          <a class="list-group-item" href="../proc/penf_print.html">penf_print</a>
+          
+          <a class="list-group-item" href="../proc/read_delimited.html">read_delimited</a>
+          
+          <a class="list-group-item" href="../proc/read_file.html">read_file</a>
+          
+          <a class="list-group-item" href="../proc/read_file%7E2.html">read_file</a>
+          
+          <a class="list-group-item" href="../proc/read_formatted.html">read_formatted</a>
+          
+          <a class="list-group-item" href="../proc/read_line.html">read_line</a>
+          
+          <a class="list-group-item" href="../proc/read_lines.html">read_lines</a>
+          
+          <a class="list-group-item" href="../proc/read_lines%7E2.html">read_lines</a>
+          
+          <a class="list-group-item" href="../proc/read_undelimited.html">read_undelimited</a>
+          
+          <a class="list-group-item" href="../proc/read_undelimited_listdirected.html">read_undelimited_listdirected</a>
+          
+          <a class="list-group-item" href="../proc/read_unformatted.html">read_unformatted</a>
+          
+          <a class="list-group-item" href="../interface/repeat.html">repeat</a>
+          
+          <a class="list-group-item" href="../proc/replace.html">replace</a>
+          
+          <a class="list-group-item" href="../proc/replace_one_occurrence.html">replace_one_occurrence</a>
+          
+          <a class="list-group-item" href="../proc/reverse.html">reverse</a>
+          
+          <a class="list-group-item" href="../proc/sadjustl.html">sadjustl</a>
+          
+          <a class="list-group-item" href="../proc/sadjustl_character.html">sadjustl_character</a>
+          
+          <a class="list-group-item" href="../proc/sadjustr.html">sadjustr</a>
+          
+          <a class="list-group-item" href="../proc/sadjustr_character.html">sadjustr_character</a>
+          
+          <a class="list-group-item" href="../interface/scan.html">scan</a>
+          
+          <a class="list-group-item" href="../proc/scount.html">scount</a>
+          
+          <a class="list-group-item" href="../proc/search.html">search</a>
+          
+          <a class="list-group-item" href="../proc/search%7E2.html">search</a>
+          
+          <a class="list-group-item" href="../proc/sindex_character_string.html">sindex_character_string</a>
+          
+          <a class="list-group-item" href="../proc/sindex_string_character.html">sindex_string_character</a>
+          
+          <a class="list-group-item" href="../proc/sindex_string_string.html">sindex_string_string</a>
+          
+          <a class="list-group-item" href="../proc/slen.html">slen</a>
+          
+          <a class="list-group-item" href="../proc/slen_trim.html">slen_trim</a>
+          
+          <a class="list-group-item" href="../proc/slice.html">slice</a>
+          
+          <a class="list-group-item" href="../proc/snakecase.html">snakecase</a>
+          
+          <a class="list-group-item" href="../proc/split.html">split</a>
+          
+          <a class="list-group-item" href="../proc/srepeat_character_string.html">srepeat_character_string</a>
+          
+          <a class="list-group-item" href="../proc/srepeat_string_string.html">srepeat_string_string</a>
+          
+          <a class="list-group-item" href="../proc/sscan_character_string.html">sscan_character_string</a>
+          
+          <a class="list-group-item" href="../proc/sscan_string_character.html">sscan_string_character</a>
+          
+          <a class="list-group-item" href="../proc/sscan_string_string.html">sscan_string_string</a>
+          
+          <a class="list-group-item" href="../proc/start_with.html">start_with</a>
+          
+          <a class="list-group-item" href="../proc/startcase.html">startcase</a>
+          
+          <a class="list-group-item" href="../interface/str.html">str</a>
+          
+          <a class="list-group-item" href="../proc/str_a_i1p.html">str_a_I1P</a>
+          
+          <a class="list-group-item" href="../proc/str_a_i2p.html">str_a_I2P</a>
+          
+          <a class="list-group-item" href="../proc/str_a_i4p.html">str_a_I4P</a>
+          
+          <a class="list-group-item" href="../proc/str_a_i8p.html">str_a_I8P</a>
+          
+          <a class="list-group-item" href="../proc/str_a_r16p.html">str_a_R16P</a>
+          
+          <a class="list-group-item" href="../proc/str_a_r4p.html">str_a_R4P</a>
+          
+          <a class="list-group-item" href="../proc/str_a_r8p.html">str_a_R8P</a>
+          
+          <a class="list-group-item" href="../proc/str_bol.html">str_bol</a>
+          
+          <a class="list-group-item" href="../proc/str_i1p.html">str_I1P</a>
+          
+          <a class="list-group-item" href="../proc/str_i2p.html">str_I2P</a>
+          
+          <a class="list-group-item" href="../proc/str_i4p.html">str_I4P</a>
+          
+          <a class="list-group-item" href="../proc/str_i8p.html">str_I8P</a>
+          
+          <a class="list-group-item" href="../proc/str_r16p.html">str_R16P</a>
+          
+          <a class="list-group-item" href="../proc/str_r4p.html">str_R4P</a>
+          
+          <a class="list-group-item" href="../proc/str_r8p.html">str_R8P</a>
+          
+          <a class="list-group-item" href="../proc/strf_i1p.html">strf_I1P</a>
+          
+          <a class="list-group-item" href="../proc/strf_i2p.html">strf_I2P</a>
+          
+          <a class="list-group-item" href="../proc/strf_i4p.html">strf_I4P</a>
+          
+          <a class="list-group-item" href="../proc/strf_i8p.html">strf_I8P</a>
+          
+          <a class="list-group-item" href="../proc/strf_r16p.html">strf_R16P</a>
+          
+          <a class="list-group-item" href="../proc/strf_r4p.html">strf_R4P</a>
+          
+          <a class="list-group-item" href="../proc/strf_r8p.html">strf_R8P</a>
+          
+          <a class="list-group-item" href="../proc/strim.html">strim</a>
+          
+          <a class="list-group-item" href="../proc/string_assign_character.html">string_assign_character</a>
+          
+          <a class="list-group-item" href="../proc/string_assign_integer_i1p.html">string_assign_integer_I1P</a>
+          
+          <a class="list-group-item" href="../proc/string_assign_integer_i2p.html">string_assign_integer_I2P</a>
+          
+          <a class="list-group-item" href="../proc/string_assign_integer_i4p.html">string_assign_integer_I4P</a>
+          
+          <a class="list-group-item" href="../proc/string_assign_integer_i8p.html">string_assign_integer_I8P</a>
+          
+          <a class="list-group-item" href="../proc/string_assign_real_r16p.html">string_assign_real_R16P</a>
+          
+          <a class="list-group-item" href="../proc/string_assign_real_r4p.html">string_assign_real_R4P</a>
+          
+          <a class="list-group-item" href="../proc/string_assign_real_r8p.html">string_assign_real_R8P</a>
+          
+          <a class="list-group-item" href="../proc/string_assign_string.html">string_assign_string</a>
+          
+          <a class="list-group-item" href="../proc/string_concat_character.html">string_concat_character</a>
+          
+          <a class="list-group-item" href="../proc/string_concat_character_string.html">string_concat_character_string</a>
+          
+          <a class="list-group-item" href="../proc/string_concat_string.html">string_concat_string</a>
+          
+          <a class="list-group-item" href="../proc/string_concat_string_string.html">string_concat_string_string</a>
+          
+          <a class="list-group-item" href="../proc/string_eq_character.html">string_eq_character</a>
+          
+          <a class="list-group-item" href="../proc/string_eq_string.html">string_eq_string</a>
+          
+          <a class="list-group-item" href="../proc/string_ge_character.html">string_ge_character</a>
+          
+          <a class="list-group-item" href="../proc/string_ge_string.html">string_ge_string</a>
+          
+          <a class="list-group-item" href="../proc/string_gt_character.html">string_gt_character</a>
+          
+          <a class="list-group-item" href="../proc/string_gt_string.html">string_gt_string</a>
+          
+          <a class="list-group-item" href="../proc/string_le_character.html">string_le_character</a>
+          
+          <a class="list-group-item" href="../proc/string_le_string.html">string_le_string</a>
+          
+          <a class="list-group-item" href="../proc/string_lt_character.html">string_lt_character</a>
+          
+          <a class="list-group-item" href="../proc/string_lt_string.html">string_lt_string</a>
+          
+          <a class="list-group-item" href="../proc/string_ne_character.html">string_ne_character</a>
+          
+          <a class="list-group-item" href="../proc/string_ne_string.html">string_ne_string</a>
+          
+          <a class="list-group-item" href="../proc/stringify.html">stringify</a>
+          
+          <a class="list-group-item" href="../proc/stringify%7E2.html">stringify</a>
+          
+          <a class="list-group-item" href="../proc/strip.html">strip</a>
+          
+          <a class="list-group-item" href="../interface/strz.html">strz</a>
+          
+          <a class="list-group-item" href="../proc/strz_i1p.html">strz_I1P</a>
+          
+          <a class="list-group-item" href="../proc/strz_i2p.html">strz_I2P</a>
+          
+          <a class="list-group-item" href="../proc/strz_i4p.html">strz_I4P</a>
+          
+          <a class="list-group-item" href="../proc/strz_i8p.html">strz_I8P</a>
+          
+          <a class="list-group-item" href="../proc/sverify.html">sverify</a>
+          
+          <a class="list-group-item" href="../proc/swapcase.html">swapcase</a>
+          
+          <a class="list-group-item" href="../proc/tag_value.html">tag_value</a>
+          
+          <a class="list-group-item" href="../proc/tag_value%7E2.html">tag_value</a>
+          
+          <a class="list-group-item" href="../proc/to_integer_i1p.html">to_integer_I1P</a>
+          
+          <a class="list-group-item" href="../proc/to_integer_i2p.html">to_integer_I2P</a>
+          
+          <a class="list-group-item" href="../proc/to_integer_i4p.html">to_integer_I4P</a>
+          
+          <a class="list-group-item" href="../proc/to_integer_i8p.html">to_integer_I8P</a>
+          
+          <a class="list-group-item" href="../proc/to_real_r16p.html">to_real_R16P</a>
+          
+          <a class="list-group-item" href="../proc/to_real_r4p.html">to_real_R4P</a>
+          
+          <a class="list-group-item" href="../proc/to_real_r8p.html">to_real_R8P</a>
+          
+          <a class="list-group-item" href="../interface/trim.html">trim</a>
+          
+          <a class="list-group-item" href="../proc/unescape.html">unescape</a>
+          
+          <a class="list-group-item" href="../proc/unique.html">unique</a>
+          
+          <a class="list-group-item" href="../proc/upper.html">upper</a>
+          
+          <a class="list-group-item" href="../proc/write_file.html">write_file</a>
+          
+          <a class="list-group-item" href="../proc/write_file%7E2.html">write_file</a>
+          
+          <a class="list-group-item" href="../proc/write_formatted.html">write_formatted</a>
+          
+          <a class="list-group-item" href="../proc/write_line.html">write_line</a>
+          
+          <a class="list-group-item" href="../proc/write_lines.html">write_lines</a>
+          
+          <a class="list-group-item" href="../proc/write_lines%7E2.html">write_lines</a>
+          
+          <a class="list-group-item" href="../proc/write_unformatted.html">write_unformatted</a>
+          
+        </div>
+    </div>
+  </div>
+  
+</div>
+
+    </div>
+    
+    <div class="col-lg-9" id='text'>
+    <h2>public interface pack_data</h2>
+	 <p>Pack different kinds of data into single I1P array.</p>
+<p>This is useful for encoding different (heterogeneous) kinds variables into a single (homogeneous) stream of bits.
+ </p><div class="alert alert-info" role="alert"><h4>Note</h4>This procedure exploits the <code>transfer</code> builtin function, that from the standard (2003+) is defined as
+ <code>TRANSFER(SOURCE, MOLD [, SIZE])</code>. Data object having a physical representation identical to that of <code>SOURCE</code> but with the type
+ and type parameters of <code>MOLD</code>. The result is of the same type and type parameters as <code>MOLD</code>.
+ If <code>MOLD</code> is an array and <code>SIZE</code> is absent, the result is an array and of rank one. Its size is as small as possible such
+ that its physical representation is not shorter than that of <code>SOURCE</code>.</div>
+<p>Presently, the following combinations are available:</p>
+<ul class="checklist">
+<li><input type="checkbox" disabled> Arrays-Arrays:<ul class="checklist">
+<li><input type="checkbox" disabled checked> real(any)-real(any);</li>
+<li><input type="checkbox" disabled checked> real(any)-integer(any);</li>
+<li><input type="checkbox" disabled checked> integer(any)-integer(any);</li>
+<li><input type="checkbox" disabled checked> integer(any)-real(any);</li>
+<li><input type="checkbox" disabled> real(any)-character;</li>
+<li><input type="checkbox" disabled> character-real(any);</li>
+<li><input type="checkbox" disabled> integer(any)-character;</li>
+<li><input type="checkbox" disabled> character-integer(any);</li>
+</ul>
+</li>
+<li><input type="checkbox" disabled> Scalars-Scalars:<ul class="checklist">
+<li><input type="checkbox" disabled> real(any)-real(any);</li>
+<li><input type="checkbox" disabled> real(any)-integer(any);</li>
+<li><input type="checkbox" disabled> integer(any)-integer(any);</li>
+<li><input type="checkbox" disabled> integer(any)-real(any);</li>
+<li><input type="checkbox" disabled> real(any)-character;</li>
+<li><input type="checkbox" disabled> character-real(any);</li>
+<li><input type="checkbox" disabled> integer(any)-character;</li>
+<li><input type="checkbox" disabled> character-integer(any);</li>
+</ul>
+</li>
+</ul>
+<h3 id="examples-of-usage"><a class="toclink" href="#examples-of-usage">Examples of usage</a></h3>
+<h4 id="packing-two-real-arrays-one-with-kind-r8p-and-one-with-r4p"><a class="toclink" href="#packing-two-real-arrays-one-with-kind-r8p-and-one-with-r4p">Packing two real arrays, one with kind R8P and one with R4P</a></h4>
+<div class="codehilite"><pre><span></span><span class="kt">real</span><span class="p">(</span><span class="n">R8P</span><span class="p">)</span><span class="kd">::</span>                 <span class="n">array_r8</span><span class="p">(</span><span class="mi">1</span><span class="p">:</span><span class="mi">12</span><span class="p">)</span>
+<span class="kt">real</span><span class="p">(</span><span class="n">R4P</span><span class="p">)</span><span class="kd">::</span>                 <span class="n">array_r4</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">:</span><span class="mi">5</span><span class="p">)</span>
+<span class="kt">integer</span><span class="p">(</span><span class="n">I1P</span><span class="p">),</span> <span class="k">allocatable</span><span class="kd">::</span> <span class="n">rpack</span>
+<span class="p">...</span>
+<span class="k">call </span><span class="n">pack_data</span><span class="p">(</span><span class="n">a1</span><span class="o">=</span><span class="n">array_r8</span><span class="p">,</span><span class="n">a2</span><span class="o">=</span><span class="n">array_r4</span><span class="p">,</span><span class="n">packed</span><span class="o">=</span><span class="n">rpack</span><span class="p">)</span>
+</pre></div>
+
+
+<h4 id="packing-two-arrays-one-real-with-kind-r4p-and-one-integer-with-i4p"><a class="toclink" href="#packing-two-arrays-one-real-with-kind-r4p-and-one-integer-with-i4p">Packing two arrays, one real with kind R4P and one integer with I4P</a></h4>
+<div class="codehilite"><pre><span></span><span class="kt">real</span><span class="p">(</span><span class="n">R4P</span><span class="p">)</span><span class="kd">::</span>                 <span class="n">array_r4</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+<span class="kt">integer</span><span class="p">(</span><span class="n">I4P</span><span class="p">)</span><span class="kd">::</span>              <span class="n">array_i4</span><span class="p">(</span><span class="mi">0</span><span class="p">:</span><span class="mi">2</span><span class="p">)</span>
+<span class="kt">integer</span><span class="p">(</span><span class="n">I1P</span><span class="p">),</span> <span class="k">allocatable</span><span class="kd">::</span> <span class="n">rpack</span>
+<span class="p">...</span>
+<span class="k">call </span><span class="n">pack_data</span><span class="p">(</span><span class="n">a1</span><span class="o">=</span><span class="n">array_r4</span><span class="p">,</span><span class="n">a2</span><span class="o">=</span><span class="n">array_i4</span><span class="p">,</span><span class="n">packed</span><span class="o">=</span><span class="n">rpack</span><span class="p">)</span>
+</pre></div>
+     
+     <h3>Calls</h3>
+     
+                <div class="depgraph"><?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.26.3 (20100126.1600)
+ -->
+<!-- Title: interface~~pack_data~~CallsGraph Pages: 1 -->
+<svg id="interfacepack_dataCallsGraph" width="208pt" height="1310pt"
+ viewBox="0.00 0.00 208.00 1310.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="interface~~pack_data~~CallsGraph" class="graph" transform="scale(1 1) rotate(0) translate(4 1306)">
+<title>interface~~pack_data~~CallsGraph</title>
+<polygon fill="white" stroke="white" points="-4,5 -4,-1306 205,-1306 205,5 -4,5"/>
+<!-- interface~pack_data -->
+<g id="node1" class="node"><title>interface~pack_data</title>
+<polygon fill="none" stroke="black" points="62,-664 2.4869e-14,-664 0,-638 62,-638 62,-664"/>
+<text text-anchor="middle" x="31" y="-648.55" font-family="Helvetica,sans-Serif" font-size="10.50">pack_data</text>
+</g>
+<!-- proc~pack_data_i8_i1 -->
+<g id="node2" class="node"><title>proc~pack_data_i8_i1</title>
+<a xlink:href="../proc/pack_data_i8_i1.html" xlink:title="pack_data_I8_I1">
+<polygon fill="#d9534f" stroke="#d9534f" points="195,-1302 103,-1302 103,-1276 195,-1276 195,-1302"/>
+<text text-anchor="middle" x="149" y="-1286.55" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">pack_data_I8_I1</text>
+</a>
+</g>
+<!-- interface~pack_data&#45;&gt;proc~pack_data_i8_i1 -->
+<g id="edge2" class="edge"><title>interface~pack_data&#45;&gt;proc~pack_data_i8_i1</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M31.6376,-664.074C35.8643,-748.662 60.8225,-1216.64 98,-1267 98.4725,-1267.64 98.9675,-1268.26 99.4831,-1268.87"/>
+<polygon fill="#000000" stroke="#000000" points="97.3976,-1271.7 107.186,-1275.75 102.062,-1266.48 97.3976,-1271.7"/>
+</g>
+<!-- proc~pack_data_i1_r8 -->
+<g id="node3" class="node"><title>proc~pack_data_i1_r8</title>
+<a xlink:href="../proc/pack_data_i1_r8.html" xlink:title="pack_data_I1_R8">
+<polygon fill="#d9534f" stroke="#d9534f" points="197,-1258 101,-1258 101,-1232 197,-1232 197,-1258"/>
+<text text-anchor="middle" x="149" y="-1242.55" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">pack_data_I1_R8</text>
+</a>
+</g>
+<!-- interface~pack_data&#45;&gt;proc~pack_data_i1_r8 -->
+<g id="edge4" class="edge"><title>interface~pack_data&#45;&gt;proc~pack_data_i1_r8</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M31.7583,-664.175C36.5375,-745.432 63.4021,-1176.54 98,-1223 98.4751,-1223.64 98.9726,-1224.26 99.4905,-1224.86"/>
+<polygon fill="#000000" stroke="#000000" points="97.4163,-1227.7 107.215,-1231.73 102.067,-1222.47 97.4163,-1227.7"/>
+</g>
+<!-- proc~pack_data_i2_r8 -->
+<g id="node4" class="node"><title>proc~pack_data_i2_r8</title>
+<a xlink:href="../proc/pack_data_i2_r8.html" xlink:title="pack_data_I2_R8">
+<polygon fill="#d9534f" stroke="#d9534f" points="197,-1214 101,-1214 101,-1188 197,-1188 197,-1214"/>
+<text text-anchor="middle" x="149" y="-1198.55" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">pack_data_I2_R8</text>
+</a>
+</g>
+<!-- interface~pack_data&#45;&gt;proc~pack_data_i2_r8 -->
+<g id="edge6" class="edge"><title>interface~pack_data&#45;&gt;proc~pack_data_i2_r8</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M31.8917,-664.153C37.2443,-741.616 65.9587,-1136.4 98,-1179 98.4782,-1179.64 98.9785,-1180.25 99.4991,-1180.85"/>
+<polygon fill="#000000" stroke="#000000" points="97.438,-1183.7 107.249,-1187.7 102.074,-1178.46 97.438,-1183.7"/>
+</g>
+<!-- proc~pack_data_i8_i2 -->
+<g id="node5" class="node"><title>proc~pack_data_i8_i2</title>
+<a xlink:href="../proc/pack_data_i8_i2.html" xlink:title="pack_data_I8_I2">
+<polygon fill="#d9534f" stroke="#d9534f" points="195,-1170 103,-1170 103,-1144 195,-1144 195,-1170"/>
+<text text-anchor="middle" x="149" y="-1154.55" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">pack_data_I8_I2</text>
+</a>
+</g>
+<!-- interface~pack_data&#45;&gt;proc~pack_data_i8_i2 -->
+<g id="edge8" class="edge"><title>interface~pack_data&#45;&gt;proc~pack_data_i8_i2</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M31.1273,-664.342C32.0432,-734.251 39.4332,-1058.05 98,-1135 98.4818,-1135.63 98.9855,-1136.25 99.5092,-1136.85"/>
+<polygon fill="#000000" stroke="#000000" points="97.4636,-1139.71 107.288,-1143.67 102.081,-1134.45 97.4636,-1139.71"/>
+</g>
+<!-- proc~pack_data_i2_r4 -->
+<g id="node6" class="node"><title>proc~pack_data_i2_r4</title>
+<a xlink:href="../proc/pack_data_i2_r4.html" xlink:title="pack_data_I2_R4">
+<polygon fill="#d9534f" stroke="#d9534f" points="197,-1126 101,-1126 101,-1100 197,-1100 197,-1126"/>
+<text text-anchor="middle" x="149" y="-1110.55" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">pack_data_I2_R4</text>
+</a>
+</g>
+<!-- interface~pack_data&#45;&gt;proc~pack_data_i2_r4 -->
+<g id="edge10" class="edge"><title>interface~pack_data&#45;&gt;proc~pack_data_i2_r4</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M31.3341,-664.422C33.2292,-730.598 44.5326,-1021.73 98,-1091 98.6776,-1091.88 99.3972,-1092.72 100.154,-1093.53"/>
+<polygon fill="#000000" stroke="#000000" points="97.9094,-1096.22 107.819,-1099.96 102.409,-1090.86 97.9094,-1096.22"/>
+</g>
+<!-- proc~pack_data_i2_i8 -->
+<g id="node7" class="node"><title>proc~pack_data_i2_i8</title>
+<a xlink:href="../proc/pack_data_i2_i8.html" xlink:title="pack_data_I2_I8">
+<polygon fill="#d9534f" stroke="#d9534f" points="195,-1082 103,-1082 103,-1056 195,-1056 195,-1082"/>
+<text text-anchor="middle" x="149" y="-1066.55" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">pack_data_I2_I8</text>
+</a>
+</g>
+<!-- interface~pack_data&#45;&gt;proc~pack_data_i2_i8 -->
+<g id="edge12" class="edge"><title>interface~pack_data&#45;&gt;proc~pack_data_i2_i8</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M31.5786,-664.3C34.5127,-726.156 49.5607,-985.3 98,-1047 98.6848,-1047.87 99.4109,-1048.71 100.173,-1049.52"/>
+<polygon fill="#000000" stroke="#000000" points="97.9499,-1052.22 107.878,-1055.92 102.424,-1046.84 97.9499,-1052.22"/>
+</g>
+<!-- proc~pack_data_i4_r8 -->
+<g id="node8" class="node"><title>proc~pack_data_i4_r8</title>
+<a xlink:href="../proc/pack_data_i4_r8.html" xlink:title="pack_data_I4_R8">
+<polygon fill="#d9534f" stroke="#d9534f" points="197,-1038 101,-1038 101,-1012 197,-1012 197,-1038"/>
+<text text-anchor="middle" x="149" y="-1022.55" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">pack_data_I4_R8</text>
+</a>
+</g>
+<!-- interface~pack_data&#45;&gt;proc~pack_data_i4_r8 -->
+<g id="edge14" class="edge"><title>interface~pack_data&#45;&gt;proc~pack_data_i4_r8</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M31.89,-664.342C35.974,-721.949 54.6116,-948.884 98,-1003 98.6937,-1003.87 99.4279,-1004.7 100.198,-1005.5"/>
+<polygon fill="#000000" stroke="#000000" points="98,-1008.22 107.95,-1011.86 102.442,-1002.81 98,-1008.22"/>
+</g>
+<!-- proc~pack_data_i8_r8 -->
+<g id="node9" class="node"><title>proc~pack_data_i8_r8</title>
+<a xlink:href="../proc/pack_data_i8_r8.html" xlink:title="pack_data_I8_R8">
+<polygon fill="#d9534f" stroke="#d9534f" points="197,-994 101,-994 101,-968 197,-968 197,-994"/>
+<text text-anchor="middle" x="149" y="-978.55" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">pack_data_I8_R8</text>
+</a>
+</g>
+<!-- interface~pack_data&#45;&gt;proc~pack_data_i8_r8 -->
+<g id="edge16" class="edge"><title>interface~pack_data&#45;&gt;proc~pack_data_i8_r8</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M32.2592,-664.08C37.5576,-716.698 59.5623,-912.32 98,-959 98.7049,-959.856 99.4494,-960.68 100.228,-961.472"/>
+<polygon fill="#000000" stroke="#000000" points="98.0636,-964.222 108.04,-967.788 102.465,-958.779 98.0636,-964.222"/>
+</g>
+<!-- proc~pack_data_i8_i4 -->
+<g id="node10" class="node"><title>proc~pack_data_i8_i4</title>
+<a xlink:href="../proc/pack_data_i8_i4.html" xlink:title="pack_data_I8_I4">
+<polygon fill="#d9534f" stroke="#d9534f" points="195,-950 103,-950 103,-924 195,-924 195,-950"/>
+<text text-anchor="middle" x="149" y="-934.55" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">pack_data_I8_I4</text>
+</a>
+</g>
+<!-- interface~pack_data&#45;&gt;proc~pack_data_i8_i4 -->
+<g id="edge18" class="edge"><title>interface~pack_data&#45;&gt;proc~pack_data_i8_i4</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M32.78,-664.131C39.4863,-711.915 64.5582,-875.78 98,-915 98.7195,-915.844 99.4773,-916.656 100.268,-917.438"/>
+<polygon fill="#000000" stroke="#000000" points="98.1466,-920.223 108.158,-923.69 102.494,-914.736 98.1466,-920.223"/>
+</g>
+<!-- proc~pack_data_i2_i4 -->
+<g id="node11" class="node"><title>proc~pack_data_i2_i4</title>
+<a xlink:href="../proc/pack_data_i2_i4.html" xlink:title="pack_data_I2_I4">
+<polygon fill="#d9534f" stroke="#d9534f" points="195,-906 103,-906 103,-880 195,-880 195,-906"/>
+<text text-anchor="middle" x="149" y="-890.55" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">pack_data_I2_I4</text>
+</a>
+</g>
+<!-- interface~pack_data&#45;&gt;proc~pack_data_i2_i4 -->
+<g id="edge20" class="edge"><title>interface~pack_data&#45;&gt;proc~pack_data_i2_i4</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M33.519,-664.25C41.8372,-706.816 69.5238,-839.153 98,-871 98.8677,-871.97 99.7857,-872.9 100.746,-873.789"/>
+<polygon fill="#000000" stroke="#000000" points="98.7221,-876.646 108.817,-879.864 102.932,-871.054 98.7221,-876.646"/>
+</g>
+<!-- proc~pack_data_i4_i2 -->
+<g id="node12" class="node"><title>proc~pack_data_i4_i2</title>
+<a xlink:href="../proc/pack_data_i4_i2.html" xlink:title="pack_data_I4_I2">
+<polygon fill="#d9534f" stroke="#d9534f" points="195,-862 103,-862 103,-836 195,-836 195,-862"/>
+<text text-anchor="middle" x="149" y="-846.55" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">pack_data_I4_I2</text>
+</a>
+</g>
+<!-- interface~pack_data&#45;&gt;proc~pack_data_i4_i2 -->
+<g id="edge22" class="edge"><title>interface~pack_data&#45;&gt;proc~pack_data_i4_i2</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M32.5242,-664.343C36.8655,-696.481 52.1012,-779.059 98,-827 99.042,-828.088 100.147,-829.126 101.303,-830.114"/>
+<polygon fill="#000000" stroke="#000000" points="99.3694,-833.034 109.554,-835.955 103.414,-827.321 99.3694,-833.034"/>
+</g>
+<!-- proc~pack_data_r8_i4 -->
+<g id="node13" class="node"><title>proc~pack_data_r8_i4</title>
+<a xlink:href="../proc/pack_data_r8_i4.html" xlink:title="pack_data_R8_I4">
+<polygon fill="#d9534f" stroke="#d9534f" points="197,-818 101,-818 101,-792 197,-792 197,-818"/>
+<text text-anchor="middle" x="149" y="-802.55" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">pack_data_R8_I4</text>
+</a>
+</g>
+<!-- interface~pack_data&#45;&gt;proc~pack_data_r8_i4 -->
+<g id="edge24" class="edge"><title>interface~pack_data&#45;&gt;proc~pack_data_r8_i4</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M34.378,-664.068C41.7191,-690.059 61.475,-748.687 98,-783 99.2563,-784.18 100.586,-785.303 101.972,-786.37"/>
+<polygon fill="#000000" stroke="#000000" points="100.135,-789.351 110.42,-791.895 103.966,-783.492 100.135,-789.351"/>
+</g>
+<!-- proc~pack_data_r8_i8 -->
+<g id="node14" class="node"><title>proc~pack_data_r8_i8</title>
+<a xlink:href="../proc/pack_data_r8_i8.html" xlink:title="pack_data_R8_I8">
+<polygon fill="#d9534f" stroke="#d9534f" points="197,-774 101,-774 101,-748 197,-748 197,-774"/>
+<text text-anchor="middle" x="149" y="-758.55" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">pack_data_R8_I8</text>
+</a>
+</g>
+<!-- interface~pack_data&#45;&gt;proc~pack_data_r8_i8 -->
+<g id="edge26" class="edge"><title>interface~pack_data&#45;&gt;proc~pack_data_r8_i8</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M38.01,-664.033C48.7101,-682.853 70.7729,-717.709 98,-739 99.759,-740.375 101.617,-741.682 103.542,-742.921"/>
+<polygon fill="#000000" stroke="#000000" points="101.888,-746.007 112.308,-747.924 105.358,-739.928 101.888,-746.007"/>
+</g>
+<!-- proc~pack_data_r4_i1 -->
+<g id="node15" class="node"><title>proc~pack_data_r4_i1</title>
+<a xlink:href="../proc/pack_data_r4_i1.html" xlink:title="pack_data_R4_I1">
+<polygon fill="#d9534f" stroke="#d9534f" points="197,-730 101,-730 101,-704 197,-704 197,-730"/>
+<text text-anchor="middle" x="149" y="-714.55" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">pack_data_R4_I1</text>
+</a>
+</g>
+<!-- interface~pack_data&#45;&gt;proc~pack_data_r4_i1 -->
+<g id="edge28" class="edge"><title>interface~pack_data&#45;&gt;proc~pack_data_r4_i1</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M48.9564,-664.026C62.1552,-673.291 80.7259,-685.693 98,-695 101.02,-696.627 104.186,-698.227 107.399,-699.776"/>
+<polygon fill="#000000" stroke="#000000" points="105.949,-702.961 116.494,-703.985 108.889,-696.609 105.949,-702.961"/>
+</g>
+<!-- proc~pack_data_i1_i8 -->
+<g id="node16" class="node"><title>proc~pack_data_i1_i8</title>
+<a xlink:href="../proc/pack_data_i1_i8.html" xlink:title="pack_data_I1_I8">
+<polygon fill="#d9534f" stroke="#d9534f" points="195,-686 103,-686 103,-660 195,-660 195,-686"/>
+<text text-anchor="middle" x="149" y="-670.55" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">pack_data_I1_I8</text>
+</a>
+</g>
+<!-- interface~pack_data&#45;&gt;proc~pack_data_i1_i8 -->
+<g id="edge30" class="edge"><title>interface~pack_data&#45;&gt;proc~pack_data_i1_i8</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M62.0031,-656.78C71.421,-658.536 82.0778,-660.523 92.6227,-662.489"/>
+<polygon fill="#000000" stroke="#000000" points="92.1822,-665.967 102.654,-664.359 93.4653,-659.086 92.1822,-665.967"/>
+</g>
+<!-- proc~pack_data_i8_r4 -->
+<g id="node17" class="node"><title>proc~pack_data_i8_r4</title>
+<a xlink:href="../proc/pack_data_i8_r4.html" xlink:title="pack_data_I8_R4">
+<polygon fill="#d9534f" stroke="#d9534f" points="197,-642 101,-642 101,-616 197,-616 197,-642"/>
+<text text-anchor="middle" x="149" y="-626.55" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">pack_data_I8_R4</text>
+</a>
+</g>
+<!-- interface~pack_data&#45;&gt;proc~pack_data_i8_r4 -->
+<g id="edge32" class="edge"><title>interface~pack_data&#45;&gt;proc~pack_data_i8_r4</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M62.0031,-645.22C70.72,-643.595 80.4983,-641.772 90.2668,-639.95"/>
+<polygon fill="#000000" stroke="#000000" points="91.2091,-643.335 100.398,-638.061 89.9261,-636.454 91.2091,-643.335"/>
+</g>
+<!-- proc~pack_data_i1_i4 -->
+<g id="node18" class="node"><title>proc~pack_data_i1_i4</title>
+<a xlink:href="../proc/pack_data_i1_i4.html" xlink:title="pack_data_I1_I4">
+<polygon fill="#d9534f" stroke="#d9534f" points="195,-598 103,-598 103,-572 195,-572 195,-598"/>
+<text text-anchor="middle" x="149" y="-582.55" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">pack_data_I1_I4</text>
+</a>
+</g>
+<!-- interface~pack_data&#45;&gt;proc~pack_data_i1_i4 -->
+<g id="edge34" class="edge"><title>interface~pack_data&#45;&gt;proc~pack_data_i1_i4</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M48.9564,-637.974C62.1552,-628.709 80.7259,-616.307 98,-607 101.02,-605.373 104.186,-603.773 107.399,-602.224"/>
+<polygon fill="#000000" stroke="#000000" points="108.889,-605.391 116.494,-598.015 105.949,-599.039 108.889,-605.391"/>
+</g>
+<!-- proc~pack_data_r8_r4 -->
+<g id="node19" class="node"><title>proc~pack_data_r8_r4</title>
+<a xlink:href="../proc/pack_data_r8_r4.html" xlink:title="pack_data_R8_R4">
+<polygon fill="#d9534f" stroke="#d9534f" points="199,-554 99,-554 99,-528 199,-528 199,-554"/>
+<text text-anchor="middle" x="149" y="-538.55" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">pack_data_R8_R4</text>
+</a>
+</g>
+<!-- interface~pack_data&#45;&gt;proc~pack_data_r8_r4 -->
+<g id="edge36" class="edge"><title>interface~pack_data&#45;&gt;proc~pack_data_r8_r4</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M38.01,-637.967C48.7101,-619.147 70.7729,-584.291 98,-563 99.759,-561.625 101.617,-560.318 103.542,-559.079"/>
+<polygon fill="#000000" stroke="#000000" points="105.358,-562.072 112.308,-554.076 101.888,-555.993 105.358,-562.072"/>
+</g>
+<!-- proc~pack_data_i1_i2 -->
+<g id="node20" class="node"><title>proc~pack_data_i1_i2</title>
+<a xlink:href="../proc/pack_data_i1_i2.html" xlink:title="pack_data_I1_I2">
+<polygon fill="#d9534f" stroke="#d9534f" points="195,-510 103,-510 103,-484 195,-484 195,-510"/>
+<text text-anchor="middle" x="149" y="-494.55" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">pack_data_I1_I2</text>
+</a>
+</g>
+<!-- interface~pack_data&#45;&gt;proc~pack_data_i1_i2 -->
+<g id="edge38" class="edge"><title>interface~pack_data&#45;&gt;proc~pack_data_i1_i2</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M34.378,-637.932C41.7191,-611.941 61.475,-553.313 98,-519 99.2563,-517.82 100.586,-516.697 101.972,-515.63"/>
+<polygon fill="#000000" stroke="#000000" points="103.966,-518.508 110.42,-510.105 100.135,-512.649 103.966,-518.508"/>
+</g>
+<!-- proc~pack_data_i4_r4 -->
+<g id="node21" class="node"><title>proc~pack_data_i4_r4</title>
+<a xlink:href="../proc/pack_data_i4_r4.html" xlink:title="pack_data_I4_R4">
+<polygon fill="#d9534f" stroke="#d9534f" points="197,-466 101,-466 101,-440 197,-440 197,-466"/>
+<text text-anchor="middle" x="149" y="-450.55" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">pack_data_I4_R4</text>
+</a>
+</g>
+<!-- interface~pack_data&#45;&gt;proc~pack_data_i4_r4 -->
+<g id="edge40" class="edge"><title>interface~pack_data&#45;&gt;proc~pack_data_i4_r4</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M32.5242,-637.657C36.8655,-605.519 52.1012,-522.941 98,-475 99.042,-473.912 100.147,-472.874 101.303,-471.886"/>
+<polygon fill="#000000" stroke="#000000" points="103.414,-474.679 109.554,-466.045 99.3694,-468.966 103.414,-474.679"/>
+</g>
+<!-- proc~pack_data_i1_r4 -->
+<g id="node22" class="node"><title>proc~pack_data_i1_r4</title>
+<a xlink:href="../proc/pack_data_i1_r4.html" xlink:title="pack_data_I1_R4">
+<polygon fill="#d9534f" stroke="#d9534f" points="197,-422 101,-422 101,-396 197,-396 197,-422"/>
+<text text-anchor="middle" x="149" y="-406.55" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">pack_data_I1_R4</text>
+</a>
+</g>
+<!-- interface~pack_data&#45;&gt;proc~pack_data_i1_r4 -->
+<g id="edge42" class="edge"><title>interface~pack_data&#45;&gt;proc~pack_data_i1_r4</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M33.519,-637.75C41.8372,-595.184 69.5238,-462.847 98,-431 98.8677,-430.03 99.7857,-429.1 100.746,-428.211"/>
+<polygon fill="#000000" stroke="#000000" points="102.932,-430.946 108.817,-422.136 98.7221,-425.354 102.932,-430.946"/>
+</g>
+<!-- proc~pack_data_r8_i1 -->
+<g id="node23" class="node"><title>proc~pack_data_r8_i1</title>
+<a xlink:href="../proc/pack_data_r8_i1.html" xlink:title="pack_data_R8_I1">
+<polygon fill="#d9534f" stroke="#d9534f" points="197,-378 101,-378 101,-352 197,-352 197,-378"/>
+<text text-anchor="middle" x="149" y="-362.55" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">pack_data_R8_I1</text>
+</a>
+</g>
+<!-- interface~pack_data&#45;&gt;proc~pack_data_r8_i1 -->
+<g id="edge44" class="edge"><title>interface~pack_data&#45;&gt;proc~pack_data_r8_i1</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M32.78,-637.869C39.4863,-590.085 64.5582,-426.22 98,-387 98.7195,-386.156 99.4773,-385.344 100.268,-384.562"/>
+<polygon fill="#000000" stroke="#000000" points="102.494,-387.264 108.158,-378.31 98.1466,-381.777 102.494,-387.264"/>
+</g>
+<!-- proc~pack_data_r4_i8 -->
+<g id="node24" class="node"><title>proc~pack_data_r4_i8</title>
+<a xlink:href="../proc/pack_data_r4_i8.html" xlink:title="pack_data_R4_I8">
+<polygon fill="#d9534f" stroke="#d9534f" points="197,-334 101,-334 101,-308 197,-308 197,-334"/>
+<text text-anchor="middle" x="149" y="-318.55" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">pack_data_R4_I8</text>
+</a>
+</g>
+<!-- interface~pack_data&#45;&gt;proc~pack_data_r4_i8 -->
+<g id="edge46" class="edge"><title>interface~pack_data&#45;&gt;proc~pack_data_r4_i8</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M32.2592,-637.92C37.5576,-585.302 59.5623,-389.68 98,-343 98.7049,-342.144 99.4494,-341.32 100.228,-340.528"/>
+<polygon fill="#000000" stroke="#000000" points="102.465,-343.221 108.04,-334.212 98.0636,-337.778 102.465,-343.221"/>
+</g>
+<!-- proc~pack_data_i4_i8 -->
+<g id="node25" class="node"><title>proc~pack_data_i4_i8</title>
+<a xlink:href="../proc/pack_data_i4_i8.html" xlink:title="pack_data_I4_I8">
+<polygon fill="#d9534f" stroke="#d9534f" points="195,-290 103,-290 103,-264 195,-264 195,-290"/>
+<text text-anchor="middle" x="149" y="-274.55" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">pack_data_I4_I8</text>
+</a>
+</g>
+<!-- interface~pack_data&#45;&gt;proc~pack_data_i4_i8 -->
+<g id="edge48" class="edge"><title>interface~pack_data&#45;&gt;proc~pack_data_i4_i8</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M31.89,-637.658C35.974,-580.051 54.6116,-353.116 98,-299 98.6937,-298.135 99.4279,-297.303 100.198,-296.503"/>
+<polygon fill="#000000" stroke="#000000" points="102.442,-299.189 107.95,-290.138 98,-293.779 102.442,-299.189"/>
+</g>
+<!-- proc~pack_data_i4_i1 -->
+<g id="node26" class="node"><title>proc~pack_data_i4_i1</title>
+<a xlink:href="../proc/pack_data_i4_i1.html" xlink:title="pack_data_I4_I1">
+<polygon fill="#d9534f" stroke="#d9534f" points="195,-246 103,-246 103,-220 195,-220 195,-246"/>
+<text text-anchor="middle" x="149" y="-230.55" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">pack_data_I4_I1</text>
+</a>
+</g>
+<!-- interface~pack_data&#45;&gt;proc~pack_data_i4_i1 -->
+<g id="edge50" class="edge"><title>interface~pack_data&#45;&gt;proc~pack_data_i4_i1</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M31.5786,-637.7C34.5127,-575.844 49.5607,-316.7 98,-255 98.6848,-254.128 99.4109,-253.289 100.173,-252.484"/>
+<polygon fill="#000000" stroke="#000000" points="102.424,-255.164 107.878,-246.081 97.9499,-249.781 102.424,-255.164"/>
+</g>
+<!-- proc~pack_data_r4_i4 -->
+<g id="node27" class="node"><title>proc~pack_data_r4_i4</title>
+<a xlink:href="../proc/pack_data_r4_i4.html" xlink:title="pack_data_R4_I4">
+<polygon fill="#d9534f" stroke="#d9534f" points="197,-202 101,-202 101,-176 197,-176 197,-202"/>
+<text text-anchor="middle" x="149" y="-186.55" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">pack_data_R4_I4</text>
+</a>
+</g>
+<!-- interface~pack_data&#45;&gt;proc~pack_data_r4_i4 -->
+<g id="edge52" class="edge"><title>interface~pack_data&#45;&gt;proc~pack_data_r4_i4</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M31.3341,-637.578C33.2292,-571.402 44.5326,-280.274 98,-211 98.6776,-210.122 99.3972,-209.279 100.154,-208.469"/>
+<polygon fill="#000000" stroke="#000000" points="102.409,-211.145 107.819,-202.036 97.9094,-205.783 102.409,-211.145"/>
+</g>
+<!-- proc~pack_data_i2_i1 -->
+<g id="node28" class="node"><title>proc~pack_data_i2_i1</title>
+<a xlink:href="../proc/pack_data_i2_i1.html" xlink:title="pack_data_I2_I1">
+<polygon fill="#d9534f" stroke="#d9534f" points="195,-158 103,-158 103,-132 195,-132 195,-158"/>
+<text text-anchor="middle" x="149" y="-142.55" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">pack_data_I2_I1</text>
+</a>
+</g>
+<!-- interface~pack_data&#45;&gt;proc~pack_data_i2_i1 -->
+<g id="edge54" class="edge"><title>interface~pack_data&#45;&gt;proc~pack_data_i2_i1</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M31.1273,-637.658C32.0432,-567.749 39.4332,-243.953 98,-167 98.4818,-166.367 98.9855,-165.752 99.5092,-165.154"/>
+<polygon fill="#000000" stroke="#000000" points="102.081,-167.554 107.288,-158.327 97.4636,-162.293 102.081,-167.554"/>
+</g>
+<!-- proc~pack_data_r4_i2 -->
+<g id="node29" class="node"><title>proc~pack_data_r4_i2</title>
+<a xlink:href="../proc/pack_data_r4_i2.html" xlink:title="pack_data_R4_I2">
+<polygon fill="#d9534f" stroke="#d9534f" points="197,-114 101,-114 101,-88 197,-88 197,-114"/>
+<text text-anchor="middle" x="149" y="-98.55" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">pack_data_R4_I2</text>
+</a>
+</g>
+<!-- interface~pack_data&#45;&gt;proc~pack_data_r4_i2 -->
+<g id="edge56" class="edge"><title>interface~pack_data&#45;&gt;proc~pack_data_r4_i2</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M31.8917,-637.847C37.2443,-560.384 65.9587,-165.599 98,-123 98.4782,-122.364 98.9785,-121.747 99.4991,-121.147"/>
+<polygon fill="#000000" stroke="#000000" points="102.074,-123.542 107.249,-114.298 97.438,-118.297 102.074,-123.542"/>
+</g>
+<!-- proc~pack_data_r8_i2 -->
+<g id="node30" class="node"><title>proc~pack_data_r8_i2</title>
+<a xlink:href="../proc/pack_data_r8_i2.html" xlink:title="pack_data_R8_I2">
+<polygon fill="#d9534f" stroke="#d9534f" points="197,-70 101,-70 101,-44 197,-44 197,-70"/>
+<text text-anchor="middle" x="149" y="-54.55" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">pack_data_R8_I2</text>
+</a>
+</g>
+<!-- interface~pack_data&#45;&gt;proc~pack_data_r8_i2 -->
+<g id="edge58" class="edge"><title>interface~pack_data&#45;&gt;proc~pack_data_r8_i2</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M31.7583,-637.825C36.5375,-556.568 63.4021,-125.462 98,-79 98.4751,-78.3619 98.9726,-77.7422 99.4905,-77.1401"/>
+<polygon fill="#000000" stroke="#000000" points="102.067,-79.5325 107.215,-70.2725 97.4163,-74.301 102.067,-79.5325"/>
+</g>
+<!-- proc~pack_data_r4_r8 -->
+<g id="node31" class="node"><title>proc~pack_data_r4_r8</title>
+<a xlink:href="../proc/pack_data_r4_r8.html" xlink:title="pack_data_R4_R8">
+<polygon fill="#d9534f" stroke="#d9534f" points="199,-26 99,-26 99,-1.24345e-14 199,-3.55271e-15 199,-26"/>
+<text text-anchor="middle" x="149" y="-10.55" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">pack_data_R4_R8</text>
+</a>
+</g>
+<!-- interface~pack_data&#45;&gt;proc~pack_data_r4_r8 -->
+<g id="edge60" class="edge"><title>interface~pack_data&#45;&gt;proc~pack_data_r4_r8</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M31.6376,-637.926C35.8643,-553.338 60.8225,-85.3588 98,-35 98.4725,-34.36 98.9675,-33.7384 99.4831,-33.1346"/>
+<polygon fill="#000000" stroke="#000000" points="102.062,-35.5241 107.186,-26.251 97.3976,-30.3044 102.062,-35.5241"/>
+</g>
+</g>
+</svg>
+</div>
+                <div><a type="button" class="graph-help" data-toggle="modal" href="#graph-help-text">Help</a></div>
+                <div class="modal fade" id="graph-help-text" tabindex="-1" role="dialog">
+                  <div class="modal-dialog modal-lg" role="document">
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title" id="-graph-help-label">Graph Key</h4>
+                      </div>
+                      <div class="modal-body">
+                        
+Nodes of different colours represent the following:
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.26.3 (20100126.1600)
+ -->
+<!-- Title: Graph Key Pages: 1 -->
+<svg width="641pt" height="28pt"
+ viewBox="0.00 0.00 641.00 27.80" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="graph1" class="graph" transform="scale(0.817602 0.817602) rotate(0) translate(4 30)">
+<title>Graph Key</title>
+<polygon fill="white" stroke="white" points="-4,5 -4,-30 781,-30 781,5 -4,5"/>
+<!-- Module -->
+<g id="node1" class="node"><title>Module</title>
+<polygon fill="#337ab7" stroke="#337ab7" points="54,-26 2.13163e-14,-26 0,-1.24345e-14 54,-3.55271e-15 54,-26"/>
+<text text-anchor="middle" x="27" y="-10.55" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Module</text>
+</g>
+<!-- Submodule -->
+<g id="node2" class="node"><title>Submodule</title>
+<polygon fill="#5bc0de" stroke="#5bc0de" points="138,-26 72,-26 72,-1.24345e-14 138,-3.55271e-15 138,-26"/>
+<text text-anchor="middle" x="105" y="-10.55" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Submodule</text>
+</g>
+<!-- Type -->
+<g id="node3" class="node"><title>Type</title>
+<polygon fill="#5cb85c" stroke="#5cb85c" points="210,-26 156,-26 156,-1.24345e-14 210,-3.55271e-15 210,-26"/>
+<text text-anchor="middle" x="183" y="-10.55" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Type</text>
+</g>
+<!-- Subroutine -->
+<g id="node4" class="node"><title>Subroutine</title>
+<polygon fill="#d9534f" stroke="#d9534f" points="292,-26 228,-26 228,-1.24345e-14 292,-3.55271e-15 292,-26"/>
+<text text-anchor="middle" x="260" y="-10.55" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Subroutine</text>
+</g>
+<!-- Function -->
+<g id="node5" class="node"><title>Function</title>
+<polygon fill="#d94e8f" stroke="#d94e8f" points="364,-26 310,-26 310,-1.24345e-14 364,-3.55271e-15 364,-26"/>
+<text text-anchor="middle" x="337" y="-10.55" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Function</text>
+</g>
+<!-- Interface -->
+<g id="node6" class="node"><title>Interface</title>
+<polygon fill="#a7506f" stroke="#a7506f" points="436,-26 382,-26 382,-1.24345e-14 436,-3.55271e-15 436,-26"/>
+<text text-anchor="middle" x="409" y="-10.55" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Interface</text>
+</g>
+<!-- Unknown Procedure Type -->
+<g id="node7" class="node"><title>Unknown Procedure Type</title>
+<polygon fill="#777777" stroke="#777777" points="590,-26 454,-26 454,-1.24345e-14 590,-3.55271e-15 590,-26"/>
+<text text-anchor="middle" x="522" y="-10.55" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Unknown Procedure Type</text>
+</g>
+<!-- Program -->
+<g id="node8" class="node"><title>Program</title>
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="662,-26 608,-26 608,-1.24345e-14 662,-3.55271e-15 662,-26"/>
+<text text-anchor="middle" x="635" y="-10.55" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Program</text>
+</g>
+<!-- This Page&#39;s Entity -->
+<g id="node9" class="node"><title>This Page&#39;s Entity</title>
+<polygon fill="none" stroke="black" points="776,-26 680,-26 680,-1.24345e-14 776,-3.55271e-15 776,-26"/>
+<text text-anchor="middle" x="728" y="-10.55" font-family="Helvetica,sans-Serif" font-size="10.50">This Page&#39;s Entity</text>
+</g>
+</g>
+</svg>
+
+Where possible, edges connecting nodes are given different colours to make them
+easier to distinguish in large graphs.
+<h5>Module Graph</h5>
+<p>Solid arrows point from a parent (sub)module to the submodule which is
+descended from it. Dashed arrows point from a module being used to the
+module using it.</p>
+<h5>Type Graph</h5>
+<p>Solid arrows point from one derived type to another which extends
+(inherits from) it. Dashed arrows point from a derived type to another
+type containing it as a components, with a label listing the name(s) of
+said component(s).</p>
+<h5>Call Graph</h5>
+<p>Solid arrows point from a procedure to one which it calls. Dashed 
+arrows point from an interface to procedures which implement that interface.
+This could include the module procedures in a generic interface or the
+implementation in a submodule of an interface in a parent module.</p>
+
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                
+     
+     
+    <br>
+	
+	
+
+	
+
+	
+	 <h2>Module Procedures</h2>
+	 
+    
+  <div class="panel panel-default">
+  <div class="panel-heading codesum"><span class="anchor" id="proc-pack_data_r8_r4"></span><h3>
+private pure subroutine <a href='../proc/pack_data_r8_r4.html'>pack_data_R8_R4</a>(a1, a2, packed)
+    
+    
+    
+</h3></div>
+  <div class="panel-body">
+       
+    
+    <h4>Arguments</h4>
+    
+      
+      
+<table class="table table-striped varlist">
+<thead><tr><th>Type</th>
+<th>Intent</th><th>Optional</th>
+<th>Attributes</th><th></th><th>Name</th><th></th></thead>
+
+
+
+<tbody>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>real(kind=R8P),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>a1</strong>(1:)</td><td><p>Firs data stream.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>real(kind=R4P),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>a2</strong>(1:)</td><td><p>Second data stream.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>integer(kind=I1P),</td>
+  <td>intent(inout),</td>
+  <td></td>
+  
+  <td>allocatable</td><td>::</td>
+  <td><strong>packed</strong>(:)</td><td><p>Packed data into I1P array.</p></td>
+  
+</tr>
+
+</tbody>
+</table>
+
+      
+    
+    
+    
+    <h4>Description</h4>
+       
+       
+
+
+       
+       <p>Pack different kinds of data into single I1P array.</p>
+        
+
+  </div>
+  </div>
+
+ 	 
+    
+  <div class="panel panel-default">
+  <div class="panel-heading codesum"><span class="anchor" id="proc-pack_data_r8_i8"></span><h3>
+private pure subroutine <a href='../proc/pack_data_r8_i8.html'>pack_data_R8_I8</a>(a1, a2, packed)
+    
+    
+    
+</h3></div>
+  <div class="panel-body">
+       
+    
+    <h4>Arguments</h4>
+    
+      
+      
+<table class="table table-striped varlist">
+<thead><tr><th>Type</th>
+<th>Intent</th><th>Optional</th>
+<th>Attributes</th><th></th><th>Name</th><th></th></thead>
+
+
+
+<tbody>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>real(kind=R8P),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>a1</strong>(1:)</td><td><p>First data stream.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>integer(kind=I8P),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>a2</strong>(1:)</td><td><p>Second data stream.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>integer(kind=I1P),</td>
+  <td>intent(inout),</td>
+  <td></td>
+  
+  <td>allocatable</td><td>::</td>
+  <td><strong>packed</strong>(:)</td><td><p>Packed data into I1P array.</p></td>
+  
+</tr>
+
+</tbody>
+</table>
+
+      
+    
+    
+    
+    <h4>Description</h4>
+       
+       
+
+
+       
+       <p>Pack different kinds of data into single I1P array.</p>
+        
+
+  </div>
+  </div>
+
+ 	 
+    
+  <div class="panel panel-default">
+  <div class="panel-heading codesum"><span class="anchor" id="proc-pack_data_r8_i4"></span><h3>
+private pure subroutine <a href='../proc/pack_data_r8_i4.html'>pack_data_R8_I4</a>(a1, a2, packed)
+    
+    
+    
+</h3></div>
+  <div class="panel-body">
+       
+    
+    <h4>Arguments</h4>
+    
+      
+      
+<table class="table table-striped varlist">
+<thead><tr><th>Type</th>
+<th>Intent</th><th>Optional</th>
+<th>Attributes</th><th></th><th>Name</th><th></th></thead>
+
+
+
+<tbody>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>real(kind=R8P),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>a1</strong>(1:)</td><td><p>First data stream.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>integer(kind=I4P),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>a2</strong>(1:)</td><td><p>Second data stream.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>integer(kind=I1P),</td>
+  <td>intent(inout),</td>
+  <td></td>
+  
+  <td>allocatable</td><td>::</td>
+  <td><strong>packed</strong>(:)</td><td><p>Packed data into I1P array.</p></td>
+  
+</tr>
+
+</tbody>
+</table>
+
+      
+    
+    
+    
+    <h4>Description</h4>
+       
+       
+
+
+       
+       <p>Pack different kinds of data into single I1P array.</p>
+        
+
+  </div>
+  </div>
+
+ 	 
+    
+  <div class="panel panel-default">
+  <div class="panel-heading codesum"><span class="anchor" id="proc-pack_data_r8_i2"></span><h3>
+private pure subroutine <a href='../proc/pack_data_r8_i2.html'>pack_data_R8_I2</a>(a1, a2, packed)
+    
+    
+    
+</h3></div>
+  <div class="panel-body">
+       
+    
+    <h4>Arguments</h4>
+    
+      
+      
+<table class="table table-striped varlist">
+<thead><tr><th>Type</th>
+<th>Intent</th><th>Optional</th>
+<th>Attributes</th><th></th><th>Name</th><th></th></thead>
+
+
+
+<tbody>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>real(kind=R8P),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>a1</strong>(1:)</td><td><p>First data stream.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>integer(kind=I2P),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>a2</strong>(1:)</td><td><p>Second data stream.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>integer(kind=I1P),</td>
+  <td>intent(inout),</td>
+  <td></td>
+  
+  <td>allocatable</td><td>::</td>
+  <td><strong>packed</strong>(:)</td><td><p>Packed data into I1P array.</p></td>
+  
+</tr>
+
+</tbody>
+</table>
+
+      
+    
+    
+    
+    <h4>Description</h4>
+       
+       
+
+
+       
+       <p>Pack different kinds of data into single I1P array.</p>
+        
+
+  </div>
+  </div>
+
+ 	 
+    
+  <div class="panel panel-default">
+  <div class="panel-heading codesum"><span class="anchor" id="proc-pack_data_r8_i1"></span><h3>
+private pure subroutine <a href='../proc/pack_data_r8_i1.html'>pack_data_R8_I1</a>(a1, a2, packed)
+    
+    
+    
+</h3></div>
+  <div class="panel-body">
+       
+    
+    <h4>Arguments</h4>
+    
+      
+      
+<table class="table table-striped varlist">
+<thead><tr><th>Type</th>
+<th>Intent</th><th>Optional</th>
+<th>Attributes</th><th></th><th>Name</th><th></th></thead>
+
+
+
+<tbody>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>real(kind=R8P),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>a1</strong>(1:)</td><td><p>First data stream.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>integer(kind=I1P),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>a2</strong>(1:)</td><td><p>Second data stream.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>integer(kind=I1P),</td>
+  <td>intent(inout),</td>
+  <td></td>
+  
+  <td>allocatable</td><td>::</td>
+  <td><strong>packed</strong>(:)</td><td><p>Packed data into I1P array.</p></td>
+  
+</tr>
+
+</tbody>
+</table>
+
+      
+    
+    
+    
+    <h4>Description</h4>
+       
+       
+
+
+       
+       <p>Pack different kinds of data into single I1P array.</p>
+        
+
+  </div>
+  </div>
+
+ 	 
+    
+  <div class="panel panel-default">
+  <div class="panel-heading codesum"><span class="anchor" id="proc-pack_data_r4_r8"></span><h3>
+private pure subroutine <a href='../proc/pack_data_r4_r8.html'>pack_data_R4_R8</a>(a1, a2, packed)
+    
+    
+    
+</h3></div>
+  <div class="panel-body">
+       
+    
+    <h4>Arguments</h4>
+    
+      
+      
+<table class="table table-striped varlist">
+<thead><tr><th>Type</th>
+<th>Intent</th><th>Optional</th>
+<th>Attributes</th><th></th><th>Name</th><th></th></thead>
+
+
+
+<tbody>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>real(kind=R4P),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>a1</strong>(1:)</td><td><p>Firs data stream.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>real(kind=R8P),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>a2</strong>(1:)</td><td><p>Second data stream.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>integer(kind=I1P),</td>
+  <td>intent(inout),</td>
+  <td></td>
+  
+  <td>allocatable</td><td>::</td>
+  <td><strong>packed</strong>(:)</td><td><p>Packed data into I1P array.</p></td>
+  
+</tr>
+
+</tbody>
+</table>
+
+      
+    
+    
+    
+    <h4>Description</h4>
+       
+       
+
+
+       
+       <p>Pack different kinds of data into single I1P array.</p>
+        
+
+  </div>
+  </div>
+
+ 	 
+    
+  <div class="panel panel-default">
+  <div class="panel-heading codesum"><span class="anchor" id="proc-pack_data_r4_i8"></span><h3>
+private pure subroutine <a href='../proc/pack_data_r4_i8.html'>pack_data_R4_I8</a>(a1, a2, packed)
+    
+    
+    
+</h3></div>
+  <div class="panel-body">
+       
+    
+    <h4>Arguments</h4>
+    
+      
+      
+<table class="table table-striped varlist">
+<thead><tr><th>Type</th>
+<th>Intent</th><th>Optional</th>
+<th>Attributes</th><th></th><th>Name</th><th></th></thead>
+
+
+
+<tbody>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>real(kind=R4P),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>a1</strong>(1:)</td><td><p>First data stream.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>integer(kind=I8P),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>a2</strong>(1:)</td><td><p>Second data stream.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>integer(kind=I1P),</td>
+  <td>intent(inout),</td>
+  <td></td>
+  
+  <td>allocatable</td><td>::</td>
+  <td><strong>packed</strong>(:)</td><td><p>Packed data into I1P array.</p></td>
+  
+</tr>
+
+</tbody>
+</table>
+
+      
+    
+    
+    
+    <h4>Description</h4>
+       
+       
+
+
+       
+       <p>Pack different kinds of data into single I1P array.</p>
+        
+
+  </div>
+  </div>
+
+ 	 
+    
+  <div class="panel panel-default">
+  <div class="panel-heading codesum"><span class="anchor" id="proc-pack_data_r4_i4"></span><h3>
+private pure subroutine <a href='../proc/pack_data_r4_i4.html'>pack_data_R4_I4</a>(a1, a2, packed)
+    
+    
+    
+</h3></div>
+  <div class="panel-body">
+       
+    
+    <h4>Arguments</h4>
+    
+      
+      
+<table class="table table-striped varlist">
+<thead><tr><th>Type</th>
+<th>Intent</th><th>Optional</th>
+<th>Attributes</th><th></th><th>Name</th><th></th></thead>
+
+
+
+<tbody>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>real(kind=R4P),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>a1</strong>(1:)</td><td><p>First data stream.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>integer(kind=I4P),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>a2</strong>(1:)</td><td><p>Second data stream.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>integer(kind=I1P),</td>
+  <td>intent(inout),</td>
+  <td></td>
+  
+  <td>allocatable</td><td>::</td>
+  <td><strong>packed</strong>(:)</td><td><p>Packed data into I1P array.</p></td>
+  
+</tr>
+
+</tbody>
+</table>
+
+      
+    
+    
+    
+    <h4>Description</h4>
+       
+       
+
+
+       
+       <p>Pack different kinds of data into single I1P array.</p>
+        
+
+  </div>
+  </div>
+
+ 	 
+    
+  <div class="panel panel-default">
+  <div class="panel-heading codesum"><span class="anchor" id="proc-pack_data_r4_i2"></span><h3>
+private pure subroutine <a href='../proc/pack_data_r4_i2.html'>pack_data_R4_I2</a>(a1, a2, packed)
+    
+    
+    
+</h3></div>
+  <div class="panel-body">
+       
+    
+    <h4>Arguments</h4>
+    
+      
+      
+<table class="table table-striped varlist">
+<thead><tr><th>Type</th>
+<th>Intent</th><th>Optional</th>
+<th>Attributes</th><th></th><th>Name</th><th></th></thead>
+
+
+
+<tbody>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>real(kind=R4P),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>a1</strong>(1:)</td><td><p>First data stream.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>integer(kind=I2P),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>a2</strong>(1:)</td><td><p>Second data stream.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>integer(kind=I1P),</td>
+  <td>intent(inout),</td>
+  <td></td>
+  
+  <td>allocatable</td><td>::</td>
+  <td><strong>packed</strong>(:)</td><td><p>Packed data into I1P array.</p></td>
+  
+</tr>
+
+</tbody>
+</table>
+
+      
+    
+    
+    
+    <h4>Description</h4>
+       
+       
+
+
+       
+       <p>Pack different kinds of data into single I1P array.</p>
+        
+
+  </div>
+  </div>
+
+ 	 
+    
+  <div class="panel panel-default">
+  <div class="panel-heading codesum"><span class="anchor" id="proc-pack_data_r4_i1"></span><h3>
+private pure subroutine <a href='../proc/pack_data_r4_i1.html'>pack_data_R4_I1</a>(a1, a2, packed)
+    
+    
+    
+</h3></div>
+  <div class="panel-body">
+       
+    
+    <h4>Arguments</h4>
+    
+      
+      
+<table class="table table-striped varlist">
+<thead><tr><th>Type</th>
+<th>Intent</th><th>Optional</th>
+<th>Attributes</th><th></th><th>Name</th><th></th></thead>
+
+
+
+<tbody>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>real(kind=R4P),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>a1</strong>(1:)</td><td><p>First data stream.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>integer(kind=I1P),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>a2</strong>(1:)</td><td><p>Second data stream.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>integer(kind=I1P),</td>
+  <td>intent(inout),</td>
+  <td></td>
+  
+  <td>allocatable</td><td>::</td>
+  <td><strong>packed</strong>(:)</td><td><p>Packed data into I1P array.</p></td>
+  
+</tr>
+
+</tbody>
+</table>
+
+      
+    
+    
+    
+    <h4>Description</h4>
+       
+       
+
+
+       
+       <p>Pack different kinds of data into single I1P array.</p>
+        
+
+  </div>
+  </div>
+
+ 	 
+    
+  <div class="panel panel-default">
+  <div class="panel-heading codesum"><span class="anchor" id="proc-pack_data_i8_r8"></span><h3>
+private pure subroutine <a href='../proc/pack_data_i8_r8.html'>pack_data_I8_R8</a>(a1, a2, packed)
+    
+    
+    
+</h3></div>
+  <div class="panel-body">
+       
+    
+    <h4>Arguments</h4>
+    
+      
+      
+<table class="table table-striped varlist">
+<thead><tr><th>Type</th>
+<th>Intent</th><th>Optional</th>
+<th>Attributes</th><th></th><th>Name</th><th></th></thead>
+
+
+
+<tbody>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>integer(kind=I8P),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>a1</strong>(1:)</td><td><p>First data stream.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>real(kind=R8P),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>a2</strong>(1:)</td><td><p>Second data stream.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>integer(kind=I1P),</td>
+  <td>intent(inout),</td>
+  <td></td>
+  
+  <td>allocatable</td><td>::</td>
+  <td><strong>packed</strong>(:)</td><td><p>Packed data into I1P array.</p></td>
+  
+</tr>
+
+</tbody>
+</table>
+
+      
+    
+    
+    
+    <h4>Description</h4>
+       
+       
+
+
+       
+       <p>Pack different kinds of data into single I1P array.</p>
+        
+
+  </div>
+  </div>
+
+ 	 
+    
+  <div class="panel panel-default">
+  <div class="panel-heading codesum"><span class="anchor" id="proc-pack_data_i8_r4"></span><h3>
+private pure subroutine <a href='../proc/pack_data_i8_r4.html'>pack_data_I8_R4</a>(a1, a2, packed)
+    
+    
+    
+</h3></div>
+  <div class="panel-body">
+       
+    
+    <h4>Arguments</h4>
+    
+      
+      
+<table class="table table-striped varlist">
+<thead><tr><th>Type</th>
+<th>Intent</th><th>Optional</th>
+<th>Attributes</th><th></th><th>Name</th><th></th></thead>
+
+
+
+<tbody>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>integer(kind=I8P),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>a1</strong>(1:)</td><td><p>First data stream.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>real(kind=R4P),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>a2</strong>(1:)</td><td><p>Second data stream.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>integer(kind=I1P),</td>
+  <td>intent(inout),</td>
+  <td></td>
+  
+  <td>allocatable</td><td>::</td>
+  <td><strong>packed</strong>(:)</td><td><p>Packed data into I1P array.</p></td>
+  
+</tr>
+
+</tbody>
+</table>
+
+      
+    
+    
+    
+    <h4>Description</h4>
+       
+       
+
+
+       
+       <p>Pack different kinds of data into single I1P array.</p>
+        
+
+  </div>
+  </div>
+
+ 	 
+    
+  <div class="panel panel-default">
+  <div class="panel-heading codesum"><span class="anchor" id="proc-pack_data_i8_i4"></span><h3>
+private pure subroutine <a href='../proc/pack_data_i8_i4.html'>pack_data_I8_I4</a>(a1, a2, packed)
+    
+    
+    
+</h3></div>
+  <div class="panel-body">
+       
+    
+    <h4>Arguments</h4>
+    
+      
+      
+<table class="table table-striped varlist">
+<thead><tr><th>Type</th>
+<th>Intent</th><th>Optional</th>
+<th>Attributes</th><th></th><th>Name</th><th></th></thead>
+
+
+
+<tbody>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>integer(kind=I8P),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>a1</strong>(1:)</td><td><p>First data stream.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>integer(kind=I4P),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>a2</strong>(1:)</td><td><p>Second data stream.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>integer(kind=I1P),</td>
+  <td>intent(inout),</td>
+  <td></td>
+  
+  <td>allocatable</td><td>::</td>
+  <td><strong>packed</strong>(:)</td><td><p>Packed data into I1P array.</p></td>
+  
+</tr>
+
+</tbody>
+</table>
+
+      
+    
+    
+    
+    <h4>Description</h4>
+       
+       
+
+
+       
+       <p>Pack different kinds of data into single I1P array.</p>
+        
+
+  </div>
+  </div>
+
+ 	 
+    
+  <div class="panel panel-default">
+  <div class="panel-heading codesum"><span class="anchor" id="proc-pack_data_i8_i2"></span><h3>
+private pure subroutine <a href='../proc/pack_data_i8_i2.html'>pack_data_I8_I2</a>(a1, a2, packed)
+    
+    
+    
+</h3></div>
+  <div class="panel-body">
+       
+    
+    <h4>Arguments</h4>
+    
+      
+      
+<table class="table table-striped varlist">
+<thead><tr><th>Type</th>
+<th>Intent</th><th>Optional</th>
+<th>Attributes</th><th></th><th>Name</th><th></th></thead>
+
+
+
+<tbody>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>integer(kind=I8P),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>a1</strong>(1:)</td><td><p>First data stream.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>integer(kind=I2P),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>a2</strong>(1:)</td><td><p>Second data stream.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>integer(kind=I1P),</td>
+  <td>intent(inout),</td>
+  <td></td>
+  
+  <td>allocatable</td><td>::</td>
+  <td><strong>packed</strong>(:)</td><td><p>Packed data into I1P array.</p></td>
+  
+</tr>
+
+</tbody>
+</table>
+
+      
+    
+    
+    
+    <h4>Description</h4>
+       
+       
+
+
+       
+       <p>Pack different kinds of data into single I1P array.</p>
+        
+
+  </div>
+  </div>
+
+ 	 
+    
+  <div class="panel panel-default">
+  <div class="panel-heading codesum"><span class="anchor" id="proc-pack_data_i8_i1"></span><h3>
+private pure subroutine <a href='../proc/pack_data_i8_i1.html'>pack_data_I8_I1</a>(a1, a2, packed)
+    
+    
+    
+</h3></div>
+  <div class="panel-body">
+       
+    
+    <h4>Arguments</h4>
+    
+      
+      
+<table class="table table-striped varlist">
+<thead><tr><th>Type</th>
+<th>Intent</th><th>Optional</th>
+<th>Attributes</th><th></th><th>Name</th><th></th></thead>
+
+
+
+<tbody>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>integer(kind=I8P),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>a1</strong>(1:)</td><td><p>First data stream.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>integer(kind=I1P),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>a2</strong>(1:)</td><td><p>Second data stream.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>integer(kind=I1P),</td>
+  <td>intent(inout),</td>
+  <td></td>
+  
+  <td>allocatable</td><td>::</td>
+  <td><strong>packed</strong>(:)</td><td><p>Packed data into I1P array.</p></td>
+  
+</tr>
+
+</tbody>
+</table>
+
+      
+    
+    
+    
+    <h4>Description</h4>
+       
+       
+
+
+       
+       <p>Pack different kinds of data into single I1P array.</p>
+        
+
+  </div>
+  </div>
+
+ 	 
+    
+  <div class="panel panel-default">
+  <div class="panel-heading codesum"><span class="anchor" id="proc-pack_data_i4_r8"></span><h3>
+private pure subroutine <a href='../proc/pack_data_i4_r8.html'>pack_data_I4_R8</a>(a1, a2, packed)
+    
+    
+    
+</h3></div>
+  <div class="panel-body">
+       
+    
+    <h4>Arguments</h4>
+    
+      
+      
+<table class="table table-striped varlist">
+<thead><tr><th>Type</th>
+<th>Intent</th><th>Optional</th>
+<th>Attributes</th><th></th><th>Name</th><th></th></thead>
+
+
+
+<tbody>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>integer(kind=I4P),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>a1</strong>(1:)</td><td><p>First data stream.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>real(kind=R8P),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>a2</strong>(1:)</td><td><p>Second data stream.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>integer(kind=I1P),</td>
+  <td>intent(inout),</td>
+  <td></td>
+  
+  <td>allocatable</td><td>::</td>
+  <td><strong>packed</strong>(:)</td><td><p>Packed data into I1P array.</p></td>
+  
+</tr>
+
+</tbody>
+</table>
+
+      
+    
+    
+    
+    <h4>Description</h4>
+       
+       
+
+
+       
+       <p>Pack different kinds of data into single I1P array.</p>
+        
+
+  </div>
+  </div>
+
+ 	 
+    
+  <div class="panel panel-default">
+  <div class="panel-heading codesum"><span class="anchor" id="proc-pack_data_i4_r4"></span><h3>
+private pure subroutine <a href='../proc/pack_data_i4_r4.html'>pack_data_I4_R4</a>(a1, a2, packed)
+    
+    
+    
+</h3></div>
+  <div class="panel-body">
+       
+    
+    <h4>Arguments</h4>
+    
+      
+      
+<table class="table table-striped varlist">
+<thead><tr><th>Type</th>
+<th>Intent</th><th>Optional</th>
+<th>Attributes</th><th></th><th>Name</th><th></th></thead>
+
+
+
+<tbody>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>integer(kind=I4P),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>a1</strong>(1:)</td><td><p>First data stream.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>real(kind=R4P),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>a2</strong>(1:)</td><td><p>Second data stream.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>integer(kind=I1P),</td>
+  <td>intent(inout),</td>
+  <td></td>
+  
+  <td>allocatable</td><td>::</td>
+  <td><strong>packed</strong>(:)</td><td><p>Packed data into I1P array.</p></td>
+  
+</tr>
+
+</tbody>
+</table>
+
+      
+    
+    
+    
+    <h4>Description</h4>
+       
+       
+
+
+       
+       <p>Pack different kinds of data into single I1P array.</p>
+        
+
+  </div>
+  </div>
+
+ 	 
+    
+  <div class="panel panel-default">
+  <div class="panel-heading codesum"><span class="anchor" id="proc-pack_data_i4_i8"></span><h3>
+private pure subroutine <a href='../proc/pack_data_i4_i8.html'>pack_data_I4_I8</a>(a1, a2, packed)
+    
+    
+    
+</h3></div>
+  <div class="panel-body">
+       
+    
+    <h4>Arguments</h4>
+    
+      
+      
+<table class="table table-striped varlist">
+<thead><tr><th>Type</th>
+<th>Intent</th><th>Optional</th>
+<th>Attributes</th><th></th><th>Name</th><th></th></thead>
+
+
+
+<tbody>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>integer(kind=I4P),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>a1</strong>(1:)</td><td><p>First data stream.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>integer(kind=I8P),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>a2</strong>(1:)</td><td><p>Second data stream.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>integer(kind=I1P),</td>
+  <td>intent(inout),</td>
+  <td></td>
+  
+  <td>allocatable</td><td>::</td>
+  <td><strong>packed</strong>(:)</td><td><p>Packed data into I1P array.</p></td>
+  
+</tr>
+
+</tbody>
+</table>
+
+      
+    
+    
+    
+    <h4>Description</h4>
+       
+       
+
+
+       
+       <p>Pack different kinds of data into single I1P array.</p>
+        
+
+  </div>
+  </div>
+
+ 	 
+    
+  <div class="panel panel-default">
+  <div class="panel-heading codesum"><span class="anchor" id="proc-pack_data_i4_i2"></span><h3>
+private pure subroutine <a href='../proc/pack_data_i4_i2.html'>pack_data_I4_I2</a>(a1, a2, packed)
+    
+    
+    
+</h3></div>
+  <div class="panel-body">
+       
+    
+    <h4>Arguments</h4>
+    
+      
+      
+<table class="table table-striped varlist">
+<thead><tr><th>Type</th>
+<th>Intent</th><th>Optional</th>
+<th>Attributes</th><th></th><th>Name</th><th></th></thead>
+
+
+
+<tbody>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>integer(kind=I4P),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>a1</strong>(1:)</td><td><p>First data stream.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>integer(kind=I2P),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>a2</strong>(1:)</td><td><p>Second data stream.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>integer(kind=I1P),</td>
+  <td>intent(inout),</td>
+  <td></td>
+  
+  <td>allocatable</td><td>::</td>
+  <td><strong>packed</strong>(:)</td><td><p>Packed data into I1P array.</p></td>
+  
+</tr>
+
+</tbody>
+</table>
+
+      
+    
+    
+    
+    <h4>Description</h4>
+       
+       
+
+
+       
+       <p>Pack different kinds of data into single I1P array.</p>
+        
+
+  </div>
+  </div>
+
+ 	 
+    
+  <div class="panel panel-default">
+  <div class="panel-heading codesum"><span class="anchor" id="proc-pack_data_i4_i1"></span><h3>
+private pure subroutine <a href='../proc/pack_data_i4_i1.html'>pack_data_I4_I1</a>(a1, a2, packed)
+    
+    
+    
+</h3></div>
+  <div class="panel-body">
+       
+    
+    <h4>Arguments</h4>
+    
+      
+      
+<table class="table table-striped varlist">
+<thead><tr><th>Type</th>
+<th>Intent</th><th>Optional</th>
+<th>Attributes</th><th></th><th>Name</th><th></th></thead>
+
+
+
+<tbody>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>integer(kind=I4P),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>a1</strong>(1:)</td><td><p>First data stream.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>integer(kind=I1P),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>a2</strong>(1:)</td><td><p>Second data stream.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>integer(kind=I1P),</td>
+  <td>intent(inout),</td>
+  <td></td>
+  
+  <td>allocatable</td><td>::</td>
+  <td><strong>packed</strong>(:)</td><td><p>Packed data into I1P array.</p></td>
+  
+</tr>
+
+</tbody>
+</table>
+
+      
+    
+    
+    
+    <h4>Description</h4>
+       
+       
+
+
+       
+       <p>Pack different kinds of data into single I1P array.</p>
+        
+
+  </div>
+  </div>
+
+ 	 
+    
+  <div class="panel panel-default">
+  <div class="panel-heading codesum"><span class="anchor" id="proc-pack_data_i2_r8"></span><h3>
+private pure subroutine <a href='../proc/pack_data_i2_r8.html'>pack_data_I2_R8</a>(a1, a2, packed)
+    
+    
+    
+</h3></div>
+  <div class="panel-body">
+       
+    
+    <h4>Arguments</h4>
+    
+      
+      
+<table class="table table-striped varlist">
+<thead><tr><th>Type</th>
+<th>Intent</th><th>Optional</th>
+<th>Attributes</th><th></th><th>Name</th><th></th></thead>
+
+
+
+<tbody>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>integer(kind=I2P),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>a1</strong>(1:)</td><td><p>First data stream.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>real(kind=R8P),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>a2</strong>(1:)</td><td><p>Second data stream.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>integer(kind=I1P),</td>
+  <td>intent(inout),</td>
+  <td></td>
+  
+  <td>allocatable</td><td>::</td>
+  <td><strong>packed</strong>(:)</td><td><p>Packed data into I1P array.</p></td>
+  
+</tr>
+
+</tbody>
+</table>
+
+      
+    
+    
+    
+    <h4>Description</h4>
+       
+       
+
+
+       
+       <p>Pack different kinds of data into single I1P array.</p>
+        
+
+  </div>
+  </div>
+
+ 	 
+    
+  <div class="panel panel-default">
+  <div class="panel-heading codesum"><span class="anchor" id="proc-pack_data_i2_r4"></span><h3>
+private pure subroutine <a href='../proc/pack_data_i2_r4.html'>pack_data_I2_R4</a>(a1, a2, packed)
+    
+    
+    
+</h3></div>
+  <div class="panel-body">
+       
+    
+    <h4>Arguments</h4>
+    
+      
+      
+<table class="table table-striped varlist">
+<thead><tr><th>Type</th>
+<th>Intent</th><th>Optional</th>
+<th>Attributes</th><th></th><th>Name</th><th></th></thead>
+
+
+
+<tbody>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>integer(kind=I2P),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>a1</strong>(1:)</td><td><p>First data stream.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>real(kind=R4P),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>a2</strong>(1:)</td><td><p>Second data stream.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>integer(kind=I1P),</td>
+  <td>intent(inout),</td>
+  <td></td>
+  
+  <td>allocatable</td><td>::</td>
+  <td><strong>packed</strong>(:)</td><td><p>Packed data into I1P array.</p></td>
+  
+</tr>
+
+</tbody>
+</table>
+
+      
+    
+    
+    
+    <h4>Description</h4>
+       
+       
+
+
+       
+       <p>Pack different kinds of data into single I1P array.</p>
+        
+
+  </div>
+  </div>
+
+ 	 
+    
+  <div class="panel panel-default">
+  <div class="panel-heading codesum"><span class="anchor" id="proc-pack_data_i2_i8"></span><h3>
+private pure subroutine <a href='../proc/pack_data_i2_i8.html'>pack_data_I2_I8</a>(a1, a2, packed)
+    
+    
+    
+</h3></div>
+  <div class="panel-body">
+       
+    
+    <h4>Arguments</h4>
+    
+      
+      
+<table class="table table-striped varlist">
+<thead><tr><th>Type</th>
+<th>Intent</th><th>Optional</th>
+<th>Attributes</th><th></th><th>Name</th><th></th></thead>
+
+
+
+<tbody>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>integer(kind=I2P),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>a1</strong>(1:)</td><td><p>First data stream.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>integer(kind=I8P),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>a2</strong>(1:)</td><td><p>Second data stream.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>integer(kind=I1P),</td>
+  <td>intent(inout),</td>
+  <td></td>
+  
+  <td>allocatable</td><td>::</td>
+  <td><strong>packed</strong>(:)</td><td><p>Packed data into I1P array.</p></td>
+  
+</tr>
+
+</tbody>
+</table>
+
+      
+    
+    
+    
+    <h4>Description</h4>
+       
+       
+
+
+       
+       <p>Pack different kinds of data into single I1P array.</p>
+        
+
+  </div>
+  </div>
+
+ 	 
+    
+  <div class="panel panel-default">
+  <div class="panel-heading codesum"><span class="anchor" id="proc-pack_data_i2_i4"></span><h3>
+private pure subroutine <a href='../proc/pack_data_i2_i4.html'>pack_data_I2_I4</a>(a1, a2, packed)
+    
+    
+    
+</h3></div>
+  <div class="panel-body">
+       
+    
+    <h4>Arguments</h4>
+    
+      
+      
+<table class="table table-striped varlist">
+<thead><tr><th>Type</th>
+<th>Intent</th><th>Optional</th>
+<th>Attributes</th><th></th><th>Name</th><th></th></thead>
+
+
+
+<tbody>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>integer(kind=I2P),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>a1</strong>(1:)</td><td><p>First data stream.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>integer(kind=I4P),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>a2</strong>(1:)</td><td><p>Second data stream.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>integer(kind=I1P),</td>
+  <td>intent(inout),</td>
+  <td></td>
+  
+  <td>allocatable</td><td>::</td>
+  <td><strong>packed</strong>(:)</td><td><p>Packed data into I1P array.</p></td>
+  
+</tr>
+
+</tbody>
+</table>
+
+      
+    
+    
+    
+    <h4>Description</h4>
+       
+       
+
+
+       
+       <p>Pack different kinds of data into single I1P array.</p>
+        
+
+  </div>
+  </div>
+
+ 	 
+    
+  <div class="panel panel-default">
+  <div class="panel-heading codesum"><span class="anchor" id="proc-pack_data_i2_i1"></span><h3>
+private pure subroutine <a href='../proc/pack_data_i2_i1.html'>pack_data_I2_I1</a>(a1, a2, packed)
+    
+    
+    
+</h3></div>
+  <div class="panel-body">
+       
+    
+    <h4>Arguments</h4>
+    
+      
+      
+<table class="table table-striped varlist">
+<thead><tr><th>Type</th>
+<th>Intent</th><th>Optional</th>
+<th>Attributes</th><th></th><th>Name</th><th></th></thead>
+
+
+
+<tbody>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>integer(kind=I2P),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>a1</strong>(1:)</td><td><p>First data stream.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>integer(kind=I1P),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>a2</strong>(1:)</td><td><p>Second data stream.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>integer(kind=I1P),</td>
+  <td>intent(inout),</td>
+  <td></td>
+  
+  <td>allocatable</td><td>::</td>
+  <td><strong>packed</strong>(:)</td><td><p>Packed data into I1P array.</p></td>
+  
+</tr>
+
+</tbody>
+</table>
+
+      
+    
+    
+    
+    <h4>Description</h4>
+       
+       
+
+
+       
+       <p>Pack different kinds of data into single I1P array.</p>
+        
+
+  </div>
+  </div>
+
+ 	 
+    
+  <div class="panel panel-default">
+  <div class="panel-heading codesum"><span class="anchor" id="proc-pack_data_i1_r8"></span><h3>
+private pure subroutine <a href='../proc/pack_data_i1_r8.html'>pack_data_I1_R8</a>(a1, a2, packed)
+    
+    
+    
+</h3></div>
+  <div class="panel-body">
+       
+    
+    <h4>Arguments</h4>
+    
+      
+      
+<table class="table table-striped varlist">
+<thead><tr><th>Type</th>
+<th>Intent</th><th>Optional</th>
+<th>Attributes</th><th></th><th>Name</th><th></th></thead>
+
+
+
+<tbody>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>integer(kind=I1P),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>a1</strong>(1:)</td><td><p>First data stream.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>real(kind=R8P),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>a2</strong>(1:)</td><td><p>Second data stream.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>integer(kind=I1P),</td>
+  <td>intent(inout),</td>
+  <td></td>
+  
+  <td>allocatable</td><td>::</td>
+  <td><strong>packed</strong>(:)</td><td><p>Packed data into I1P array.</p></td>
+  
+</tr>
+
+</tbody>
+</table>
+
+      
+    
+    
+    
+    <h4>Description</h4>
+       
+       
+
+
+       
+       <p>Pack different kinds of data into single I1P array.</p>
+        
+
+  </div>
+  </div>
+
+ 	 
+    
+  <div class="panel panel-default">
+  <div class="panel-heading codesum"><span class="anchor" id="proc-pack_data_i1_r4"></span><h3>
+private pure subroutine <a href='../proc/pack_data_i1_r4.html'>pack_data_I1_R4</a>(a1, a2, packed)
+    
+    
+    
+</h3></div>
+  <div class="panel-body">
+       
+    
+    <h4>Arguments</h4>
+    
+      
+      
+<table class="table table-striped varlist">
+<thead><tr><th>Type</th>
+<th>Intent</th><th>Optional</th>
+<th>Attributes</th><th></th><th>Name</th><th></th></thead>
+
+
+
+<tbody>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>integer(kind=I1P),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>a1</strong>(1:)</td><td><p>First data stream.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>real(kind=R4P),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>a2</strong>(1:)</td><td><p>Second data stream.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>integer(kind=I1P),</td>
+  <td>intent(inout),</td>
+  <td></td>
+  
+  <td>allocatable</td><td>::</td>
+  <td><strong>packed</strong>(:)</td><td><p>Packed data into I1P array.</p></td>
+  
+</tr>
+
+</tbody>
+</table>
+
+      
+    
+    
+    
+    <h4>Description</h4>
+       
+       
+
+
+       
+       <p>Pack different kinds of data into single I1P array.</p>
+        
+
+  </div>
+  </div>
+
+ 	 
+    
+  <div class="panel panel-default">
+  <div class="panel-heading codesum"><span class="anchor" id="proc-pack_data_i1_i8"></span><h3>
+private pure subroutine <a href='../proc/pack_data_i1_i8.html'>pack_data_I1_I8</a>(a1, a2, packed)
+    
+    
+    
+</h3></div>
+  <div class="panel-body">
+       
+    
+    <h4>Arguments</h4>
+    
+      
+      
+<table class="table table-striped varlist">
+<thead><tr><th>Type</th>
+<th>Intent</th><th>Optional</th>
+<th>Attributes</th><th></th><th>Name</th><th></th></thead>
+
+
+
+<tbody>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>integer(kind=I1P),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>a1</strong>(1:)</td><td><p>First data stream.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>integer(kind=I8P),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>a2</strong>(1:)</td><td><p>Second data stream.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>integer(kind=I1P),</td>
+  <td>intent(inout),</td>
+  <td></td>
+  
+  <td>allocatable</td><td>::</td>
+  <td><strong>packed</strong>(:)</td><td><p>Packed data into I1P array.</p></td>
+  
+</tr>
+
+</tbody>
+</table>
+
+      
+    
+    
+    
+    <h4>Description</h4>
+       
+       
+
+
+       
+       <p>Pack different kinds of data into single I1P array.</p>
+        
+
+  </div>
+  </div>
+
+ 	 
+    
+  <div class="panel panel-default">
+  <div class="panel-heading codesum"><span class="anchor" id="proc-pack_data_i1_i4"></span><h3>
+private pure subroutine <a href='../proc/pack_data_i1_i4.html'>pack_data_I1_I4</a>(a1, a2, packed)
+    
+    
+    
+</h3></div>
+  <div class="panel-body">
+       
+    
+    <h4>Arguments</h4>
+    
+      
+      
+<table class="table table-striped varlist">
+<thead><tr><th>Type</th>
+<th>Intent</th><th>Optional</th>
+<th>Attributes</th><th></th><th>Name</th><th></th></thead>
+
+
+
+<tbody>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>integer(kind=I1P),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>a1</strong>(1:)</td><td><p>First data stream.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>integer(kind=I4P),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>a2</strong>(1:)</td><td><p>Second data stream.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>integer(kind=I1P),</td>
+  <td>intent(inout),</td>
+  <td></td>
+  
+  <td>allocatable</td><td>::</td>
+  <td><strong>packed</strong>(:)</td><td><p>Packed data into I1P array.</p></td>
+  
+</tr>
+
+</tbody>
+</table>
+
+      
+    
+    
+    
+    <h4>Description</h4>
+       
+       
+
+
+       
+       <p>Pack different kinds of data into single I1P array.</p>
+        
+
+  </div>
+  </div>
+
+ 	 
+    
+  <div class="panel panel-default">
+  <div class="panel-heading codesum"><span class="anchor" id="proc-pack_data_i1_i2"></span><h3>
+private pure subroutine <a href='../proc/pack_data_i1_i2.html'>pack_data_I1_I2</a>(a1, a2, packed)
+    
+    
+    
+</h3></div>
+  <div class="panel-body">
+       
+    
+    <h4>Arguments</h4>
+    
+      
+      
+<table class="table table-striped varlist">
+<thead><tr><th>Type</th>
+<th>Intent</th><th>Optional</th>
+<th>Attributes</th><th></th><th>Name</th><th></th></thead>
+
+
+
+<tbody>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>integer(kind=I1P),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>a1</strong>(1:)</td><td><p>First data stream.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>integer(kind=I2P),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>a2</strong>(1:)</td><td><p>Second data stream.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>integer(kind=I1P),</td>
+  <td>intent(inout),</td>
+  <td></td>
+  
+  <td>allocatable</td><td>::</td>
+  <td><strong>packed</strong>(:)</td><td><p>Packed data into I1P array.</p></td>
+  
+</tr>
+
+</tbody>
+</table>
+
+      
+    
+    
+    
+    <h4>Description</h4>
+       
+       
+
+
+       
+       <p>Pack different kinds of data into single I1P array.</p>
+        
+
+  </div>
+  </div>
+
+ 	 
+  	 
+
+ </div>
+</div>
+
+    <hr>
+    <footer>
+      <div class="row">
+        <div class="col-md-4">&copy; 2016 </div>
+        <div class="col-md-4"><span class="text-center"> FoXy was developed by Fortran-FOSS-Programmers Group</span></div>
+        <div class="col-md-4">
+          <span class="pull-right">
+            Documentation generated by 
+            <a href="https://github.com/cmacmackin/ford">FORD</a>
+            
+          </span>
+        </div>
+      </div>
+      <br>
+    </footer>
+    </div> <!-- /container -->
+
+
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+<!--
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+-->
+    <script src="../js/bootstrap.min.js"></script>
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+    <script src="../js/ie10-viewport-bug-workaround.js"></script>
+
+    <!-- MathJax JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        TeX: { extensions: ['AMSmath.js','AMSsymbols.js','noErrors.js','noUndefined.js'], equationNumbers: { autoNumber: 'AMS' } },
+        jax: ['input/TeX','input/MathML','output/HTML-CSS'],
+        extensions: ['tex2jax.js','mml2jax.js','MathMenu.js','MathZoom.js'],
+        'HTML-CSS': { 
+           styles: { '.MathJax_Display, .MathJax .mo, .MathJax .mi, .MathJax .mn': {color: '#000000 ! important'} }
+        }
+      });
+    </script>
+    <script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+  </body>
+</html>

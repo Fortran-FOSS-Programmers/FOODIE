@@ -1,0 +1,1309 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+	 
+	 <meta name="description" content="Fortran XML parser for poor people">
+    
+    <meta name="author" content="Chris MacMackin" >
+    <link rel="icon" href="../favicon.png">
+
+    <title>b64_decode_up &ndash; FoXy</title>
+
+    <link href="../css/bootstrap.min.css" rel="stylesheet">
+    <link href="../css/pygments.css" rel="stylesheet">
+    <link href="../css/font-awesome.min.css" rel="stylesheet">
+    <link href="../css/local.css" rel="stylesheet">
+    
+
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+    
+    <script src="../js/jquery-2.1.3.min.js"></script>
+    <script src="../js/svg-pan-zoom.min.js"></script>
+
+    
+    <script src="../tipuesearch/tipuesearch_content.js"></script>
+    <link  href="../tipuesearch/tipuesearch.css" rel="stylesheet">
+    <script src="../tipuesearch/tipuesearch_set.js"></script>
+    <script src="../tipuesearch/tipuesearch.js"></script>
+    
+
+  </head>
+
+  <body>
+
+    <!-- Fixed navbar -->
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="../index.html">FoXy </a>
+        </div>
+        <div id="navbar" class="navbar-collapse collapse">
+          <ul class="nav navbar-nav">
+				
+                
+            <li><a href="../lists/files.html">Source Files</a></li>
+				
+				
+            <li><a href="../lists/modules.html">Modules</a></li>
+				
+				
+            <li><a href="../lists/procedures.html">Procedures</a></li>
+				
+								
+            <li><a href="../lists/types.html">Derived Types</a></li>
+				
+				
+            <li><a href="../program/fx_test1.html">Program</a></li>
+				
+          </ul>
+        
+        <form action="../search.html" class="navbar-form navbar-right" role="search">
+        <div class="form-group">
+          <input type="text" class="form-control" placeholder="Search" name="q" id="tipue_search_input" autocomplete="off" required>
+        </div>
+<!--
+        <button type="submit" class="btn btn-default">Submit</button>
+-->
+        </form>
+        
+        </div><!--/.nav-collapse -->
+      </div>
+    </nav>
+
+    <div class="container">
+    
+  
+  <div class="row">
+    <h1>b64_decode_up
+	 <small>Interface</small>
+    
+    </h1>
+	 
+<div class="row">
+<div class="col-lg-12">
+<div class="well well-sm">
+  <ul class="list-inline" style="margin-bottom:0px;display:inline">
+     
+     
+     
+     
+    
+    
+    <li><i class="fa fa-code"></i><a href="../src/befor64.F90"> Source File</a></li>
+     
+  </ul>
+  <ol class="breadcrumb in-well text-right">
+  
+     <li><a href='../sourcefile/befor64.f90.html'>befor64.F90</a></li>
+  
+     <li><a href='../module/befor64.html'>befor64</a></li>
+  
+     <li class="active">b64_decode_up</li>
+  </ol>
+</div>
+</div>
+</div>
+    
+  </div>
+  
+  <div class="row">
+    <div class="col-lg-3">
+    
+<div id="sidebar">
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  <div class="panel panel-primary">
+    <div class="panel-heading text-left"><h3 class="panel-title"><a data-toggle="collapse" href="#modprocs">Module Procedures</a></h3></div>
+    <div id="modprocs" class="panel-collapse collapse">
+        <div class="list-group">
+          
+          <a class="list-group-item" href="../interface/b64_decode_up.html#moduleprocedure-b64_decode_up">b64_decode_up</a>
+          
+          <a class="list-group-item" href="../interface/b64_decode_up.html#moduleprocedure-b64_decode_up_a">b64_decode_up_a</a>
+          
+        </div>
+    </div>
+  </div>
+  
+  
+  <hr>
+  
+  <div class="panel panel-default">
+    <div class="panel-heading text-left"><h3 class="panel-title"><a data-toggle="collapse" href="#allprocs">All Procedures</a></h3></div>
+    <div id="allprocs" class="panel-collapse collapse">
+        <div class="list-group">
+          
+          <a class="list-group-item" href="../proc/add_tag.html">add_tag</a>
+          
+          <a class="list-group-item" href="../interface/adjustl.html">adjustl</a>
+          
+          <a class="list-group-item" href="../interface/adjustr.html">adjustr</a>
+          
+          <a class="list-group-item" href="../proc/alloc_attributes.html">alloc_attributes</a>
+          
+          <a class="list-group-item" href="../proc/assign_tag.html">assign_tag</a>
+          
+          <a class="list-group-item" href="../proc/autotest.html">autotest</a>
+          
+          <a class="list-group-item" href="../interface/b64_decode.html">b64_decode</a>
+          
+          <a class="list-group-item" href="../proc/b64_decode_i1.html">b64_decode_I1</a>
+          
+          <a class="list-group-item" href="../proc/b64_decode_i1_a.html">b64_decode_I1_a</a>
+          
+          <a class="list-group-item" href="../proc/b64_decode_i2.html">b64_decode_I2</a>
+          
+          <a class="list-group-item" href="../proc/b64_decode_i2_a.html">b64_decode_I2_a</a>
+          
+          <a class="list-group-item" href="../proc/b64_decode_i4.html">b64_decode_I4</a>
+          
+          <a class="list-group-item" href="../proc/b64_decode_i4_a.html">b64_decode_I4_a</a>
+          
+          <a class="list-group-item" href="../proc/b64_decode_i8.html">b64_decode_I8</a>
+          
+          <a class="list-group-item" href="../proc/b64_decode_i8_a.html">b64_decode_I8_a</a>
+          
+          <a class="list-group-item" href="../proc/b64_decode_r16.html">b64_decode_R16</a>
+          
+          <a class="list-group-item" href="../proc/b64_decode_r16_a.html">b64_decode_R16_a</a>
+          
+          <a class="list-group-item" href="../proc/b64_decode_r4.html">b64_decode_R4</a>
+          
+          <a class="list-group-item" href="../proc/b64_decode_r4_a.html">b64_decode_R4_a</a>
+          
+          <a class="list-group-item" href="../proc/b64_decode_r8.html">b64_decode_R8</a>
+          
+          <a class="list-group-item" href="../proc/b64_decode_r8_a.html">b64_decode_R8_a</a>
+          
+          <a class="list-group-item" href="../proc/b64_decode_string.html">b64_decode_string</a>
+          
+          <a class="list-group-item" href="../proc/b64_decode_string_a.html">b64_decode_string_a</a>
+          
+          <a class="list-group-item" href="../proc/b64_decode_up.html">b64_decode_up</a>
+          
+          <a class="list-group-item" href="../interface/b64_decode_up.html">b64_decode_up</a>
+          
+          <a class="list-group-item" href="../proc/b64_decode_up_a.html">b64_decode_up_a</a>
+          
+          <a class="list-group-item" href="../interface/b64_encode.html">b64_encode</a>
+          
+          <a class="list-group-item" href="../proc/b64_encode_i1.html">b64_encode_I1</a>
+          
+          <a class="list-group-item" href="../proc/b64_encode_i1_a.html">b64_encode_I1_a</a>
+          
+          <a class="list-group-item" href="../proc/b64_encode_i2.html">b64_encode_I2</a>
+          
+          <a class="list-group-item" href="../proc/b64_encode_i2_a.html">b64_encode_I2_a</a>
+          
+          <a class="list-group-item" href="../proc/b64_encode_i4.html">b64_encode_I4</a>
+          
+          <a class="list-group-item" href="../proc/b64_encode_i4_a.html">b64_encode_I4_a</a>
+          
+          <a class="list-group-item" href="../proc/b64_encode_i8.html">b64_encode_I8</a>
+          
+          <a class="list-group-item" href="../proc/b64_encode_i8_a.html">b64_encode_I8_a</a>
+          
+          <a class="list-group-item" href="../proc/b64_encode_r16.html">b64_encode_R16</a>
+          
+          <a class="list-group-item" href="../proc/b64_encode_r16_a.html">b64_encode_R16_a</a>
+          
+          <a class="list-group-item" href="../proc/b64_encode_r4.html">b64_encode_R4</a>
+          
+          <a class="list-group-item" href="../proc/b64_encode_r4_a.html">b64_encode_R4_a</a>
+          
+          <a class="list-group-item" href="../proc/b64_encode_r8.html">b64_encode_R8</a>
+          
+          <a class="list-group-item" href="../proc/b64_encode_r8_a.html">b64_encode_R8_a</a>
+          
+          <a class="list-group-item" href="../proc/b64_encode_string.html">b64_encode_string</a>
+          
+          <a class="list-group-item" href="../proc/b64_encode_string_a.html">b64_encode_string_a</a>
+          
+          <a class="list-group-item" href="../proc/b64_encode_up.html">b64_encode_up</a>
+          
+          <a class="list-group-item" href="../interface/b64_encode_up.html">b64_encode_up</a>
+          
+          <a class="list-group-item" href="../proc/b64_encode_up_a.html">b64_encode_up_a</a>
+          
+          <a class="list-group-item" href="../proc/b64_init.html">b64_init</a>
+          
+          <a class="list-group-item" href="../proc/basedir.html">basedir</a>
+          
+          <a class="list-group-item" href="../proc/basename.html">basename</a>
+          
+          <a class="list-group-item" href="../proc/bctoi_i1p.html">bctoi_I1P</a>
+          
+          <a class="list-group-item" href="../proc/bctoi_i2p.html">bctoi_I2P</a>
+          
+          <a class="list-group-item" href="../proc/bctoi_i4p.html">bctoi_I4P</a>
+          
+          <a class="list-group-item" href="../proc/bctoi_i8p.html">bctoi_I8P</a>
+          
+          <a class="list-group-item" href="../interface/bcton.html">bcton</a>
+          
+          <a class="list-group-item" href="../proc/bctor_r16p.html">bctor_R16P</a>
+          
+          <a class="list-group-item" href="../proc/bctor_r4p.html">bctor_R4P</a>
+          
+          <a class="list-group-item" href="../proc/bctor_r8p.html">bctor_R8P</a>
+          
+          <a class="list-group-item" href="../interface/bit_size.html">bit_size</a>
+          
+          <a class="list-group-item" href="../proc/bit_size_chr.html">bit_size_chr</a>
+          
+          <a class="list-group-item" href="../proc/bit_size_r16p.html">bit_size_R16P</a>
+          
+          <a class="list-group-item" href="../proc/bit_size_r4p.html">bit_size_R4P</a>
+          
+          <a class="list-group-item" href="../proc/bit_size_r8p.html">bit_size_R8P</a>
+          
+          <a class="list-group-item" href="../interface/bstr.html">bstr</a>
+          
+          <a class="list-group-item" href="../proc/bstr_i1p.html">bstr_I1P</a>
+          
+          <a class="list-group-item" href="../proc/bstr_i2p.html">bstr_I2P</a>
+          
+          <a class="list-group-item" href="../proc/bstr_i4p.html">bstr_I4P</a>
+          
+          <a class="list-group-item" href="../proc/bstr_i8p.html">bstr_I8P</a>
+          
+          <a class="list-group-item" href="../proc/bstr_r16p.html">bstr_R16P</a>
+          
+          <a class="list-group-item" href="../proc/bstr_r4p.html">bstr_R4P</a>
+          
+          <a class="list-group-item" href="../proc/bstr_r8p.html">bstr_R8P</a>
+          
+          <a class="list-group-item" href="../interface/byte_size.html">byte_size</a>
+          
+          <a class="list-group-item" href="../proc/byte_size_chr.html">byte_size_chr</a>
+          
+          <a class="list-group-item" href="../proc/byte_size_i1p.html">byte_size_I1P</a>
+          
+          <a class="list-group-item" href="../proc/byte_size_i2p.html">byte_size_I2P</a>
+          
+          <a class="list-group-item" href="../proc/byte_size_i4p.html">byte_size_I4P</a>
+          
+          <a class="list-group-item" href="../proc/byte_size_i8p.html">byte_size_I8P</a>
+          
+          <a class="list-group-item" href="../proc/byte_size_r16p.html">byte_size_R16P</a>
+          
+          <a class="list-group-item" href="../proc/byte_size_r4p.html">byte_size_R4P</a>
+          
+          <a class="list-group-item" href="../proc/byte_size_r8p.html">byte_size_R8P</a>
+          
+          <a class="list-group-item" href="../proc/camelcase.html">camelcase</a>
+          
+          <a class="list-group-item" href="../proc/capitalize.html">capitalize</a>
+          
+          <a class="list-group-item" href="../proc/character_concat_string.html">character_concat_string</a>
+          
+          <a class="list-group-item" href="../proc/character_concat_string_string.html">character_concat_string_string</a>
+          
+          <a class="list-group-item" href="../proc/character_eq_string.html">character_eq_string</a>
+          
+          <a class="list-group-item" href="../proc/character_ge_string.html">character_ge_string</a>
+          
+          <a class="list-group-item" href="../proc/character_gt_string.html">character_gt_string</a>
+          
+          <a class="list-group-item" href="../proc/character_le_string.html">character_le_string</a>
+          
+          <a class="list-group-item" href="../proc/character_lt_string.html">character_lt_string</a>
+          
+          <a class="list-group-item" href="../proc/character_ne_string.html">character_ne_string</a>
+          
+          <a class="list-group-item" href="../proc/chars.html">chars</a>
+          
+          <a class="list-group-item" href="../proc/check_endian.html">check_endian</a>
+          
+          <a class="list-group-item" href="../interface/count.html">count</a>
+          
+          <a class="list-group-item" href="../proc/count_substring.html">count_substring</a>
+          
+          <a class="list-group-item" href="../proc/ctoi_i1p.html">ctoi_I1P</a>
+          
+          <a class="list-group-item" href="../proc/ctoi_i2p.html">ctoi_I2P</a>
+          
+          <a class="list-group-item" href="../proc/ctoi_i4p.html">ctoi_I4P</a>
+          
+          <a class="list-group-item" href="../proc/ctoi_i8p.html">ctoi_I8P</a>
+          
+          <a class="list-group-item" href="../interface/cton.html">cton</a>
+          
+          <a class="list-group-item" href="../proc/ctor_r16p.html">ctor_R16P</a>
+          
+          <a class="list-group-item" href="../proc/ctor_r4p.html">ctor_R4P</a>
+          
+          <a class="list-group-item" href="../proc/ctor_r8p.html">ctor_R8P</a>
+          
+          <a class="list-group-item" href="../proc/decode.html">decode</a>
+          
+          <a class="list-group-item" href="../proc/decode_bits.html">decode_bits</a>
+          
+          <a class="list-group-item" href="../interface/digit.html">digit</a>
+          
+          <a class="list-group-item" href="../proc/digit_i1.html">digit_I1</a>
+          
+          <a class="list-group-item" href="../proc/digit_i2.html">digit_I2</a>
+          
+          <a class="list-group-item" href="../proc/digit_i4.html">digit_I4</a>
+          
+          <a class="list-group-item" href="../proc/digit_i8.html">digit_I8</a>
+          
+          <a class="list-group-item" href="../proc/encode.html">encode</a>
+          
+          <a class="list-group-item" href="../proc/encode_bits.html">encode_bits</a>
+          
+          <a class="list-group-item" href="../proc/end_with.html">end_with</a>
+          
+          <a class="list-group-item" href="../proc/escape.html">escape</a>
+          
+          <a class="list-group-item" href="../proc/extension.html">extension</a>
+          
+          <a class="list-group-item" href="../proc/fill.html">fill</a>
+          
+          <a class="list-group-item" href="../proc/finalize.html">finalize</a>
+          
+          <a class="list-group-item" href="../proc/finalize%7E2.html">finalize</a>
+          
+          <a class="list-group-item" href="../proc/free.html">free</a>
+          
+          <a class="list-group-item" href="../proc/free%7E2.html">free</a>
+          
+          <a class="list-group-item" href="../proc/free%7E3.html">free</a>
+          
+          <a class="list-group-item" href="../proc/get.html">get</a>
+          
+          <a class="list-group-item" href="../proc/get_attributes.html">get_attributes</a>
+          
+          <a class="list-group-item" href="../proc/get_decimal_mode.html">get_decimal_mode</a>
+          
+          <a class="list-group-item" href="../proc/get_delimiter_mode.html">get_delimiter_mode</a>
+          
+          <a class="list-group-item" href="../proc/get_next_non_blank_character_any_record.html">get_next_non_blank_character_any_record</a>
+          
+          <a class="list-group-item" href="../proc/get_next_non_blank_character_this_record.html">get_next_non_blank_character_this_record</a>
+          
+          <a class="list-group-item" href="../proc/get_value.html">get_value</a>
+          
+          <a class="list-group-item" href="../interface/index.html">index</a>
+          
+          <a class="list-group-item" href="../proc/insert_character.html">insert_character</a>
+          
+          <a class="list-group-item" href="../proc/insert_string.html">insert_string</a>
+          
+          <a class="list-group-item" href="../proc/is_allocated.html">is_allocated</a>
+          
+          <a class="list-group-item" href="../proc/is_digit.html">is_digit</a>
+          
+          <a class="list-group-item" href="../proc/is_integer.html">is_integer</a>
+          
+          <a class="list-group-item" href="../proc/is_lower.html">is_lower</a>
+          
+          <a class="list-group-item" href="../proc/is_number.html">is_number</a>
+          
+          <a class="list-group-item" href="../proc/is_parsed.html">is_parsed</a>
+          
+          <a class="list-group-item" href="../proc/is_real.html">is_real</a>
+          
+          <a class="list-group-item" href="../proc/is_upper.html">is_upper</a>
+          
+          <a class="list-group-item" href="../proc/join_characters.html">join_characters</a>
+          
+          <a class="list-group-item" href="../proc/join_strings.html">join_strings</a>
+          
+          <a class="list-group-item" href="../interface/len.html">len</a>
+          
+          <a class="list-group-item" href="../interface/len_trim.html">len_trim</a>
+          
+          <a class="list-group-item" href="../proc/load_file_as_stream.html">load_file_as_stream</a>
+          
+          <a class="list-group-item" href="../proc/lower.html">lower</a>
+          
+          <a class="list-group-item" href="../interface/pack_data.html">pack_data</a>
+          
+          <a class="list-group-item" href="../proc/pack_data_i1_i2.html">pack_data_I1_I2</a>
+          
+          <a class="list-group-item" href="../proc/pack_data_i1_i4.html">pack_data_I1_I4</a>
+          
+          <a class="list-group-item" href="../proc/pack_data_i1_i8.html">pack_data_I1_I8</a>
+          
+          <a class="list-group-item" href="../proc/pack_data_i1_r4.html">pack_data_I1_R4</a>
+          
+          <a class="list-group-item" href="../proc/pack_data_i1_r8.html">pack_data_I1_R8</a>
+          
+          <a class="list-group-item" href="../proc/pack_data_i2_i1.html">pack_data_I2_I1</a>
+          
+          <a class="list-group-item" href="../proc/pack_data_i2_i4.html">pack_data_I2_I4</a>
+          
+          <a class="list-group-item" href="../proc/pack_data_i2_i8.html">pack_data_I2_I8</a>
+          
+          <a class="list-group-item" href="../proc/pack_data_i2_r4.html">pack_data_I2_R4</a>
+          
+          <a class="list-group-item" href="../proc/pack_data_i2_r8.html">pack_data_I2_R8</a>
+          
+          <a class="list-group-item" href="../proc/pack_data_i4_i1.html">pack_data_I4_I1</a>
+          
+          <a class="list-group-item" href="../proc/pack_data_i4_i2.html">pack_data_I4_I2</a>
+          
+          <a class="list-group-item" href="../proc/pack_data_i4_i8.html">pack_data_I4_I8</a>
+          
+          <a class="list-group-item" href="../proc/pack_data_i4_r4.html">pack_data_I4_R4</a>
+          
+          <a class="list-group-item" href="../proc/pack_data_i4_r8.html">pack_data_I4_R8</a>
+          
+          <a class="list-group-item" href="../proc/pack_data_i8_i1.html">pack_data_I8_I1</a>
+          
+          <a class="list-group-item" href="../proc/pack_data_i8_i2.html">pack_data_I8_I2</a>
+          
+          <a class="list-group-item" href="../proc/pack_data_i8_i4.html">pack_data_I8_I4</a>
+          
+          <a class="list-group-item" href="../proc/pack_data_i8_r4.html">pack_data_I8_R4</a>
+          
+          <a class="list-group-item" href="../proc/pack_data_i8_r8.html">pack_data_I8_R8</a>
+          
+          <a class="list-group-item" href="../proc/pack_data_r4_i1.html">pack_data_R4_I1</a>
+          
+          <a class="list-group-item" href="../proc/pack_data_r4_i2.html">pack_data_R4_I2</a>
+          
+          <a class="list-group-item" href="../proc/pack_data_r4_i4.html">pack_data_R4_I4</a>
+          
+          <a class="list-group-item" href="../proc/pack_data_r4_i8.html">pack_data_R4_I8</a>
+          
+          <a class="list-group-item" href="../proc/pack_data_r4_r8.html">pack_data_R4_R8</a>
+          
+          <a class="list-group-item" href="../proc/pack_data_r8_i1.html">pack_data_R8_I1</a>
+          
+          <a class="list-group-item" href="../proc/pack_data_r8_i2.html">pack_data_R8_I2</a>
+          
+          <a class="list-group-item" href="../proc/pack_data_r8_i4.html">pack_data_R8_I4</a>
+          
+          <a class="list-group-item" href="../proc/pack_data_r8_i8.html">pack_data_R8_I8</a>
+          
+          <a class="list-group-item" href="../proc/pack_data_r8_r4.html">pack_data_R8_R4</a>
+          
+          <a class="list-group-item" href="../proc/parse.html">parse</a>
+          
+          <a class="list-group-item" href="../proc/parse%7E2.html">parse</a>
+          
+          <a class="list-group-item" href="../proc/parse_attributes_names.html">parse_attributes_names</a>
+          
+          <a class="list-group-item" href="../proc/parse_tag_name.html">parse_tag_name</a>
+          
+          <a class="list-group-item" href="../proc/partition.html">partition</a>
+          
+          <a class="list-group-item" href="../proc/penf_init.html">penf_init</a>
+          
+          <a class="list-group-item" href="../proc/penf_print.html">penf_print</a>
+          
+          <a class="list-group-item" href="../proc/read_delimited.html">read_delimited</a>
+          
+          <a class="list-group-item" href="../proc/read_file.html">read_file</a>
+          
+          <a class="list-group-item" href="../proc/read_file%7E2.html">read_file</a>
+          
+          <a class="list-group-item" href="../proc/read_formatted.html">read_formatted</a>
+          
+          <a class="list-group-item" href="../proc/read_line.html">read_line</a>
+          
+          <a class="list-group-item" href="../proc/read_lines.html">read_lines</a>
+          
+          <a class="list-group-item" href="../proc/read_lines%7E2.html">read_lines</a>
+          
+          <a class="list-group-item" href="../proc/read_undelimited.html">read_undelimited</a>
+          
+          <a class="list-group-item" href="../proc/read_undelimited_listdirected.html">read_undelimited_listdirected</a>
+          
+          <a class="list-group-item" href="../proc/read_unformatted.html">read_unformatted</a>
+          
+          <a class="list-group-item" href="../interface/repeat.html">repeat</a>
+          
+          <a class="list-group-item" href="../proc/replace.html">replace</a>
+          
+          <a class="list-group-item" href="../proc/replace_one_occurrence.html">replace_one_occurrence</a>
+          
+          <a class="list-group-item" href="../proc/reverse.html">reverse</a>
+          
+          <a class="list-group-item" href="../proc/sadjustl.html">sadjustl</a>
+          
+          <a class="list-group-item" href="../proc/sadjustl_character.html">sadjustl_character</a>
+          
+          <a class="list-group-item" href="../proc/sadjustr.html">sadjustr</a>
+          
+          <a class="list-group-item" href="../proc/sadjustr_character.html">sadjustr_character</a>
+          
+          <a class="list-group-item" href="../interface/scan.html">scan</a>
+          
+          <a class="list-group-item" href="../proc/scount.html">scount</a>
+          
+          <a class="list-group-item" href="../proc/search.html">search</a>
+          
+          <a class="list-group-item" href="../proc/search%7E2.html">search</a>
+          
+          <a class="list-group-item" href="../proc/sindex_character_string.html">sindex_character_string</a>
+          
+          <a class="list-group-item" href="../proc/sindex_string_character.html">sindex_string_character</a>
+          
+          <a class="list-group-item" href="../proc/sindex_string_string.html">sindex_string_string</a>
+          
+          <a class="list-group-item" href="../proc/slen.html">slen</a>
+          
+          <a class="list-group-item" href="../proc/slen_trim.html">slen_trim</a>
+          
+          <a class="list-group-item" href="../proc/slice.html">slice</a>
+          
+          <a class="list-group-item" href="../proc/snakecase.html">snakecase</a>
+          
+          <a class="list-group-item" href="../proc/split.html">split</a>
+          
+          <a class="list-group-item" href="../proc/srepeat_character_string.html">srepeat_character_string</a>
+          
+          <a class="list-group-item" href="../proc/srepeat_string_string.html">srepeat_string_string</a>
+          
+          <a class="list-group-item" href="../proc/sscan_character_string.html">sscan_character_string</a>
+          
+          <a class="list-group-item" href="../proc/sscan_string_character.html">sscan_string_character</a>
+          
+          <a class="list-group-item" href="../proc/sscan_string_string.html">sscan_string_string</a>
+          
+          <a class="list-group-item" href="../proc/start_with.html">start_with</a>
+          
+          <a class="list-group-item" href="../proc/startcase.html">startcase</a>
+          
+          <a class="list-group-item" href="../interface/str.html">str</a>
+          
+          <a class="list-group-item" href="../proc/str_a_i1p.html">str_a_I1P</a>
+          
+          <a class="list-group-item" href="../proc/str_a_i2p.html">str_a_I2P</a>
+          
+          <a class="list-group-item" href="../proc/str_a_i4p.html">str_a_I4P</a>
+          
+          <a class="list-group-item" href="../proc/str_a_i8p.html">str_a_I8P</a>
+          
+          <a class="list-group-item" href="../proc/str_a_r16p.html">str_a_R16P</a>
+          
+          <a class="list-group-item" href="../proc/str_a_r4p.html">str_a_R4P</a>
+          
+          <a class="list-group-item" href="../proc/str_a_r8p.html">str_a_R8P</a>
+          
+          <a class="list-group-item" href="../proc/str_bol.html">str_bol</a>
+          
+          <a class="list-group-item" href="../proc/str_i1p.html">str_I1P</a>
+          
+          <a class="list-group-item" href="../proc/str_i2p.html">str_I2P</a>
+          
+          <a class="list-group-item" href="../proc/str_i4p.html">str_I4P</a>
+          
+          <a class="list-group-item" href="../proc/str_i8p.html">str_I8P</a>
+          
+          <a class="list-group-item" href="../proc/str_r16p.html">str_R16P</a>
+          
+          <a class="list-group-item" href="../proc/str_r4p.html">str_R4P</a>
+          
+          <a class="list-group-item" href="../proc/str_r8p.html">str_R8P</a>
+          
+          <a class="list-group-item" href="../proc/strf_i1p.html">strf_I1P</a>
+          
+          <a class="list-group-item" href="../proc/strf_i2p.html">strf_I2P</a>
+          
+          <a class="list-group-item" href="../proc/strf_i4p.html">strf_I4P</a>
+          
+          <a class="list-group-item" href="../proc/strf_i8p.html">strf_I8P</a>
+          
+          <a class="list-group-item" href="../proc/strf_r16p.html">strf_R16P</a>
+          
+          <a class="list-group-item" href="../proc/strf_r4p.html">strf_R4P</a>
+          
+          <a class="list-group-item" href="../proc/strf_r8p.html">strf_R8P</a>
+          
+          <a class="list-group-item" href="../proc/strim.html">strim</a>
+          
+          <a class="list-group-item" href="../proc/string_assign_character.html">string_assign_character</a>
+          
+          <a class="list-group-item" href="../proc/string_assign_integer_i1p.html">string_assign_integer_I1P</a>
+          
+          <a class="list-group-item" href="../proc/string_assign_integer_i2p.html">string_assign_integer_I2P</a>
+          
+          <a class="list-group-item" href="../proc/string_assign_integer_i4p.html">string_assign_integer_I4P</a>
+          
+          <a class="list-group-item" href="../proc/string_assign_integer_i8p.html">string_assign_integer_I8P</a>
+          
+          <a class="list-group-item" href="../proc/string_assign_real_r16p.html">string_assign_real_R16P</a>
+          
+          <a class="list-group-item" href="../proc/string_assign_real_r4p.html">string_assign_real_R4P</a>
+          
+          <a class="list-group-item" href="../proc/string_assign_real_r8p.html">string_assign_real_R8P</a>
+          
+          <a class="list-group-item" href="../proc/string_assign_string.html">string_assign_string</a>
+          
+          <a class="list-group-item" href="../proc/string_concat_character.html">string_concat_character</a>
+          
+          <a class="list-group-item" href="../proc/string_concat_character_string.html">string_concat_character_string</a>
+          
+          <a class="list-group-item" href="../proc/string_concat_string.html">string_concat_string</a>
+          
+          <a class="list-group-item" href="../proc/string_concat_string_string.html">string_concat_string_string</a>
+          
+          <a class="list-group-item" href="../proc/string_eq_character.html">string_eq_character</a>
+          
+          <a class="list-group-item" href="../proc/string_eq_string.html">string_eq_string</a>
+          
+          <a class="list-group-item" href="../proc/string_ge_character.html">string_ge_character</a>
+          
+          <a class="list-group-item" href="../proc/string_ge_string.html">string_ge_string</a>
+          
+          <a class="list-group-item" href="../proc/string_gt_character.html">string_gt_character</a>
+          
+          <a class="list-group-item" href="../proc/string_gt_string.html">string_gt_string</a>
+          
+          <a class="list-group-item" href="../proc/string_le_character.html">string_le_character</a>
+          
+          <a class="list-group-item" href="../proc/string_le_string.html">string_le_string</a>
+          
+          <a class="list-group-item" href="../proc/string_lt_character.html">string_lt_character</a>
+          
+          <a class="list-group-item" href="../proc/string_lt_string.html">string_lt_string</a>
+          
+          <a class="list-group-item" href="../proc/string_ne_character.html">string_ne_character</a>
+          
+          <a class="list-group-item" href="../proc/string_ne_string.html">string_ne_string</a>
+          
+          <a class="list-group-item" href="../proc/stringify.html">stringify</a>
+          
+          <a class="list-group-item" href="../proc/stringify%7E2.html">stringify</a>
+          
+          <a class="list-group-item" href="../proc/strip.html">strip</a>
+          
+          <a class="list-group-item" href="../interface/strz.html">strz</a>
+          
+          <a class="list-group-item" href="../proc/strz_i1p.html">strz_I1P</a>
+          
+          <a class="list-group-item" href="../proc/strz_i2p.html">strz_I2P</a>
+          
+          <a class="list-group-item" href="../proc/strz_i4p.html">strz_I4P</a>
+          
+          <a class="list-group-item" href="../proc/strz_i8p.html">strz_I8P</a>
+          
+          <a class="list-group-item" href="../proc/sverify.html">sverify</a>
+          
+          <a class="list-group-item" href="../proc/swapcase.html">swapcase</a>
+          
+          <a class="list-group-item" href="../proc/tag_value.html">tag_value</a>
+          
+          <a class="list-group-item" href="../proc/tag_value%7E2.html">tag_value</a>
+          
+          <a class="list-group-item" href="../proc/to_integer_i1p.html">to_integer_I1P</a>
+          
+          <a class="list-group-item" href="../proc/to_integer_i2p.html">to_integer_I2P</a>
+          
+          <a class="list-group-item" href="../proc/to_integer_i4p.html">to_integer_I4P</a>
+          
+          <a class="list-group-item" href="../proc/to_integer_i8p.html">to_integer_I8P</a>
+          
+          <a class="list-group-item" href="../proc/to_real_r16p.html">to_real_R16P</a>
+          
+          <a class="list-group-item" href="../proc/to_real_r4p.html">to_real_R4P</a>
+          
+          <a class="list-group-item" href="../proc/to_real_r8p.html">to_real_R8P</a>
+          
+          <a class="list-group-item" href="../interface/trim.html">trim</a>
+          
+          <a class="list-group-item" href="../proc/unescape.html">unescape</a>
+          
+          <a class="list-group-item" href="../proc/unique.html">unique</a>
+          
+          <a class="list-group-item" href="../proc/upper.html">upper</a>
+          
+          <a class="list-group-item" href="../proc/write_file.html">write_file</a>
+          
+          <a class="list-group-item" href="../proc/write_file%7E2.html">write_file</a>
+          
+          <a class="list-group-item" href="../proc/write_formatted.html">write_formatted</a>
+          
+          <a class="list-group-item" href="../proc/write_line.html">write_line</a>
+          
+          <a class="list-group-item" href="../proc/write_lines.html">write_lines</a>
+          
+          <a class="list-group-item" href="../proc/write_lines%7E2.html">write_lines</a>
+          
+          <a class="list-group-item" href="../proc/write_unformatted.html">write_unformatted</a>
+          
+        </div>
+    </div>
+  </div>
+  
+</div>
+
+    </div>
+    
+    <div class="col-lg-9" id='text'>
+    <h2>public interface b64_decode_up</h2>
+	 <p>Decode unlimited polymorphic variable from base64.</p>
+<p>This is an interface for decoding both scalar and array.</p>
+<p></p><div class="alert alert-info" role="alert"><h4>Note</h4>Before start to decode anything the library must be initialized. The procedure <code>b64_init</code> must be called at first. The
+ global variable <code>is_b64_initialized</code> can be used to check the status of the initialization.</div>
+<h3 id="usage"><a class="toclink" href="#usage">Usage</a></h3>
+<p>For a practical example see the <code>autotest</code> procedure.</p>
+<h4 id="scalar-decoding"><a class="toclink" href="#scalar-decoding">Scalar decoding</a></h4>
+<div class="codehilite"><pre><span></span><span class="kt">real</span><span class="p">(</span><span class="n">R8P</span><span class="p">)</span><span class="kd">::</span> <span class="n">decoded</span> <span class="c">! scalar to be decoded</span>
+<span class="p">...</span>
+<span class="k">call </span><span class="n">b64_decode_up</span><span class="p">(</span><span class="n">code</span><span class="o">=</span><span class="s1">&#39;AAAAAAAA8D8=&#39;</span><span class="p">,</span><span class="n">up</span><span class="o">=</span><span class="n">decoded</span><span class="p">)</span>
+</pre></div>
+
+
+<h4 id="array-decoding"><a class="toclink" href="#array-decoding">Array decoding</a></h4>
+<div class="codehilite"><pre><span></span><span class="kt">integer</span><span class="p">(</span><span class="n">I8P</span><span class="p">)</span><span class="kd">::</span> <span class="n">decoded</span><span class="p">(</span><span class="mi">1</span><span class="p">:</span><span class="mi">4</span><span class="p">)</span> <span class="c">! array to be decoded</span>
+<span class="p">...</span>
+<span class="k">call </span><span class="n">b64_decode_up</span><span class="p">(</span><span class="n">code</span><span class="o">=</span><span class="s1">&#39;FwAAAAAAAABEAQAAAAAAABBwhAEAAAAAAgAAAAAAAAA=&#39;</span><span class="p">,</span><span class="n">up</span><span class="o">=</span><span class="n">decoded</span><span class="p">)</span>
+</pre></div>
+
+
+<p></p><div class="alert alert-info" role="alert"><h4>Note</h4>If you want to decode heterogenous data (e.g. integer and real numbers), you must use the auxiliary <code>pack_data</code>
+ procedure.</div>
+<p></p><div class="alert alert-warning" role="alert"><h4>Warning</h4>The decoding of array of strings is admitted only if each string of the array has the same length.</div>
+     
+     <h3>Calls</h3>
+     
+                <div class="depgraph"><?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.26.3 (20100126.1600)
+ -->
+<!-- Title: interface~~b64_decode_up~~CallsGraph Pages: 1 -->
+<svg id="interfaceb64_decode_upCallsGraph" width="614pt" height="430pt"
+ viewBox="0.00 0.00 614.00 430.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="interface~~b64_decode_up~~CallsGraph" class="graph" transform="scale(1 1) rotate(0) translate(4 426)">
+<title>interface~~b64_decode_up~~CallsGraph</title>
+<polygon fill="white" stroke="white" points="-4,5 -4,-426 611,-426 611,5 -4,5"/>
+<!-- interface~b64_decode_up -->
+<g id="node1" class="node"><title>interface~b64_decode_up</title>
+<polygon fill="none" stroke="black" points="90,-158 4.26326e-14,-158 0,-132 90,-132 90,-158"/>
+<text text-anchor="middle" x="45" y="-142.55" font-family="Helvetica,sans-Serif" font-size="10.50">b64_decode_up</text>
+</g>
+<!-- interface~b64_decode_up&#45;&gt;interface~b64_decode_up -->
+<g id="edge46" class="edge"><title>interface~b64_decode_up&#45;&gt;interface~b64_decode_up</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M22.667,-158.06C15.8994,-167.1 23.3438,-176 45,-176 58.1968,-176 66.1161,-172.695 68.7581,-168.067"/>
+<polygon fill="#000000" stroke="#000000" points="72.2079,-167.467 67.333,-158.06 65.2779,-168.454 72.2079,-167.467"/>
+</g>
+<!-- proc~b64_decode_up_a -->
+<g id="node2" class="node"><title>proc~b64_decode_up_a</title>
+<a xlink:href="../proc/b64_decode_up_a.html" xlink:title="b64_decode_up_a">
+<polygon fill="#d9534f" stroke="#d9534f" points="228,-158 126,-158 126,-132 228,-132 228,-158"/>
+<text text-anchor="middle" x="177" y="-142.55" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">b64_decode_up_a</text>
+</a>
+</g>
+<!-- interface~b64_decode_up&#45;&gt;proc~b64_decode_up_a -->
+<g id="edge48" class="edge"><title>interface~b64_decode_up&#45;&gt;proc~b64_decode_up_a</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M90.0577,-145C98.3246,-145 107.08,-145 115.728,-145"/>
+<polygon fill="#000000" stroke="#000000" points="115.793,-148.5 125.793,-145 115.793,-141.5 115.793,-148.5"/>
+</g>
+<!-- proc~b64_decode_r4_a -->
+<g id="node3" class="node"><title>proc~b64_decode_r4_a</title>
+<a xlink:href="../proc/b64_decode_r4_a.html" xlink:title="b64_decode_R4_a">
+<polygon fill="#d9534f" stroke="#d9534f" points="373,-246 271,-246 271,-220 373,-220 373,-246"/>
+<text text-anchor="middle" x="322" y="-230.55" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">b64_decode_R4_a</text>
+</a>
+</g>
+<!-- proc~b64_decode_up_a&#45;&gt;proc~b64_decode_r4_a -->
+<g id="edge32" class="edge"><title>proc~b64_decode_up_a&#45;&gt;proc~b64_decode_r4_a</title>
+<path fill="none" stroke="#000000" d="M191.49,-158.083C208.061,-172.528 236.469,-195.753 264,-211 267.06,-212.695 270.278,-214.314 273.564,-215.849"/>
+<polygon fill="#000000" stroke="#000000" points="272.365,-219.145 282.929,-219.946 275.171,-212.732 272.365,-219.145"/>
+</g>
+<!-- proc~b64_decode_string_a -->
+<g id="node4" class="node"><title>proc~b64_decode_string_a</title>
+<a xlink:href="../proc/b64_decode_string_a.html" xlink:title="b64_decode_string_a">
+<polygon fill="#d9534f" stroke="#d9534f" points="380,-290 264,-290 264,-264 380,-264 380,-290"/>
+<text text-anchor="middle" x="322" y="-274.55" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">b64_decode_string_a</text>
+</a>
+</g>
+<!-- proc~b64_decode_up_a&#45;&gt;proc~b64_decode_string_a -->
+<g id="edge34" class="edge"><title>proc~b64_decode_up_a&#45;&gt;proc~b64_decode_string_a</title>
+<path fill="none" stroke="#000000" d="M184.129,-158.073C197.146,-180.812 226.873,-227.811 264,-255 266.053,-256.503 268.221,-257.916 270.465,-259.243"/>
+<polygon fill="#000000" stroke="#000000" points="268.936,-262.394 279.417,-263.942 272.189,-256.195 268.936,-262.394"/>
+</g>
+<!-- proc~b64_decode_i2_a -->
+<g id="node5" class="node"><title>proc~b64_decode_i2_a</title>
+<a xlink:href="../proc/b64_decode_i2_a.html" xlink:title="b64_decode_I2_a">
+<polygon fill="#d9534f" stroke="#d9534f" points="371,-202 273,-202 273,-176 371,-176 371,-202"/>
+<text text-anchor="middle" x="322" y="-186.55" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">b64_decode_I2_a</text>
+</a>
+</g>
+<!-- proc~b64_decode_up_a&#45;&gt;proc~b64_decode_i2_a -->
+<g id="edge36" class="edge"><title>proc~b64_decode_up_a&#45;&gt;proc~b64_decode_i2_a</title>
+<path fill="none" stroke="#000000" d="M220.112,-158.082C235.529,-162.76 253.079,-168.086 269.219,-172.984"/>
+<polygon fill="#000000" stroke="#000000" points="268.468,-176.413 279.054,-175.968 270.501,-169.715 268.468,-176.413"/>
+</g>
+<!-- proc~b64_decode_i1_a -->
+<g id="node6" class="node"><title>proc~b64_decode_i1_a</title>
+<a xlink:href="../proc/b64_decode_i1_a.html" xlink:title="b64_decode_I1_a">
+<polygon fill="#d9534f" stroke="#d9534f" points="371,-158 273,-158 273,-132 371,-132 371,-158"/>
+<text text-anchor="middle" x="322" y="-142.55" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">b64_decode_I1_a</text>
+</a>
+</g>
+<!-- proc~b64_decode_up_a&#45;&gt;proc~b64_decode_i1_a -->
+<g id="edge38" class="edge"><title>proc~b64_decode_up_a&#45;&gt;proc~b64_decode_i1_a</title>
+<path fill="none" stroke="#000000" d="M228.122,-145C239.109,-145 250.815,-145 262.101,-145"/>
+<polygon fill="#000000" stroke="#000000" points="262.315,-148.5 272.315,-145 262.315,-141.5 262.315,-148.5"/>
+</g>
+<!-- proc~b64_decode_r8_a -->
+<g id="node7" class="node"><title>proc~b64_decode_r8_a</title>
+<a xlink:href="../proc/b64_decode_r8_a.html" xlink:title="b64_decode_R8_a">
+<polygon fill="#d9534f" stroke="#d9534f" points="373,-114 271,-114 271,-88 373,-88 373,-114"/>
+<text text-anchor="middle" x="322" y="-98.55" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">b64_decode_R8_a</text>
+</a>
+</g>
+<!-- proc~b64_decode_up_a&#45;&gt;proc~b64_decode_r8_a -->
+<g id="edge40" class="edge"><title>proc~b64_decode_up_a&#45;&gt;proc~b64_decode_r8_a</title>
+<path fill="none" stroke="#000000" d="M220.112,-131.918C235.529,-127.24 253.079,-121.914 269.219,-117.016"/>
+<polygon fill="#000000" stroke="#000000" points="270.501,-120.285 279.054,-114.032 268.468,-113.587 270.501,-120.285"/>
+</g>
+<!-- proc~b64_decode_i8_a -->
+<g id="node8" class="node"><title>proc~b64_decode_i8_a</title>
+<a xlink:href="../proc/b64_decode_i8_a.html" xlink:title="b64_decode_I8_a">
+<polygon fill="#d9534f" stroke="#d9534f" points="371,-70 273,-70 273,-44 371,-44 371,-70"/>
+<text text-anchor="middle" x="322" y="-54.55" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">b64_decode_I8_a</text>
+</a>
+</g>
+<!-- proc~b64_decode_up_a&#45;&gt;proc~b64_decode_i8_a -->
+<g id="edge42" class="edge"><title>proc~b64_decode_up_a&#45;&gt;proc~b64_decode_i8_a</title>
+<path fill="none" stroke="#000000" d="M191.49,-131.917C208.061,-117.472 236.469,-94.2473 264,-79 267.06,-77.3051 270.278,-75.6861 273.564,-74.151"/>
+<polygon fill="#000000" stroke="#000000" points="275.171,-77.2684 282.929,-70.0538 272.365,-70.8552 275.171,-77.2684"/>
+</g>
+<!-- proc~b64_decode_i4_a -->
+<g id="node9" class="node"><title>proc~b64_decode_i4_a</title>
+<a xlink:href="../proc/b64_decode_i4_a.html" xlink:title="b64_decode_I4_a">
+<polygon fill="#d9534f" stroke="#d9534f" points="371,-26 273,-26 273,-1.24345e-14 371,-3.55271e-15 371,-26"/>
+<text text-anchor="middle" x="322" y="-10.55" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">b64_decode_I4_a</text>
+</a>
+</g>
+<!-- proc~b64_decode_up_a&#45;&gt;proc~b64_decode_i4_a -->
+<g id="edge44" class="edge"><title>proc~b64_decode_up_a&#45;&gt;proc~b64_decode_i4_a</title>
+<path fill="none" stroke="#000000" d="M184.129,-131.927C197.146,-109.188 226.873,-62.1889 264,-35 266.053,-33.4968 268.221,-32.0836 270.465,-30.7567"/>
+<polygon fill="#000000" stroke="#000000" points="272.189,-33.8046 279.417,-26.0584 268.936,-27.6063 272.189,-33.8046"/>
+</g>
+<!-- proc~decode_bits -->
+<g id="node10" class="node"><title>proc~decode_bits</title>
+<a xlink:href="../proc/decode_bits.html" xlink:title="decode_bits">
+<polygon fill="#d9534f" stroke="#d9534f" points="486,-158 416,-158 416,-132 486,-132 486,-158"/>
+<text text-anchor="middle" x="451" y="-142.55" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">decode_bits</text>
+</a>
+</g>
+<!-- proc~b64_decode_r4_a&#45;&gt;proc~decode_bits -->
+<g id="edge2" class="edge"><title>proc~b64_decode_r4_a&#45;&gt;proc~decode_bits</title>
+<path fill="none" stroke="#000000" d="M362.588,-219.922C368.612,-217.328 374.602,-214.352 380,-211 400.145,-198.489 419.624,-179.756 433.067,-165.44"/>
+<polygon fill="#000000" stroke="#000000" points="435.702,-167.745 439.88,-158.008 430.542,-163.014 435.702,-167.745"/>
+</g>
+<!-- proc~b64_decode_string_a&#45;&gt;proc~decode_bits -->
+<g id="edge20" class="edge"><title>proc~b64_decode_string_a&#45;&gt;proc~decode_bits</title>
+<path fill="none" stroke="#000000" d="M365.796,-263.916C370.859,-261.405 375.73,-258.454 380,-255 409.357,-231.256 430.51,-192.011 441.745,-167.379"/>
+<polygon fill="#000000" stroke="#000000" points="445,-168.672 445.82,-158.109 438.592,-165.855 445,-168.672"/>
+</g>
+<!-- interface~byte_size -->
+<g id="node12" class="node"><title>interface~byte_size</title>
+<a xlink:href="../interface/byte_size.html" xlink:title="byte_size">
+<polygon fill="#a7506f" stroke="#a7506f" points="480,-290 422,-290 422,-264 480,-264 480,-290"/>
+<text text-anchor="middle" x="451" y="-274.55" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">byte_size</text>
+</a>
+</g>
+<!-- proc~b64_decode_string_a&#45;&gt;interface~byte_size -->
+<g id="edge18" class="edge"><title>proc~b64_decode_string_a&#45;&gt;interface~byte_size</title>
+<path fill="none" stroke="#000000" d="M380.085,-277C390.806,-277 401.765,-277 411.763,-277"/>
+<polygon fill="#000000" stroke="#000000" points="411.783,-280.5 421.783,-277 411.783,-273.5 411.783,-280.5"/>
+</g>
+<!-- proc~b64_decode_i2_a&#45;&gt;proc~decode_bits -->
+<g id="edge22" class="edge"><title>proc~b64_decode_i2_a&#45;&gt;proc~decode_bits</title>
+<path fill="none" stroke="#000000" d="M360.355,-175.918C374.733,-171.014 391.197,-165.398 406.115,-160.31"/>
+<polygon fill="#000000" stroke="#000000" points="407.322,-163.596 415.657,-157.055 405.062,-156.971 407.322,-163.596"/>
+</g>
+<!-- proc~b64_decode_i1_a&#45;&gt;proc~decode_bits -->
+<g id="edge24" class="edge"><title>proc~b64_decode_i1_a&#45;&gt;proc~decode_bits</title>
+<path fill="none" stroke="#000000" d="M371.506,-145C382.705,-145 394.544,-145 405.565,-145"/>
+<polygon fill="#000000" stroke="#000000" points="405.835,-148.5 415.835,-145 405.835,-141.5 405.835,-148.5"/>
+</g>
+<!-- proc~b64_decode_r8_a&#45;&gt;proc~decode_bits -->
+<g id="edge26" class="edge"><title>proc~b64_decode_r8_a&#45;&gt;proc~decode_bits</title>
+<path fill="none" stroke="#000000" d="M360.355,-114.082C374.733,-118.986 391.197,-124.602 406.115,-129.69"/>
+<polygon fill="#000000" stroke="#000000" points="405.062,-133.029 415.657,-132.945 407.322,-126.404 405.062,-133.029"/>
+</g>
+<!-- proc~b64_decode_i8_a&#45;&gt;proc~decode_bits -->
+<g id="edge28" class="edge"><title>proc~b64_decode_i8_a&#45;&gt;proc~decode_bits</title>
+<path fill="none" stroke="#000000" d="M362.588,-70.0778C368.612,-72.6723 374.602,-75.6479 380,-79 400.145,-91.5106 419.624,-110.244 433.067,-124.56"/>
+<polygon fill="#000000" stroke="#000000" points="430.542,-126.986 439.88,-131.992 435.702,-122.255 430.542,-126.986"/>
+</g>
+<!-- proc~b64_decode_i4_a&#45;&gt;proc~decode_bits -->
+<g id="edge30" class="edge"><title>proc~b64_decode_i4_a&#45;&gt;proc~decode_bits</title>
+<path fill="none" stroke="#000000" d="M365.796,-26.0839C370.859,-28.5951 375.73,-31.546 380,-35 409.357,-58.7439 430.51,-97.9889 441.745,-122.621"/>
+<polygon fill="#000000" stroke="#000000" points="438.592,-124.145 445.82,-131.891 445,-121.328 438.592,-124.145"/>
+</g>
+<!-- proc~byte_size_i1p -->
+<g id="node13" class="node"><title>proc~byte_size_i1p</title>
+<a xlink:href="../proc/byte_size_i1p.html" xlink:title="byte_size_I1P">
+<polygon fill="#d94e8f" stroke="#d94e8f" points="603,-422 525,-422 525,-396 603,-396 603,-422"/>
+<text text-anchor="middle" x="564" y="-406.55" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">byte_size_I1P</text>
+</a>
+</g>
+<!-- interface~byte_size&#45;&gt;proc~byte_size_i1p -->
+<g id="edge4" class="edge"><title>interface~byte_size&#45;&gt;proc~byte_size_i1p</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M456.688,-290.061C466.946,-312.368 490.446,-358.184 522,-387 523.254,-388.145 524.578,-389.248 525.953,-390.309"/>
+<polygon fill="#000000" stroke="#000000" points="524.008,-393.218 534.253,-395.916 527.926,-387.418 524.008,-393.218"/>
+</g>
+<!-- proc~byte_size_r8p -->
+<g id="node14" class="node"><title>proc~byte_size_r8p</title>
+<a xlink:href="../proc/byte_size_r8p.html" xlink:title="byte_size_R8P">
+<polygon fill="#d94e8f" stroke="#d94e8f" points="606,-378 522,-378 522,-352 606,-352 606,-378"/>
+<text text-anchor="middle" x="564" y="-362.55" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">byte_size_R8P</text>
+</a>
+</g>
+<!-- interface~byte_size&#45;&gt;proc~byte_size_r8p -->
+<g id="edge6" class="edge"><title>interface~byte_size&#45;&gt;proc~byte_size_r8p</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M462.943,-290.01C476.389,-304.18 499.331,-326.962 522,-343 523.802,-344.275 525.687,-345.524 527.618,-346.738"/>
+<polygon fill="#000000" stroke="#000000" points="525.869,-349.77 536.265,-351.818 529.415,-343.735 525.869,-349.77"/>
+</g>
+<!-- proc~byte_size_r4p -->
+<g id="node15" class="node"><title>proc~byte_size_r4p</title>
+<a xlink:href="../proc/byte_size_r4p.html" xlink:title="byte_size_R4P">
+<polygon fill="#d94e8f" stroke="#d94e8f" points="606,-334 522,-334 522,-308 606,-308 606,-334"/>
+<text text-anchor="middle" x="564" y="-318.55" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">byte_size_R4P</text>
+</a>
+</g>
+<!-- interface~byte_size&#45;&gt;proc~byte_size_r4p -->
+<g id="edge8" class="edge"><title>interface~byte_size&#45;&gt;proc~byte_size_r4p</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M480.1,-288.331C492.519,-293.167 507.267,-298.909 520.909,-304.221"/>
+<polygon fill="#000000" stroke="#000000" points="520.009,-307.627 530.598,-307.994 522.549,-301.104 520.009,-307.627"/>
+</g>
+<!-- proc~byte_size_i2p -->
+<g id="node16" class="node"><title>proc~byte_size_i2p</title>
+<a xlink:href="../proc/byte_size_i2p.html" xlink:title="byte_size_I2P">
+<polygon fill="#d94e8f" stroke="#d94e8f" points="603,-290 525,-290 525,-264 603,-264 603,-290"/>
+<text text-anchor="middle" x="564" y="-274.55" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">byte_size_I2P</text>
+</a>
+</g>
+<!-- interface~byte_size&#45;&gt;proc~byte_size_i2p -->
+<g id="edge10" class="edge"><title>interface~byte_size&#45;&gt;proc~byte_size_i2p</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M480.1,-277C490.519,-277 502.578,-277 514.248,-277"/>
+<polygon fill="#000000" stroke="#000000" points="514.352,-280.5 524.352,-277 514.352,-273.5 514.352,-280.5"/>
+</g>
+<!-- proc~byte_size_i8p -->
+<g id="node17" class="node"><title>proc~byte_size_i8p</title>
+<a xlink:href="../proc/byte_size_i8p.html" xlink:title="byte_size_I8P">
+<polygon fill="#d94e8f" stroke="#d94e8f" points="603,-246 525,-246 525,-220 603,-220 603,-246"/>
+<text text-anchor="middle" x="564" y="-230.55" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">byte_size_I8P</text>
+</a>
+</g>
+<!-- interface~byte_size&#45;&gt;proc~byte_size_i8p -->
+<g id="edge12" class="edge"><title>interface~byte_size&#45;&gt;proc~byte_size_i8p</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M480.1,-265.669C492.519,-260.833 507.267,-255.091 520.909,-249.779"/>
+<polygon fill="#000000" stroke="#000000" points="522.549,-252.896 530.598,-246.006 520.009,-246.373 522.549,-252.896"/>
+</g>
+<!-- proc~byte_size_i4p -->
+<g id="node18" class="node"><title>proc~byte_size_i4p</title>
+<a xlink:href="../proc/byte_size_i4p.html" xlink:title="byte_size_I4P">
+<polygon fill="#d94e8f" stroke="#d94e8f" points="603,-202 525,-202 525,-176 603,-176 603,-202"/>
+<text text-anchor="middle" x="564" y="-186.55" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">byte_size_I4P</text>
+</a>
+</g>
+<!-- interface~byte_size&#45;&gt;proc~byte_size_i4p -->
+<g id="edge14" class="edge"><title>interface~byte_size&#45;&gt;proc~byte_size_i4p</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M462.943,-263.99C476.389,-249.82 499.331,-227.038 522,-211 523.802,-209.725 525.687,-208.476 527.618,-207.262"/>
+<polygon fill="#000000" stroke="#000000" points="529.415,-210.265 536.265,-202.182 525.869,-204.23 529.415,-210.265"/>
+</g>
+<!-- proc~byte_size_chr -->
+<g id="node19" class="node"><title>proc~byte_size_chr</title>
+<a xlink:href="../proc/byte_size_chr.html" xlink:title="byte_size_chr">
+<polygon fill="#d94e8f" stroke="#d94e8f" points="603,-158 525,-158 525,-132 603,-132 603,-158"/>
+<text text-anchor="middle" x="564" y="-142.55" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">byte_size_chr</text>
+</a>
+</g>
+<!-- interface~byte_size&#45;&gt;proc~byte_size_chr -->
+<g id="edge16" class="edge"><title>interface~byte_size&#45;&gt;proc~byte_size_chr</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M456.688,-263.939C466.946,-241.632 490.446,-195.816 522,-167 523.254,-165.855 524.578,-164.752 525.953,-163.691"/>
+<polygon fill="#000000" stroke="#000000" points="527.926,-166.582 534.253,-158.084 524.008,-160.782 527.926,-166.582"/>
+</g>
+</g>
+</svg>
+</div>
+                <div><a type="button" class="graph-help" data-toggle="modal" href="#graph-help-text">Help</a></div>
+                <div class="modal fade" id="graph-help-text" tabindex="-1" role="dialog">
+                  <div class="modal-dialog modal-lg" role="document">
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title" id="-graph-help-label">Graph Key</h4>
+                      </div>
+                      <div class="modal-body">
+                        
+Nodes of different colours represent the following:
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.26.3 (20100126.1600)
+ -->
+<!-- Title: Graph Key Pages: 1 -->
+<svg width="641pt" height="28pt"
+ viewBox="0.00 0.00 641.00 27.80" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="graph1" class="graph" transform="scale(0.817602 0.817602) rotate(0) translate(4 30)">
+<title>Graph Key</title>
+<polygon fill="white" stroke="white" points="-4,5 -4,-30 781,-30 781,5 -4,5"/>
+<!-- Module -->
+<g id="node1" class="node"><title>Module</title>
+<polygon fill="#337ab7" stroke="#337ab7" points="54,-26 2.13163e-14,-26 0,-1.24345e-14 54,-3.55271e-15 54,-26"/>
+<text text-anchor="middle" x="27" y="-10.55" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Module</text>
+</g>
+<!-- Submodule -->
+<g id="node2" class="node"><title>Submodule</title>
+<polygon fill="#5bc0de" stroke="#5bc0de" points="138,-26 72,-26 72,-1.24345e-14 138,-3.55271e-15 138,-26"/>
+<text text-anchor="middle" x="105" y="-10.55" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Submodule</text>
+</g>
+<!-- Type -->
+<g id="node3" class="node"><title>Type</title>
+<polygon fill="#5cb85c" stroke="#5cb85c" points="210,-26 156,-26 156,-1.24345e-14 210,-3.55271e-15 210,-26"/>
+<text text-anchor="middle" x="183" y="-10.55" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Type</text>
+</g>
+<!-- Subroutine -->
+<g id="node4" class="node"><title>Subroutine</title>
+<polygon fill="#d9534f" stroke="#d9534f" points="292,-26 228,-26 228,-1.24345e-14 292,-3.55271e-15 292,-26"/>
+<text text-anchor="middle" x="260" y="-10.55" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Subroutine</text>
+</g>
+<!-- Function -->
+<g id="node5" class="node"><title>Function</title>
+<polygon fill="#d94e8f" stroke="#d94e8f" points="364,-26 310,-26 310,-1.24345e-14 364,-3.55271e-15 364,-26"/>
+<text text-anchor="middle" x="337" y="-10.55" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Function</text>
+</g>
+<!-- Interface -->
+<g id="node6" class="node"><title>Interface</title>
+<polygon fill="#a7506f" stroke="#a7506f" points="436,-26 382,-26 382,-1.24345e-14 436,-3.55271e-15 436,-26"/>
+<text text-anchor="middle" x="409" y="-10.55" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Interface</text>
+</g>
+<!-- Unknown Procedure Type -->
+<g id="node7" class="node"><title>Unknown Procedure Type</title>
+<polygon fill="#777777" stroke="#777777" points="590,-26 454,-26 454,-1.24345e-14 590,-3.55271e-15 590,-26"/>
+<text text-anchor="middle" x="522" y="-10.55" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Unknown Procedure Type</text>
+</g>
+<!-- Program -->
+<g id="node8" class="node"><title>Program</title>
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="662,-26 608,-26 608,-1.24345e-14 662,-3.55271e-15 662,-26"/>
+<text text-anchor="middle" x="635" y="-10.55" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Program</text>
+</g>
+<!-- This Page&#39;s Entity -->
+<g id="node9" class="node"><title>This Page&#39;s Entity</title>
+<polygon fill="none" stroke="black" points="776,-26 680,-26 680,-1.24345e-14 776,-3.55271e-15 776,-26"/>
+<text text-anchor="middle" x="728" y="-10.55" font-family="Helvetica,sans-Serif" font-size="10.50">This Page&#39;s Entity</text>
+</g>
+</g>
+</svg>
+
+Where possible, edges connecting nodes are given different colours to make them
+easier to distinguish in large graphs.
+<h5>Module Graph</h5>
+<p>Solid arrows point from a parent (sub)module to the submodule which is
+descended from it. Dashed arrows point from a module being used to the
+module using it.</p>
+<h5>Type Graph</h5>
+<p>Solid arrows point from one derived type to another which extends
+(inherits from) it. Dashed arrows point from a derived type to another
+type containing it as a components, with a label listing the name(s) of
+said component(s).</p>
+<h5>Call Graph</h5>
+<p>Solid arrows point from a procedure to one which it calls. Dashed 
+arrows point from an interface to procedures which implement that interface.
+This could include the module procedures in a generic interface or the
+implementation in a submodule of an interface in a parent module.</p>
+
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                
+     
+     
+    <br>
+	
+	
+
+	
+
+	
+	 <h2>Module Procedures</h2>
+	 
+    
+  <div class="panel panel-default">
+  <div class="panel-heading codesum"><span class="anchor" id="interface-b64_decode_up"></span><h3>
+public interface <a href='../interface/b64_decode_up.html'>b64_decode_up</a>()
+    
+    
+    
+</h3></div>
+  <div class="panel-body">
+       
+    
+    <h4>Arguments</h4>
+    
+      <em>None</em>
+    
+    
+    
+    <h4>Description</h4>
+       
+       
+
+
+       
+       <p>Decode unlimited polymorphic variable from base64.</p>
+        
+
+  </div>
+  </div>
+
+ 	 
+    
+  <div class="panel panel-default">
+  <div class="panel-heading codesum"><span class="anchor" id="proc-b64_decode_up_a"></span><h3>
+private subroutine <a href='../proc/b64_decode_up_a.html'>b64_decode_up_a</a>(code, up)
+    
+    
+    
+</h3></div>
+  <div class="panel-body">
+       
+    
+    <h4>Arguments</h4>
+    
+      
+      
+<table class="table table-striped varlist">
+<thead><tr><th>Type</th>
+<th>Intent</th><th>Optional</th>
+<th>Attributes</th><th></th><th>Name</th><th></th></thead>
+
+
+
+<tbody>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>character(len=*),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>code</strong></td><td><p>Encoded array.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>class(*),</td>
+  <td>intent(out)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>up</strong>(1:)</td><td><p>Unlimited polymorphic variable to be decoded.</p></td>
+  
+</tr>
+
+</tbody>
+</table>
+
+      
+    
+    
+    
+    <h4>Description</h4>
+       
+       
+
+
+       
+       <p>Decode an unlimited polymorphic array from base64.</p>
+        
+
+  </div>
+  </div>
+
+ 	 
+  	 
+
+ </div>
+</div>
+
+    <hr>
+    <footer>
+      <div class="row">
+        <div class="col-md-4">&copy; 2016 </div>
+        <div class="col-md-4"><span class="text-center"> FoXy was developed by Fortran-FOSS-Programmers Group</span></div>
+        <div class="col-md-4">
+          <span class="pull-right">
+            Documentation generated by 
+            <a href="https://github.com/cmacmackin/ford">FORD</a>
+            
+          </span>
+        </div>
+      </div>
+      <br>
+    </footer>
+    </div> <!-- /container -->
+
+
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+<!--
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+-->
+    <script src="../js/bootstrap.min.js"></script>
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+    <script src="../js/ie10-viewport-bug-workaround.js"></script>
+
+    <!-- MathJax JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        TeX: { extensions: ['AMSmath.js','AMSsymbols.js','noErrors.js','noUndefined.js'], equationNumbers: { autoNumber: 'AMS' } },
+        jax: ['input/TeX','input/MathML','output/HTML-CSS'],
+        extensions: ['tex2jax.js','mml2jax.js','MathMenu.js','MathZoom.js'],
+        'HTML-CSS': { 
+           styles: { '.MathJax_Display, .MathJax .mo, .MathJax .mi, .MathJax .mn': {color: '#000000 ! important'} }
+        }
+      });
+    </script>
+    <script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+  </body>
+</html>
