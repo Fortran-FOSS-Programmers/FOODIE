@@ -25,8 +25,8 @@ type, public:: xml_file
     procedure :: parse     !< Parse xml data from string or file.
     procedure :: tag_value !< Return tag value of tag named *tag_name*.
     procedure :: stringify !< Convert the whole file data into a string.
+    procedure :: add_tag   !< Add tag to self%tag array.
     ! private methods
-    procedure, private :: add_tag           !< Add tag to self%tag array.
     procedure, private :: parse_from_string !< Parse xml data from string.
 endtype xml_file
 !-----------------------------------------------------------------------------------------------------------------------------------
@@ -135,7 +135,6 @@ contains
   !---------------------------------------------------------------------------------------------------------------------------------
   endfunction stringify
 
-  ! private methods
   elemental subroutine add_tag(self, tag)
   !---------------------------------------------------------------------------------------------------------------------------------
   !< Add tag to self%tag array.
@@ -161,6 +160,7 @@ contains
   !---------------------------------------------------------------------------------------------------------------------------------
   endsubroutine add_tag
 
+  ! private methods
   subroutine parse_from_string(self, source_string)
   !---------------------------------------------------------------------------------------------------------------------------------
   !< Parse xml data from string.
