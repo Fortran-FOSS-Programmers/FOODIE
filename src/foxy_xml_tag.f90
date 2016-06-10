@@ -30,14 +30,15 @@ type :: xml_tag
   !< by '="' without any additional white spaces and its value must be termined by '"'. Each attribute is separated by a white
   !< space. If the string member does not contain the tag_name no attributes are parsed.
   private
-  character(len=:),           allocatable :: tag_name    !< Tag name.
-  character(len=:),           allocatable :: tag_val     !< Tag value.
-  type(string), allocatable :: att_name(:) !< Attributes names.
-  type(string), allocatable :: att_val(:)  !< Attributes values.
+  character(len=:), allocatable :: tag_name    !< Tag name.
+  character(len=:), allocatable :: tag_val     !< Tag value.
+  type(string),     allocatable :: att_name(:) !< Attributes names.
+  type(string),     allocatable :: att_val(:)  !< Attributes values.
   contains
     ! public methods
     procedure :: free                        !< Free dynamic memory.
     final     :: finalize                    !< Free dynamic memory when finalizing.
+    procedure :: set                         !< Set tag data.
     procedure :: parse                       !< Parse the tag contained into a source string.
     procedure :: is_parsed                   !< Check is tag is correctly parsed, i.e. its *tag_name* is allocated.
     procedure :: tag_value                   !< Return tag value of is sefl (or its nested tags) is named *tag_name*.
@@ -90,6 +91,25 @@ contains
   return
   !---------------------------------------------------------------------------------------------------------------------------------
   endsubroutine finalize
+
+  pure subroutine set(self, name, attribute, attributes, value)
+  !---------------------------------------------------------------------------------------------------------------------------------
+  !< Set tag data.
+  !---------------------------------------------------------------------------------------------------------------------------------
+  class(xml_tag), intent(inout)        :: self              !< XML tag.
+  character(*),   intent(in), optional :: name              !< Tag name.
+  character(*),   intent(in), optional :: attribute(1:)     !< Attribute name/value pair [1:2].
+  character(*),   intent(in), optional :: attributes(1:,1:) !< Attributes list of name/value pairs [1:2,1:].
+  character(*),   intent(in), optional :: value             !< Tag value.
+  !---------------------------------------------------------------------------------------------------------------------------------
+
+  !---------------------------------------------------------------------------------------------------------------------------------
+  if (present(name)) self%tag_name = name
+  ! Attributes setter to be implemented
+  if (present(value)) self%tag_val = value
+  return
+  !---------------------------------------------------------------------------------------------------------------------------------
+  endsubroutine set
 
   elemental subroutine parse(self, source, tstart, tend)
   !---------------------------------------------------------------------------------------------------------------------------------

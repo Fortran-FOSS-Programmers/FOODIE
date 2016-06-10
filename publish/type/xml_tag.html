@@ -178,6 +178,8 @@
           
           <a class="list-group-item" href="../type/xml_tag.html#boundprocedure-free%7E2">free</a>
           
+          <a class="list-group-item" href="../type/xml_tag.html#boundprocedure-set">set</a>
+          
           <a class="list-group-item" href="../type/xml_tag.html#boundprocedure-parse%7E2">parse</a>
           
           <a class="list-group-item" href="../type/xml_tag.html#boundprocedure-is_parsed">is_parsed</a>
@@ -740,6 +742,143 @@ private elemental subroutine <a href='../proc/free%7E2.html'>free</a>(self)
 
        
        <p>Free dynamic memory.</p>
+        
+
+      
+      </li>
+    
+  </ul>
+</div>
+
+    
+	   
+<div class="panel panel-default">
+  <div class="panel-heading codesum"><span class="anchor" id="boundprocedure-set"></span><h3>procedure, public :: <strong>set</strong>  
+    
+  </h3></div>
+  
+  <div class="panel-body">
+    
+
+
+    <p>Set tag data.</p>
+  </div>
+  
+  <ul class="list-group">
+    
+      <li class="list-group-item">
+      
+         
+    
+    <h3>
+private pure subroutine <a href='../proc/set.html'>set</a>(self, name, attribute, attributes, value)
+    
+    
+    
+</h3>
+    
+    <h4>Arguments</h4>
+    
+      
+      
+<table class="table table-striped varlist">
+<thead><tr><th>Type</th>
+<th>Intent</th><th>Optional</th>
+<th>Attributes</th><th></th><th>Name</th><th></th></thead>
+
+
+
+<tbody>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>class(<a href='../type/xml_tag.html'>xml_tag</a>),</td>
+  <td>intent(inout)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>self</strong></td><td><p>XML tag.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>character(len=*),</td>
+  <td>intent(in),</td>
+  <td>optional</td>
+  
+  <td></td><td>::</td>
+  <td><strong>name</strong></td><td><p>Tag name.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>character(len=*),</td>
+  <td>intent(in),</td>
+  <td>optional</td>
+  
+  <td></td><td>::</td>
+  <td><strong>attribute</strong>(1:)</td><td><p>Attribute name/value pair [1:2].</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>character(len=*),</td>
+  <td>intent(in),</td>
+  <td>optional</td>
+  
+  <td></td><td>::</td>
+  <td><strong>attributes</strong>(1:,1:)</td><td><p>Attributes list of name/value pairs [1:2,1:].</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>character(len=*),</td>
+  <td>intent(in),</td>
+  <td>optional</td>
+  
+  <td></td><td>::</td>
+  <td><strong>value</strong></td><td><p>Tag value.</p></td>
+  
+</tr>
+
+</tbody>
+</table>
+
+      
+    
+    
+    
+    <h4>Description</h4>
+       
+       
+
+
+       
+       <p>Set tag data.</p>
         
 
       
@@ -2107,14 +2246,15 @@ private elemental subroutine <a href='../proc/assign_tag.html'>assign_tag</a>(lh
   <span class="c">!&lt; by &#39;=&quot;&#39; without any additional white spaces and its value must be termined by &#39;&quot;&#39;. Each attribute is separated by a white</span>
   <span class="c">!&lt; space. If the string member does not contain the tag_name no attributes are parsed.</span>
   <span class="k">private</span>
-<span class="k">  </span><span class="kt">character</span><span class="p">(</span><span class="nb">len</span><span class="o">=</span><span class="p">:),</span>           <span class="k">allocatable</span> <span class="kd">::</span> <span class="n">tag_name</span>    <span class="c">!&lt; Tag name.</span>
-  <span class="kt">character</span><span class="p">(</span><span class="nb">len</span><span class="o">=</span><span class="p">:),</span>           <span class="k">allocatable</span> <span class="kd">::</span> <span class="n">tag_val</span>     <span class="c">!&lt; Tag value.</span>
-  <span class="k">type</span><span class="p">(</span><span class="n">string</span><span class="p">),</span> <span class="k">allocatable</span> <span class="kd">::</span> <span class="n">att_name</span><span class="p">(:)</span> <span class="c">!&lt; Attributes names.</span>
-  <span class="k">type</span><span class="p">(</span><span class="n">string</span><span class="p">),</span> <span class="k">allocatable</span> <span class="kd">::</span> <span class="n">att_val</span><span class="p">(:)</span>  <span class="c">!&lt; Attributes values.</span>
+<span class="k">  </span><span class="kt">character</span><span class="p">(</span><span class="nb">len</span><span class="o">=</span><span class="p">:),</span> <span class="k">allocatable</span> <span class="kd">::</span> <span class="n">tag_name</span>    <span class="c">!&lt; Tag name.</span>
+  <span class="kt">character</span><span class="p">(</span><span class="nb">len</span><span class="o">=</span><span class="p">:),</span> <span class="k">allocatable</span> <span class="kd">::</span> <span class="n">tag_val</span>     <span class="c">!&lt; Tag value.</span>
+  <span class="k">type</span><span class="p">(</span><span class="n">string</span><span class="p">),</span>     <span class="k">allocatable</span> <span class="kd">::</span> <span class="n">att_name</span><span class="p">(:)</span> <span class="c">!&lt; Attributes names.</span>
+  <span class="k">type</span><span class="p">(</span><span class="n">string</span><span class="p">),</span>     <span class="k">allocatable</span> <span class="kd">::</span> <span class="n">att_val</span><span class="p">(:)</span>  <span class="c">!&lt; Attributes values.</span>
   <span class="k">contains</span>
     <span class="c">! public methods</span>
     <span class="k">procedure</span> <span class="kd">::</span> <span class="n">free</span>                        <span class="c">!&lt; Free dynamic memory.</span>
     <span class="k">final</span>     <span class="kd">::</span> <span class="n">finalize</span>                    <span class="c">!&lt; Free dynamic memory when finalizing.</span>
+    <span class="k">procedure</span> <span class="kd">::</span> <span class="n">set</span>                         <span class="c">!&lt; Set tag data.</span>
     <span class="k">procedure</span> <span class="kd">::</span> <span class="n">parse</span>                       <span class="c">!&lt; Parse the tag contained into a source string.</span>
     <span class="k">procedure</span> <span class="kd">::</span> <span class="n">is_parsed</span>                   <span class="c">!&lt; Check is tag is correctly parsed, i.e. its *tag_name* is allocated.</span>
     <span class="k">procedure</span> <span class="kd">::</span> <span class="n">tag_value</span>                   <span class="c">!&lt; Return tag value of is sefl (or its nested tags) is named *tag_name*.</span>
