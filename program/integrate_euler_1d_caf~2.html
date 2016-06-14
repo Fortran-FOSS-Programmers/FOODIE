@@ -1,0 +1,2511 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+	 
+	 <meta name="description" content="Fortran Object oriented Ordinary Differential Equations integration library">
+    
+    <meta name="author" content="Chris MacMackin" >
+    <link rel="icon" href="../favicon.png">
+
+    <title>integrate_euler_1D_caf &ndash; FOODIE</title>
+
+    <link href="../css/bootstrap.min.css" rel="stylesheet">
+    <link href="../css/pygments.css" rel="stylesheet">
+    <link href="../css/font-awesome.min.css" rel="stylesheet">
+    <link href="../css/local.css" rel="stylesheet">
+    
+
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+    
+    <script src="../js/jquery-2.1.3.min.js"></script>
+    <script src="../js/svg-pan-zoom.min.js"></script>
+
+    
+    <script src="../tipuesearch/tipuesearch_content.js"></script>
+    <link  href="../tipuesearch/tipuesearch.css" rel="stylesheet">
+    <script src="../tipuesearch/tipuesearch_set.js"></script>
+    <script src="../tipuesearch/tipuesearch.js"></script>
+    
+
+  </head>
+
+  <body>
+
+    <!-- Fixed navbar -->
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="../index.html">FOODIE </a>
+        </div>
+        <div id="navbar" class="navbar-collapse collapse">
+          <ul class="nav navbar-nav">
+				
+                
+            <li><a href="../lists/files.html">Source Files</a></li>
+				
+				
+            <li><a href="../lists/modules.html">Modules</a></li>
+				
+				
+            <li><a href="../lists/procedures.html">Procedures</a></li>
+				
+				
+            <li><a href="../lists/absint.html">Abstract Interfaces</a></li>
+								
+            <li><a href="../lists/types.html">Derived Types</a></li>
+				
+				
+            <li><a href="../lists/programs.html">Programs</a></li>
+				
+          </ul>
+        
+        <form action="../search.html" class="navbar-form navbar-right" role="search">
+        <div class="form-group">
+          <input type="text" class="form-control" placeholder="Search" name="q" id="tipue_search_input" autocomplete="off" required>
+        </div>
+<!--
+        <button type="submit" class="btn btn-default">Submit</button>
+-->
+        </form>
+        
+        </div><!--/.nav-collapse -->
+      </div>
+    </nav>
+
+    <div class="container">
+    
+  
+  <div class="row">
+    <h1>integrate_euler_1D_caf 
+    <small>Program</small>
+    
+    </h1>
+	 
+<div class="row">
+<div class="col-lg-12">
+<div class="well well-sm">
+  <ul class="list-inline" style="margin-bottom:0px;display:inline">
+     
+     
+     
+     
+    
+    
+    <li><i class="fa fa-code"></i><a href="../src/euler-1D-caf.f90"> Source File</a></li>
+     
+  </ul>
+  <ol class="breadcrumb in-well text-right">
+  
+     <li><a href='../sourcefile/euler-1d-caf.f90.html'>euler-1D-caf.f90</a></li>
+  
+     <li class="active">integrate_euler_1D_caf</li>
+  </ol>
+</div>
+</div>
+</div>
+    
+  </div>
+  
+  <div class="row">
+    <div class="col-lg-3">
+    
+<div id="sidebar">
+  
+  
+  
+  <div class="panel panel-primary">
+    <div class="panel-heading text-left"><h3 class="panel-title"><a data-toggle="collapse" href="#vars">Variables</a></h3></div>
+    <div id="vars" class="panel-collapse collapse">
+      <div class="list-group">
+        
+        <a class="list-group-item" href="../program/integrate_euler_1d_caf%7E2.html#variable-cli%7E3">cli</a>
+        
+        <a class="list-group-item" href="../program/integrate_euler_1d_caf%7E2.html#variable-rk_integrator%7E14">rk_integrator</a>
+        
+        <a class="list-group-item" href="../program/integrate_euler_1d_caf%7E2.html#variable-rk_stages%7E14">rk_stages</a>
+        
+        <a class="list-group-item" href="../program/integrate_euler_1d_caf%7E2.html#variable-rk_stage%7E15">rk_stage</a>
+        
+        <a class="list-group-item" href="../program/integrate_euler_1d_caf%7E2.html#variable-ord%7E12">ord</a>
+        
+        <a class="list-group-item" href="../program/integrate_euler_1d_caf%7E2.html#variable-t%7E55">t</a>
+        
+        <a class="list-group-item" href="../program/integrate_euler_1d_caf%7E2.html#variable-cfl%7E8">CFL</a>
+        
+        <a class="list-group-item" href="../program/integrate_euler_1d_caf%7E2.html#variable-ns%7E12">Ns</a>
+        
+        <a class="list-group-item" href="../program/integrate_euler_1d_caf%7E2.html#variable-nc%7E8">Nc</a>
+        
+        <a class="list-group-item" href="../program/integrate_euler_1d_caf%7E2.html#variable-np%7E7">Np</a>
+        
+        <a class="list-group-item" href="../program/integrate_euler_1d_caf%7E2.html#variable-bc_l%7E12">BC_L</a>
+        
+        <a class="list-group-item" href="../program/integrate_euler_1d_caf%7E2.html#variable-bc_r%7E12">BC_R</a>
+        
+        <a class="list-group-item" href="../program/integrate_euler_1d_caf%7E2.html#variable-dx%7E12">Dx</a>
+        
+        <a class="list-group-item" href="../program/integrate_euler_1d_caf%7E2.html#variable-cp0%7E12">cp0</a>
+        
+        <a class="list-group-item" href="../program/integrate_euler_1d_caf%7E2.html#variable-cv0%7E12">cv0</a>
+        
+        <a class="list-group-item" href="../program/integrate_euler_1d_caf%7E2.html#variable-initial_state%7E11">initial_state</a>
+        
+        <a class="list-group-item" href="../program/integrate_euler_1d_caf%7E2.html#variable-x%7E9">x</a>
+        
+        <a class="list-group-item" href="../program/integrate_euler_1d_caf%7E2.html#variable-final_state%7E2">final_state</a>
+        
+        <a class="list-group-item" href="../program/integrate_euler_1d_caf%7E2.html#variable-error%7E62">error</a>
+        
+        <a class="list-group-item" href="../program/integrate_euler_1d_caf%7E2.html#variable-profiling%7E2">profiling</a>
+        
+        <a class="list-group-item" href="../program/integrate_euler_1d_caf%7E2.html#variable-count_rate%7E2">count_rate</a>
+        
+        <a class="list-group-item" href="../program/integrate_euler_1d_caf%7E2.html#variable-system_clocks%7E2">system_clocks</a>
+        
+        <a class="list-group-item" href="../program/integrate_euler_1d_caf%7E2.html#variable-steps%7E21">steps</a>
+        
+        <a class="list-group-item" href="../program/integrate_euler_1d_caf%7E2.html#variable-domain%7E2">domain</a>
+        
+        <a class="list-group-item" href="../program/integrate_euler_1d_caf%7E2.html#variable-ni_image%7E2">Ni_image</a>
+        
+        <a class="list-group-item" href="../program/integrate_euler_1d_caf%7E2.html#variable-ni%7E15">Ni</a>
+        
+        <a class="list-group-item" href="../program/integrate_euler_1d_caf%7E2.html#variable-steps_max%7E3">steps_max</a>
+        
+        <a class="list-group-item" href="../program/integrate_euler_1d_caf%7E2.html#variable-results%7E5">results</a>
+        
+        <a class="list-group-item" href="../program/integrate_euler_1d_caf%7E2.html#variable-plots%7E5">plots</a>
+        
+        <a class="list-group-item" href="../program/integrate_euler_1d_caf%7E2.html#variable-time_serie%7E3">time_serie</a>
+        
+        <a class="list-group-item" href="../program/integrate_euler_1d_caf%7E2.html#variable-verbose%7E3">verbose</a>
+        
+        <a class="list-group-item" href="../program/integrate_euler_1d_caf%7E2.html#variable-dt%7E23">Dt</a>
+        
+        <a class="list-group-item" href="../program/integrate_euler_1d_caf%7E2.html#variable-ni%7E16">Ni</a>
+        
+        <a class="list-group-item" href="../program/integrate_euler_1d_caf%7E2.html#variable-steps_max%7E4">steps_max</a>
+        
+        <a class="list-group-item" href="../program/integrate_euler_1d_caf%7E2.html#variable-results%7E6">results</a>
+        
+        <a class="list-group-item" href="../program/integrate_euler_1d_caf%7E2.html#variable-plots%7E6">plots</a>
+        
+        <a class="list-group-item" href="../program/integrate_euler_1d_caf%7E2.html#variable-time_serie%7E4">time_serie</a>
+        
+        <a class="list-group-item" href="../program/integrate_euler_1d_caf%7E2.html#variable-verbose%7E4">verbose</a>
+        
+        <a class="list-group-item" href="../program/integrate_euler_1d_caf%7E2.html#variable-dt%7E24">Dt</a>
+        
+        <a class="list-group-item" href="../program/integrate_euler_1d_caf%7E2.html#variable-me%7E24">me</a>
+        
+        <a class="list-group-item" href="../program/integrate_euler_1d_caf%7E2.html#variable-we%7E6">we</a>
+        
+        <a class="list-group-item" href="../program/integrate_euler_1d_caf%7E2.html#variable-id%7E2">id</a>
+        
+      </div>
+    </div>
+  </div>
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  <div class="panel panel-primary">
+    <div class="panel-heading text-left"><h3 class="panel-title"><a data-toggle="collapse" href="#subs">Subroutines</a></h3></div>
+    <div class="list-group">
+        <div id="subs" class="panel-collapse collapse">
+          
+          <a class="list-group-item" href="../program/integrate_euler_1d_caf%7E2.html#proc-init%7E13">init</a>
+          
+          <a class="list-group-item" href="../program/integrate_euler_1d_caf%7E2.html#proc-synchronize%7E3">synchronize</a>
+          
+          <a class="list-group-item" href="../program/integrate_euler_1d_caf%7E2.html#proc-save_results%7E3">save_results</a>
+          
+          <a class="list-group-item" href="../program/integrate_euler_1d_caf%7E2.html#proc-save_time_serie%7E2">save_time_serie</a>
+          
+        </div>
+    </div>
+  </div>
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  <div class="panel panel-primary">
+    <div class="panel-heading text-left"><h3 class="panel-title">Source Code</h3></div>
+    <div class="list-group">
+      <a class="list-group-item" href="../program/integrate_euler_1d_caf%7E2.html#src">integrate_euler_1D_caf</a>
+    </div>
+  </div>
+  
+  <hr>
+  
+  <div class="panel panel-default">
+    <div class="panel-heading text-left"><h3 class="panel-title"><a data-toggle="collapse" href="#allprogs">All Programs</a></h3></div>
+    <div id="allprogs" class="panel-collapse collapse">
+        <div class="list-group">
+          
+          <a class="list-group-item" href="../program/integrate_burgers.html">integrate_burgers</a>
+          
+          <a class="list-group-item" href="../program/integrate_euler_1d.html">integrate_euler_1D</a>
+          
+          <a class="list-group-item" href="../program/integrate_euler_1d_caf.html">integrate_euler_1D_caf</a>
+          
+          <a class="list-group-item" href="../program/integrate_euler_1d_caf%7E2.html">integrate_euler_1D_caf</a>
+          
+          <a class="list-group-item" href="../program/integrate_euler_1d_openmp.html">integrate_euler_1D_openmp</a>
+          
+          <a class="list-group-item" href="../program/integrate_euler_1d_openmp_no_foodie.html">integrate_euler_1D_openmp_no_foodie</a>
+          
+          <a class="list-group-item" href="../program/integrate_lorenz.html">integrate_lorenz</a>
+          
+          <a class="list-group-item" href="../program/integrate_oscillation.html">integrate_oscillation</a>
+          
+          <a class="list-group-item" href="../program/module_imports.html">module_imports</a>
+          
+          <a class="list-group-item" href="../program/sin_reconstruction.html">sin_reconstruction</a>
+          
+          <a class="list-group-item" href="../program/test.html">test</a>
+          
+          <a class="list-group-item" href="../program/test%7E2.html">test</a>
+          
+          <a class="list-group-item" href="../program/test_all.html">test_all</a>
+          
+          <a class="list-group-item" href="../program/test_all%7E2.html">test_all</a>
+          
+          <a class="list-group-item" href="../program/test_all%7E3.html">test_all</a>
+          
+          <a class="list-group-item" href="../program/test_basic.html">test_basic</a>
+          
+          <a class="list-group-item" href="../program/test_choices_logical.html">test_choices_logical</a>
+          
+          <a class="list-group-item" href="../program/test_hidden.html">test_hidden</a>
+          
+          <a class="list-group-item" href="../program/test_minimal.html">test_minimal</a>
+          
+          <a class="list-group-item" href="../program/test_nested.html">test_nested</a>
+          
+          <a class="list-group-item" href="../program/test_string.html">test_string</a>
+          
+        </div>
+    </div>
+  </div>
+  
+</div>
+
+    </div>
+    
+    <div class="col-lg-9" id='text'>
+    
+  
+    <ul class="list-inline">
+      <li><h4>Uses:</h4></li>
+      
+      <li><a href='../module/flap.html'>flap</a></li>
+      
+      <li><a href='../module/foodie.html'>foodie</a></li>
+      
+      <li>IR_Precision</li>
+      
+      <li><a href='../module/pyplot_module.html'>pyplot_module</a></li>
+      
+      <li><a href='../module/type_euler_1d_caf.html'>type_euler_1D_caf</a></li>
+      
+    </ul>
+  
+
+    
+                <div class="depgraph"><?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.26.3 (20100126.1600)
+ -->
+<!-- Title: program~~integrate_euler_1d_caf~2~~UsesGraph Pages: 1 -->
+<svg id="programintegrate_euler_1d_caf2UsesGraph" width="641pt" height="280pt"
+ viewBox="0.00 0.00 641.00 279.69" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="program~~integrate_euler_1d_caf~2~~UsesGraph" class="graph" transform="scale(0.36545 0.36545) rotate(0) translate(4 761.332)">
+<title>program~~integrate_euler_1d_caf~2~~UsesGraph</title>
+<polygon fill="white" stroke="white" points="-4,5 -4,-761.332 1751,-761.332 1751,5 -4,5"/>
+<!-- program~integrate_euler_1d_caf~2 -->
+<g id="node1" class="node"><title>program~integrate_euler_1d_caf~2</title>
+<polygon fill="none" stroke="black" points="1746,-288.899 1622,-288.899 1622,-262.899 1746,-262.899 1746,-288.899"/>
+<text text-anchor="middle" x="1684" y="-273.449" font-family="Helvetica,sans-Serif" font-size="10.50">integrate_euler_1D_caf</text>
+</g>
+<!-- IR_Precision -->
+<g id="node2" class="node"><title>IR_Precision</title>
+<polygon fill="#337ab7" stroke="#337ab7" points="1401,-381.899 1329,-381.899 1329,-355.899 1401,-355.899 1401,-381.899"/>
+<text text-anchor="middle" x="1365" y="-366.449" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">IR_Precision</text>
+</g>
+<!-- IR_Precision&#45;&gt;program~integrate_euler_1d_caf~2 -->
+<g id="edge150" class="edge"><title>IR_Precision&#45;&gt;program~integrate_euler_1d_caf~2</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M1401.86,-365.525C1446.46,-360.66 1523.36,-349.749 1586,-327.899 1610.38,-319.394 1636.1,-305.537 1655.07,-294.265"/>
+<polygon fill="#000000" stroke="#000000" points="1657.07,-297.148 1663.81,-288.974 1653.44,-291.161 1657.07,-297.148"/>
+</g>
+<!-- module~type_euler_1d_caf -->
+<g id="node4" class="node"><title>module~type_euler_1d_caf</title>
+<a xlink:href="../module/type_euler_1d_caf.html" xlink:title="type_euler_1D_caf">
+<polygon fill="#337ab7" stroke="#337ab7" points="1585,-318.899 1483,-318.899 1483,-292.899 1585,-292.899 1585,-318.899"/>
+<text text-anchor="middle" x="1534" y="-303.449" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">type_euler_1D_caf</text>
+</a>
+</g>
+<!-- IR_Precision&#45;&gt;module~type_euler_1d_caf -->
+<g id="edge28" class="edge"><title>IR_Precision&#45;&gt;module~type_euler_1d_caf</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M1401.7,-360.347C1415.73,-356.711 1431.77,-352.104 1446,-346.899 1464.26,-340.221 1483.93,-331.236 1500.04,-323.379"/>
+<polygon fill="#000000" stroke="#000000" points="1501.66,-326.482 1509.07,-318.91 1498.55,-320.208 1501.66,-326.482"/>
+</g>
+<!-- module~pyplot_module -->
+<g id="node3" class="node"><title>module~pyplot_module</title>
+<a xlink:href="../module/pyplot_module.html" xlink:title="pyplot_module">
+<polygon fill="#337ab7" stroke="#337ab7" points="420,-258.899 338,-258.899 338,-232.899 420,-232.899 420,-258.899"/>
+<text text-anchor="middle" x="379" y="-243.449" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">pyplot_module</text>
+</a>
+</g>
+<!-- module~pyplot_module&#45;&gt;program~integrate_euler_1d_caf~2 -->
+<g id="edge152" class="edge"><title>module~pyplot_module&#45;&gt;program~integrate_euler_1d_caf~2</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M420.414,-245.899C469.828,-245.899 554.943,-245.899 628,-245.899 628,-245.899 628,-245.899 1134,-245.899 1311.78,-245.899 1356.25,-248.762 1534,-245.899"/>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M1534,-245.899C1567.49,-245.36 1604.39,-252.634 1633.21,-260.154"/>
+<polygon fill="#000000" stroke="#000000" points="1632.49,-263.583 1643.05,-262.811 1634.31,-256.825 1632.49,-263.583"/>
+</g>
+<!-- module~type_euler_1d_caf&#45;&gt;program~integrate_euler_1d_caf~2 -->
+<g id="edge154" class="edge"><title>module~type_euler_1d_caf&#45;&gt;program~integrate_euler_1d_caf~2</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M1585.62,-295.575C1594.12,-293.876 1603.06,-292.087 1611.95,-290.31"/>
+<polygon fill="#000000" stroke="#000000" points="1612.81,-293.706 1621.93,-288.313 1611.44,-286.842 1612.81,-293.706"/>
+</g>
+<!-- module~flap -->
+<g id="node5" class="node"><title>module~flap</title>
+<a xlink:href="../module/flap.html" xlink:title="flap">
+<polygon fill="#337ab7" stroke="#337ab7" points="1561,-138.899 1507,-138.899 1507,-112.899 1561,-112.899 1561,-138.899"/>
+<text text-anchor="middle" x="1534" y="-123.449" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">flap</text>
+</a>
+</g>
+<!-- module~flap&#45;&gt;program~integrate_euler_1d_caf~2 -->
+<g id="edge156" class="edge"><title>module~flap&#45;&gt;program~integrate_euler_1d_caf~2</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M1547.05,-138.948C1573.2,-165.101 1632.2,-224.1 1663.54,-255.439"/>
+<polygon fill="#000000" stroke="#000000" points="1661.33,-258.177 1670.87,-262.773 1666.28,-253.228 1661.33,-258.177"/>
+</g>
+<!-- module~foodie -->
+<g id="node6" class="node"><title>module~foodie</title>
+<a xlink:href="../module/foodie.html" xlink:title="foodie">
+<polygon fill="#337ab7" stroke="#337ab7" points="1392,-337.899 1338,-337.899 1338,-311.899 1392,-311.899 1392,-337.899"/>
+<text text-anchor="middle" x="1365" y="-322.449" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">foodie</text>
+</a>
+</g>
+<!-- module~foodie&#45;&gt;program~integrate_euler_1d_caf~2 -->
+<g id="edge158" class="edge"><title>module~foodie&#45;&gt;program~integrate_euler_1d_caf~2</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M1381.09,-311.701C1409.85,-289.475 1472.8,-246.885 1534,-245.899"/>
+</g>
+<!-- module~foodie&#45;&gt;module~type_euler_1d_caf -->
+<g id="edge30" class="edge"><title>module~foodie&#45;&gt;module~type_euler_1d_caf</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M1392.15,-321.847C1413.76,-319.417 1444.84,-315.924 1472.4,-312.825"/>
+<polygon fill="#000000" stroke="#000000" points="1472.82,-316.299 1482.37,-311.704 1472.04,-309.343 1472.82,-316.299"/>
+</g>
+<!-- iso_fortran_env -->
+<g id="node7" class="node"><title>iso_fortran_env</title>
+<a xlink:href="https://gcc.gnu.org/onlinedocs/gfortran/ISO_005fFORTRAN_005fENV.html" xlink:title="iso_fortran_env">
+<polygon fill="#337ab7" stroke="#337ab7" points="301,-238.899 215,-238.899 215,-212.899 301,-212.899 301,-238.899"/>
+<text text-anchor="middle" x="258" y="-223.449" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">iso_fortran_env</text>
+</a>
+</g>
+<!-- iso_fortran_env&#45;&gt;module~pyplot_module -->
+<g id="edge2" class="edge"><title>iso_fortran_env&#45;&gt;module~pyplot_module</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M301.684,-233.12C310.15,-234.519 319.093,-235.997 327.775,-237.432"/>
+<polygon fill="#000000" stroke="#000000" points="327.366,-240.912 337.803,-239.09 328.507,-234.006 327.366,-240.912"/>
+</g>
+<!-- module~penf_stringify~3 -->
+<g id="node15" class="node"><title>module~penf_stringify~3</title>
+<a xlink:href="../module/penf_stringify%7E3.html" xlink:title="penf_stringify">
+<polygon fill="#337ab7" stroke="#337ab7" points="417,-176.899 341,-176.899 341,-150.899 417,-150.899 417,-176.899"/>
+<text text-anchor="middle" x="379" y="-161.449" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">penf_stringify</text>
+</a>
+</g>
+<!-- iso_fortran_env&#45;&gt;module~penf_stringify~3 -->
+<g id="edge6" class="edge"><title>iso_fortran_env&#45;&gt;module~penf_stringify~3</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M283.661,-212.751C301.307,-203.709 324.953,-191.593 344.28,-181.69"/>
+<polygon fill="#000000" stroke="#000000" points="346.072,-184.704 353.376,-177.029 342.88,-178.474 346.072,-184.704"/>
+</g>
+<!-- module~flap_object_t -->
+<g id="node34" class="node"><title>module~flap_object_t</title>
+<a xlink:href="../module/flap_object_t.html" xlink:title="flap_object_t">
+<polygon fill="#337ab7" stroke="#337ab7" points="664,-217.899 592,-217.899 592,-191.899 664,-191.899 664,-217.899"/>
+<text text-anchor="middle" x="628" y="-202.449" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">flap_object_t</text>
+</a>
+</g>
+<!-- iso_fortran_env&#45;&gt;module~flap_object_t -->
+<g id="edge34" class="edge"><title>iso_fortran_env&#45;&gt;module~flap_object_t</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M301.532,-223.429C371.63,-219.45 508.945,-211.656 581.12,-207.56"/>
+<polygon fill="#000000" stroke="#000000" points="581.494,-211.044 591.28,-206.983 581.098,-204.056 581.494,-211.044"/>
+</g>
+<!-- module~wenoof -->
+<g id="node9" class="node"><title>module~wenoof</title>
+<a xlink:href="../module/wenoof.html" xlink:title="wenoof">
+<polygon fill="#337ab7" stroke="#337ab7" points="1161,-179.899 1107,-179.899 1107,-153.899 1161,-153.899 1161,-179.899"/>
+<text text-anchor="middle" x="1134" y="-164.449" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">wenoof</text>
+</a>
+</g>
+<!-- module~wenoof&#45;&gt;module~type_euler_1d_caf -->
+<g id="edge32" class="edge"><title>module~wenoof&#45;&gt;module~type_euler_1d_caf</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M1161.18,-176.344C1228.33,-199.678 1402.71,-260.277 1487.01,-289.571"/>
+<polygon fill="#000000" stroke="#000000" points="1485.99,-292.922 1496.59,-292.899 1488.29,-286.31 1485.99,-292.922"/>
+</g>
+<!-- module~type_weno_interpolator -->
+<g id="node10" class="node"><title>module~type_weno_interpolator</title>
+<a xlink:href="../module/type_weno_interpolator.html" xlink:title="type_weno_interpolator">
+<polygon fill="#337ab7" stroke="#337ab7" points="690,-135.899 566,-135.899 566,-109.899 690,-109.899 690,-135.899"/>
+<text text-anchor="middle" x="628" y="-120.449" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">type_weno_interpolator</text>
+</a>
+</g>
+<!-- module~type_weno_interpolator&#45;&gt;module~wenoof -->
+<g id="edge24" class="edge"><title>module~type_weno_interpolator&#45;&gt;module~wenoof</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M690.19,-125.16C761.345,-128.114 881.297,-134.213 984,-144.899 1022.64,-148.92 1066.59,-155.617 1096.87,-160.568"/>
+<polygon fill="#000000" stroke="#000000" points="1096.55,-164.062 1106.99,-162.24 1097.69,-157.156 1096.55,-164.062"/>
+</g>
+<!-- module~type_weno_interpolator_upwind -->
+<g id="node11" class="node"><title>module~type_weno_interpolator_upwind</title>
+<a xlink:href="../module/type_weno_interpolator_upwind.html" xlink:title="type_weno_interpolator_upwind">
+<polygon fill="#337ab7" stroke="#337ab7" points="937,-179.899 773,-179.899 773,-153.899 937,-153.899 937,-179.899"/>
+<text text-anchor="middle" x="855" y="-164.449" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">type_weno_interpolator_upwind</text>
+</a>
+</g>
+<!-- module~type_weno_interpolator&#45;&gt;module~type_weno_interpolator_upwind -->
+<g id="edge20" class="edge"><title>module~type_weno_interpolator&#45;&gt;module~type_weno_interpolator_upwind</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M690.029,-134.922C717.154,-140.18 749.255,-146.403 777.898,-151.954"/>
+<polygon fill="#000000" stroke="#000000" points="777.388,-155.421 787.871,-153.888 778.72,-148.548 777.388,-155.421"/>
+</g>
+<!-- module~type_weno_interpolator_upwind&#45;&gt;module~wenoof -->
+<g id="edge26" class="edge"><title>module~type_weno_interpolator_upwind&#45;&gt;module~wenoof</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M937.2,-166.899C990.024,-166.899 1056.12,-166.899 1096.68,-166.899"/>
+<polygon fill="#000000" stroke="#000000" points="1096.92,-170.399 1106.92,-166.899 1096.92,-163.399 1096.92,-170.399"/>
+</g>
+<!-- module~penf~3 -->
+<g id="node12" class="node"><title>module~penf~3</title>
+<a xlink:href="../module/penf%7E3.html" xlink:title="penf">
+<polygon fill="#337ab7" stroke="#337ab7" points="520,-115.899 466,-115.899 466,-89.8992 520,-89.8992 520,-115.899"/>
+<text text-anchor="middle" x="493" y="-100.449" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">penf</text>
+</a>
+</g>
+<!-- module~penf~3&#45;&gt;module~type_weno_interpolator -->
+<g id="edge18" class="edge"><title>module~penf~3&#45;&gt;module~type_weno_interpolator</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M520.319,-106.947C530.715,-108.487 543.11,-110.323 555.728,-112.192"/>
+<polygon fill="#000000" stroke="#000000" points="555.457,-115.69 565.862,-113.694 556.483,-108.766 555.457,-115.69"/>
+</g>
+<!-- module~penf~3&#45;&gt;module~type_weno_interpolator_upwind -->
+<g id="edge22" class="edge"><title>module~penf~3&#45;&gt;module~type_weno_interpolator_upwind</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M510.552,-116.015C524.725,-125.834 545.6,-138.61 566,-144.899 629.734,-164.547 704.941,-169.747 762.656,-170.193"/>
+<polygon fill="#000000" stroke="#000000" points="762.846,-173.694 772.857,-170.224 762.867,-166.694 762.846,-173.694"/>
+</g>
+<!-- module~flap_command_line_arguments_group_t -->
+<g id="node31" class="node"><title>module~flap_command_line_arguments_group_t</title>
+<a xlink:href="../module/flap_command_line_arguments_group_t.html" xlink:title="flap_command_line_arguments_group_t">
+<polygon fill="#337ab7" stroke="#337ab7" points="1236,-97.8992 1032,-97.8992 1032,-71.8992 1236,-71.8992 1236,-97.8992"/>
+<text text-anchor="middle" x="1134" y="-82.4492" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">flap_command_line_arguments_group_t</text>
+</a>
+</g>
+<!-- module~penf~3&#45;&gt;module~flap_command_line_arguments_group_t -->
+<g id="edge38" class="edge"><title>module~penf~3&#45;&gt;module~flap_command_line_arguments_group_t</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M520.197,-92.8768C547.134,-83.5183 589.776,-70.2192 628,-64.8992"/>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M628,-64.8992C685.322,-56.9211 876.763,-55.077 984,-62.8992 1005.53,-64.4696 1028.66,-67.2917 1050.15,-70.4023"/>
+<polygon fill="#000000" stroke="#000000" points="1049.82,-73.8917 1060.23,-71.898 1050.85,-66.9676 1049.82,-73.8917"/>
+</g>
+<!-- module~flap_command_line_argument_t -->
+<g id="node32" class="node"><title>module~flap_command_line_argument_t</title>
+<a xlink:href="../module/flap_command_line_argument_t.html" xlink:title="flap_command_line_argument_t">
+<polygon fill="#337ab7" stroke="#337ab7" points="938,-97.8992 772,-97.8992 772,-71.8992 938,-71.8992 938,-97.8992"/>
+<text text-anchor="middle" x="855" y="-82.4492" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">flap_command_line_argument_t</text>
+</a>
+</g>
+<!-- module~penf~3&#45;&gt;module~flap_command_line_argument_t -->
+<g id="edge46" class="edge"><title>module~penf~3&#45;&gt;module~flap_command_line_argument_t</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M628,-64.8992C679.548,-57.7248 738.06,-63.2051 782.767,-70.2288"/>
+<polygon fill="#000000" stroke="#000000" points="782.232,-73.6876 792.665,-71.8441 783.359,-66.779 782.232,-73.6876"/>
+</g>
+<!-- module~flap_command_line_interface_t -->
+<g id="node33" class="node"><title>module~flap_command_line_interface_t</title>
+<a xlink:href="../module/flap_command_line_interface_t.html" xlink:title="flap_command_line_interface_t">
+<polygon fill="#337ab7" stroke="#337ab7" points="1446,-97.8992 1284,-97.8992 1284,-71.8992 1446,-71.8992 1446,-97.8992"/>
+<text text-anchor="middle" x="1365" y="-82.4492" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">flap_command_line_interface_t</text>
+</a>
+</g>
+<!-- module~penf~3&#45;&gt;module~flap_command_line_interface_t -->
+<g id="edge54" class="edge"><title>module~penf~3&#45;&gt;module~flap_command_line_interface_t</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M497.901,-89.5899C507.152,-66.6909 529.589,-20.5083 566,-1.89925 576.04,3.23209 825.756,-5.73822 855,-5.89925"/>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M855,-5.89925C978.985,-3.98804 1010.55,5.79392 1134,-5.89925"/>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M1134,-5.89925C1206.73,-12.788 1286.23,-46.2096 1330.42,-67.3147"/>
+<polygon fill="#000000" stroke="#000000" points="1329.04,-70.5331 1339.56,-71.7462 1332.09,-64.2343 1329.04,-70.5331"/>
+</g>
+<!-- module~penf~3&#45;&gt;module~flap_object_t -->
+<g id="edge36" class="edge"><title>module~penf~3&#45;&gt;module~flap_object_t</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M503.117,-116.085C516.175,-132.381 540.291,-160.128 566,-177.899 571.134,-181.448 576.808,-184.687 582.578,-187.592"/>
+<polygon fill="#000000" stroke="#000000" points="581.123,-190.775 591.66,-191.878 584.111,-184.445 581.123,-190.775"/>
+</g>
+<!-- module~flap_utils_m -->
+<g id="node40" class="node"><title>module~flap_utils_m</title>
+<a xlink:href="../module/flap_utils_m.html" xlink:title="flap_utils_m">
+<polygon fill="#337ab7" stroke="#337ab7" points="663,-36.8992 593,-36.8992 593,-10.8992 663,-10.8992 663,-36.8992"/>
+<text text-anchor="middle" x="628" y="-21.4492" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">flap_utils_m</text>
+</a>
+</g>
+<!-- module~penf~3&#45;&gt;module~flap_utils_m -->
+<g id="edge44" class="edge"><title>module~penf~3&#45;&gt;module~flap_utils_m</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M509.162,-89.8921C523.539,-78.6935 545.414,-62.5451 566,-50.8992 572.042,-47.4813 578.6,-44.202 585.113,-41.1796"/>
+<polygon fill="#000000" stroke="#000000" points="586.864,-44.2307 594.56,-36.9489 584.003,-37.8421 586.864,-44.2307"/>
+</g>
+<!-- module~penf_global_parameters_variables~2 -->
+<g id="node13" class="node"><title>module~penf_global_parameters_variables~2</title>
+<a xlink:href="../module/penf_global_parameters_variables%7E2.html" xlink:title="penf_global_parameters_variables">
+<polygon fill="#337ab7" stroke="#337ab7" points="178,-156.899 8.52651e-14,-156.899 0,-130.899 178,-130.899 178,-156.899"/>
+<text text-anchor="middle" x="89" y="-141.449" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">penf_global_parameters_variables</text>
+</a>
+</g>
+<!-- module~penf_global_parameters_variables~2&#45;&gt;module~penf~3 -->
+<g id="edge12" class="edge"><title>module~penf_global_parameters_variables~2&#45;&gt;module~penf~3</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M158.632,-130.886C176.634,-127.731 196.01,-124.516 214,-121.899 287.049,-111.275 305.442,-109.086 379,-102.899"/>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M379,-102.899C404.474,-100.092 433.346,-100.124 455.66,-100.842"/>
+<polygon fill="#000000" stroke="#000000" points="455.602,-104.343 465.728,-101.226 455.869,-97.3477 455.602,-104.343"/>
+</g>
+<!-- module~penf_b_size~2 -->
+<g id="node14" class="node"><title>module~penf_b_size~2</title>
+<a xlink:href="../module/penf_b_size%7E2.html" xlink:title="penf_b_size">
+<polygon fill="#337ab7" stroke="#337ab7" points="293,-156.899 223,-156.899 223,-130.899 293,-130.899 293,-156.899"/>
+<text text-anchor="middle" x="258" y="-141.449" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">penf_b_size</text>
+</a>
+</g>
+<!-- module~penf_global_parameters_variables~2&#45;&gt;module~penf_b_size~2 -->
+<g id="edge4" class="edge"><title>module~penf_global_parameters_variables~2&#45;&gt;module~penf_b_size~2</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M178.449,-143.899C190.206,-143.899 201.835,-143.899 212.422,-143.899"/>
+<polygon fill="#000000" stroke="#000000" points="212.627,-147.399 222.627,-143.899 212.627,-140.399 212.627,-147.399"/>
+</g>
+<!-- module~penf_global_parameters_variables~2&#45;&gt;module~penf_stringify~3 -->
+<g id="edge10" class="edge"><title>module~penf_global_parameters_variables~2&#45;&gt;module~penf_stringify~3</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M150.709,-156.956C170.794,-160.616 193.256,-164.088 214,-165.899 252.963,-169.302 262.892,-166.407 302,-165.899 311.23,-165.779 321.082,-165.579 330.548,-165.35"/>
+<polygon fill="#000000" stroke="#000000" points="330.714,-168.847 340.621,-165.092 330.535,-161.849 330.714,-168.847"/>
+</g>
+<!-- module~penf_b_size~2&#45;&gt;module~penf~3 -->
+<g id="edge14" class="edge"><title>module~penf_b_size~2&#45;&gt;module~penf~3</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M284.578,-130.71C308.568,-119.833 345.184,-105.744 379,-102.899"/>
+</g>
+<!-- module~penf_b_size~2&#45;&gt;module~penf_stringify~3 -->
+<g id="edge8" class="edge"><title>module~penf_b_size~2&#45;&gt;module~penf_stringify~3</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M293.323,-149.738C305.102,-151.685 318.431,-153.888 331.006,-155.966"/>
+<polygon fill="#000000" stroke="#000000" points="330.448,-159.422 340.885,-157.599 331.589,-152.515 330.448,-159.422"/>
+</g>
+<!-- module~penf_stringify~3&#45;&gt;module~penf~3 -->
+<g id="edge16" class="edge"><title>module~penf_stringify~3&#45;&gt;module~penf~3</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M403.456,-150.813C419.835,-142.049 441.607,-130.399 459.58,-120.782"/>
+<polygon fill="#000000" stroke="#000000" points="461.419,-123.768 468.585,-115.964 458.116,-117.596 461.419,-123.768"/>
+</g>
+<!-- module~flap_command_line_arguments_group_t&#45;&gt;module~flap -->
+<g id="edge62" class="edge"><title>module~flap_command_line_arguments_group_t&#45;&gt;module~flap</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M1184.95,-97.9174C1231.47,-108.851 1302.34,-123.124 1365,-125.899"/>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M1365,-125.899C1410.29,-127.905 1462.48,-127.489 1496.73,-126.845"/>
+<polygon fill="#000000" stroke="#000000" points="1496.84,-130.344 1506.76,-126.64 1496.69,-123.345 1496.84,-130.344"/>
+</g>
+<!-- module~flap_command_line_arguments_group_t&#45;&gt;module~flap_command_line_interface_t -->
+<g id="edge52" class="edge"><title>module~flap_command_line_arguments_group_t&#45;&gt;module~flap_command_line_interface_t</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M1236.67,-84.8992C1249,-84.8992 1261.53,-84.8992 1273.68,-84.8992"/>
+<polygon fill="#000000" stroke="#000000" points="1273.79,-88.3993 1283.79,-84.8992 1273.79,-81.3993 1273.79,-88.3993"/>
+</g>
+<!-- module~flap_command_line_argument_t&#45;&gt;module~flap -->
+<g id="edge64" class="edge"><title>module~flap_command_line_argument_t&#45;&gt;module~flap</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M938.373,-97.2947C964.462,-100.829 993.386,-104.396 1020,-106.899 1172.89,-121.28 1211.58,-119.105 1365,-125.899"/>
+</g>
+<!-- module~flap_command_line_argument_t&#45;&gt;module~flap_command_line_arguments_group_t -->
+<g id="edge40" class="edge"><title>module~flap_command_line_argument_t&#45;&gt;module~flap_command_line_arguments_group_t</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M938.331,-84.8992C964.359,-84.8992 993.518,-84.8992 1021.22,-84.8992"/>
+<polygon fill="#000000" stroke="#000000" points="1021.35,-88.3993 1031.35,-84.8992 1021.35,-81.3993 1021.35,-88.3993"/>
+</g>
+<!-- module~flap_command_line_argument_t&#45;&gt;module~flap_command_line_interface_t -->
+<g id="edge58" class="edge"><title>module~flap_command_line_argument_t&#45;&gt;module~flap_command_line_interface_t</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M878.692,-71.8133C926.114,-47.0652 1036.52,3.3341 1134,-5.89925"/>
+</g>
+<!-- module~flap_command_line_interface_t&#45;&gt;module~flap -->
+<g id="edge66" class="edge"><title>module~flap_command_line_interface_t&#45;&gt;module~flap</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M1418.94,-97.9846C1444.4,-104.163 1474.15,-111.379 1497.02,-116.927"/>
+<polygon fill="#000000" stroke="#000000" points="1496.46,-120.392 1507,-119.349 1498.11,-113.59 1496.46,-120.392"/>
+</g>
+<!-- module~flap_object_t&#45;&gt;module~flap_command_line_arguments_group_t -->
+<g id="edge42" class="edge"><title>module~flap_object_t&#45;&gt;module~flap_command_line_arguments_group_t</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M664.678,-207.967C709.654,-211.133 788.149,-214.733 855,-207.899"/>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M855,-207.899C912.651,-202.006 933.584,-217.475 984,-188.899 1005.98,-176.44 1000.43,-160.881 1020,-144.899 1041.6,-127.261 1069.2,-112.571 1091.84,-102.141"/>
+<polygon fill="#000000" stroke="#000000" points="1093.51,-105.225 1101.2,-97.936 1090.65,-98.8398 1093.51,-105.225"/>
+</g>
+<!-- module~flap_object_t&#45;&gt;module~flap_command_line_argument_t -->
+<g id="edge48" class="edge"><title>module~flap_object_t&#45;&gt;module~flap_command_line_argument_t</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M647.878,-191.804C667.404,-179.162 698.224,-159.799 726,-144.899 755.143,-129.266 789.09,-113.573 814.843,-102.158"/>
+<polygon fill="#000000" stroke="#000000" points="816.542,-105.235 824.285,-98.0025 813.722,-98.8278 816.542,-105.235"/>
+</g>
+<!-- module~flap_object_t&#45;&gt;module~flap_command_line_interface_t -->
+<g id="edge60" class="edge"><title>module~flap_object_t&#45;&gt;module~flap_command_line_interface_t</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M855,-207.899C941.982,-199.007 1175.39,-237.609 1248,-188.899 1279.37,-167.853 1255.79,-137.025 1284,-111.899 1288.08,-108.264 1292.67,-105.116 1297.53,-102.39"/>
+<polygon fill="#000000" stroke="#000000" points="1299.12,-105.505 1306.53,-97.9245 1296.01,-99.2349 1299.12,-105.505"/>
+</g>
+<!-- module~flap_utils_m&#45;&gt;module~flap_command_line_argument_t -->
+<g id="edge50" class="edge"><title>module~flap_utils_m&#45;&gt;module~flap_command_line_argument_t</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M663.469,-33.4305C699.024,-42.9851 754.381,-57.8607 796.457,-69.1673"/>
+<polygon fill="#000000" stroke="#000000" points="795.737,-72.5981 806.303,-71.8132 797.554,-65.8379 795.737,-72.5981"/>
+</g>
+<!-- module~flap_utils_m&#45;&gt;module~flap_command_line_interface_t -->
+<g id="edge56" class="edge"><title>module~flap_utils_m&#45;&gt;module~flap_command_line_interface_t</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M663.319,-19.2362C707.906,-13.779 787.004,-5.52483 855,-5.89925"/>
+</g>
+<!-- module~foodie_integrator_leapfrog -->
+<g id="node53" class="node"><title>module~foodie_integrator_leapfrog</title>
+<a xlink:href="../module/foodie_integrator_leapfrog.html" xlink:title="foodie_integrator_leapfrog">
+<polygon fill="#337ab7" stroke="#337ab7" points="924,-425.899 786,-425.899 786,-399.899 924,-399.899 924,-425.899"/>
+<text text-anchor="middle" x="855" y="-410.449" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">foodie_integrator_leapfrog</text>
+</a>
+</g>
+<!-- module~foodie_integrator_leapfrog&#45;&gt;module~foodie -->
+<g id="edge130" class="edge"><title>module~foodie_integrator_leapfrog&#45;&gt;module~foodie</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M924.669,-422.24C981.825,-427.693 1064.38,-430.474 1134,-412.899"/>
+</g>
+<!-- module~foodie_integrator_adams_bashforth_moulton -->
+<g id="node54" class="node"><title>module~foodie_integrator_adams_bashforth_moulton</title>
+<a xlink:href="../module/foodie_integrator_adams_bashforth_moulton.html" xlink:title="foodie_integrator_adams_bashforth_moulton">
+<polygon fill="#337ab7" stroke="#337ab7" points="1247,-649.899 1021,-649.899 1021,-623.899 1247,-623.899 1247,-649.899"/>
+<text text-anchor="middle" x="1134" y="-634.449" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">foodie_integrator_adams_bashforth_moulton</text>
+</a>
+</g>
+<!-- module~foodie_integrator_adams_bashforth_moulton&#45;&gt;module~foodie -->
+<g id="edge132" class="edge"><title>module~foodie_integrator_adams_bashforth_moulton&#45;&gt;module~foodie</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M1141.55,-623.811C1160.34,-591.056 1210.42,-502.726 1248,-426.899 1265.31,-391.964 1254.34,-372.213 1284,-346.899 1296.16,-336.522 1312.77,-330.999 1327.78,-328.075"/>
+<polygon fill="#000000" stroke="#000000" points="1328.54,-331.498 1337.85,-326.438 1327.41,-324.588 1328.54,-331.498"/>
+</g>
+<!-- module~foodie_integrator_backward_differentiation_formula -->
+<g id="node55" class="node"><title>module~foodie_integrator_backward_differentiation_formula</title>
+<a xlink:href="../module/foodie_integrator_backward_differentiation_formula.html" xlink:title="foodie_integrator_backward_differentiation_formula">
+<polygon fill="#337ab7" stroke="#337ab7" points="984,-381.899 726,-381.899 726,-355.899 984,-355.899 984,-381.899"/>
+<text text-anchor="middle" x="855" y="-366.449" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">foodie_integrator_backward_differentiation_formula</text>
+</a>
+</g>
+<!-- module~foodie_integrator_backward_differentiation_formula&#45;&gt;module~foodie -->
+<g id="edge134" class="edge"><title>module~foodie_integrator_backward_differentiation_formula&#45;&gt;module~foodie</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M932.74,-381.913C1013.57,-395.331 1129.07,-414.142 1134,-412.899"/>
+</g>
+<!-- module~foodie_integrator_tvd_runge_kutta -->
+<g id="node56" class="node"><title>module~foodie_integrator_tvd_runge_kutta</title>
+<a xlink:href="../module/foodie_integrator_tvd_runge_kutta.html" xlink:title="foodie_integrator_tvd_runge_kutta">
+<polygon fill="#337ab7" stroke="#337ab7" points="943,-337.899 767,-337.899 767,-311.899 943,-311.899 943,-337.899"/>
+<text text-anchor="middle" x="855" y="-322.449" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">foodie_integrator_tvd_runge_kutta</text>
+</a>
+</g>
+<!-- module~foodie_integrator_tvd_runge_kutta&#45;&gt;module~foodie -->
+<g id="edge136" class="edge"><title>module~foodie_integrator_tvd_runge_kutta&#45;&gt;module~foodie</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M943.795,-337.084C957.39,-339.798 971.162,-343.044 984,-346.899 1053.76,-367.846 1063.38,-430.725 1134,-412.899"/>
+</g>
+<!-- module~foodie_adt_integrand -->
+<g id="node57" class="node"><title>module~foodie_adt_integrand</title>
+<a xlink:href="../module/foodie_adt_integrand.html" xlink:title="foodie_adt_integrand">
+<polygon fill="#337ab7" stroke="#337ab7" points="685,-507.899 571,-507.899 571,-481.899 685,-481.899 685,-507.899"/>
+<text text-anchor="middle" x="628" y="-492.449" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">foodie_adt_integrand</text>
+</a>
+</g>
+<!-- module~foodie_adt_integrand&#45;&gt;module~foodie -->
+<g id="edge138" class="edge"><title>module~foodie_adt_integrand&#45;&gt;module~foodie</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M643.412,-481.829C657.456,-469.134 677.813,-448.639 690,-426.899 718.061,-376.841 680.112,-337.36 726,-302.899 817.691,-234.042 875.024,-267.224 984,-302.899 1062.57,-328.62 1053.84,-433.132 1134,-412.899"/>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M1134,-412.899C1204.63,-395.105 1215.33,-371.179 1284,-346.899 1298.15,-341.896 1314.03,-337.357 1327.95,-333.719"/>
+<polygon fill="#000000" stroke="#000000" points="1328.86,-337.098 1337.69,-331.236 1327.13,-330.315 1328.86,-337.098"/>
+</g>
+<!-- module~foodie_adt_integrand&#45;&gt;module~foodie_integrator_leapfrog -->
+<g id="edge70" class="edge"><title>module~foodie_adt_integrand&#45;&gt;module~foodie_integrator_leapfrog</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M645.006,-481.677C663.766,-467.788 695.37,-446.398 726,-434.899 741.5,-429.08 758.629,-424.791 775.204,-421.633"/>
+<polygon fill="#000000" stroke="#000000" points="776.202,-425.01 785.432,-419.809 774.973,-418.119 776.202,-425.01"/>
+</g>
+<!-- module~foodie_adt_integrand&#45;&gt;module~foodie_integrator_adams_bashforth_moulton -->
+<g id="edge78" class="edge"><title>module~foodie_adt_integrand&#45;&gt;module~foodie_integrator_adams_bashforth_moulton</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M685.108,-488.122C757.349,-481.827 884.342,-478.449 984,-516.899 1039.22,-538.205 1089.97,-587.646 1115.91,-615.97"/>
+<polygon fill="#000000" stroke="#000000" points="1113.56,-618.592 1122.84,-623.694 1118.77,-613.915 1113.56,-618.592"/>
+</g>
+<!-- module~foodie_adt_integrand&#45;&gt;module~foodie_integrator_backward_differentiation_formula -->
+<g id="edge86" class="edge"><title>module~foodie_adt_integrand&#45;&gt;module~foodie_integrator_backward_differentiation_formula</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M639.978,-481.75C664.924,-454.427 720.588,-393.8 726,-390.899 729.559,-388.992 733.246,-387.243 737.025,-385.64"/>
+<polygon fill="#000000" stroke="#000000" points="738.521,-388.815 746.591,-381.95 736.001,-382.284 738.521,-388.815"/>
+</g>
+<!-- module~foodie_adt_integrand&#45;&gt;module~foodie_integrator_tvd_runge_kutta -->
+<g id="edge92" class="edge"><title>module~foodie_adt_integrand&#45;&gt;module~foodie_integrator_tvd_runge_kutta</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M642.468,-481.663C656.032,-468.691 676.232,-447.865 690,-426.899 711.402,-394.309 695.161,-370.756 726,-346.899 735.034,-339.911 745.495,-334.818 756.474,-331.147"/>
+<polygon fill="#000000" stroke="#000000" points="757.627,-334.456 766.232,-328.275 755.651,-327.741 757.627,-334.456"/>
+</g>
+<!-- module~foodie_integrator_adams_moulton -->
+<g id="node58" class="node"><title>module~foodie_integrator_adams_moulton</title>
+<a xlink:href="../module/foodie_integrator_adams_moulton.html" xlink:title="foodie_integrator_adams_moulton">
+<polygon fill="#337ab7" stroke="#337ab7" points="943,-721.899 767,-721.899 767,-695.899 943,-695.899 943,-721.899"/>
+<text text-anchor="middle" x="855" y="-706.449" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">foodie_integrator_adams_moulton</text>
+</a>
+</g>
+<!-- module~foodie_adt_integrand&#45;&gt;module~foodie_integrator_adams_moulton -->
+<g id="edge100" class="edge"><title>module~foodie_adt_integrand&#45;&gt;module~foodie_integrator_adams_moulton</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M678.701,-507.946C682.876,-510.428 686.737,-513.383 690,-516.899 731.362,-561.474 686.786,-602.423 726,-648.899 743.225,-669.315 768.918,-683.189 792.85,-692.405"/>
+<polygon fill="#000000" stroke="#000000" points="791.67,-695.7 802.264,-695.834 794.065,-689.123 791.67,-695.7"/>
+</g>
+<!-- module~foodie_integrator_adams_bashforth -->
+<g id="node59" class="node"><title>module~foodie_integrator_adams_bashforth</title>
+<a xlink:href="../module/foodie_integrator_adams_bashforth.html" xlink:title="foodie_integrator_adams_bashforth">
+<polygon fill="#337ab7" stroke="#337ab7" points="946,-639.899 764,-639.899 764,-613.899 946,-613.899 946,-639.899"/>
+<text text-anchor="middle" x="855" y="-624.449" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">foodie_integrator_adams_bashforth</text>
+</a>
+</g>
+<!-- module~foodie_adt_integrand&#45;&gt;module~foodie_integrator_adams_bashforth -->
+<g id="edge106" class="edge"><title>module~foodie_adt_integrand&#45;&gt;module~foodie_integrator_adams_bashforth</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M677.653,-508.037C682.145,-510.505 686.363,-513.431 690,-516.899 720.579,-546.064 693.028,-578.47 726,-604.899 734.195,-611.468 743.636,-616.382 753.607,-620.024"/>
+<polygon fill="#000000" stroke="#000000" points="752.714,-623.413 763.305,-623.139 754.855,-616.748 752.714,-623.413"/>
+</g>
+<!-- module~foodie_integrator_emd_runge_kutta -->
+<g id="node60" class="node"><title>module~foodie_integrator_emd_runge_kutta</title>
+<a xlink:href="../module/foodie_integrator_emd_runge_kutta.html" xlink:title="foodie_integrator_emd_runge_kutta">
+<polygon fill="#337ab7" stroke="#337ab7" points="947,-551.899 763,-551.899 763,-525.899 947,-525.899 947,-551.899"/>
+<text text-anchor="middle" x="855" y="-536.449" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">foodie_integrator_emd_runge_kutta</text>
+</a>
+</g>
+<!-- module~foodie_adt_integrand&#45;&gt;module~foodie_integrator_emd_runge_kutta -->
+<g id="edge112" class="edge"><title>module~foodie_adt_integrand&#45;&gt;module~foodie_integrator_emd_runge_kutta</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M685.282,-506.002C713.248,-511.423 747.307,-518.025 777.554,-523.888"/>
+<polygon fill="#000000" stroke="#000000" points="777.168,-527.378 787.651,-525.845 778.5,-520.506 777.168,-527.378"/>
+</g>
+<!-- module~foodie_integrator_euler_explicit -->
+<g id="node61" class="node"><title>module~foodie_integrator_euler_explicit</title>
+<a xlink:href="../module/foodie_integrator_euler_explicit.html" xlink:title="foodie_integrator_euler_explicit">
+<polygon fill="#337ab7" stroke="#337ab7" points="936,-469.899 774,-469.899 774,-443.899 936,-443.899 936,-469.899"/>
+<text text-anchor="middle" x="855" y="-454.449" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">foodie_integrator_euler_explicit</text>
+</a>
+</g>
+<!-- module~foodie_adt_integrand&#45;&gt;module~foodie_integrator_euler_explicit -->
+<g id="edge118" class="edge"><title>module~foodie_adt_integrand&#45;&gt;module~foodie_integrator_euler_explicit</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M685.282,-485.31C710.081,-481.159 739.67,-476.206 767.144,-471.606"/>
+<polygon fill="#000000" stroke="#000000" points="767.873,-475.033 777.157,-469.93 766.717,-468.129 767.873,-475.033"/>
+</g>
+<!-- module~foodie_integrator_low_storage_runge_kutta -->
+<g id="node62" class="node"><title>module~foodie_integrator_low_storage_runge_kutta</title>
+<a xlink:href="../module/foodie_integrator_low_storage_runge_kutta.html" xlink:title="foodie_integrator_low_storage_runge_kutta">
+<polygon fill="#337ab7" stroke="#337ab7" points="965,-595.899 745,-595.899 745,-569.899 965,-569.899 965,-595.899"/>
+<text text-anchor="middle" x="855" y="-580.449" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">foodie_integrator_low_storage_runge_kutta</text>
+</a>
+</g>
+<!-- module~foodie_adt_integrand&#45;&gt;module~foodie_integrator_low_storage_runge_kutta -->
+<g id="edge124" class="edge"><title>module~foodie_adt_integrand&#45;&gt;module~foodie_integrator_low_storage_runge_kutta</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M674.111,-508.035C679.7,-510.546 685.142,-513.482 690,-516.899 710.666,-531.436 704.161,-548.192 726,-560.899 729.088,-562.696 732.284,-564.355 735.562,-565.887"/>
+<polygon fill="#000000" stroke="#000000" points="734.424,-569.206 744.998,-569.874 737.149,-562.758 734.424,-569.206"/>
+</g>
+<!-- module~foodie_integrator_adams_moulton&#45;&gt;module~foodie -->
+<g id="edge140" class="edge"><title>module~foodie_integrator_adams_moulton&#45;&gt;module~foodie</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M917.517,-721.934C1004.68,-736.076 1161.7,-746.216 1248,-658.899 1346.13,-559.622 1192.99,-452.735 1284,-346.899 1294.83,-334.301 1312.09,-328.561 1327.89,-326.069"/>
+<polygon fill="#000000" stroke="#000000" points="1328.47,-329.525 1337.98,-324.861 1327.64,-322.574 1328.47,-329.525"/>
+</g>
+<!-- module~foodie_integrator_adams_moulton&#45;&gt;module~foodie_integrator_adams_bashforth_moulton -->
+<g id="edge76" class="edge"><title>module~foodie_integrator_adams_moulton&#45;&gt;module~foodie_integrator_adams_bashforth_moulton</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M922.536,-695.894C942.415,-691.761 964.152,-686.944 984,-681.899 1017.59,-673.362 1054.92,-662.17 1083.94,-653.083"/>
+<polygon fill="#000000" stroke="#000000" points="1085.35,-656.308 1093.83,-649.964 1083.24,-649.632 1085.35,-656.308"/>
+</g>
+<!-- module~foodie_integrator_adams_bashforth&#45;&gt;module~foodie -->
+<g id="edge142" class="edge"><title>module~foodie_integrator_adams_bashforth&#45;&gt;module~foodie</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M946.831,-619.898C959.877,-616.478 972.686,-611.654 984,-604.899 1076.98,-549.387 1029.01,-439.402 1134,-412.899"/>
+</g>
+<!-- module~foodie_integrator_adams_bashforth&#45;&gt;module~foodie_integrator_adams_bashforth_moulton -->
+<g id="edge84" class="edge"><title>module~foodie_integrator_adams_bashforth&#45;&gt;module~foodie_integrator_adams_bashforth_moulton</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M946.741,-630.187C967.034,-630.915 988.859,-631.697 1010.19,-632.462"/>
+<polygon fill="#000000" stroke="#000000" points="1010.16,-635.963 1020.28,-632.823 1010.41,-628.967 1010.16,-635.963"/>
+</g>
+<!-- module~foodie_integrator_emd_runge_kutta&#45;&gt;module~foodie -->
+<g id="edge144" class="edge"><title>module~foodie_integrator_emd_runge_kutta&#45;&gt;module~foodie</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M883.231,-525.826C951.494,-494.258 1120.86,-416.216 1134,-412.899"/>
+</g>
+<!-- module~foodie_integrator_euler_explicit&#45;&gt;module~foodie -->
+<g id="edge146" class="edge"><title>module~foodie_integrator_euler_explicit&#45;&gt;module~foodie</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M936.061,-448.067C992.165,-440.994 1068.27,-429.491 1134,-412.899"/>
+</g>
+<!-- module~foodie_integrator_low_storage_runge_kutta&#45;&gt;module~foodie -->
+<g id="edge148" class="edge"><title>module~foodie_integrator_low_storage_runge_kutta&#45;&gt;module~foodie</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M962.603,-569.801C970.018,-567.312 977.227,-564.372 984,-560.899 1067.34,-518.167 1043.19,-435.82 1134,-412.899"/>
+</g>
+<!-- module~foodie_kinds -->
+<g id="node63" class="node"><title>module~foodie_kinds</title>
+<a xlink:href="../module/foodie_kinds.html" xlink:title="foodie_kinds">
+<polygon fill="#337ab7" stroke="#337ab7" points="529,-529.899 457,-529.899 457,-503.899 529,-503.899 529,-529.899"/>
+<text text-anchor="middle" x="493" y="-514.449" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">foodie_kinds</text>
+</a>
+</g>
+<!-- module~foodie_kinds&#45;&gt;module~foodie_integrator_leapfrog -->
+<g id="edge72" class="edge"><title>module~foodie_kinds&#45;&gt;module~foodie_integrator_leapfrog</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M628,-412.899C674.509,-394.511 730.688,-394.353 775.522,-398.87"/>
+<polygon fill="#000000" stroke="#000000" points="775.168,-402.352 785.491,-399.97 775.935,-395.395 775.168,-402.352"/>
+</g>
+<!-- module~foodie_kinds&#45;&gt;module~foodie_integrator_adams_bashforth_moulton -->
+<g id="edge80" class="edge"><title>module~foodie_kinds&#45;&gt;module~foodie_integrator_adams_bashforth_moulton</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M628,-708.899C777.729,-760.968 831.645,-774.693 984,-730.899 1034.06,-716.511 1083.57,-679.979 1111.33,-656.927"/>
+<polygon fill="#000000" stroke="#000000" points="1113.85,-659.377 1119.22,-650.244 1109.33,-654.035 1113.85,-659.377"/>
+</g>
+<!-- module~foodie_kinds&#45;&gt;module~foodie_integrator_backward_differentiation_formula -->
+<g id="edge88" class="edge"><title>module~foodie_kinds&#45;&gt;module~foodie_integrator_backward_differentiation_formula</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M628,-412.899C661.383,-399.701 699.141,-390.354 734.146,-383.779"/>
+<polygon fill="#000000" stroke="#000000" points="735.211,-387.143 744.424,-381.912 733.96,-380.255 735.211,-387.143"/>
+</g>
+<!-- module~foodie_kinds&#45;&gt;module~foodie_integrator_tvd_runge_kutta -->
+<g id="edge94" class="edge"><title>module~foodie_kinds&#45;&gt;module~foodie_integrator_tvd_runge_kutta</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M504.869,-503.847C526.682,-480.844 575.725,-433.568 628,-412.899"/>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M628,-412.899C676.834,-393.592 677.25,-366.416 726,-346.899 735.59,-343.06 745.843,-339.89 756.221,-337.274"/>
+<polygon fill="#000000" stroke="#000000" points="757.257,-340.626 766.191,-334.931 755.656,-333.811 757.257,-340.626"/>
+</g>
+<!-- module~foodie_kinds&#45;&gt;module~foodie_adt_integrand -->
+<g id="edge98" class="edge"><title>module~foodie_kinds&#45;&gt;module~foodie_adt_integrand</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M529.533,-510.946C539.278,-509.358 550.123,-507.59 560.952,-505.826"/>
+<polygon fill="#000000" stroke="#000000" points="561.553,-509.274 570.86,-504.211 560.427,-502.365 561.553,-509.274"/>
+</g>
+<!-- module~foodie_kinds&#45;&gt;module~foodie_integrator_adams_moulton -->
+<g id="edge102" class="edge"><title>module~foodie_kinds&#45;&gt;module~foodie_integrator_adams_moulton</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M628,-708.899C669.867,-723.459 718.764,-725.225 760.432,-722.628"/>
+<polygon fill="#000000" stroke="#000000" points="760.859,-726.107 770.583,-721.902 760.359,-719.125 760.859,-726.107"/>
+</g>
+<!-- module~foodie_kinds&#45;&gt;module~foodie_integrator_adams_bashforth -->
+<g id="edge108" class="edge"><title>module~foodie_kinds&#45;&gt;module~foodie_integrator_adams_bashforth</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M628,-708.899C646.23,-715.239 755.798,-669.98 815.79,-644.11"/>
+<polygon fill="#000000" stroke="#000000" points="817.538,-647.167 825.324,-639.981 814.757,-640.743 817.538,-647.167"/>
+</g>
+<!-- module~foodie_kinds&#45;&gt;module~foodie_integrator_emd_runge_kutta -->
+<g id="edge114" class="edge"><title>module~foodie_kinds&#45;&gt;module~foodie_integrator_emd_runge_kutta</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M496.52,-529.994C507.74,-568.538 546.791,-680.658 628,-708.899"/>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M628,-708.899C702.514,-734.812 659.899,-603.963 726,-560.899 734.281,-555.505 743.472,-551.308 753.025,-548.058"/>
+<polygon fill="#000000" stroke="#000000" points="754.134,-551.379 762.678,-545.115 752.092,-544.684 754.134,-551.379"/>
+</g>
+<!-- module~foodie_kinds&#45;&gt;module~foodie_integrator_euler_explicit -->
+<g id="edge120" class="edge"><title>module~foodie_kinds&#45;&gt;module~foodie_integrator_euler_explicit</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M628,-412.899C669.513,-396.486 682.205,-426.255 726,-434.899 738.522,-437.371 751.761,-439.817 764.798,-442.13"/>
+<polygon fill="#000000" stroke="#000000" points="764.259,-445.589 774.714,-443.871 765.47,-438.694 764.259,-445.589"/>
+</g>
+<!-- module~foodie_kinds&#45;&gt;module~foodie_integrator_low_storage_runge_kutta -->
+<g id="edge126" class="edge"><title>module~foodie_kinds&#45;&gt;module~foodie_integrator_low_storage_runge_kutta</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M628,-708.899C687.987,-729.76 670.023,-634.901 726,-604.899 729.559,-602.992 733.246,-601.243 737.025,-599.64"/>
+<polygon fill="#000000" stroke="#000000" points="738.521,-602.815 746.591,-595.95 736.001,-596.284 738.521,-602.815"/>
+</g>
+<!-- module~foodie_utils -->
+<g id="node64" class="node"><title>module~foodie_utils</title>
+<a xlink:href="../module/foodie_utils.html" xlink:title="foodie_utils">
+<polygon fill="#337ab7" stroke="#337ab7" points="661,-551.899 595,-551.899 595,-525.899 661,-525.899 661,-551.899"/>
+<text text-anchor="middle" x="628" y="-536.449" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">foodie_utils</text>
+</a>
+</g>
+<!-- module~foodie_kinds&#45;&gt;module~foodie_utils -->
+<g id="edge68" class="edge"><title>module~foodie_kinds&#45;&gt;module~foodie_utils</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M529.533,-522.853C546.374,-525.597 566.499,-528.877 584.153,-531.754"/>
+<polygon fill="#000000" stroke="#000000" points="583.785,-535.24 594.218,-533.394 584.911,-528.331 583.785,-535.24"/>
+</g>
+<!-- module~foodie_utils&#45;&gt;module~foodie_integrator_leapfrog -->
+<g id="edge74" class="edge"><title>module~foodie_utils&#45;&gt;module~foodie_integrator_leapfrog</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M661.615,-532.402C671.69,-529.118 682.137,-524.21 690,-516.899 719.149,-489.797 694.63,-459.397 726,-434.899 739.995,-423.97 757.47,-417.663 774.994,-414.176"/>
+<polygon fill="#000000" stroke="#000000" points="776.015,-417.553 785.292,-412.434 774.848,-410.651 776.015,-417.553"/>
+</g>
+<!-- module~foodie_utils&#45;&gt;module~foodie_integrator_adams_bashforth_moulton -->
+<g id="edge82" class="edge"><title>module~foodie_utils&#45;&gt;module~foodie_integrator_adams_bashforth_moulton</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M634.7,-551.936C648.13,-576.438 680.957,-628.703 726,-648.899 843.662,-701.658 1000.2,-673.351 1080.89,-652.566"/>
+<polygon fill="#000000" stroke="#000000" points="1082.04,-655.882 1090.82,-649.948 1080.26,-649.114 1082.04,-655.882"/>
+</g>
+<!-- module~foodie_utils&#45;&gt;module~foodie_integrator_backward_differentiation_formula -->
+<g id="edge90" class="edge"><title>module~foodie_utils&#45;&gt;module~foodie_integrator_backward_differentiation_formula</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M661.586,-533.226C671.898,-529.983 682.494,-524.892 690,-516.899 729.872,-474.447 682.628,-429.769 726,-390.899 727.309,-389.727 728.656,-388.605 730.038,-387.531"/>
+<polygon fill="#000000" stroke="#000000" points="732.013,-390.421 738.315,-381.904 728.078,-384.632 732.013,-390.421"/>
+</g>
+<!-- module~foodie_utils&#45;&gt;module~foodie_integrator_tvd_runge_kutta -->
+<g id="edge96" class="edge"><title>module~foodie_utils&#45;&gt;module~foodie_integrator_tvd_runge_kutta</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M661.595,-533.627C672.032,-530.411 682.701,-525.234 690,-516.899 740.881,-458.798 670.314,-400.413 726,-346.899 734.702,-338.536 745.348,-332.697 756.756,-328.693"/>
+<polygon fill="#000000" stroke="#000000" points="757.935,-331.994 766.492,-325.748 755.907,-325.294 757.935,-331.994"/>
+</g>
+<!-- module~foodie_utils&#45;&gt;module~foodie_integrator_adams_moulton -->
+<g id="edge104" class="edge"><title>module~foodie_utils&#45;&gt;module~foodie_integrator_adams_moulton</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M633.001,-552.068C644.593,-580.692 676.171,-648.669 726,-681.899 735.423,-688.183 746.025,-693.047 756.998,-696.804"/>
+<polygon fill="#000000" stroke="#000000" points="756.127,-700.198 766.715,-699.829 758.208,-693.515 756.127,-700.198"/>
+</g>
+<!-- module~foodie_utils&#45;&gt;module~foodie_integrator_adams_bashforth -->
+<g id="edge110" class="edge"><title>module~foodie_utils&#45;&gt;module~foodie_integrator_adams_bashforth</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M643.111,-552.122C661.417,-567.379 693.817,-592.015 726,-604.899 734.766,-608.409 744.086,-611.359 753.549,-613.838"/>
+<polygon fill="#000000" stroke="#000000" points="752.9,-617.282 763.445,-616.255 754.561,-610.482 752.9,-617.282"/>
+</g>
+<!-- module~foodie_utils&#45;&gt;module~foodie_integrator_emd_runge_kutta -->
+<g id="edge116" class="edge"><title>module~foodie_utils&#45;&gt;module~foodie_integrator_emd_runge_kutta</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M661.984,-538.899C686.195,-538.899 720.107,-538.899 752.762,-538.899"/>
+<polygon fill="#000000" stroke="#000000" points="752.844,-542.399 762.844,-538.899 752.844,-535.399 752.844,-542.399"/>
+</g>
+<!-- module~foodie_utils&#45;&gt;module~foodie_integrator_euler_explicit -->
+<g id="edge122" class="edge"><title>module~foodie_utils&#45;&gt;module~foodie_integrator_euler_explicit</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M661.804,-526.958C670.959,-523.709 680.863,-520.181 690,-516.899 730.599,-502.315 776.739,-485.518 809.884,-473.412"/>
+<polygon fill="#000000" stroke="#000000" points="811.111,-476.691 819.302,-469.971 808.708,-470.116 811.111,-476.691"/>
+</g>
+<!-- module~foodie_utils&#45;&gt;module~foodie_integrator_low_storage_runge_kutta -->
+<g id="edge128" class="edge"><title>module~foodie_utils&#45;&gt;module~foodie_integrator_low_storage_runge_kutta</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M661.924,-546.97C680.75,-551.334 704.616,-556.678 726,-560.899 738.522,-563.371 751.761,-565.817 764.798,-568.13"/>
+<polygon fill="#000000" stroke="#000000" points="764.259,-571.589 774.714,-569.871 765.47,-564.694 764.259,-571.589"/>
+</g>
+</g>
+</svg>
+</div>
+                <script>var panprogramintegrate_euler_1d_caf2UsesGraph = svgPanZoom('#programintegrate_euler_1d_caf2UsesGraph', {
+                    zoomEnabled: true,
+                    controlIconsEnabled: true,
+                    fit: true,
+                    center: true,});
+                    </script>
+                <div><a type="button" class="graph-help" data-toggle="modal" href="#graph-help-text">Help</a></div>
+                <div class="modal fade" id="graph-help-text" tabindex="-1" role="dialog">
+                  <div class="modal-dialog modal-lg" role="document">
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title" id="-graph-help-label">Graph Key</h4>
+                      </div>
+                      <div class="modal-body">
+                        
+Nodes of different colours represent the following:
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.26.3 (20100126.1600)
+ -->
+<!-- Title: Graph Key Pages: 1 -->
+<svg width="641pt" height="28pt"
+ viewBox="0.00 0.00 641.00 27.80" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="graph1" class="graph" transform="scale(0.817602 0.817602) rotate(0) translate(4 30)">
+<title>Graph Key</title>
+<polygon fill="white" stroke="white" points="-4,5 -4,-30 781,-30 781,5 -4,5"/>
+<!-- Module -->
+<g id="node1" class="node"><title>Module</title>
+<polygon fill="#337ab7" stroke="#337ab7" points="54,-26 2.13163e-14,-26 0,-1.24345e-14 54,-3.55271e-15 54,-26"/>
+<text text-anchor="middle" x="27" y="-10.55" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Module</text>
+</g>
+<!-- Submodule -->
+<g id="node2" class="node"><title>Submodule</title>
+<polygon fill="#5bc0de" stroke="#5bc0de" points="138,-26 72,-26 72,-1.24345e-14 138,-3.55271e-15 138,-26"/>
+<text text-anchor="middle" x="105" y="-10.55" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Submodule</text>
+</g>
+<!-- Type -->
+<g id="node3" class="node"><title>Type</title>
+<polygon fill="#5cb85c" stroke="#5cb85c" points="210,-26 156,-26 156,-1.24345e-14 210,-3.55271e-15 210,-26"/>
+<text text-anchor="middle" x="183" y="-10.55" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Type</text>
+</g>
+<!-- Subroutine -->
+<g id="node4" class="node"><title>Subroutine</title>
+<polygon fill="#d9534f" stroke="#d9534f" points="292,-26 228,-26 228,-1.24345e-14 292,-3.55271e-15 292,-26"/>
+<text text-anchor="middle" x="260" y="-10.55" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Subroutine</text>
+</g>
+<!-- Function -->
+<g id="node5" class="node"><title>Function</title>
+<polygon fill="#d94e8f" stroke="#d94e8f" points="364,-26 310,-26 310,-1.24345e-14 364,-3.55271e-15 364,-26"/>
+<text text-anchor="middle" x="337" y="-10.55" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Function</text>
+</g>
+<!-- Interface -->
+<g id="node6" class="node"><title>Interface</title>
+<polygon fill="#a7506f" stroke="#a7506f" points="436,-26 382,-26 382,-1.24345e-14 436,-3.55271e-15 436,-26"/>
+<text text-anchor="middle" x="409" y="-10.55" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Interface</text>
+</g>
+<!-- Unknown Procedure Type -->
+<g id="node7" class="node"><title>Unknown Procedure Type</title>
+<polygon fill="#777777" stroke="#777777" points="590,-26 454,-26 454,-1.24345e-14 590,-3.55271e-15 590,-26"/>
+<text text-anchor="middle" x="522" y="-10.55" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Unknown Procedure Type</text>
+</g>
+<!-- Program -->
+<g id="node8" class="node"><title>Program</title>
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="662,-26 608,-26 608,-1.24345e-14 662,-3.55271e-15 662,-26"/>
+<text text-anchor="middle" x="635" y="-10.55" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Program</text>
+</g>
+<!-- This Page&#39;s Entity -->
+<g id="node9" class="node"><title>This Page&#39;s Entity</title>
+<polygon fill="none" stroke="black" points="776,-26 680,-26 680,-1.24345e-14 776,-3.55271e-15 776,-26"/>
+<text text-anchor="middle" x="728" y="-10.55" font-family="Helvetica,sans-Serif" font-size="10.50">This Page&#39;s Entity</text>
+</g>
+</g>
+</svg>
+
+Where possible, edges connecting nodes are given different colours to make them
+easier to distinguish in large graphs.
+<h5>Module Graph</h5>
+<p>Solid arrows point from a parent (sub)module to the submodule which is
+descended from it. Dashed arrows point from a module being used to the
+module using it.</p>
+<h5>Type Graph</h5>
+<p>Solid arrows point from one derived type to another which extends
+(inherits from) it. Dashed arrows point from a derived type to another
+type containing it as a components, with a label listing the name(s) of
+said component(s).</p>
+<h5>Call Graph</h5>
+<p>Solid arrows point from a procedure to one which it calls. Dashed 
+arrows point from an interface to procedures which implement that interface.
+This could include the module procedures in a generic interface or the
+implementation in a submodule of an interface in a parent module.</p>
+
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                
+    <br><br>
+    <p>Test FOODIE with the integration of Euler 1D PDEs system.</p>
+    
+     <h3>Calls</h3>
+     
+                <div class="depgraph"><?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.26.3 (20100126.1600)
+ -->
+<!-- Title: program~~integrate_euler_1d_caf~2~~CallsGraph Pages: 1 -->
+<svg id="programintegrate_euler_1d_caf2CallsGraph" width="456pt" height="242pt"
+ viewBox="0.00 0.00 456.00 242.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="program~~integrate_euler_1d_caf~2~~CallsGraph" class="graph" transform="scale(1 1) rotate(0) translate(4 238)">
+<title>program~~integrate_euler_1d_caf~2~~CallsGraph</title>
+<polygon fill="white" stroke="white" points="-4,5 -4,-238 453,-238 453,5 -4,5"/>
+<!-- program~integrate_euler_1d_caf~2 -->
+<g id="node1" class="node"><title>program~integrate_euler_1d_caf~2</title>
+<polygon fill="none" stroke="black" points="124,-128 4.9738e-14,-128 0,-102 124,-102 124,-128"/>
+<text text-anchor="middle" x="62" y="-112.55" font-family="Helvetica,sans-Serif" font-size="10.50">integrate_euler_1D_caf</text>
+</g>
+<!-- proc~save_results~3 -->
+<g id="node2" class="node"><title>proc~save_results~3</title>
+<a xlink:href="../proc/save_results%7E3.html" xlink:title="save_results">
+<polygon fill="#d9534f" stroke="#d9534f" points="348,-234 276,-234 276,-208 348,-208 348,-234"/>
+<text text-anchor="middle" x="312" y="-218.55" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">save_results</text>
+</a>
+</g>
+<!-- program~integrate_euler_1d_caf~2&#45;&gt;proc~save_results~3 -->
+<g id="edge12" class="edge"><title>program~integrate_euler_1d_caf~2&#45;&gt;proc~save_results~3</title>
+<path fill="none" stroke="#000000" d="M78.8124,-128.023C97.6587,-142.078 129.575,-164.285 160,-178 193.918,-193.29 234.574,-204.45 265.301,-211.564"/>
+<polygon fill="#000000" stroke="#000000" points="264.792,-215.037 275.317,-213.822 266.331,-208.208 264.792,-215.037"/>
+</g>
+<!-- str -->
+<g id="node3" class="node"><title>str</title>
+<polygon fill="#777777" stroke="#777777" points="448,-128 394,-128 394,-102 448,-102 448,-128"/>
+<text text-anchor="middle" x="421" y="-112.55" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">str</text>
+</g>
+<!-- program~integrate_euler_1d_caf~2&#45;&gt;str -->
+<g id="edge14" class="edge"><title>program~integrate_euler_1d_caf~2&#45;&gt;str</title>
+<path fill="none" stroke="#000000" d="M93.3538,-101.867C148.134,-80.8203 264.36,-44.648 358,-73 372.838,-77.4926 387.375,-86.7598 398.74,-95.4488"/>
+<polygon fill="#000000" stroke="#000000" points="396.776,-98.3602 406.765,-101.892 401.158,-92.902 396.776,-98.3602"/>
+</g>
+<!-- strz -->
+<g id="node4" class="node"><title>strz</title>
+<polygon fill="#777777" stroke="#777777" points="339,-190 285,-190 285,-164 339,-164 339,-190"/>
+<text text-anchor="middle" x="312" y="-174.55" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">strz</text>
+</g>
+<!-- program~integrate_euler_1d_caf~2&#45;&gt;strz -->
+<g id="edge16" class="edge"><title>program~integrate_euler_1d_caf~2&#45;&gt;strz</title>
+<path fill="none" stroke="#000000" d="M86.2471,-128.003C105.651,-137.82 133.849,-150.793 160,-158 198.352,-168.57 243.784,-173.274 274.925,-175.359"/>
+<polygon fill="#000000" stroke="#000000" points="274.713,-178.853 284.908,-175.971 275.141,-171.866 274.713,-178.853"/>
+</g>
+<!-- proc~save_time_serie~2 -->
+<g id="node5" class="node"><title>proc~save_time_serie~2</title>
+<a xlink:href="../proc/save_time_serie%7E2.html" xlink:title="save_time_serie">
+<polygon fill="#d9534f" stroke="#d9534f" points="357,-108 267,-108 267,-82 357,-82 357,-108"/>
+<text text-anchor="middle" x="312" y="-92.55" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">save_time_serie</text>
+</a>
+</g>
+<!-- program~integrate_euler_1d_caf~2&#45;&gt;proc~save_time_serie~2 -->
+<g id="edge18" class="edge"><title>program~integrate_euler_1d_caf~2&#45;&gt;proc~save_time_serie~2</title>
+<path fill="none" stroke="#000000" d="M124.119,-110.03C164.607,-106.791 216.997,-102.6 256.164,-99.4669"/>
+<polygon fill="#000000" stroke="#000000" points="256.641,-102.94 266.33,-98.6536 256.082,-95.9623 256.641,-102.94"/>
+</g>
+<!-- proc~init~13 -->
+<g id="node6" class="node"><title>proc~init~13</title>
+<a xlink:href="../proc/init%7E13.html" xlink:title="init">
+<polygon fill="#d9534f" stroke="#d9534f" points="222,-149 168,-149 168,-123 222,-123 222,-149"/>
+<text text-anchor="middle" x="195" y="-133.55" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">init</text>
+</a>
+</g>
+<!-- program~integrate_euler_1d_caf~2&#45;&gt;proc~init~13 -->
+<g id="edge20" class="edge"><title>program~integrate_euler_1d_caf~2&#45;&gt;proc~init~13</title>
+<path fill="none" stroke="#000000" d="M124.217,-124.824C135.676,-126.633 147.306,-128.469 157.737,-130.116"/>
+<polygon fill="#000000" stroke="#000000" points="157.295,-133.59 167.718,-131.692 158.386,-126.675 157.295,-133.59"/>
+</g>
+<!-- proc~synchronize~3 -->
+<g id="node7" class="node"><title>proc~synchronize~3</title>
+<a xlink:href="../proc/synchronize%7E3.html" xlink:title="synchronize">
+<polygon fill="#d9534f" stroke="#d9534f" points="230,-26 160,-26 160,-1.24345e-14 230,-3.55271e-15 230,-26"/>
+<text text-anchor="middle" x="195" y="-10.55" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">synchronize</text>
+</a>
+</g>
+<!-- program~integrate_euler_1d_caf~2&#45;&gt;proc~synchronize~3 -->
+<g id="edge22" class="edge"><title>program~integrate_euler_1d_caf~2&#45;&gt;proc~synchronize~3</title>
+<path fill="none" stroke="#000000" d="M79.1151,-101.874C102.159,-84.2014 143.328,-52.6283 169.884,-32.2623"/>
+<polygon fill="#000000" stroke="#000000" points="172.145,-34.9384 177.951,-26.0755 167.885,-29.3838 172.145,-34.9384"/>
+</g>
+<!-- proc~save_results~3&#45;&gt;str -->
+<g id="edge2" class="edge"><title>proc~save_results~3&#45;&gt;str</title>
+<path fill="none" stroke="#000000" d="M344.381,-207.981C349.183,-205.365 353.892,-202.367 358,-199 379.346,-181.5 397.481,-155.315 408.735,-136.841"/>
+<polygon fill="#000000" stroke="#000000" points="411.758,-138.606 413.833,-128.217 405.732,-135.045 411.758,-138.606"/>
+</g>
+<!-- proc~save_time_serie~2&#45;&gt;str -->
+<g id="edge4" class="edge"><title>proc~save_time_serie~2&#45;&gt;str</title>
+<path fill="none" stroke="#000000" d="M357.594,-103.366C366.387,-104.979 375.497,-106.651 383.976,-108.207"/>
+<polygon fill="#000000" stroke="#000000" points="383.475,-111.673 393.942,-110.035 384.738,-104.788 383.475,-111.673"/>
+</g>
+<!-- proc~init~13&#45;&gt;str -->
+<g id="edge6" class="edge"><title>proc~init~13&#45;&gt;str</title>
+<path fill="none" stroke="#000000" d="M222.261,-133.467C262.669,-129.712 338.562,-122.66 383.969,-118.441"/>
+<polygon fill="#000000" stroke="#000000" points="384.361,-121.92 393.994,-117.509 383.713,-114.95 384.361,-121.92"/>
+</g>
+<!-- proc~init~13&#45;&gt;strz -->
+<g id="edge8" class="edge"><title>proc~init~13&#45;&gt;strz</title>
+<path fill="none" stroke="#000000" d="M222.136,-145.509C237.824,-151.007 257.784,-158.001 274.906,-164.001"/>
+<polygon fill="#000000" stroke="#000000" points="274.011,-167.396 284.606,-167.4 276.326,-160.79 274.011,-167.396"/>
+</g>
+<!-- proc~init~13&#45;&gt;proc~save_time_serie~2 -->
+<g id="edge10" class="edge"><title>proc~init~13&#45;&gt;proc~save_time_serie~2</title>
+<path fill="none" stroke="#000000" d="M222.136,-126.491C234.983,-121.989 250.696,-116.483 265.368,-111.341"/>
+<polygon fill="#000000" stroke="#000000" points="266.54,-114.639 274.82,-108.029 264.225,-108.033 266.54,-114.639"/>
+</g>
+</g>
+</svg>
+</div>
+                <div><a type="button" class="graph-help" data-toggle="modal" href="#graph-help-text">Help</a></div>
+                <div class="modal fade" id="graph-help-text" tabindex="-1" role="dialog">
+                  <div class="modal-dialog modal-lg" role="document">
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title" id="-graph-help-label">Graph Key</h4>
+                      </div>
+                      <div class="modal-body">
+                        
+Nodes of different colours represent the following:
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.26.3 (20100126.1600)
+ -->
+<!-- Title: Graph Key Pages: 1 -->
+<svg width="641pt" height="28pt"
+ viewBox="0.00 0.00 641.00 27.80" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="graph1" class="graph" transform="scale(0.817602 0.817602) rotate(0) translate(4 30)">
+<title>Graph Key</title>
+<polygon fill="white" stroke="white" points="-4,5 -4,-30 781,-30 781,5 -4,5"/>
+<!-- Module -->
+<g id="node1" class="node"><title>Module</title>
+<polygon fill="#337ab7" stroke="#337ab7" points="54,-26 2.13163e-14,-26 0,-1.24345e-14 54,-3.55271e-15 54,-26"/>
+<text text-anchor="middle" x="27" y="-10.55" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Module</text>
+</g>
+<!-- Submodule -->
+<g id="node2" class="node"><title>Submodule</title>
+<polygon fill="#5bc0de" stroke="#5bc0de" points="138,-26 72,-26 72,-1.24345e-14 138,-3.55271e-15 138,-26"/>
+<text text-anchor="middle" x="105" y="-10.55" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Submodule</text>
+</g>
+<!-- Type -->
+<g id="node3" class="node"><title>Type</title>
+<polygon fill="#5cb85c" stroke="#5cb85c" points="210,-26 156,-26 156,-1.24345e-14 210,-3.55271e-15 210,-26"/>
+<text text-anchor="middle" x="183" y="-10.55" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Type</text>
+</g>
+<!-- Subroutine -->
+<g id="node4" class="node"><title>Subroutine</title>
+<polygon fill="#d9534f" stroke="#d9534f" points="292,-26 228,-26 228,-1.24345e-14 292,-3.55271e-15 292,-26"/>
+<text text-anchor="middle" x="260" y="-10.55" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Subroutine</text>
+</g>
+<!-- Function -->
+<g id="node5" class="node"><title>Function</title>
+<polygon fill="#d94e8f" stroke="#d94e8f" points="364,-26 310,-26 310,-1.24345e-14 364,-3.55271e-15 364,-26"/>
+<text text-anchor="middle" x="337" y="-10.55" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Function</text>
+</g>
+<!-- Interface -->
+<g id="node6" class="node"><title>Interface</title>
+<polygon fill="#a7506f" stroke="#a7506f" points="436,-26 382,-26 382,-1.24345e-14 436,-3.55271e-15 436,-26"/>
+<text text-anchor="middle" x="409" y="-10.55" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Interface</text>
+</g>
+<!-- Unknown Procedure Type -->
+<g id="node7" class="node"><title>Unknown Procedure Type</title>
+<polygon fill="#777777" stroke="#777777" points="590,-26 454,-26 454,-1.24345e-14 590,-3.55271e-15 590,-26"/>
+<text text-anchor="middle" x="522" y="-10.55" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Unknown Procedure Type</text>
+</g>
+<!-- Program -->
+<g id="node8" class="node"><title>Program</title>
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="662,-26 608,-26 608,-1.24345e-14 662,-3.55271e-15 662,-26"/>
+<text text-anchor="middle" x="635" y="-10.55" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Program</text>
+</g>
+<!-- This Page&#39;s Entity -->
+<g id="node9" class="node"><title>This Page&#39;s Entity</title>
+<polygon fill="none" stroke="black" points="776,-26 680,-26 680,-1.24345e-14 776,-3.55271e-15 776,-26"/>
+<text text-anchor="middle" x="728" y="-10.55" font-family="Helvetica,sans-Serif" font-size="10.50">This Page&#39;s Entity</text>
+</g>
+</g>
+</svg>
+
+Where possible, edges connecting nodes are given different colours to make them
+easier to distinguish in large graphs.
+<h5>Module Graph</h5>
+<p>Solid arrows point from a parent (sub)module to the submodule which is
+descended from it. Dashed arrows point from a module being used to the
+module using it.</p>
+<h5>Type Graph</h5>
+<p>Solid arrows point from one derived type to another which extends
+(inherits from) it. Dashed arrows point from a derived type to another
+type containing it as a components, with a label listing the name(s) of
+said component(s).</p>
+<h5>Call Graph</h5>
+<p>Solid arrows point from a procedure to one which it calls. Dashed 
+arrows point from an interface to procedures which implement that interface.
+This could include the module procedures in a generic interface or the
+implementation in a submodule of an interface in a parent module.</p>
+
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                
+     
+    <br>
+
+    
+    <section>
+    <h2>Variables</h2>
+    
+<table class="table table-striped varlist">
+<thead><tr><th>Type</th>
+
+<th>Attributes</th><th></th><th>Name</th><th></th><th>Initial</th><th></th></thead>
+
+
+
+<tbody>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-cli%7E3"></span>type(<a href='../type/command_line_interface.html'>command_line_interface</a>)</td>
+  
+  
+  <td></td><td>::</td>
+  <td><strong>cli</strong></td><td></td><td></td><td><p>Command line interface handler.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-rk_integrator%7E14"></span>type(<a href='../type/tvd_runge_kutta_integrator%7E3.html'>tvd_runge_kutta_integrator</a>)</td>
+  
+  
+  <td></td><td>::</td>
+  <td><strong>rk_integrator</strong></td><td></td><td></td><td><p>Runge-Kutta integrator.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-rk_stages%7E14"></span>integer,</td>
+  
+  
+  <td>parameter</td><td>::</td>
+  <td><strong>rk_stages</strong></td><td> =</td><td>5</td><td><p>Runge-Kutta stages number.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-rk_stage%7E15"></span>type(euler_1D_caf)</td>
+  
+  
+  <td></td><td>::</td>
+  <td><strong>rk_stage</strong>(1:rk_stages)</td><td></td><td></td><td><p>Runge-Kutta stages.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-ord%7E12"></span>integer,</td>
+  
+  
+  <td>parameter</td><td>::</td>
+  <td><strong>ord</strong></td><td> =</td><td>7</td><td><p>Space reconstruciton order,</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-t%7E55"></span>real(kind=R_P)</td>
+  
+  
+  <td></td><td>::</td>
+  <td><strong>t</strong></td><td></td><td></td><td><p>Time.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-cfl%7E8"></span>real(kind=R_P),</td>
+  
+  
+  <td>parameter</td><td>::</td>
+  <td><strong>CFL</strong></td><td> =</td><td>0.7_R_P</td><td><p>CFL value.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-ns%7E12"></span>integer(kind=I_P),</td>
+  
+  
+  <td>parameter</td><td>::</td>
+  <td><strong>Ns</strong></td><td> =</td><td>1</td><td><p>Number of differnt initial gas species.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-nc%7E8"></span>integer(kind=I_P),</td>
+  
+  
+  <td>parameter</td><td>::</td>
+  <td><strong>Nc</strong></td><td> =</td><td>Ns+2</td><td><p>Number of conservative variables.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-np%7E7"></span>integer(kind=I_P),</td>
+  
+  
+  <td>parameter</td><td>::</td>
+  <td><strong>Np</strong></td><td> =</td><td>Ns+4</td><td><p>Number of primitive variables.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-bc_l%7E12"></span>character(len=:),</td>
+  
+  
+  <td>allocatable</td><td>::</td>
+  <td><strong>BC_L</strong></td><td></td><td></td><td><p>Left boundary condition type.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-bc_r%7E12"></span>character(len=:),</td>
+  
+  
+  <td>allocatable</td><td>::</td>
+  <td><strong>BC_R</strong></td><td></td><td></td><td><p>Right boundary condition type.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-dx%7E12"></span>real(kind=R_P)</td>
+  
+  
+  <td></td><td>::</td>
+  <td><strong>Dx</strong></td><td></td><td></td><td><p>Space step discretization.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-cp0%7E12"></span>real(kind=R_P)</td>
+  
+  
+  <td></td><td>::</td>
+  <td><strong>cp0</strong>(1:Ns)</td><td></td><td></td><td><p>Specific heat at constant pressure.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-cv0%7E12"></span>real(kind=R_P)</td>
+  
+  
+  <td></td><td>::</td>
+  <td><strong>cv0</strong>(1:Ns)</td><td></td><td></td><td><p>Specific heat at constant volume.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-initial_state%7E11"></span>real(kind=R_P),</td>
+  
+  
+  <td>allocatable</td><td>::</td>
+  <td><strong>initial_state</strong>(:,:)</td><td></td><td></td><td><p>Initial state of primitive variables.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-x%7E9"></span>real(kind=R_P),</td>
+  
+  
+  <td>allocatable</td><td>::</td>
+  <td><strong>x</strong>(:)</td><td></td><td></td><td><p>Cell center x-abscissa values.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-final_state%7E2"></span>real(kind=R_P),</td>
+  
+  
+  <td>allocatable</td><td>::</td>
+  <td><strong>final_state</strong>(:,:)</td><td></td><td></td><td><p>Final state.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-error%7E62"></span>integer(kind=I_P)</td>
+  
+  
+  <td></td><td>::</td>
+  <td><strong>error</strong></td><td></td><td></td><td><p>Error handler.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-profiling%7E2"></span>integer(kind=I_P)</td>
+  
+  
+  <td></td><td>::</td>
+  <td><strong>profiling</strong>(1:2)</td><td></td><td></td><td><p>Tic-toc profiling counters.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-count_rate%7E2"></span>integer(kind=I_P)</td>
+  
+  
+  <td></td><td>::</td>
+  <td><strong>count_rate</strong></td><td></td><td></td><td><p>Counting rate of system clock.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-system_clocks%7E2"></span>real(kind=R_P)</td>
+  
+  
+  <td></td><td>::</td>
+  <td><strong>system_clocks</strong></td><td></td><td></td><td><p>Profiling result.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-steps%7E21"></span>integer(kind=I_P)</td>
+  
+  
+  <td></td><td>::</td>
+  <td><strong>steps</strong></td><td></td><td></td><td><p>Time steps counter.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-domain%7E2"></span>type(euler_1D_caf)</td>
+  
+  
+  <td></td><td>::</td>
+  <td><strong>domain</strong></td><td></td><td></td><td><p>Domain of Euler equations.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-ni_image%7E2"></span>integer(kind=I_P)</td>
+  
+  
+  <td></td><td>::</td>
+  <td><strong>Ni_image</strong></td><td></td><td></td><td><p>Space dimension of local image.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-ni%7E15"></span>integer(kind=I_P)</td>
+  
+  
+  <td></td><td>::</td>
+  <td><strong>Ni</strong>[*]</td><td></td><td></td><td><p>Number of grid cells.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-steps_max%7E3"></span>integer(kind=I_P)</td>
+  
+  
+  <td></td><td>::</td>
+  <td><strong>steps_max</strong>[*]</td><td></td><td></td><td><p>Maximum number of time steps.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-results%7E5"></span>logical</td>
+  
+  
+  <td></td><td>::</td>
+  <td><strong>results</strong>[*]</td><td></td><td></td><td><p>Flag for activating results saving.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-plots%7E5"></span>logical</td>
+  
+  
+  <td></td><td>::</td>
+  <td><strong>plots</strong>[*]</td><td></td><td></td><td><p>Flag for activating plots saving.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-time_serie%7E3"></span>logical</td>
+  
+  
+  <td></td><td>::</td>
+  <td><strong>time_serie</strong>[*]</td><td></td><td></td><td><p>Flag for activating time serie-results saving.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-verbose%7E3"></span>logical</td>
+  
+  
+  <td></td><td>::</td>
+  <td><strong>verbose</strong>[*]</td><td></td><td></td><td><p>Flag for activating more verbose output.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-dt%7E23"></span>real(kind=R_P),</td>
+  
+  
+  <td>allocatable</td><td>::</td>
+  <td><strong>Dt</strong>(:)[:]</td><td></td><td></td><td><p>Time step.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-ni%7E16"></span>integer(kind=I_P)</td>
+  
+  
+  <td></td><td>::</td>
+  <td><strong>Ni</strong></td><td></td><td></td><td><p>Number of grid cells.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-steps_max%7E4"></span>integer(kind=I_P)</td>
+  
+  
+  <td></td><td>::</td>
+  <td><strong>steps_max</strong></td><td></td><td></td><td><p>Maximum number of time steps.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-results%7E6"></span>logical</td>
+  
+  
+  <td></td><td>::</td>
+  <td><strong>results</strong></td><td></td><td></td><td><p>Flag for activating results saving.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-plots%7E6"></span>logical</td>
+  
+  
+  <td></td><td>::</td>
+  <td><strong>plots</strong></td><td></td><td></td><td><p>Flag for activating plots saving.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-time_serie%7E4"></span>logical</td>
+  
+  
+  <td></td><td>::</td>
+  <td><strong>time_serie</strong></td><td></td><td></td><td><p>Flag for activating time serie-results saving.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-verbose%7E4"></span>logical</td>
+  
+  
+  <td></td><td>::</td>
+  <td><strong>verbose</strong></td><td></td><td></td><td><p>Flag for activating more verbose output.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-dt%7E24"></span>real(kind=R_P),</td>
+  
+  
+  <td>allocatable</td><td>::</td>
+  <td><strong>Dt</strong>(:)</td><td></td><td></td><td><p>Time step.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-me%7E24"></span>integer(kind=I_P)</td>
+  
+  
+  <td></td><td>::</td>
+  <td><strong>me</strong></td><td></td><td></td><td><p>ID of this_image()</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-we%7E6"></span>integer(kind=I_P)</td>
+  
+  
+  <td></td><td>::</td>
+  <td><strong>we</strong></td><td></td><td></td><td><p>Number of CAF images used.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-id%7E2"></span>character(len=:),</td>
+  
+  
+  <td>allocatable</td><td>::</td>
+  <td><strong>id</strong></td><td></td><td></td><td><p>My ID.</p></td>
+  
+</tr>
+
+</tbody>
+</table>
+
+    </section>
+    <br>
+    
+    
+    
+    
+    
+    
+    
+
+    
+    
+    
+
+
+    
+    <section>
+    <h2>Subroutines</h2>
+    
+    
+  <div class="panel panel-default">
+  <div class="panel-heading codesum"><span class="anchor" id="proc-init%7E13"></span><h3>
+subroutine <a href='../proc/init%7E13.html'>init</a>()
+    
+    
+    
+</h3></div>
+  <div class="panel-body">
+       
+    
+    <h4>Arguments</h4>
+    
+      <em>None</em>
+    
+    
+    
+    <h4>Description</h4>
+       
+       
+
+
+       
+       <p>Initialize the simulation.</p>
+        
+
+  </div>
+  </div>
+
+    
+    
+  <div class="panel panel-default">
+  <div class="panel-heading codesum"><span class="anchor" id="proc-synchronize%7E3"></span><h3>
+subroutine <a href='../proc/synchronize%7E3.html'>synchronize</a>()
+    
+    
+    
+</h3></div>
+  <div class="panel-body">
+       
+    
+    <h4>Arguments</h4>
+    
+      <em>None</em>
+    
+    
+    
+    <h4>Description</h4>
+       
+       
+
+
+       
+       <p>Synchronize CAF images.</p>
+        
+
+  </div>
+  </div>
+
+    
+    
+  <div class="panel panel-default">
+  <div class="panel-heading codesum"><span class="anchor" id="proc-save_results%7E3"></span><h3>
+subroutine <a href='../proc/save_results%7E3.html'>save_results</a>(title, filename)
+    
+    
+    
+</h3></div>
+  <div class="panel-body">
+       
+    
+    <h4>Arguments</h4>
+    
+      
+      
+<table class="table table-striped varlist">
+<thead><tr><th>Type</th>
+<th>Intent</th><th>Optional</th>
+<th>Attributes</th><th></th><th>Name</th><th></th></thead>
+
+
+
+<tbody>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>character(len=*),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>title</strong></td><td><p>Plot title.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>character(len=*),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>filename</strong></td><td><p>Output filename.</p></td>
+  
+</tr>
+
+</tbody>
+</table>
+
+      
+    
+    
+    
+    <h4>Description</h4>
+       
+       
+
+
+       
+       <p>Save results.</p>
+        
+
+  </div>
+  </div>
+
+    
+    
+  <div class="panel panel-default">
+  <div class="panel-heading codesum"><span class="anchor" id="proc-save_time_serie%7E2"></span><h3>
+subroutine <a href='../proc/save_time_serie%7E2.html'>save_time_serie</a>(title, filename, finish, t)
+    
+    
+    
+</h3></div>
+  <div class="panel-body">
+       
+    
+    <h4>Arguments</h4>
+    
+      
+      
+<table class="table table-striped varlist">
+<thead><tr><th>Type</th>
+<th>Intent</th><th>Optional</th>
+<th>Attributes</th><th></th><th>Name</th><th></th></thead>
+
+
+
+<tbody>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>character(len=*),</td>
+  <td>intent(in),</td>
+  <td>optional</td>
+  
+  <td></td><td>::</td>
+  <td><strong>title</strong></td><td><p>Plot title.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>character(len=*),</td>
+  <td>intent(in),</td>
+  <td>optional</td>
+  
+  <td></td><td>::</td>
+  <td><strong>filename</strong></td><td><p>Output filename.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>logical,</td>
+  <td>intent(in),</td>
+  <td>optional</td>
+  
+  <td></td><td>::</td>
+  <td><strong>finish</strong></td><td><p>Flag for triggering the file closing.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>real(kind=R_P),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>t</strong></td><td><p>Current integration time.</p></td>
+  
+</tr>
+
+</tbody>
+</table>
+
+      
+    
+    
+    
+    <h4>Description</h4>
+       
+       
+
+
+       
+       <p>Save time-serie results.</p>
+        
+
+  </div>
+  </div>
+
+    
+    </section>    
+    
+    
+    
+    <section>
+    <h2 id="src">Source Code</h2>
+    <div class="highlight"><pre><span></span><span class="k">program </span><span class="n">integrate_euler_1D_caf</span>
+<span class="c">!-----------------------------------------------------------------------------------------------------------------------------------</span>
+<span class="c">!&lt; Test FOODIE with the integration of Euler 1D PDEs system.</span>
+<span class="c">!-----------------------------------------------------------------------------------------------------------------------------------</span>
+
+<span class="c">!-----------------------------------------------------------------------------------------------------------------------------------</span>
+<span class="k">use </span><span class="n">flap</span><span class="p">,</span> <span class="n">only</span> <span class="p">:</span> <span class="n">command_line_interface</span>
+<span class="k">use </span><span class="n">foodie</span><span class="p">,</span> <span class="n">only</span> <span class="p">:</span> <span class="n">tvd_runge_kutta_integrator</span>
+<span class="k">use </span><span class="n">IR_Precision</span><span class="p">,</span> <span class="n">only</span> <span class="p">:</span> <span class="n">R_P</span><span class="p">,</span> <span class="n">I_P</span><span class="p">,</span> <span class="n">FR_P</span><span class="p">,</span> <span class="n">str</span><span class="p">,</span> <span class="n">strz</span>
+<span class="k">use </span><span class="n">pyplot_module</span><span class="p">,</span> <span class="n">only</span> <span class="p">:</span> <span class="n">pyplot</span>
+<span class="k">use </span><span class="n">type_euler_1D_caf</span><span class="p">,</span> <span class="n">only</span> <span class="p">:</span> <span class="n">euler_1D_caf</span>
+<span class="c">!-----------------------------------------------------------------------------------------------------------------------------------</span>
+
+<span class="c">!-----------------------------------------------------------------------------------------------------------------------------------</span>
+<span class="k">implicit none</span>
+<span class="k">type</span><span class="p">(</span><span class="n">command_line_interface</span><span class="p">)</span>     <span class="kd">::</span> <span class="n">cli</span>                   <span class="c">!&lt; Command line interface handler.</span>
+<span class="k">type</span><span class="p">(</span><span class="n">tvd_runge_kutta_integrator</span><span class="p">)</span> <span class="kd">::</span> <span class="n">rk_integrator</span>         <span class="c">!&lt; Runge-Kutta integrator.</span>
+<span class="kt">integer</span><span class="p">,</span> <span class="k">parameter</span>               <span class="kd">::</span> <span class="n">rk_stages</span><span class="o">=</span><span class="mi">5</span>           <span class="c">!&lt; Runge-Kutta stages number.</span>
+<span class="k">type</span><span class="p">(</span><span class="n">euler_1D_caf</span><span class="p">)</span>               <span class="kd">::</span> <span class="n">rk_stage</span><span class="p">(</span><span class="mi">1</span><span class="p">:</span><span class="n">rk_stages</span><span class="p">)</span> <span class="c">!&lt; Runge-Kutta stages.</span>
+<span class="kt">integer</span><span class="p">,</span> <span class="k">parameter</span>               <span class="kd">::</span> <span class="n">ord</span><span class="o">=</span><span class="mi">7</span>                 <span class="c">!&lt; Space reconstruciton order,</span>
+<span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">)</span>                        <span class="kd">::</span> <span class="n">t</span>                     <span class="c">!&lt; Time.</span>
+<span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">),</span>    <span class="k">parameter</span>          <span class="kd">::</span> <span class="n">CFL</span><span class="o">=</span><span class="mf">0.7_R_P</span>           <span class="c">!&lt; CFL value.</span>
+<span class="kt">integer</span><span class="p">(</span><span class="n">I_P</span><span class="p">),</span> <span class="k">parameter</span>          <span class="kd">::</span> <span class="n">Ns</span><span class="o">=</span><span class="mi">1</span>                  <span class="c">!&lt; Number of differnt initial gas species.</span>
+<span class="kt">integer</span><span class="p">(</span><span class="n">I_P</span><span class="p">),</span> <span class="k">parameter</span>          <span class="kd">::</span> <span class="n">Nc</span><span class="o">=</span><span class="n">Ns</span><span class="o">+</span><span class="mi">2</span>               <span class="c">!&lt; Number of conservative variables.</span>
+<span class="kt">integer</span><span class="p">(</span><span class="n">I_P</span><span class="p">),</span> <span class="k">parameter</span>          <span class="kd">::</span> <span class="n">Np</span><span class="o">=</span><span class="n">Ns</span><span class="o">+</span><span class="mi">4</span>               <span class="c">!&lt; Number of primitive variables.</span>
+<span class="kt">character</span><span class="p">(</span><span class="nb">len</span><span class="o">=</span><span class="p">:),</span> <span class="k">allocatable</span>    <span class="kd">::</span> <span class="n">BC_L</span>                  <span class="c">!&lt; Left boundary condition type.</span>
+<span class="kt">character</span><span class="p">(</span><span class="nb">len</span><span class="o">=</span><span class="p">:),</span> <span class="k">allocatable</span>    <span class="kd">::</span> <span class="n">BC_R</span>                  <span class="c">!&lt; Right boundary condition type.</span>
+<span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">)</span>                        <span class="kd">::</span> <span class="n">Dx</span>                    <span class="c">!&lt; Space step discretization.</span>
+<span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">)</span>                        <span class="kd">::</span> <span class="n">cp0</span><span class="p">(</span><span class="mi">1</span><span class="p">:</span><span class="n">Ns</span><span class="p">)</span>             <span class="c">!&lt; Specific heat at constant pressure.</span>
+<span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">)</span>                        <span class="kd">::</span> <span class="n">cv0</span><span class="p">(</span><span class="mi">1</span><span class="p">:</span><span class="n">Ns</span><span class="p">)</span>             <span class="c">!&lt; Specific heat at constant volume.</span>
+<span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">),</span> <span class="k">allocatable</span>           <span class="kd">::</span> <span class="n">initial_state</span><span class="p">(:,:)</span>    <span class="c">!&lt; Initial state of primitive variables.</span>
+<span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">),</span> <span class="k">allocatable</span>           <span class="kd">::</span> <span class="n">x</span><span class="p">(:)</span>                  <span class="c">!&lt; Cell center x-abscissa values.</span>
+<span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">),</span> <span class="k">allocatable</span>           <span class="kd">::</span> <span class="n">final_state</span><span class="p">(:,:)</span>      <span class="c">!&lt; Final state.</span>
+<span class="kt">integer</span><span class="p">(</span><span class="n">I_P</span><span class="p">)</span>                     <span class="kd">::</span> <span class="n">error</span>                 <span class="c">!&lt; Error handler.</span>
+<span class="kt">integer</span><span class="p">(</span><span class="n">I_P</span><span class="p">)</span>                     <span class="kd">::</span> <span class="n">profiling</span><span class="p">(</span><span class="mi">1</span><span class="p">:</span><span class="mi">2</span><span class="p">)</span>        <span class="c">!&lt; Tic-toc profiling counters.</span>
+<span class="kt">integer</span><span class="p">(</span><span class="n">I_P</span><span class="p">)</span>                     <span class="kd">::</span> <span class="n">count_rate</span>            <span class="c">!&lt; Counting rate of system clock.</span>
+<span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">)</span>                        <span class="kd">::</span> <span class="n">system_clocks</span>         <span class="c">!&lt; Profiling result.</span>
+<span class="kt">integer</span><span class="p">(</span><span class="n">I_P</span><span class="p">)</span>                     <span class="kd">::</span> <span class="n">steps</span>                 <span class="c">!&lt; Time steps counter.</span>
+<span class="k">type</span><span class="p">(</span><span class="n">euler_1D_caf</span><span class="p">)</span>               <span class="kd">::</span> <span class="n">domain</span>                <span class="c">!&lt; Domain of Euler equations.</span>
+<span class="c">! coarrays-related variables</span>
+<span class="kt">integer</span><span class="p">(</span><span class="n">I_P</span><span class="p">)</span>                     <span class="kd">::</span> <span class="n">Ni_image</span>              <span class="c">!&lt; Space dimension of local image.</span>
+<span class="cp">#ifdef CAF</span>
+<span class="kt">integer</span><span class="p">(</span><span class="n">I_P</span><span class="p">)</span>                     <span class="kd">::</span> <span class="n">Ni</span><span class="p">[</span><span class="o">*</span><span class="p">]</span>                 <span class="c">!&lt; Number of grid cells.</span>
+<span class="kt">integer</span><span class="p">(</span><span class="n">I_P</span><span class="p">)</span>                     <span class="kd">::</span> <span class="n">steps_max</span><span class="p">[</span><span class="o">*</span><span class="p">]</span>          <span class="c">!&lt; Maximum number of time steps.</span>
+<span class="kt">logical</span>                          <span class="kd">::</span> <span class="n">results</span><span class="p">[</span><span class="o">*</span><span class="p">]</span>            <span class="c">!&lt; Flag for activating results saving.</span>
+<span class="kt">logical</span>                          <span class="kd">::</span> <span class="n">plots</span><span class="p">[</span><span class="o">*</span><span class="p">]</span>              <span class="c">!&lt; Flag for activating plots saving.</span>
+<span class="kt">logical</span>                          <span class="kd">::</span> <span class="n">time_serie</span><span class="p">[</span><span class="o">*</span><span class="p">]</span>         <span class="c">!&lt; Flag for activating time serie-results saving.</span>
+<span class="kt">logical</span>                          <span class="kd">::</span> <span class="n">verbose</span><span class="p">[</span><span class="o">*</span><span class="p">]</span>            <span class="c">!&lt; Flag for activating more verbose output.</span>
+<span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">),</span> <span class="k">allocatable</span>           <span class="kd">::</span> <span class="n">Dt</span><span class="p">(:)[:]</span>              <span class="c">!&lt; Time step.</span>
+<span class="cp">#else</span>
+<span class="kt">integer</span><span class="p">(</span><span class="n">I_P</span><span class="p">)</span>                     <span class="kd">::</span> <span class="n">Ni</span>                    <span class="c">!&lt; Number of grid cells.</span>
+<span class="kt">integer</span><span class="p">(</span><span class="n">I_P</span><span class="p">)</span>                     <span class="kd">::</span> <span class="n">steps_max</span>             <span class="c">!&lt; Maximum number of time steps.</span>
+<span class="kt">logical</span>                          <span class="kd">::</span> <span class="n">results</span>               <span class="c">!&lt; Flag for activating results saving.</span>
+<span class="kt">logical</span>                          <span class="kd">::</span> <span class="n">plots</span>                 <span class="c">!&lt; Flag for activating plots saving.</span>
+<span class="kt">logical</span>                          <span class="kd">::</span> <span class="n">time_serie</span>            <span class="c">!&lt; Flag for activating time serie-results saving.</span>
+<span class="kt">logical</span>                          <span class="kd">::</span> <span class="n">verbose</span>               <span class="c">!&lt; Flag for activating more verbose output.</span>
+<span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">),</span> <span class="k">allocatable</span>           <span class="kd">::</span> <span class="n">Dt</span><span class="p">(:)</span>                 <span class="c">!&lt; Time step.</span>
+<span class="cp">#endif</span>
+<span class="kt">integer</span><span class="p">(</span><span class="n">I_P</span><span class="p">)</span>                     <span class="kd">::</span> <span class="n">me</span>                    <span class="c">!&lt; ID of this_image()</span>
+<span class="kt">integer</span><span class="p">(</span><span class="n">I_P</span><span class="p">)</span>                     <span class="kd">::</span> <span class="n">we</span>                    <span class="c">!&lt; Number of CAF images used.</span>
+<span class="kt">character</span><span class="p">(</span><span class="nb">len</span><span class="o">=</span><span class="p">:),</span> <span class="k">allocatable</span>    <span class="kd">::</span> <span class="n">id</span>                    <span class="c">!&lt; My ID.</span>
+<span class="c">!-----------------------------------------------------------------------------------------------------------------------------------</span>
+
+<span class="c">!-----------------------------------------------------------------------------------------------------------------------------------</span>
+<span class="cp">#ifdef CAF</span>
+<span class="n">me</span> <span class="o">=</span> <span class="nb">this_image</span><span class="p">()</span>
+<span class="n">we</span> <span class="o">=</span> <span class="nb">num_images</span><span class="p">()</span>
+<span class="cp">#else</span>
+<span class="n">me</span> <span class="o">=</span> <span class="mi">1</span>
+<span class="n">we</span> <span class="o">=</span> <span class="mi">1</span>
+<span class="cp">#endif</span>
+<span class="n">id</span> <span class="o">=</span> <span class="nb">trim</span><span class="p">(</span><span class="n">strz</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="n">me</span><span class="p">))</span><span class="o">//</span><span class="s1">&#39;&gt; &#39;</span>
+<span class="c">! setting Command Line Interface</span>
+<span class="k">call </span><span class="n">cli</span><span class="p">%</span><span class="n">init</span><span class="p">(</span><span class="n">progname</span>    <span class="o">=</span> <span class="s1">&#39;euler-1D-caf&#39;</span><span class="p">,</span>                                                       <span class="p">&amp;</span>
+              <span class="n">authors</span>     <span class="o">=</span> <span class="s1">&#39;Fortran-FOSS-Programmers&#39;</span><span class="p">,</span>                                           <span class="p">&amp;</span>
+              <span class="n">license</span>     <span class="o">=</span> <span class="s1">&#39;GNU GPLv3&#39;</span><span class="p">,</span>                                                          <span class="p">&amp;</span>
+              <span class="n">description</span> <span class="o">=</span> <span class="s1">&#39;Test FOODIE library on 1D Euler equations integration, CAF enabled&#39;</span><span class="p">,</span> <span class="p">&amp;</span>
+              <span class="n">examples</span>    <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;euler-1D-caf --results  &quot;</span><span class="p">,</span>                                          <span class="p">&amp;</span>
+                             <span class="s2">&quot;euler-1D-caf -r -t -v -p&quot;</span><span class="p">,</span>                                          <span class="p">&amp;</span>
+                             <span class="s2">&quot;euler-1D-caf            &quot;</span><span class="p">,</span>                                          <span class="p">&amp;</span>
+                             <span class="s2">&quot;euler-1D-caf --plots -r &quot;</span><span class="p">])</span>
+<span class="k">call </span><span class="n">cli</span><span class="p">%</span><span class="n">add</span><span class="p">(</span><span class="n">switch</span><span class="o">=</span><span class="s1">&#39;--Ni&#39;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s1">&#39;Number finite volumes used&#39;</span><span class="p">,</span> <span class="n">required</span><span class="o">=</span><span class="p">.</span><span class="n">false</span><span class="p">.,</span> <span class="n">act</span><span class="o">=</span><span class="s1">&#39;store&#39;</span><span class="p">,</span> <span class="n">def</span><span class="o">=</span><span class="s1">&#39;100&#39;</span><span class="p">,</span> <span class="n">error</span><span class="o">=</span><span class="n">error</span><span class="p">)</span>
+<span class="k">call </span><span class="n">cli</span><span class="p">%</span><span class="n">add</span><span class="p">(</span><span class="n">switch</span><span class="o">=</span><span class="s1">&#39;--steps&#39;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s1">&#39;Number time steps performed&#39;</span><span class="p">,</span> <span class="n">required</span><span class="o">=</span><span class="p">.</span><span class="n">false</span><span class="p">.,</span> <span class="n">act</span><span class="o">=</span><span class="s1">&#39;store&#39;</span><span class="p">,</span> <span class="n">def</span><span class="o">=</span><span class="s1">&#39;30&#39;</span><span class="p">,</span> <span class="n">error</span><span class="o">=</span><span class="n">error</span><span class="p">)</span>
+<span class="k">call </span><span class="n">cli</span><span class="p">%</span><span class="n">add</span><span class="p">(</span><span class="n">switch</span><span class="o">=</span><span class="s1">&#39;--results&#39;</span><span class="p">,</span> <span class="n">switch_ab</span><span class="o">=</span><span class="s1">&#39;-r&#39;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s1">&#39;Save results&#39;</span><span class="p">,</span> <span class="n">required</span><span class="o">=</span><span class="p">.</span><span class="n">false</span><span class="p">.,</span> <span class="n">act</span><span class="o">=</span><span class="s1">&#39;store_true&#39;</span><span class="p">,</span> <span class="n">def</span><span class="o">=</span><span class="s1">&#39;.false.&#39;</span><span class="p">,</span> <span class="p">&amp;</span>
+             <span class="n">error</span><span class="o">=</span><span class="n">error</span><span class="p">)</span>
+<span class="k">call </span><span class="n">cli</span><span class="p">%</span><span class="n">add</span><span class="p">(</span><span class="n">switch</span><span class="o">=</span><span class="s1">&#39;--plots&#39;</span><span class="p">,</span> <span class="n">switch_ab</span><span class="o">=</span><span class="s1">&#39;-p&#39;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s1">&#39;Save plots of results&#39;</span><span class="p">,</span> <span class="n">required</span><span class="o">=</span><span class="p">.</span><span class="n">false</span><span class="p">.,</span> <span class="n">act</span><span class="o">=</span><span class="s1">&#39;store_true&#39;</span><span class="p">,</span> <span class="n">def</span><span class="o">=</span><span class="s1">&#39;.false.&#39;</span><span class="p">,</span> <span class="p">&amp;</span>
+             <span class="n">error</span><span class="o">=</span><span class="n">error</span><span class="p">)</span>
+<span class="k">call </span><span class="n">cli</span><span class="p">%</span><span class="n">add</span><span class="p">(</span><span class="n">switch</span><span class="o">=</span><span class="s1">&#39;--tserie&#39;</span><span class="p">,</span> <span class="n">switch_ab</span><span class="o">=</span><span class="s1">&#39;-t&#39;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s1">&#39;Save time-serie-results&#39;</span><span class="p">,</span> <span class="n">required</span><span class="o">=</span><span class="p">.</span><span class="n">false</span><span class="p">.,</span> <span class="n">act</span><span class="o">=</span><span class="s1">&#39;store_true&#39;</span><span class="p">,</span> <span class="n">def</span><span class="o">=</span><span class="s1">&#39;.false.&#39;</span><span class="p">,</span> <span class="p">&amp;</span>
+             <span class="n">error</span><span class="o">=</span><span class="n">error</span><span class="p">)</span>
+<span class="k">call </span><span class="n">cli</span><span class="p">%</span><span class="n">add</span><span class="p">(</span><span class="n">switch</span><span class="o">=</span><span class="s1">&#39;--verbose&#39;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s1">&#39;Verbose output&#39;</span><span class="p">,</span> <span class="n">required</span><span class="o">=</span><span class="p">.</span><span class="n">false</span><span class="p">.,</span> <span class="n">act</span><span class="o">=</span><span class="s1">&#39;store_true&#39;</span><span class="p">,</span> <span class="n">def</span><span class="o">=</span><span class="s1">&#39;.false.&#39;</span><span class="p">,</span> <span class="n">error</span><span class="o">=</span><span class="n">error</span><span class="p">)</span>
+<span class="c">! parsing Command Line Interface</span>
+<span class="k">if</span> <span class="p">(</span><span class="n">me</span><span class="o">==</span><span class="mi">1</span><span class="p">)</span> <span class="k">then</span> <span class="c">! only master image do CLI stuffs</span>
+  <span class="k">call </span><span class="n">cli</span><span class="p">%</span><span class="n">parse</span><span class="p">(</span><span class="n">error</span><span class="o">=</span><span class="n">error</span><span class="p">)</span>
+  <span class="k">call </span><span class="n">cli</span><span class="p">%</span><span class="n">get</span><span class="p">(</span><span class="n">switch</span><span class="o">=</span><span class="s1">&#39;--Ni&#39;</span><span class="p">,</span> <span class="n">val</span><span class="o">=</span><span class="n">Ni</span><span class="p">,</span> <span class="n">error</span><span class="o">=</span><span class="n">error</span><span class="p">)</span> <span class="p">;</span> <span class="k">if</span> <span class="p">(</span><span class="n">error</span><span class="o">/=</span><span class="mi">0</span><span class="p">)</span> <span class="k">stop</span>
+<span class="k">  call </span><span class="n">cli</span><span class="p">%</span><span class="n">get</span><span class="p">(</span><span class="n">switch</span><span class="o">=</span><span class="s1">&#39;--steps&#39;</span><span class="p">,</span> <span class="n">val</span><span class="o">=</span><span class="n">steps_max</span><span class="p">,</span> <span class="n">error</span><span class="o">=</span><span class="n">error</span><span class="p">)</span> <span class="p">;</span> <span class="k">if</span> <span class="p">(</span><span class="n">error</span><span class="o">/=</span><span class="mi">0</span><span class="p">)</span> <span class="k">stop</span>
+<span class="k">  call </span><span class="n">cli</span><span class="p">%</span><span class="n">get</span><span class="p">(</span><span class="n">switch</span><span class="o">=</span><span class="s1">&#39;-r&#39;</span><span class="p">,</span> <span class="n">val</span><span class="o">=</span><span class="n">results</span><span class="p">,</span> <span class="n">error</span><span class="o">=</span><span class="n">error</span><span class="p">)</span> <span class="p">;</span> <span class="k">if</span> <span class="p">(</span><span class="n">error</span><span class="o">/=</span><span class="mi">0</span><span class="p">)</span> <span class="k">stop</span>
+<span class="k">  call </span><span class="n">cli</span><span class="p">%</span><span class="n">get</span><span class="p">(</span><span class="n">switch</span><span class="o">=</span><span class="s1">&#39;-p&#39;</span><span class="p">,</span> <span class="n">val</span><span class="o">=</span><span class="n">plots</span><span class="p">,</span> <span class="n">error</span><span class="o">=</span><span class="n">error</span><span class="p">)</span> <span class="p">;</span> <span class="k">if</span> <span class="p">(</span><span class="n">error</span><span class="o">/=</span><span class="mi">0</span><span class="p">)</span> <span class="k">stop</span>
+<span class="k">  call </span><span class="n">cli</span><span class="p">%</span><span class="n">get</span><span class="p">(</span><span class="n">switch</span><span class="o">=</span><span class="s1">&#39;-t&#39;</span><span class="p">,</span> <span class="n">val</span><span class="o">=</span><span class="n">time_serie</span><span class="p">,</span> <span class="n">error</span><span class="o">=</span><span class="n">error</span><span class="p">)</span> <span class="p">;</span> <span class="k">if</span> <span class="p">(</span><span class="n">error</span><span class="o">/=</span><span class="mi">0</span><span class="p">)</span> <span class="k">stop</span>
+<span class="k">  call </span><span class="n">cli</span><span class="p">%</span><span class="n">get</span><span class="p">(</span><span class="n">switch</span><span class="o">=</span><span class="s1">&#39;--verbose&#39;</span><span class="p">,</span> <span class="n">val</span><span class="o">=</span><span class="n">verbose</span><span class="p">,</span> <span class="n">error</span><span class="o">=</span><span class="n">error</span><span class="p">)</span> <span class="p">;</span> <span class="k">if</span> <span class="p">(</span><span class="n">error</span><span class="o">/=</span><span class="mi">0</span><span class="p">)</span> <span class="k">stop</span>
+<span class="n">endif</span>
+<span class="k">call </span><span class="n">init</span><span class="p">()</span>
+<span class="n">system_clocks</span> <span class="o">=</span> <span class="mf">0._R_P</span>
+<span class="k">do </span><span class="n">steps</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">steps_max</span>
+  <span class="k">if</span> <span class="p">(</span><span class="n">verbose</span><span class="p">)</span> <span class="k">print</span> <span class="s2">&quot;(A)&quot;</span><span class="p">,</span> <span class="n">id</span><span class="o">//</span><span class="s1">&#39;    Time step: &#39;</span><span class="o">//</span><span class="n">str</span><span class="p">(</span><span class="n">n</span><span class="o">=</span><span class="n">Dt</span><span class="p">(</span><span class="n">me</span><span class="p">))</span><span class="o">//</span><span class="s1">&#39;, Time: &#39;</span><span class="o">//</span><span class="n">str</span><span class="p">(</span><span class="n">n</span><span class="o">=</span><span class="n">t</span><span class="p">)</span>
+  <span class="n">Dt</span><span class="p">(</span><span class="n">me</span><span class="p">)</span> <span class="o">=</span> <span class="n">domain</span><span class="p">%</span><span class="n">dt</span><span class="p">(</span><span class="n">Nmax</span><span class="o">=</span><span class="n">steps_max</span><span class="p">,</span> <span class="n">Tmax</span><span class="o">=</span><span class="mf">0._R_P</span><span class="p">,</span> <span class="n">t</span><span class="o">=</span><span class="n">t</span><span class="p">,</span> <span class="n">CFL</span><span class="o">=</span><span class="n">CFL</span><span class="p">)</span>
+  <span class="k">call </span><span class="n">synchronize</span>
+  <span class="k">call </span><span class="nb">system_clock</span><span class="p">(</span><span class="n">profiling</span><span class="p">(</span><span class="mi">1</span><span class="p">),</span> <span class="n">count_rate</span><span class="p">)</span>
+  <span class="k">call </span><span class="n">rk_integrator</span><span class="p">%</span><span class="n">integrate</span><span class="p">(</span><span class="n">U</span><span class="o">=</span><span class="n">domain</span><span class="p">,</span> <span class="n">stage</span><span class="o">=</span><span class="n">rk_stage</span><span class="p">,</span> <span class="n">Dt</span><span class="o">=</span><span class="n">Dt</span><span class="p">(</span><span class="n">me</span><span class="p">),</span> <span class="n">t</span><span class="o">=</span><span class="n">t</span><span class="p">)</span>
+  <span class="k">call </span><span class="nb">system_clock</span><span class="p">(</span><span class="n">profiling</span><span class="p">(</span><span class="mi">2</span><span class="p">),</span> <span class="n">count_rate</span><span class="p">)</span>
+  <span class="n">system_clocks</span> <span class="o">=</span> <span class="n">system_clocks</span> <span class="o">+</span> <span class="kt">real</span><span class="p">(</span><span class="n">profiling</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span> <span class="o">-</span> <span class="n">profiling</span><span class="p">(</span><span class="mi">1</span><span class="p">),</span> <span class="nb">kind</span><span class="o">=</span><span class="n">R_P</span><span class="p">)</span><span class="o">/</span><span class="n">count_rate</span>
+  <span class="n">t</span> <span class="o">=</span> <span class="n">t</span> <span class="o">+</span> <span class="n">Dt</span><span class="p">(</span><span class="n">me</span><span class="p">)</span>
+  <span class="k">call </span><span class="n">save_time_serie</span><span class="p">(</span><span class="n">t</span><span class="o">=</span><span class="n">t</span><span class="p">)</span>
+<span class="n">enddo</span>
+<span class="n">system_clocks</span> <span class="o">=</span> <span class="n">system_clocks</span> <span class="o">/</span> <span class="n">steps_max</span>
+<span class="k">if</span> <span class="p">(</span><span class="n">verbose</span><span class="p">)</span> <span class="k">print</span> <span class="s2">&quot;(A)&quot;</span><span class="p">,</span> <span class="n">id</span><span class="o">//</span><span class="s1">&#39;    Time step: &#39;</span><span class="o">//</span><span class="n">str</span><span class="p">(</span><span class="n">n</span><span class="o">=</span><span class="n">Dt</span><span class="p">(</span><span class="n">me</span><span class="p">))</span><span class="o">//</span><span class="s1">&#39;, Time: &#39;</span><span class="o">//</span><span class="n">str</span><span class="p">(</span><span class="n">n</span><span class="o">=</span><span class="n">t</span><span class="p">)</span>
+<span class="k">call </span><span class="n">save_time_serie</span><span class="p">(</span><span class="n">t</span><span class="o">=</span><span class="n">t</span><span class="p">,</span> <span class="n">finish</span><span class="o">=</span><span class="p">.</span><span class="n">true</span><span class="p">.)</span>
+<span class="k">call </span><span class="n">save_results</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s1">&#39;FOODIE test: 1D Euler equations integration, explicit TVD Runge-Kutta&#39;</span><span class="o">//</span> <span class="p">&amp;</span>
+                        <span class="nb">trim</span><span class="p">(</span><span class="n">str</span><span class="p">(.</span><span class="n">true</span><span class="p">.,</span> <span class="n">rk_stages</span><span class="p">))</span><span class="o">//</span><span class="s1">&#39; stages&#39;</span><span class="p">,</span> <span class="p">&amp;</span>
+                  <span class="n">filename</span><span class="o">=</span><span class="s1">&#39;euler_1D_caf_integration-tvdrk-&#39;</span><span class="o">//</span><span class="nb">trim</span><span class="p">(</span><span class="n">str</span><span class="p">(.</span><span class="n">true</span><span class="p">.,</span> <span class="n">rk_stages</span><span class="p">))</span><span class="o">//</span><span class="s1">&#39;-image-&#39;</span><span class="o">//</span><span class="nb">trim</span><span class="p">(</span><span class="n">strz</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="n">me</span><span class="p">)))</span>
+
+<span class="k">print</span> <span class="s2">&quot;(A,I5,A,F23.15)&quot;</span><span class="p">,</span> <span class="n">id</span><span class="p">,</span> <span class="n">we</span><span class="p">,</span> <span class="s1">&#39; &#39;</span><span class="p">,</span> <span class="n">system_clocks</span>
+<span class="k">stop</span>
+<span class="c">!-----------------------------------------------------------------------------------------------------------------------------------</span>
+<span class="k">contains</span>
+<span class="k">  subroutine </span><span class="n">init</span><span class="p">()</span>
+  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+  <span class="c">!&lt; Initialize the simulation.</span>
+  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+  <span class="kt">integer</span><span class="p">(</span><span class="n">I_P</span><span class="p">)</span>                  <span class="kd">::</span> <span class="n">i</span>        <span class="c">!&lt; Space counter.</span>
+  <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">)</span>                     <span class="kd">::</span> <span class="n">x_L</span>      <span class="c">!&lt; Left abscissa of local image.</span>
+  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+
+  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+<span class="cp">#ifdef CAF</span>
+  <span class="c">! CAF images comunications</span>
+  <span class="k">sync all</span>
+<span class="k">  if</span> <span class="p">(</span><span class="n">me</span><span class="o">/=</span><span class="mi">1</span><span class="p">)</span> <span class="k">then</span>
+<span class="k">    </span><span class="n">Ni</span> <span class="o">=</span> <span class="n">Ni</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+    <span class="n">steps_max</span> <span class="o">=</span> <span class="n">steps_max</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+    <span class="n">results</span> <span class="o">=</span> <span class="n">results</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+    <span class="n">plots</span> <span class="o">=</span> <span class="n">plots</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+    <span class="n">time_serie</span> <span class="o">=</span> <span class="n">time_serie</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+    <span class="n">verbose</span> <span class="o">=</span> <span class="n">verbose</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+  <span class="n">endif</span>
+<span class="cp">#endif</span>
+  <span class="c">! init simulation</span>
+  <span class="k">if</span> <span class="p">(</span><span class="nb">mod</span><span class="p">(</span><span class="n">Ni</span><span class="p">,</span> <span class="n">we</span><span class="p">)</span><span class="o">/=</span><span class="mi">0</span><span class="p">)</span> <span class="n">error</span> <span class="k">stop</span> <span class="s1">&#39;error: the number of cells Ni must be a multiple of the number of CAF images used!&#39;</span>
+  <span class="n">Ni_image</span> <span class="o">=</span> <span class="n">Ni</span> <span class="o">/</span> <span class="n">we</span>
+  <span class="k">allocate</span><span class="p">(</span><span class="n">x</span><span class="p">(</span><span class="mi">1</span><span class="p">:</span><span class="n">Ni_image</span><span class="p">))</span>
+  <span class="k">allocate</span><span class="p">(</span><span class="n">initial_state</span><span class="p">(</span><span class="mi">1</span><span class="p">:</span><span class="n">Np</span><span class="p">,</span> <span class="mi">1</span><span class="p">:</span><span class="n">Ni_image</span><span class="p">))</span>
+  <span class="n">Dx</span> <span class="o">=</span> <span class="mf">1._R_P</span> <span class="o">/</span> <span class="n">Ni</span>
+  <span class="c">! Sod&#39;s problem</span>
+  <span class="n">cp0</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">=</span> <span class="mi">104</span><span class="mf">0._R_P</span>
+  <span class="n">cv0</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">=</span> <span class="mi">74</span><span class="mf">3._R_P</span>
+  <span class="k">if</span> <span class="p">(</span><span class="n">we</span><span class="o">==</span><span class="mi">1</span><span class="p">)</span> <span class="k">then</span>
+<span class="k">      </span><span class="n">BC_L</span> <span class="o">=</span> <span class="s1">&#39;TRA&#39;</span>
+      <span class="n">BC_R</span> <span class="o">=</span> <span class="s1">&#39;TRA&#39;</span>
+  <span class="k">else</span>
+<span class="k">    if</span> <span class="p">(</span><span class="n">me</span><span class="o">==</span><span class="mi">1</span><span class="p">)</span> <span class="k">then</span>
+<span class="k">      </span><span class="n">BC_L</span> <span class="o">=</span> <span class="s1">&#39;TRA&#39;</span>
+      <span class="n">BC_R</span> <span class="o">=</span> <span class="s1">&#39;CON-&#39;</span><span class="o">//</span><span class="nb">trim</span><span class="p">(</span><span class="n">strz</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="n">me</span><span class="o">+</span><span class="mi">1</span><span class="p">))</span>
+    <span class="n">elseif</span> <span class="p">(</span><span class="n">me</span><span class="o">==</span><span class="n">we</span><span class="p">)</span> <span class="k">then</span>
+<span class="k">      </span><span class="n">BC_L</span> <span class="o">=</span> <span class="s1">&#39;CON-&#39;</span><span class="o">//</span><span class="nb">trim</span><span class="p">(</span><span class="n">strz</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="n">me</span><span class="o">-</span><span class="mi">1</span><span class="p">))</span>
+      <span class="n">BC_R</span> <span class="o">=</span> <span class="s1">&#39;TRA&#39;</span>
+    <span class="k">else</span>
+<span class="k">      </span><span class="n">BC_L</span> <span class="o">=</span> <span class="s1">&#39;CON-&#39;</span><span class="o">//</span><span class="nb">trim</span><span class="p">(</span><span class="n">strz</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="n">me</span><span class="o">-</span><span class="mi">1</span><span class="p">))</span>
+      <span class="n">BC_R</span> <span class="o">=</span> <span class="s1">&#39;CON-&#39;</span><span class="o">//</span><span class="nb">trim</span><span class="p">(</span><span class="n">strz</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="n">me</span><span class="o">+</span><span class="mi">1</span><span class="p">))</span>
+    <span class="n">endif</span>
+  <span class="n">endif</span>
+  <span class="k">if</span> <span class="p">(</span><span class="n">me</span><span class="o">&gt;</span><span class="mi">1</span><span class="p">)</span> <span class="k">then</span>
+<span class="k">    </span><span class="n">x_L</span> <span class="o">=</span> <span class="n">Ni_image</span> <span class="o">*</span> <span class="n">Dx</span> <span class="o">*</span> <span class="p">(</span><span class="n">me</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
+  <span class="k">else</span>
+<span class="k">    </span><span class="n">x_L</span> <span class="o">=</span> <span class="mf">0._R_P</span>
+  <span class="n">endif</span>
+  <span class="k">do </span><span class="n">i</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">Ni_image</span>
+    <span class="n">x</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="o">=</span> <span class="n">x_L</span> <span class="o">+</span> <span class="n">Dx</span> <span class="o">*</span> <span class="n">i</span> <span class="o">-</span> <span class="mf">0.5_R_P</span> <span class="o">*</span> <span class="n">Dx</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">x</span><span class="p">(</span><span class="n">i</span><span class="p">)</span><span class="o">&lt;=</span><span class="mf">0.5_R_P</span><span class="p">)</span> <span class="k">then</span>
+<span class="k">      </span><span class="n">initial_state</span><span class="p">(:,</span> <span class="n">i</span><span class="p">)</span> <span class="o">=</span> <span class="p">[</span><span class="mf">1._R_P</span><span class="p">,</span> <span class="p">&amp;</span> <span class="c">! rho(s)</span>
+                             <span class="mf">0._R_P</span><span class="p">,</span> <span class="p">&amp;</span> <span class="c">! u</span>
+                             <span class="mf">1._R_P</span><span class="p">,</span> <span class="p">&amp;</span> <span class="c">! p</span>
+                             <span class="mf">1._R_P</span><span class="p">,</span> <span class="p">&amp;</span> <span class="c">! sum(rho(s))</span>
+                             <span class="n">cp0</span><span class="o">/</span><span class="n">cv0</span><span class="p">]</span>  <span class="c">! gamma = cp/cv</span>
+    <span class="k">else</span>
+<span class="k">      </span><span class="n">initial_state</span><span class="p">(:,</span> <span class="n">i</span><span class="p">)</span> <span class="o">=</span> <span class="p">[</span><span class="mf">0.125_R_P</span><span class="p">,</span> <span class="p">&amp;</span> <span class="c">! rho(s)</span>
+                             <span class="mf">0._R_P</span><span class="p">,</span>    <span class="p">&amp;</span> <span class="c">! u</span>
+                             <span class="mf">0.1_R_P</span><span class="p">,</span>   <span class="p">&amp;</span> <span class="c">! p</span>
+                             <span class="mf">0.125_R_P</span><span class="p">,</span> <span class="p">&amp;</span> <span class="c">! sum(rho(s))</span>
+                             <span class="n">cp0</span><span class="o">/</span><span class="n">cv0</span><span class="p">]</span>     <span class="c">! gamma = cp/cv</span>
+    <span class="n">endif</span>
+  <span class="n">enddo</span>
+  <span class="k">if</span> <span class="p">(</span><span class="n">verbose</span><span class="p">)</span> <span class="k">then</span>
+<span class="k">    print</span> <span class="s1">&#39;(A)&#39;</span><span class="p">,</span> <span class="n">id</span><span class="o">//</span><span class="s1">&#39;image &#39;</span><span class="o">//</span><span class="nb">trim</span><span class="p">(</span><span class="n">str</span><span class="p">(.</span><span class="n">true</span><span class="p">.,</span> <span class="n">me</span><span class="p">))</span><span class="o">//</span><span class="s1">&#39; of &#39;</span><span class="o">//</span><span class="nb">trim</span><span class="p">(</span><span class="n">str</span><span class="p">(.</span><span class="n">true</span><span class="p">.,</span> <span class="n">we</span><span class="p">))</span>
+    <span class="k">print</span> <span class="s1">&#39;(A)&#39;</span><span class="p">,</span> <span class="n">id</span><span class="o">//</span><span class="s1">&#39;Number of total cells: &#39;</span><span class="o">//</span><span class="nb">trim</span><span class="p">(</span><span class="n">str</span><span class="p">(.</span><span class="n">true</span><span class="p">.,</span> <span class="n">Ni</span><span class="p">))</span>
+    <span class="k">print</span> <span class="s1">&#39;(A)&#39;</span><span class="p">,</span> <span class="n">id</span><span class="o">//</span><span class="s1">&#39;Number of time steps: &#39;</span><span class="o">//</span><span class="nb">trim</span><span class="p">(</span><span class="n">str</span><span class="p">(.</span><span class="n">true</span><span class="p">.,</span> <span class="n">steps_max</span><span class="p">))</span>
+    <span class="k">print</span> <span class="s1">&#39;(A)&#39;</span><span class="p">,</span> <span class="n">id</span><span class="o">//</span><span class="s1">&#39;Save final results: &#39;</span><span class="o">//</span><span class="nb">trim</span><span class="p">(</span><span class="n">str</span><span class="p">(</span><span class="n">results</span><span class="p">))</span>
+    <span class="k">print</span> <span class="s1">&#39;(A)&#39;</span><span class="p">,</span> <span class="n">id</span><span class="o">//</span><span class="s1">&#39;Save plots of results: &#39;</span><span class="o">//</span><span class="nb">trim</span><span class="p">(</span><span class="n">str</span><span class="p">(</span><span class="n">plots</span><span class="p">))</span>
+    <span class="k">print</span> <span class="s1">&#39;(A)&#39;</span><span class="p">,</span> <span class="n">id</span><span class="o">//</span><span class="s1">&#39;Save time serie of results: &#39;</span><span class="o">//</span><span class="nb">trim</span><span class="p">(</span><span class="n">str</span><span class="p">(</span><span class="n">time_serie</span><span class="p">))</span>
+    <span class="k">print</span> <span class="s1">&#39;(A)&#39;</span><span class="p">,</span> <span class="n">id</span><span class="o">//</span><span class="s1">&#39;Left BC: &#39;</span><span class="o">//</span><span class="n">BC_L</span>
+    <span class="k">print</span> <span class="s1">&#39;(A)&#39;</span><span class="p">,</span> <span class="n">id</span><span class="o">//</span><span class="s1">&#39;Right BC: &#39;</span><span class="o">//</span><span class="n">BC_R</span>
+    <span class="k">print</span> <span class="s1">&#39;(A)&#39;</span><span class="p">,</span> <span class="n">id</span><span class="o">//</span><span class="s1">&#39;Space resolution: &#39;</span><span class="o">//</span><span class="nb">trim</span><span class="p">(</span><span class="n">str</span><span class="p">(.</span><span class="n">true</span><span class="p">.,</span> <span class="n">Dx</span><span class="p">))</span>
+    <span class="k">print</span> <span class="s1">&#39;(A)&#39;</span><span class="p">,</span> <span class="n">id</span><span class="o">//</span><span class="s1">&#39;X(1) X(N): &#39;</span><span class="o">//</span><span class="nb">trim</span><span class="p">(</span><span class="n">str</span><span class="p">(.</span><span class="n">true</span><span class="p">.,</span> <span class="n">x</span><span class="p">(</span><span class="mi">1</span><span class="p">)))</span><span class="o">//</span><span class="s1">&#39; &#39;</span><span class="o">//</span><span class="nb">trim</span><span class="p">(</span><span class="n">str</span><span class="p">(.</span><span class="n">true</span><span class="p">.,</span> <span class="n">x</span><span class="p">(</span><span class="n">Ni_image</span><span class="p">)))</span>
+    <span class="k">print</span> <span class="s1">&#39;(A)&#39;</span><span class="p">,</span> <span class="n">id</span><span class="o">//</span><span class="s1">&#39;Density value: &#39;</span><span class="o">//</span><span class="nb">trim</span><span class="p">(</span><span class="n">str</span><span class="p">(</span><span class="n">n</span><span class="o">=</span><span class="n">initial_state</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)))</span><span class="o">//</span><span class="s1">&#39; &#39;</span><span class="o">//</span><span class="nb">trim</span><span class="p">(</span><span class="n">str</span><span class="p">(</span><span class="n">n</span><span class="o">=</span><span class="n">initial_state</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">Ni_image</span><span class="p">)))</span>
+  <span class="n">endif</span>
+  <span class="c">! initialize integrator and domain</span>
+  <span class="k">call </span><span class="n">rk_integrator</span><span class="p">%</span><span class="n">init</span><span class="p">(</span><span class="n">stages</span><span class="o">=</span><span class="n">rk_stages</span><span class="p">)</span>
+  <span class="k">call </span><span class="n">domain</span><span class="p">%</span><span class="n">init</span><span class="p">(</span><span class="n">Ni</span><span class="o">=</span><span class="n">Ni_image</span><span class="p">,</span> <span class="n">Ns</span><span class="o">=</span><span class="n">Ns</span><span class="p">,</span> <span class="n">Dx</span><span class="o">=</span><span class="n">Dx</span><span class="p">,</span> <span class="n">BC_L</span><span class="o">=</span><span class="n">BC_L</span><span class="p">,</span> <span class="n">BC_R</span><span class="o">=</span><span class="n">BC_R</span><span class="p">,</span> <span class="n">initial_state</span><span class="o">=</span><span class="n">initial_state</span><span class="p">,</span> <span class="n">cp0</span><span class="o">=</span><span class="n">cp0</span><span class="p">,</span> <span class="n">cv0</span><span class="o">=</span><span class="n">cv0</span><span class="p">,</span> <span class="p">&amp;</span>
+                   <span class="n">me</span><span class="o">=</span><span class="n">me</span><span class="p">,</span> <span class="n">we</span><span class="o">=</span><span class="n">we</span><span class="p">,</span> <span class="n">ord</span><span class="o">=</span><span class="n">ord</span><span class="p">)</span>
+<span class="cp">#ifdef CAF</span>
+  <span class="k">allocate</span><span class="p">(</span><span class="n">Dt</span><span class="p">(</span><span class="mi">1</span><span class="p">:</span><span class="n">we</span><span class="p">)[</span><span class="o">*</span><span class="p">])</span>
+<span class="cp">#else</span>
+  <span class="k">allocate</span><span class="p">(</span><span class="n">Dt</span><span class="p">(</span><span class="mi">1</span><span class="p">:</span><span class="n">we</span><span class="p">))</span>
+<span class="cp">#endif</span>
+  <span class="c">! initialize time serie file</span>
+  <span class="k">call </span><span class="n">save_time_serie</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s1">&#39;FOODIE test: 1D Euler equations integration, explicit TVD Runge-Kutta&#39;</span><span class="o">//</span> <span class="p">&amp;</span>
+                             <span class="nb">trim</span><span class="p">(</span><span class="n">str</span><span class="p">(.</span><span class="n">true</span><span class="p">.,</span> <span class="n">rk_stages</span><span class="p">))</span><span class="o">//</span><span class="s1">&#39; stages&#39;</span><span class="p">,</span> <span class="p">&amp;</span>
+                       <span class="n">filename</span><span class="o">=</span><span class="s1">&#39;euler_1D_caf_integration-tvdrk-&#39;</span><span class="o">//</span><span class="p">&amp;</span>
+                                <span class="nb">trim</span><span class="p">(</span><span class="n">str</span><span class="p">(.</span><span class="n">true</span><span class="p">.,</span> <span class="n">rk_stages</span><span class="p">))</span><span class="o">//</span><span class="s1">&#39;-image-&#39;</span><span class="o">//</span><span class="p">&amp;</span>
+                                <span class="nb">trim</span><span class="p">(</span><span class="n">strz</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="n">me</span><span class="p">))</span><span class="o">//</span><span class="p">&amp;</span>
+                                <span class="s1">&#39;-time_serie.dat&#39;</span><span class="p">,</span> <span class="p">&amp;</span>
+                       <span class="n">t</span><span class="o">=</span><span class="n">t</span><span class="p">)</span>
+  <span class="c">! initialize time variables</span>
+  <span class="n">t</span> <span class="o">=</span> <span class="mf">0._R_P</span>
+  <span class="n">Dt</span> <span class="o">=</span> <span class="mf">0._R_P</span>
+  <span class="k">return</span>
+  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+  <span class="n">endsubroutine</span> <span class="n">init</span>
+
+  <span class="k">subroutine </span><span class="n">synchronize</span><span class="p">()</span>
+  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+  <span class="c">!&lt; Synchronize CAF images.</span>
+  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+  <span class="kt">integer</span><span class="p">(</span><span class="n">I_P</span><span class="p">)</span> <span class="kd">::</span> <span class="n">i</span> <span class="c">!&lt; Images counter.</span>
+  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+
+  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+<span class="cp">#ifdef CAF</span>
+  <span class="k">if</span> <span class="p">(</span><span class="n">we</span><span class="o">&gt;</span><span class="mi">1</span><span class="p">)</span> <span class="k">then</span>
+<span class="k">    sync all</span>
+    <span class="c">! reduction on minumum value of Dt</span>
+    <span class="k">do </span><span class="n">i</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">we</span>
+      <span class="k">if</span> <span class="p">(</span><span class="n">i</span><span class="o">/=</span><span class="n">me</span><span class="p">)</span> <span class="n">Dt</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="o">=</span> <span class="n">Dt</span><span class="p">(</span><span class="n">i</span><span class="p">)[</span><span class="n">i</span><span class="p">]</span>
+      <span class="n">Dt</span><span class="p">(</span><span class="n">me</span><span class="p">)</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">Dt</span><span class="p">(</span><span class="n">me</span><span class="p">),</span> <span class="n">Dt</span><span class="p">(</span><span class="n">i</span><span class="p">))</span>
+    <span class="n">enddo</span>
+  <span class="n">endif</span>
+<span class="cp">#endif</span>
+  <span class="k">return</span>
+  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+  <span class="n">endsubroutine</span> <span class="n">synchronize</span>
+
+  <span class="k">subroutine </span><span class="n">save_results</span><span class="p">(</span><span class="n">title</span><span class="p">,</span> <span class="n">filename</span><span class="p">)</span>
+  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+  <span class="c">!&lt; Save results.</span>
+  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+  <span class="kt">character</span><span class="p">(</span><span class="o">*</span><span class="p">),</span> <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span> <span class="kd">::</span> <span class="n">title</span>    <span class="c">!&lt; Plot title.</span>
+  <span class="kt">character</span><span class="p">(</span><span class="o">*</span><span class="p">),</span> <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span> <span class="kd">::</span> <span class="n">filename</span> <span class="c">!&lt; Output filename.</span>
+  <span class="kt">integer</span><span class="p">(</span><span class="n">I_P</span><span class="p">)</span>             <span class="kd">::</span> <span class="n">rawfile</span>  <span class="c">!&lt; Raw file unit for saving results.</span>
+  <span class="k">type</span><span class="p">(</span><span class="n">pyplot</span><span class="p">)</span>             <span class="kd">::</span> <span class="n">plt</span>      <span class="c">!&lt; Plot file handler.</span>
+  <span class="kt">integer</span><span class="p">(</span><span class="n">I_P</span><span class="p">)</span>             <span class="kd">::</span> <span class="n">i</span>        <span class="c">!&lt; Counter.</span>
+  <span class="kt">integer</span><span class="p">(</span><span class="n">I_P</span><span class="p">)</span>             <span class="kd">::</span> <span class="n">v</span>        <span class="c">!&lt; Counter.</span>
+  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+
+  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+  <span class="k">if</span> <span class="p">(</span><span class="n">results</span><span class="p">.</span><span class="nb">or</span><span class="p">.</span><span class="n">plots</span><span class="p">)</span> <span class="n">final_state</span> <span class="o">=</span> <span class="n">domain</span><span class="p">%</span><span class="n">output</span><span class="p">()</span>
+  <span class="k">if</span> <span class="p">(</span><span class="n">results</span><span class="p">)</span> <span class="k">then</span>
+<span class="k">    open</span><span class="p">(</span><span class="n">newunit</span><span class="o">=</span><span class="n">rawfile</span><span class="p">,</span> <span class="k">file</span><span class="o">=</span><span class="n">filename</span><span class="o">//</span><span class="s1">&#39;.dat&#39;</span><span class="p">)</span>
+    <span class="k">write</span><span class="p">(</span><span class="n">rawfile</span><span class="p">,</span> <span class="s1">&#39;(A)&#39;</span><span class="p">)</span><span class="s1">&#39;# &#39;</span><span class="o">//</span><span class="n">title</span>
+    <span class="k">write</span><span class="p">(</span><span class="n">rawfile</span><span class="p">,</span> <span class="s1">&#39;(A)&#39;</span><span class="p">)</span><span class="s1">&#39;VARIABLES=&quot;x&quot; &quot;rho(1)&quot; &quot;u&quot; &quot;p&quot; &quot;rho&quot; &quot;gamma&quot;&#39;</span>
+    <span class="k">write</span><span class="p">(</span><span class="n">rawfile</span><span class="p">,</span> <span class="s1">&#39;(A)&#39;</span><span class="p">)</span><span class="s1">&#39;ZONE T=&quot;&#39;</span><span class="o">//</span><span class="n">str</span><span class="p">(</span><span class="n">n</span><span class="o">=</span><span class="n">t</span><span class="p">)</span><span class="o">//</span><span class="s1">&#39;&quot;&#39;</span>
+    <span class="k">do </span><span class="n">i</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">Ni_image</span>
+      <span class="k">write</span><span class="p">(</span><span class="n">rawfile</span><span class="p">,</span> <span class="s1">&#39;(&#39;</span><span class="o">//</span><span class="nb">trim</span><span class="p">(</span><span class="n">str</span><span class="p">(.</span><span class="n">true</span><span class="p">.,</span><span class="n">Np</span><span class="o">+</span><span class="mi">1</span><span class="p">))</span><span class="o">//</span><span class="s1">&#39;(&#39;</span><span class="o">//</span><span class="n">FR_P</span><span class="o">//</span><span class="s1">&#39;,1X))&#39;</span><span class="p">)</span><span class="n">x</span><span class="p">(</span><span class="n">i</span><span class="p">),</span> <span class="p">(</span><span class="n">final_state</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="n">i</span><span class="p">),</span> <span class="n">v</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">Np</span><span class="p">)</span>
+    <span class="n">enddo</span>
+    <span class="k">close</span><span class="p">(</span><span class="n">rawfile</span><span class="p">)</span>
+  <span class="n">endif</span>
+  <span class="k">if</span> <span class="p">(</span><span class="n">plots</span><span class="p">)</span> <span class="k">then</span>
+<span class="k">    call </span><span class="n">plt</span><span class="p">%</span><span class="n">initialize</span><span class="p">(</span><span class="n">grid</span><span class="o">=</span><span class="p">.</span><span class="n">true</span><span class="p">.,</span> <span class="n">xlabel</span><span class="o">=</span><span class="s1">&#39;x&#39;</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="n">title</span><span class="p">)</span>
+    <span class="k">do </span><span class="n">v</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">Ns</span>
+      <span class="k">call </span><span class="n">plt</span><span class="p">%</span><span class="n">add_plot</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="n">final_state</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="p">:),</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;rho(&#39;</span><span class="o">//</span><span class="nb">trim</span><span class="p">(</span><span class="n">str</span><span class="p">(.</span><span class="n">true</span><span class="p">.,</span><span class="n">v</span><span class="p">))</span><span class="o">//</span><span class="s1">&#39;)&#39;</span><span class="p">,</span> <span class="n">linestyle</span><span class="o">=</span><span class="s1">&#39;b-&#39;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">enddo</span>
+    <span class="k">call </span><span class="n">plt</span><span class="p">%</span><span class="n">add_plot</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="n">final_state</span><span class="p">(</span><span class="n">Ns</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="p">:),</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;u&#39;</span><span class="p">,</span> <span class="n">linestyle</span><span class="o">=</span><span class="s1">&#39;r-&#39;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+    <span class="k">call </span><span class="n">plt</span><span class="p">%</span><span class="n">add_plot</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="n">final_state</span><span class="p">(</span><span class="n">Ns</span><span class="o">+</span><span class="mi">2</span><span class="p">,</span> <span class="p">:),</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;p&#39;</span><span class="p">,</span> <span class="n">linestyle</span><span class="o">=</span><span class="s1">&#39;g-&#39;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+    <span class="k">call </span><span class="n">plt</span><span class="p">%</span><span class="n">add_plot</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="n">final_state</span><span class="p">(</span><span class="n">Ns</span><span class="o">+</span><span class="mi">3</span><span class="p">,</span> <span class="p">:),</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;rho&#39;</span><span class="p">,</span> <span class="n">linestyle</span><span class="o">=</span><span class="s1">&#39;o-&#39;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+    <span class="k">call </span><span class="n">plt</span><span class="p">%</span><span class="n">add_plot</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="n">final_state</span><span class="p">(</span><span class="n">Ns</span><span class="o">+</span><span class="mi">4</span><span class="p">,</span> <span class="p">:),</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;gamma&#39;</span><span class="p">,</span> <span class="n">linestyle</span><span class="o">=</span><span class="s1">&#39;c-&#39;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+    <span class="k">call </span><span class="n">plt</span><span class="p">%</span><span class="n">savefig</span><span class="p">(</span><span class="n">filename</span><span class="o">//</span><span class="s1">&#39;.png&#39;</span><span class="p">)</span>
+  <span class="n">endif</span>
+  <span class="k">return</span>
+  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+  <span class="n">endsubroutine</span> <span class="n">save_results</span>
+
+  <span class="k">subroutine </span><span class="n">save_time_serie</span><span class="p">(</span><span class="n">title</span><span class="p">,</span> <span class="n">filename</span><span class="p">,</span> <span class="n">finish</span><span class="p">,</span> <span class="n">t</span><span class="p">)</span>
+  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+  <span class="c">!&lt; Save time-serie results.</span>
+  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+  <span class="kt">character</span><span class="p">(</span><span class="o">*</span><span class="p">),</span> <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">),</span> <span class="k">optional</span> <span class="kd">::</span> <span class="n">title</span>    <span class="c">!&lt; Plot title.</span>
+  <span class="kt">character</span><span class="p">(</span><span class="o">*</span><span class="p">),</span> <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">),</span> <span class="k">optional</span> <span class="kd">::</span> <span class="n">filename</span> <span class="c">!&lt; Output filename.</span>
+  <span class="kt">logical</span><span class="p">,</span>      <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">),</span> <span class="k">optional</span> <span class="kd">::</span> <span class="n">finish</span>   <span class="c">!&lt; Flag for triggering the file closing.</span>
+  <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">),</span>    <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span>           <span class="kd">::</span> <span class="n">t</span>        <span class="c">!&lt; Current integration time.</span>
+  <span class="kt">integer</span><span class="p">(</span><span class="n">I_P</span><span class="p">),</span> <span class="k">save</span>                 <span class="kd">::</span> <span class="n">tsfile</span>   <span class="c">!&lt; File unit for saving time serie results.</span>
+  <span class="kt">integer</span><span class="p">(</span><span class="n">I_P</span><span class="p">)</span>                       <span class="kd">::</span> <span class="n">i</span>        <span class="c">!&lt; Counter.</span>
+  <span class="kt">integer</span><span class="p">(</span><span class="n">I_P</span><span class="p">)</span>                       <span class="kd">::</span> <span class="n">v</span>        <span class="c">!&lt; Counter.</span>
+  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+
+  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+  <span class="k">if</span> <span class="p">(</span><span class="n">time_serie</span><span class="p">)</span> <span class="k">then</span>
+<span class="k">    </span><span class="n">final_state</span> <span class="o">=</span> <span class="n">domain</span><span class="p">%</span><span class="n">output</span><span class="p">()</span>
+    <span class="k">if</span> <span class="p">(</span><span class="nb">present</span><span class="p">(</span><span class="n">filename</span><span class="p">).</span><span class="nb">and</span><span class="p">.</span><span class="nb">present</span><span class="p">(</span><span class="n">title</span><span class="p">))</span> <span class="k">then</span>
+<span class="k">      open</span><span class="p">(</span><span class="n">newunit</span><span class="o">=</span><span class="n">tsfile</span><span class="p">,</span> <span class="k">file</span><span class="o">=</span><span class="n">filename</span><span class="p">)</span>
+      <span class="k">write</span><span class="p">(</span><span class="n">tsfile</span><span class="p">,</span> <span class="s1">&#39;(A)&#39;</span><span class="p">)</span><span class="s1">&#39;# &#39;</span><span class="o">//</span><span class="n">title</span>
+    <span class="n">endif</span>
+    <span class="k">write</span><span class="p">(</span><span class="n">tsfile</span><span class="p">,</span> <span class="s1">&#39;(A)&#39;</span><span class="p">)</span><span class="s1">&#39;VARIABLES=&quot;x&quot; &quot;rho(1)&quot; &quot;u&quot; &quot;p&quot; &quot;rho&quot; &quot;gamma&quot;&#39;</span>
+    <span class="k">write</span><span class="p">(</span><span class="n">tsfile</span><span class="p">,</span> <span class="s1">&#39;(A)&#39;</span><span class="p">)</span><span class="s1">&#39;ZONE T=&quot;&#39;</span><span class="o">//</span><span class="n">str</span><span class="p">(</span><span class="n">n</span><span class="o">=</span><span class="n">t</span><span class="p">)</span><span class="o">//</span><span class="s1">&#39;&quot;&#39;</span>
+    <span class="k">do </span><span class="n">i</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">Ni_image</span>
+      <span class="k">write</span><span class="p">(</span><span class="n">tsfile</span><span class="p">,</span> <span class="s1">&#39;(&#39;</span><span class="o">//</span><span class="nb">trim</span><span class="p">(</span><span class="n">str</span><span class="p">(.</span><span class="n">true</span><span class="p">.,</span><span class="n">Np</span><span class="o">+</span><span class="mi">1</span><span class="p">))</span><span class="o">//</span><span class="s1">&#39;(&#39;</span><span class="o">//</span><span class="n">FR_P</span><span class="o">//</span><span class="s1">&#39;,1X))&#39;</span><span class="p">)</span><span class="n">x</span><span class="p">(</span><span class="n">i</span><span class="p">),</span> <span class="p">(</span><span class="n">final_state</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="n">i</span><span class="p">),</span> <span class="n">v</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">Np</span><span class="p">)</span>
+    <span class="n">enddo</span>
+    <span class="k">if</span> <span class="p">(</span><span class="nb">present</span><span class="p">(</span><span class="n">finish</span><span class="p">))</span> <span class="k">then</span>
+<span class="k">      if</span> <span class="p">(</span><span class="n">finish</span><span class="p">)</span> <span class="k">close</span><span class="p">(</span><span class="n">tsfile</span><span class="p">)</span>
+    <span class="n">endif</span>
+  <span class="n">endif</span>
+  <span class="k">return</span>
+  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+  <span class="n">endsubroutine</span> <span class="n">save_time_serie</span>
+<span class="n">endprogram</span> <span class="n">integrate_euler_1D_caf</span>
+</pre></div>
+
+    </section>
+    
+    
+    </div>
+  </div>
+
+    <hr>
+    <footer>
+      <div class="row">
+        <div class="col-md-4">&copy; 2016 </div>
+        <div class="col-md-4"><span class="text-center"> FOODIE was developed by Fortran-FOSS-Programmers Group</span></div>
+        <div class="col-md-4">
+          <span class="pull-right">
+            Documentation generated by 
+            <a href="https://github.com/cmacmackin/ford">FORD</a>
+            
+          </span>
+        </div>
+      </div>
+      <br>
+    </footer>
+    </div> <!-- /container -->
+
+
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+<!--
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+-->
+    <script src="../js/bootstrap.min.js"></script>
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+    <script src="../js/ie10-viewport-bug-workaround.js"></script>
+
+    <!-- MathJax JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        TeX: { extensions: ['AMSmath.js','AMSsymbols.js','noErrors.js','noUndefined.js'], equationNumbers: { autoNumber: 'AMS' } },
+        jax: ['input/TeX','input/MathML','output/HTML-CSS'],
+        extensions: ['tex2jax.js','mml2jax.js','MathMenu.js','MathZoom.js'],
+        'HTML-CSS': { 
+           styles: { '.MathJax_Display, .MathJax .mo, .MathJax .mi, .MathJax .mn': {color: '#000000 ! important'} }
+        }
+      });
+    </script>
+    <script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+  </body>
+</html>

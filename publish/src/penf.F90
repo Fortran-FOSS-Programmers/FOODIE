@@ -1171,8 +1171,8 @@ contains
   !<
   !< @note It is assumed that R16P is represented by means of 128 bits, but this is not ensured in all architectures.
   !---------------------------------------------------------------------------------------------------------------------------------
-  real(R16P), intent(in) :: n    !< Real to be converted.
-  character(128)         :: bstr !< Returned bit-string containing input number.
+  real(R8P), intent(in) :: n    !< Real to be converted.
+  character(128)        :: bstr !< Returned bit-string containing input number.
   !---------------------------------------------------------------------------------------------------------------------------------
 
   !---------------------------------------------------------------------------------------------------------------------------------
@@ -1389,11 +1389,7 @@ module penf
 !<{!README-PENF.md!}
 !-----------------------------------------------------------------------------------------------------------------------------------
 use penf_global_parameters_variables
-#ifdef __GFORTRAN__
-use penf_b_size, only : bit_size, byte_size
-#else
-use penf_b_size
-#endif
+use penf_b_size,  only : bit_size, byte_size
 use penf_stringify, only : str, strz, cton, bstr, bcton
 !-----------------------------------------------------------------------------------------------------------------------------------
 

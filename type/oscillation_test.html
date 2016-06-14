@@ -1,0 +1,1018 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+	 
+	 <meta name="description" content="Fortran Object oriented Ordinary Differential Equations integration library">
+    
+    <meta name="author" content="Chris MacMackin" >
+    <link rel="icon" href="../favicon.png">
+
+    <title>oscillation_test &ndash; FOODIE </title>
+
+    <link href="../css/bootstrap.min.css" rel="stylesheet">
+    <link href="../css/pygments.css" rel="stylesheet">
+    <link href="../css/font-awesome.min.css" rel="stylesheet">
+    <link href="../css/local.css" rel="stylesheet">
+    
+
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+    
+    <script src="../js/jquery-2.1.3.min.js"></script>
+    <script src="../js/svg-pan-zoom.min.js"></script>
+
+    
+    <script src="../tipuesearch/tipuesearch_content.js"></script>
+    <link  href="../tipuesearch/tipuesearch.css" rel="stylesheet">
+    <script src="../tipuesearch/tipuesearch_set.js"></script>
+    <script src="../tipuesearch/tipuesearch.js"></script>
+    
+
+  </head>
+
+  <body>
+
+    <!-- Fixed navbar -->
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="../index.html">FOODIE </a>
+        </div>
+        <div id="navbar" class="navbar-collapse collapse">
+          <ul class="nav navbar-nav">
+				
+                
+            <li><a href="../lists/files.html">Source Files</a></li>
+				
+				
+            <li><a href="../lists/modules.html">Modules</a></li>
+				
+				
+            <li><a href="../lists/procedures.html">Procedures</a></li>
+				
+				
+            <li><a href="../lists/absint.html">Abstract Interfaces</a></li>
+								
+            <li><a href="../lists/types.html">Derived Types</a></li>
+				
+				
+            <li><a href="../lists/programs.html">Programs</a></li>
+				
+          </ul>
+        
+        <form action="../search.html" class="navbar-form navbar-right" role="search">
+        <div class="form-group">
+          <input type="text" class="form-control" placeholder="Search" name="q" id="tipue_search_input" autocomplete="off" required>
+        </div>
+<!--
+        <button type="submit" class="btn btn-default">Submit</button>
+-->
+        </form>
+        
+        </div><!--/.nav-collapse -->
+      </div>
+    </nav>
+
+    <div class="container">
+    
+  
+  <div class="row">
+    <h1>oscillation_test
+    <small>Derived Type</small>
+    
+    </h1>
+	 
+<div class="row">
+<div class="col-lg-12">
+<div class="well well-sm">
+  <ul class="list-inline" style="margin-bottom:0px;display:inline">
+     
+     
+     
+     
+    
+    
+    <li><i class="fa fa-code"></i><a href="../src/oscillation.f90"> Source File</a></li>
+     
+  </ul>
+  <ol class="breadcrumb in-well text-right">
+  
+     <li><a href='../sourcefile/oscillation.f90.html'>oscillation.f90</a></li>
+  
+     <li><a href='../module/oscillation_test_t.html'>oscillation_test_t</a></li>
+  
+     <li class="active">oscillation_test</li>
+  </ol>
+</div>
+</div>
+</div>
+    
+  </div>
+  
+  <div class="row">
+    <div class="col-lg-3">
+    
+<div id="sidebar">
+  
+  
+  
+  <div class="panel panel-primary">
+    <div class="panel-heading text-left"><h3 class="panel-title"><a data-toggle="collapse" href="#vars">Variables</a></h3></div>
+    <div id="vars" class="panel-collapse collapse">
+      <div class="list-group">
+        
+        <a class="list-group-item" href="../type/oscillation_test.html#variable-cli">cli</a>
+        
+        <a class="list-group-item" href="../type/oscillation_test.html#variable-error%7E8">error</a>
+        
+        <a class="list-group-item" href="../type/oscillation_test.html#variable-errors_analysis">errors_analysis</a>
+        
+        <a class="list-group-item" href="../type/oscillation_test.html#variable-frequency">frequency</a>
+        
+        <a class="list-group-item" href="../type/oscillation_test.html#variable-final_time">final_time</a>
+        
+        <a class="list-group-item" href="../type/oscillation_test.html#variable-implicit_iterations">implicit_iterations</a>
+        
+        <a class="list-group-item" href="../type/oscillation_test.html#variable-output_cli">output_cli</a>
+        
+        <a class="list-group-item" href="../type/oscillation_test.html#variable-plots">plots</a>
+        
+        <a class="list-group-item" href="../type/oscillation_test.html#variable-results">results</a>
+        
+        <a class="list-group-item" href="../type/oscillation_test.html#variable-solver">solver</a>
+        
+        <a class="list-group-item" href="../type/oscillation_test.html#variable-stages_steps">stages_steps</a>
+        
+        <a class="list-group-item" href="../type/oscillation_test.html#variable-dt">Dt</a>
+        
+        <a class="list-group-item" href="../type/oscillation_test.html#variable-tolerance%7E2">tolerance</a>
+        
+      </div>
+    </div>
+  </div>
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  <div class="panel panel-primary">
+    <div class="panel-heading text-left"><h3 class="panel-title"><a data-toggle="collapse" href="#boundprocs">Type-Bound Procedures</a></h3></div>
+    <div id="boundprocs" class="panel-collapse collapse">
+        <div class="list-group">
+          
+          <a class="list-group-item" href="../type/oscillation_test.html#boundprocedure-execute">execute</a>
+          
+          <a class="list-group-item" href="../type/oscillation_test.html#boundprocedure-init%7E9">init</a>
+          
+          <a class="list-group-item" href="../type/oscillation_test.html#boundprocedure-test">test</a>
+          
+        </div>
+    </div>
+  </div>
+  
+  
+  
+  
+  <div class="panel panel-primary">
+    <div class="panel-heading text-left"><h3 class="panel-title">Source Code</h3></div>
+    <div class="list-group">
+      <a class="list-group-item" href="../type/oscillation_test.html#src">oscillation_test</a>
+    </div>
+  </div>
+  
+  <hr>
+  
+  <div class="panel panel-default">
+    <div class="panel-heading text-left"><h3 class="panel-title"><a data-toggle="collapse" href="#alltypes">All Derived Types</a></h3></div>
+    <div id="alltypes" class="panel-collapse collapse">
+        <div class="list-group">
+          
+          <a class="list-group-item" href="../type/adams_bashforth_integrator.html">adams_bashforth_integrator</a>
+          
+          <a class="list-group-item" href="../type/adams_bashforth_moulton_integrator.html">adams_bashforth_moulton_integrator</a>
+          
+          <a class="list-group-item" href="../type/adams_moulton_integrator.html">adams_moulton_integrator</a>
+          
+          <a class="list-group-item" href="../type/back_df_integrator.html">back_df_integrator</a>
+          
+          <a class="list-group-item" href="../type/burgers.html">burgers</a>
+          
+          <a class="list-group-item" href="../type/command_line_argument.html">command_line_argument</a>
+          
+          <a class="list-group-item" href="../type/command_line_arguments_group.html">command_line_arguments_group</a>
+          
+          <a class="list-group-item" href="../type/command_line_interface.html">command_line_interface</a>
+          
+          <a class="list-group-item" href="../type/emd_runge_kutta_integrator.html">emd_runge_kutta_integrator</a>
+          
+          <a class="list-group-item" href="../type/euler_1d.html">euler_1D</a>
+          
+          <a class="list-group-item" href="../type/euler_1d_caf.html">euler_1D_caf</a>
+          
+          <a class="list-group-item" href="../type/euler_1d_caf_nf.html">euler_1D_caf_nf</a>
+          
+          <a class="list-group-item" href="../type/euler_1d_omp_nf.html">euler_1D_omp_nf</a>
+          
+          <a class="list-group-item" href="../type/euler_1d_openmp.html">euler_1D_openmp</a>
+          
+          <a class="list-group-item" href="../type/euler_explicit_integrator.html">euler_explicit_integrator</a>
+          
+          <a class="list-group-item" href="../type/integrand.html">integrand</a>
+          
+          <a class="list-group-item" href="../type/leapfrog_integrator.html">leapfrog_integrator</a>
+          
+          <a class="list-group-item" href="../type/lorenz.html">lorenz</a>
+          
+          <a class="list-group-item" href="../type/ls_runge_kutta_integrator.html">ls_runge_kutta_integrator</a>
+          
+          <a class="list-group-item" href="../type/object.html">object</a>
+          
+          <a class="list-group-item" href="../type/oscillation.html">oscillation</a>
+          
+          <a class="list-group-item" href="../type/oscillation_test.html">oscillation_test</a>
+          
+          <a class="list-group-item" href="../type/pyplot.html">pyplot</a>
+          
+          <a class="list-group-item" href="../type/pyplot%7E2.html">pyplot</a>
+          
+          <a class="list-group-item" href="../type/tvd_runge_kutta_integrator%7E3.html">tvd_runge_kutta_integrator</a>
+          
+          <a class="list-group-item" href="../type/tvd_runge_kutta_integrator.html">tvd_runge_kutta_integrator</a>
+          
+          <a class="list-group-item" href="../type/tvd_runge_kutta_integrator%7E2.html">tvd_runge_kutta_integrator</a>
+          
+          <a class="list-group-item" href="../type/weno_constructor.html">weno_constructor</a>
+          
+          <a class="list-group-item" href="../type/weno_constructor_upwind.html">weno_constructor_upwind</a>
+          
+          <a class="list-group-item" href="../type/weno_factory.html">weno_factory</a>
+          
+          <a class="list-group-item" href="../type/weno_interpolator.html">weno_interpolator</a>
+          
+          <a class="list-group-item" href="../type/weno_interpolator_upwind.html">weno_interpolator_upwind</a>
+          
+        </div>
+    </div>
+  </div>
+  
+</div>
+
+    </div>
+    
+    <div class="col-lg-9" id='text'>
+    <h2>type, public :: oscillation_test</h2>
+    
+    
+                <div class="depgraph"><?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.26.3 (20100126.1600)
+ -->
+<!-- Title: type~~oscillation_test~~InheritsGraph Pages: 1 -->
+<svg id="typeoscillation_testInheritsGraph" width="641pt" height="62pt"
+ viewBox="0.00 0.00 641.00 62.11" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="type~~oscillation_test~~InheritsGraph" class="graph" transform="scale(0.828165 0.828165) rotate(0) translate(4 71)">
+<title>type~~oscillation_test~~InheritsGraph</title>
+<polygon fill="white" stroke="white" points="-4,5 -4,-71 771,-71 771,5 -4,5"/>
+<!-- type~oscillation_test -->
+<g id="node1" class="node"><title>type~oscillation_test</title>
+<polygon fill="none" stroke="black" points="766,-50 684,-50 684,-24 766,-24 766,-50"/>
+<text text-anchor="middle" x="725" y="-34.55" font-family="Helvetica,sans-Serif" font-size="10.50">oscillation_test</text>
+</g>
+<!-- type~command_line_interface -->
+<g id="node2" class="node"><title>type~command_line_interface</title>
+<a xlink:href="../type/command_line_interface.html" xlink:title="command_line_interface">
+<polygon fill="#5cb85c" stroke="#5cb85c" points="638,-50 508,-50 508,-24 638,-24 638,-50"/>
+<text text-anchor="middle" x="573" y="-34.55" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">command_line_interface</text>
+</a>
+</g>
+<!-- type~command_line_interface&#45;&gt;type~oscillation_test -->
+<g id="edge12" class="edge"><title>type~command_line_interface&#45;&gt;type~oscillation_test</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M638.344,-37C650.172,-37 662.351,-37 673.705,-37"/>
+<polygon fill="#000000" stroke="#000000" points="673.867,-40.5001 683.867,-37 673.867,-33.5001 673.867,-40.5001"/>
+<text text-anchor="middle" x="661" y="-41.45" font-family="Helvetica,sans-Serif" font-size="9.50">cli</text>
+</g>
+<!-- type~command_line_arguments_group -->
+<g id="node3" class="node"><title>type~command_line_arguments_group</title>
+<a xlink:href="../type/command_line_arguments_group.html" xlink:title="command_line_arguments_group">
+<polygon fill="#5cb85c" stroke="#5cb85c" points="449,-26 277,-26 277,-1.24345e-14 449,-3.55271e-15 449,-26"/>
+<text text-anchor="middle" x="363" y="-10.55" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">command_line_arguments_group</text>
+</a>
+</g>
+<!-- type~command_line_arguments_group&#45;&gt;type~command_line_interface -->
+<g id="edge8" class="edge"><title>type~command_line_arguments_group&#45;&gt;type~command_line_interface</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M449.775,-22.4475C463.245,-23.9481 476.999,-25.5002 490,-27 492.523,-27.2911 495.089,-27.5891 497.681,-27.8917"/>
+<polygon fill="#000000" stroke="#000000" points="497.423,-31.3854 507.763,-29.077 498.24,-24.4333 497.423,-31.3854"/>
+<text text-anchor="middle" x="479" y="-31.45" font-family="Helvetica,sans-Serif" font-size="9.50">clasg</text>
+</g>
+<!-- type~command_line_argument -->
+<g id="node4" class="node"><title>type~command_line_argument</title>
+<a xlink:href="../type/command_line_argument.html" xlink:title="command_line_argument">
+<polygon fill="#5cb85c" stroke="#5cb85c" points="226,-26 92,-26 92,-1.24345e-14 226,-3.55271e-15 226,-26"/>
+<text text-anchor="middle" x="159" y="-10.55" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">command_line_argument</text>
+</a>
+</g>
+<!-- type~command_line_argument&#45;&gt;type~command_line_arguments_group -->
+<g id="edge4" class="edge"><title>type~command_line_argument&#45;&gt;type~command_line_arguments_group</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M226.08,-13C238.85,-13 252.452,-13 265.937,-13"/>
+<polygon fill="#000000" stroke="#000000" points="266.212,-16.5001 276.212,-13 266.212,-9.5001 266.212,-16.5001"/>
+<text text-anchor="middle" x="251" y="-17.45" font-family="Helvetica,sans-Serif" font-size="9.50">cla</text>
+</g>
+<!-- type~object -->
+<g id="node5" class="node"><title>type~object</title>
+<a xlink:href="../type/object.html" xlink:title="object">
+<polygon fill="#5cb85c" stroke="#5cb85c" points="54,-67 2.13163e-14,-67 0,-41 54,-41 54,-67"/>
+<text text-anchor="middle" x="27" y="-51.55" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">object</text>
+</a>
+</g>
+<!-- type~object&#45;&gt;type~command_line_interface -->
+<g id="edge10" class="edge"><title>type~object&#45;&gt;type~command_line_interface</title>
+<path fill="none" stroke="#000000" d="M251,-54C297.135,-50.0652 418.101,-44.1171 497.924,-40.4007"/>
+<polygon fill="#000000" stroke="#000000" points="498.104,-43.8962 507.931,-39.9364 497.779,-36.9037 498.104,-43.8962"/>
+</g>
+<!-- type~object&#45;&gt;type~command_line_arguments_group -->
+<g id="edge6" class="edge"><title>type~object&#45;&gt;type~command_line_arguments_group</title>
+<path fill="none" stroke="#000000" d="M73,-54C151.57,-44.7649 172.213,-61.151 251,-54"/>
+<path fill="none" stroke="#000000" d="M251,-54C263.689,-52.9178 264.299,-45.026 276,-40 285.155,-36.0678 295.072,-32.4358 304.823,-29.1944"/>
+<polygon fill="#000000" stroke="#000000" points="306.036,-32.4809 314.484,-26.0865 303.892,-25.8172 306.036,-32.4809"/>
+</g>
+<!-- type~object&#45;&gt;type~command_line_argument -->
+<g id="edge2" class="edge"><title>type~object&#45;&gt;type~command_line_argument</title>
+<path fill="none" stroke="#000000" d="M54.3042,-55.0508C60.469,-54.9964 66.9721,-54.7085 73,-54"/>
+<path fill="none" stroke="#000000" d="M73,-54C83.4176,-52.7755 82.8407,-45.1119 92,-40 98.3994,-36.4284 105.368,-33.0805 112.314,-30.0402"/>
+<polygon fill="#000000" stroke="#000000" points="113.849,-33.1918 121.714,-26.093 111.138,-26.7377 113.849,-33.1918"/>
+</g>
+</g>
+</svg>
+</div>
+                <script>var pantypeoscillation_testInheritsGraph = svgPanZoom('#typeoscillation_testInheritsGraph', {
+                    zoomEnabled: true,
+                    controlIconsEnabled: true,
+                    fit: true,
+                    center: true,});
+                    </script>
+                <div><a type="button" class="graph-help" data-toggle="modal" href="#graph-help-text">Help</a></div>
+                <div class="modal fade" id="graph-help-text" tabindex="-1" role="dialog">
+                  <div class="modal-dialog modal-lg" role="document">
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title" id="-graph-help-label">Graph Key</h4>
+                      </div>
+                      <div class="modal-body">
+                        
+Nodes of different colours represent the following:
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.26.3 (20100126.1600)
+ -->
+<!-- Title: Graph Key Pages: 1 -->
+<svg width="641pt" height="28pt"
+ viewBox="0.00 0.00 641.00 27.80" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="graph1" class="graph" transform="scale(0.817602 0.817602) rotate(0) translate(4 30)">
+<title>Graph Key</title>
+<polygon fill="white" stroke="white" points="-4,5 -4,-30 781,-30 781,5 -4,5"/>
+<!-- Module -->
+<g id="node1" class="node"><title>Module</title>
+<polygon fill="#337ab7" stroke="#337ab7" points="54,-26 2.13163e-14,-26 0,-1.24345e-14 54,-3.55271e-15 54,-26"/>
+<text text-anchor="middle" x="27" y="-10.55" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Module</text>
+</g>
+<!-- Submodule -->
+<g id="node2" class="node"><title>Submodule</title>
+<polygon fill="#5bc0de" stroke="#5bc0de" points="138,-26 72,-26 72,-1.24345e-14 138,-3.55271e-15 138,-26"/>
+<text text-anchor="middle" x="105" y="-10.55" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Submodule</text>
+</g>
+<!-- Type -->
+<g id="node3" class="node"><title>Type</title>
+<polygon fill="#5cb85c" stroke="#5cb85c" points="210,-26 156,-26 156,-1.24345e-14 210,-3.55271e-15 210,-26"/>
+<text text-anchor="middle" x="183" y="-10.55" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Type</text>
+</g>
+<!-- Subroutine -->
+<g id="node4" class="node"><title>Subroutine</title>
+<polygon fill="#d9534f" stroke="#d9534f" points="292,-26 228,-26 228,-1.24345e-14 292,-3.55271e-15 292,-26"/>
+<text text-anchor="middle" x="260" y="-10.55" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Subroutine</text>
+</g>
+<!-- Function -->
+<g id="node5" class="node"><title>Function</title>
+<polygon fill="#d94e8f" stroke="#d94e8f" points="364,-26 310,-26 310,-1.24345e-14 364,-3.55271e-15 364,-26"/>
+<text text-anchor="middle" x="337" y="-10.55" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Function</text>
+</g>
+<!-- Interface -->
+<g id="node6" class="node"><title>Interface</title>
+<polygon fill="#a7506f" stroke="#a7506f" points="436,-26 382,-26 382,-1.24345e-14 436,-3.55271e-15 436,-26"/>
+<text text-anchor="middle" x="409" y="-10.55" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Interface</text>
+</g>
+<!-- Unknown Procedure Type -->
+<g id="node7" class="node"><title>Unknown Procedure Type</title>
+<polygon fill="#777777" stroke="#777777" points="590,-26 454,-26 454,-1.24345e-14 590,-3.55271e-15 590,-26"/>
+<text text-anchor="middle" x="522" y="-10.55" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Unknown Procedure Type</text>
+</g>
+<!-- Program -->
+<g id="node8" class="node"><title>Program</title>
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="662,-26 608,-26 608,-1.24345e-14 662,-3.55271e-15 662,-26"/>
+<text text-anchor="middle" x="635" y="-10.55" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Program</text>
+</g>
+<!-- This Page&#39;s Entity -->
+<g id="node9" class="node"><title>This Page&#39;s Entity</title>
+<polygon fill="none" stroke="black" points="776,-26 680,-26 680,-1.24345e-14 776,-3.55271e-15 776,-26"/>
+<text text-anchor="middle" x="728" y="-10.55" font-family="Helvetica,sans-Serif" font-size="10.50">This Page&#39;s Entity</text>
+</g>
+</g>
+</svg>
+
+Where possible, edges connecting nodes are given different colours to make them
+easier to distinguish in large graphs.
+<h5>Module Graph</h5>
+<p>Solid arrows point from a parent (sub)module to the submodule which is
+descended from it. Dashed arrows point from a module being used to the
+module using it.</p>
+<h5>Type Graph</h5>
+<p>Solid arrows point from one derived type to another which extends
+(inherits from) it. Dashed arrows point from a derived type to another
+type containing it as a components, with a label listing the name(s) of
+said component(s).</p>
+<h5>Call Graph</h5>
+<p>Solid arrows point from a procedure to one which it calls. Dashed 
+arrows point from an interface to procedures which implement that interface.
+This could include the module procedures in a generic interface or the
+implementation in a submodule of an interface in a parent module.</p>
+
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                
+    <br><br>
+    
+    <p>Class to handle oscillation test(s).</p>
+<p>Test is driven by the Command Line Interface (CLI) options.</p>
+<p>Test has only 1 public method <code>execute</code>: it executes test(s) accordingly to cli options.</p>
+    <br>
+    
+    
+    <section>
+    <h2>Components</h2>
+    
+<table class="table table-striped varlist">
+<thead><tr><th>Type</th><th>Visibility</th>
+
+<th>Attributes</th><th></th><th>Name</th><th></th><th>Initial</th><th></th></thead>
+
+
+
+<tbody>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-cli"></span>type(<a href='../type/command_line_interface.html'>command_line_interface</a>),</td>
+  
+  <td>private</td>
+  <td></td><td>::</td>
+  <td><strong>cli</strong></td><td></td><td></td><td><p>Command line interface handler.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-error%7E8"></span>integer(kind=I_P),</td>
+  
+  <td>private</td>
+  <td></td><td>::</td>
+  <td><strong>error</strong></td><td> =</td><td>0</td><td><p>Error handler.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-errors_analysis"></span>logical,</td>
+  
+  <td>private</td>
+  <td></td><td>::</td>
+  <td><strong>errors_analysis</strong></td><td> =</td><td>.false.</td><td><p>Flag for activating errors analysis.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-frequency"></span>real(kind=R_P),</td>
+  
+  <td>private</td>
+  <td></td><td>::</td>
+  <td><strong>frequency</strong></td><td> =</td><td>0.0_R_P</td><td><p>Oscillation frequency.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-final_time"></span>real(kind=R_P),</td>
+  
+  <td>private</td>
+  <td></td><td>::</td>
+  <td><strong>final_time</strong></td><td> =</td><td>0.0_R_P</td><td><p>Final integration time.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-implicit_iterations"></span>integer(kind=I_P),</td>
+  
+  <td>private</td>
+  <td></td><td>::</td>
+  <td><strong>implicit_iterations</strong></td><td> =</td><td>0</td><td><p>Number of iterations (implicit solvers).</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-output_cli"></span>character(len=99),</td>
+  
+  <td>private</td>
+  <td></td><td>::</td>
+  <td><strong>output_cli</strong></td><td> =</td><td>'unset'</td><td><p>Output files basename.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-plots"></span>logical,</td>
+  
+  <td>private</td>
+  <td></td><td>::</td>
+  <td><strong>plots</strong></td><td> =</td><td>.false.</td><td><p>Flag for activating plots saving.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-results"></span>logical,</td>
+  
+  <td>private</td>
+  <td></td><td>::</td>
+  <td><strong>results</strong></td><td> =</td><td>.false.</td><td><p>Flag for activating results saving.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-solver"></span>character(len=99),</td>
+  
+  <td>private</td>
+  <td></td><td>::</td>
+  <td><strong>solver</strong></td><td> =</td><td>'adams-bashforth'</td><td><p>Solver used.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-stages_steps"></span>integer(kind=I_P),</td>
+  
+  <td>private,</td>
+  <td>allocatable</td><td>::</td>
+  <td><strong>stages_steps</strong>(:)</td><td></td><td></td><td><p>Number of stages/steps used.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-dt"></span>real(kind=R_P),</td>
+  
+  <td>private,</td>
+  <td>allocatable</td><td>::</td>
+  <td><strong>Dt</strong>(:)</td><td></td><td></td><td><p>Time step(s) exercised.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-tolerance%7E2"></span>real(kind=R_P),</td>
+  
+  <td>private,</td>
+  <td>allocatable</td><td>::</td>
+  <td><strong>tolerance</strong>(:)</td><td></td><td></td><td><p>Tolerance(s) exercised on local truncation error.</p></td>
+  
+</tr>
+
+</tbody>
+</table>
+
+    </section>
+    <br>
+    
+    
+    
+    
+    
+    
+     
+    <section>
+    <h2>Type-Bound Procedures</h2>
+    
+	   
+<div class="panel panel-default">
+  <div class="panel-heading codesum"><span class="anchor" id="boundprocedure-execute"></span><h3>procedure, public, pass(self) :: <strong>execute</strong>  
+    
+  </h3></div>
+  
+  <div class="panel-body">
+    
+
+
+    <p>Execute selected test(s).</p>
+  </div>
+  
+  <ul class="list-group">
+    
+      <li class="list-group-item">
+      
+         
+    
+    <h3>
+private subroutine <a href='../proc/execute.html'>execute</a>(self)
+    
+    
+    
+</h3>
+    
+    <h4>Arguments</h4>
+    
+      
+      
+<table class="table table-striped varlist">
+<thead><tr><th>Type</th>
+<th>Intent</th><th>Optional</th>
+<th>Attributes</th><th></th><th>Name</th><th></th></thead>
+
+
+
+<tbody>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>class(<a href='../type/oscillation_test.html'>oscillation_test</a>),</td>
+  <td>intent(inout)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>self</strong></td><td><p>Test.</p></td>
+  
+</tr>
+
+</tbody>
+</table>
+
+      
+    
+    
+    
+    <h4>Description</h4>
+       
+       
+
+
+       
+       <p>Execute test(s).</p>
+        
+
+      
+      </li>
+    
+  </ul>
+</div>
+
+    
+	   
+<div class="panel panel-default">
+  <div class="panel-heading codesum"><span class="anchor" id="boundprocedure-init%7E9"></span><h3>procedure, private, pass(self) :: <strong>init</strong>  
+    
+  </h3></div>
+  
+  <div class="panel-body">
+    
+
+
+    <p>Initialize test: set Command Line Interface, parse it and check its validity.</p>
+  </div>
+  
+  <ul class="list-group">
+    
+      <li class="list-group-item">
+      
+         
+    
+    <h3>
+private subroutine <a href='../proc/init%7E9.html'>init</a>(self)
+    
+    
+    
+</h3>
+    
+    <h4>Arguments</h4>
+    
+      
+      
+<table class="table table-striped varlist">
+<thead><tr><th>Type</th>
+<th>Intent</th><th>Optional</th>
+<th>Attributes</th><th></th><th>Name</th><th></th></thead>
+
+
+
+<tbody>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>class(<a href='../type/oscillation_test.html'>oscillation_test</a>),</td>
+  <td>intent(inout)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>self</strong></td><td><p>Test.</p></td>
+  
+</tr>
+
+</tbody>
+</table>
+
+      
+    
+    
+    
+    <h4>Description</h4>
+       
+       
+
+
+       
+       <p>Initialize test: set Command Line Interface, parse it and check its validity.</p>
+        
+
+      
+      </li>
+    
+  </ul>
+</div>
+
+    
+	   
+<div class="panel panel-default">
+  <div class="panel-heading codesum"><span class="anchor" id="boundprocedure-test"></span><h3>procedure, private, pass(self) :: <strong>test</strong>  
+    
+  </h3></div>
+  
+  <div class="panel-body">
+    
+
+
+    <p>Perform the test.</p>
+  </div>
+  
+  <ul class="list-group">
+    
+      <li class="list-group-item">
+      
+         
+    
+    <h3>
+private subroutine <a href='../proc/test.html'>test</a>(self, solver)
+    
+    
+    
+</h3>
+    
+    <h4>Arguments</h4>
+    
+      
+      
+<table class="table table-striped varlist">
+<thead><tr><th>Type</th>
+<th>Intent</th><th>Optional</th>
+<th>Attributes</th><th></th><th>Name</th><th></th></thead>
+
+
+
+<tbody>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>class(<a href='../type/oscillation_test.html'>oscillation_test</a>),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>self</strong></td><td><p>Test.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>character(len=*),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>solver</strong></td><td><p>Selected solver.</p></td>
+  
+</tr>
+
+</tbody>
+</table>
+
+      
+    
+    
+    
+    <h4>Description</h4>
+       
+       
+
+
+       
+       <p>Perform the test.</p>
+        
+
+      
+      </li>
+    
+  </ul>
+</div>
+
+    
+    </section>
+    
+    
+    
+    <section>
+    <h2><span class="anchor" id="src"></span>Source Code</h2>
+    <div class="highlight"><pre><span></span><span class="k">type</span> <span class="kd">::</span> <span class="n">oscillation_test</span>
+  <span class="c">!&lt; Class to handle oscillation test(s).</span>
+  <span class="c">!&lt;</span>
+  <span class="c">!&lt; Test is driven by the Command Line Interface (CLI) options.</span>
+  <span class="c">!&lt;</span>
+  <span class="c">!&lt; Test has only 1 public method `execute`: it executes test(s) accordingly to cli options.</span>
+  <span class="k">private</span>
+<span class="k">  type</span><span class="p">(</span><span class="n">command_line_interface</span><span class="p">)</span> <span class="kd">::</span> <span class="n">cli</span>                      <span class="c">!&lt; Command line interface handler.</span>
+  <span class="kt">integer</span><span class="p">(</span><span class="n">I_P</span><span class="p">)</span>                 <span class="kd">::</span> <span class="n">error</span><span class="o">=</span><span class="mi">0</span>                  <span class="c">!&lt; Error handler.</span>
+  <span class="kt">logical</span>                      <span class="kd">::</span> <span class="n">errors_analysis</span><span class="o">=</span><span class="p">.</span><span class="n">false</span><span class="p">.</span>  <span class="c">!&lt; Flag for activating errors analysis.</span>
+  <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">)</span>                    <span class="kd">::</span> <span class="n">frequency</span><span class="o">=</span><span class="mf">0.0_R_P</span>        <span class="c">!&lt; Oscillation frequency.</span>
+  <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">)</span>                    <span class="kd">::</span> <span class="n">final_time</span><span class="o">=</span><span class="mf">0.0_R_P</span>       <span class="c">!&lt; Final integration time.</span>
+  <span class="kt">integer</span><span class="p">(</span><span class="n">I_P</span><span class="p">)</span>                 <span class="kd">::</span> <span class="n">implicit_iterations</span><span class="o">=</span><span class="mi">0</span>    <span class="c">!&lt; Number of iterations (implicit solvers).</span>
+  <span class="kt">character</span><span class="p">(</span><span class="mi">99</span><span class="p">)</span>                <span class="kd">::</span> <span class="n">output_cli</span><span class="o">=</span><span class="s1">&#39;unset&#39;</span>       <span class="c">!&lt; Output files basename.</span>
+  <span class="kt">logical</span>                      <span class="kd">::</span> <span class="n">plots</span><span class="o">=</span><span class="p">.</span><span class="n">false</span><span class="p">.</span>            <span class="c">!&lt; Flag for activating plots saving.</span>
+  <span class="kt">logical</span>                      <span class="kd">::</span> <span class="n">results</span><span class="o">=</span><span class="p">.</span><span class="n">false</span><span class="p">.</span>          <span class="c">!&lt; Flag for activating results saving.</span>
+  <span class="kt">character</span><span class="p">(</span><span class="mi">99</span><span class="p">)</span>                <span class="kd">::</span> <span class="n">solver</span><span class="o">=</span><span class="s1">&#39;adams-bashforth&#39;</span> <span class="c">!&lt; Solver used.</span>
+  <span class="kt">integer</span><span class="p">(</span><span class="n">I_P</span><span class="p">),</span> <span class="k">allocatable</span>    <span class="kd">::</span> <span class="n">stages_steps</span><span class="p">(:)</span>          <span class="c">!&lt; Number of stages/steps used.</span>
+  <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">),</span>    <span class="k">allocatable</span>    <span class="kd">::</span> <span class="n">Dt</span><span class="p">(:)</span>                    <span class="c">!&lt; Time step(s) exercised.</span>
+  <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">),</span>    <span class="k">allocatable</span>    <span class="kd">::</span> <span class="n">tolerance</span><span class="p">(:)</span>             <span class="c">!&lt; Tolerance(s) exercised on local truncation error.</span>
+  <span class="k">contains</span>
+<span class="k">    private</span>
+    <span class="c">! Public methods</span>
+    <span class="k">procedure</span><span class="p">,</span> <span class="k">pass</span><span class="p">(</span><span class="n">self</span><span class="p">),</span> <span class="k">public</span>  <span class="kd">::</span> <span class="n">execute</span> <span class="c">!&lt; Execute selected test(s).</span>
+    <span class="c">! Private methods</span>
+    <span class="k">procedure</span><span class="p">,</span> <span class="k">pass</span><span class="p">(</span><span class="n">self</span><span class="p">),</span> <span class="k">private</span> <span class="kd">::</span> <span class="n">init</span>    <span class="c">!&lt; Initialize test: set Command Line Interface, parse it and check its validity.</span>
+    <span class="k">procedure</span><span class="p">,</span> <span class="k">pass</span><span class="p">(</span><span class="n">self</span><span class="p">),</span> <span class="k">private</span> <span class="kd">::</span> <span class="n">test</span>    <span class="c">!&lt; Perform the test.</span>
+<span class="n">endtype</span> <span class="n">oscillation_test</span>
+</pre></div>
+
+    </section>
+    
+    
+    </div>
+  </div>
+
+    <hr>
+    <footer>
+      <div class="row">
+        <div class="col-md-4">&copy; 2016 </div>
+        <div class="col-md-4"><span class="text-center"> FOODIE was developed by Fortran-FOSS-Programmers Group</span></div>
+        <div class="col-md-4">
+          <span class="pull-right">
+            Documentation generated by 
+            <a href="https://github.com/cmacmackin/ford">FORD</a>
+            
+          </span>
+        </div>
+      </div>
+      <br>
+    </footer>
+    </div> <!-- /container -->
+
+
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+<!--
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+-->
+    <script src="../js/bootstrap.min.js"></script>
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+    <script src="../js/ie10-viewport-bug-workaround.js"></script>
+
+    <!-- MathJax JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        TeX: { extensions: ['AMSmath.js','AMSsymbols.js','noErrors.js','noUndefined.js'], equationNumbers: { autoNumber: 'AMS' } },
+        jax: ['input/TeX','input/MathML','output/HTML-CSS'],
+        extensions: ['tex2jax.js','mml2jax.js','MathMenu.js','MathZoom.js'],
+        'HTML-CSS': { 
+           styles: { '.MathJax_Display, .MathJax .mo, .MathJax .mi, .MathJax .mn': {color: '#000000 ! important'} }
+        }
+      });
+    </script>
+    <script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+  </body>
+</html>
