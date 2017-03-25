@@ -70,7 +70,7 @@ use foodie_integrator_adams_bashforth_moulton, only : integrator_adams_bashforth
 use foodie_integrator_adams_moulton, only : integrator_adams_moulton
 use foodie_integrator_backward_differentiation_formula, only : integrator_back_df
 use foodie_integrator_euler_explicit, only : integrator_euler_explicit
-use foodie_integrator_leapfrog, only : leapfrog_integrator
+use foodie_integrator_leapfrog, only : integrator_leapfrog
 use foodie_integrator_runge_kutta_emd, only : integrator_runge_kutta_emd
 use foodie_integrator_low_storage_runge_kutta, only : ls_runge_kutta_integrator
 use foodie_integrator_tvd_runge_kutta, only : tvd_runge_kutta_integrator
@@ -86,12 +86,12 @@ public :: integrator_back_df
 public :: integrator_euler_explicit
 public :: integrator_runge_kutta_emd
 public :: foodie_integrator
-public :: leapfrog_integrator
+public :: integrator_leapfrog
 public :: ls_runge_kutta_integrator
 public :: tvd_runge_kutta_integrator
 
 contains
-  function foodie_integrator(scheme, steps, stages, tolerance) result(integrator)
+  function foodie_integrator(scheme, steps, stages, tolerance, nu, alpha) result(integrator)
   !< Return a concrete instance of [[integrator]] given a scheme selection.
   !<
   !< This is the FOODIE integrators factory.
@@ -101,6 +101,8 @@ contains
   integer(I_P), intent(in), optional    :: steps      !< Number of time steps used in multi-step schemes.
   integer(I_P), intent(in), optional    :: stages     !< Number of Runge-Kutta stages used in multi-stage schemes.
   real(R_P),    intent(in), optional    :: tolerance  !< Tolerance on the local truncation error.
+  real(R_P),    intent(in), optional    :: nu         !< Williams-Robert-Asselin filter coefficient.
+  real(R_P),    intent(in), optional    :: alpha      !< Robert-Asselin filter coefficient.
   class(integrator_object), allocatable :: integrator !< The FOODIE integrator.
 
   select case(trim(adjustl(scheme)))
@@ -166,6 +168,12 @@ contains
     endif
   case('euler_explicit')
     allocate(integrator_euler_explicit :: integrator)
+  case('leapfrog')
+    allocate(integrator_leapfrog :: integrator)
+    select type(integrator)
+    type is(integrator_leapfrog)
+      call integrator%init(nu=nu, alpha=alpha)
+    endselect
   endselect
   endfunction foodie_integrator
 endmodule foodie

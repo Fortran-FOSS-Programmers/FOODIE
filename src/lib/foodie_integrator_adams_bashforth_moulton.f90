@@ -77,7 +77,7 @@ module foodie_integrator_adams_bashforth_moulton
 !<
 
 use foodie_adt_integrand, only : integrand
-use foodie_error_codes, only : ERROR_BAD_STEPS_NUMBER, ERROR_MISSING_STEPS_NUMBER
+use foodie_error_codes, only : ERROR_BAD_STEPS_NUMBER
 use foodie_kinds, only : I_P, R_P
 use foodie_integrator_adams_bashforth, only : integrator_adams_bashforth
 use foodie_integrator_adams_moulton, only : integrator_adams_moulton

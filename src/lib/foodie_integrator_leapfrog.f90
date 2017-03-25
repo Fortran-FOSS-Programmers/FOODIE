@@ -38,17 +38,18 @@ module foodie_integrator_leapfrog
 
 use foodie_adt_integrand, only : integrand
 use foodie_kinds, only : I_P, R_P
+use foodie_integrator_object, only : integrator_object
 use foodie_utils, only : is_admissible
 
 implicit none
 private
-public :: leapfrog_integrator
+public :: integrator_leapfrog
 
 character(len=99), parameter :: supported_steps='2' !< List of supported steps number. Valid format is `1-2,4,9-23...`.
 integer(I_P),      parameter :: min_ss=2            !< Minimum number of steps supported.
 integer(I_P),      parameter :: max_ss=2            !< Maximum number of steps supported.
 
-type :: leapfrog_integrator
+type, extends(integrator_object) :: integrator_leapfrog
   !< FOODIE integrator: provide an explicit class of leapfrog multi-step schemes, 2nd order accurate.
   !<
   !< @note The integrator could be used without initialialization (initialize the time filter coefficients) if the defulat values
@@ -57,20 +58,59 @@ type :: leapfrog_integrator
   real(R_P) :: nu=0.01_R_P    !< Robert-Asselin filter coefficient.
   real(R_P) :: alpha=0.53_R_P !< Robert-Asselin-Williams filter coefficient.
   contains
-    private
-    procedure, pass(self), public :: init         !< Initialize (create) the integrator.
-    procedure, pass(self), public :: integrate    !< Integrate integrand field.
-    procedure, nopass,     public :: min_steps    !< Return the minimum number of steps supported.
-    procedure, nopass,     public :: max_steps    !< Return the maximum number of steps supported.
-    procedure, nopass,     public :: is_supported !< Check if the queried number of steps is supported or not.
-endtype leapfrog_integrator
+    ! deferred methods
+    procedure, pass(self) :: description          !< Return pretty-printed object description.
+    procedure, pass(lhs)  :: integr_assign_integr !< Operator `=`.
+    ! public methods
+    procedure, pass(self) :: destroy      !< Destroy the integrator.
+    procedure, pass(self) :: init         !< Initialize (create) the integrator.
+    procedure, pass(self) :: integrate    !< Integrate integrand field.
+    procedure, nopass     :: is_supported !< Check if the queried number of steps is supported or not.
+    procedure, nopass     :: min_steps    !< Return the minimum number of steps supported.
+    procedure, nopass     :: max_steps    !< Return the maximum number of steps supported.
+endtype integrator_leapfrog
+
 contains
+  ! deferred methods
+  pure function description(self, prefix) result(desc)
+  !< Return a pretty-formatted object description.
+  class(integrator_leapfrog), intent(in)           :: self    !< Integrator.
+  character(*),               intent(in), optional :: prefix  !< Prefixing string.
+  character(len=:), allocatable                    :: desc    !< Description.
+  character(len=:), allocatable                    :: prefix_ !< Prefixing string, local variable.
+
+  prefix_ = '' ; if (present(prefix)) prefix_ = prefix
+  desc = desc//prefix_//'Explicit leapfrog multi-step 2nd order scheme'
+  endfunction description
+
+  pure subroutine integr_assign_integr(lhs, rhs)
+  !< Operator `=`.
+  class(integrator_leapfrog), intent(inout) :: lhs !< Left hand side.
+  class(integrator_object),   intent(in)    :: rhs !< Right hand side.
+
+  call lhs%assign_abstract(rhs=rhs)
+  select type(rhs)
+  class is(integrator_leapfrog)
+    lhs%nu    = rhs%nu
+    lhs%alpha = rhs%alpha
+  endselect
+  endsubroutine integr_assign_integr
+
   ! public methods
-  elemental subroutine init(self, nu, alpha)
+  elemental subroutine destroy(self)
+  !< Destroy the integrator.
+  class(integrator_leapfrog), intent(INOUT) :: self !< Integrator.
+
+  call self%destroy_abstract
+  self%nu = 0.01_R_P
+  self%alpha = 0.53_R_P
+  endsubroutine destroy
+
+  subroutine init(self, nu, alpha)
   !< Create the actual leapfrog integrator: initialize the filter coefficient.
-  class(leapfrog_integrator), intent(INOUT) :: self  !< LF integrator.
-  real(R_P), optional,        intent(IN)    :: nu    !< Williams-Robert-Asselin filter coefficient.
-  real(R_P), optional,        intent(IN)    :: alpha !< Robert-Asselin filter coefficient.
+  class(integrator_leapfrog), intent(inout)        :: self  !< Integrator.
+  real(R_P),                  intent(in), optional :: nu    !< Williams-Robert-Asselin filter coefficient.
+  real(R_P),                  intent(in), optional :: alpha !< Robert-Asselin filter coefficient.
 
   self%nu = 0.01_R_P
   self%alpha = 0.53_R_P
@@ -80,12 +120,12 @@ contains
 
   subroutine integrate(self, U, previous, Dt, t, filter)
   !< Integrate field with leapfrog class scheme.
-  class(leapfrog_integrator), intent(IN)    :: self          !< LF integrator.
-  class(integrand),           intent(INOUT) :: U             !< Field to be integrated.
-  class(integrand),           intent(INOUT) :: previous(1:2) !< Previous time steps solutions of integrand field.
+  class(integrator_leapfrog), intent(in)    :: self          !< Integrator.
+  class(integrand),           intent(inout) :: U             !< Field to be integrated.
+  class(integrand),           intent(inout) :: previous(1:2) !< Previous time steps solutions of integrand field.
   real(R_P),                  intent(in)    :: Dt            !< Time step.
-  real(R_P),                  intent(IN)    :: t             !< Time.
-  class(integrand), optional, intent(INOUT) :: filter        !< Filter field displacement.
+  real(R_P),                  intent(in)    :: t             !< Time.
+  class(integrand), optional, intent(inout) :: filter        !< Filter field displacement.
 
   U = previous(1) + previous(2)%t(t=t) * (Dt * 2._R_P)
   if (present(filter)) then
@@ -96,6 +136,14 @@ contains
   previous(1) = previous(2)
   previous(2) = U
   endsubroutine integrate
+
+  elemental function is_supported(steps)
+  !< Check if the queried number of steps is supported or not.
+  integer(I_P), intent(in) :: steps        !< Number of time steps used.
+  logical                  :: is_supported !< Is true is the steps number is in *supported_steps*.
+
+  is_supported = is_admissible(n=steps, adm_range=trim(supported_steps))
+  endfunction is_supported
 
   pure function min_steps()
   !< Return the minimum number of steps supported.
@@ -110,12 +158,4 @@ contains
 
   max_steps = max_ss
   endfunction max_steps
-
-  elemental function is_supported(steps)
-  !< Check if the queried number of steps is supported or not.
-  integer(I_P), intent(IN) :: steps        !< Number of time steps used.
-  logical                  :: is_supported !< Is true is the steps number is in *supported_steps*.
-
-  is_supported = is_admissible(n=steps, adm_range=trim(supported_steps))
-  endfunction is_supported
 endmodule foodie_integrator_leapfrog

@@ -8,7 +8,7 @@ program integrate_euler_1D
 use flap, only : command_line_interface
 use foodie, only : integrator_adams_bashforth, &
                    integrator_euler_explicit, &
-                   leapfrog_integrator, &
+                   integrator_leapfrog, &
                    ls_runge_kutta_integrator, &
                    tvd_runge_kutta_integrator
 use penf, only : R_P, I_P, FR_P, str
@@ -438,7 +438,7 @@ contains
   integer, parameter               :: rk_stages=2           !< Runge-Kutta stages number.
   type(euler_1D)                   :: rk_stage(1:rk_stages) !< Runge-Kutta stages.
   type(euler_1D)                   :: filter                !< Filter displacement.
-  type(leapfrog_integrator)        :: lf_integrator         !< Leapfrog integrator.
+  type(integrator_leapfrog)        :: lf_integrator         !< Leapfrog integrator.
   type(euler_1D)                   :: previous(1:2)         !< Previous time steps solutions.
   integer                          :: step                  !< Time steps counter.
   real(R_P)                        :: dt                    !< Time step.

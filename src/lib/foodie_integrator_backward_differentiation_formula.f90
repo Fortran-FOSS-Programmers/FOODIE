@@ -34,7 +34,7 @@ module foodie_integrator_backward_differentiation_formula
 !<
 
 use foodie_adt_integrand, only : integrand
-use foodie_error_codes, only : ERROR_BAD_STEPS_NUMBER, ERROR_MISSING_STEPS_NUMBER
+use foodie_error_codes, only : ERROR_BAD_STEPS_NUMBER
 use foodie_kinds, only : I_P, R_P
 use foodie_integrator_object, only : integrator_object
 use foodie_utils, only : is_admissible

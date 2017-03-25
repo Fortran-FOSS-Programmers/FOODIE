@@ -8,7 +8,7 @@ program integrate_lorenz
 use flap, only : command_line_interface
 use foodie, only : integrator_adams_bashforth, &
                    integrator_euler_explicit, &
-                   leapfrog_integrator, &
+                   integrator_leapfrog, &
                    ls_runge_kutta_integrator, &
                    tvd_runge_kutta_integrator
 use IR_Precision, only : R_P, I_P, FR_P, str
@@ -202,7 +202,7 @@ contains
   integer, parameter               :: rk_stages=5           !< Runge-Kutta stages number.
   type(lorenz)                     :: rk_stage(1:rk_stages) !< Runge-Kutta stages.
   type(lorenz)                     :: filter                !< Filter displacement.
-  type(leapfrog_integrator)        :: lf_integrator         !< Leapfrog integrator.
+  type(integrator_leapfrog)        :: lf_integrator         !< Leapfrog integrator.
   type(lorenz)                     :: previous(1:2)         !< Previous time steps solutions.
   integer                          :: step                  !< Time steps counter.
   !---------------------------------------------------------------------------------------------------------------------------------

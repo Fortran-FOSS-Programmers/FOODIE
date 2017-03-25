@@ -11,7 +11,7 @@ use foodie, only : integrator_adams_bashforth,         &
                    integrator_adams_moulton,           &
                    integrator_back_df,                 &
                    integrator_euler_explicit,          &
-                   leapfrog_integrator,                &
+                   integrator_leapfrog,                &
                    integrator_runge_kutta_emd,         &
                    ls_runge_kutta_integrator,          &
                    tvd_runge_kutta_integrator
@@ -251,7 +251,7 @@ contains
   type(integrator_back_df)                 :: bdf_integrator    !< BDF integrator.
   type(integrator_runge_kutta_emd)         :: emd_rk_integrator !< Runge-Kutta integrator.
   type(integrator_euler_explicit)          :: euler_integrator  !< Euler integrator.
-  type(leapfrog_integrator)                :: lf_integrator     !< Leapfrog integrator.
+  type(integrator_leapfrog)                :: lf_integrator     !< Leapfrog integrator.
   type(ls_runge_kutta_integrator)          :: ls_rk_integrator  !< Low Storage Runge-Kutta integrator.
   type(tvd_runge_kutta_integrator)         :: tvd_rk_integrator !< TVD Runge-Kutta integrator.
   ! Auxiliary variables
@@ -414,7 +414,7 @@ contains
   type(integrator_back_df)                 :: bdf_integrator    !< BDF integrator.
   type(integrator_runge_kutta_emd)         :: emd_rk_integrator !< Runge-Kutta integrator.
   type(integrator_euler_explicit)          :: euler_integrator  !< Euler integrator.
-  type(leapfrog_integrator)                :: lf_integrator     !< Leapfrog integrator.
+  type(integrator_leapfrog)                :: lf_integrator     !< Leapfrog integrator.
   type(ls_runge_kutta_integrator)          :: ls_rk_integrator  !< Low Storage Runge-Kutta integrator.
   type(tvd_runge_kutta_integrator)         :: tvd_rk_integrator !< TVD Runge-Kutta integrator.
   ! Auxiliary variables

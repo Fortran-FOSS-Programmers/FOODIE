@@ -46,10 +46,10 @@ contains
   ! deferred methods
   pure function description(self, prefix) result(desc)
   !< Return a pretty-formatted object description.
-  class(integrator_euler_explicit), intent(in)           :: self             !< Integrator.
-  character(*),                     intent(in), optional :: prefix           !< Prefixing string.
-  character(len=:), allocatable                          :: desc             !< Description.
-  character(len=:), allocatable                          :: prefix_          !< Prefixing string, local variable.
+  class(integrator_euler_explicit), intent(in)           :: self    !< Integrator.
+  character(*),                     intent(in), optional :: prefix  !< Prefixing string.
+  character(len=:), allocatable                          :: desc    !< Description.
+  character(len=:), allocatable                          :: prefix_ !< Prefixing string, local variable.
 
   prefix_ = '' ; if (present(prefix)) prefix_ = prefix
   desc = prefix_//'Euler, Explicit (1 step/stage) 1st order scheme'
