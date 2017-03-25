@@ -9,10 +9,10 @@ use flap, only : command_line_interface
 use foodie, only : integrator_adams_bashforth,         &
                    integrator_adams_bashforth_moulton, &
                    integrator_adams_moulton,           &
-                   back_df_integrator,                 &
-                   emd_runge_kutta_integrator,         &
-                   euler_explicit_integrator,          &
+                   integrator_back_df,                 &
+                   integrator_euler_explicit,          &
                    leapfrog_integrator,                &
+                   integrator_runge_kutta_emd,         &
                    ls_runge_kutta_integrator,          &
                    tvd_runge_kutta_integrator
 use oscillation_t, only : oscillation
@@ -248,9 +248,9 @@ contains
   type(integrator_adams_bashforth)         :: ab_integrator     !< Adams-Bashforth integrator.
   type(integrator_adams_bashforth_moulton) :: abm_integrator    !< Adams-Bashforth-Moulton integrator.
   type(integrator_adams_moulton)           :: am_integrator     !< Adams-Moulton integrator.
-  type(back_df_integrator)                 :: bdf_integrator    !< BDF integrator.
-  type(emd_runge_kutta_integrator)         :: emd_rk_integrator !< Runge-Kutta integrator.
-  type(euler_explicit_integrator)          :: euler_integrator  !< Euler integrator.
+  type(integrator_back_df)                 :: bdf_integrator    !< BDF integrator.
+  type(integrator_runge_kutta_emd)         :: emd_rk_integrator !< Runge-Kutta integrator.
+  type(integrator_euler_explicit)          :: euler_integrator  !< Euler integrator.
   type(leapfrog_integrator)                :: lf_integrator     !< Leapfrog integrator.
   type(ls_runge_kutta_integrator)          :: ls_rk_integrator  !< Low Storage Runge-Kutta integrator.
   type(tvd_runge_kutta_integrator)         :: tvd_rk_integrator !< TVD Runge-Kutta integrator.
@@ -411,9 +411,9 @@ contains
   type(integrator_adams_bashforth)         :: ab_integrator     !< Adams-Bashforth integrator.
   type(integrator_adams_bashforth_moulton) :: abm_integrator    !< Adams-Bashforth-Moulton integrator.
   type(integrator_adams_moulton)           :: am_integrator     !< Adams-Moulton integrator.
-  type(back_df_integrator)                 :: bdf_integrator    !< BDF integrator.
-  type(emd_runge_kutta_integrator)         :: emd_rk_integrator !< Runge-Kutta integrator.
-  type(euler_explicit_integrator)          :: euler_integrator  !< Euler integrator.
+  type(integrator_back_df)                 :: bdf_integrator    !< BDF integrator.
+  type(integrator_runge_kutta_emd)         :: emd_rk_integrator !< Runge-Kutta integrator.
+  type(integrator_euler_explicit)          :: euler_integrator  !< Euler integrator.
   type(leapfrog_integrator)                :: lf_integrator     !< Leapfrog integrator.
   type(ls_runge_kutta_integrator)          :: ls_rk_integrator  !< Low Storage Runge-Kutta integrator.
   type(tvd_runge_kutta_integrator)         :: tvd_rk_integrator !< TVD Runge-Kutta integrator.

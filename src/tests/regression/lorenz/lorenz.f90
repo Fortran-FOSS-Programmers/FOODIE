@@ -7,7 +7,7 @@ program integrate_lorenz
 !-----------------------------------------------------------------------------------------------------------------------------------
 use flap, only : command_line_interface
 use foodie, only : integrator_adams_bashforth, &
-                   euler_explicit_integrator, &
+                   integrator_euler_explicit, &
                    leapfrog_integrator, &
                    ls_runge_kutta_integrator, &
                    tvd_runge_kutta_integrator
@@ -173,7 +173,7 @@ contains
   !---------------------------------------------------------------------------------------------------------------------------------
   !< Test explicit forward Euler ODE solver.
   !---------------------------------------------------------------------------------------------------------------------------------
-  type(euler_explicit_integrator) :: euler_integrator !< Euler integrator.
+  type(integrator_euler_explicit) :: euler_integrator !< Euler integrator.
   integer(I_P)                    :: step             !< Time steps counter.
   !---------------------------------------------------------------------------------------------------------------------------------
 

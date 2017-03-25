@@ -1,7 +1,7 @@
-!< FOODIE integrator: provide an explicit class of embedded Runge-Kutta schemes, from 2nd to 6th order accurate.
+!< FOODIE integrator: provide an explicit class of embedded Runge-Kutta schemes, from 2nd to 10th order accurate.
 
-module foodie_integrator_emd_runge_kutta
-!< FOODIE integrator: provide an explicit class of embedded Runge-Kutta schemes, from 2nd to 6th order accurate.
+module foodie_integrator_runge_kutta_emd
+!< FOODIE integrator: provide an explicit class of embedded Runge-Kutta schemes, from 2nd to 10th order accurate.
 !<
 !< The integrators provided have the embedded pairs property allowing for automatic step size control.
 !< The schemes are explicit and defined through the extended Butcher's table syntax, see[1] .
@@ -267,61 +267,108 @@ module foodie_integrator_emd_runge_kutta
 !< Computing. 2007.
 
 use foodie_adt_integrand, only : integrand
+use foodie_error_codes, only : ERROR_BAD_STAGES_NUMBER
 use foodie_kinds, only : I_P, R_P
+use foodie_integrator_object, only : integrator_object
 use foodie_utils, only : is_admissible
 
 implicit none
 private
-public :: emd_runge_kutta_integrator
+public :: integrator_runge_kutta_emd
 
 character(len=99), parameter :: supported_stages='6,7,9,17' !< List of supported stages number. Valid format is `1-2,4,9-23...`.
 integer(I_P),      parameter :: min_ss=6                    !< Minimum number of stages supported.
 integer(I_P),      parameter :: max_ss=17                   !< Maximum number of stages supported.
 
-type :: emd_runge_kutta_integrator
-  !< FOODIE integrator: provide an explicit class of TVD or SSP Runge-Kutta schemes, from 1st to 4th order accurate.
+type, extends(integrator_object) :: integrator_runge_kutta_emd
+  !< FOODIE integrator: provide an explicit class of embedded Runge-Kutta schemes, from 2nd to 10th order accurate.
   !<
   !< @note The integrator must be created or initialized (initialize the RK coefficients) before used.
-  !<
-  !< ### List of errors status
-  !<+ error=0 => no error;
-  !<+ error=1 => bad (unsupported) number of required stages;
   private
   real(R_P)              :: tolerance=0._R_P !< Tolerance on the local truncation error.
-  real(R_P)              :: pp1_inv=0._R_P   !< 1/(p+1) where p is the accuracy order of the lower accurate scheme of the pair.
+  real(R_P)              :: pp1_inv=0._R_P   !< \(1/(p+1)\) where p is the accuracy order of the lower accurate scheme of the pair.
   integer(I_P)           :: stages=0         !< Number of stages.
   real(R_P), allocatable :: alph(:,:)        !< \(\alpha\) Butcher's coefficients.
   real(R_P), allocatable :: beta(:,:)        !< \(\beta\) Butcher's coefficients.
   real(R_P), allocatable :: gamm(:)          !< \(\gamma\) Butcher's coefficients.
-  integer(I_P)           :: error=0          !< Error status flag: trap occurrences of errors.
   contains
-    private
-    procedure, pass(self), public  :: init         !< Initialize (create) the integrator.
-    procedure, pass(self), public  :: destroy      !< Destroy the integrator.
-    procedure, pass(self), public  :: integrate    !< Integrate integrand field.
-    procedure, nopass,     public  :: min_stages   !< Return the minimum number of stages supported.
-    procedure, nopass,     public  :: max_stages   !< Return the maximum number of stages supported.
-    procedure, nopass,     public  :: is_supported !< Check if the queried number of stages is supported or not.
-    procedure, pass(self), private :: new_Dt       !< Compute new estimation of the time step Dt.
-endtype emd_runge_kutta_integrator
+    ! deferred methods
+    procedure, pass(self) :: description          !< Return pretty-printed object description.
+    procedure, pass(lhs)  :: integr_assign_integr !< Operator `=`.
+    ! public methods
+    procedure, pass(self) :: destroy      !< Destroy the integrator.
+    procedure, pass(self) :: init         !< Initialize (create) the integrator.
+    procedure, pass(self) :: integrate    !< Integrate integrand field.
+    procedure, nopass     :: is_supported !< Check if the queried number of stages is supported or not.
+    procedure, nopass     :: min_stages   !< Return the minimum number of stages supported.
+    procedure, nopass     :: max_stages   !< Return the maximum number of stages supported.
+    ! private methods
+    procedure, pass(self), private :: new_Dt !< Compute new estimation of the time step Dt.
+endtype integrator_runge_kutta_emd
 contains
+  ! deferred methods
+  pure function description(self, prefix) result(desc)
+  !< Return a pretty-formatted object description.
+  class(integrator_runge_kutta_emd), intent(in)           :: self             !< Integrator.
+  character(*),                      intent(in), optional :: prefix           !< Prefixing string.
+  character(len=:), allocatable                           :: desc             !< Description.
+  character(len=:), allocatable                           :: prefix_          !< Prefixing string, local variable.
+  character(len=1), parameter                             :: NL=new_line('a') !< New line character.
+
+  prefix_ = '' ; if (present(prefix)) prefix_ = prefix
+  desc = ''
+  desc = desc//prefix_//'Embedded Runge-Kutta multi-stage schemes class'//NL
+  desc = desc//prefix_//'  Supported stages numbers: ['//trim(adjustl(supported_stages))//']'
+  endfunction description
+
+  pure subroutine integr_assign_integr(lhs, rhs)
+  !< Operator `=`.
+  class(integrator_runge_kutta_emd), intent(inout) :: lhs !< Left hand side.
+  class(integrator_object),          intent(in)    :: rhs !< Right hand side.
+
+  call lhs%assign_abstract(rhs=rhs)
+  select type(rhs)
+  class is (integrator_runge_kutta_emd)
+                             lhs%tolerance = rhs%tolerance
+                             lhs%pp1_inv   = rhs%pp1_inv
+                             lhs%stages    = rhs%stages
+    if (allocated(rhs%alph)) lhs%alph      = rhs%alph
+    if (allocated(rhs%beta)) lhs%beta      = rhs%beta
+    if (allocated(rhs%gamm)) lhs%gamm      = rhs%gamm
+  endselect
+  endsubroutine integr_assign_integr
+
   ! public methods
-  elemental subroutine init(self, stages, tolerance)
+  elemental subroutine destroy(self)
+  !< Destroy the integrator.
+  class(integrator_runge_kutta_emd), intent(inout) :: self !< Integrator.
+
+  call self%destroy_abstract
+  self%tolerance = 0._R_P
+  self%pp1_inv = 0._R_P
+  self%stages = 0
+  if (allocated(self%alph)) deallocate(self%alph)
+  if (allocated(self%beta)) deallocate(self%beta)
+  if (allocated(self%gamm)) deallocate(self%gamm)
+  endsubroutine destroy
+
+  subroutine init(self, stages, tolerance)
   !< Create the actual RK integrator: initialize the Butcher' table coefficients.
-  class(emd_runge_kutta_integrator), intent(INOUT) :: self      !< RK integrator.
-  integer(I_P),                      intent(IN)    :: stages    !< Number of stages used.
-  real(R_P), optional,               intent(IN)    :: tolerance !< Tolerance on the local truncation error (default 0.01).
+  class(integrator_runge_kutta_emd), intent(inout) :: self      !< Integrator.
+  integer(I_P),                      intent(in)    :: stages    !< Number of stages used.
+  real(R_P), optional,               intent(in)    :: tolerance !< Tolerance on the local truncation error (default 0.01).
 
   if (self%is_supported(stages)) then
+    call self%destroy
     if (present(tolerance)) then
       self%tolerance = tolerance
     else
       self%tolerance = 0.01_R_P
     endif
     self%stages = stages
-    if (allocated(self%beta)) deallocate(self%beta) ; allocate(self%beta(1:stages, 1:2     )) ; self%beta = 0._R_P
-    if (allocated(self%alph)) deallocate(self%alph) ; allocate(self%alph(1:stages, 1:stages)) ; self%alph = 0._R_P
-    if (allocated(self%gamm)) deallocate(self%gamm) ; allocate(self%gamm(          1:stages)) ; self%gamm = 0._R_P
+    allocate(self%beta(1:stages, 1:2     )) ; self%beta = 0._R_P
+    allocate(self%alph(1:stages, 1:stages)) ; self%alph = 0._R_P
+    allocate(self%gamm(          1:stages)) ; self%gamm = 0._R_P
     select case(stages)
     case(2) ! do not use, seems to not work!
       ! HERK(2,2)
@@ -552,25 +599,12 @@ contains
       self%gamm(16) = 0.1_R_P
       self%gamm(17) = 1._R_P
     endselect
-    self%error = 0
   else
-    ! bad (unsupported) number of required stages
-    self%error = 1
+    call self%trigger_error(error=ERROR_BAD_STAGES_NUMBER,                                  &
+                            error_message='bad (unsupported) number of Runge-Kutta stages', &
+                            is_severe=.true.)
   endif
   endsubroutine init
-
-  elemental subroutine destroy(self)
-  !< Destroy the integrator.
-  class(emd_runge_kutta_integrator), intent(INOUT) :: self !< Integrator.
-
-  self%error = -1
-  self%tolerance = 0._R_P
-  self%stages = 0
-  if (allocated(self%alph)) deallocate(self%alph)
-  if (allocated(self%beta)) deallocate(self%beta)
-  if (allocated(self%gamm)) deallocate(self%gamm)
-  self%error = 0
-  endsubroutine destroy
 
   subroutine integrate(self, U, stage, Dt, t)
   !< Integrate field with explicit embedded Runge-Kutta scheme.
@@ -578,11 +612,11 @@ contains
   !< The time steps is adaptively resized using the local truncation error estimation by means of the embedded pairs of RK schemes.
   !<
   !< @note This method can be used **after** the integrator is created (i.e. the RK coefficients are initialized).
-  class(emd_runge_kutta_integrator), intent(IN)    :: self      !< Actual RK integrator.
-  class(integrand),                  intent(INOUT) :: U         !< Field to be integrated.
-  class(integrand),                  intent(INOUT) :: stage(1:) !< Runge-Kutta stages [1:stages].
-  real(R_P),                         intent(INOUT) :: Dt        !< Time step.
-  real(R_P),                         intent(IN)    :: t         !< Time.
+  class(integrator_runge_kutta_emd), intent(in)    :: self      !< Integrator.
+  class(integrand),                  intent(inout) :: U         !< Field to be integrated.
+  class(integrand),                  intent(inout) :: stage(1:) !< Runge-Kutta stages [1:stages].
+  real(R_P),                         intent(inout) :: Dt        !< Time step.
+  real(R_P),                         intent(in)    :: t         !< Time.
   class(integrand), allocatable                    :: U1        !< First U evaluation.
   class(integrand), allocatable                    :: U2        !< Second U evaluation.
   real(R_P)                                        :: error     !< Local truncation error estimation.
@@ -614,6 +648,14 @@ contains
   U = U1
   endsubroutine integrate
 
+  elemental function is_supported(stages)
+  !< Check if the queried number of stages is supported or not.
+  integer(I_P), intent(in) :: stages       !< Number of stages used.
+  logical                  :: is_supported !< Is true is the stages number is in *supported_stages*.
+
+  is_supported = is_admissible(n=stages, adm_range=trim(supported_stages))
+  endfunction is_supported
+
   pure function min_stages()
   !< Return the minimum number of stages supported.
   integer(I_P) :: min_stages !< Minimum number of stages supported.
@@ -628,14 +670,6 @@ contains
   max_stages = max_ss
   endfunction max_stages
 
-  elemental function is_supported(stages)
-  !< Check if the queried number of stages is supported or not.
-  integer(I_P), intent(IN) :: stages       !< Number of stages used.
-  logical                  :: is_supported !< Is true is the stages number is in *supported_stages*.
-
-  is_supported = is_admissible(n=stages, adm_range=trim(supported_stages))
-  endfunction is_supported
-
   ! private methods
   elemental subroutine new_Dt(self, error, Dt)
   !< Compute new estimation of the time step Dt.
@@ -645,10 +679,10 @@ contains
   !< $$ Dt_{new} = 0.9 Dt_{old} \left( \frac{tolerance}{error} \right)^{\frac{1}{p+1}} $$
   !<
   !< @note 0.9 is a safety factor.
-  class(emd_runge_kutta_integrator), intent(IN)    :: self  !< Integrator.
-  real(R_P),                         intent(IN)    :: error !< Local truncation error estimation.
-  real(R_P),                         intent(INOUT) :: Dt    !< Time step.
+  class(integrator_runge_kutta_emd), intent(in)    :: self  !< Integrator.
+  real(R_P),                         intent(in)    :: error !< Local truncation error estimation.
+  real(R_P),                         intent(inout) :: Dt    !< Time step.
 
   if (error>self%tolerance) Dt = 0.9_R_P * Dt * (self%tolerance/error) ** self%pp1_inv
   endsubroutine new_Dt
-endmodule foodie_integrator_emd_runge_kutta
+endmodule foodie_integrator_runge_kutta_emd

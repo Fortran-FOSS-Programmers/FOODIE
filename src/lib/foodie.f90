@@ -51,9 +51,9 @@ module foodie
 !< For example using the forward explicit Euler scheme to the above Lorenz' ODE system
 !<
 !<```fortran
-!< use foodie, only : euler_explicit_integrator
+!< use foodie, only : integrator_euler_explicit
 !< use type_lorenz, only : lorenz
-!< type(euler_explicit_integrator) :: euler_integrator
+!< type(integrator_euler_explicit) :: euler_integrator
 !< type(lorenz)                    :: attractor
 !< real                            :: dt=0.01
 !< do step = 1, num_steps
@@ -62,16 +62,16 @@ module foodie
 !<```
 
 use foodie_adt_integrand, only : integrand
-use foodie_error_codes, only : error_missing_steps_number
+use foodie_error_codes, only : ERROR_MISSING_STAGES_NUMBER, ERROR_MISSING_STEPS_NUMBER
 use foodie_integrator_object, only : integrator_object
 use foodie_kinds, only : I_P, R_P
 use foodie_integrator_adams_bashforth, only : integrator_adams_bashforth
 use foodie_integrator_adams_bashforth_moulton, only : integrator_adams_bashforth_moulton
 use foodie_integrator_adams_moulton, only : integrator_adams_moulton
-use foodie_integrator_backward_differentiation_formula, only : back_df_integrator
-use foodie_integrator_emd_runge_kutta, only : emd_runge_kutta_integrator
-use foodie_integrator_euler_explicit, only : euler_explicit_integrator
+use foodie_integrator_backward_differentiation_formula, only : integrator_back_df
+use foodie_integrator_euler_explicit, only : integrator_euler_explicit
 use foodie_integrator_leapfrog, only : leapfrog_integrator
+use foodie_integrator_runge_kutta_emd, only : integrator_runge_kutta_emd
 use foodie_integrator_low_storage_runge_kutta, only : ls_runge_kutta_integrator
 use foodie_integrator_tvd_runge_kutta, only : tvd_runge_kutta_integrator
 
@@ -82,15 +82,16 @@ public :: integrator_object
 public :: integrator_adams_bashforth
 public :: integrator_adams_bashforth_moulton
 public :: integrator_adams_moulton
-public :: back_df_integrator
-public :: emd_runge_kutta_integrator
-public :: euler_explicit_integrator
+public :: integrator_back_df
+public :: integrator_euler_explicit
+public :: integrator_runge_kutta_emd
+public :: foodie_integrator
 public :: leapfrog_integrator
 public :: ls_runge_kutta_integrator
 public :: tvd_runge_kutta_integrator
 
 contains
-  function foodie_integrator(scheme, steps) result(integrator)
+  function foodie_integrator(scheme, steps, stages, tolerance) result(integrator)
   !< Return a concrete instance of [[integrator]] given a scheme selection.
   !<
   !< This is the FOODIE integrators factory.
@@ -98,6 +99,8 @@ contains
   !< @note If an error occurs the error status of [[integrator]] is updated.
   character(*), intent(in)              :: scheme     !< Selected integrator given.
   integer(I_P), intent(in), optional    :: steps      !< Number of time steps used in multi-step schemes.
+  integer(I_P), intent(in), optional    :: stages     !< Number of Runge-Kutta stages used in multi-stage schemes.
+  real(R_P),    intent(in), optional    :: tolerance  !< Tolerance on the local truncation error.
   class(integrator_object), allocatable :: integrator !< The FOODIE integrator.
 
   select case(trim(adjustl(scheme)))
@@ -137,6 +140,32 @@ contains
                                     error_message='missing steps number for initializing integrator!', &
                                     is_severe=.true.)
     endif
+  case('back_df')
+    allocate(integrator_back_df :: integrator)
+    if (present(steps)) then
+      select type(integrator)
+      type is(integrator_back_df)
+        call integrator%init(steps=steps)
+      endselect
+    else
+      call integrator%trigger_error(error=ERROR_MISSING_STEPS_NUMBER,                                  &
+                                    error_message='missing steps number for initializing integrator!', &
+                                    is_severe=.true.)
+    endif
+  case('runge_kutta_emd')
+    allocate(integrator_runge_kutta_emd :: integrator)
+    if (present(stages)) then
+      select type(integrator)
+      type is(integrator_runge_kutta_emd)
+        call integrator%init(stages=stages, tolerance=tolerance)
+      endselect
+    else
+      call integrator%trigger_error(error=ERROR_MISSING_STAGES_NUMBER,                                  &
+                                    error_message='missing stages number for initializing integrator!', &
+                                    is_severe=.true.)
+    endif
+  case('euler_explicit')
+    allocate(integrator_euler_explicit :: integrator)
   endselect
   endfunction foodie_integrator
 endmodule foodie

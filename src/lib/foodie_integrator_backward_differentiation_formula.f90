@@ -34,110 +34,144 @@ module foodie_integrator_backward_differentiation_formula
 !<
 
 use foodie_adt_integrand, only : integrand
+use foodie_error_codes, only : ERROR_BAD_STEPS_NUMBER, ERROR_MISSING_STEPS_NUMBER
 use foodie_kinds, only : I_P, R_P
+use foodie_integrator_object, only : integrator_object
 use foodie_utils, only : is_admissible
 
 implicit none
 private
-public :: back_df_integrator
+public :: integrator_back_df
 
 character(len=99), parameter :: supported_steps='1-6' !< List of supported steps number. Valid format is `1-2,4,9-23...`.
 integer(I_P),      parameter :: min_ss=1              !< Minimum number of steps supported.
 integer(I_P),      parameter :: max_ss=6              !< Maximum number of steps supported.
 
-type :: back_df_integrator
+type, extends(integrator_object) :: integrator_back_df
   !< FOODIE integrator: provide an implicit class of Backward-Differentiation-Formula multi-step schemes, from 1st to 6th order
   !< accurate.
   !<
   !< @note The integrator must be created or initialized (initialize the *alpha* and *beta* coefficients) before used.
-  !<
-  !< ### List of errors status
-  !<+ error=0 => no error;
-  !<+ error=1 => bad (unsupported) number of required time steps;
   private
   integer(I_P)           :: steps=0   !< Number of time steps.
   real(R_P), allocatable :: a(:)      !< \(\alpha\) coefficients.
   real(R_P)              :: b=0.0_R_P !< \(\beta\) coefficient.
-  integer(I_P)           :: error=0   !< Error status flag: trap occurrences of errors.
   contains
-    private
-    procedure, pass(self), public :: destroy         !< Destroy the integrator.
-    procedure, pass(self), public :: init            !< Initialize (create) the integrator.
-    procedure, pass(self), public :: integrate       !< Integrate integrand field.
-    procedure, pass(self), public :: update_previous !< Cyclic update previous time steps.
-    procedure, nopass,     public :: min_steps       !< Return the minimum number of steps supported.
-    procedure, nopass,     public :: max_steps       !< Return the maximum number of steps supported.
-    procedure, nopass,     public :: is_supported    !< Check if the queried number of steps is supported or not.
-endtype back_df_integrator
+    ! deferred methods
+    procedure, pass(self) :: description          !< Return pretty-printed object description.
+    procedure, pass(lhs)  :: integr_assign_integr !< Operator `=`.
+    ! public methods
+    procedure, pass(self) :: destroy         !< Destroy the integrator.
+    procedure, pass(self) :: init            !< Initialize (create) the integrator.
+    procedure, pass(self) :: integrate       !< Integrate integrand field.
+    procedure, nopass     :: is_supported    !< Check if the queried number of steps is supported or not.
+    procedure, nopass     :: min_steps       !< Return the minimum number of steps supported.
+    procedure, nopass     :: max_steps       !< Return the maximum number of steps supported.
+    procedure, pass(self) :: update_previous !< Cyclic update previous time steps.
+endtype integrator_back_df
+
 contains
-  ! public methods
-  elemental subroutine init(self, steps)
-  !< Create the actual BDF integrator: initialize the *alpha* and *beta* coefficients.
-  class(back_df_integrator), intent(INOUT) :: self  !< BDF integrator.
-  integer(I_P),              intent(IN)    :: steps !< Number of time steps used.
+  ! deferred methods
+  pure function description(self, prefix) result(desc)
+  !< Return a pretty-formatted object description.
+  class(integrator_back_df), intent(in)           :: self             !< Integrator.
+  character(*),              intent(in), optional :: prefix           !< Prefixing string.
+  character(len=:), allocatable                   :: desc             !< Description.
+  character(len=:), allocatable                   :: prefix_          !< Prefixing string, local variable.
+  character(len=1), parameter                     :: NL=new_line('a') !< New line character.
 
-  self%steps = steps
-  if (allocated(self%a)) deallocate(self%a) ; allocate(self%a(1:steps)) ; self%a = 0.0_R_P
-  select case(steps)
-  case(1)
-    self%a(1) = -1.0_R_P
-    self%b = 1.0_R_P
-  case(2)
-    self%a(1) = 1.0_R_P/3.0_R_P
-    self%a(2) = -4.0_R_P/3.0_R_P
-    self%b = 2.0_R_P/3.0_R_P
-  case(3)
-    self%a(1) = -2.0_R_P/11.0_R_P
-    self%a(2) = 9.0_R_P/11.0_R_P
-    self%a(3) = -18.0_R_P/11.0_R_P
-    self%b = 6.0_R_P/11.0_R_P
-  case(4)
-    self%a(1) = 3.0_R_P/25.0_R_P
-    self%a(2) = -16.0_R_P/25.0_R_P
-    self%a(3) = 36.0_R_P/25.0_R_P
-    self%a(4) = -48.0_R_P/25.0_R_P
-    self%b = 12.0_R_P/25.0_R_P
-  case(5)
-    self%a(1) = -12.0_R_P/137.0_R_P
-    self%a(2) = 75.0_R_P/137.0_R_P
-    self%a(3) = -200.0_R_P/137.0_R_P
-    self%a(4) = 300.0_R_P/137.0_R_P
-    self%a(5) = -300.0_R_P/137.0_R_P
-    self%b = 60.0_R_P/137.0_R_P
-  case(6)
-    self%a(1) = 10.0_R_P/147.0_R_P
-    self%a(2) = -72.0_R_P/147.0_R_P
-    self%a(3) = 225.0_R_P/147.0_R_P
-    self%a(4) = -400.0_R_P/147.0_R_P
-    self%a(5) = 450.0_R_P/147.0_R_P
-    self%a(6) = -360.0_R_P/147.0_R_P
-    self%b = 60.0_R_P/147.0_R_P
-  case default
-    ! bad (unsupported) number of required time steps
-    self%error = 1
+  prefix_ = '' ; if (present(prefix)) prefix_ = prefix
+  desc = ''
+  desc = desc//prefix_//'Backward-Differentiation-Formula multi-step schemes class'//NL
+  desc = desc//prefix_//'  Supported steps numbers: ['//trim(adjustl(supported_steps))//']'
+  endfunction description
+
+  pure subroutine integr_assign_integr(lhs, rhs)
+  !< Operator `=`.
+  class(integrator_back_df), intent(inout) :: lhs !< Left hand side.
+  class(integrator_object),  intent(in)    :: rhs !< Right hand side.
+
+  call lhs%assign_abstract(rhs=rhs)
+  select type(rhs)
+  class is (integrator_back_df)
+                          lhs%steps = rhs%steps
+    if (allocated(rhs%a)) lhs%a     = rhs%a
+                          lhs%b     = rhs%b
   endselect
-  endsubroutine init
+  endsubroutine integr_assign_integr
 
+  ! public methods
   elemental subroutine destroy(self)
   !< Destroy the integrator.
-  class(back_df_integrator), intent(INOUT) :: self !< BDF integrator.
+  class(integrator_back_df), intent(inout) :: self !< Integrator.
 
-  self%error = -1
-  self%steps = 1
+  call self%destroy_abstract
+  self%steps = 0
   if (allocated(self%a)) deallocate(self%a)
   self%b = 0.0_R_P
-  self%error = 0
   endsubroutine destroy
+
+  subroutine init(self, steps)
+  !< Create the actual BDF integrator: initialize the *alpha* and *beta* coefficients.
+  class(integrator_back_df), intent(inout) :: self  !< Integrator.
+  integer(I_P),              intent(in)    :: steps !< Number of time steps used.
+
+  if (self%is_supported(steps)) then
+    call self%destroy
+    self%steps = steps
+    allocate(self%a(1:steps)) ; self%a = 0.0_R_P
+    select case(steps)
+    case(1)
+      self%a(1) = -1.0_R_P
+      self%b = 1.0_R_P
+    case(2)
+      self%a(1) = 1.0_R_P/3.0_R_P
+      self%a(2) = -4.0_R_P/3.0_R_P
+      self%b = 2.0_R_P/3.0_R_P
+    case(3)
+      self%a(1) = -2.0_R_P/11.0_R_P
+      self%a(2) = 9.0_R_P/11.0_R_P
+      self%a(3) = -18.0_R_P/11.0_R_P
+      self%b = 6.0_R_P/11.0_R_P
+    case(4)
+      self%a(1) = 3.0_R_P/25.0_R_P
+      self%a(2) = -16.0_R_P/25.0_R_P
+      self%a(3) = 36.0_R_P/25.0_R_P
+      self%a(4) = -48.0_R_P/25.0_R_P
+      self%b = 12.0_R_P/25.0_R_P
+    case(5)
+      self%a(1) = -12.0_R_P/137.0_R_P
+      self%a(2) = 75.0_R_P/137.0_R_P
+      self%a(3) = -200.0_R_P/137.0_R_P
+      self%a(4) = 300.0_R_P/137.0_R_P
+      self%a(5) = -300.0_R_P/137.0_R_P
+      self%b = 60.0_R_P/137.0_R_P
+    case(6)
+      self%a(1) = 10.0_R_P/147.0_R_P
+      self%a(2) = -72.0_R_P/147.0_R_P
+      self%a(3) = 225.0_R_P/147.0_R_P
+      self%a(4) = -400.0_R_P/147.0_R_P
+      self%a(5) = 450.0_R_P/147.0_R_P
+      self%a(6) = -360.0_R_P/147.0_R_P
+      self%b = 60.0_R_P/147.0_R_P
+    case default
+    endselect
+  else
+    call self%trigger_error(error=ERROR_BAD_STEPS_NUMBER,                           &
+                            error_message='bad (unsupported) number of time steps', &
+                            is_severe=.true.)
+  endif
+  endsubroutine init
 
   subroutine integrate(self, U, previous, Dt, t, iterations, autoupdate)
   !< Integrate field with BDF class scheme.
-  class(back_df_integrator),  intent(IN)    :: self         !< Actual BDF integrator.
-  class(integrand),           intent(INOUT) :: U            !< Field to be integrated.
-  class(integrand),           intent(INOUT) :: previous(1:) !< Previous time steps solutions of integrand field.
-  real(R_P),                  intent(IN)    :: Dt           !< Time steps.
-  real(R_P),                  intent(IN)    :: t(:)         !< Times.
-  integer(I_P), optional,     intent(IN)    :: iterations   !< Fixed point iterations.
-  logical,      optional,     intent(IN)    :: autoupdate   !< Perform cyclic autoupdate of previous time steps.
+  class(integrator_back_df),  intent(in)    :: self         !< Integrator.
+  class(integrand),           intent(inout) :: U            !< Field to be integrated.
+  class(integrand),           intent(inout) :: previous(1:) !< Previous time steps solutions of integrand field.
+  real(R_P),                  intent(in)    :: Dt           !< Time steps.
+  real(R_P),                  intent(in)    :: t(:)         !< Times.
+  integer(I_P), optional,     intent(in)    :: iterations   !< Fixed point iterations.
+  logical,      optional,     intent(in)    :: autoupdate   !< Perform cyclic autoupdate of previous time steps.
   integer(I_P)                              :: iterations_  !< Fixed point iterations.
   logical                                   :: autoupdate_  !< Perform cyclic autoupdate of previous time steps, dummy var.
   class(integrand), allocatable             :: delta        !< Delta RHS for fixed point iterations.
@@ -155,6 +189,14 @@ contains
   if (autoupdate_) call self%update_previous(U=U, previous=previous)
   endsubroutine integrate
 
+  elemental function is_supported(steps)
+  !< Check if the queried number of steps is supported or not.
+  integer(I_P), intent(in) :: steps        !< Number of time steps used.
+  logical                  :: is_supported !< Is true is the steps number is in *supported_steps*.
+
+  is_supported = is_admissible(n=steps, adm_range=trim(supported_steps))
+  endfunction is_supported
+
   pure function min_steps()
   !< Return the minimum number of steps supported.
   integer(I_P) :: min_steps !< Minimum number of steps supported.
@@ -169,19 +211,11 @@ contains
   max_steps = max_ss
   endfunction max_steps
 
-  elemental function is_supported(steps)
-  !< Check if the queried number of steps is supported or not.
-  integer(I_P), intent(IN) :: steps        !< Number of time steps used.
-  logical                  :: is_supported !< Is true is the steps number is in *supported_steps*.
-
-  is_supported = is_admissible(n=steps, adm_range=trim(supported_steps))
-  endfunction is_supported
-
   subroutine update_previous(self, U, previous)
   !< Cyclic update previous time steps.
-  class(back_df_integrator), intent(IN)    :: self         !< Actual BDF integrator.
-  class(integrand),          intent(IN)    :: U            !< Field to be integrated.
-  class(integrand),          intent(INOUT) :: previous(1:) !< Previous time steps solutions of integrand field.
+  class(integrator_back_df), intent(in)    :: self         !< Integrator.
+  class(integrand),          intent(in)    :: U            !< Field to be integrated.
+  class(integrand),          intent(inout) :: previous(1:) !< Previous time steps solutions of integrand field.
   integer(I_P)                             :: s            !< Steps counter.
 
   do s=1, self%steps - 1
