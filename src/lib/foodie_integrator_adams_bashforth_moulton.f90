@@ -1,7 +1,7 @@
 !< FOODIE integrator: provide a predictor-corrector class of Adams-Bashforth-Moutlon multi-step schemes, from 1st to 4rd order
 !< accurate.
+
 module foodie_integrator_adams_bashforth_moulton
-!-----------------------------------------------------------------------------------------------------------------------------------
 !< FOODIE integrator: provide a predictor-corrector class of Adams-Bashforth-Moutlon multi-step schemes, from 1st to 4rd order
 !< accurate.
 !<
@@ -75,147 +75,135 @@ module foodie_integrator_adams_bashforth_moulton
 !<
 !<#### Bibliography
 !<
-!-----------------------------------------------------------------------------------------------------------------------------------
 
-!-----------------------------------------------------------------------------------------------------------------------------------
 use foodie_adt_integrand, only : integrand
+use foodie_error_codes, only : ERROR_BAD_STEPS_NUMBER, ERROR_MISSING_STEPS_NUMBER
 use foodie_kinds, only : I_P, R_P
-use foodie_integrator_adams_bashforth, only : adams_bashforth_integrator
-use foodie_integrator_adams_moulton, only : adams_moulton_integrator
+use foodie_integrator_adams_bashforth, only : integrator_adams_bashforth
+use foodie_integrator_adams_moulton, only : integrator_adams_moulton
+use foodie_integrator_object, only : integrator_object
 use foodie_utils, only : is_admissible
-!-----------------------------------------------------------------------------------------------------------------------------------
 
-!-----------------------------------------------------------------------------------------------------------------------------------
 implicit none
 private
-public :: adams_bashforth_moulton_integrator
-!-----------------------------------------------------------------------------------------------------------------------------------
+public :: integrator_adams_bashforth_moulton
 
-!-----------------------------------------------------------------------------------------------------------------------------------
 character(len=99), parameter :: supported_steps='1-16' !< List of supported steps number. Valid format is `1-2,4,9-23...`.
 integer(I_P),      parameter :: min_ss=1               !< Minimum number of steps supported.
 integer(I_P),      parameter :: max_ss=16              !< Maximum number of steps supported.
 
-type :: adams_bashforth_moulton_integrator
+type, extends(integrator_object) :: integrator_adams_bashforth_moulton
   !< FOODIE integrator: provide an explicit class of Adams-Bashforth-Moulton multi-step schemes, from 1st to 4rd order accurate.
   !<
   !< @note The integrator must be created or initialized (predictor and corrector schemes selection) before used.
-  !<
-  !< ### List of errors status
-  !<+ error=0 => no error;
-  !<+ error=1 => bad (unsupported) number of required time steps;
   private
   integer(I_P)                     :: steps=-1  !< Number of time steps.
-  type(adams_bashforth_integrator) :: predictor !< Predictor solver.
-  type(adams_moulton_integrator)   :: corrector !< Corrector solver.
-  integer(I_P)                     :: error=0   !< Error status flag: trap occurrences of errors.
+  type(integrator_adams_bashforth) :: predictor !< Predictor solver.
+  type(integrator_adams_moulton)   :: corrector !< Corrector solver.
   contains
-    private
-    procedure, pass(self), public :: init         !< Initialize (create) the integrator.
-    procedure, pass(self), public :: destroy      !< Destroy the integrator.
-    procedure, pass(self), public :: integrate    !< Integrate integrand field.
-    procedure, nopass,     public :: min_steps    !< Return the minimum number of steps supported.
-    procedure, nopass,     public :: max_steps    !< Return the maximum number of steps supported.
-    procedure, nopass,     public :: is_supported !< Check if the queried number of steps is supported or not.
-endtype adams_bashforth_moulton_integrator
-!-----------------------------------------------------------------------------------------------------------------------------------
+    ! deferred methods
+    procedure, pass(self) :: description          !< Return pretty-printed object description.
+    procedure, pass(lhs)  :: integr_assign_integr !< Operator `=`.
+    ! public methods
+    procedure, pass(self) :: destroy      !< Destroy the integrator.
+    procedure, pass(self) :: init         !< Initialize (create) the integrator.
+    procedure, pass(self) :: integrate    !< Integrate integrand field.
+    procedure, nopass     :: is_supported !< Check if the queried number of steps is supported or not.
+    procedure, nopass     :: min_steps    !< Return the minimum number of steps supported.
+    procedure, nopass     :: max_steps    !< Return the maximum number of steps supported.
+endtype integrator_adams_bashforth_moulton
+
 contains
+  ! deferred methods
+  pure function description(self, prefix) result(desc)
+  !< Return a pretty-formatted object description.
+  class(integrator_adams_bashforth_moulton), intent(in)           :: self             !< Integrator.
+  character(*),                              intent(in), optional :: prefix           !< Prefixing string.
+  character(len=:), allocatable                                   :: desc             !< Description.
+  character(len=:), allocatable                                   :: prefix_          !< Prefixing string, local variable.
+  character(len=1), parameter                                     :: NL=new_line('a') !< New line character.
+
+  prefix_ = '' ; if (present(prefix)) prefix_ = prefix
+  desc = ''
+  desc = desc//prefix_//'Adams-Bashforth-Moulton multi-step schemes class'//NL
+  desc = desc//prefix_//'  Supported steps numbers: ['//trim(adjustl(supported_steps))//']'
+  endfunction description
+
+  pure subroutine integr_assign_integr(lhs, rhs)
+  !< Operator `=`.
+  class(integrator_adams_bashforth_moulton), intent(inout) :: lhs !< Left hand side.
+  class(integrator_object),                  intent(in)    :: rhs !< Right hand side.
+
+  call lhs%assign_abstract(rhs=rhs)
+  select type(rhs)
+  class is (integrator_adams_bashforth_moulton)
+    lhs%steps     = rhs%steps
+    lhs%predictor = rhs%predictor
+    lhs%corrector = rhs%corrector
+  endselect
+  endsubroutine integr_assign_integr
+
   ! public methods
-  elemental subroutine init(self, steps)
-  !---------------------------------------------------------------------------------------------------------------------------------
-  !< Create the actual Adams-Bashforth-Moulton integrator: initialize the *b* coefficients.
-  !---------------------------------------------------------------------------------------------------------------------------------
-  class(adams_bashforth_moulton_integrator), intent(INOUT) :: self  !< ABM integrator.
-  integer(I_P), intent(IN)                                 :: steps !< Number of time steps used.
-  !---------------------------------------------------------------------------------------------------------------------------------
-
-  !---------------------------------------------------------------------------------------------------------------------------------
-  if (self%is_supported(steps)) then
-    self%steps = steps
-    call self%predictor%init(steps=steps)
-    call self%corrector%init(steps=steps-1)
-    self%error = 0
-  else
-    ! bad (unsupported) number of required time steps
-    self%error = 1
-  endif
-  return
-  !---------------------------------------------------------------------------------------------------------------------------------
-  endsubroutine init
-
   elemental subroutine destroy(self)
-  !---------------------------------------------------------------------------------------------------------------------------------
   !< Destroy the integrator.
-  !---------------------------------------------------------------------------------------------------------------------------------
-  class(adams_bashforth_moulton_integrator), intent(INOUT) :: self !< ABM integrator.
-  !---------------------------------------------------------------------------------------------------------------------------------
+  class(integrator_adams_bashforth_moulton), intent(inout) :: self !< Integrator.
 
-  !---------------------------------------------------------------------------------------------------------------------------------
+  call self%destroy_abstract
   self%steps = -1
   call self%predictor%destroy
   call self%corrector%destroy
-  self%error = 0
-  return
-  !---------------------------------------------------------------------------------------------------------------------------------
   endsubroutine destroy
 
-  subroutine integrate(self, U, previous, Dt, t, iterations)
-  !---------------------------------------------------------------------------------------------------------------------------------
-  !< Integrate field with Adams-Bashforth-Moulton class scheme.
-  !---------------------------------------------------------------------------------------------------------------------------------
-  class(adams_bashforth_moulton_integrator), intent(IN)    :: self         !< Actual ABM integrator.
-  class(integrand),                          intent(INOUT) :: U            !< Field to be integrated.
-  class(integrand),                          intent(INOUT) :: previous(1:) !< Previous time steps solutions of integrand field.
-  real(R_P),                                 intent(IN)    :: Dt           !< Time steps.
-  real(R_P),                                 intent(IN)    :: t(:)         !< Times.
-  integer(I_P), optional,                    intent(IN)    :: iterations   !< Fixed point iterations of AM scheme.
-  !---------------------------------------------------------------------------------------------------------------------------------
+  subroutine init(self, steps)
+  !< Create the actual Adams-Bashforth-Moulton integrator: initialize the *b* coefficients.
+  class(integrator_adams_bashforth_moulton), intent(inout) :: self  !< Integrator.
+  integer(I_P),                              intent(in)    :: steps !< Number of time steps used.
 
-  !---------------------------------------------------------------------------------------------------------------------------------
+  if (self%is_supported(steps)) then
+    call self%destroy
+    self%steps = steps
+    call self%predictor%init(steps=steps)
+    call self%corrector%init(steps=steps-1)
+  else
+    call self%trigger_error(error=ERROR_BAD_STEPS_NUMBER,                           &
+                            error_message='bad (unsupported) number of time steps', &
+                            is_severe=.true.)
+  endif
+  endsubroutine init
+
+  subroutine integrate(self, U, previous, Dt, t, iterations)
+  !< Integrate field with Adams-Bashforth-Moulton class scheme.
+  class(integrator_adams_bashforth_moulton), intent(in)           :: self         !< Integrator.
+  class(integrand),                          intent(inout)        :: U            !< Field to be integrated.
+  class(integrand),                          intent(inout)        :: previous(1:) !< Previous time steps solutions of integrand.
+  real(R_P),                                 intent(in)           :: Dt           !< Time steps.
+  real(R_P),                                 intent(in)           :: t(:)         !< Times.
+  integer(I_P),                              intent(in), optional :: iterations   !< Fixed point iterations of AM scheme.
+
   call self%predictor%integrate(U=U, previous=previous, Dt=Dt, t=t, autoupdate=.false.)
   call self%corrector%integrate(U=U, previous=previous(2:), Dt=Dt, t=t, iterations=iterations, autoupdate=.false.)
   call self%predictor%update_previous(U=U, previous=previous)
-  return
-  !---------------------------------------------------------------------------------------------------------------------------------
   endsubroutine integrate
 
-  pure function min_steps()
-  !---------------------------------------------------------------------------------------------------------------------------------
-  !< Return the minimum number of steps supported.
-  !---------------------------------------------------------------------------------------------------------------------------------
-  integer(I_P) :: min_steps !< Minimum number of steps supported.
-  !---------------------------------------------------------------------------------------------------------------------------------
+  elemental function is_supported(steps)
+  !< Check if the queried number of steps is supported or not.
+  integer(I_P), intent(in) :: steps        !< Number of time steps used.
+  logical                  :: is_supported !< Is true is the steps number is in *supported_steps*.
 
-  !---------------------------------------------------------------------------------------------------------------------------------
+  is_supported = is_admissible(n=steps, adm_range=trim(supported_steps))
+  endfunction is_supported
+
+  pure function min_steps()
+  !< Return the minimum number of steps supported.
+  integer(I_P) :: min_steps !< Minimum number of steps supported.
+
   min_steps = min_ss
-  return
-  !---------------------------------------------------------------------------------------------------------------------------------
   endfunction min_steps
 
   pure function max_steps()
-  !---------------------------------------------------------------------------------------------------------------------------------
   !< Return the maximum number of steps supported.
-  !---------------------------------------------------------------------------------------------------------------------------------
   integer(I_P) :: max_steps !< Maximum number of steps supported.
-  !---------------------------------------------------------------------------------------------------------------------------------
 
-  !---------------------------------------------------------------------------------------------------------------------------------
   max_steps = max_ss
-  return
-  !---------------------------------------------------------------------------------------------------------------------------------
   endfunction max_steps
-
-  elemental function is_supported(steps)
-  !---------------------------------------------------------------------------------------------------------------------------------
-  !< Check if the queried number of steps is supported or not.
-  !---------------------------------------------------------------------------------------------------------------------------------
-  integer(I_P), intent(IN) :: steps        !< Number of time steps used.
-  logical                  :: is_supported !< Is true is the steps number is in *supported_steps*.
-  !---------------------------------------------------------------------------------------------------------------------------------
-
-  !---------------------------------------------------------------------------------------------------------------------------------
-  is_supported = is_admissible(n=steps, adm_range=trim(supported_steps))
-  return
-  !---------------------------------------------------------------------------------------------------------------------------------
-  endfunction is_supported
 endmodule foodie_integrator_adams_bashforth_moulton

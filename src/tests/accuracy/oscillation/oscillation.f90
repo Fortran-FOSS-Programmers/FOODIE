@@ -6,9 +6,9 @@ module oscillation_test_t
 
 !-----------------------------------------------------------------------------------------------------------------------------------
 use flap, only : command_line_interface
-use foodie, only : adams_bashforth_integrator,         &
-                   adams_bashforth_moulton_integrator, &
-                   adams_moulton_integrator,           &
+use foodie, only : integrator_adams_bashforth,         &
+                   integrator_adams_bashforth_moulton, &
+                   integrator_adams_moulton,           &
                    back_df_integrator,                 &
                    emd_runge_kutta_integrator,         &
                    euler_explicit_integrator,          &
@@ -245,9 +245,9 @@ contains
   class(oscillation_test), intent(in) :: self   !< Test.
   character(*),            intent(in) :: solver !< Selected solver.
   ! FOODIE integrators
-  type(adams_bashforth_integrator)         :: ab_integrator     !< Adams-Bashforth integrator.
-  type(adams_bashforth_moulton_integrator) :: abm_integrator    !< Adams-Bashforth-Moulton integrator.
-  type(adams_moulton_integrator)           :: am_integrator     !< Adams-Moulton integrator.
+  type(integrator_adams_bashforth)         :: ab_integrator     !< Adams-Bashforth integrator.
+  type(integrator_adams_bashforth_moulton) :: abm_integrator    !< Adams-Bashforth-Moulton integrator.
+  type(integrator_adams_moulton)           :: am_integrator     !< Adams-Moulton integrator.
   type(back_df_integrator)                 :: bdf_integrator    !< BDF integrator.
   type(emd_runge_kutta_integrator)         :: emd_rk_integrator !< Runge-Kutta integrator.
   type(euler_explicit_integrator)          :: euler_integrator  !< Euler integrator.
@@ -408,9 +408,9 @@ contains
   real(R_P), optional,    intent(in)  :: Dt            !< Time step.
   real(R_P), optional,    intent(in)  :: tolerance     !< Local error tolerance.
   ! FOODIE integrators
-  type(adams_bashforth_integrator)         :: ab_integrator     !< Adams-Bashforth integrator.
-  type(adams_bashforth_moulton_integrator) :: abm_integrator    !< Adams-Bashforth-Moulton integrator.
-  type(adams_moulton_integrator)           :: am_integrator     !< Adams-Moulton integrator.
+  type(integrator_adams_bashforth)         :: ab_integrator     !< Adams-Bashforth integrator.
+  type(integrator_adams_bashforth_moulton) :: abm_integrator    !< Adams-Bashforth-Moulton integrator.
+  type(integrator_adams_moulton)           :: am_integrator     !< Adams-Moulton integrator.
   type(back_df_integrator)                 :: bdf_integrator    !< BDF integrator.
   type(emd_runge_kutta_integrator)         :: emd_rk_integrator !< Runge-Kutta integrator.
   type(euler_explicit_integrator)          :: euler_integrator  !< Euler integrator.

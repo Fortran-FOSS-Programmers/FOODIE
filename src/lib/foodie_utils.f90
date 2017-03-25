@@ -1,22 +1,17 @@
 !< FOODIE utils: module of (possible) unrelated utilities of FOODIE library.
+
 module foodie_utils
-!-----------------------------------------------------------------------------------------------------------------------------------
 !< FOODIE utils: module of (possible) unrelated utilities of FOODIE library.
-!-----------------------------------------------------------------------------------------------------------------------------------
 
-!-----------------------------------------------------------------------------------------------------------------------------------
 use foodie_kinds, only : I_P
-!-----------------------------------------------------------------------------------------------------------------------------------
 
-!-----------------------------------------------------------------------------------------------------------------------------------
 implicit none
 private
-public:: is_admissible
-!-----------------------------------------------------------------------------------------------------------------------------------
+public :: is_admissible
+
 contains
   ! public procedures
   elemental function is_admissible(n, adm_range)
-  !---------------------------------------------------------------------------------------------------------------------------------
   !< Check if the queried number *n* is admitted by the *admissible* range list *adm_range*.
   !<
   !< The admissible range list must be formatted as string containing admissible numbers; valid list are:
@@ -25,7 +20,6 @@ contains
   !<+ `adm_range = '1-4,8,21-22'` => 1, 2, 3, 4, 8, 21, 22 are admissible numbers;
   !<
   !< You can mix any number of range (`min-max` format) and/or single number (`,` comma separated) entries.
-  !---------------------------------------------------------------------------------------------------------------------------------
   integer(I_P), intent(IN)               :: n             !< Number queried.
   character(*), intent(IN)               :: adm_range     !< Admissible range string.
   logical                                :: is_admissible !< Is true is the number is in *adm_range*.
@@ -33,36 +27,30 @@ contains
   character(len(adm_range)), allocatable :: subtokens(:)  !< Tokens for parsing *adm_range* string.
   integer(I_P)                           :: t             !< Counter.
   integer(I_P)                           :: n_parsed(1:2) !< Values parsed from *adm_range*..
-  !---------------------------------------------------------------------------------------------------------------------------------
 
-  !---------------------------------------------------------------------------------------------------------------------------------
   is_admissible = .false.
   call tokenize(string=adm_range, delimiter=',', toks=tokens)
   search_me : do t=1, size(tokens)
-                if (index(tokens(t), '-')>0) then
-                  call tokenize(string=tokens(t), delimiter='-', toks=subtokens)
-                  read(subtokens(1), *) n_parsed(1)
-                  read(subtokens(2), *) n_parsed(2)
-                  is_admissible = (n_parsed(1)<=n.and.n<=n_parsed(2))
-                else
-                  read(tokens(t), *) n_parsed(1)
-                  is_admissible = (n_parsed(1)==n)
-                endif
-                if (is_admissible) exit search_me
+    if (index(tokens(t), '-')>0) then
+      call tokenize(string=tokens(t), delimiter='-', toks=subtokens)
+      read(subtokens(1), *) n_parsed(1)
+      read(subtokens(2), *) n_parsed(2)
+      is_admissible = (n_parsed(1)<=n.and.n<=n_parsed(2))
+    else
+      read(tokens(t), *) n_parsed(1)
+      is_admissible = (n_parsed(1)==n)
+    endif
+    if (is_admissible) exit search_me
   enddo search_me
-  return
-  !---------------------------------------------------------------------------------------------------------------------------------
   endfunction is_admissible
 
   ! private procedures
   pure subroutine tokenize(string, delimiter, toks, Nt)
-  !---------------------------------------------------------------------------------------------------------------------------------
   !< Tokenize a string in order to parse it.
   !<
   !< @note The dummy array containing tokens must be allocatable and its character elements must have the same length of the input
   !< string. If the length of the delimiter is higher than the input string one then the output tokens array is allocated with
   !< only one element set to char(0).
-  !---------------------------------------------------------------------------------------------------------------------------------
   character(len=*),                        intent(IN)  :: string    !< String to be tokenized.
   character(len=*),                        intent(IN)  :: delimiter !< Delimiter of tokens.
   character(len=len(string)), allocatable, intent(OUT) :: toks(:)   !< Tokens.
@@ -72,9 +60,7 @@ contains
   integer(I_P)                                         :: c         !< Counter.
   integer(I_P)                                         :: n         !< Counter.
   integer(I_P)                                         :: t         !< Counter.
-  !---------------------------------------------------------------------------------------------------------------------------------
 
-  !---------------------------------------------------------------------------------------------------------------------------------
   ! initialize
   if (allocated(toks)) deallocate(toks)
   strsub = string
@@ -104,7 +90,5 @@ contains
     endif
   enddo
   if (present(Nt)) Nt = n
-  return
-  !---------------------------------------------------------------------------------------------------------------------------------
   endsubroutine tokenize
 endmodule foodie_utils

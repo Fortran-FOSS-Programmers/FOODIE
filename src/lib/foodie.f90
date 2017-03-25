@@ -1,6 +1,6 @@
 !< FOODIE, Fortran Object oriented Ordinary Differential Equations integration library.
+
 module foodie
-!-----------------------------------------------------------------------------------------------------------------------------------
 !< FOODIE, Fortran Object oriented Ordinary Differential Equations integration library.
 !<
 !< FOODIE is a KISS library for solving systems of Ordinary Differential Equation (ODE) into the Initial Values Problems (IVP)
@@ -13,37 +13,7 @@ module foodie
 !< *t*, *R* is the (vectorial) residual function and *F* is the (vectorial) initial conditions function.
 !<
 !< FOODIE is aimed to the time-like integration of the above system of ODE. To this aim, different numerical schemes are provided:
-!<
-!<+ *explicit Adams-Bashforth* class of schemes:
-!<    + 1 step, namely the explicit forward Euler scheme, 1st order accurate;
-!<    + 2 steps, 2nd order accurate;
-!<    + 3 steps, 3rd order accurate;
-!<    + 4 steps, 4th order accurate;
-!<+ *forward explicit Euler* scheme, a 1st order accurate;
-!<+ *explicit Leapfrog*:
-!<    + Unfiltered, 2nd order accurate, (mostly) unstable;
-!<    + Robert-Asselin filtered, 1st order accurate;
-!<    + Robert-Asselin-Williams filter, 2nd order accurate;
-!<+ *explicit low storage Runge-Kutta 2N* class schemes:
-!<    + LS(1,1): 1 stage, 1st order accurate, namely the forward explicit Euler one;
-!<    + LS(5,4): 5 stages, 4th order accurate;
-!<+ *explicit TVD or SSP Runge-Kutta* class schemes:
-!<    + TVD(1,1): 1 stage, 1st order accurate, namely the forward explicit Euler one;
-!<    + SSP(2,2): 2 stages, 2nd order accurate;
-!<    + SSP(3,3): 3 stages, 3rd order accurate;
-!<    + SSP(5,4): 5 stages, 4th order accurate;
-!<+ *explicit embedded Runge-Kutta* class schemes:
-!<    + DP(7,4): 7 stages, 4th order accurate, Dormand and Prince scheme;
-!<+ *implicit Adams-Moulton* class of schemes:
-!<    + 0 step, namely the implicit backward Euler scheme, 1st order accurate;
-!<    + 1 step, 2nd order accurate;
-!<    + 2 steps, 3rd order accurate;
-!<    + 3 steps, 4th order accurate;
-!<+ *predictor-corrector Adams-Bashforth-Moulton* class of schemes:
-!<    + P=AB(1)-C=AM(0) step, namely the explicit/implicit forward/backward Euler scheme, 1st order accurate;
-!<    + P=AB(2)-C=AM(1) step, 2nd order accurate;
-!<    + P=AB(3)-C=AM(2) steps, 3rd order accurate;
-!<    + P=AB(4)-C=AM(3) steps, 4th order accurate;
+!< see [FOODIE home page](https://github.com/Fortran-FOSS-Programmers/FOODIE) for more details about available integrators.
 !<
 !<### Usage
 !<
@@ -56,7 +26,7 @@ module foodie
 !< For example for the Lorenz' ODE system
 !<
 !<```fortran
-!< type, extends(integrand) :: lorenz
+!< type, extends(integrand_object) :: lorenz
 !<   !< Lorenz equations field.
 !<   !<
 !<   !< It is a FOODIE integrand class.
@@ -90,33 +60,83 @@ module foodie
 !<   call euler_integrator%integrate(field=attractor, dt=dt)
 !< enddo
 !<```
-!-----------------------------------------------------------------------------------------------------------------------------------
 
-!-----------------------------------------------------------------------------------------------------------------------------------
 use foodie_adt_integrand, only : integrand
-use foodie_integrator_adams_bashforth, only : adams_bashforth_integrator
-use foodie_integrator_adams_bashforth_moulton, only : adams_bashforth_moulton_integrator
-use foodie_integrator_adams_moulton, only : adams_moulton_integrator
+use foodie_error_codes, only : error_missing_steps_number
+use foodie_integrator_object, only : integrator_object
+use foodie_kinds, only : I_P, R_P
+use foodie_integrator_adams_bashforth, only : integrator_adams_bashforth
+use foodie_integrator_adams_bashforth_moulton, only : integrator_adams_bashforth_moulton
+use foodie_integrator_adams_moulton, only : integrator_adams_moulton
 use foodie_integrator_backward_differentiation_formula, only : back_df_integrator
 use foodie_integrator_emd_runge_kutta, only : emd_runge_kutta_integrator
 use foodie_integrator_euler_explicit, only : euler_explicit_integrator
 use foodie_integrator_leapfrog, only : leapfrog_integrator
 use foodie_integrator_low_storage_runge_kutta, only : ls_runge_kutta_integrator
 use foodie_integrator_tvd_runge_kutta, only : tvd_runge_kutta_integrator
-!-----------------------------------------------------------------------------------------------------------------------------------
 
-!-----------------------------------------------------------------------------------------------------------------------------------
 implicit none
 private
 public :: integrand
-public :: adams_bashforth_integrator
-public :: adams_bashforth_moulton_integrator
-public :: adams_moulton_integrator
+public :: integrator_object
+public :: integrator_adams_bashforth
+public :: integrator_adams_bashforth_moulton
+public :: integrator_adams_moulton
 public :: back_df_integrator
 public :: emd_runge_kutta_integrator
 public :: euler_explicit_integrator
 public :: leapfrog_integrator
 public :: ls_runge_kutta_integrator
 public :: tvd_runge_kutta_integrator
-!-----------------------------------------------------------------------------------------------------------------------------------
+
+contains
+  function foodie_integrator(scheme, steps) result(integrator)
+  !< Return a concrete instance of [[integrator]] given a scheme selection.
+  !<
+  !< This is the FOODIE integrators factory.
+  !<
+  !< @note If an error occurs the error status of [[integrator]] is updated.
+  character(*), intent(in)              :: scheme     !< Selected integrator given.
+  integer(I_P), intent(in), optional    :: steps      !< Number of time steps used in multi-step schemes.
+  class(integrator_object), allocatable :: integrator !< The FOODIE integrator.
+
+  select case(trim(adjustl(scheme)))
+  case('adams_bashforth')
+    allocate(integrator_adams_bashforth :: integrator)
+    if (present(steps)) then
+      select type(integrator)
+      type is(integrator_adams_bashforth)
+        call integrator%init(steps=steps)
+      endselect
+    else
+      call integrator%trigger_error(error=ERROR_MISSING_STEPS_NUMBER,                                  &
+                                    error_message='missing steps number for initializing integrator!', &
+                                    is_severe=.true.)
+    endif
+  case('adams_bashforth_moulton')
+    allocate(integrator_adams_bashforth_moulton :: integrator)
+    if (present(steps)) then
+      select type(integrator)
+      type is(integrator_adams_bashforth_moulton)
+        call integrator%init(steps=steps)
+      endselect
+    else
+      call integrator%trigger_error(error=ERROR_MISSING_STEPS_NUMBER,                                  &
+                                    error_message='missing steps number for initializing integrator!', &
+                                    is_severe=.true.)
+    endif
+  case('adams_moulton')
+    allocate(integrator_adams_moulton :: integrator)
+    if (present(steps)) then
+      select type(integrator)
+      type is(integrator_adams_moulton)
+        call integrator%init(steps=steps)
+      endselect
+    else
+      call integrator%trigger_error(error=ERROR_MISSING_STEPS_NUMBER,                                  &
+                                    error_message='missing steps number for initializing integrator!', &
+                                    is_severe=.true.)
+    endif
+  endselect
+  endfunction foodie_integrator
 endmodule foodie

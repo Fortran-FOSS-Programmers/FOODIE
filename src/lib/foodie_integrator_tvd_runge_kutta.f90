@@ -1,6 +1,6 @@
 !< FOODIE integrator: provide an explicit class of TVD or SSP Runge-Kutta schemes, from 1st to 4th order accurate.
+
 module foodie_integrator_tvd_runge_kutta
-!-----------------------------------------------------------------------------------------------------------------------------------
 !< FOODIE integrator: provide an explicit class of TVD or SSP Runge-Kutta schemes, from 1st to 4th order accurate.
 !<
 !< The integrators provided have the Total Variation Diminishing (TVD) property or the Strong Stability Preserving (SSP)
@@ -99,21 +99,15 @@ module foodie_integrator_tvd_runge_kutta
 !<
 !< [2] *High Order Strong Stability Preserving Time Discretizations*, Gottlieb, S., Ketcheson, D. I., Shu, C.W., Journal of
 !< Scientific Computing, vol. 38, N. 3, 2009, pp. 251-289.
-!-----------------------------------------------------------------------------------------------------------------------------------
 
-!-----------------------------------------------------------------------------------------------------------------------------------
 use foodie_adt_integrand, only : integrand
 use foodie_kinds, only : R_P, I_P
 use foodie_utils, only : is_admissible
-!-----------------------------------------------------------------------------------------------------------------------------------
 
-!-----------------------------------------------------------------------------------------------------------------------------------
 implicit none
 private
 public :: tvd_runge_kutta_integrator
-!-----------------------------------------------------------------------------------------------------------------------------------
 
-!-----------------------------------------------------------------------------------------------------------------------------------
 character(len=99), parameter :: supported_stages='1-3,5' !< List of supported stages number. Valid format is `1-2,4,9-23...`.
 integer(I_P),      parameter :: min_ss=1                 !< Minimum number of stages supported.
 integer(I_P),      parameter :: max_ss=5                 !< Maximum number of stages supported.
@@ -141,18 +135,14 @@ type :: tvd_runge_kutta_integrator
     procedure, nopass,     public :: max_stages   !< Return the maximum number of stages supported.
     procedure, nopass,     public :: is_supported !< Check if the queried number of stages is supported or not.
 endtype tvd_runge_kutta_integrator
-!-----------------------------------------------------------------------------------------------------------------------------------
+
 contains
   ! public methods
   elemental subroutine init(self, stages)
-  !---------------------------------------------------------------------------------------------------------------------------------
   !< Create the actual RK integrator: initialize the Butcher' table coefficients.
-  !---------------------------------------------------------------------------------------------------------------------------------
   class(tvd_runge_kutta_integrator), intent(INOUT) :: self   !< RK integrator.
   integer(I_P),                      intent(IN)    :: stages !< Number of stages used.
-  !---------------------------------------------------------------------------------------------------------------------------------
 
-  !---------------------------------------------------------------------------------------------------------------------------------
   if (self%is_supported(stages)) then
     self%stages = stages
     if (allocated(self%beta)) deallocate(self%beta) ; allocate(self%beta(1:stages          )) ; self%beta = 0._R_P
@@ -205,33 +195,23 @@ contains
     ! bad (unsupported) number of required stages
     self%error = 1
   endif
-  return
-  !---------------------------------------------------------------------------------------------------------------------------------
   endsubroutine init
 
   elemental subroutine destroy(self)
-  !---------------------------------------------------------------------------------------------------------------------------------
   !< Destroy the integrator.
-  !---------------------------------------------------------------------------------------------------------------------------------
   class(tvd_runge_kutta_integrator), intent(INOUT) :: self !< Integrator.
-  !---------------------------------------------------------------------------------------------------------------------------------
 
-  !---------------------------------------------------------------------------------------------------------------------------------
-  self%stages = 0
+  self%stages = -1
   if (allocated(self%alph)) deallocate(self%alph)
   if (allocated(self%beta)) deallocate(self%beta)
   if (allocated(self%gamm)) deallocate(self%gamm)
   self%error = 0
-  return
-  !---------------------------------------------------------------------------------------------------------------------------------
   endsubroutine destroy
 
   subroutine integrate(self, U, stage, Dt, t)
-  !---------------------------------------------------------------------------------------------------------------------------------
   !< Integrate field with explicit TVD (or SSP) Runge-Kutta scheme.
   !<
   !< @note This method can be used **after** the integrator is created (i.e. the RK coefficients are initialized).
-  !---------------------------------------------------------------------------------------------------------------------------------
   class(tvd_runge_kutta_integrator), intent(IN)    :: self      !< Actual RK integrator.
   class(integrand),                  intent(INOUT) :: U         !< Field to be integrated.
   class(integrand),                  intent(INOUT) :: stage(1:) !< Runge-Kutta stages [1:stages].
@@ -239,65 +219,40 @@ contains
   real(R_P),                         intent(IN)    :: t         !< Time.
   integer(I_P)                                     :: s         !< First stages counter.
   integer(I_P)                                     :: ss        !< Second stages counter.
-  !---------------------------------------------------------------------------------------------------------------------------------
 
-  !---------------------------------------------------------------------------------------------------------------------------------
-  select type(stage)
-  class is(integrand)
-    ! computing stages
-    do s=1, self%stages
-      stage(s) = U
-      do ss=1, s - 1
-        stage(s) = stage(s) + stage(ss) * (Dt * self%alph(s, ss))
-      enddo
-      stage(s) = stage(s)%t(t=t + self%gamm(s) * Dt)
+  ! computing stages
+  do s=1, self%stages
+    stage(s) = U
+    do ss=1, s - 1
+      stage(s) = stage(s) + stage(ss) * (Dt * self%alph(s, ss))
     enddo
-    ! computing new time step
-    do s=1, self%stages
-      U = U + stage(s) * (Dt * self%beta(s))
-    enddo
-  endselect
-  return
-  !---------------------------------------------------------------------------------------------------------------------------------
+    stage(s) = stage(s)%t(t=t + self%gamm(s) * Dt)
+  enddo
+  ! computing new time step
+  do s=1, self%stages
+    U = U + stage(s) * (Dt * self%beta(s))
+  enddo
   endsubroutine integrate
 
   pure function min_stages()
-  !---------------------------------------------------------------------------------------------------------------------------------
   !< Return the minimum number of stages supported.
-  !---------------------------------------------------------------------------------------------------------------------------------
   integer(I_P) :: min_stages !< Minimum number of stages supported.
-  !---------------------------------------------------------------------------------------------------------------------------------
 
-  !---------------------------------------------------------------------------------------------------------------------------------
   min_stages = min_ss
-  return
-  !---------------------------------------------------------------------------------------------------------------------------------
   endfunction min_stages
 
   pure function max_stages()
-  !---------------------------------------------------------------------------------------------------------------------------------
   !< Return the maximum number of stages supported.
-  !---------------------------------------------------------------------------------------------------------------------------------
   integer(I_P) :: max_stages !< Maximum number of stages supported.
-  !---------------------------------------------------------------------------------------------------------------------------------
 
-  !---------------------------------------------------------------------------------------------------------------------------------
   max_stages = max_ss
-  return
-  !---------------------------------------------------------------------------------------------------------------------------------
   endfunction max_stages
 
   elemental function is_supported(stages)
-  !---------------------------------------------------------------------------------------------------------------------------------
   !< Check if the queried number of stages is supported or not.
-  !---------------------------------------------------------------------------------------------------------------------------------
   integer(I_P), intent(IN) :: stages       !< Number of stages used.
   logical                  :: is_supported !< Is true is the stages number is in *supported_stages*.
-  !---------------------------------------------------------------------------------------------------------------------------------
 
-  !---------------------------------------------------------------------------------------------------------------------------------
   is_supported = is_admissible(n=stages, adm_range=trim(supported_stages))
-  return
-  !---------------------------------------------------------------------------------------------------------------------------------
   endfunction is_supported
 endmodule foodie_integrator_tvd_runge_kutta

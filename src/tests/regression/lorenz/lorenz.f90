@@ -6,7 +6,7 @@ program integrate_lorenz
 
 !-----------------------------------------------------------------------------------------------------------------------------------
 use flap, only : command_line_interface
-use foodie, only : adams_bashforth_integrator, &
+use foodie, only : integrator_adams_bashforth, &
                    euler_explicit_integrator, &
                    leapfrog_integrator, &
                    ls_runge_kutta_integrator, &
@@ -129,7 +129,7 @@ contains
   type(tvd_runge_kutta_integrator) :: rk_integrator         !< Runge-Kutta integrator.
   integer, parameter               :: rk_stages=5           !< Runge-Kutta stages number.
   type(lorenz)                     :: rk_stage(1:rk_stages) !< Runge-Kutta stages.
-  type(adams_bashforth_integrator) :: ab_integrator         !< Adams-Bashforth integrator.
+  type(integrator_adams_bashforth) :: ab_integrator         !< Adams-Bashforth integrator.
   integer, parameter               :: ab_steps=4            !< Adams-Bashforth steps number.
   type(lorenz)                     :: previous(1:ab_steps)  !< Previous time steps solutions.
   integer(I_P)                     :: s                     !< AB steps counter.

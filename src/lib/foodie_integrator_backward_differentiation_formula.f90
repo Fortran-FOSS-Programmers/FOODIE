@@ -1,6 +1,6 @@
 !< FOODIE integrator: provide an implicit class of Backward Differentiation Formula schemes, from 1st to 6th order accurate.
+
 module foodie_integrator_backward_differentiation_formula
-!-----------------------------------------------------------------------------------------------------------------------------------
 !< FOODIE integrator: provide an implicit class of Backward Differentiation Formula schemes, from 1st to 6th order accurate.
 !<
 !< Considering the following ODE system:
@@ -32,21 +32,15 @@ module foodie_integrator_backward_differentiation_formula
 !<
 !<#### Bibliography
 !<
-!-----------------------------------------------------------------------------------------------------------------------------------
 
-!-----------------------------------------------------------------------------------------------------------------------------------
 use foodie_adt_integrand, only : integrand
 use foodie_kinds, only : I_P, R_P
 use foodie_utils, only : is_admissible
-!-----------------------------------------------------------------------------------------------------------------------------------
 
-!-----------------------------------------------------------------------------------------------------------------------------------
 implicit none
 private
 public :: back_df_integrator
-!-----------------------------------------------------------------------------------------------------------------------------------
 
-!-----------------------------------------------------------------------------------------------------------------------------------
 character(len=99), parameter :: supported_steps='1-6' !< List of supported steps number. Valid format is `1-2,4,9-23...`.
 integer(I_P),      parameter :: min_ss=1              !< Minimum number of steps supported.
 integer(I_P),      parameter :: max_ss=6              !< Maximum number of steps supported.
@@ -75,18 +69,13 @@ type :: back_df_integrator
     procedure, nopass,     public :: max_steps       !< Return the maximum number of steps supported.
     procedure, nopass,     public :: is_supported    !< Check if the queried number of steps is supported or not.
 endtype back_df_integrator
-!-----------------------------------------------------------------------------------------------------------------------------------
 contains
   ! public methods
   elemental subroutine init(self, steps)
-  !---------------------------------------------------------------------------------------------------------------------------------
   !< Create the actual BDF integrator: initialize the *alpha* and *beta* coefficients.
-  !---------------------------------------------------------------------------------------------------------------------------------
   class(back_df_integrator), intent(INOUT) :: self  !< BDF integrator.
   integer(I_P),              intent(IN)    :: steps !< Number of time steps used.
-  !---------------------------------------------------------------------------------------------------------------------------------
 
-  !---------------------------------------------------------------------------------------------------------------------------------
   self%steps = steps
   if (allocated(self%a)) deallocate(self%a) ; allocate(self%a(1:steps)) ; self%a = 0.0_R_P
   select case(steps)
@@ -127,30 +116,21 @@ contains
     ! bad (unsupported) number of required time steps
     self%error = 1
   endselect
-  return
-  !---------------------------------------------------------------------------------------------------------------------------------
   endsubroutine init
 
   elemental subroutine destroy(self)
-  !---------------------------------------------------------------------------------------------------------------------------------
   !< Destroy the integrator.
-  !---------------------------------------------------------------------------------------------------------------------------------
   class(back_df_integrator), intent(INOUT) :: self !< BDF integrator.
-  !---------------------------------------------------------------------------------------------------------------------------------
 
-  !---------------------------------------------------------------------------------------------------------------------------------
+  self%error = -1
   self%steps = 1
   if (allocated(self%a)) deallocate(self%a)
   self%b = 0.0_R_P
   self%error = 0
-  return
-  !---------------------------------------------------------------------------------------------------------------------------------
   endsubroutine destroy
 
   subroutine integrate(self, U, previous, Dt, t, iterations, autoupdate)
-  !---------------------------------------------------------------------------------------------------------------------------------
   !< Integrate field with BDF class scheme.
-  !---------------------------------------------------------------------------------------------------------------------------------
   class(back_df_integrator),  intent(IN)    :: self         !< Actual BDF integrator.
   class(integrand),           intent(INOUT) :: U            !< Field to be integrated.
   class(integrand),           intent(INOUT) :: previous(1:) !< Previous time steps solutions of integrand field.
@@ -162,9 +142,7 @@ contains
   logical                                   :: autoupdate_  !< Perform cyclic autoupdate of previous time steps, dummy var.
   class(integrand), allocatable             :: delta        !< Delta RHS for fixed point iterations.
   integer(I_P)                              :: s            !< Steps counter.
-  !---------------------------------------------------------------------------------------------------------------------------------
 
-  !---------------------------------------------------------------------------------------------------------------------------------
   autoupdate_ = .true. ; if (present(autoupdate)) autoupdate_ = autoupdate
   iterations_ = 1 ; if (present(iterations)) iterations_ = iterations
   allocate(delta, source=previous(self%steps) * (-self%a(self%steps)))
@@ -175,66 +153,40 @@ contains
     U = delta + U%t(t=t(self%steps) + Dt) * (Dt * self%b)
   enddo
   if (autoupdate_) call self%update_previous(U=U, previous=previous)
-  return
-  !---------------------------------------------------------------------------------------------------------------------------------
   endsubroutine integrate
 
   pure function min_steps()
-  !---------------------------------------------------------------------------------------------------------------------------------
   !< Return the minimum number of steps supported.
-  !---------------------------------------------------------------------------------------------------------------------------------
   integer(I_P) :: min_steps !< Minimum number of steps supported.
-  !---------------------------------------------------------------------------------------------------------------------------------
 
-  !---------------------------------------------------------------------------------------------------------------------------------
   min_steps = min_ss
-  return
-  !---------------------------------------------------------------------------------------------------------------------------------
   endfunction min_steps
 
   pure function max_steps()
-  !---------------------------------------------------------------------------------------------------------------------------------
   !< Return the maximum number of steps supported.
-  !---------------------------------------------------------------------------------------------------------------------------------
   integer(I_P) :: max_steps !< Maximum number of steps supported.
-  !---------------------------------------------------------------------------------------------------------------------------------
 
-  !---------------------------------------------------------------------------------------------------------------------------------
   max_steps = max_ss
-  return
-  !---------------------------------------------------------------------------------------------------------------------------------
   endfunction max_steps
 
   elemental function is_supported(steps)
-  !---------------------------------------------------------------------------------------------------------------------------------
   !< Check if the queried number of steps is supported or not.
-  !---------------------------------------------------------------------------------------------------------------------------------
   integer(I_P), intent(IN) :: steps        !< Number of time steps used.
   logical                  :: is_supported !< Is true is the steps number is in *supported_steps*.
-  !---------------------------------------------------------------------------------------------------------------------------------
 
-  !---------------------------------------------------------------------------------------------------------------------------------
   is_supported = is_admissible(n=steps, adm_range=trim(supported_steps))
-  return
-  !---------------------------------------------------------------------------------------------------------------------------------
   endfunction is_supported
 
   subroutine update_previous(self, U, previous)
-  !---------------------------------------------------------------------------------------------------------------------------------
   !< Cyclic update previous time steps.
-  !---------------------------------------------------------------------------------------------------------------------------------
   class(back_df_integrator), intent(IN)    :: self         !< Actual BDF integrator.
   class(integrand),          intent(IN)    :: U            !< Field to be integrated.
   class(integrand),          intent(INOUT) :: previous(1:) !< Previous time steps solutions of integrand field.
   integer(I_P)                             :: s            !< Steps counter.
-  !---------------------------------------------------------------------------------------------------------------------------------
 
-  !---------------------------------------------------------------------------------------------------------------------------------
   do s=1, self%steps - 1
     previous(s) = previous(s + 1)
   enddo
   previous(self%steps) = U
-  return
-  !---------------------------------------------------------------------------------------------------------------------------------
   endsubroutine update_previous
 endmodule foodie_integrator_backward_differentiation_formula
