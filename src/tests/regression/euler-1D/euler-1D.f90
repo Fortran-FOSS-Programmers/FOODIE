@@ -10,7 +10,7 @@ use foodie, only : integrator_adams_bashforth, &
                    integrator_euler_explicit, &
                    integrator_leapfrog, &
                    integrator_runge_kutta_ls, &
-                   tvd_runge_kutta_integrator
+                   integrator_runge_kutta_tvd
 use penf, only : R_P, I_P, FR_P, str
 use pyplot_module, only :  pyplot
 use type_euler_1D, only : euler_1D
@@ -334,7 +334,7 @@ contains
   !---------------------------------------------------------------------------------------------------------------------------------
   !< Test explicit Adams-Bashforth class of ODE solvers.
   !---------------------------------------------------------------------------------------------------------------------------------
-  type(tvd_runge_kutta_integrator) :: rk_integrator         !< Runge-Kutta integrator.
+  type(integrator_runge_kutta_tvd) :: rk_integrator         !< Runge-Kutta integrator.
   integer, parameter               :: rk_stages=5           !< Runge-Kutta stages number.
   type(euler_1D)                   :: rk_stage(1:rk_stages) !< Runge-Kutta stages.
   type(integrator_adams_bashforth) :: ab_integrator         !< Adams-Bashforth integrator.
@@ -434,7 +434,7 @@ contains
   !---------------------------------------------------------------------------------------------------------------------------------
   !< Test explicit leapfrog class of ODE solvers.
   !---------------------------------------------------------------------------------------------------------------------------------
-  type(tvd_runge_kutta_integrator) :: rk_integrator         !< Runge-Kutta integrator.
+  type(integrator_runge_kutta_tvd) :: rk_integrator         !< Runge-Kutta integrator.
   integer, parameter               :: rk_stages=2           !< Runge-Kutta stages number.
   type(euler_1D)                   :: rk_stage(1:rk_stages) !< Runge-Kutta stages.
   type(euler_1D)                   :: filter                !< Filter displacement.
@@ -530,7 +530,7 @@ contains
   !---------------------------------------------------------------------------------------------------------------------------------
   !< Test explicit TVD/SSP Runge-Kutta class of ODE solvers.
   !---------------------------------------------------------------------------------------------------------------------------------
-  type(tvd_runge_kutta_integrator) :: rk_integrator         !< Runge-Kutta integrator.
+  type(integrator_runge_kutta_tvd) :: rk_integrator         !< Runge-Kutta integrator.
   integer, parameter               :: rk_stages=5           !< Runge-Kutta stages number.
   type(euler_1D)                   :: rk_stage(1:rk_stages) !< Runge-Kutta stages.
   real(R_P)                        :: dt                    !< Time step.

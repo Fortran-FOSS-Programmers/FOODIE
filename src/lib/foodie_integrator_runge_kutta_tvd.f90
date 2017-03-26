@@ -1,6 +1,6 @@
 !< FOODIE integrator: provide an explicit class of TVD or SSP Runge-Kutta schemes, from 1st to 4th order accurate.
 
-module foodie_integrator_tvd_runge_kutta
+module foodie_integrator_runge_kutta_tvd
 !< FOODIE integrator: provide an explicit class of TVD or SSP Runge-Kutta schemes, from 1st to 4th order accurate.
 !<
 !< The integrators provided have the Total Variation Diminishing (TVD) property or the Strong Stability Preserving (SSP)
@@ -101,53 +101,95 @@ module foodie_integrator_tvd_runge_kutta
 !< Scientific Computing, vol. 38, N. 3, 2009, pp. 251-289.
 
 use foodie_adt_integrand, only : integrand
-use foodie_kinds, only : R_P, I_P
+use foodie_error_codes, only : ERROR_BAD_STAGES_NUMBER
+use foodie_kinds, only : I_P, R_P
+use foodie_integrator_object, only : integrator_object
 use foodie_utils, only : is_admissible
 
 implicit none
 private
-public :: tvd_runge_kutta_integrator
+public :: integrator_runge_kutta_tvd
 
 character(len=99), parameter :: supported_stages='1-3,5' !< List of supported stages number. Valid format is `1-2,4,9-23...`.
 integer(I_P),      parameter :: min_ss=1                 !< Minimum number of stages supported.
 integer(I_P),      parameter :: max_ss=5                 !< Maximum number of stages supported.
 
-type :: tvd_runge_kutta_integrator
+type, extends(integrator_object) :: integrator_runge_kutta_tvd
   !< FOODIE integrator: provide an explicit class of TVD or SSP Runge-Kutta schemes, from 1st to 4th order accurate.
   !<
   !< @note The integrator must be created or initialized (initialize the RK coefficients) before used.
-  !<
-  !< ### List of errors status
-  !<+ error=0 => no error;
-  !<+ error=1 => bad (unsupported) number of required stages;
   private
   integer(I_P)           :: stages=0  !< Number of stages.
   real(R_P), allocatable :: alph(:,:) !< \(\alpha\) Butcher's coefficients.
   real(R_P), allocatable :: beta(:)   !< \(\beta\) Butcher's coefficients.
   real(R_P), allocatable :: gamm(:)   !< \(\gamma\) Butcher's coefficients.
-  integer(I_P)           :: error=0   !< Error status flag: trap occurrences of errors.
   contains
-    private
-    procedure, pass(self), public :: init         !< Initialize (create) the integrator.
-    procedure, pass(self), public :: destroy      !< Destroy the integrator.
-    procedure, pass(self), public :: integrate    !< Integrate integrand field.
-    procedure, nopass,     public :: min_stages   !< Return the minimum number of stages supported.
-    procedure, nopass,     public :: max_stages   !< Return the maximum number of stages supported.
-    procedure, nopass,     public :: is_supported !< Check if the queried number of stages is supported or not.
-endtype tvd_runge_kutta_integrator
+    ! deferred methods
+    procedure, pass(self) :: description          !< Return pretty-printed object description.
+    procedure, pass(lhs)  :: integr_assign_integr !< Operator `=`.
+    ! public methods
+    procedure, pass(self) :: destroy      !< Destroy the integrator.
+    procedure, pass(self) :: init         !< Initialize (create) the integrator.
+    procedure, pass(self) :: integrate    !< Integrate integrand field.
+    procedure, nopass     :: is_supported !< Check if the queried number of stages is supported or not.
+    procedure, nopass     :: min_stages   !< Return the minimum number of stages supported.
+    procedure, nopass     :: max_stages   !< Return the maximum number of stages supported.
+endtype integrator_runge_kutta_tvd
 
 contains
+  ! deferred methods
+  pure function description(self, prefix) result(desc)
+  !< Return a pretty-formatted object description.
+  class(integrator_runge_kutta_tvd), intent(in)           :: self             !< Integrator.
+  character(*),                      intent(in), optional :: prefix           !< Prefixing string.
+  character(len=:), allocatable                           :: desc             !< Description.
+  character(len=:), allocatable                           :: prefix_          !< Prefixing string, local variable.
+  character(len=1), parameter                             :: NL=new_line('a') !< New line character.
+
+  prefix_ = '' ; if (present(prefix)) prefix_ = prefix
+  desc = ''
+  desc = desc//prefix_//'TVD Runge-Kutta multi-stage schemes class'//NL
+  desc = desc//prefix_//'  Supported stages numbers: ['//trim(adjustl(supported_stages))//']'
+  endfunction description
+
+  pure subroutine integr_assign_integr(lhs, rhs)
+  !< Operator `=`.
+  class(integrator_runge_kutta_tvd), intent(inout) :: lhs !< Left hand side.
+  class(integrator_object),          intent(in)    :: rhs !< Right hand side.
+
+  call lhs%assign_abstract(rhs=rhs)
+  select type(rhs)
+  class is (integrator_runge_kutta_tvd)
+                             lhs%stages = rhs%stages
+    if (allocated(rhs%alph)) lhs%alph   = rhs%alph
+    if (allocated(rhs%beta)) lhs%beta   = rhs%beta
+    if (allocated(rhs%gamm)) lhs%gamm   = rhs%gamm
+  endselect
+  endsubroutine integr_assign_integr
+
   ! public methods
-  elemental subroutine init(self, stages)
+  elemental subroutine destroy(self)
+  !< Destroy the integrator.
+  class(integrator_runge_kutta_tvd), intent(inout) :: self !< Integrator.
+
+  call self%destroy_abstract
+  self%stages = 0
+  if (allocated(self%alph)) deallocate(self%alph)
+  if (allocated(self%beta)) deallocate(self%beta)
+  if (allocated(self%gamm)) deallocate(self%gamm)
+  endsubroutine destroy
+
+  subroutine init(self, stages)
   !< Create the actual RK integrator: initialize the Butcher' table coefficients.
-  class(tvd_runge_kutta_integrator), intent(INOUT) :: self   !< RK integrator.
-  integer(I_P),                      intent(IN)    :: stages !< Number of stages used.
+  class(integrator_runge_kutta_tvd), intent(inout) :: self   !< Integrator.
+  integer(I_P),                      intent(in)    :: stages !< Number of stages used.
 
   if (self%is_supported(stages)) then
+    call self%destroy
     self%stages = stages
-    if (allocated(self%beta)) deallocate(self%beta) ; allocate(self%beta(1:stages          )) ; self%beta = 0._R_P
-    if (allocated(self%alph)) deallocate(self%alph) ; allocate(self%alph(1:stages, 1:stages)) ; self%alph = 0._R_P
-    if (allocated(self%gamm)) deallocate(self%gamm) ; allocate(self%gamm(          1:stages)) ; self%gamm = 0._R_P
+    allocate(self%beta(1:stages          )) ; self%beta = 0._R_P
+    allocate(self%alph(1:stages, 1:stages)) ; self%alph = 0._R_P
+    allocate(self%gamm(          1:stages)) ; self%gamm = 0._R_P
     select case(stages)
     case(1)
       ! RK(1,1) Forward-Euler
@@ -190,33 +232,22 @@ contains
       self%gamm(4) = 0.47454236302687_R_P
       self%gamm(5) = 0.93501063100924_R_P
     endselect
-    self%error = 0
   else
-    ! bad (unsupported) number of required stages
-    self%error = 1
+    call self%trigger_error(error=ERROR_BAD_STAGES_NUMBER,                                  &
+                            error_message='bad (unsupported) number of Runge-Kutta stages', &
+                            is_severe=.true.)
   endif
   endsubroutine init
-
-  elemental subroutine destroy(self)
-  !< Destroy the integrator.
-  class(tvd_runge_kutta_integrator), intent(INOUT) :: self !< Integrator.
-
-  self%stages = -1
-  if (allocated(self%alph)) deallocate(self%alph)
-  if (allocated(self%beta)) deallocate(self%beta)
-  if (allocated(self%gamm)) deallocate(self%gamm)
-  self%error = 0
-  endsubroutine destroy
 
   subroutine integrate(self, U, stage, Dt, t)
   !< Integrate field with explicit TVD (or SSP) Runge-Kutta scheme.
   !<
   !< @note This method can be used **after** the integrator is created (i.e. the RK coefficients are initialized).
-  class(tvd_runge_kutta_integrator), intent(IN)    :: self      !< Actual RK integrator.
-  class(integrand),                  intent(INOUT) :: U         !< Field to be integrated.
-  class(integrand),                  intent(INOUT) :: stage(1:) !< Runge-Kutta stages [1:stages].
-  real(R_P),                         intent(IN)    :: Dt        !< Time step.
-  real(R_P),                         intent(IN)    :: t         !< Time.
+  class(integrator_runge_kutta_tvd), intent(in)    :: self      !< Integrator.
+  class(integrand),                  intent(inout) :: U         !< Field to be integrated.
+  class(integrand),                  intent(inout) :: stage(1:) !< Runge-Kutta stages [1:stages].
+  real(R_P),                         intent(in)    :: Dt        !< Time step.
+  real(R_P),                         intent(in)    :: t         !< Time.
   integer(I_P)                                     :: s         !< First stages counter.
   integer(I_P)                                     :: ss        !< Second stages counter.
 
@@ -234,6 +265,14 @@ contains
   enddo
   endsubroutine integrate
 
+  elemental function is_supported(stages)
+  !< Check if the queried number of stages is supported or not.
+  integer(I_P), intent(in) :: stages       !< Number of stages used.
+  logical                  :: is_supported !< Is true is the stages number is in *supported_stages*.
+
+  is_supported = is_admissible(n=stages, adm_range=trim(supported_stages))
+  endfunction is_supported
+
   pure function min_stages()
   !< Return the minimum number of stages supported.
   integer(I_P) :: min_stages !< Minimum number of stages supported.
@@ -247,12 +286,4 @@ contains
 
   max_stages = max_ss
   endfunction max_stages
-
-  elemental function is_supported(stages)
-  !< Check if the queried number of stages is supported or not.
-  integer(I_P), intent(IN) :: stages       !< Number of stages used.
-  logical                  :: is_supported !< Is true is the stages number is in *supported_stages*.
-
-  is_supported = is_admissible(n=stages, adm_range=trim(supported_stages))
-  endfunction is_supported
-endmodule foodie_integrator_tvd_runge_kutta
+endmodule foodie_integrator_runge_kutta_tvd

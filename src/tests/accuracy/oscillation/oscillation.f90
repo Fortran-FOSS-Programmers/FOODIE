@@ -14,7 +14,7 @@ use foodie, only : integrator_adams_bashforth,         &
                    integrator_leapfrog,                &
                    integrator_runge_kutta_emd,         &
                    integrator_runge_kutta_ls,          &
-                   tvd_runge_kutta_integrator
+                   integrator_runge_kutta_tvd
 use oscillation_t, only : oscillation
 use penf, only : I_P, R_P, FR_P, str, strz
 use pyplot_module, only :  pyplot
@@ -253,7 +253,7 @@ contains
   type(integrator_euler_explicit)          :: euler_integrator  !< Euler integrator.
   type(integrator_leapfrog)                :: lf_integrator     !< Leapfrog integrator.
   type(integrator_runge_kutta_ls)          :: ls_rk_integrator  !< Low Storage Runge-Kutta integrator.
-  type(tvd_runge_kutta_integrator)         :: tvd_rk_integrator !< TVD Runge-Kutta integrator.
+  type(integrator_runge_kutta_tvd)         :: tvd_rk_integrator !< TVD Runge-Kutta integrator.
   ! Auxiliary variables
   real(R_P), allocatable :: solution(:,:)           !< Solution at each time step.
   real(R_P), allocatable :: error(:,:)              !< Error (norm L2) with respect the exact solution.
@@ -416,7 +416,7 @@ contains
   type(integrator_euler_explicit)          :: euler_integrator  !< Euler integrator.
   type(integrator_leapfrog)                :: lf_integrator     !< Leapfrog integrator.
   type(integrator_runge_kutta_ls)          :: ls_rk_integrator  !< Low Storage Runge-Kutta integrator.
-  type(tvd_runge_kutta_integrator)         :: tvd_rk_integrator !< TVD Runge-Kutta integrator.
+  type(integrator_runge_kutta_tvd)         :: tvd_rk_integrator !< TVD Runge-Kutta integrator.
   ! Auxiliary variables
   integer(I_P), parameter        :: max_rk_stages=5 !< Max RK stages used to init high order multi-step solver.
   type(oscillation)              :: oscillator      !< Oscillation field.

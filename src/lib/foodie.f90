@@ -73,7 +73,7 @@ use foodie_integrator_euler_explicit, only : integrator_euler_explicit
 use foodie_integrator_leapfrog, only : integrator_leapfrog
 use foodie_integrator_runge_kutta_emd, only : integrator_runge_kutta_emd
 use foodie_integrator_runge_kutta_low_storage, only : integrator_runge_kutta_ls
-use foodie_integrator_tvd_runge_kutta, only : tvd_runge_kutta_integrator
+use foodie_integrator_runge_kutta_tvd, only : integrator_runge_kutta_tvd
 
 implicit none
 private
@@ -88,7 +88,7 @@ public :: integrator_leapfrog
 public :: integrator_runge_kutta_emd
 public :: integrator_runge_kutta_ls
 public :: foodie_integrator
-public :: tvd_runge_kutta_integrator
+public :: integrator_runge_kutta_tvd
 
 contains
   function foodie_integrator(scheme, steps, stages, tolerance, nu, alpha) result(integrator)
@@ -179,6 +179,18 @@ contains
     if (present(stages)) then
       select type(integrator)
       type is(integrator_runge_kutta_ls)
+        call integrator%init(stages=stages)
+      endselect
+    else
+      call integrator%trigger_error(error=ERROR_MISSING_STAGES_NUMBER,                                  &
+                                    error_message='missing stages number for initializing integrator!', &
+                                    is_severe=.true.)
+    endif
+  case('runge_kutta_tvd')
+    allocate(integrator_runge_kutta_tvd :: integrator)
+    if (present(stages)) then
+      select type(integrator)
+      type is(integrator_runge_kutta_tvd)
         call integrator%init(stages=stages)
       endselect
     else
