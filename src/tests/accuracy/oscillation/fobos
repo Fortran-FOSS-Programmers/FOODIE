@@ -8,19 +8,14 @@ modes = gnu gnu-debug gnu-coverage
 [common-variables]
 $CSTATIC_GNU          = -cpp -c -frealloc-lhs
 $CSTATIC_INT          = -cpp -c -assume realloc_lhs
-$DEBUG_GNU            = -O0 -g3 -Warray-bounds -Wcharacter-truncation -Wline-truncation -Wimplicit-interface -Wimplicit-procedure -Wunderflow -Wuninitialized -fcheck=all -fmodule-private -ffree-line-length-132 -fimplicit-none -fbacktrace -fdump-core -finit-real=nan -std=f2008 -fall-intrinsics
+$DEBUG_GNU            = -Og -g3 -Warray-bounds -Wcharacter-truncation -Wline-truncation -Wimplicit-interface -Wimplicit-procedure -Wunderflow -Wuninitialized -fcheck=all -fmodule-private -ffree-line-length-132 -fimplicit-none -fbacktrace -fdump-core -finit-real=nan -std=f2008 -fall-intrinsics
 $DEBUG_INT            = -O0 -debug all -check all -warn all -extend-source 132 -traceback -gen-interfaces -fp-stack-check -fstack-protector-all -ftrapuv -no-ftz -std08
 $OPTIMIZE             = -O2
-$DEPENDS_GNU          = ./fobos:foodie-static-gnu ./src/third_party/fobos:flap-static-gnu ./src/third_party/fobos:pyplot-fortran-static-gnu ./src/third_party/fobos:wenoof-static-gnu
-$DEPENDS_GNU_DEB      = ./fobos:foodie-static-gnu-debug ./src/third_party/fobos:flap-static-gnu-debug ./src/third_party/fobos:pyplot-fortran-static-gnu-debug ./src/third_party/fobos:wenoof-static-gnu-debug
-$DEPENDS_GNU_COV      = ./fobos:foodie-static-gnu-coverage ./src/third_party/fobos:flap-static-gnu-debug ./src/third_party/fobos:pyplot-fortran-static-gnu-debug ./src/third_party/fobos:wenoof-static-gnu-debug
-$DEPENDS_INT          = ./fobos:foodie-static-intel ./src/third_party/fobos:flap-static-intel ./src/third_party/fobos:pyplot-fortran-static-intel ./src/third_party/fobos:wenoof-static-intel
-$DEPENDS_INT_DEB      = ./fobos:foodie-static-intel-debug ./src/third_party/fobos:flap-static-intel-debug ./src/third_party/fobos:pyplot-fortran-static-intel-debug ./src/third_party/fobos:wenoof-static-intel-debug
-$DEPENDS_GNU_PURE     = ./fobos:foodie-static-gnu-pure ./src/third_party/fobos:flap-static-gnu ./src/third_party/fobos:pyplot-fortran-static-gnu ./src/third_party/fobos:wenoof-static-gnu
-$DEPENDS_GNU_DEB_PURE = ./fobos:foodie-static-gnu-debug-pure ./src/third_party/fobos:flap-static-gnu-debug ./src/third_party/fobos:pyplot-fortran-static-gnu-debug ./src/third_party/fobos:wenoof-static-gnu-debug
-$DEPENDS_GNU_COV_PURE = ./fobos:foodie-static-gnu-coverage-pure ./src/third_party/fobos:flap-static-gnu-debug ./src/third_party/fobos:pyplot-fortran-static-gnu-debug ./src/third_party/fobos:wenoof-static-gnu-debug
-$DEPENDS_INT_PURE     = ./fobos:foodie-static-intel-pure ./src/third_party/fobos:flap-static-intel ./src/third_party/fobos:pyplot-fortran-static-intel ./src/third_party/fobos:wenoof-static-intel
-$DEPENDS_INT_DEB_PURE = ./fobos:foodie-static-intel-debug-pure ./src/third_party/fobos:flap-static-intel-debug ./src/third_party/fobos:pyplot-fortran-static-intel-debug ./src/third_party/fobos:wenoof-static-intel-debug
+$EXDIRS               = src/tests/parallel/ src/tests/regression/
+                        PENF/src/tests/
+                        FACE/src/tests/ FACE/src/third_party/
+                        FLAP/src/tests/ FLAP/src/third_party/
+                        WenOOF/src/tests/ WenOOF/src/third_party/
 
 # main modes
 [gnu]
@@ -28,7 +23,6 @@ help     = Build test in release mode with GNU gfortran
 compiler = gnu
 cflags   = $CSTATIC_GNU $OPTIMIZE
 lflags   = $OPTIMIZE
-dependon = $DEPENDS_GNU
 template = template-common
 
 [gnu-debug]
@@ -36,7 +30,6 @@ help     = Build test in debug mode with GNU gfortran
 compiler = gnu
 cflags   = $CSTATIC_GNU $DEBUG_GNU
 lflags   = $DEBUG_GNU
-dependon = $DEPENDS_GNU_DEB
 template = template-common
 
 [gnu-coverage]
@@ -45,7 +38,6 @@ compiler = gnu
 cflags   = $CSTATIC_GNU $OPTIMIZE
 lflags   = $OPTIMIZE
 coverage = True
-dependon = $DEPENDS_GNU_COV
 template = template-common
 
 [intel]
@@ -53,7 +45,6 @@ help     = Build test in release mode with Intel Fortran
 compiler = intel
 cflags   = $CSTATIC_INT $OPTIMIZE
 lflags   = $OPTIMIZE
-dependon = $DEPENDS_INT
 template = template-common
 
 [intel-debug]
@@ -61,7 +52,6 @@ help     = Build test in debug mode with Intel Fortran
 compiler = intel
 cflags   = $CSTATIC_INT $DEBUG_INT
 lflags   = $DEBUG_INT
-dependon = $DEPENDS_INT_DEB
 template = template-common
 
 [errors-analysis]
@@ -69,7 +59,6 @@ help            = Build test in release mode (for errors analysis) with GNU gfor
 compiler        = gnu
 cflags          = $CSTATIC_GNU $OPTIMIZE
 lflags          = $OPTIMIZE
-dependon        = $DEPENDS_GNU
 cflags_heritage = True
 mod_dir         = mod
 obj_dir         = obj
@@ -86,7 +75,6 @@ compiler = gnu
 cflags   = $CSTATIC_GNU $OPTIMIZE
 lflags   = $OPTIMIZE
 preproc  = -DPURE
-dependon = $DEPENDS_GNU_PURE
 template = template-common
 
 [gnu-debug-pure]
@@ -95,7 +83,6 @@ compiler = gnu
 cflags   = $CSTATIC_GNU $DEBUG_GNU
 lflags   = $DEBUG_GNU
 preproc  = -DPURE
-dependon = $DEPENDS_GNU_DEB_PURE
 template = template-common
 
 [gnu-coverage-pure]
@@ -105,7 +92,6 @@ cflags   = $CSTATIC_GNU $OPTIMIZE
 lflags   = $OPTIMIZE
 preproc  = -DPURE
 coverage = True
-dependon = $DEPENDS_GNU_COV_PURE
 template = template-common
 
 [intel-pure]
@@ -114,7 +100,6 @@ compiler = intel
 cflags   = $CSTATIC_INT $OPTIMIZE
 lflags   = $OPTIMIZE
 preproc  = -DPURE
-dependon = $DEPENDS_INT_PURE
 template = template-common
 
 [intel-debug-pure]
@@ -123,7 +108,6 @@ compiler = intel
 cflags   = $CSTATIC_INT $DEBUG_INT
 lflags   = $DEBUG_INT
 preproc  = -DPURE
-dependon = $DEPENDS_INT_DEB_PURE
 template = template-common
 
 # templates
@@ -132,7 +116,9 @@ cflags_heritage = True
 build_dir       = build/tests/accuracy/oscillation/
 mod_dir         = mod
 obj_dir         = obj
-src             = src/tests/accuracy/oscillation/
+src             = src/
+target          = src/tests/accuracy/oscillation/oscillation.f90
+exclude_dirs    = $EXDIRS
 colors          = True
 quiet           = False
 log             = True
