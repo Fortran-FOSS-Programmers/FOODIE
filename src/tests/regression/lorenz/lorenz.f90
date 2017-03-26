@@ -9,7 +9,7 @@ use flap, only : command_line_interface
 use foodie, only : integrator_adams_bashforth, &
                    integrator_euler_explicit, &
                    integrator_leapfrog, &
-                   ls_runge_kutta_integrator, &
+                   integrator_runge_kutta_ls, &
                    tvd_runge_kutta_integrator
 use IR_Precision, only : R_P, I_P, FR_P, str
 use pyplot_module, only :  pyplot
@@ -236,7 +236,7 @@ contains
   !---------------------------------------------------------------------------------------------------------------------------------
   !< Test explicit low storage Runge-Kutta class of ODE solvers.
   !---------------------------------------------------------------------------------------------------------------------------------
-  type(ls_runge_kutta_integrator) :: rk_integrator         !< Runge-Kutta integrator.
+  type(integrator_runge_kutta_ls) :: rk_integrator         !< Runge-Kutta integrator.
   integer, parameter              :: rk_stages=5           !< Runge-Kutta stages number.
   integer, parameter              :: registers=2           !< Runge-Kutta stages number.
   type(lorenz)                    :: rk_stage(1:registers) !< Runge-Kutta stages.

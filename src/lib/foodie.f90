@@ -72,7 +72,7 @@ use foodie_integrator_backward_differentiation_formula, only : integrator_back_d
 use foodie_integrator_euler_explicit, only : integrator_euler_explicit
 use foodie_integrator_leapfrog, only : integrator_leapfrog
 use foodie_integrator_runge_kutta_emd, only : integrator_runge_kutta_emd
-use foodie_integrator_low_storage_runge_kutta, only : ls_runge_kutta_integrator
+use foodie_integrator_runge_kutta_low_storage, only : integrator_runge_kutta_ls
 use foodie_integrator_tvd_runge_kutta, only : tvd_runge_kutta_integrator
 
 implicit none
@@ -84,10 +84,10 @@ public :: integrator_adams_bashforth_moulton
 public :: integrator_adams_moulton
 public :: integrator_back_df
 public :: integrator_euler_explicit
-public :: integrator_runge_kutta_emd
-public :: foodie_integrator
 public :: integrator_leapfrog
-public :: ls_runge_kutta_integrator
+public :: integrator_runge_kutta_emd
+public :: integrator_runge_kutta_ls
+public :: foodie_integrator
 public :: tvd_runge_kutta_integrator
 
 contains
@@ -154,6 +154,14 @@ contains
                                     error_message='missing steps number for initializing integrator!', &
                                     is_severe=.true.)
     endif
+  case('euler_explicit')
+    allocate(integrator_euler_explicit :: integrator)
+  case('leapfrog')
+    allocate(integrator_leapfrog :: integrator)
+    select type(integrator)
+    type is(integrator_leapfrog)
+      call integrator%init(nu=nu, alpha=alpha)
+    endselect
   case('runge_kutta_emd')
     allocate(integrator_runge_kutta_emd :: integrator)
     if (present(stages)) then
@@ -166,14 +174,18 @@ contains
                                     error_message='missing stages number for initializing integrator!', &
                                     is_severe=.true.)
     endif
-  case('euler_explicit')
-    allocate(integrator_euler_explicit :: integrator)
-  case('leapfrog')
-    allocate(integrator_leapfrog :: integrator)
-    select type(integrator)
-    type is(integrator_leapfrog)
-      call integrator%init(nu=nu, alpha=alpha)
-    endselect
+  case('runge_kutta_ls')
+    allocate(integrator_runge_kutta_ls :: integrator)
+    if (present(stages)) then
+      select type(integrator)
+      type is(integrator_runge_kutta_ls)
+        call integrator%init(stages=stages)
+      endselect
+    else
+      call integrator%trigger_error(error=ERROR_MISSING_STAGES_NUMBER,                                  &
+                                    error_message='missing stages number for initializing integrator!', &
+                                    is_severe=.true.)
+    endif
   endselect
   endfunction foodie_integrator
 endmodule foodie

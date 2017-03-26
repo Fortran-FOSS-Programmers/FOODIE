@@ -1,6 +1,6 @@
 !< FOODIE integrator: provide an explicit class of low storage Runge-Kutta schemes, from 1st to 4th order accurate.
 
-module foodie_integrator_low_storage_runge_kutta
+module foodie_integrator_runge_kutta_low_storage
 !< FOODIE integrator: provide an explicit class of low storage Runge-Kutta schemes, from 1st to 4th order accurate.
 !<
 !< The integrators provided have the low storage property allowing for an efficient use of the memory.
@@ -148,54 +148,97 @@ module foodie_integrator_low_storage_runge_kutta
 !< Busch, Journal of Computational Physics, vol. 231, 2012, pp. 364--372.
 
 use foodie_adt_integrand, only : integrand
+use foodie_error_codes, only : ERROR_BAD_STAGES_NUMBER
 use foodie_kinds, only : I_P, I8P, R_P
+use foodie_integrator_object, only : integrator_object
 use foodie_utils, only : is_admissible
 
 implicit none
 private
-public :: ls_runge_kutta_integrator
+public :: integrator_runge_kutta_ls
 
 integer(I_P),      parameter :: registers=2                    !< Registers used (2N schemes).
 character(len=99), parameter :: supported_stages='1,5-7,12-14' !< List of supported stages number. Valid format is `1-2,4,9-23...`.
 integer(I_P),      parameter :: min_ss=1                       !< Minimum number of stages supported.
 integer(I_P),      parameter :: max_ss=14                      !< Maximum number of stages supported.
 
-type :: ls_runge_kutta_integrator
+type, extends(integrator_object) :: integrator_runge_kutta_ls
   !< FOODIE integrator: provide an explicit class of low storage Runge-Kutta schemes, from 1st to 4th order accurate.
   !<
   !< @note The integrator must be created or initialized (initialize the RK coefficients) before used.
-  !<
-  !< ### List of errors status
-  !<+ error=0 => no error;
-  !<+ error=1 => bad (unsupported) number of required stages;
   private
   integer(I_P)           :: stages=0 !< Number of stages.
   real(R_P), allocatable :: A(:)     !< Low storage *A* coefficients.
   real(R_P), allocatable :: B(:)     !< Low storage *B* coefficients.
   real(R_P), allocatable :: C(:)     !< Low storage *C* coefficients.
-  integer(I_P)           :: error=0  !< Error status flag: trap occurrences of errors.
   contains
-    private
-    procedure, pass(self), public :: init           !< Initialize (create) the integrator.
-    procedure, pass(self), public :: destroy        !< Destroy the integrator.
-    procedure, pass(self), public :: integrate      !< Integrate integrand field.
-    procedure, nopass,     public :: used_registers !< Return the number of registers used.
-    procedure, nopass,     public :: min_stages     !< Return the minimum number of stages supported.
-    procedure, nopass,     public :: max_stages     !< Return the maximum number of stages supported.
-    procedure, nopass,     public :: is_supported   !< Check if the queried number of stages is supported or not.
-endtype ls_runge_kutta_integrator
+    ! deferred methods
+    procedure, pass(self) :: description          !< Return pretty-printed object description.
+    procedure, pass(lhs)  :: integr_assign_integr !< Operator `=`.
+    ! public methods
+    procedure, pass(self) :: destroy        !< Destroy the integrator.
+    procedure, pass(self) :: init           !< Initialize (create) the integrator.
+    procedure, pass(self) :: integrate      !< Integrate integrand field.
+    procedure, nopass     :: is_supported   !< Check if the queried number of stages is supported or not.
+    procedure, nopass     :: min_stages     !< Return the minimum number of stages supported.
+    procedure, nopass     :: max_stages     !< Return the maximum number of stages supported.
+    procedure, nopass     :: used_registers !< Return the number of registers used.
+endtype integrator_runge_kutta_ls
+
 contains
+  ! deferred methods
+  pure function description(self, prefix) result(desc)
+  !< Return a pretty-formatted object description.
+  class(integrator_runge_kutta_ls), intent(in)           :: self             !< Integrator.
+  character(*),                     intent(in), optional :: prefix           !< Prefixing string.
+  character(len=:), allocatable                          :: desc             !< Description.
+  character(len=:), allocatable                          :: prefix_          !< Prefixing string, local variable.
+  character(len=1), parameter                            :: NL=new_line('a') !< New line character.
+
+  prefix_ = '' ; if (present(prefix)) prefix_ = prefix
+  desc = ''
+  desc = desc//prefix_//'Low storage (2-registers) Runge-Kutta multi-stage schemes class'//NL
+  desc = desc//prefix_//'  Supported stages numbers: ['//trim(adjustl(supported_stages))//']'
+  endfunction description
+
+  pure subroutine integr_assign_integr(lhs, rhs)
+  !< Operator `=`.
+  class(integrator_runge_kutta_ls), intent(inout) :: lhs !< Left hand side.
+  class(integrator_object),         intent(in)    :: rhs !< Right hand side.
+
+  call lhs%assign_abstract(rhs=rhs)
+  select type(rhs)
+  class is (integrator_runge_kutta_ls)
+                          lhs%stages = rhs%stages
+    if (allocated(rhs%A)) lhs%A      = rhs%A
+    if (allocated(rhs%B)) lhs%B      = rhs%B
+    if (allocated(rhs%C)) lhs%C      = rhs%C
+  endselect
+  endsubroutine integr_assign_integr
+
   ! public methods
-  elemental subroutine init(self, stages)
+  elemental subroutine destroy(self)
+  !< Destroy the integrator.
+  class(integrator_runge_kutta_ls), intent(inout) :: self !< Integrator.
+
+  call self%destroy_abstract
+  self%stages = 0
+  if (allocated(self%A)) deallocate(self%A)
+  if (allocated(self%B)) deallocate(self%B)
+  if (allocated(self%C)) deallocate(self%C)
+  endsubroutine destroy
+
+  subroutine init(self, stages)
   !< Create the actual RK integrator: initialize the Butcher' low storage table coefficients.
-  class(ls_runge_kutta_integrator), intent(INOUT) :: self   !< RK integrator.
-  integer(I_P),                     intent(IN)    :: stages !< Number of stages used.
+  class(integrator_runge_kutta_ls), intent(inout) :: self   !< Integrator.
+  integer(I_P),                     intent(in)    :: stages !< Number of stages used.
 
   if (self%is_supported(stages)) then
+    call self%destroy
     self%stages = stages
-    if (allocated(self%A)) deallocate(self%A) ; allocate(self%A(1:stages)) ; self%A = 0._R_P
-    if (allocated(self%B)) deallocate(self%B) ; allocate(self%B(1:stages)) ; self%B = 0._R_P
-    if (allocated(self%C)) deallocate(self%C) ; allocate(self%C(1:stages)) ; self%C = 0._R_P
+    allocate(self%A(1:stages)) ; self%A = 0._R_P
+    allocate(self%B(1:stages)) ; self%B = 0._R_P
+    allocate(self%C(1:stages)) ; self%C = 0._R_P
     select case(stages)
     case(1) ! RK(1,1) Forward-Euler
       self%B(1) = 1._R_P
@@ -275,38 +318,27 @@ contains
       self%A(13) = -0.9514200470875948_R_P ; self%B(13) = 0.0780348340049386_R_P ; self%C(13) = 0.8627060376969976_R_P
       self%A(14) = -7.1151571693922548_R_P ; self%B(14) = 5.5059777270269628_R_P ; self%C(14) = 0.8734213127600976_R_P
     endselect
-    self%error = 0
   else
-    ! bad (unsupported) number of required stages
-    self%error = 1
+    call self%trigger_error(error=ERROR_BAD_STAGES_NUMBER,                                  &
+                            error_message='bad (unsupported) number of Runge-Kutta stages', &
+                            is_severe=.true.)
   endif
   endsubroutine init
-
-  elemental subroutine destroy(self)
-  !< Destroy the integrator.
-  class(ls_runge_kutta_integrator), intent(INOUT) :: self !< Integrator.
-
-  self%stages = -1
-  if (allocated(self%A)) deallocate(self%A)
-  if (allocated(self%B)) deallocate(self%B)
-  if (allocated(self%C)) deallocate(self%C)
-  self%error = 0
-  endsubroutine destroy
 
   subroutine integrate(self, U, stage, Dt, t)
   !< Integrate field with explicit low storage Runge-Kutta scheme.
   !<
   !< @note This method can be used **after** the integrator is created (i.e. the RK coefficients are initialized).
-  class(ls_runge_kutta_integrator), intent(IN)    :: self               !< Actual RK integrator.
-  class(integrand),                 intent(INOUT) :: U                  !< Field to be integrated.
-  class(integrand),                 intent(INOUT) :: stage(1:registers) !< Runge-Kutta registers.
-  real(R_P),                        intent(IN)    :: Dt                 !< Time step.
-  real(R_P),                        intent(IN)    :: t                  !< Time.
+  class(integrator_runge_kutta_ls), intent(in)    :: self               !< Integrator.
+  class(integrand),                 intent(inout) :: U                  !< Field to be integrated.
+  class(integrand),                 intent(inout) :: stage(1:registers) !< Runge-Kutta registers.
+  real(R_P),                        intent(in)    :: Dt                 !< Time step.
+  real(R_P),                        intent(in)    :: t                  !< Time.
   integer(I_P)                                    :: s                  !< First stages counter.
 
   ! computing stages
   stage(1) = U
-  stage(2) = U*0._R_P
+  stage(2) = U * 0._R_P
   do s=1, self%stages
     stage(2) = stage(2) * self%A(s) + stage(1)%t(t=t + self%C(s) * Dt) * Dt
     stage(1) = stage(1) + stage(2) * self%B(s)
@@ -314,12 +346,13 @@ contains
   U = stage(1)
   endsubroutine integrate
 
-  pure function used_registers()
-  !< Return the number of registers used.
-  integer(I_P) :: used_registers !< Number of registers used.
+  elemental function is_supported(stages)
+  !< Check if the queried number of stages is supported or not.
+  integer(I_P), intent(in) :: stages       !< Number of stages used.
+  logical                  :: is_supported !< Is true is the stages number is in *supported_stages*.
 
-  used_registers = registers
-  endfunction used_registers
+  is_supported = is_admissible(n=stages, adm_range=trim(supported_stages))
+  endfunction is_supported
 
   pure function min_stages()
   !< Return the minimum number of stages supported.
@@ -335,11 +368,10 @@ contains
   max_stages = max_ss
   endfunction max_stages
 
-  elemental function is_supported(stages)
-  !< Check if the queried number of stages is supported or not.
-  integer(I_P), intent(IN) :: stages       !< Number of stages used.
-  logical                  :: is_supported !< Is true is the stages number is in *supported_stages*.
+  pure function used_registers()
+  !< Return the number of registers used.
+  integer(I_P) :: used_registers !< Number of registers used.
 
-  is_supported = is_admissible(n=stages, adm_range=trim(supported_stages))
-  endfunction is_supported
-endmodule foodie_integrator_low_storage_runge_kutta
+  used_registers = registers
+  endfunction used_registers
+endmodule foodie_integrator_runge_kutta_low_storage
