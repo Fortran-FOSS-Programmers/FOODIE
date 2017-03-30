@@ -76,8 +76,12 @@ FOODIE is aimed to be a KISS-pure-Fortran library for integrating Ordinary Diffe
             + [x] unfiltered leapfrog, 2nd order accurate, mostly unstable, see [4];
             + [x] Robert-Asselin filtered leapfrog, 1st order accurate, see [4, 5, 6];
             + [x] Robert-Asselin-Williams filtered leapfrog, 3rd order accurate, see [5, 6];
+        + [x] [Linear Multistep Methods SSP](http://fortran-foss-programmers.github.io/FOODIE/module/foodie_integrator_lmm_ssp.html) schemes see [16]:
+            + [x] 3 steps, 2nd order accurate;
+            + [x] 4 steps, 3rd order accurate;
+            + [x] 5 steps, 3rd order accurate;
         + [ ] Runge-Kutta schemes:
-            + [ ] [low-storage](http://fortran-foss-programmers.github.io/FOODIE/module/foodie_integrator_low_storage_runge_kutta.html) schemes, see [1, 2, 3]:
+            + [ ] [low-storage](http://fortran-foss-programmers.github.io/FOODIE/module/foodie_integrator_runge_kutta_low_storage.html) schemes, see [1, 2, 3]:
                 + [x] 1 stage, namely the forward explicit Euler scheme, 1st order accurate;
                 + [ ] 2 stages;
                 + [ ] 3 stages;
@@ -88,13 +92,13 @@ FOODIE is aimed to be a KISS-pure-Fortran library for integrating Ordinary Diffe
                 + [x] 12 stages, 4th order accurate, 2N registers, see [10];
                 + [x] 13 stages, 4th order accurate, 2N registers, see [10];
                 + [x] 14 stages, 4th order accurate, 2N registers, see [10];
-            + [ ] [TVD/SSP](http://fortran-foss-programmers.github.io/FOODIE/module/foodie_integrator_tvd_runge_kutta.html) schemes, see [1]:
+            + [ ] [TVD/SSP](http://fortran-foss-programmers.github.io/FOODIE/module/foodie_integrator_kutta_tvd_runge.html) schemes, see [1]:
                 + [x] 1 stage, namely the forward explicit Euler scheme, 1st order accurate;
                 + [x] 2 stages, 2nd order accurate;
                 + [x] 3 stages, 3rd order accurate;
                 + [ ] 4 stages;
                 + [x] 5 stages, 4th order accurate;
-            + [ ] [embedded (adaptive)](http://fortran-foss-programmers.github.io/FOODIE/module/foodie_integrator_emd_runge_kutta.html) schemes:
+            + [ ] [embedded (adaptive)](http://fortran-foss-programmers.github.io/FOODIE/module/foodie_integrator_runge_kutta_embeddedd.html) schemes:
                 + [x] Heun-Euler, 2 stages, 2nd order accurate;
                 + [ ] Runge-Kutta-Fehlberg, 5 stages, 4th order accurate;
                 + [x] Runge-Kutta-Cash-Karp, 6 stages, 5th order accurate, see [13];
@@ -164,6 +168,8 @@ Any feature request is welcome.
 [14] *A New Embedded Pair of Runge-Kutta Formulas of orders 5 and 6*, M. Calvo, J.I. Montijano, L. Randez, Computers & Mathematics with Applications, Volume 20, Issue 1, 1990, Pages 15--24, ISSN 0898-1221, http://dx.doi.org/10.1016/0898-1221(90)90064-Q.
 
 [15] *A tenth-order Runge-Kutta method with error estimate*, Feagin, T., Proceedings of the IAENG Conf. on Scientific Computing. 2007.
+
+[16] *Strong Stability Preserving Runge-Kutta and Multistep Time Discretizations*, S. Gottlieb, D. Ketcheson, C.W. Shu, 2011, 978-981-4289-26-9, doi:10.1142/7498, World Scientific Publishing Co. Pte. Ltd.
 
 Go to [Top](#top)
 

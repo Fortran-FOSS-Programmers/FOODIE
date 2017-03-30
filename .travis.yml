@@ -1,7 +1,4 @@
-language: python
-
-python:
-  - 2.7
+language: generic
 
 sudo: false
 
@@ -17,17 +14,20 @@ addons:
     sources:
       - ubuntu-toolchain-r-test
     packages:
-      - gfortran-4.9
+      - gfortran-6
       - binutils
       - python-pip
-      - graphviz      
+      - graphviz
 
 env:
   global:
-    - SCRIPT="FoBiS.py rule -ex makecoverage"
+    - MAKECOVERAGE="FoBiS.py rule -ex makecoverage"
+    - MAKEDOC="./scripts/makedoc.sh Fortran-FOSS-Programmers/FOODIE"
+    - CLEAN="FoBiS.py rule -ex clean"
+    - MAKETAR="FoBiS.py rule -ex maketar"
 
 before_install:
-  - git submodule update --init --recursive
+  - git submodule update --init
 
 install:
   - |
@@ -35,20 +35,37 @@ install:
       mkdir "$HOME/.local/bin"
     fi
   - export PATH="$HOME/.local/bin:$PATH"
-  - export FC=/usr/bin/gfortran-4.9
-  - ln -fs /usr/bin/gfortran-4.9 "$HOME/.local/bin/gfortran" && gfortran --version
-  - ls -l /usr/bin/gfortran-4.9
-  - ln -fs /usr/bin/gcov-4.9 "$HOME/.local/bin/gcov" && gcov --version
-  - pip install --upgrade pygooglechart
-  - pip install --upgrade graphviz
-  - pip install --upgrade FoBiS.py
-  - pip install --upgrade markdown-checklist 
-  - pip install --upgrade ford
+  - export FC=/usr/bin/gfortran-6
+  - ln -fs /usr/bin/gfortran-6 "$HOME/.local/bin/gfortran" && gfortran --version
+  - ls -l /usr/bin/gfortran-6
+  - ln -fs /usr/bin/gcov-6 "$HOME/.local/bin/gcov" && gcov --version
+  - pip install --user --upgrade pygooglechart
+  - pip install --user --upgrade graphviz
+  - pip install --user --upgrade FoBiS.py
+  - pip install --user --upgrade markdown-checklist 
+  - pip install --user --upgrade ford
 
 script:
-  - $SCRIPT
+  - $MAKECOVERAGE
 
 after_success:
-  - cd $TRAVIS_BUILD_DIR
-  - cd build/lib/obj/ ; bash <(curl -s https://codecov.io/bash) ; cd -
-  - ./makedoc.sh Fortran-FOSS-Programmers/FOODiE
+  - find . -name '*.gcno' -print
+  - bash <(curl -s https://codecov.io/bash)
+  - $MAKEDOC
+
+before_deploy:
+  - $CLEAN
+  - $MAKETAR
+  - mv FOODIE.tar.gz FOODIE-$TRAVIS_TAG.tar.gz
+
+deploy:
+  provider: releases
+  api_key:
+    secure: QTsZ8jIN5/f15EW/L93u7Yn0fUlX1UaF6qCLfiWfo0jDiK0FGkIo4B+MeBYbZs+HphMxbhDv7v+A1dpcA8w9RlkMX47NsGT4Nu7bu5AzABsjnFPUKbUux4ktoYkPAxXujcvT1fTYrv2bgH0ualtPnvU9CDT3PRfUpZND+bM0UIMyo40ojOec2v3opYfGYvbksosAVKTg15cxzxGgGVrZb+DWfnILgrETieULL1Tvp8eZG9wY9Kja65JCzbUVBrcGIThz5iZqO8rAi6Opl7cgpP7W2qRotNRXQjQc1KsV+HH0w5eTCUwqUZOJKuucZrUjYiu762LYMYfLGxs4F2Wy2aXPqcTImVIG5W9tFN4xKsL46Ed7PZdCHWZJFCFx89znEosZnCFmSp445L88Q1/dbluk/oP+TxYi6z61QEstSB2T5r0Pv/rC2PGqoBlYyCGIZZdBzzXNSW2gaUEkhNgOU1Q/K6yFpjy+GUxvcGugroWsHBXvoSMswzC+IhYUvjSXkiFM5AkXbJrb8/mIc25QehUrvO5Fe/A67o2HuM6aHZDBbGyP8876k63o1H82JkW0fSfCrcWu302eqCu5YwrZJ3I20bepZEbj5Wh50Bz6n8c0ZsFQL1GUxAA+3KBtWp7wDHK9WYsKrdc2FFGtfZgQ7X5iiY01/i6ZCqiUO4vASWg=
+  file: 
+    - FOODIE-$TRAVIS_TAG.tar.gz
+    - ./scripts/install.sh
+  skip_cleanup: true
+  overwrite: true
+  on:
+    tags: true

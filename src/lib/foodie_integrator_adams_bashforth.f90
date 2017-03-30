@@ -36,9 +36,9 @@ implicit none
 private
 public :: integrator_adams_bashforth
 
-character(len=99), parameter :: supported_steps='1-16'       !< List of supported steps number. Valid format is `1-2,4,9-23...`.
-integer(I_P),      parameter :: min_ss=1                     !< Minimum number of steps supported.
-integer(I_P),      parameter :: max_ss=16                    !< Maximum number of steps supported.
+character(len=99), parameter :: supported_steps='1-16' !< List of supported steps number. Valid format is `1-2,4,9-23...`.
+integer(I_P),      parameter :: min_ss=1               !< Minimum number of steps supported.
+integer(I_P),      parameter :: max_ss=16              !< Maximum number of steps supported.
 
 type, extends(integrator_object) :: integrator_adams_bashforth
   !< FOODIE integrator: provide an explicit class of Adams-Bashforth multi-step schemes, from 1st to 16th order accurate.
@@ -93,7 +93,7 @@ contains
   ! public methods
   elemental subroutine destroy(self)
   !< Destroy the integrator.
-  class(integrator_adams_bashforth), intent(INOUT) :: self !< Integrator.
+  class(integrator_adams_bashforth), intent(inout) :: self !< Integrator.
 
   call self%destroy_abstract
   self%steps = 0
