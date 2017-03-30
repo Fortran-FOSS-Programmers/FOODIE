@@ -352,11 +352,12 @@ contains
   if (allocated(self%gamm)) deallocate(self%gamm)
   endsubroutine destroy
 
-  subroutine init(self, stages, tolerance)
+  subroutine init(self, stages, tolerance, stop_on_fail)
   !< Create the actual RK integrator: initialize the Butcher' table coefficients.
-  class(integrator_runge_kutta_emd), intent(inout) :: self      !< Integrator.
-  integer(I_P),                      intent(in)    :: stages    !< Number of stages used.
-  real(R_P), optional,               intent(in)    :: tolerance !< Tolerance on the local truncation error (default 0.01).
+  class(integrator_runge_kutta_emd), intent(inout)        :: self         !< Integrator.
+  integer(I_P),                      intent(in)           :: stages       !< Number of stages used.
+  real(R_P),                         intent(in), optional :: tolerance    !< Tolerance on the local truncation error (default 0.01).
+  logical,                           intent(in), optional :: stop_on_fail !< Stop execution if initialization fail.
 
   if (self%is_supported(stages)) then
     call self%destroy
@@ -602,7 +603,7 @@ contains
   else
     call self%trigger_error(error=ERROR_BAD_STAGES_NUMBER,                                  &
                             error_message='bad (unsupported) number of Runge-Kutta stages', &
-                            is_severe=.true.)
+                            is_severe=stop_on_fail)
   endif
   endsubroutine init
 

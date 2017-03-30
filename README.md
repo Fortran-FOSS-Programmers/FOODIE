@@ -98,7 +98,7 @@ FOODIE is aimed to be a KISS-pure-Fortran library for integrating Ordinary Diffe
                 + [x] 3 stages, 3rd order accurate;
                 + [ ] 4 stages;
                 + [x] 5 stages, 4th order accurate;
-            + [ ] [embedded (adaptive)](http://fortran-foss-programmers.github.io/FOODIE/module/foodie_integrator_runge_kutta_emd.html) schemes:
+            + [ ] [embedded (adaptive)](http://fortran-foss-programmers.github.io/FOODIE/module/foodie_integrator_runge_kutta_embeddedd.html) schemes:
                 + [x] Heun-Euler, 2 stages, 2nd order accurate;
                 + [ ] Runge-Kutta-Fehlberg, 5 stages, 4th order accurate;
                 + [x] Runge-Kutta-Cash-Karp, 6 stages, 5th order accurate, see [13];
