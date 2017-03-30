@@ -71,6 +71,7 @@ use foodie_integrator_adams_moulton, only : integrator_adams_moulton
 use foodie_integrator_backward_differentiation_formula, only : integrator_back_df
 use foodie_integrator_euler_explicit, only : integrator_euler_explicit
 use foodie_integrator_leapfrog, only : integrator_leapfrog
+use foodie_integrator_lmm_ssp, only : integrator_lmm_ssp
 use foodie_integrator_runge_kutta_emd, only : integrator_runge_kutta_emd
 use foodie_integrator_runge_kutta_low_storage, only : integrator_runge_kutta_ls
 use foodie_integrator_runge_kutta_tvd, only : integrator_runge_kutta_tvd
@@ -85,6 +86,7 @@ public :: integrator_adams_moulton
 public :: integrator_back_df
 public :: integrator_euler_explicit
 public :: integrator_leapfrog
+public :: integrator_lmm_ssp
 public :: integrator_runge_kutta_emd
 public :: integrator_runge_kutta_ls
 public :: foodie_integrator
@@ -162,6 +164,18 @@ contains
     type is(integrator_leapfrog)
       call integrator%init(nu=nu, alpha=alpha)
     endselect
+  case('lmm_ssp')
+    allocate(integrator_lmm_ssp :: integrator)
+    if (present(steps)) then
+      select type(integrator)
+      type is(integrator_lmm_ssp)
+        call integrator%init(steps=steps)
+      endselect
+    else
+      call integrator%trigger_error(error=ERROR_MISSING_STEPS_NUMBER,                                  &
+                                    error_message='missing steps number for initializing integrator!', &
+                                    is_severe=.true.)
+    endif
   case('runge_kutta_emd')
     allocate(integrator_runge_kutta_emd :: integrator)
     if (present(stages)) then
