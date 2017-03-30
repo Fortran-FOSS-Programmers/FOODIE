@@ -1,10 +1,8 @@
 !< Test FOODIE with the integration of Oscillation equations.
-module oscillation_test_t
-!-----------------------------------------------------------------------------------------------------------------------------------
-!< Oscillation test handler definition.
-!-----------------------------------------------------------------------------------------------------------------------------------
 
-!-----------------------------------------------------------------------------------------------------------------------------------
+module oscillation_test_t
+!< Oscillation test handler definition.
+
 use flap, only : command_line_interface
 use foodie, only : integrator_adams_bashforth,         &
                    integrator_adams_bashforth_moulton, &
@@ -12,24 +10,21 @@ use foodie, only : integrator_adams_bashforth,         &
                    integrator_back_df,                 &
                    integrator_euler_explicit,          &
                    integrator_leapfrog,                &
+                   integrator_lmm_ssp,                 &
                    integrator_runge_kutta_emd,         &
                    integrator_runge_kutta_ls,          &
                    integrator_runge_kutta_tvd
 use oscillation_t, only : oscillation
 use penf, only : I_P, R_P, FR_P, str, strz
 use pyplot_module, only :  pyplot
-!-----------------------------------------------------------------------------------------------------------------------------------
 
-!-----------------------------------------------------------------------------------------------------------------------------------
 implicit none
 private
 public :: oscillation_test
-!-----------------------------------------------------------------------------------------------------------------------------------
 
-!-----------------------------------------------------------------------------------------------------------------------------------
 integer,       parameter :: space_dimension=2                                !< Space dimensions.
 real(R_P),     parameter :: initial_state(1:space_dimension)=[0._R_P,1._R_P] !< Initial state.
-character(99), parameter :: solvers(1:11) = ["all                    ", &
+character(99), parameter :: solvers(1:12) = ["all                    ", &
                                              "adams-bashforth        ", &
                                              "adams-bashforth-moulton", &
                                              "adams-moulton          ", &
@@ -38,6 +33,7 @@ character(99), parameter :: solvers(1:11) = ["all                    ", &
                                              "euler                  ", &
                                              "leapfrog               ", &
                                              "leapfrog-raw           ", &
+                                             "lmm-ssp                ", &
                                              "ls-runge-kutta         ", &
                                              "tvd-runge-kutta        "]      !< List of available solvers.
 
@@ -69,18 +65,14 @@ type :: oscillation_test
     procedure, pass(self), private :: init    !< Initialize test: set Command Line Interface, parse it and check its validity.
     procedure, pass(self), private :: test    !< Perform the test.
 endtype oscillation_test
-!-----------------------------------------------------------------------------------------------------------------------------------
+
 contains
   ! Public methods
   subroutine execute(self)
-  !---------------------------------------------------------------------------------------------------------------------------------
   !< Execute test(s).
-  !---------------------------------------------------------------------------------------------------------------------------------
   class(oscillation_test), intent(inout) :: self !< Test.
   integer(I_P)                           :: s    !< Counter.
-  !---------------------------------------------------------------------------------------------------------------------------------
 
-  !---------------------------------------------------------------------------------------------------------------------------------
   call self%init
   if (trim(adjustl(self%solver))/='all') then
     call self%test(solver=self%solver)
@@ -90,30 +82,19 @@ contains
       call self%test(solver=self%solver)
     enddo
   endif
-  return
-  !---------------------------------------------------------------------------------------------------------------------------------
   endsubroutine execute
 
   ! Private methods
   subroutine init(self)
-  !---------------------------------------------------------------------------------------------------------------------------------
   !< Initialize test: set Command Line Interface, parse it and check its validity.
-  !---------------------------------------------------------------------------------------------------------------------------------
   class(oscillation_test), intent(inout) :: self !< Test.
-  !---------------------------------------------------------------------------------------------------------------------------------
 
-  !---------------------------------------------------------------------------------------------------------------------------------
   call set_cli
   call parse_cli
-  return
-  !---------------------------------------------------------------------------------------------------------------------------------
   contains
     subroutine set_cli()
-    !-------------------------------------------------------------------------------------------------------------------------------
     !< Set Command Line Interface.
-    !-------------------------------------------------------------------------------------------------------------------------------
 
-    !-------------------------------------------------------------------------------------------------------------------------------
     associate(cli => self%cli)
       call cli%init(progname    = 'oscillation',                                              &
                     authors     = 'Fortran-FOSS-Programmers',                                 &
@@ -136,18 +117,12 @@ contains
       call cli%add(switch='--output', help='Output files basename', required=.false., act='store', def='unset')
       call cli%add(switch='--errors_analysis', help='Peform errors analysis', required=.false., act='store_true', def='.false.')
     endassociate
-    return
-    !-------------------------------------------------------------------------------------------------------------------------------
     endsubroutine set_cli
 
     subroutine parse_cli()
-    !-------------------------------------------------------------------------------------------------------------------------------
     !< Parse Command Line Interface and check its validity.
-    !-------------------------------------------------------------------------------------------------------------------------------
     character(len=:), allocatable :: valid_solvers_list !< Pretty printed list of available solvers.
-    !-------------------------------------------------------------------------------------------------------------------------------
 
-    !-------------------------------------------------------------------------------------------------------------------------------
     call self%cli%parse(error=self%error)
     call self%cli%get(switch='-s', val=self%solver, error=self%error) ; if (self%error/=0) stop
     call self%cli%get(switch='--iterations', val=self%implicit_iterations, error=self%error) ; if (self%error/=0) stop
@@ -180,80 +155,59 @@ contains
         stop
       endif
     endif
-    return
-    !-------------------------------------------------------------------------------------------------------------------------------
     endsubroutine parse_cli
 
     function is_solver_valid()
-    !-------------------------------------------------------------------------------------------------------------------------------
     !< Verify if the selected solver is valid.
-    !-------------------------------------------------------------------------------------------------------------------------------
     logical      :: is_solver_valid !< Return true is the selected solver is available.
     integer(I_P) :: s               !< Counter.
-    !-------------------------------------------------------------------------------------------------------------------------------
 
-    !-------------------------------------------------------------------------------------------------------------------------------
     is_solver_valid = .false.
     do s=1, ubound(solvers, dim=1)
       is_solver_valid = (trim(adjustl(self%solver))==trim(adjustl(solvers(s))))
       if (is_solver_valid) exit
     enddo
-    return
-    !-------------------------------------------------------------------------------------------------------------------------------
     endfunction is_solver_valid
 
     function is_dt_valid()
-    !-------------------------------------------------------------------------------------------------------------------------------
     !< Verify if the selected time step Dt is valid.
-    !-------------------------------------------------------------------------------------------------------------------------------
     logical      :: is_dt_valid !< Return true is the selected time step Dt is valid.
     integer(I_P) :: t           !< Counter.
-    !-------------------------------------------------------------------------------------------------------------------------------
 
-    !-------------------------------------------------------------------------------------------------------------------------------
     is_dt_valid = .true.
     do t=1, size(self%Dt)
       is_dt_valid = ((self%final_time - int(self%final_time/self%Dt(t), I_P)*self%Dt(t))==0)
       if (.not.is_dt_valid) exit
     enddo
-    return
-    !-------------------------------------------------------------------------------------------------------------------------------
     endfunction is_dt_valid
 
     function list_solvers() result(list)
-    !-------------------------------------------------------------------------------------------------------------------------------
     !< List available solvers.
-    !-------------------------------------------------------------------------------------------------------------------------------
     character(len=:), allocatable :: list !< Pretty printed list of available solvers.
     integer(I_P)                  :: s    !< Solvers counter.
-    !-------------------------------------------------------------------------------------------------------------------------------
 
-    !-------------------------------------------------------------------------------------------------------------------------------
     list = 'Valid solver names are:' // new_line('a')
     do s=1, ubound(solvers, dim=1)
       list = list // '  + ' // trim(adjustl(solvers(s))) // new_line('a')
     enddo
-    return
-    !-------------------------------------------------------------------------------------------------------------------------------
     endfunction list_solvers
   endsubroutine init
 
   subroutine test(self, solver)
-  !---------------------------------------------------------------------------------------------------------------------------------
   !< Perform the test.
-  !---------------------------------------------------------------------------------------------------------------------------------
   class(oscillation_test), intent(in) :: self   !< Test.
   character(*),            intent(in) :: solver !< Selected solver.
   ! FOODIE integrators
-  type(integrator_adams_bashforth)         :: ab_integrator     !< Adams-Bashforth integrator.
-  type(integrator_adams_bashforth_moulton) :: abm_integrator    !< Adams-Bashforth-Moulton integrator.
-  type(integrator_adams_moulton)           :: am_integrator     !< Adams-Moulton integrator.
-  type(integrator_back_df)                 :: bdf_integrator    !< BDF integrator.
-  type(integrator_runge_kutta_emd)         :: emd_rk_integrator !< Runge-Kutta integrator.
-  type(integrator_euler_explicit)          :: euler_integrator  !< Euler integrator.
-  type(integrator_leapfrog)                :: lf_integrator     !< Leapfrog integrator.
-  type(integrator_runge_kutta_ls)          :: ls_rk_integrator  !< Low Storage Runge-Kutta integrator.
-  type(integrator_runge_kutta_tvd)         :: tvd_rk_integrator !< TVD Runge-Kutta integrator.
+  type(integrator_adams_bashforth)         :: ab_integrator      !< Adams-Bashforth integrator.
+  type(integrator_adams_bashforth_moulton) :: abm_integrator     !< Adams-Bashforth-Moulton integrator.
+  type(integrator_adams_moulton)           :: am_integrator      !< Adams-Moulton integrator.
+  type(integrator_back_df)                 :: bdf_integrator     !< BDF integrator.
+  type(integrator_runge_kutta_emd)         :: emd_rk_integrator  !< Runge-Kutta integrator.
+  type(integrator_euler_explicit)          :: euler_integrator   !< Euler integrator.
+  type(integrator_leapfrog)                :: lf_integrator      !< Leapfrog integrator.
+  type(integrator_lmm_ssp)                 :: lmm_ssp_integrator !< LMM SSP integrator.
+  type(integrator_runge_kutta_ls)          :: ls_rk_integrator   !< Low Storage Runge-Kutta integrator.
+  type(integrator_runge_kutta_tvd)         :: tvd_rk_integrator  !< TVD Runge-Kutta integrator.
   ! Auxiliary variables
   real(R_P), allocatable :: solution(:,:)           !< Solution at each time step.
   real(R_P), allocatable :: error(:,:)              !< Error (norm L2) with respect the exact solution.
@@ -264,9 +218,7 @@ contains
   integer(I_P)           :: last_step               !< Last time step computed.
   integer(I_P)           :: s                       !< Counter.
   integer(I_P)           :: t                       !< Counter.
-  !---------------------------------------------------------------------------------------------------------------------------------
 
-  !---------------------------------------------------------------------------------------------------------------------------------
   ! initialize stages/steps range
   if (size(self%stages_steps)==2) then
     if (self%stages_steps(2)>self%stages_steps(1).and.self%stages_steps(1)>=0) then
@@ -292,6 +244,8 @@ contains
       stages_steps_range = [lf_integrator%min_steps(), lf_integrator%max_steps()]
     case('leapfrog-raw')
       stages_steps_range = [lf_integrator%min_steps(), lf_integrator%max_steps()]
+    case('lmm-ssp')
+      stages_steps_range = [lmm_ssp_integrator%min_steps(), lmm_ssp_integrator%max_steps()]
     case('ls-runge-kutta')
       stages_steps_range = [ls_rk_integrator%min_stages(), ls_rk_integrator%max_stages()]
     case('tvd-runge-kutta')
@@ -385,18 +339,14 @@ contains
       enddo
     endif
   enddo
-  return
-  !---------------------------------------------------------------------------------------------------------------------------------
   endsubroutine test
 
   ! non type bound procedures
   subroutine solve(solver, frequency, final_time, stages_steps, iterations, solution, error, last_step, Dt, tolerance)
-  !---------------------------------------------------------------------------------------------------------------------------------
   !< Rune the solver selected.
   !<
   !< The actual solver is selected by means of the *solver* input string that must be a valid string as defined into *solvers*
   !< parameter list.
-  !---------------------------------------------------------------------------------------------------------------------------------
   character(*),           intent(in)  :: solver        !< Selected solver: must be defined into *solvers*.
   real(R_P),              intent(in)  :: frequency     !< Oscillation frequency.
   real(R_P),              intent(in)  :: final_time    !< Final integration time.
@@ -408,15 +358,16 @@ contains
   real(R_P), optional,    intent(in)  :: Dt            !< Time step.
   real(R_P), optional,    intent(in)  :: tolerance     !< Local error tolerance.
   ! FOODIE integrators
-  type(integrator_adams_bashforth)         :: ab_integrator     !< Adams-Bashforth integrator.
-  type(integrator_adams_bashforth_moulton) :: abm_integrator    !< Adams-Bashforth-Moulton integrator.
-  type(integrator_adams_moulton)           :: am_integrator     !< Adams-Moulton integrator.
-  type(integrator_back_df)                 :: bdf_integrator    !< BDF integrator.
-  type(integrator_runge_kutta_emd)         :: emd_rk_integrator !< Runge-Kutta integrator.
-  type(integrator_euler_explicit)          :: euler_integrator  !< Euler integrator.
-  type(integrator_leapfrog)                :: lf_integrator     !< Leapfrog integrator.
-  type(integrator_runge_kutta_ls)          :: ls_rk_integrator  !< Low Storage Runge-Kutta integrator.
-  type(integrator_runge_kutta_tvd)         :: tvd_rk_integrator !< TVD Runge-Kutta integrator.
+  type(integrator_adams_bashforth)         :: ab_integrator      !< Adams-Bashforth integrator.
+  type(integrator_adams_bashforth_moulton) :: abm_integrator     !< Adams-Bashforth-Moulton integrator.
+  type(integrator_adams_moulton)           :: am_integrator      !< Adams-Moulton integrator.
+  type(integrator_back_df)                 :: bdf_integrator     !< BDF integrator.
+  type(integrator_runge_kutta_emd)         :: emd_rk_integrator  !< Runge-Kutta integrator.
+  type(integrator_euler_explicit)          :: euler_integrator   !< Euler integrator.
+  type(integrator_leapfrog)                :: lf_integrator      !< Leapfrog integrator.
+  type(integrator_lmm_ssp)                 :: lmm_ssp_integrator !< LMM SSP integrator.
+  type(integrator_runge_kutta_ls)          :: ls_rk_integrator   !< Low Storage Runge-Kutta integrator.
+  type(integrator_runge_kutta_tvd)         :: tvd_rk_integrator  !< TVD Runge-Kutta integrator.
   ! Auxiliary variables
   integer(I_P), parameter        :: max_rk_stages=5 !< Max RK stages used to init high order multi-step solver.
   type(oscillation)              :: oscillator      !< Oscillation field.
@@ -429,9 +380,7 @@ contains
   type(oscillation), allocatable :: previous(:)     !< Previous time steps solutions.
   type(oscillation)              :: filter          !< Filter displacement.
   integer                        :: step            !< Time steps counter.
-  !---------------------------------------------------------------------------------------------------------------------------------
 
-  !---------------------------------------------------------------------------------------------------------------------------------
   ! initizialize
   call oscillator%init(initial_state=initial_state, frequency=frequency)
 
@@ -497,6 +446,12 @@ contains
     supported = lf_integrator%is_supported(stages_steps)
     multistep = .true.
     call lf_integrator%init()
+    if (allocated(previous)) deallocate(previous) ; allocate(previous(1:stages_steps))
+
+  case("lmm-ssp")
+    supported = lmm_ssp_integrator%is_supported(stages_steps)
+    multistep = .true.
+    call lmm_ssp_integrator%init(steps=stages_steps)
     if (allocated(previous)) deallocate(previous) ; allocate(previous(1:stages_steps))
 
   case("ls-runge-kutta")
@@ -585,6 +540,12 @@ contains
                                        Dt=Dt,               &
                                        t=solution(0, step), &
                                        filter=filter)
+
+        case("lmm-ssp")
+          call lmm_ssp_integrator%integrate(U=oscillator,      &
+                                            previous=previous, &
+                                            Dt=Dt,             &
+                                            t=solution(0, step-step_offset:step-1))
         endselect
       endif
     else
@@ -617,14 +578,10 @@ contains
   last_step = step
 
   error = error_L2(frequency=frequency, solution=solution(:, 0:last_step))
-  return
-  !---------------------------------------------------------------------------------------------------------------------------------
   endsubroutine solve
 
   subroutine save_results(results, plots, output_cli, solver, frequency, solution)
-  !---------------------------------------------------------------------------------------------------------------------------------
   !< Save results (and plots).
-  !---------------------------------------------------------------------------------------------------------------------------------
   logical,      intent(in)      :: results                   !< Flag for activating results saving.
   logical,      intent(in)      :: plots                     !< Flag for activating plots saving.
   character(*), intent(in)      :: output_cli                !< Output files basename coming from CLI.
@@ -637,9 +594,7 @@ contains
   real(R_P)                     :: ex_sol(1:space_dimension) !< Exact solution.
   type(pyplot)                  :: plt                       !< Plot file handler.
   integer(I_P)                  :: s                         !< Counter.
-  !---------------------------------------------------------------------------------------------------------------------------------
 
-  !---------------------------------------------------------------------------------------------------------------------------------
   title = 'Oscillation equations integration, solver='//trim(adjustl(solver))
   if (trim(adjustl(output_cli))/='unset') then
     basename = trim(adjustl(output_cli))//'-'//trim(strz(ubound(solution, dim=2), 10))//'-time_steps-'//trim(adjustl(solver))
@@ -671,54 +626,36 @@ contains
     call plt%add_plot(x=solution(1, :), y=solution(2, :), label='path', linestyle='r-', linewidth=1)
     call plt%savefig('path-'//basename//'.png')
   endif
-  return
-  !---------------------------------------------------------------------------------------------------------------------------------
   contains
     function amplitude_phase(sol) result(ap)
-    !-------------------------------------------------------------------------------------------------------------------------------
     !< Compute amplitude and phase of the solution provided in X-Y domain.
-    !-------------------------------------------------------------------------------------------------------------------------------
     real(R_P), intent(IN) :: sol(1:) !< Solution in X-Y domain.
     real(R_P)             :: ap(1:2) !< Amplitude and phase solution.
-    !-------------------------------------------------------------------------------------------------------------------------------
 
-    !-------------------------------------------------------------------------------------------------------------------------------
     ap(1) = sqrt(sol(1)**2 + sol(2)**2)
     ap(2) = atan(-sol(1) / sol(2))
-    return
-    !-------------------------------------------------------------------------------------------------------------------------------
     endfunction amplitude_phase
   endsubroutine save_results
 
   pure function exact_solution_xy(frequency, t) result(ex_sol)
-  !---------------------------------------------------------------------------------------------------------------------------------
   !< Compute the exact solution on X-Y domain.
-  !---------------------------------------------------------------------------------------------------------------------------------
   real(R_P), intent(in) :: frequency   !< Oscillation frequency.
   real(R_P), intent(IN) :: t           !< Time.
   real(R_P)             :: ex_sol(1:2) !< Exact solution.
-  !---------------------------------------------------------------------------------------------------------------------------------
 
-  !---------------------------------------------------------------------------------------------------------------------------------
   ex_sol(1) = initial_state(1) * cos(frequency * t) - initial_state(2) * sin(frequency * t)
   ex_sol(2) = initial_state(1) * sin(frequency * t) + initial_state(2) * cos(frequency * t)
-  return
-  !---------------------------------------------------------------------------------------------------------------------------------
   endfunction exact_solution_xy
 
   pure function error_L2(frequency, solution)
-  !---------------------------------------------------------------------------------------------------------------------------------
   !< Compute the L2 norm of numerical error with respect the exact solution.
-  !---------------------------------------------------------------------------------------------------------------------------------
   real(R_P), intent(in) :: frequency                   !< Oscillation frequency.
   real(R_P), intent(IN) :: solution(0:,0:)             !< Solution at each time step.
   real(R_P)             :: error_L2(1:space_dimension) !< L2 norm of the numerical error.
   real(R_P)             :: ex_sol(1:space_dimension)   !< Exact solution.
   integer(I_P)          :: s                           !< Steps/stages counter.
   integer(I_P)          :: v                           !< Variables counter.
-  !---------------------------------------------------------------------------------------------------------------------------------
 
-  !---------------------------------------------------------------------------------------------------------------------------------
   error_L2 = 0._R_P
   do s=0, ubound(solution, dim=2)
     ex_sol = exact_solution_xy(frequency=frequency, t=solution(0, s))
@@ -727,45 +664,28 @@ contains
     enddo
   enddo
   error_L2 = sqrt(error_L2)
-  return
-  !---------------------------------------------------------------------------------------------------------------------------------
   endfunction error_L2
 
   pure function observed_order(error, Dt)
-  !---------------------------------------------------------------------------------------------------------------------------------
   !< Estimate the order of accuracy using 2 subsequent refined numerical solutions.
-  !---------------------------------------------------------------------------------------------------------------------------------
   real(R_P), intent(IN) :: error(1:space_dimension, 1:2)     !< Computed errors.
   real(R_P), intent(IN) :: Dt(1:2)                           !< Time steps used.
   real(R_P)             :: observed_order(1:space_dimension) !< Estimation of the order of accuracy.
   integer(I_P)          :: v                                 !< Variables counter.
-  !---------------------------------------------------------------------------------------------------------------------------------
 
-  !---------------------------------------------------------------------------------------------------------------------------------
   do v=1, space_dimension
     observed_order(v) = log(error(v, 1) / error(v, 2)) / log(Dt(1) / Dt(2))
   enddo
-  return
-  !---------------------------------------------------------------------------------------------------------------------------------
   endfunction observed_order
 endmodule oscillation_test_t
 
 program integrate_oscillation
-!-----------------------------------------------------------------------------------------------------------------------------------
 !< Test FOODIE with the integration of Oscillation equations.
-!-----------------------------------------------------------------------------------------------------------------------------------
 
-!-----------------------------------------------------------------------------------------------------------------------------------
 use oscillation_test_t, only : oscillation_test
-!-----------------------------------------------------------------------------------------------------------------------------------
 
-!-----------------------------------------------------------------------------------------------------------------------------------
 implicit none
 type(oscillation_test) :: test !< Oscillation test.
-!-----------------------------------------------------------------------------------------------------------------------------------
 
-!-----------------------------------------------------------------------------------------------------------------------------------
 call test%execute
-stop
-!-----------------------------------------------------------------------------------------------------------------------------------
 endprogram integrate_oscillation
