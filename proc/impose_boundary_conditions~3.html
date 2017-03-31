@@ -134,18 +134,18 @@
      <li><i class="fa fa-list-ol"></i>
        <a data-toggle="tooltip"
 	  data-placement="bottom" data-html="true"
-	  title=" 0.6% of total for procedures.">44 statements</a>
+	  title=" 0.4% of total for procedures.">28 statements</a>
      </li> 
      
      
-    <li><i class="fa fa-code"></i><a href="../src/type_euler-1D-caf_no_foodie.f90"> Source File</a></li>
+    <li><i class="fa fa-code"></i><a href="../src/type_euler-1D-openmp_no_foodie.f90"> Source File</a></li>
      
   </ul>
   <ol class="breadcrumb in-well text-right">
   
-     <li><a href='../sourcefile/type_euler-1d-caf_no_foodie.f90.html'>type_euler-1D-caf_no_foodie.f90</a></li>
+     <li><a href='../sourcefile/type_euler-1d-openmp_no_foodie.f90.html'>type_euler-1D-openmp_no_foodie.f90</a></li>
   
-     <li><a href='../module/type_euler_1d_caf_no_foodie.html'>type_euler_1D_caf_no_foodie</a></li>
+     <li><a href='../module/type_euler_1d_openmp_no_foodie.html'>type_euler_1D_openmp_no_foodie</a></li>
   
      <li class="active">impose_boundary_conditions</li>
   </ol>
@@ -820,7 +820,7 @@
     
     <div class="col-md-9" id='text'>
     <h2>
-private subroutine impose_boundary_conditions(self, primitive)
+private pure subroutine impose_boundary_conditions(self, primitive)
     
     
 	 
@@ -852,7 +852,7 @@ private subroutine impose_boundary_conditions(self, primitive)
   
 <tr>
   
-  <td><span class="anchor" id="variable-self%7E94"></span>class(<a href='../type/euler_1d_caf_nf.html'>euler_1D_caf_nf</a>),</td>
+  <td><span class="anchor" id="variable-self%7E95"></span>class(<a href='../type/euler_1d_omp_nf.html'>euler_1D_omp_nf</a>),</td>
   <td>intent(in)</td>
   <td></td>
   
@@ -938,57 +938,41 @@ private subroutine impose_boundary_conditions(self, primitive)
     
     <section>
     <h2><span class="anchor" id="src"></span>Source Code</h2>
-    <div class="highlight"><pre><span></span>  <span class="k">subroutine </span><span class="n">impose_boundary_conditions</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">primitive</span><span class="p">)</span>
+    <div class="highlight"><pre><span></span>  <span class="k">pure subroutine </span><span class="n">impose_boundary_conditions</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">primitive</span><span class="p">)</span>
   <span class="c">!--------------------------------------------------------------------------------------------------------------------------------</span>
   <span class="c">!&lt; Impose boundary conditions.</span>
   <span class="c">!&lt;</span>
   <span class="c">!&lt; The boundary conditions are imposed on the primitive variables by means of the ghost cells approach.</span>
   <span class="c">!--------------------------------------------------------------------------------------------------------------------------------</span>
-  <span class="k">class</span><span class="p">(</span><span class="n">euler_1D_caf_nf</span><span class="p">),</span> <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span>    <span class="kd">::</span> <span class="n">self</span>                                           <span class="c">!&lt; Euler field.</span>
+  <span class="k">class</span><span class="p">(</span><span class="n">euler_1D_omp_nf</span><span class="p">),</span> <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span>    <span class="kd">::</span> <span class="n">self</span>                                           <span class="c">!&lt; Euler field.</span>
   <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">),</span>              <span class="k">intent</span><span class="p">(</span><span class="n">INOUT</span><span class="p">)</span> <span class="kd">::</span> <span class="n">primitive</span><span class="p">(</span><span class="mi">1</span><span class="p">:</span><span class="n">self</span><span class="p">%</span><span class="n">Np</span><span class="p">,</span><span class="mi">1</span><span class="o">-</span><span class="n">self</span><span class="p">%</span><span class="n">Ng</span><span class="p">:</span><span class="n">self</span><span class="p">%</span><span class="n">Ni</span><span class="o">+</span><span class="n">self</span><span class="p">%</span><span class="n">Ng</span><span class="p">)</span> <span class="c">!&lt; Primitive variables [1:Np,1-Ng:Ni+Ng].</span>
   <span class="kt">integer</span><span class="p">(</span><span class="n">I_P</span><span class="p">)</span>                          <span class="kd">::</span> <span class="n">i</span>                                              <span class="c">!&lt; Space counter.</span>
-  <span class="kt">character</span><span class="p">(</span><span class="nb">len</span><span class="o">=</span><span class="p">:),</span> <span class="k">allocatable</span>         <span class="kd">::</span> <span class="n">bc_type</span>                                        <span class="c">!&lt; String containing BC type.</span>
   <span class="c">!--------------------------------------------------------------------------------------------------------------------------------</span>
 
   <span class="c">!--------------------------------------------------------------------------------------------------------------------------------</span>
-  <span class="k">call </span><span class="n">self</span><span class="p">%</span><span class="n">synchronize</span>
-  <span class="n">bc_type</span> <span class="o">=</span> <span class="nb">trim</span><span class="p">(</span><span class="nb">adjustl</span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">BC_L</span><span class="p">))</span>
-  <span class="k">if</span> <span class="p">(</span><span class="s1">&#39;CON&#39;</span> <span class="o">==</span> <span class="n">bc_type</span><span class="p">(</span><span class="mi">1</span><span class="p">:</span><span class="mi">3</span><span class="p">))</span> <span class="k">then</span> <span class="c">! connection between remote images</span>
-    <span class="k">do </span><span class="n">i</span><span class="o">=</span><span class="mi">1</span><span class="o">-</span><span class="n">self</span><span class="p">%</span><span class="n">Ng</span><span class="p">,</span> <span class="mi">0</span>
-      <span class="n">primitive</span><span class="p">(:,</span> <span class="n">i</span><span class="p">)</span> <span class="o">=</span> <span class="n">self</span><span class="p">%</span><span class="n">conservative2primitive</span><span class="p">(</span><span class="n">U_L</span><span class="p">(:,</span> <span class="n">self</span><span class="p">%</span><span class="n">Ni</span><span class="o">+</span><span class="n">i</span><span class="p">))</span>
-    <span class="n">enddo</span>
-  <span class="k">else</span>
-<span class="k">    select case</span><span class="p">(</span><span class="n">bc_type</span><span class="p">(</span><span class="mi">1</span><span class="p">:</span><span class="mi">3</span><span class="p">))</span>
-      <span class="k">case</span><span class="p">(</span><span class="s1">&#39;TRA&#39;</span><span class="p">)</span> <span class="c">! trasmissive (non reflective) BC</span>
-        <span class="k">do </span><span class="n">i</span><span class="o">=</span><span class="mi">1</span><span class="o">-</span><span class="n">self</span><span class="p">%</span><span class="n">Ng</span><span class="p">,</span> <span class="mi">0</span>
-          <span class="n">primitive</span><span class="p">(:,</span> <span class="n">i</span><span class="p">)</span> <span class="o">=</span> <span class="n">primitive</span><span class="p">(:,</span> <span class="o">-</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span>
-        <span class="n">enddo</span>
-      <span class="k">case</span><span class="p">(</span><span class="s1">&#39;REF&#39;</span><span class="p">)</span> <span class="c">! reflective BC</span>
-        <span class="k">do </span><span class="n">i</span><span class="o">=</span><span class="mi">1</span><span class="o">-</span><span class="n">self</span><span class="p">%</span><span class="n">Ng</span><span class="p">,</span> <span class="mi">0</span>
-          <span class="n">primitive</span><span class="p">(:,</span>           <span class="n">i</span><span class="p">)</span> <span class="o">=</span>  <span class="n">primitive</span><span class="p">(:,</span>           <span class="o">-</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span> <span class="c">! all variables</span>
-          <span class="n">primitive</span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">Ns</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">i</span><span class="p">)</span> <span class="o">=</span> <span class="o">-</span><span class="n">primitive</span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">Ns</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span> <span class="c">! only velocity</span>
-        <span class="n">enddo</span>
-    <span class="n">endselect</span>
-  <span class="n">endif</span>
+  <span class="k">select case</span><span class="p">(</span><span class="nb">trim</span><span class="p">(</span><span class="nb">adjustl</span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">BC_L</span><span class="p">)))</span>
+    <span class="k">case</span><span class="p">(</span><span class="s1">&#39;TRA&#39;</span><span class="p">)</span> <span class="c">! trasmissive (non reflective) BC</span>
+      <span class="k">do </span><span class="n">i</span><span class="o">=</span><span class="mi">1</span><span class="o">-</span><span class="n">self</span><span class="p">%</span><span class="n">Ng</span><span class="p">,</span> <span class="mi">0</span>
+        <span class="n">primitive</span><span class="p">(:,</span> <span class="n">i</span><span class="p">)</span> <span class="o">=</span> <span class="n">primitive</span><span class="p">(:,</span> <span class="o">-</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span>
+      <span class="n">enddo</span>
+    <span class="k">case</span><span class="p">(</span><span class="s1">&#39;REF&#39;</span><span class="p">)</span> <span class="c">! reflective BC</span>
+      <span class="k">do </span><span class="n">i</span><span class="o">=</span><span class="mi">1</span><span class="o">-</span><span class="n">self</span><span class="p">%</span><span class="n">Ng</span><span class="p">,</span> <span class="mi">0</span>
+        <span class="n">primitive</span><span class="p">(:,</span>           <span class="n">i</span><span class="p">)</span> <span class="o">=</span>  <span class="n">primitive</span><span class="p">(:,</span>           <span class="o">-</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span> <span class="c">! all variables</span>
+        <span class="n">primitive</span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">Ns</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">i</span><span class="p">)</span> <span class="o">=</span> <span class="o">-</span><span class="n">primitive</span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">Ns</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span> <span class="c">! only velocity</span>
+      <span class="n">enddo</span>
+  <span class="n">endselect</span>
 
-  <span class="n">bc_type</span> <span class="o">=</span> <span class="nb">trim</span><span class="p">(</span><span class="nb">adjustl</span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">BC_R</span><span class="p">))</span>
-  <span class="k">if</span> <span class="p">(</span><span class="s1">&#39;CON&#39;</span> <span class="o">==</span> <span class="n">bc_type</span><span class="p">(</span><span class="mi">1</span><span class="p">:</span><span class="mi">3</span><span class="p">))</span> <span class="k">then</span> <span class="c">! connection between remote images</span>
-    <span class="k">do </span><span class="n">i</span><span class="o">=</span><span class="n">self</span><span class="p">%</span><span class="n">Ni</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="n">self</span><span class="p">%</span><span class="n">Ni</span><span class="o">+</span><span class="n">self</span><span class="p">%</span><span class="n">Ng</span>
-      <span class="n">primitive</span><span class="p">(:,</span> <span class="n">i</span><span class="p">)</span> <span class="o">=</span> <span class="n">self</span><span class="p">%</span><span class="n">conservative2primitive</span><span class="p">(</span><span class="n">U_R</span><span class="p">(:,</span> <span class="n">i</span><span class="o">-</span><span class="n">self</span><span class="p">%</span><span class="n">Ni</span><span class="p">))</span>
-    <span class="n">enddo</span>
-  <span class="k">else</span>
-<span class="k">    select case</span><span class="p">(</span><span class="n">bc_type</span><span class="p">(</span><span class="mi">1</span><span class="p">:</span><span class="mi">3</span><span class="p">))</span>
-      <span class="k">case</span><span class="p">(</span><span class="s1">&#39;TRA&#39;</span><span class="p">)</span> <span class="c">! trasmissive (non reflective) BC</span>
-        <span class="k">do </span><span class="n">i</span><span class="o">=</span><span class="n">self</span><span class="p">%</span><span class="n">Ni</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="n">self</span><span class="p">%</span><span class="n">Ni</span><span class="o">+</span><span class="n">self</span><span class="p">%</span><span class="n">Ng</span>
-          <span class="n">primitive</span><span class="p">(:,</span> <span class="n">i</span><span class="p">)</span> <span class="o">=</span> <span class="n">primitive</span><span class="p">(:,</span> <span class="n">self</span><span class="p">%</span><span class="n">Ni</span><span class="o">-</span><span class="p">(</span><span class="n">i</span><span class="o">-</span><span class="n">self</span><span class="p">%</span><span class="n">Ni</span><span class="o">-</span><span class="mi">1</span><span class="p">))</span>
-        <span class="n">enddo</span>
-      <span class="k">case</span><span class="p">(</span><span class="s1">&#39;REF&#39;</span><span class="p">)</span> <span class="c">! reflective BC</span>
-        <span class="k">do </span><span class="n">i</span><span class="o">=</span><span class="n">self</span><span class="p">%</span><span class="n">Ni</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="n">self</span><span class="p">%</span><span class="n">Ni</span><span class="o">+</span><span class="n">self</span><span class="p">%</span><span class="n">Ng</span>
-          <span class="n">primitive</span><span class="p">(:,</span>           <span class="n">i</span><span class="p">)</span> <span class="o">=</span>  <span class="n">primitive</span><span class="p">(:,</span>           <span class="n">self</span><span class="p">%</span><span class="n">Ni</span><span class="o">-</span><span class="p">(</span><span class="n">i</span><span class="o">-</span><span class="n">self</span><span class="p">%</span><span class="n">Ni</span><span class="o">-</span><span class="mi">1</span><span class="p">))</span> <span class="c">! all variables</span>
-          <span class="n">primitive</span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">Ns</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">i</span><span class="p">)</span> <span class="o">=</span> <span class="o">-</span><span class="n">primitive</span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">Ns</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">self</span><span class="p">%</span><span class="n">Ni</span><span class="o">-</span><span class="p">(</span><span class="n">i</span><span class="o">-</span><span class="n">self</span><span class="p">%</span><span class="n">Ni</span><span class="o">-</span><span class="mi">1</span><span class="p">))</span> <span class="c">! only velocity</span>
-        <span class="n">enddo</span>
-    <span class="n">endselect</span>
-  <span class="n">endif</span>
+  <span class="k">select case</span><span class="p">(</span><span class="nb">trim</span><span class="p">(</span><span class="nb">adjustl</span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">BC_R</span><span class="p">)))</span>
+    <span class="k">case</span><span class="p">(</span><span class="s1">&#39;TRA&#39;</span><span class="p">)</span> <span class="c">! trasmissive (non reflective) BC</span>
+      <span class="k">do </span><span class="n">i</span><span class="o">=</span><span class="n">self</span><span class="p">%</span><span class="n">Ni</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="n">self</span><span class="p">%</span><span class="n">Ni</span><span class="o">+</span><span class="n">self</span><span class="p">%</span><span class="n">Ng</span>
+        <span class="n">primitive</span><span class="p">(:,</span> <span class="n">i</span><span class="p">)</span> <span class="o">=</span> <span class="n">primitive</span><span class="p">(:,</span> <span class="n">self</span><span class="p">%</span><span class="n">Ni</span><span class="o">-</span><span class="p">(</span><span class="n">i</span><span class="o">-</span><span class="n">self</span><span class="p">%</span><span class="n">Ni</span><span class="o">-</span><span class="mi">1</span><span class="p">))</span>
+      <span class="n">enddo</span>
+    <span class="k">case</span><span class="p">(</span><span class="s1">&#39;REF&#39;</span><span class="p">)</span> <span class="c">! reflective BC</span>
+      <span class="k">do </span><span class="n">i</span><span class="o">=</span><span class="n">self</span><span class="p">%</span><span class="n">Ni</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="n">self</span><span class="p">%</span><span class="n">Ni</span><span class="o">+</span><span class="n">self</span><span class="p">%</span><span class="n">Ng</span>
+        <span class="n">primitive</span><span class="p">(:,</span>           <span class="n">i</span><span class="p">)</span> <span class="o">=</span>  <span class="n">primitive</span><span class="p">(:,</span>           <span class="n">self</span><span class="p">%</span><span class="n">Ni</span><span class="o">-</span><span class="p">(</span><span class="n">i</span><span class="o">-</span><span class="n">self</span><span class="p">%</span><span class="n">Ni</span><span class="o">-</span><span class="mi">1</span><span class="p">))</span> <span class="c">! all variables</span>
+        <span class="n">primitive</span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">Ns</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">i</span><span class="p">)</span> <span class="o">=</span> <span class="o">-</span><span class="n">primitive</span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">Ns</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">self</span><span class="p">%</span><span class="n">Ni</span><span class="o">-</span><span class="p">(</span><span class="n">i</span><span class="o">-</span><span class="n">self</span><span class="p">%</span><span class="n">Ni</span><span class="o">-</span><span class="mi">1</span><span class="p">))</span> <span class="c">! only velocity</span>
+      <span class="n">enddo</span>
+  <span class="n">endselect</span>
   <span class="k">return</span>
   <span class="c">!--------------------------------------------------------------------------------------------------------------------------------</span>
   <span class="n">endsubroutine</span> <span class="n">impose_boundary_conditions</span>
@@ -1635,7 +1619,7 @@ private subroutine impose_boundary_conditions(self, primitive)
           <p class="text-right">
             Documentation generated by 
             <a href="https://github.com/cmacmackin/ford">FORD</a>
-             on 2017-03-31 16:42  
+             on 2017-03-31 15:04  
           </p>
         </div>
         <div class="col-xs-12 col-md-4 col-md-pull-4"><p class="text-center"> FOODIE was developed by Fortran-FOSS-Programmers Group</p></div>

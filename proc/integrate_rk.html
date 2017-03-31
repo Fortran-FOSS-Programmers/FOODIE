@@ -138,14 +138,14 @@
      </li> 
      
      
-    <li><i class="fa fa-code"></i><a href="../src/type_euler-1D-openmp_no_foodie.f90"> Source File</a></li>
+    <li><i class="fa fa-code"></i><a href="../src/type_euler-1D-caf_no_foodie.f90"> Source File</a></li>
      
   </ul>
   <ol class="breadcrumb in-well text-right">
   
-     <li><a href='../sourcefile/type_euler-1d-openmp_no_foodie.f90.html'>type_euler-1D-openmp_no_foodie.f90</a></li>
+     <li><a href='../sourcefile/type_euler-1d-caf_no_foodie.f90.html'>type_euler-1D-caf_no_foodie.f90</a></li>
   
-     <li><a href='../module/type_euler_1d_openmp_no_foodie.html'>type_euler_1D_openmp_no_foodie</a></li>
+     <li><a href='../module/type_euler_1d_caf_no_foodie.html'>type_euler_1D_caf_no_foodie</a></li>
   
      <li class="active">integrate_rk</li>
   </ol>
@@ -852,7 +852,7 @@ private subroutine integrate_rk(self, U, stage, Dt, t)
   
 <tr>
   
-  <td><span class="anchor" id="variable-self%7E84"></span>class(<a href='../type/tvd_runge_kutta_integrator%7E2.html'>tvd_runge_kutta_integrator</a>),</td>
+  <td><span class="anchor" id="variable-self%7E73"></span>class(<a href='../type/tvd_runge_kutta_integrator.html'>tvd_runge_kutta_integrator</a>),</td>
   <td>intent(in)</td>
   <td></td>
   
@@ -867,7 +867,7 @@ private subroutine integrate_rk(self, U, stage, Dt, t)
   
 <tr>
   
-  <td><span class="anchor" id="variable-u%7E28"></span>class(<a href='../type/euler_1d_omp_nf.html'>euler_1D_omp_nf</a>),</td>
+  <td><span class="anchor" id="variable-u%7E28"></span>class(<a href='../type/euler_1d_caf_nf.html'>euler_1D_caf_nf</a>),</td>
   <td>intent(inout)</td>
   <td></td>
   
@@ -882,7 +882,7 @@ private subroutine integrate_rk(self, U, stage, Dt, t)
   
 <tr>
   
-  <td><span class="anchor" id="variable-stage%7E4"></span>class(<a href='../type/euler_1d_omp_nf.html'>euler_1D_omp_nf</a>),</td>
+  <td><span class="anchor" id="variable-stage%7E4"></span>class(<a href='../type/euler_1d_caf_nf.html'>euler_1D_caf_nf</a>),</td>
   <td>intent(inout)</td>
   <td></td>
   
@@ -897,7 +897,7 @@ private subroutine integrate_rk(self, U, stage, Dt, t)
   
 <tr>
   
-  <td><span class="anchor" id="variable-dt%7E24"></span>real(kind=R_P),</td>
+  <td><span class="anchor" id="variable-dt%7E23"></span>real(kind=R_P),</td>
   <td>intent(in)</td>
   <td></td>
   
@@ -912,7 +912,7 @@ private subroutine integrate_rk(self, U, stage, Dt, t)
   
 <tr>
   
-  <td><span class="anchor" id="variable-t%7E32"></span>real(kind=R_P),</td>
+  <td><span class="anchor" id="variable-t%7E29"></span>real(kind=R_P),</td>
   <td>intent(in)</td>
   <td></td>
   
@@ -990,8 +990,8 @@ private subroutine integrate_rk(self, U, stage, Dt, t)
   <span class="c">!&lt; @note This method can be used **after** the integrator is created (i.e. the RK coeficients are initialized).</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
   <span class="k">class</span><span class="p">(</span><span class="n">tvd_runge_kutta_integrator</span><span class="p">),</span> <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span>    <span class="kd">::</span> <span class="n">self</span>      <span class="c">!&lt; Actual RK integrator.</span>
-  <span class="k">class</span><span class="p">(</span><span class="n">euler_1D_omp_nf</span><span class="p">),</span>            <span class="k">intent</span><span class="p">(</span><span class="n">INOUT</span><span class="p">)</span> <span class="kd">::</span> <span class="n">U</span>         <span class="c">!&lt; Field to be integrated.</span>
-  <span class="k">class</span><span class="p">(</span><span class="n">euler_1D_omp_nf</span><span class="p">),</span>            <span class="k">intent</span><span class="p">(</span><span class="n">INOUT</span><span class="p">)</span> <span class="kd">::</span> <span class="n">stage</span><span class="p">(</span><span class="mi">1</span><span class="p">:)</span> <span class="c">!&lt; Runge-Kutta stages [1:stages].</span>
+  <span class="k">class</span><span class="p">(</span><span class="n">euler_1D_caf_nf</span><span class="p">),</span>            <span class="k">intent</span><span class="p">(</span><span class="n">INOUT</span><span class="p">)</span> <span class="kd">::</span> <span class="n">U</span>         <span class="c">!&lt; Field to be integrated.</span>
+  <span class="k">class</span><span class="p">(</span><span class="n">euler_1D_caf_nf</span><span class="p">),</span>            <span class="k">intent</span><span class="p">(</span><span class="n">INOUT</span><span class="p">)</span> <span class="kd">::</span> <span class="n">stage</span><span class="p">(</span><span class="mi">1</span><span class="p">:)</span> <span class="c">!&lt; Runge-Kutta stages [1:stages].</span>
   <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">),</span>                         <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span>    <span class="kd">::</span> <span class="n">Dt</span>        <span class="c">!&lt; Time step.</span>
   <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">),</span>                         <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span>    <span class="kd">::</span> <span class="n">t</span>         <span class="c">!&lt; Time.</span>
   <span class="kt">integer</span><span class="p">(</span><span class="n">I_P</span><span class="p">)</span>                                     <span class="kd">::</span> <span class="n">s</span>         <span class="c">!&lt; First stages counter.</span>
@@ -1657,7 +1657,7 @@ private subroutine integrate_rk(self, U, stage, Dt, t)
           <p class="text-right">
             Documentation generated by 
             <a href="https://github.com/cmacmackin/ford">FORD</a>
-             on 2017-03-31 16:42  
+             on 2017-03-31 15:04  
           </p>
         </div>
         <div class="col-xs-12 col-md-4 col-md-pull-4"><p class="text-center"> FOODIE was developed by Fortran-FOSS-Programmers Group</p></div>

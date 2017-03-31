@@ -134,18 +134,18 @@
      <li><i class="fa fa-list-ol"></i>
        <a data-toggle="tooltip"
 	  data-placement="bottom" data-html="true"
-	  title=" 0.2% of total for procedures.">11 statements</a>
+	  title=" 1.4% of total for procedures.">96 statements</a>
      </li> 
      
      
-    <li><i class="fa fa-code"></i><a href="../src/oscillation_t.f90"> Source File</a></li>
+    <li><i class="fa fa-code"></i><a href="../src/oscillation.f90"> Source File</a></li>
      
   </ul>
   <ol class="breadcrumb in-well text-right">
   
-     <li><a href='../sourcefile/oscillation_t.f90.html'>oscillation_t.f90</a></li>
+     <li><a href='../sourcefile/oscillation.f90.html'>oscillation.f90</a></li>
   
-     <li><a href='../module/oscillation_t.html'>oscillation_t</a></li>
+     <li><a href='../module/oscillation_test_t.html'>oscillation_test_t</a></li>
   
      <li class="active">init</li>
   </ol>
@@ -820,7 +820,7 @@
     
     <div class="col-md-9" id='text'>
     <h2>
-private pure subroutine init(self, initial_state, frequency)
+private subroutine init(self)
     
     
 	 
@@ -830,7 +830,7 @@ private pure subroutine init(self, initial_state, frequency)
 
 
     
-    <p>Construct an initialized Oscillation field.</p>
+    <p>Initialize test: set Command Line Interface, parse it and check its validity.</p>
     
 
     <h3>Arguments</h3>
@@ -851,42 +851,12 @@ private pure subroutine init(self, initial_state, frequency)
   
 <tr>
   
-  <td><span class="anchor" id="variable-self%7E59"></span>class(<a href='../type/oscillation.html'>oscillation</a>),</td>
+  <td><span class="anchor" id="variable-self%7E58"></span>class(<a href='../type/oscillation_test.html'>oscillation_test</a>),</td>
   <td>intent(inout)</td>
   <td></td>
   
   <td></td><td>::</td>
-  <td><strong>self</strong></td><td><p>Oscillation field.</p></td>
-  
-</tr>
-
-  
-  
-  
-  
-<tr>
-  
-  <td><span class="anchor" id="variable-initial_state"></span>real(kind=R_P),</td>
-  <td>intent(in),</td>
-  <td></td>
-  
-  <td>dimension(:)</td><td>::</td>
-  <td><strong>initial_state</strong></td><td><p>Initial state of the Oscillation field vector.</p></td>
-  
-</tr>
-
-  
-  
-  
-  
-<tr>
-  
-  <td><span class="anchor" id="variable-frequency%7E2"></span>real(kind=R_P),</td>
-  <td>intent(in)</td>
-  <td></td>
-  
-  <td></td><td>::</td>
-  <td><strong>frequency</strong></td><td><p>Frequency of oscillation.</p></td>
+  <td><strong>self</strong></td><td><p>Test.</p></td>
   
 </tr>
 
@@ -952,21 +922,114 @@ private pure subroutine init(self, initial_state, frequency)
     
     <section>
     <h2><span class="anchor" id="src"></span>Source Code</h2>
-    <div class="highlight"><pre><span></span>  <span class="k">pure subroutine </span><span class="n">init</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">initial_state</span><span class="p">,</span> <span class="n">frequency</span><span class="p">)</span>
-  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
-  <span class="c">!&lt; Construct an initialized Oscillation field.</span>
-  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
-  <span class="k">class</span><span class="p">(</span><span class="n">oscillation</span><span class="p">),</span>      <span class="k">intent</span><span class="p">(</span><span class="n">INOUT</span><span class="p">)</span> <span class="kd">::</span> <span class="n">self</span>          <span class="c">!&lt; Oscillation field.</span>
-  <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">),</span> <span class="k">dimension</span><span class="p">(:),</span> <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span>    <span class="kd">::</span> <span class="n">initial_state</span> <span class="c">!&lt; Initial state of the Oscillation field vector.</span>
-  <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">),</span>               <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span>    <span class="kd">::</span> <span class="n">frequency</span>     <span class="c">!&lt; Frequency of oscillation.</span>
-  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+    <div class="highlight"><pre><span></span>  <span class="k">subroutine </span><span class="n">init</span><span class="p">(</span><span class="n">self</span><span class="p">)</span>
+  <span class="c">!&lt; Initialize test: set Command Line Interface, parse it and check its validity.</span>
+  <span class="k">class</span><span class="p">(</span><span class="n">oscillation_test</span><span class="p">),</span> <span class="k">intent</span><span class="p">(</span><span class="n">inout</span><span class="p">)</span> <span class="kd">::</span> <span class="n">self</span> <span class="c">!&lt; Test.</span>
 
-  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
-  <span class="n">self</span><span class="p">%</span><span class="n">dims</span> <span class="o">=</span> <span class="n">size</span><span class="p">(</span><span class="n">initial_state</span><span class="p">)</span>
-  <span class="n">self</span><span class="p">%</span><span class="n">f</span> <span class="o">=</span> <span class="n">frequency</span>
-  <span class="k">if</span> <span class="p">(</span><span class="nb">allocated</span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">U</span><span class="p">))</span> <span class="k">deallocate</span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">U</span><span class="p">)</span> <span class="p">;</span> <span class="k">allocate</span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">U</span><span class="p">(</span><span class="mi">1</span><span class="p">:</span><span class="n">self</span><span class="p">%</span><span class="n">dims</span><span class="p">))</span> <span class="p">;</span> <span class="n">self</span><span class="p">%</span><span class="n">U</span> <span class="o">=</span> <span class="n">initial_state</span>
-  <span class="k">return</span>
-  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+  <span class="k">call </span><span class="n">set_cli</span>
+  <span class="k">call </span><span class="n">parse_cli</span>
+  <span class="k">contains</span>
+<span class="k">    subroutine </span><span class="n">set_cli</span><span class="p">()</span>
+    <span class="c">!&lt; Set Command Line Interface.</span>
+
+    <span class="k">associate</span><span class="p">(</span><span class="n">cli</span> <span class="o">=&gt;</span> <span class="n">self</span><span class="p">%</span><span class="n">cli</span><span class="p">)</span>
+      <span class="k">call </span><span class="n">cli</span><span class="p">%</span><span class="n">init</span><span class="p">(</span><span class="n">progname</span>    <span class="o">=</span> <span class="s1">&#39;oscillation&#39;</span><span class="p">,</span>                                              <span class="p">&amp;</span>
+                    <span class="n">authors</span>     <span class="o">=</span> <span class="s1">&#39;Fortran-FOSS-Programmers&#39;</span><span class="p">,</span>                                 <span class="p">&amp;</span>
+                    <span class="n">license</span>     <span class="o">=</span> <span class="s1">&#39;GNU GPLv3&#39;</span><span class="p">,</span>                                                <span class="p">&amp;</span>
+                    <span class="n">description</span> <span class="o">=</span> <span class="s1">&#39;Test FOODIE library on Oscillation equations integration&#39;</span><span class="p">,</span> <span class="p">&amp;</span>
+                    <span class="n">examples</span>    <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;oscillation --solver euler --results  &quot;</span><span class="p">,</span>                  <span class="p">&amp;</span>
+                                   <span class="s2">&quot;oscillation --solver ls-runge-kutta -r&quot;</span><span class="p">,</span>                  <span class="p">&amp;</span>
+                                   <span class="s2">&quot;oscillation --solver adams-bashforth  &quot;</span><span class="p">,</span>                  <span class="p">&amp;</span>
+                                   <span class="s2">&quot;oscillation --solver all --plots -r   &quot;</span><span class="p">])</span>
+      <span class="k">call </span><span class="n">cli</span><span class="p">%</span><span class="n">add</span><span class="p">(</span><span class="n">switch</span><span class="o">=</span><span class="s1">&#39;--solver&#39;</span><span class="p">,</span> <span class="n">switch_ab</span><span class="o">=</span><span class="s1">&#39;-s&#39;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s1">&#39;ODE solver used&#39;</span><span class="p">,</span> <span class="n">required</span><span class="o">=</span><span class="p">.</span><span class="n">false</span><span class="p">.,</span> <span class="n">def</span><span class="o">=</span><span class="s1">&#39;all&#39;</span><span class="p">,</span> <span class="n">act</span><span class="o">=</span><span class="s1">&#39;store&#39;</span><span class="p">)</span>
+      <span class="k">call </span><span class="n">cli</span><span class="p">%</span><span class="n">add</span><span class="p">(</span><span class="n">switch</span><span class="o">=</span><span class="s1">&#39;--iterations&#39;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s1">&#39;Number of iterations for implicit solvers&#39;</span><span class="p">,</span> <span class="n">required</span><span class="o">=</span><span class="p">.</span><span class="n">false</span><span class="p">.,</span> <span class="n">act</span><span class="o">=</span><span class="s1">&#39;store&#39;</span><span class="p">,</span> <span class="n">def</span><span class="o">=</span><span class="s1">&#39;5&#39;</span><span class="p">)</span>
+      <span class="k">call </span><span class="n">cli</span><span class="p">%</span><span class="n">add</span><span class="p">(</span><span class="n">switch</span><span class="o">=</span><span class="s1">&#39;--frequency&#39;</span><span class="p">,</span> <span class="n">switch_ab</span><span class="o">=</span><span class="s1">&#39;-f&#39;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s1">&#39;Oscillation frequency&#39;</span><span class="p">,</span> <span class="n">required</span><span class="o">=</span><span class="p">.</span><span class="n">false</span><span class="p">.,</span> <span class="n">def</span><span class="o">=</span><span class="s1">&#39;1e-4&#39;</span><span class="p">,</span> <span class="n">act</span><span class="o">=</span><span class="s1">&#39;store&#39;</span><span class="p">)</span>
+      <span class="k">call </span><span class="n">cli</span><span class="p">%</span><span class="n">add</span><span class="p">(</span><span class="n">switch</span><span class="o">=</span><span class="s1">&#39;--ss&#39;</span><span class="p">,</span> <span class="n">nargs</span><span class="o">=</span><span class="s1">&#39;+&#39;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s1">&#39;Stages/steps used&#39;</span><span class="p">,</span> <span class="n">required</span><span class="o">=</span><span class="p">.</span><span class="n">false</span><span class="p">.,</span> <span class="n">def</span><span class="o">=</span><span class="s1">&#39;-1&#39;</span><span class="p">,</span> <span class="n">act</span><span class="o">=</span><span class="s1">&#39;store&#39;</span><span class="p">)</span>
+      <span class="k">call </span><span class="n">cli</span><span class="p">%</span><span class="n">add</span><span class="p">(</span><span class="n">switch</span><span class="o">=</span><span class="s1">&#39;--order&#39;</span><span class="p">,</span> <span class="n">switch_ab</span><span class="o">=</span><span class="s1">&#39;-o&#39;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s1">&#39;ODE solver order&#39;</span><span class="p">,</span> <span class="n">required</span><span class="o">=</span><span class="p">.</span><span class="n">false</span><span class="p">.,</span> <span class="n">def</span><span class="o">=</span><span class="s1">&#39;1&#39;</span><span class="p">,</span> <span class="n">act</span><span class="o">=</span><span class="s1">&#39;store&#39;</span><span class="p">)</span>
+      <span class="k">call </span><span class="n">cli</span><span class="p">%</span><span class="n">add</span><span class="p">(</span><span class="n">switch</span><span class="o">=</span><span class="s1">&#39;--time_step&#39;</span><span class="p">,</span> <span class="n">switch_ab</span><span class="o">=</span><span class="s1">&#39;-Dt&#39;</span><span class="p">,</span> <span class="n">nargs</span><span class="o">=</span><span class="s1">&#39;+&#39;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s1">&#39;Time step&#39;</span><span class="p">,</span> <span class="n">required</span><span class="o">=</span><span class="p">.</span><span class="n">false</span><span class="p">.,</span> <span class="n">def</span><span class="o">=</span><span class="s1">&#39;100.d0&#39;</span><span class="p">,</span> <span class="n">act</span><span class="o">=</span><span class="s1">&#39;store&#39;</span><span class="p">)</span>
+      <span class="k">call </span><span class="n">cli</span><span class="p">%</span><span class="n">add</span><span class="p">(</span><span class="n">switch</span><span class="o">=</span><span class="s1">&#39;--tolerance&#39;</span><span class="p">,</span> <span class="n">switch_ab</span><span class="o">=</span><span class="s1">&#39;-tol&#39;</span><span class="p">,</span> <span class="n">nargs</span><span class="o">=</span><span class="s1">&#39;+&#39;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s1">&#39;Error Tolerance&#39;</span><span class="p">,</span> <span class="n">required</span><span class="o">=</span><span class="p">.</span><span class="n">false</span><span class="p">.,</span> <span class="n">def</span><span class="o">=</span><span class="s1">&#39;0.001d0&#39;</span><span class="p">,</span> <span class="p">&amp;</span>
+                   <span class="n">act</span><span class="o">=</span><span class="s1">&#39;store&#39;</span><span class="p">)</span>
+      <span class="k">call </span><span class="n">cli</span><span class="p">%</span><span class="n">add</span><span class="p">(</span><span class="n">switch</span><span class="o">=</span><span class="s1">&#39;--t_final&#39;</span><span class="p">,</span> <span class="n">switch_ab</span><span class="o">=</span><span class="s1">&#39;-tf&#39;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s1">&#39;Final integration time&#39;</span><span class="p">,</span> <span class="n">required</span><span class="o">=</span><span class="p">.</span><span class="n">false</span><span class="p">.,</span> <span class="n">def</span><span class="o">=</span><span class="s1">&#39;1e6&#39;</span><span class="p">,</span> <span class="n">act</span><span class="o">=</span><span class="s1">&#39;store&#39;</span><span class="p">)</span>
+      <span class="k">call </span><span class="n">cli</span><span class="p">%</span><span class="n">add</span><span class="p">(</span><span class="n">switch</span><span class="o">=</span><span class="s1">&#39;--results&#39;</span><span class="p">,</span> <span class="n">switch_ab</span><span class="o">=</span><span class="s1">&#39;-r&#39;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s1">&#39;Save results&#39;</span><span class="p">,</span> <span class="n">required</span><span class="o">=</span><span class="p">.</span><span class="n">false</span><span class="p">.,</span> <span class="n">act</span><span class="o">=</span><span class="s1">&#39;store_true&#39;</span><span class="p">,</span> <span class="n">def</span><span class="o">=</span><span class="s1">&#39;.false.&#39;</span><span class="p">)</span>
+      <span class="k">call </span><span class="n">cli</span><span class="p">%</span><span class="n">add</span><span class="p">(</span><span class="n">switch</span><span class="o">=</span><span class="s1">&#39;--plots&#39;</span><span class="p">,</span> <span class="n">switch_ab</span><span class="o">=</span><span class="s1">&#39;-p&#39;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s1">&#39;Save plots&#39;</span><span class="p">,</span> <span class="n">required</span><span class="o">=</span><span class="p">.</span><span class="n">false</span><span class="p">.,</span> <span class="n">act</span><span class="o">=</span><span class="s1">&#39;store_true&#39;</span><span class="p">,</span> <span class="n">def</span><span class="o">=</span><span class="s1">&#39;.false.&#39;</span><span class="p">)</span>
+      <span class="k">call </span><span class="n">cli</span><span class="p">%</span><span class="n">add</span><span class="p">(</span><span class="n">switch</span><span class="o">=</span><span class="s1">&#39;--output&#39;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s1">&#39;Output files basename&#39;</span><span class="p">,</span> <span class="n">required</span><span class="o">=</span><span class="p">.</span><span class="n">false</span><span class="p">.,</span> <span class="n">act</span><span class="o">=</span><span class="s1">&#39;store&#39;</span><span class="p">,</span> <span class="n">def</span><span class="o">=</span><span class="s1">&#39;unset&#39;</span><span class="p">)</span>
+      <span class="k">call </span><span class="n">cli</span><span class="p">%</span><span class="n">add</span><span class="p">(</span><span class="n">switch</span><span class="o">=</span><span class="s1">&#39;--errors_analysis&#39;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s1">&#39;Peform errors analysis&#39;</span><span class="p">,</span> <span class="n">required</span><span class="o">=</span><span class="p">.</span><span class="n">false</span><span class="p">.,</span> <span class="n">act</span><span class="o">=</span><span class="s1">&#39;store_true&#39;</span><span class="p">,</span> <span class="n">def</span><span class="o">=</span><span class="s1">&#39;.false.&#39;</span><span class="p">)</span>
+    <span class="n">endassociate</span>
+    <span class="n">endsubroutine</span> <span class="n">set_cli</span>
+
+    <span class="k">subroutine </span><span class="n">parse_cli</span><span class="p">()</span>
+    <span class="c">!&lt; Parse Command Line Interface and check its validity.</span>
+    <span class="kt">character</span><span class="p">(</span><span class="nb">len</span><span class="o">=</span><span class="p">:),</span> <span class="k">allocatable</span> <span class="kd">::</span> <span class="n">valid_solvers_list</span> <span class="c">!&lt; Pretty printed list of available solvers.</span>
+
+    <span class="k">call </span><span class="n">self</span><span class="p">%</span><span class="n">cli</span><span class="p">%</span><span class="n">parse</span><span class="p">(</span><span class="n">error</span><span class="o">=</span><span class="n">self</span><span class="p">%</span><span class="n">error</span><span class="p">)</span>
+    <span class="k">call </span><span class="n">self</span><span class="p">%</span><span class="n">cli</span><span class="p">%</span><span class="n">get</span><span class="p">(</span><span class="n">switch</span><span class="o">=</span><span class="s1">&#39;-s&#39;</span><span class="p">,</span> <span class="n">val</span><span class="o">=</span><span class="n">self</span><span class="p">%</span><span class="n">solver</span><span class="p">,</span> <span class="n">error</span><span class="o">=</span><span class="n">self</span><span class="p">%</span><span class="n">error</span><span class="p">)</span> <span class="p">;</span> <span class="k">if</span> <span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">error</span><span class="o">/=</span><span class="mi">0</span><span class="p">)</span> <span class="k">stop</span>
+<span class="k">    call </span><span class="n">self</span><span class="p">%</span><span class="n">cli</span><span class="p">%</span><span class="n">get</span><span class="p">(</span><span class="n">switch</span><span class="o">=</span><span class="s1">&#39;--iterations&#39;</span><span class="p">,</span> <span class="n">val</span><span class="o">=</span><span class="n">self</span><span class="p">%</span><span class="n">implicit_iterations</span><span class="p">,</span> <span class="n">error</span><span class="o">=</span><span class="n">self</span><span class="p">%</span><span class="n">error</span><span class="p">)</span> <span class="p">;</span> <span class="k">if</span> <span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">error</span><span class="o">/=</span><span class="mi">0</span><span class="p">)</span> <span class="k">stop</span>
+<span class="k">    call </span><span class="n">self</span><span class="p">%</span><span class="n">cli</span><span class="p">%</span><span class="n">get</span><span class="p">(</span><span class="n">switch</span><span class="o">=</span><span class="s1">&#39;-f&#39;</span><span class="p">,</span> <span class="n">val</span><span class="o">=</span><span class="n">self</span><span class="p">%</span><span class="n">frequency</span><span class="p">,</span> <span class="n">error</span><span class="o">=</span><span class="n">self</span><span class="p">%</span><span class="n">error</span><span class="p">)</span> <span class="p">;</span> <span class="k">if</span> <span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">error</span><span class="o">/=</span><span class="mi">0</span><span class="p">)</span> <span class="k">stop</span>
+<span class="k">    call </span><span class="n">self</span><span class="p">%</span><span class="n">cli</span><span class="p">%</span><span class="n">get_varying</span><span class="p">(</span><span class="n">switch</span><span class="o">=</span><span class="s1">&#39;--ss&#39;</span><span class="p">,</span> <span class="n">val</span><span class="o">=</span><span class="n">self</span><span class="p">%</span><span class="n">stages_steps</span><span class="p">,</span> <span class="n">error</span><span class="o">=</span><span class="n">self</span><span class="p">%</span><span class="n">error</span><span class="p">)</span> <span class="p">;</span> <span class="k">if</span> <span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">error</span><span class="o">/=</span><span class="mi">0</span><span class="p">)</span> <span class="k">stop</span>
+<span class="k">    call </span><span class="n">self</span><span class="p">%</span><span class="n">cli</span><span class="p">%</span><span class="n">get</span><span class="p">(</span><span class="n">switch</span><span class="o">=</span><span class="s1">&#39;-o&#39;</span><span class="p">,</span> <span class="n">val</span><span class="o">=</span><span class="n">self</span><span class="p">%</span><span class="n">order</span><span class="p">,</span> <span class="n">error</span><span class="o">=</span><span class="n">self</span><span class="p">%</span><span class="n">error</span><span class="p">)</span> <span class="p">;</span> <span class="k">if</span> <span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">error</span><span class="o">/=</span><span class="mi">0</span><span class="p">)</span> <span class="k">stop</span>
+<span class="k">    call </span><span class="n">self</span><span class="p">%</span><span class="n">cli</span><span class="p">%</span><span class="n">get_varying</span><span class="p">(</span><span class="n">switch</span><span class="o">=</span><span class="s1">&#39;-Dt&#39;</span><span class="p">,</span> <span class="n">val</span><span class="o">=</span><span class="n">self</span><span class="p">%</span><span class="n">Dt</span><span class="p">,</span> <span class="n">error</span><span class="o">=</span><span class="n">self</span><span class="p">%</span><span class="n">error</span><span class="p">)</span> <span class="p">;</span> <span class="k">if</span> <span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">error</span><span class="o">/=</span><span class="mi">0</span><span class="p">)</span> <span class="k">stop</span>
+<span class="k">    call </span><span class="n">self</span><span class="p">%</span><span class="n">cli</span><span class="p">%</span><span class="n">get_varying</span><span class="p">(</span><span class="n">switch</span><span class="o">=</span><span class="s1">&#39;-tol&#39;</span><span class="p">,</span> <span class="n">val</span><span class="o">=</span><span class="n">self</span><span class="p">%</span><span class="n">tolerance</span><span class="p">,</span> <span class="n">error</span><span class="o">=</span><span class="n">self</span><span class="p">%</span><span class="n">error</span><span class="p">)</span> <span class="p">;</span> <span class="k">if</span> <span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">error</span><span class="o">/=</span><span class="mi">0</span><span class="p">)</span> <span class="k">stop</span>
+<span class="k">    call </span><span class="n">self</span><span class="p">%</span><span class="n">cli</span><span class="p">%</span><span class="n">get</span><span class="p">(</span><span class="n">switch</span><span class="o">=</span><span class="s1">&#39;-tf&#39;</span><span class="p">,</span> <span class="n">val</span><span class="o">=</span><span class="n">self</span><span class="p">%</span><span class="n">final_time</span><span class="p">,</span> <span class="n">error</span><span class="o">=</span><span class="n">self</span><span class="p">%</span><span class="n">error</span><span class="p">)</span> <span class="p">;</span> <span class="k">if</span> <span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">error</span><span class="o">/=</span><span class="mi">0</span><span class="p">)</span> <span class="k">stop</span>
+<span class="k">    call </span><span class="n">self</span><span class="p">%</span><span class="n">cli</span><span class="p">%</span><span class="n">get</span><span class="p">(</span><span class="n">switch</span><span class="o">=</span><span class="s1">&#39;-r&#39;</span><span class="p">,</span> <span class="n">val</span><span class="o">=</span><span class="n">self</span><span class="p">%</span><span class="n">results</span><span class="p">,</span> <span class="n">error</span><span class="o">=</span><span class="n">self</span><span class="p">%</span><span class="n">error</span><span class="p">)</span> <span class="p">;</span> <span class="k">if</span> <span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">error</span><span class="o">/=</span><span class="mi">0</span><span class="p">)</span> <span class="k">stop</span>
+<span class="k">    call </span><span class="n">self</span><span class="p">%</span><span class="n">cli</span><span class="p">%</span><span class="n">get</span><span class="p">(</span><span class="n">switch</span><span class="o">=</span><span class="s1">&#39;-p&#39;</span><span class="p">,</span> <span class="n">val</span><span class="o">=</span><span class="n">self</span><span class="p">%</span><span class="n">plots</span><span class="p">,</span> <span class="n">error</span><span class="o">=</span><span class="n">self</span><span class="p">%</span><span class="n">error</span><span class="p">)</span> <span class="p">;</span> <span class="k">if</span> <span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">error</span><span class="o">/=</span><span class="mi">0</span><span class="p">)</span> <span class="k">stop</span>
+<span class="k">    call </span><span class="n">self</span><span class="p">%</span><span class="n">cli</span><span class="p">%</span><span class="n">get</span><span class="p">(</span><span class="n">switch</span><span class="o">=</span><span class="s1">&#39;--output&#39;</span><span class="p">,</span> <span class="n">val</span><span class="o">=</span><span class="n">self</span><span class="p">%</span><span class="n">output_cli</span><span class="p">,</span> <span class="n">error</span><span class="o">=</span><span class="n">self</span><span class="p">%</span><span class="n">error</span><span class="p">)</span> <span class="p">;</span> <span class="k">if</span> <span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">error</span><span class="o">/=</span><span class="mi">0</span><span class="p">)</span> <span class="k">stop</span>
+<span class="k">    call </span><span class="n">self</span><span class="p">%</span><span class="n">cli</span><span class="p">%</span><span class="n">get</span><span class="p">(</span><span class="n">switch</span><span class="o">=</span><span class="s1">&#39;--errors_analysis&#39;</span><span class="p">,</span> <span class="n">val</span><span class="o">=</span><span class="n">self</span><span class="p">%</span><span class="n">errors_analysis</span><span class="p">,</span> <span class="n">error</span><span class="o">=</span><span class="n">self</span><span class="p">%</span><span class="n">error</span><span class="p">)</span> <span class="p">;</span> <span class="k">if</span> <span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">error</span><span class="o">/=</span><span class="mi">0</span><span class="p">)</span> <span class="k">stop</span>
+
+<span class="k">    if</span> <span class="p">(.</span><span class="nb">not</span><span class="p">.</span><span class="n">is_solver_valid</span><span class="p">())</span> <span class="k">then</span>
+<span class="k">      print</span> <span class="s2">&quot;(A)&quot;</span><span class="p">,</span> <span class="s1">&#39;Error: the solver &quot;&#39;</span><span class="o">//</span><span class="nb">trim</span><span class="p">(</span><span class="nb">adjustl</span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">solver</span><span class="p">))</span><span class="o">//</span><span class="s1">&#39;&quot; is unknown!&#39;</span>
+      <span class="n">valid_solvers_list</span> <span class="o">=</span> <span class="n">list_solvers</span><span class="p">()</span>
+      <span class="k">print</span> <span class="s2">&quot;(A)&quot;</span><span class="p">,</span> <span class="n">valid_solvers_list</span>
+      <span class="k">stop</span>
+<span class="k">    </span><span class="n">endif</span>
+    <span class="k">if</span> <span class="p">(.</span><span class="nb">not</span><span class="p">.</span><span class="n">is_dt_valid</span><span class="p">())</span> <span class="k">then</span>
+<span class="k">      print</span> <span class="s2">&quot;(A)&quot;</span><span class="p">,</span> <span class="s1">&#39;Error: the final integration time must be an exact multiple of the time step used!&#39;</span>
+      <span class="k">print</span> <span class="s2">&quot;(A)&quot;</span><span class="p">,</span> <span class="s1">&#39;Final integration time: &#39;</span><span class="o">//</span><span class="n">str</span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">final_time</span><span class="p">,</span> <span class="p">.</span><span class="n">true</span><span class="p">.)</span>
+      <span class="k">print</span> <span class="s2">&quot;(A)&quot;</span><span class="p">,</span> <span class="s1">&#39;Time step: &#39;</span><span class="o">//</span><span class="n">str</span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">Dt</span><span class="p">,</span> <span class="p">.</span><span class="n">true</span><span class="p">.)</span>
+      <span class="k">stop</span>
+<span class="k">    </span><span class="n">endif</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">size</span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">stages_steps</span><span class="p">)</span><span class="o">==</span><span class="mi">2</span><span class="p">)</span> <span class="k">then</span>
+<span class="k">      if</span> <span class="p">(.</span><span class="nb">not</span><span class="p">.(</span><span class="n">self</span><span class="p">%</span><span class="n">stages_steps</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span><span class="o">&gt;</span><span class="n">self</span><span class="p">%</span><span class="n">stages_steps</span><span class="p">(</span><span class="mi">1</span><span class="p">).</span><span class="nb">and</span><span class="p">.</span><span class="n">self</span><span class="p">%</span><span class="n">stages_steps</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="o">&gt;=</span><span class="mi">0</span><span class="p">))</span> <span class="k">then</span>
+<span class="k">        print</span> <span class="s2">&quot;(A)&quot;</span><span class="p">,</span> <span class="s1">&#39;Error: when passing a range of stages/steps the valid format must be lower-upper (both positive)!&#39;</span>
+        <span class="k">print</span> <span class="s2">&quot;(A)&quot;</span><span class="p">,</span> <span class="s1">&#39;Range passed: &#39;</span><span class="o">//</span><span class="nb">trim</span><span class="p">(</span><span class="n">str</span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">stages_steps</span><span class="p">(</span><span class="mi">1</span><span class="p">),</span> <span class="p">.</span><span class="n">true</span><span class="p">.))</span><span class="o">//</span><span class="s1">&#39;-&#39;</span><span class="o">//</span><span class="nb">trim</span><span class="p">(</span><span class="n">str</span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">stages_steps</span><span class="p">(</span><span class="mi">2</span><span class="p">),</span> <span class="p">.</span><span class="n">true</span><span class="p">.))</span>
+        <span class="k">stop</span>
+<span class="k">      </span><span class="n">endif</span>
+    <span class="n">endif</span>
+    <span class="n">endsubroutine</span> <span class="n">parse_cli</span>
+
+    <span class="k">function </span><span class="n">is_solver_valid</span><span class="p">()</span>
+    <span class="c">!&lt; Verify if the selected solver is valid.</span>
+    <span class="kt">logical</span>      <span class="kd">::</span> <span class="n">is_solver_valid</span> <span class="c">!&lt; Return true is the selected solver is available.</span>
+    <span class="kt">integer</span><span class="p">(</span><span class="n">I_P</span><span class="p">)</span> <span class="kd">::</span> <span class="n">s</span>               <span class="c">!&lt; Counter.</span>
+
+    <span class="n">is_solver_valid</span> <span class="o">=</span> <span class="p">.</span><span class="n">false</span><span class="p">.</span>
+    <span class="k">do </span><span class="n">s</span><span class="o">=</span><span class="nb">lbound</span><span class="p">(</span><span class="n">solvers</span><span class="p">,</span> <span class="nb">dim</span><span class="o">=</span><span class="mi">1</span><span class="p">),</span> <span class="nb">ubound</span><span class="p">(</span><span class="n">solvers</span><span class="p">,</span> <span class="nb">dim</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+      <span class="n">is_solver_valid</span> <span class="o">=</span> <span class="p">(</span><span class="nb">trim</span><span class="p">(</span><span class="nb">adjustl</span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">solver</span><span class="p">))</span><span class="o">==</span><span class="nb">trim</span><span class="p">(</span><span class="nb">adjustl</span><span class="p">(</span><span class="n">solvers</span><span class="p">(</span><span class="n">s</span><span class="p">))))</span>
+      <span class="k">if</span> <span class="p">(</span><span class="n">is_solver_valid</span><span class="p">)</span> <span class="k">exit</span>
+<span class="k">    </span><span class="n">enddo</span>
+    <span class="n">endfunction</span> <span class="n">is_solver_valid</span>
+
+    <span class="k">function </span><span class="n">is_dt_valid</span><span class="p">()</span>
+    <span class="c">!&lt; Verify if the selected time step Dt is valid.</span>
+    <span class="kt">logical</span>      <span class="kd">::</span> <span class="n">is_dt_valid</span> <span class="c">!&lt; Return true is the selected time step Dt is valid.</span>
+    <span class="kt">integer</span><span class="p">(</span><span class="n">I_P</span><span class="p">)</span> <span class="kd">::</span> <span class="n">t</span>           <span class="c">!&lt; Counter.</span>
+
+    <span class="n">is_dt_valid</span> <span class="o">=</span> <span class="p">.</span><span class="n">true</span><span class="p">.</span>
+    <span class="k">do </span><span class="n">t</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">size</span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">Dt</span><span class="p">)</span>
+      <span class="n">is_dt_valid</span> <span class="o">=</span> <span class="p">((</span><span class="n">self</span><span class="p">%</span><span class="n">final_time</span> <span class="o">-</span> <span class="nb">int</span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">final_time</span><span class="o">/</span><span class="n">self</span><span class="p">%</span><span class="n">Dt</span><span class="p">(</span><span class="n">t</span><span class="p">),</span> <span class="n">I_P</span><span class="p">)</span><span class="o">*</span><span class="n">self</span><span class="p">%</span><span class="n">Dt</span><span class="p">(</span><span class="n">t</span><span class="p">))</span><span class="o">==</span><span class="mi">0</span><span class="p">)</span>
+      <span class="k">if</span> <span class="p">(.</span><span class="nb">not</span><span class="p">.</span><span class="n">is_dt_valid</span><span class="p">)</span> <span class="k">exit</span>
+<span class="k">    </span><span class="n">enddo</span>
+    <span class="n">endfunction</span> <span class="n">is_dt_valid</span>
+
+    <span class="k">function </span><span class="n">list_solvers</span><span class="p">()</span> <span class="k">result</span><span class="p">(</span><span class="n">list</span><span class="p">)</span>
+    <span class="c">!&lt; List available solvers.</span>
+    <span class="kt">character</span><span class="p">(</span><span class="nb">len</span><span class="o">=</span><span class="p">:),</span> <span class="k">allocatable</span> <span class="kd">::</span> <span class="n">list</span> <span class="c">!&lt; Pretty printed list of available solvers.</span>
+    <span class="kt">integer</span><span class="p">(</span><span class="n">I_P</span><span class="p">)</span>                  <span class="kd">::</span> <span class="n">s</span>    <span class="c">!&lt; Solvers counter.</span>
+
+    <span class="n">list</span> <span class="o">=</span> <span class="s1">&#39;Valid solver names are:&#39;</span> <span class="o">//</span> <span class="nb">new_line</span><span class="p">(</span><span class="s1">&#39;a&#39;</span><span class="p">)</span>
+    <span class="k">do </span><span class="n">s</span><span class="o">=</span><span class="nb">lbound</span><span class="p">(</span><span class="n">solvers</span><span class="p">,</span> <span class="nb">dim</span><span class="o">=</span><span class="mi">1</span><span class="p">),</span> <span class="nb">ubound</span><span class="p">(</span><span class="n">solvers</span><span class="p">,</span> <span class="nb">dim</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+      <span class="n">list</span> <span class="o">=</span> <span class="n">list</span> <span class="o">//</span> <span class="s1">&#39;  + &#39;</span> <span class="o">//</span> <span class="nb">trim</span><span class="p">(</span><span class="nb">adjustl</span><span class="p">(</span><span class="n">solvers</span><span class="p">(</span><span class="n">s</span><span class="p">)))</span> <span class="o">//</span> <span class="nb">new_line</span><span class="p">(</span><span class="s1">&#39;a&#39;</span><span class="p">)</span>
+    <span class="n">enddo</span>
+    <span class="n">endfunction</span> <span class="n">list_solvers</span>
   <span class="n">endsubroutine</span> <span class="n">init</span>
 </pre></div>
 
@@ -1611,7 +1674,7 @@ private pure subroutine init(self, initial_state, frequency)
           <p class="text-right">
             Documentation generated by 
             <a href="https://github.com/cmacmackin/ford">FORD</a>
-             on 2017-03-31 16:42  
+             on 2017-03-31 15:04  
           </p>
         </div>
         <div class="col-xs-12 col-md-4 col-md-pull-4"><p class="text-center"> FOODIE was developed by Fortran-FOSS-Programmers Group</p></div>

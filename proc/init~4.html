@@ -134,18 +134,18 @@
      <li><i class="fa fa-list-ol"></i>
        <a data-toggle="tooltip"
 	  data-placement="bottom" data-html="true"
-	  title=" 0.1% of total for procedures.">9 statements</a>
+	  title=" 0.7% of total for procedures.">48 statements</a>
      </li> 
      
      
-    <li><i class="fa fa-code"></i><a href="../src/foodie_integrator_leapfrog.f90"> Source File</a></li>
+    <li><i class="fa fa-code"></i><a href="../src/foodie_integrator_backward_differentiation_formula.f90"> Source File</a></li>
      
   </ul>
   <ol class="breadcrumb in-well text-right">
   
-     <li><a href='../sourcefile/foodie_integrator_leapfrog.f90.html'>foodie_integrator_leapfrog.f90</a></li>
+     <li><a href='../sourcefile/foodie_integrator_backward_differentiation_formula.f90.html'>foodie_integrator_backward_differentiation_formula.f90</a></li>
   
-     <li><a href='../module/foodie_integrator_leapfrog.html'>foodie_integrator_leapfrog</a></li>
+     <li><a href='../module/foodie_integrator_backward_differentiation_formula.html'>foodie_integrator_backward_differentiation_formula</a></li>
   
      <li class="active">init</li>
   </ol>
@@ -820,7 +820,7 @@
     
     <div class="col-md-9" id='text'>
     <h2>
-private subroutine init(self, nu, alpha)
+private subroutine init(self, steps)
     
     
 	 
@@ -830,7 +830,7 @@ private subroutine init(self, nu, alpha)
 
 
     
-    <p>Create the actual leapfrog integrator: initialize the filter coefficient.</p>
+    <p>Create the actual BDF integrator: initialize the <em>alpha</em> and <em>beta</em> coefficients.</p>
     
 
     <h3>Arguments</h3>
@@ -851,7 +851,7 @@ private subroutine init(self, nu, alpha)
   
 <tr>
   
-  <td><span class="anchor" id="variable-self%7E22"></span>class(<a href='../type/integrator_leapfrog.html'>integrator_leapfrog</a>),</td>
+  <td><span class="anchor" id="variable-self%7E20"></span>class(<a href='../type/integrator_back_df.html'>integrator_back_df</a>),</td>
   <td>intent(inout)</td>
   <td></td>
   
@@ -866,27 +866,12 @@ private subroutine init(self, nu, alpha)
   
 <tr>
   
-  <td><span class="anchor" id="variable-nu%7E3"></span>real(kind=R_P),</td>
-  <td>intent(in),</td>
-  <td>optional</td>
+  <td><span class="anchor" id="variable-steps%7E18"></span>integer(kind=I_P),</td>
+  <td>intent(in)</td>
+  <td></td>
   
   <td></td><td>::</td>
-  <td><strong>nu</strong></td><td><p>Williams-Robert-Asselin filter coefficient.</p></td>
-  
-</tr>
-
-  
-  
-  
-  
-<tr>
-  
-  <td><span class="anchor" id="variable-alpha%7E2"></span>real(kind=R_P),</td>
-  <td>intent(in),</td>
-  <td>optional</td>
-  
-  <td></td><td>::</td>
-  <td><strong>alpha</strong></td><td><p>Robert-Asselin filter coefficient.</p></td>
+  <td><strong>steps</strong></td><td><p>Number of time steps used.</p></td>
   
 </tr>
 
@@ -952,16 +937,56 @@ private subroutine init(self, nu, alpha)
     
     <section>
     <h2><span class="anchor" id="src"></span>Source Code</h2>
-    <div class="highlight"><pre><span></span>  <span class="k">subroutine </span><span class="n">init</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">nu</span><span class="p">,</span> <span class="n">alpha</span><span class="p">)</span>
-  <span class="c">!&lt; Create the actual leapfrog integrator: initialize the filter coefficient.</span>
-  <span class="k">class</span><span class="p">(</span><span class="n">integrator_leapfrog</span><span class="p">),</span> <span class="k">intent</span><span class="p">(</span><span class="n">inout</span><span class="p">)</span>        <span class="kd">::</span> <span class="n">self</span>  <span class="c">!&lt; Integrator.</span>
-  <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">),</span>                  <span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">),</span> <span class="k">optional</span> <span class="kd">::</span> <span class="n">nu</span>    <span class="c">!&lt; Williams-Robert-Asselin filter coefficient.</span>
-  <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">),</span>                  <span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">),</span> <span class="k">optional</span> <span class="kd">::</span> <span class="n">alpha</span> <span class="c">!&lt; Robert-Asselin filter coefficient.</span>
+    <div class="highlight"><pre><span></span>  <span class="k">subroutine </span><span class="n">init</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">steps</span><span class="p">)</span>
+  <span class="c">!&lt; Create the actual BDF integrator: initialize the *alpha* and *beta* coefficients.</span>
+  <span class="k">class</span><span class="p">(</span><span class="n">integrator_back_df</span><span class="p">),</span> <span class="k">intent</span><span class="p">(</span><span class="n">inout</span><span class="p">)</span> <span class="kd">::</span> <span class="n">self</span>  <span class="c">!&lt; Integrator.</span>
+  <span class="kt">integer</span><span class="p">(</span><span class="n">I_P</span><span class="p">),</span>              <span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span>    <span class="kd">::</span> <span class="n">steps</span> <span class="c">!&lt; Number of time steps used.</span>
 
-  <span class="n">self</span><span class="p">%</span><span class="n">nu</span> <span class="o">=</span> <span class="mf">0.01_R_P</span>
-  <span class="n">self</span><span class="p">%</span><span class="n">alpha</span> <span class="o">=</span> <span class="mf">0.53_R_P</span>
-  <span class="k">if</span> <span class="p">(</span><span class="nb">present</span><span class="p">(</span><span class="n">nu</span><span class="p">))</span> <span class="n">self</span><span class="p">%</span><span class="n">nu</span> <span class="o">=</span> <span class="n">nu</span>
-  <span class="k">if</span> <span class="p">(</span><span class="nb">present</span><span class="p">(</span><span class="n">alpha</span><span class="p">))</span> <span class="n">self</span><span class="p">%</span><span class="n">alpha</span> <span class="o">=</span> <span class="n">alpha</span>
+  <span class="k">if</span> <span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">is_supported</span><span class="p">(</span><span class="n">steps</span><span class="p">))</span> <span class="k">then</span>
+<span class="k">    call </span><span class="n">self</span><span class="p">%</span><span class="n">destroy</span>
+    <span class="n">self</span><span class="p">%</span><span class="n">steps</span> <span class="o">=</span> <span class="n">steps</span>
+    <span class="k">allocate</span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">a</span><span class="p">(</span><span class="mi">1</span><span class="p">:</span><span class="n">steps</span><span class="p">))</span> <span class="p">;</span> <span class="n">self</span><span class="p">%</span><span class="n">a</span> <span class="o">=</span> <span class="mf">0.0_R_P</span>
+    <span class="k">select case</span><span class="p">(</span><span class="n">steps</span><span class="p">)</span>
+    <span class="k">case</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+      <span class="n">self</span><span class="p">%</span><span class="n">a</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">=</span> <span class="o">-</span><span class="mf">1.0_R_P</span>
+      <span class="n">self</span><span class="p">%</span><span class="n">b</span> <span class="o">=</span> <span class="mf">1.0_R_P</span>
+    <span class="k">case</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+      <span class="n">self</span><span class="p">%</span><span class="n">a</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">=</span> <span class="mf">1.0_R_P</span><span class="o">/</span><span class="mf">3.0_R_P</span>
+      <span class="n">self</span><span class="p">%</span><span class="n">a</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span> <span class="o">=</span> <span class="o">-</span><span class="mf">4.0_R_P</span><span class="o">/</span><span class="mf">3.0_R_P</span>
+      <span class="n">self</span><span class="p">%</span><span class="n">b</span> <span class="o">=</span> <span class="mf">2.0_R_P</span><span class="o">/</span><span class="mf">3.0_R_P</span>
+    <span class="k">case</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
+      <span class="n">self</span><span class="p">%</span><span class="n">a</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">=</span> <span class="o">-</span><span class="mf">2.0_R_P</span><span class="o">/</span><span class="mi">1</span><span class="mf">1.0_R_P</span>
+      <span class="n">self</span><span class="p">%</span><span class="n">a</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span> <span class="o">=</span> <span class="mf">9.0_R_P</span><span class="o">/</span><span class="mi">1</span><span class="mf">1.0_R_P</span>
+      <span class="n">self</span><span class="p">%</span><span class="n">a</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="mf">8.0_R_P</span><span class="o">/</span><span class="mi">1</span><span class="mf">1.0_R_P</span>
+      <span class="n">self</span><span class="p">%</span><span class="n">b</span> <span class="o">=</span> <span class="mf">6.0_R_P</span><span class="o">/</span><span class="mi">1</span><span class="mf">1.0_R_P</span>
+    <span class="k">case</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span>
+      <span class="n">self</span><span class="p">%</span><span class="n">a</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">=</span> <span class="mf">3.0_R_P</span><span class="o">/</span><span class="mi">2</span><span class="mf">5.0_R_P</span>
+      <span class="n">self</span><span class="p">%</span><span class="n">a</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="mf">6.0_R_P</span><span class="o">/</span><span class="mi">2</span><span class="mf">5.0_R_P</span>
+      <span class="n">self</span><span class="p">%</span><span class="n">a</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span> <span class="o">=</span> <span class="mi">3</span><span class="mf">6.0_R_P</span><span class="o">/</span><span class="mi">2</span><span class="mf">5.0_R_P</span>
+      <span class="n">self</span><span class="p">%</span><span class="n">a</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span> <span class="o">=</span> <span class="o">-</span><span class="mi">4</span><span class="mf">8.0_R_P</span><span class="o">/</span><span class="mi">2</span><span class="mf">5.0_R_P</span>
+      <span class="n">self</span><span class="p">%</span><span class="n">b</span> <span class="o">=</span> <span class="mi">1</span><span class="mf">2.0_R_P</span><span class="o">/</span><span class="mi">2</span><span class="mf">5.0_R_P</span>
+    <span class="k">case</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
+      <span class="n">self</span><span class="p">%</span><span class="n">a</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="mf">2.0_R_P</span><span class="o">/</span><span class="mi">13</span><span class="mf">7.0_R_P</span>
+      <span class="n">self</span><span class="p">%</span><span class="n">a</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span> <span class="o">=</span> <span class="mi">7</span><span class="mf">5.0_R_P</span><span class="o">/</span><span class="mi">13</span><span class="mf">7.0_R_P</span>
+      <span class="n">self</span><span class="p">%</span><span class="n">a</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span> <span class="o">=</span> <span class="o">-</span><span class="mi">20</span><span class="mf">0.0_R_P</span><span class="o">/</span><span class="mi">13</span><span class="mf">7.0_R_P</span>
+      <span class="n">self</span><span class="p">%</span><span class="n">a</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span> <span class="o">=</span> <span class="mi">30</span><span class="mf">0.0_R_P</span><span class="o">/</span><span class="mi">13</span><span class="mf">7.0_R_P</span>
+      <span class="n">self</span><span class="p">%</span><span class="n">a</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span> <span class="o">=</span> <span class="o">-</span><span class="mi">30</span><span class="mf">0.0_R_P</span><span class="o">/</span><span class="mi">13</span><span class="mf">7.0_R_P</span>
+      <span class="n">self</span><span class="p">%</span><span class="n">b</span> <span class="o">=</span> <span class="mi">6</span><span class="mf">0.0_R_P</span><span class="o">/</span><span class="mi">13</span><span class="mf">7.0_R_P</span>
+    <span class="k">case</span><span class="p">(</span><span class="mi">6</span><span class="p">)</span>
+      <span class="n">self</span><span class="p">%</span><span class="n">a</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">=</span> <span class="mi">1</span><span class="mf">0.0_R_P</span><span class="o">/</span><span class="mi">14</span><span class="mf">7.0_R_P</span>
+      <span class="n">self</span><span class="p">%</span><span class="n">a</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span> <span class="o">=</span> <span class="o">-</span><span class="mi">7</span><span class="mf">2.0_R_P</span><span class="o">/</span><span class="mi">14</span><span class="mf">7.0_R_P</span>
+      <span class="n">self</span><span class="p">%</span><span class="n">a</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span> <span class="o">=</span> <span class="mi">22</span><span class="mf">5.0_R_P</span><span class="o">/</span><span class="mi">14</span><span class="mf">7.0_R_P</span>
+      <span class="n">self</span><span class="p">%</span><span class="n">a</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span> <span class="o">=</span> <span class="o">-</span><span class="mi">40</span><span class="mf">0.0_R_P</span><span class="o">/</span><span class="mi">14</span><span class="mf">7.0_R_P</span>
+      <span class="n">self</span><span class="p">%</span><span class="n">a</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span> <span class="o">=</span> <span class="mi">45</span><span class="mf">0.0_R_P</span><span class="o">/</span><span class="mi">14</span><span class="mf">7.0_R_P</span>
+      <span class="n">self</span><span class="p">%</span><span class="n">a</span><span class="p">(</span><span class="mi">6</span><span class="p">)</span> <span class="o">=</span> <span class="o">-</span><span class="mi">36</span><span class="mf">0.0_R_P</span><span class="o">/</span><span class="mi">14</span><span class="mf">7.0_R_P</span>
+      <span class="n">self</span><span class="p">%</span><span class="n">b</span> <span class="o">=</span> <span class="mi">6</span><span class="mf">0.0_R_P</span><span class="o">/</span><span class="mi">14</span><span class="mf">7.0_R_P</span>
+    <span class="k">case </span><span class="n">default</span>
+    <span class="n">endselect</span>
+  <span class="k">else</span>
+<span class="k">    call </span><span class="n">self</span><span class="p">%</span><span class="n">trigger_error</span><span class="p">(</span><span class="n">error</span><span class="o">=</span><span class="n">ERROR_BAD_STEPS_NUMBER</span><span class="p">,</span>                           <span class="p">&amp;</span>
+                            <span class="n">error_message</span><span class="o">=</span><span class="s1">&#39;bad (unsupported) number of time steps&#39;</span><span class="p">,</span> <span class="p">&amp;</span>
+                            <span class="n">is_severe</span><span class="o">=</span><span class="p">.</span><span class="n">true</span><span class="p">.)</span>
+  <span class="n">endif</span>
   <span class="n">endsubroutine</span> <span class="n">init</span>
 </pre></div>
 
@@ -1606,7 +1631,7 @@ private subroutine init(self, nu, alpha)
           <p class="text-right">
             Documentation generated by 
             <a href="https://github.com/cmacmackin/ford">FORD</a>
-             on 2017-03-31 16:42  
+             on 2017-03-31 15:04  
           </p>
         </div>
         <div class="col-xs-12 col-md-4 col-md-pull-4"><p class="text-center"> FOODIE was developed by Fortran-FOSS-Programmers Group</p></div>

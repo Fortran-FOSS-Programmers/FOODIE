@@ -134,18 +134,18 @@
      <li><i class="fa fa-list-ol"></i>
        <a data-toggle="tooltip"
 	  data-placement="bottom" data-html="true"
-	  title=" 0.2% of total for procedures.">12 statements</a>
+	  title=" 0.2% of total for procedures.">14 statements</a>
      </li> 
      
      
-    <li><i class="fa fa-code"></i><a href="../src/foodie_integrator_adams_moulton.f90"> Source File</a></li>
+    <li><i class="fa fa-code"></i><a href="../src/foodie_integrator_lmm_ssp_vss.f90"> Source File</a></li>
      
   </ul>
   <ol class="breadcrumb in-well text-right">
   
-     <li><a href='../sourcefile/foodie_integrator_adams_moulton.f90.html'>foodie_integrator_adams_moulton.f90</a></li>
+     <li><a href='../sourcefile/foodie_integrator_lmm_ssp_vss.f90.html'>foodie_integrator_lmm_ssp_vss.f90</a></li>
   
-     <li><a href='../module/foodie_integrator_adams_moulton.html'>foodie_integrator_adams_moulton</a></li>
+     <li><a href='../module/foodie_integrator_lmm_ssp_vss.html'>foodie_integrator_lmm_ssp_vss</a></li>
   
      <li class="active">description</li>
   </ol>
@@ -851,7 +851,7 @@ private pure function description(self, prefix) result(desc)
   
 <tr>
   
-  <td><span class="anchor" id="variable-self%7E37"></span>class(<a href='../type/integrator_adams_moulton.html'>integrator_adams_moulton</a>),</td>
+  <td><span class="anchor" id="variable-self%7E34"></span>class(<a href='../type/integrator_lmm_ssp_vss.html'>integrator_lmm_ssp_vss</a>),</td>
   <td>intent(in)</td>
   <td></td>
   
@@ -948,16 +948,18 @@ private pure function description(self, prefix) result(desc)
     <h2><span class="anchor" id="src"></span>Source Code</h2>
     <div class="highlight"><pre><span></span>  <span class="k">pure function </span><span class="n">description</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">prefix</span><span class="p">)</span> <span class="k">result</span><span class="p">(</span><span class="n">desc</span><span class="p">)</span>
   <span class="c">!&lt; Return a pretty-formatted object description.</span>
-  <span class="k">class</span><span class="p">(</span><span class="n">integrator_adams_moulton</span><span class="p">),</span> <span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span>           <span class="kd">::</span> <span class="n">self</span>             <span class="c">!&lt; Integrator.</span>
-  <span class="kt">character</span><span class="p">(</span><span class="o">*</span><span class="p">),</span>                    <span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">),</span> <span class="k">optional</span> <span class="kd">::</span> <span class="n">prefix</span>           <span class="c">!&lt; Prefixing string.</span>
-  <span class="kt">character</span><span class="p">(</span><span class="nb">len</span><span class="o">=</span><span class="p">:),</span> <span class="k">allocatable</span>                         <span class="kd">::</span> <span class="n">desc</span>             <span class="c">!&lt; Description.</span>
-  <span class="kt">character</span><span class="p">(</span><span class="nb">len</span><span class="o">=</span><span class="p">:),</span> <span class="k">allocatable</span>                         <span class="kd">::</span> <span class="n">prefix_</span>          <span class="c">!&lt; Prefixing string, local variable.</span>
-  <span class="kt">character</span><span class="p">(</span><span class="nb">len</span><span class="o">=</span><span class="mi">1</span><span class="p">),</span> <span class="k">parameter</span>                           <span class="kd">::</span> <span class="n">NL</span><span class="o">=</span><span class="nb">new_line</span><span class="p">(</span><span class="s1">&#39;a&#39;</span><span class="p">)</span> <span class="c">!&lt; New line character.</span>
+  <span class="k">class</span><span class="p">(</span><span class="n">integrator_lmm_ssp_vss</span><span class="p">),</span> <span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span>           <span class="kd">::</span> <span class="n">self</span>             <span class="c">!&lt; Integrator.</span>
+  <span class="kt">character</span><span class="p">(</span><span class="o">*</span><span class="p">),</span>                  <span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">),</span> <span class="k">optional</span> <span class="kd">::</span> <span class="n">prefix</span>           <span class="c">!&lt; Prefixing string.</span>
+  <span class="kt">character</span><span class="p">(</span><span class="nb">len</span><span class="o">=</span><span class="p">:),</span> <span class="k">allocatable</span>                       <span class="kd">::</span> <span class="n">desc</span>             <span class="c">!&lt; Description.</span>
+  <span class="kt">character</span><span class="p">(</span><span class="nb">len</span><span class="o">=</span><span class="p">:),</span> <span class="k">allocatable</span>                       <span class="kd">::</span> <span class="n">prefix_</span>          <span class="c">!&lt; Prefixing string, local variable.</span>
+  <span class="kt">character</span><span class="p">(</span><span class="nb">len</span><span class="o">=</span><span class="mi">1</span><span class="p">),</span> <span class="k">parameter</span>                         <span class="kd">::</span> <span class="n">NL</span><span class="o">=</span><span class="nb">new_line</span><span class="p">(</span><span class="s1">&#39;a&#39;</span><span class="p">)</span> <span class="c">!&lt; New line character.</span>
 
   <span class="n">prefix_</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span> <span class="p">;</span> <span class="k">if</span> <span class="p">(</span><span class="nb">present</span><span class="p">(</span><span class="n">prefix</span><span class="p">))</span> <span class="n">prefix_</span> <span class="o">=</span> <span class="n">prefix</span>
   <span class="n">desc</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
-  <span class="n">desc</span> <span class="o">=</span> <span class="n">desc</span><span class="o">//</span><span class="n">prefix_</span><span class="o">//</span><span class="s1">&#39;Adams-Moulton multi-step schemes class&#39;</span><span class="o">//</span><span class="n">NL</span>
-  <span class="n">desc</span> <span class="o">=</span> <span class="n">desc</span><span class="o">//</span><span class="n">prefix_</span><span class="o">//</span><span class="s1">&#39;  Supported steps numbers: [&#39;</span><span class="o">//</span><span class="nb">trim</span><span class="p">(</span><span class="nb">adjustl</span><span class="p">(</span><span class="n">supported_steps</span><span class="p">))</span><span class="o">//</span><span class="s1">&#39;]&#39;</span>
+  <span class="n">desc</span> <span class="o">=</span> <span class="n">desc</span><span class="o">//</span><span class="n">prefix_</span><span class="o">//</span><span class="s1">&#39;Strong Stability preserving Linear-Multistep-Methods Variable Stepsize class&#39;</span><span class="o">//</span><span class="n">NL</span>
+  <span class="n">desc</span> <span class="o">=</span> <span class="n">desc</span><span class="o">//</span><span class="n">prefix_</span><span class="o">//</span><span class="s1">&#39;  Supported steps numbers: [&#39;</span><span class="o">//</span><span class="nb">trim</span><span class="p">(</span><span class="nb">adjustl</span><span class="p">(</span><span class="n">supported_steps</span><span class="p">))</span><span class="o">//</span><span class="s1">&#39;]&#39;</span><span class="o">//</span><span class="n">NL</span>
+  <span class="n">desc</span> <span class="o">=</span> <span class="n">desc</span><span class="o">//</span><span class="n">prefix_</span><span class="o">//</span><span class="s1">&#39;  Supported orders:        [&#39;</span><span class="o">//</span><span class="nb">trim</span><span class="p">(</span><span class="nb">adjustl</span><span class="p">(</span><span class="n">supported_orders</span><span class="p">))</span><span class="o">//</span><span class="s1">&#39;]&#39;</span><span class="o">//</span><span class="n">NL</span>
+  <span class="n">desc</span> <span class="o">=</span> <span class="n">desc</span><span class="o">//</span><span class="n">prefix_</span><span class="o">//</span><span class="s1">&#39;  Not all steps/order combinations are supported&#39;</span>
   <span class="n">endfunction</span> <span class="n">description</span>
 </pre></div>
 
@@ -1602,7 +1604,7 @@ private pure function description(self, prefix) result(desc)
           <p class="text-right">
             Documentation generated by 
             <a href="https://github.com/cmacmackin/ford">FORD</a>
-             on 2017-03-31 16:42  
+             on 2017-03-31 15:04  
           </p>
         </div>
         <div class="col-xs-12 col-md-4 col-md-pull-4"><p class="text-center"> FOODIE was developed by Fortran-FOSS-Programmers Group</p></div>

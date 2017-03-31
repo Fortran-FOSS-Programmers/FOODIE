@@ -134,18 +134,18 @@
      <li><i class="fa fa-list-ol"></i>
        <a data-toggle="tooltip"
 	  data-placement="bottom" data-html="true"
-	  title=" 0.1% of total for procedures.">10 statements</a>
+	  title=" 0.1% of total for procedures.">6 statements</a>
      </li> 
      
      
-    <li><i class="fa fa-code"></i><a href="../src/type_euler-1D.f90"> Source File</a></li>
+    <li><i class="fa fa-code"></i><a href="../src/type_lorenz.f90"> Source File</a></li>
      
   </ul>
   <ol class="breadcrumb in-well text-right">
   
-     <li><a href='../sourcefile/type_euler-1d.f90.html'>type_euler-1D.f90</a></li>
+     <li><a href='../sourcefile/type_lorenz.f90.html'>type_lorenz.f90</a></li>
   
-     <li><a href='../module/type_euler_1d.html'>type_euler_1D</a></li>
+     <li><a href='../module/type_lorenz.html'>type_lorenz</a></li>
   
      <li class="active">output</li>
   </ol>
@@ -830,7 +830,7 @@ private pure function output(self) result(state)
 
 
     
-    <p>Output the Euler field state (primitive variables).</p>
+    <p>Output the Lorenz field state.</p>
     
 
     <h3>Arguments</h3>
@@ -851,12 +851,12 @@ private pure function output(self) result(state)
   
 <tr>
   
-  <td><span class="anchor" id="variable-self%7E127"></span>class(<a href='../type/euler_1d.html'>euler_1D</a>),</td>
+  <td><span class="anchor" id="variable-self%7E132"></span>class(<a href='../type/lorenz.html'>lorenz</a>),</td>
   <td>intent(in)</td>
   <td></td>
   
   <td></td><td>::</td>
-  <td><strong>self</strong></td><td><p>Euler field.</p></td>
+  <td><strong>self</strong></td><td><p>Lorenz field.</p></td>
   
 </tr>
 
@@ -871,8 +871,8 @@ private pure function output(self) result(state)
     
     
 	 <h3>Return Value <small><span class="anchor" id="variable-state%7E8"></span>real(kind=R_P),
-  dimension(:,:),allocatable</small></h3>
-    <p>Euler state vector.</p>
+  dimension(:),allocatable</small></h3>
+    <p>Lorenz state vector.</p>
     
     
      
@@ -933,18 +933,14 @@ private pure function output(self) result(state)
     <h2><span class="anchor" id="src"></span>Source Code</h2>
     <div class="highlight"><pre><span></span>  <span class="k">pure function </span><span class="n">output</span><span class="p">(</span><span class="n">self</span><span class="p">)</span> <span class="k">result</span><span class="p">(</span><span class="n">state</span><span class="p">)</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
-  <span class="c">!&lt; Output the Euler field state (primitive variables).</span>
+  <span class="c">!&lt; Output the Lorenz field state.</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
-  <span class="k">class</span><span class="p">(</span><span class="n">euler_1D</span><span class="p">),</span> <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span>            <span class="kd">::</span> <span class="n">self</span>  <span class="c">!&lt; Euler field.</span>
-  <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">),</span> <span class="k">dimension</span><span class="p">(:,:),</span> <span class="k">allocatable</span> <span class="kd">::</span> <span class="n">state</span> <span class="c">!&lt; Euler state vector.</span>
-  <span class="kt">integer</span><span class="p">(</span><span class="n">I_P</span><span class="p">)</span>                           <span class="kd">::</span> <span class="n">i</span>     <span class="c">!&lt; Counter.</span>
+  <span class="k">class</span><span class="p">(</span><span class="n">lorenz</span><span class="p">),</span> <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span>            <span class="kd">::</span> <span class="n">self</span>  <span class="c">!&lt; Lorenz field.</span>
+  <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">),</span> <span class="k">dimension</span><span class="p">(:),</span> <span class="k">allocatable</span> <span class="kd">::</span> <span class="n">state</span> <span class="c">!&lt; Lorenz state vector.</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
 
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
-  <span class="k">allocate</span><span class="p">(</span><span class="n">state</span><span class="p">(</span><span class="mi">1</span><span class="p">:</span><span class="n">self</span><span class="p">%</span><span class="n">Np</span><span class="p">,</span> <span class="mi">1</span><span class="p">:</span><span class="n">self</span><span class="p">%</span><span class="n">Ni</span><span class="p">))</span>
-  <span class="k">do </span><span class="n">i</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">self</span><span class="p">%</span><span class="n">Ni</span>
-    <span class="n">state</span><span class="p">(:,</span> <span class="n">i</span><span class="p">)</span> <span class="o">=</span> <span class="n">self</span><span class="p">%</span><span class="n">conservative2primitive</span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">U</span><span class="p">(:,</span> <span class="n">i</span><span class="p">))</span>
-  <span class="n">enddo</span>
+  <span class="n">state</span> <span class="o">=</span> <span class="n">self</span><span class="p">%</span><span class="n">U</span>
   <span class="k">return</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
   <span class="n">endfunction</span> <span class="n">output</span>
@@ -1591,7 +1587,7 @@ private pure function output(self) result(state)
           <p class="text-right">
             Documentation generated by 
             <a href="https://github.com/cmacmackin/ford">FORD</a>
-             on 2017-03-31 16:42  
+             on 2017-03-31 15:04  
           </p>
         </div>
         <div class="col-xs-12 col-md-4 col-md-pull-4"><p class="text-center"> FOODIE was developed by Fortran-FOSS-Programmers Group</p></div>

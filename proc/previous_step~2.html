@@ -138,14 +138,14 @@
      </li> 
      
      
-    <li><i class="fa fa-code"></i><a href="../src/type_burgers.f90"> Source File</a></li>
+    <li><i class="fa fa-code"></i><a href="../src/type_euler-1D.f90"> Source File</a></li>
      
   </ul>
   <ol class="breadcrumb in-well text-right">
   
-     <li><a href='../sourcefile/type_burgers.f90.html'>type_burgers.f90</a></li>
+     <li><a href='../sourcefile/type_euler-1d.f90.html'>type_euler-1D.f90</a></li>
   
-     <li><a href='../module/type_burgers.html'>type_burgers</a></li>
+     <li><a href='../module/type_euler_1d.html'>type_euler_1D</a></li>
   
      <li class="active">previous_step</li>
   </ol>
@@ -830,7 +830,7 @@ private function previous_step(self, n) result(previous)
 
 
     
-    <p>Extract previous time solution of Burgers field.</p>
+    <p>Extract previous time solution of Euler field.</p>
     
 
     <h3>Arguments</h3>
@@ -851,12 +851,12 @@ private function previous_step(self, n) result(previous)
   
 <tr>
   
-  <td><span class="anchor" id="variable-self%7E121"></span>class(<a href='../type/burgers.html'>burgers</a>),</td>
+  <td><span class="anchor" id="variable-self%7E123"></span>class(<a href='../type/euler_1d.html'>euler_1D</a>),</td>
   <td>intent(in)</td>
   <td></td>
   
   <td></td><td>::</td>
-  <td><strong>self</strong></td><td><p>Burgers field.</p></td>
+  <td><strong>self</strong></td><td><p>Euler field.</p></td>
   
 </tr>
 
@@ -887,7 +887,7 @@ private function previous_step(self, n) result(previous)
     
 	 <h3>Return Value <small><span class="anchor" id="variable-previous%7E20"></span>class(<a href='../type/integrand.html'>integrand</a>),
   allocatable</small></h3>
-    <p>Previous time solution of Burgers field.</p>
+    <p>Previous time solution of Euler field.</p>
     
     
      
@@ -948,19 +948,19 @@ private function previous_step(self, n) result(previous)
     <h2><span class="anchor" id="src"></span>Source Code</h2>
     <div class="highlight"><pre><span></span>  <span class="k">function </span><span class="n">previous_step</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">n</span><span class="p">)</span> <span class="k">result</span><span class="p">(</span><span class="n">previous</span><span class="p">)</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
-  <span class="c">!&lt; Extract previous time solution of Burgers field.</span>
+  <span class="c">!&lt; Extract previous time solution of Euler field.</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
-  <span class="k">class</span><span class="p">(</span><span class="n">burgers</span><span class="p">),</span> <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span>    <span class="kd">::</span> <span class="n">self</span>     <span class="c">!&lt; Burgers field.</span>
-  <span class="kt">integer</span><span class="p">(</span><span class="n">I_P</span><span class="p">),</span>   <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span>    <span class="kd">::</span> <span class="n">n</span>        <span class="c">!&lt; Time level.</span>
-  <span class="k">class</span><span class="p">(</span><span class="n">integrand</span><span class="p">),</span> <span class="k">allocatable</span> <span class="kd">::</span> <span class="n">previous</span> <span class="c">!&lt; Previous time solution of Burgers field.</span>
+  <span class="k">class</span><span class="p">(</span><span class="n">euler_1D</span><span class="p">),</span> <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span>   <span class="kd">::</span> <span class="n">self</span>     <span class="c">!&lt; Euler field.</span>
+  <span class="kt">integer</span><span class="p">(</span><span class="n">I_P</span><span class="p">),</span>    <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span>   <span class="kd">::</span> <span class="n">n</span>        <span class="c">!&lt; Time level.</span>
+  <span class="k">class</span><span class="p">(</span><span class="n">integrand</span><span class="p">),</span> <span class="k">allocatable</span> <span class="kd">::</span> <span class="n">previous</span> <span class="c">!&lt; Previous time solution of Euler field.</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
 
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
-  <span class="k">allocate</span><span class="p">(</span><span class="n">burgers</span> <span class="kd">::</span> <span class="n">previous</span><span class="p">)</span>
+  <span class="k">allocate</span><span class="p">(</span><span class="n">euler_1D</span> <span class="kd">::</span> <span class="n">previous</span><span class="p">)</span>
   <span class="k">select type</span><span class="p">(</span><span class="n">previous</span><span class="p">)</span>
-  <span class="k">class is</span><span class="p">(</span><span class="n">burgers</span><span class="p">)</span>
+  <span class="k">class is</span><span class="p">(</span><span class="n">euler_1D</span><span class="p">)</span>
     <span class="n">previous</span> <span class="o">=</span> <span class="n">self</span>
-    <span class="n">previous</span><span class="p">%</span><span class="n">U</span> <span class="o">=</span> <span class="n">self</span><span class="p">%</span><span class="n">previous</span><span class="p">(:,</span> <span class="n">n</span><span class="p">)</span>
+    <span class="n">previous</span><span class="p">%</span><span class="n">U</span> <span class="o">=</span> <span class="n">self</span><span class="p">%</span><span class="n">previous</span><span class="p">(:,</span> <span class="p">:,</span> <span class="n">n</span><span class="p">)</span>
   <span class="n">endselect</span>
   <span class="k">return</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
@@ -1608,7 +1608,7 @@ private function previous_step(self, n) result(previous)
           <p class="text-right">
             Documentation generated by 
             <a href="https://github.com/cmacmackin/ford">FORD</a>
-             on 2017-03-31 16:42  
+             on 2017-03-31 15:04  
           </p>
         </div>
         <div class="col-xs-12 col-md-4 col-md-pull-4"><p class="text-center"> FOODIE was developed by Fortran-FOSS-Programmers Group</p></div>

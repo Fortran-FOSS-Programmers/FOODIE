@@ -134,18 +134,18 @@
      <li><i class="fa fa-list-ol"></i>
        <a data-toggle="tooltip"
 	  data-placement="bottom" data-html="true"
-	  title=" 0.5% of total for procedures.">33 statements</a>
+	  title=" 0.3% of total for procedures.">18 statements</a>
      </li> 
      
      
-    <li><i class="fa fa-code"></i><a href="../src/foodie_integrator_runge_kutta_embedded.f90"> Source File</a></li>
+    <li><i class="fa fa-code"></i><a href="../src/foodie_integrator_lmm_ssp.f90"> Source File</a></li>
      
   </ul>
   <ol class="breadcrumb in-well text-right">
   
-     <li><a href='../sourcefile/foodie_integrator_runge_kutta_embedded.f90.html'>foodie_integrator_runge_kutta_embedded.f90</a></li>
+     <li><a href='../sourcefile/foodie_integrator_lmm_ssp.f90.html'>foodie_integrator_lmm_ssp.f90</a></li>
   
-     <li><a href='../module/foodie_integrator_runge_kutta_emd.html'>foodie_integrator_runge_kutta_emd</a></li>
+     <li><a href='../module/foodie_integrator_lmm_ssp.html'>foodie_integrator_lmm_ssp</a></li>
   
      <li class="active">integrate</li>
   </ol>
@@ -820,7 +820,7 @@
     
     <div class="col-md-9" id='text'>
     <h2>
-private subroutine integrate(self, U, stage, Dt, t)
+private subroutine integrate(self, U, previous, Dt, t, autoupdate)
     
     
 	 
@@ -830,9 +830,7 @@ private subroutine integrate(self, U, stage, Dt, t)
 
 
     
-    <p>Integrate field with explicit embedded Runge-Kutta scheme.</p>
-<p>The time steps is adaptively resized using the local truncation error estimation by means of the embedded pairs of RK schemes.</p>
-<p></p><div class="alert alert-info" role="alert"><h4>Note</h4><p>This method can be used <strong>after</strong> the integrator is created (i.e. the RK coefficients are initialized).</p></div>
+    <p>Integrate field with LMM-SSP class scheme.</p>
     
 
     <h3>Arguments</h3>
@@ -853,7 +851,7 @@ private subroutine integrate(self, U, stage, Dt, t)
   
 <tr>
   
-  <td><span class="anchor" id="variable-self%7E32"></span>class(<a href='../type/integrator_runge_kutta_emd.html'>integrator_runge_kutta_emd</a>),</td>
+  <td><span class="anchor" id="variable-self%7E32"></span>class(<a href='../type/integrator_lmm_ssp.html'>integrator_lmm_ssp</a>),</td>
   <td>intent(in)</td>
   <td></td>
   
@@ -883,12 +881,12 @@ private subroutine integrate(self, U, stage, Dt, t)
   
 <tr>
   
-  <td><span class="anchor" id="variable-stage%7E2"></span>class(<a href='../type/integrand.html'>integrand</a>),</td>
+  <td><span class="anchor" id="variable-previous%7E13"></span>class(<a href='../type/integrand.html'>integrand</a>),</td>
   <td>intent(inout)</td>
   <td></td>
   
   <td></td><td>::</td>
-  <td><strong>stage</strong>(1:)</td><td><p>Runge-Kutta stages [1:stages].</p></td>
+  <td><strong>previous</strong>(1:)</td><td><p>Previous time steps solutions of integrand field.</p></td>
   
 </tr>
 
@@ -899,11 +897,11 @@ private subroutine integrate(self, U, stage, Dt, t)
 <tr>
   
   <td><span class="anchor" id="variable-dt%7E9"></span>real(kind=R_P),</td>
-  <td>intent(inout)</td>
+  <td>intent(in)</td>
   <td></td>
   
   <td></td><td>::</td>
-  <td><strong>Dt</strong></td><td><p>Time step.</p></td>
+  <td><strong>Dt</strong></td><td><p>Time steps.</p></td>
   
 </tr>
 
@@ -918,7 +916,22 @@ private subroutine integrate(self, U, stage, Dt, t)
   <td></td>
   
   <td></td><td>::</td>
-  <td><strong>t</strong></td><td><p>Time.</p></td>
+  <td><strong>t</strong>(:)</td><td><p>Times.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-autoupdate%7E5"></span>logical,</td>
+  <td>intent(in),</td>
+  <td>optional</td>
+  
+  <td></td><td>::</td>
+  <td><strong>autoupdate</strong></td><td><p>Perform cyclic autoupdate of previous time steps.</p></td>
   
 </tr>
 
@@ -984,46 +997,25 @@ private subroutine integrate(self, U, stage, Dt, t)
     
     <section>
     <h2><span class="anchor" id="src"></span>Source Code</h2>
-    <div class="highlight"><pre><span></span>  <span class="k">subroutine </span><span class="n">integrate</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">U</span><span class="p">,</span> <span class="n">stage</span><span class="p">,</span> <span class="n">Dt</span><span class="p">,</span> <span class="n">t</span><span class="p">)</span>
-  <span class="c">!&lt; Integrate field with explicit embedded Runge-Kutta scheme.</span>
-  <span class="c">!&lt;</span>
-  <span class="c">!&lt; The time steps is adaptively resized using the local truncation error estimation by means of the embedded pairs of RK schemes.</span>
-  <span class="c">!&lt;</span>
-  <span class="c">!&lt; @note This method can be used **after** the integrator is created (i.e. the RK coefficients are initialized).</span>
-  <span class="k">class</span><span class="p">(</span><span class="n">integrator_runge_kutta_emd</span><span class="p">),</span> <span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span>    <span class="kd">::</span> <span class="n">self</span>      <span class="c">!&lt; Integrator.</span>
-  <span class="k">class</span><span class="p">(</span><span class="n">integrand</span><span class="p">),</span>                  <span class="k">intent</span><span class="p">(</span><span class="n">inout</span><span class="p">)</span> <span class="kd">::</span> <span class="n">U</span>         <span class="c">!&lt; Field to be integrated.</span>
-  <span class="k">class</span><span class="p">(</span><span class="n">integrand</span><span class="p">),</span>                  <span class="k">intent</span><span class="p">(</span><span class="n">inout</span><span class="p">)</span> <span class="kd">::</span> <span class="n">stage</span><span class="p">(</span><span class="mi">1</span><span class="p">:)</span> <span class="c">!&lt; Runge-Kutta stages [1:stages].</span>
-  <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">),</span>                         <span class="k">intent</span><span class="p">(</span><span class="n">inout</span><span class="p">)</span> <span class="kd">::</span> <span class="n">Dt</span>        <span class="c">!&lt; Time step.</span>
-  <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">),</span>                         <span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span>    <span class="kd">::</span> <span class="n">t</span>         <span class="c">!&lt; Time.</span>
-  <span class="k">class</span><span class="p">(</span><span class="n">integrand</span><span class="p">),</span> <span class="k">allocatable</span>                    <span class="kd">::</span> <span class="n">U1</span>        <span class="c">!&lt; First U evaluation.</span>
-  <span class="k">class</span><span class="p">(</span><span class="n">integrand</span><span class="p">),</span> <span class="k">allocatable</span>                    <span class="kd">::</span> <span class="n">U2</span>        <span class="c">!&lt; Second U evaluation.</span>
-  <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">)</span>                                        <span class="kd">::</span> <span class="n">error</span>     <span class="c">!&lt; Local truncation error estimation.</span>
-  <span class="kt">integer</span><span class="p">(</span><span class="n">I_P</span><span class="p">)</span>                                     <span class="kd">::</span> <span class="n">s</span>         <span class="c">!&lt; First stages counter.</span>
-  <span class="kt">integer</span><span class="p">(</span><span class="n">I_P</span><span class="p">)</span>                                     <span class="kd">::</span> <span class="n">ss</span>        <span class="c">!&lt; Second stages counter.</span>
+    <div class="highlight"><pre><span></span>  <span class="k">subroutine </span><span class="n">integrate</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">U</span><span class="p">,</span> <span class="n">previous</span><span class="p">,</span> <span class="n">Dt</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="n">autoupdate</span><span class="p">)</span>
+  <span class="c">!&lt; Integrate field with LMM-SSP class scheme.</span>
+  <span class="k">class</span><span class="p">(</span><span class="n">integrator_lmm_ssp</span><span class="p">),</span> <span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span>    <span class="kd">::</span> <span class="n">self</span>         <span class="c">!&lt; Integrator.</span>
+  <span class="k">class</span><span class="p">(</span><span class="n">integrand</span><span class="p">),</span>          <span class="k">intent</span><span class="p">(</span><span class="n">inout</span><span class="p">)</span> <span class="kd">::</span> <span class="n">U</span>            <span class="c">!&lt; Field to be integrated.</span>
+  <span class="k">class</span><span class="p">(</span><span class="n">integrand</span><span class="p">),</span>          <span class="k">intent</span><span class="p">(</span><span class="n">inout</span><span class="p">)</span> <span class="kd">::</span> <span class="n">previous</span><span class="p">(</span><span class="mi">1</span><span class="p">:)</span> <span class="c">!&lt; Previous time steps solutions of integrand field.</span>
+  <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">),</span>                 <span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span>    <span class="kd">::</span> <span class="n">Dt</span>           <span class="c">!&lt; Time steps.</span>
+  <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">),</span>                 <span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span>    <span class="kd">::</span> <span class="n">t</span><span class="p">(:)</span>         <span class="c">!&lt; Times.</span>
+  <span class="kt">logical</span><span class="p">,</span> <span class="k">optional</span><span class="p">,</span>         <span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span>    <span class="kd">::</span> <span class="n">autoupdate</span>   <span class="c">!&lt; Perform cyclic autoupdate of previous time steps.</span>
+  <span class="kt">logical</span>                                  <span class="kd">::</span> <span class="n">autoupdate_</span>  <span class="c">!&lt; Perform cyclic autoupdate of previous time steps, dummy var.</span>
+  <span class="kt">integer</span><span class="p">(</span><span class="n">I_P</span><span class="p">)</span>                             <span class="kd">::</span> <span class="n">s</span>            <span class="c">!&lt; Steps counter.</span>
 
-  <span class="k">allocate</span><span class="p">(</span><span class="n">U1</span><span class="p">,</span> <span class="n">source</span><span class="o">=</span><span class="n">U</span><span class="p">)</span>
-  <span class="k">allocate</span><span class="p">(</span><span class="n">U2</span><span class="p">,</span> <span class="n">source</span><span class="o">=</span><span class="n">U</span><span class="p">)</span>
-  <span class="n">error</span> <span class="o">=</span> <span class="err">1</span><span class="n">e6</span>
-  <span class="k">do while</span><span class="p">(</span><span class="n">error</span><span class="o">&gt;</span><span class="n">self</span><span class="p">%</span><span class="n">tolerance</span><span class="p">)</span>
-    <span class="c">! compute stages</span>
-    <span class="k">do </span><span class="n">s</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">self</span><span class="p">%</span><span class="n">stages</span>
-      <span class="n">stage</span><span class="p">(</span><span class="n">s</span><span class="p">)</span> <span class="o">=</span> <span class="n">U</span>
-      <span class="k">do </span><span class="n">ss</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">s</span> <span class="o">-</span> <span class="mi">1</span>
-        <span class="n">stage</span><span class="p">(</span><span class="n">s</span><span class="p">)</span> <span class="o">=</span> <span class="n">stage</span><span class="p">(</span><span class="n">s</span><span class="p">)</span> <span class="o">+</span> <span class="n">stage</span><span class="p">(</span><span class="n">ss</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="n">Dt</span> <span class="o">*</span> <span class="n">self</span><span class="p">%</span><span class="n">alph</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">ss</span><span class="p">))</span>
-      <span class="n">enddo</span>
-      <span class="n">stage</span><span class="p">(</span><span class="n">s</span><span class="p">)</span> <span class="o">=</span> <span class="n">stage</span><span class="p">(</span><span class="n">s</span><span class="p">)%</span><span class="n">t</span><span class="p">(</span><span class="n">t</span><span class="o">=</span><span class="n">t</span> <span class="o">+</span> <span class="n">self</span><span class="p">%</span><span class="n">gamm</span><span class="p">(</span><span class="n">s</span><span class="p">)</span> <span class="o">*</span> <span class="n">Dt</span><span class="p">)</span>
-    <span class="n">enddo</span>
-    <span class="c">! compute new time step</span>
-    <span class="n">U1</span> <span class="o">=</span> <span class="n">U</span>
-    <span class="n">U2</span> <span class="o">=</span> <span class="n">U</span>
-    <span class="k">do </span><span class="n">s</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">self</span><span class="p">%</span><span class="n">stages</span>
-      <span class="n">U1</span> <span class="o">=</span> <span class="n">U1</span> <span class="o">+</span>  <span class="n">stage</span><span class="p">(</span><span class="n">s</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="n">Dt</span> <span class="o">*</span> <span class="n">self</span><span class="p">%</span><span class="n">beta</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
-      <span class="n">U2</span> <span class="o">=</span> <span class="n">U2</span> <span class="o">+</span>  <span class="n">stage</span><span class="p">(</span><span class="n">s</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="n">Dt</span> <span class="o">*</span> <span class="n">self</span><span class="p">%</span><span class="n">beta</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="mi">2</span><span class="p">))</span>
-    <span class="n">enddo</span>
-    <span class="n">error</span> <span class="o">=</span> <span class="n">U2</span><span class="p">.</span><span class="n">lterror</span><span class="p">.</span><span class="n">U1</span>
-    <span class="k">call </span><span class="n">self</span><span class="p">%</span><span class="n">new_Dt</span><span class="p">(</span><span class="n">error</span><span class="o">=</span><span class="n">error</span><span class="p">,</span> <span class="n">Dt</span><span class="o">=</span><span class="n">Dt</span><span class="p">)</span>
+  <span class="n">autoupdate_</span> <span class="o">=</span> <span class="p">.</span><span class="n">true</span><span class="p">.</span> <span class="p">;</span> <span class="k">if</span> <span class="p">(</span><span class="nb">present</span><span class="p">(</span><span class="n">autoupdate</span><span class="p">))</span> <span class="n">autoupdate_</span> <span class="o">=</span> <span class="n">autoupdate</span>
+  <span class="n">U</span> <span class="o">=</span> <span class="n">U</span> <span class="o">*</span> <span class="mf">0._R_P</span>
+  <span class="k">do </span><span class="n">s</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">self</span><span class="p">%</span><span class="n">steps</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">a</span><span class="p">(</span><span class="n">s</span><span class="p">)</span> <span class="o">/=</span> <span class="mf">0._R_P</span><span class="p">)</span> <span class="n">U</span> <span class="o">=</span> <span class="n">U</span> <span class="o">+</span> <span class="n">previous</span><span class="p">(</span><span class="n">s</span><span class="p">)</span> <span class="o">*</span> <span class="n">self</span><span class="p">%</span><span class="n">a</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">b</span><span class="p">(</span><span class="n">s</span><span class="p">)</span> <span class="o">/=</span> <span class="mf">0._R_P</span><span class="p">)</span> <span class="n">U</span> <span class="o">=</span> <span class="n">U</span> <span class="o">+</span> <span class="n">previous</span><span class="p">(</span><span class="n">s</span><span class="p">)%</span><span class="n">t</span><span class="p">(</span><span class="n">t</span><span class="o">=</span><span class="n">t</span><span class="p">(</span><span class="n">s</span><span class="p">))</span> <span class="o">*</span> <span class="p">(</span><span class="n">Dt</span> <span class="o">*</span> <span class="n">self</span><span class="p">%</span><span class="n">b</span><span class="p">(</span><span class="n">s</span><span class="p">))</span>
+    <span class="c">! U = U + previous(s) * self%a(s) + previous(s)%t(t=t(s)) * (Dt * self%b(s))</span>
   <span class="n">enddo</span>
-  <span class="n">U</span> <span class="o">=</span> <span class="n">U1</span>
+  <span class="k">if</span> <span class="p">(</span><span class="n">autoupdate_</span><span class="p">)</span> <span class="k">call </span><span class="n">self</span><span class="p">%</span><span class="n">update_previous</span><span class="p">(</span><span class="n">U</span><span class="o">=</span><span class="n">U</span><span class="p">,</span> <span class="n">previous</span><span class="o">=</span><span class="n">previous</span><span class="p">)</span>
   <span class="n">endsubroutine</span> <span class="n">integrate</span>
 </pre></div>
 
@@ -1668,7 +1660,7 @@ private subroutine integrate(self, U, stage, Dt, t)
           <p class="text-right">
             Documentation generated by 
             <a href="https://github.com/cmacmackin/ford">FORD</a>
-             on 2017-03-31 16:42  
+             on 2017-03-31 15:04  
           </p>
         </div>
         <div class="col-xs-12 col-md-4 col-md-pull-4"><p class="text-center"> FOODIE was developed by Fortran-FOSS-Programmers Group</p></div>

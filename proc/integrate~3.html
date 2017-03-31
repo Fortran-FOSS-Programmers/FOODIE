@@ -134,18 +134,18 @@
      <li><i class="fa fa-list-ol"></i>
        <a data-toggle="tooltip"
 	  data-placement="bottom" data-html="true"
-	  title=" 0.1% of total for procedures.">6 statements</a>
+	  title=" 0.5% of total for procedures.">33 statements</a>
      </li> 
      
      
-    <li><i class="fa fa-code"></i><a href="../src/foodie_integrator_euler_explicit.f90"> Source File</a></li>
+    <li><i class="fa fa-code"></i><a href="../src/foodie_integrator_adams_moulton.f90"> Source File</a></li>
      
   </ul>
   <ol class="breadcrumb in-well text-right">
   
-     <li><a href='../sourcefile/foodie_integrator_euler_explicit.f90.html'>foodie_integrator_euler_explicit.f90</a></li>
+     <li><a href='../sourcefile/foodie_integrator_adams_moulton.f90.html'>foodie_integrator_adams_moulton.f90</a></li>
   
-     <li><a href='../module/foodie_integrator_euler_explicit.html'>foodie_integrator_euler_explicit</a></li>
+     <li><a href='../module/foodie_integrator_adams_moulton.html'>foodie_integrator_adams_moulton</a></li>
   
      <li class="active">integrate</li>
   </ol>
@@ -820,7 +820,7 @@
     
     <div class="col-md-9" id='text'>
     <h2>
-private subroutine integrate(U, Dt, t)
+private subroutine integrate(self, U, previous, Dt, t, iterations, autoupdate)
     
     
 	 
@@ -830,7 +830,7 @@ private subroutine integrate(U, Dt, t)
 
 
     
-    <p>Integrate field with explicit Euler scheme, 1st order.</p>
+    <p>Integrate field with Adams-Moulton class scheme.</p>
     
 
     <h3>Arguments</h3>
@@ -851,7 +851,22 @@ private subroutine integrate(U, Dt, t)
   
 <tr>
   
-  <td><span class="anchor" id="variable-u%7E14"></span>class(<a href='../type/integrand.html'>integrand</a>),</td>
+  <td><span class="anchor" id="variable-self%7E16"></span>class(<a href='../type/integrator_adams_moulton.html'>integrator_adams_moulton</a>),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>self</strong></td><td><p>Integrator.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-u%7E13"></span>class(<a href='../type/integrand.html'>integrand</a>),</td>
   <td>intent(inout)</td>
   <td></td>
   
@@ -866,12 +881,27 @@ private subroutine integrate(U, Dt, t)
   
 <tr>
   
+  <td><span class="anchor" id="variable-previous%7E8"></span>class(<a href='../type/integrand.html'>integrand</a>),</td>
+  <td>intent(inout)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>previous</strong>(1:)</td><td><p>Previous time steps solutions of integrand field.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
   <td><span class="anchor" id="variable-dt%7E5"></span>real(kind=R_P),</td>
   <td>intent(in)</td>
   <td></td>
   
   <td></td><td>::</td>
-  <td><strong>Dt</strong></td><td><p>Time step.</p></td>
+  <td><strong>Dt</strong></td><td><p>Time steps.</p></td>
   
 </tr>
 
@@ -882,11 +912,41 @@ private subroutine integrate(U, Dt, t)
 <tr>
   
   <td><span class="anchor" id="variable-t%7E14"></span>real(kind=R_P),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>t</strong>(:)</td><td><p>Times.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-iterations%7E2"></span>integer(kind=I_P),</td>
   <td>intent(in),</td>
   <td>optional</td>
   
   <td></td><td>::</td>
-  <td><strong>t</strong></td><td><p>Time.</p></td>
+  <td><strong>iterations</strong></td><td><p>Fixed point iterations.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-autoupdate%7E3"></span>logical,</td>
+  <td>intent(in),</td>
+  <td>optional</td>
+  
+  <td></td><td>::</td>
+  <td><strong>autoupdate</strong></td><td><p>Cyclic autoupdate of previous time steps flag.</p></td>
   
 </tr>
 
@@ -952,13 +1012,39 @@ private subroutine integrate(U, Dt, t)
     
     <section>
     <h2><span class="anchor" id="src"></span>Source Code</h2>
-    <div class="highlight"><pre><span></span>  <span class="k">subroutine </span><span class="n">integrate</span><span class="p">(</span><span class="n">U</span><span class="p">,</span> <span class="n">Dt</span><span class="p">,</span> <span class="n">t</span><span class="p">)</span>
-  <span class="c">!&lt; Integrate field with explicit Euler scheme, 1st order.</span>
-  <span class="k">class</span><span class="p">(</span><span class="n">integrand</span><span class="p">),</span>    <span class="k">intent</span><span class="p">(</span><span class="n">inout</span><span class="p">)</span> <span class="kd">::</span> <span class="n">U</span>  <span class="c">!&lt; Field to be integrated.</span>
-  <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">),</span>           <span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span>    <span class="kd">::</span> <span class="n">Dt</span> <span class="c">!&lt; Time step.</span>
-  <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">),</span> <span class="k">optional</span><span class="p">,</span> <span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span>    <span class="kd">::</span> <span class="n">t</span>  <span class="c">!&lt; Time.</span>
+    <div class="highlight"><pre><span></span>  <span class="k">subroutine </span><span class="n">integrate</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">U</span><span class="p">,</span> <span class="n">previous</span><span class="p">,</span> <span class="n">Dt</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="n">iterations</span><span class="p">,</span> <span class="n">autoupdate</span><span class="p">)</span>
+  <span class="c">!&lt; Integrate field with Adams-Moulton class scheme.</span>
+  <span class="k">class</span><span class="p">(</span><span class="n">integrator_adams_moulton</span><span class="p">),</span> <span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span>           <span class="kd">::</span> <span class="n">self</span>         <span class="c">!&lt; Integrator.</span>
+  <span class="k">class</span><span class="p">(</span><span class="n">integrand</span><span class="p">),</span>                <span class="k">intent</span><span class="p">(</span><span class="n">inout</span><span class="p">)</span>        <span class="kd">::</span> <span class="n">U</span>            <span class="c">!&lt; Field to be integrated.</span>
+  <span class="k">class</span><span class="p">(</span><span class="n">integrand</span><span class="p">),</span>                <span class="k">intent</span><span class="p">(</span><span class="n">inout</span><span class="p">)</span>        <span class="kd">::</span> <span class="n">previous</span><span class="p">(</span><span class="mi">1</span><span class="p">:)</span> <span class="c">!&lt; Previous time steps solutions of integrand field.</span>
+  <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">),</span>                       <span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span>           <span class="kd">::</span> <span class="n">Dt</span>           <span class="c">!&lt; Time steps.</span>
+  <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">),</span>                       <span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span>           <span class="kd">::</span> <span class="n">t</span><span class="p">(:)</span>         <span class="c">!&lt; Times.</span>
+  <span class="kt">integer</span><span class="p">(</span><span class="n">I_P</span><span class="p">),</span>                    <span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">),</span> <span class="k">optional</span> <span class="kd">::</span> <span class="n">iterations</span>   <span class="c">!&lt; Fixed point iterations.</span>
+  <span class="kt">logical</span><span class="p">,</span>                         <span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">),</span> <span class="k">optional</span> <span class="kd">::</span> <span class="n">autoupdate</span>   <span class="c">!&lt; Cyclic autoupdate of previous time steps flag.</span>
+  <span class="kt">logical</span>                                               <span class="kd">::</span> <span class="n">autoupdate_</span>  <span class="c">!&lt; Cyclic autoupdate of previous time steps flag, dummy var.</span>
+  <span class="k">class</span><span class="p">(</span><span class="n">integrand</span><span class="p">),</span> <span class="k">allocatable</span>                         <span class="kd">::</span> <span class="n">delta</span>        <span class="c">!&lt; Delta RHS for fixed point iterations.</span>
+  <span class="kt">integer</span><span class="p">(</span><span class="n">I_P</span><span class="p">)</span>                                          <span class="kd">::</span> <span class="n">s</span>            <span class="c">!&lt; Steps counter.</span>
 
-  <span class="n">U</span> <span class="o">=</span> <span class="n">U</span> <span class="o">+</span> <span class="n">U</span><span class="p">%</span><span class="n">t</span><span class="p">(</span><span class="n">t</span><span class="o">=</span><span class="n">t</span><span class="p">)</span> <span class="o">*</span> <span class="n">Dt</span>
+  <span class="n">autoupdate_</span> <span class="o">=</span> <span class="p">.</span><span class="n">true</span><span class="p">.</span> <span class="p">;</span> <span class="k">if</span> <span class="p">(</span><span class="nb">present</span><span class="p">(</span><span class="n">autoupdate</span><span class="p">))</span> <span class="n">autoupdate_</span> <span class="o">=</span> <span class="n">autoupdate</span>
+  <span class="k">if</span> <span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">steps</span><span class="o">&gt;</span><span class="mi">0</span><span class="p">)</span> <span class="k">then</span>
+<span class="k">    if</span> <span class="p">(</span><span class="nb">present</span><span class="p">(</span><span class="n">iterations</span><span class="p">))</span> <span class="k">then</span> <span class="c">! perform fixed point iterations</span>
+      <span class="k">allocate</span><span class="p">(</span><span class="n">delta</span><span class="p">,</span> <span class="n">source</span><span class="o">=</span><span class="n">previous</span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">steps</span><span class="p">))</span>
+      <span class="k">do </span><span class="n">s</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">self</span><span class="p">%</span><span class="n">steps</span> <span class="o">-</span> <span class="mi">1</span>
+        <span class="n">delta</span> <span class="o">=</span> <span class="n">delta</span> <span class="o">+</span> <span class="n">previous</span><span class="p">(</span><span class="n">s</span><span class="o">+</span><span class="mi">1</span><span class="p">)%</span><span class="n">t</span><span class="p">(</span><span class="n">t</span><span class="o">=</span><span class="n">t</span><span class="p">(</span><span class="n">s</span><span class="o">+</span><span class="mi">1</span><span class="p">))</span> <span class="o">*</span> <span class="p">(</span><span class="n">Dt</span> <span class="o">*</span> <span class="n">self</span><span class="p">%</span><span class="n">b</span><span class="p">(</span><span class="n">s</span><span class="p">))</span>
+      <span class="n">enddo</span>
+      <span class="k">do </span><span class="n">s</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">iterations</span>
+        <span class="n">U</span> <span class="o">=</span> <span class="n">delta</span> <span class="o">+</span> <span class="n">U</span><span class="p">%</span><span class="n">t</span><span class="p">(</span><span class="n">t</span><span class="o">=</span><span class="n">t</span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">steps</span><span class="p">)</span> <span class="o">+</span> <span class="n">Dt</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="n">Dt</span> <span class="o">*</span> <span class="n">self</span><span class="p">%</span><span class="n">b</span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">steps</span><span class="p">))</span>
+      <span class="n">enddo</span>
+    <span class="k">else</span>
+<span class="k">      </span><span class="n">U</span> <span class="o">=</span> <span class="n">previous</span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">steps</span><span class="p">)</span> <span class="o">+</span> <span class="n">U</span><span class="p">%</span><span class="n">t</span><span class="p">(</span><span class="n">t</span><span class="o">=</span><span class="n">t</span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">steps</span><span class="p">)</span> <span class="o">+</span> <span class="n">Dt</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="n">Dt</span> <span class="o">*</span> <span class="n">self</span><span class="p">%</span><span class="n">b</span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">steps</span><span class="p">))</span>
+      <span class="k">do </span><span class="n">s</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">self</span><span class="p">%</span><span class="n">steps</span> <span class="o">-</span> <span class="mi">1</span>
+        <span class="n">U</span> <span class="o">=</span> <span class="n">U</span> <span class="o">+</span> <span class="n">previous</span><span class="p">(</span><span class="n">s</span><span class="o">+</span><span class="mi">1</span><span class="p">)%</span><span class="n">t</span><span class="p">(</span><span class="n">t</span><span class="o">=</span><span class="n">t</span><span class="p">(</span><span class="n">s</span><span class="o">+</span><span class="mi">1</span><span class="p">))</span> <span class="o">*</span> <span class="p">(</span><span class="n">Dt</span> <span class="o">*</span> <span class="n">self</span><span class="p">%</span><span class="n">b</span><span class="p">(</span><span class="n">s</span><span class="p">))</span>
+      <span class="n">enddo</span>
+    <span class="n">endif</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">autoupdate_</span><span class="p">)</span> <span class="k">call </span><span class="n">self</span><span class="p">%</span><span class="n">update_previous</span><span class="p">(</span><span class="n">U</span><span class="o">=</span><span class="n">U</span><span class="p">,</span> <span class="n">previous</span><span class="o">=</span><span class="n">previous</span><span class="p">)</span>
+  <span class="k">else</span>
+<span class="k">    </span><span class="n">U</span> <span class="o">=</span> <span class="n">U</span> <span class="o">+</span> <span class="n">U</span><span class="p">%</span><span class="n">t</span><span class="p">(</span><span class="n">t</span><span class="o">=</span><span class="n">t</span><span class="p">(</span><span class="mi">1</span><span class="p">))</span> <span class="o">*</span> <span class="p">(</span><span class="n">Dt</span> <span class="o">*</span> <span class="n">self</span><span class="p">%</span><span class="n">b</span><span class="p">(</span><span class="mi">0</span><span class="p">))</span>
+  <span class="n">endif</span>
   <span class="n">endsubroutine</span> <span class="n">integrate</span>
 </pre></div>
 
@@ -1603,7 +1689,7 @@ private subroutine integrate(U, Dt, t)
           <p class="text-right">
             Documentation generated by 
             <a href="https://github.com/cmacmackin/ford">FORD</a>
-             on 2017-03-31 16:42  
+             on 2017-03-31 15:04  
           </p>
         </div>
         <div class="col-xs-12 col-md-4 col-md-pull-4"><p class="text-center"> FOODIE was developed by Fortran-FOSS-Programmers Group</p></div>

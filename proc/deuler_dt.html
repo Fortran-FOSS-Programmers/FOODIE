@@ -134,18 +134,18 @@
      <li><i class="fa fa-list-ol"></i>
        <a data-toggle="tooltip"
 	  data-placement="bottom" data-html="true"
-	  title=" 0.7% of total for procedures.">48 statements</a>
+	  title=" 0.6% of total for procedures.">40 statements</a>
      </li> 
      
      
-    <li><i class="fa fa-code"></i><a href="../src/type_euler-1D-caf.f90"> Source File</a></li>
+    <li><i class="fa fa-code"></i><a href="../src/type_euler-1D-caf_no_foodie.f90"> Source File</a></li>
      
   </ul>
   <ol class="breadcrumb in-well text-right">
   
-     <li><a href='../sourcefile/type_euler-1d-caf.f90.html'>type_euler-1D-caf.f90</a></li>
+     <li><a href='../sourcefile/type_euler-1d-caf_no_foodie.f90.html'>type_euler-1D-caf_no_foodie.f90</a></li>
   
-     <li><a href='../module/type_euler_1d_caf.html'>type_euler_1D_caf</a></li>
+     <li><a href='../module/type_euler_1d_caf_no_foodie.html'>type_euler_1D_caf_no_foodie</a></li>
   
      <li class="active">dEuler_dt</li>
   </ol>
@@ -820,7 +820,7 @@
     
     <div class="col-md-9" id='text'>
     <h2>
-private function dEuler_dt(self, t) result(dState_dt)
+private function dEuler_dt(self) result(dState_dt)
     
     
 	 
@@ -851,27 +851,12 @@ private function dEuler_dt(self, t) result(dState_dt)
   
 <tr>
   
-  <td><span class="anchor" id="variable-self%7E65"></span>class(<a href='../type/euler_1d_caf.html'>euler_1D_caf</a>),</td>
+  <td><span class="anchor" id="variable-self%7E65"></span>class(<a href='../type/euler_1d_caf_nf.html'>euler_1D_caf_nf</a>),</td>
   <td>intent(in)</td>
   <td></td>
   
   <td></td><td>::</td>
   <td><strong>self</strong></td><td><p>Euler field.</p></td>
-  
-</tr>
-
-  
-  
-  
-  
-<tr>
-  
-  <td><span class="anchor" id="variable-t%7E29"></span>real(kind=R_P),</td>
-  <td>intent(in),</td>
-  <td>optional</td>
-  
-  <td></td><td>::</td>
-  <td><strong>t</strong></td><td><p>Time.</p></td>
   
 </tr>
 
@@ -885,8 +870,8 @@ private function dEuler_dt(self, t) result(dState_dt)
     
     
     
-	 <h3>Return Value <small><span class="anchor" id="variable-dstate_dt%7E3"></span>class(<a href='../type/integrand.html'>integrand</a>),
-  allocatable</small></h3>
+	 <h3>Return Value <small><span class="anchor" id="variable-dstate_dt%7E3"></span>type(<a href='../type/euler_1d_caf_nf.html'>euler_1D_caf_nf</a>)
+  </small></h3>
     <p>Euler field time derivative.</p>
     
     
@@ -946,17 +931,16 @@ private function dEuler_dt(self, t) result(dState_dt)
     
     <section>
     <h2><span class="anchor" id="src"></span>Source Code</h2>
-    <div class="highlight"><pre><span></span>  <span class="k">function </span><span class="n">dEuler_dt</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">t</span><span class="p">)</span> <span class="k">result</span><span class="p">(</span><span class="n">dState_dt</span><span class="p">)</span>
+    <div class="highlight"><pre><span></span>  <span class="k">function </span><span class="n">dEuler_dt</span><span class="p">(</span><span class="n">self</span><span class="p">)</span> <span class="k">result</span><span class="p">(</span><span class="n">dState_dt</span><span class="p">)</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
   <span class="c">!&lt; Time derivative of Euler field, the residuals function.</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
-  <span class="k">class</span><span class="p">(</span><span class="n">euler_1D_caf</span><span class="p">),</span> <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span> <span class="kd">::</span> <span class="n">self</span>      <span class="c">!&lt; Euler field.</span>
-  <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">),</span> <span class="k">optional</span><span class="p">,</span> <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span> <span class="kd">::</span> <span class="n">t</span>         <span class="c">!&lt; Time.</span>
-  <span class="k">class</span><span class="p">(</span><span class="n">integrand</span><span class="p">),</span> <span class="k">allocatable</span>   <span class="kd">::</span> <span class="n">dState_dt</span> <span class="c">!&lt; Euler field time derivative.</span>
-  <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">),</span>        <span class="k">allocatable</span>   <span class="kd">::</span> <span class="n">F</span><span class="p">(:,:)</span>    <span class="c">!&lt; Fluxes of conservative variables.</span>
-  <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">),</span>        <span class="k">allocatable</span>   <span class="kd">::</span> <span class="n">P</span><span class="p">(:,:)</span>    <span class="c">!&lt; Primitive variables.</span>
-  <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">),</span>        <span class="k">allocatable</span>   <span class="kd">::</span> <span class="n">PR</span><span class="p">(:,:,:)</span> <span class="c">!&lt; Left (1) and right (2) (reconstructed) interface values of primitive variables.</span>
-  <span class="kt">integer</span><span class="p">(</span><span class="n">I_P</span><span class="p">)</span>                    <span class="kd">::</span> <span class="n">i</span>         <span class="c">!&lt; Counter.</span>
+  <span class="k">class</span><span class="p">(</span><span class="n">euler_1D_caf_nf</span><span class="p">),</span> <span class="k">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span> <span class="kd">::</span> <span class="n">self</span>      <span class="c">!&lt; Euler field.</span>
+  <span class="k">type</span><span class="p">(</span><span class="n">euler_1D_caf_nf</span><span class="p">)</span>              <span class="kd">::</span> <span class="n">dState_dt</span> <span class="c">!&lt; Euler field time derivative.</span>
+  <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">),</span> <span class="k">allocatable</span>             <span class="kd">::</span> <span class="n">F</span><span class="p">(:,:)</span>    <span class="c">!&lt; Fluxes of conservative variables.</span>
+  <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">),</span> <span class="k">allocatable</span>             <span class="kd">::</span> <span class="n">P</span><span class="p">(:,:)</span>    <span class="c">!&lt; Primitive variables.</span>
+  <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">),</span> <span class="k">allocatable</span>             <span class="kd">::</span> <span class="n">PR</span><span class="p">(:,:,:)</span> <span class="c">!&lt; Left (1) and right (2) (reconstructed) interface values of primitive variables.</span>
+  <span class="kt">integer</span><span class="p">(</span><span class="n">I_P</span><span class="p">)</span>                       <span class="kd">::</span> <span class="n">i</span>         <span class="c">!&lt; Counter.</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
 
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
@@ -998,17 +982,10 @@ private function dEuler_dt(self, t) result(dState_dt)
     <span class="n">endif</span>
   <span class="n">enddo</span>
   <span class="c">! compute residuals</span>
-  <span class="k">allocate</span><span class="p">(</span><span class="n">euler_1D_caf</span> <span class="kd">::</span> <span class="n">dState_dt</span><span class="p">)</span>
-  <span class="k">select type</span><span class="p">(</span><span class="n">dState_dt</span><span class="p">)</span>
-  <span class="k">class is</span><span class="p">(</span><span class="n">euler_1D_caf</span><span class="p">)</span>
-    <span class="n">dState_dt</span> <span class="o">=</span> <span class="n">self</span>
-  <span class="n">endselect</span>
-  <span class="k">select type</span><span class="p">(</span><span class="n">dState_dt</span><span class="p">)</span>
-  <span class="k">class is</span><span class="p">(</span><span class="n">euler_1D_caf</span><span class="p">)</span>
-    <span class="k">do </span><span class="n">i</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">self</span><span class="p">%</span><span class="n">Ni</span>
-      <span class="n">dState_dt</span><span class="p">%</span><span class="n">U</span><span class="p">(:,</span> <span class="n">i</span><span class="p">)</span> <span class="o">=</span> <span class="p">(</span><span class="n">F</span><span class="p">(:,</span> <span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">-</span> <span class="n">F</span><span class="p">(:,</span> <span class="n">i</span><span class="p">))</span> <span class="o">/</span> <span class="n">self</span><span class="p">%</span><span class="n">Dx</span>
-    <span class="n">enddo</span>
-  <span class="n">endselect</span>
+  <span class="n">dState_dt</span> <span class="o">=</span> <span class="n">self</span>
+  <span class="k">do </span><span class="n">i</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">self</span><span class="p">%</span><span class="n">Ni</span>
+    <span class="n">dState_dt</span><span class="p">%</span><span class="n">U</span><span class="p">(:,</span> <span class="n">i</span><span class="p">)</span> <span class="o">=</span> <span class="p">(</span><span class="n">F</span><span class="p">(:,</span> <span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">-</span> <span class="n">F</span><span class="p">(:,</span> <span class="n">i</span><span class="p">))</span> <span class="o">/</span> <span class="n">self</span><span class="p">%</span><span class="n">Dx</span>
+  <span class="n">enddo</span>
   <span class="k">return</span>
   <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
   <span class="n">endfunction</span> <span class="n">dEuler_dt</span>
@@ -1655,7 +1632,7 @@ private function dEuler_dt(self, t) result(dState_dt)
           <p class="text-right">
             Documentation generated by 
             <a href="https://github.com/cmacmackin/ford">FORD</a>
-             on 2017-03-31 16:42  
+             on 2017-03-31 15:04  
           </p>
         </div>
         <div class="col-xs-12 col-md-4 col-md-pull-4"><p class="text-center"> FOODIE was developed by Fortran-FOSS-Programmers Group</p></div>
