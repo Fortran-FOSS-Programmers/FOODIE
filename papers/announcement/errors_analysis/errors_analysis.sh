@@ -11,6 +11,7 @@ euler=0
 lf=0
 lf_raw=0
 lmm_ssp=0
+lmm_ssp_vss=0
 ls_rk=0
 tvd_rk=0
 
@@ -20,18 +21,19 @@ function print_usage {
   echo "script automotion for FOODIE's errors analysis"
   echo "Usage: `basename $0` #solver"
   echo "Valid solver switches are:"
-  echo "  -ab      # => adams-bashforth"
-  echo "  -abm     # => adams-bashforth-moulton"
-  echo "  -am      # => adams-moulton"
-  echo "  -bdf     # => backward differentiation formula"
-  echo "  -emd-rk  # => embeded RK"
-  echo "  -euler   # => euler"
-  echo "  -lf      # => leapfrog"
-  echo "  -lf-raw  # => leapfrog raw filtered"
-  echo "  -lmm-ssp # => linear multistep methods SSP"
-  echo "  -ls-rk   # => low storage RK"
-  echo "  -tvd-rk  # => TVD RK"
-  echo "  -all     # => all solvers!"
+  echo "  -ab          # => adams-bashforth"
+  echo "  -abm         # => adams-bashforth-moulton"
+  echo "  -am          # => adams-moulton"
+  echo "  -bdf         # => backward differentiation formula"
+  echo "  -emd-rk      # => embeded RK"
+  echo "  -euler       # => euler"
+  echo "  -lf          # => leapfrog"
+  echo "  -lf-raw      # => leapfrog raw filtered"
+  echo "  -lmm-ssp     # => linear multistep methods SSP"
+  echo "  -lmm-ssp-vss # => linear multistep methods SSP with Variable Step Size"
+  echo "  -ls-rk       # => low storage RK"
+  echo "  -tvd-rk      # => TVD RK"
+  echo "  -all         # => all solvers!"
 }
 
 #parsing command line
@@ -63,6 +65,9 @@ while [ $# -gt 0 ]; do
       ;;
     "-lmm-ssp")
       lmm_ssp=1
+      ;;
+    "-lmm-ssp-vss")
+      lmm_ssp_vss=1
       ;;
     "-ls-rk")
       ls_rk=1
@@ -148,6 +153,10 @@ if [ $lf_raw -eq 1 ] ; then
 fi
 if [ $lmm_ssp -eq 1 ] ; then
   ../tests/oscillation -r -tf 1e6 --solver lmm-ssp --ss 3 5 -Dt 5000.d0 2500.d0 1250.d0 625.d0 320.d0 100.d0 50.d0 10.d0 --errors_analysis > analysis-lmm-ssp.log
+fi
+if [ $lmm_ssp_vss -eq 1 ] ; then
+  ../tests/oscillation -r -tf 1e6 --solver lmm-ssp-vss --ss 3 5 --order 2 -Dt 5000.d0 2500.d0 1250.d0 625.d0 320.d0 100.d0 --errors_analysis > analysis-lmm-ssp-vss.log
+  ../tests/oscillation -r -tf 1e6 --solver lmm-ssp-vss --ss 3 5 --order 3 -Dt 5000.d0 2500.d0 1250.d0 625.d0 320.d0 100.d0 --errors_analysis > analysis-lmm-ssp-vss.log
 fi
 if [ $ls_rk -eq 1 ] ; then
   ../tests/oscillation -r -tf 1e6 --solver ls-runge-kutta --ss 1 -Dt 5000.d0 2500.d0 1250.d0 625.d0 320.d0 100.d0 --errors_analysis #> analysis-leapfrog.log
