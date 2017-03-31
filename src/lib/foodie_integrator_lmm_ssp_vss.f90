@@ -12,12 +12,21 @@ module foodie_integrator_lmm_ssp_vss
 !< where \(U_t = \frac{dU}{dt}\), *U* is the vector of *state* variables being a function of the time-like independent variable
 !< *t*, *R* is the (vectorial) residual function, the LMM-SSP class scheme implemented is:
 !<
+!<#### Second order formula
+!<
 !< $$ U^{n+N_s} = \frac{1}{\Omega_{N_s-1}^2} U^n + \frac{\Omega_{N_s-1}^2 - 1}{\Omega_{N_s-1}^2} U^{n+N_s-1} +
 !<    \frac{\Omega_{N_s-1} + 1}{\Omega_{N_s-1}} \Delta t^{n+N_s} R(U^{n+N_s-1}) $$
 !<
+!<#### Third order formula
+!<
+!< $$ U^{n+N_s} = \frac{3 \Omega_{N_s-1} + 2}{\Omega_{N_s-1}^3} U^n +
+!<                \frac{(\Omega_{N_s-1} + 1)^2(\Omega_{N_s-1} - 2)}{\Omega_{N_s-1}^3} U^{n+N_s-1} +
+!<                \frac{\Omega_{N_s-1} + 1}{\Omega_{N_s-1}^2} \Delta t^{n+N_s} R(U^n) +
+!<                \frac{(\Omega_{N_s-1} + 1)^2}{\Omega_{N_s-1}^2} \Delta t^{n+N_s} R(U^{n+N_s-1}) $$
+!<
 !<where \(N_s\) is the number of previous steps considered and
 !<
-!< $$ \Omega_s = \sum_{i=1}^s \left{ \omega_i \right} \, 1 \le s \le N_s  $$
+!< $$ \Omega_s = \sum_{i=1}^s { \omega_i }\quad 1 \leq s \leq N_s $$
 !< $$ \omega_i = \frac{\Delta t^{n + s}}{\Delta t^{n + N_s}} $$
 !<
 !< @note The value of \(\Delta t\) must be provided, it not being computed by the integrator.
