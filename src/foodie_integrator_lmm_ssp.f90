@@ -12,7 +12,7 @@ module foodie_integrator_lmm_ssp
 !< where \(U_t = \frac{dU}{dt}\), *U* is the vector of *state* variables being a function of the time-like independent variable
 !< *t*, *R* is the (vectorial) residual function, the LMM-SSP class scheme implemented is:
 !<
-!< $$ U^n = \sum_{s=0}^{N_s-1}{\left[a_s U^{n-N_s+s} + \Delta t b_s \cdot R(t^{n-N_s+s}, U^{n-N_s+s}) \right]} $$
+!< $$ U^{n+N_s} = \sum_{s=1}^{N_s}{\left[a_s U^{n+s-1} + \Delta t b_s \cdot R(t^{n+s-1}, U^{n+s-1}) \right]} $$
 !<
 !<where \(N_s\) is the number of previous steps considered.
 !<
