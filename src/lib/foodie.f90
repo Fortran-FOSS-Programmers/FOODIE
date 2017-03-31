@@ -96,11 +96,11 @@ public :: integrator_runge_kutta_tvd
 
 contains
   function foodie_integrator(scheme, steps, stages, order, tolerance, nu, alpha) result(integrator)
-  !< Return a concrete instance of [[integrator]] given a scheme selection.
+  !< Return a concrete instance of [[integrator_object]] given a scheme selection.
   !<
   !< This is the FOODIE integrators factory.
   !<
-  !< @note If an error occurs the error status of [[integrator]] is updated.
+  !< @note If an error occurs the error status of [[integrator_object]] is updated.
   character(*), intent(in)              :: scheme     !< Selected integrator given.
   integer(I_P), intent(in), optional    :: steps      !< Number of time steps used in multi-step schemes.
   integer(I_P), intent(in), optional    :: stages     !< Number of Runge-Kutta stages used in multi-stage schemes.

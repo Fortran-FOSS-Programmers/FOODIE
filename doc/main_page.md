@@ -2,11 +2,6 @@
 project: FOODIE
 src_dir: ../src/lib
 src_dir: ../src/tests
-src_dir: ../src/third_party/PENF/src/lib
-src_dir: ../src/third_party/FACE/src/lib
-src_dir: ../src/third_party/FLAP/src/lib
-src_dir: ../src/third_party/WenOOF/src/lib
-
 output_dir: html/publish/
 project_github: https://github.com/Fortran-FOSS-Programmers/FOODIE
 project_download: https://github.com/Fortran-FOSS-Programmers/FOODIE/releases/latest

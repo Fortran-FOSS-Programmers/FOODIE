@@ -69,6 +69,7 @@ type, extends(integrator_object) :: integrator_lmm_ssp_vss
 endtype integrator_lmm_ssp_vss
 
 abstract interface
+  !< Abstract interfaces of [[integrator_lmm_ssp_vss]] methods.
   subroutine integrate_interface(self, U, previous, Dt, t, autoupdate)
   !< Integrate field with LMM-SSP class scheme.
   import :: integrand, integrator_lmm_ssp_vss, R_P

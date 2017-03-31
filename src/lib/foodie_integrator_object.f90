@@ -28,11 +28,11 @@ type, abstract :: integrator_object
 endtype integrator_object
 
 abstract interface
-  !< Abstract interfaces of deferred methods of [[interpolator_object]].
+  !< Abstract interfaces of deferred methods of [[integrator_object]].
   pure function description_interface(self, prefix) result(desc)
   !< Return a pretty-formatted object description.
   import :: integrator_object
-  class(integrator_object), intent(in)           :: self   !< Interpolator.
+  class(integrator_object), intent(in)           :: self   !< Integrator.
   character(*),             intent(in), optional :: prefix !< Prefixing string.
   character(len=:), allocatable                  :: desc   !< Description.
   endfunction description_interface
