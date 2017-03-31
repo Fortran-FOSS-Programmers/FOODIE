@@ -186,28 +186,43 @@ jobs            = 10
 
 # rules
 [rule-makedoc]
-help   = Rule for building documentation from source files
+help   = Build documentation from source files
 rule_1 = rm -rf doc/html/*
-rule_2 = ford doc/main_page.md
+rule_2 = ford doc/main_page.md --debug
 rule_3 = cp -r doc/html/publish/* doc/html/
+rule_4 = rm -rf doc/html/publish
+
+[rule-deldoc]
+help = Delete documentation
+rule = rm -rf doc/html/*
+
+[rule-delexe]
+help = Delete exes
+rule = rm -rf build/
+
+[rule-clean]
+help = Clean the project tree
+rule_1 = FoBiS.py rule -ex deldoc
+rule_2 = FoBiS.py rule -ex delexe
+rule_3 = rm -f *.gcov
+
+[rule-maketar]
+help = Make tar archive of the project
+rule = tar --xform="s%^%FOODIE/%" -czf FOODIE.tar.gz *
 
 [rule-makecoverage]
 help   = Rule for performing coverage analysis
 rule_1 = FoBiS.py build -f src/tests/accuracy/oscillation/fobos -mode gnu-coverage
 rule_2 = ./build/tests/accuracy/oscillation/oscillation -s all
+rule_3 = rm -f build/tests/accuracy/oscillation/obj/penf* build/tests/accuracy/oscillation/obj/face* build/tests/accuracy/oscillation/obj/flap* build/tests/accuracy/oscillation/obj/wenoof*
+rule_4 = gcov -o build/tests/accuracy/oscillation/obj/ src/lib/foodie*
+rule_5 = rm -f *.gcov
 
 [rule-coverage-analysis]
 help   = Rule for performing coverage analysis and saving reports in markdown
 rule_1 = FoBiS.py build -f src/tests/accuracy/oscillation/fobos -mode gnu-coverage
 rule_2 = ./build/tests/accuracy/oscillation/oscillation -s all
-rule_3 = gcov -o ./build/lib/obj/ src/lib/foodie*.f90
-rule_4 = FoBiS.py rule -gcov_analyzer wiki/ Coverage-Analysis
-rule_5 = rm -f *.gcov
-
-[rule-deldoc]
-help = Rule for deleting documentation
-rule = rm -rf doc/html/*
-
-[rule-maketar]
-help = Rule for making tar archive of the project
-rule = tar -czf FOODIE.tar.gz *
+rule_3 = rm -f build/tests/accuracy/oscillation/obj/penf* build/tests/accuracy/oscillation/obj/face* build/tests/accuracy/oscillation/obj/flap* build/tests/accuracy/oscillation/obj/wenoof*
+rule_4 = gcov -o build/tests/accuracy/oscillation/obj/ src/lib/foodie*
+rule_5 = FoBiS.py rule -gcov_analyzer wiki/ Coverage-Analysis
+rule_6 = rm -f *.gcov
