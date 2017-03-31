@@ -1,0 +1,1493 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+	 
+	 <meta name="description" content="Fortran Object oriented Ordinary Differential Equations integration library">
+    
+    <meta name="author" content="Fortran-FOSS-Programmers Group" >
+    <link rel="icon" href="../favicon.png">
+
+    <title>integrator_object &ndash; FOODIE </title>
+
+    <link href="../css/bootstrap.min.css" rel="stylesheet">
+    <link href="../css/pygments.css" rel="stylesheet">
+    <link href="../css/font-awesome.min.css" rel="stylesheet">
+    <link href="../css/local.css" rel="stylesheet">
+    
+
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+    
+    <script src="../js/jquery-2.1.3.min.js"></script>
+    <script src="../js/svg-pan-zoom.min.js"></script>
+
+    
+    <script src="../tipuesearch/tipuesearch_content.js"></script>
+    <link  href="../tipuesearch/tipuesearch.css" rel="stylesheet">
+    <script src="../tipuesearch/tipuesearch_set.js"></script>
+    <script src="../tipuesearch/tipuesearch.js"></script>
+    
+
+  </head>
+
+  <body>
+
+    <!-- Fixed navbar -->
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="../index.html">FOODIE </a>
+        </div>
+        <div id="navbar" class="navbar-collapse collapse">
+          <ul class="nav navbar-nav">
+				
+            <li class="dropdown hidden-xs visible-sm visible-md hidden-lg">
+              <a href="#" class="dropdown-toggle"
+              data-toggle="dropdown" role="button"
+              aria-haspopup="true"
+		 aria-expanded="false">Contents <span class="caret"></span></a>
+	      <ul class="dropdown-menu">
+              
+            <li><a href="../lists/files.html">Source Files</a></li>
+				
+				
+            <li><a href="../lists/modules.html">Modules</a></li>
+				
+            
+                                
+            <li><a href="../lists/procedures.html">Procedures</a></li>
+				
+				
+            <li><a href="../lists/absint.html">Abstract Interfaces</a></li>
+								
+            <li><a href="../lists/types.html">Derived Types</a></li>
+				
+				
+            <li><a href="../lists/programs.html">Programs</a></li>
+				
+            </ul>
+            </li>
+
+<li class="visible-xs hidden-sm visible-lg"><a href="../lists/files.html">Source Files</a></li>
+
+
+<li class="visible-xs hidden-sm visible-lg"><a href="../lists/modules.html">Modules</a></li>
+
+
+
+<li class="visible-xs hidden-sm visible-lg"><a href="../lists/procedures.html">Procedures</a></li>
+
+
+<li class="visible-xs hidden-sm visible-lg"><a href="../lists/absint.html">Abstract Interfaces</a></li>
+                             
+<li class="visible-xs hidden-sm visible-lg"><a href="../lists/types.html">Derived Types</a></li>
+
+
+<li class="visible-xs hidden-sm visible-lg"><a href="../lists/programs.html">Programs</a></li>
+
+          </ul>
+        
+        <form action="../search.html" class="navbar-form navbar-right" role="search">
+        <div class="form-group">
+          <input type="text" class="form-control" placeholder="Search" name="q" id="tipue_search_input" autocomplete="off" required>
+        </div>
+<!--
+        <button type="submit" class="btn btn-default">Submit</button>
+-->
+        </form>
+        
+        </div><!--/.nav-collapse -->
+      </div>
+    </nav>
+
+    <div class="container">
+    
+  
+  <div class="row">
+    <h1>integrator_object
+    <small>Derived Type</small>
+    
+    </h1>
+    
+<div class="row">
+  <div class="col-lg-12">
+<div class="well well-sm">
+  <ul class="list-inline" style="margin-bottom:0px;display:inline">
+     
+     
+     
+     
+    
+    
+     <li><i class="fa fa-list-ol"></i>
+       <a data-toggle="tooltip"
+	  data-placement="bottom" data-html="true"
+	  title="<p> 2.5% of total for derived types.</p>Including implementation: 47 statements,  0.7% of total for derived types.">12 statements</a>
+     </li> 
+     
+     
+    <li><i class="fa fa-code"></i><a href="../src/foodie_integrator_object.f90"> Source File</a></li>
+     
+  </ul>
+  <ol class="breadcrumb in-well text-right">
+  
+     <li><a href='../sourcefile/foodie_integrator_object.f90.html'>foodie_integrator_object.f90</a></li>
+  
+     <li><a href='../module/foodie_integrator_object.html'>foodie_integrator_object</a></li>
+  
+     <li class="active">integrator_object</li>
+  </ol>
+</div>
+</div>
+</div>
+<script>
+  $(function () {
+  $('[data-toggle="tooltip"]').tooltip()
+  })
+</script>
+
+  </div>
+  
+  <div class="row">
+    <div class="col-md-3 hidden-xs hidden-sm visible-md visible-lg">
+    
+<div id="sidebar">
+  
+
+
+<div class="panel panel-primary">
+  <div class="panel-heading text-left"><h3 class="panel-title"><a data-toggle="collapse" href="#vars-0">Variables</a></h3></div>
+  <div id="vars-0" class="panel-collapse collapse">
+    <div class="list-group">
+      
+      <a class="list-group-item" href="../type/integrator_object.html#variable-error">error</a>
+      
+      <a class="list-group-item" href="../type/integrator_object.html#variable-error_message">error_message</a>
+      
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="panel panel-primary">
+  <div class="panel-heading text-left"><h3 class="panel-title"><a data-toggle="collapse" href="#boundprocs-0">Type-Bound Procedures</a></h3></div>
+  <div id="boundprocs-0" class="panel-collapse collapse">
+    <div class="list-group">
+      
+      <a class="list-group-item" href="../type/integrator_object.html#boundprocedure-assign_abstract">assign_abstract</a>
+      
+      <a class="list-group-item" href="../type/integrator_object.html#boundprocedure-assignment%28%3D%29%7E9">assignment(=)</a>
+      
+      <a class="list-group-item" href="../type/integrator_object.html#boundprocedure-check_error">check_error</a>
+      
+      <a class="list-group-item" href="../type/integrator_object.html#boundprocedure-description%7E8">description</a>
+      
+      <a class="list-group-item" href="../type/integrator_object.html#boundprocedure-destroy_abstract">destroy_abstract</a>
+      
+      <a class="list-group-item" href="../type/integrator_object.html#boundprocedure-integr_assign_integr%7E9">integr_assign_integr</a>
+      
+      <a class="list-group-item" href="../type/integrator_object.html#boundprocedure-trigger_error">trigger_error</a>
+      
+    </div>
+  </div>
+</div>
+
+
+
+<div class="panel panel-primary">
+  <div class="panel-heading text-left"><h3 class="panel-title">Source Code</h3></div>
+  <div class="list-group">
+    <a class="list-group-item" href="../type/integrator_object.html#src">integrator_object</a>
+  </div>
+</div>
+
+
+  <hr>
+  
+
+<div class="panel panel-default">
+  <div class="panel-heading text-left"><h3 class="panel-title"><a data-toggle="collapse" href="#alltypes-0">All Derived Types</a></h3></div>
+  <div id="alltypes-0" class="panel-collapse collapse">
+    <div class="list-group">
+      
+      <a class="list-group-item" href="../type/burgers.html">burgers</a>
+      
+      <a class="list-group-item" href="../type/euler_1d.html">euler_1D</a>
+      
+      <a class="list-group-item" href="../type/euler_1d_caf.html">euler_1D_caf</a>
+      
+      <a class="list-group-item" href="../type/euler_1d_caf_nf.html">euler_1D_caf_nf</a>
+      
+      <a class="list-group-item" href="../type/euler_1d_omp_nf.html">euler_1D_omp_nf</a>
+      
+      <a class="list-group-item" href="../type/euler_1d_openmp.html">euler_1D_openmp</a>
+      
+      <a class="list-group-item" href="../type/integrand.html">integrand</a>
+      
+      <a class="list-group-item" href="../type/integrator_adams_bashforth.html">integrator_adams_bashforth</a>
+      
+      <a class="list-group-item" href="../type/integrator_adams_bashforth_moulton.html">integrator_adams_bashforth_moulton</a>
+      
+      <a class="list-group-item" href="../type/integrator_adams_moulton.html">integrator_adams_moulton</a>
+      
+      <a class="list-group-item" href="../type/integrator_back_df.html">integrator_back_df</a>
+      
+      <a class="list-group-item" href="../type/integrator_euler_explicit.html">integrator_euler_explicit</a>
+      
+      <a class="list-group-item" href="../type/integrator_leapfrog.html">integrator_leapfrog</a>
+      
+      <a class="list-group-item" href="../type/integrator_lmm_ssp.html">integrator_lmm_ssp</a>
+      
+      <a class="list-group-item" href="../type/integrator_lmm_ssp_vss.html">integrator_lmm_ssp_vss</a>
+      
+      <a class="list-group-item" href="../type/integrator_object.html">integrator_object</a>
+      
+      <a class="list-group-item" href="../type/integrator_runge_kutta_emd.html">integrator_runge_kutta_emd</a>
+      
+      <a class="list-group-item" href="../type/integrator_runge_kutta_ls.html">integrator_runge_kutta_ls</a>
+      
+      <a class="list-group-item" href="../type/integrator_runge_kutta_tvd.html">integrator_runge_kutta_tvd</a>
+      
+      <a class="list-group-item" href="../type/lorenz.html">lorenz</a>
+      
+      <a class="list-group-item" href="../type/oscillation.html">oscillation</a>
+      
+      <a class="list-group-item" href="../type/oscillation_test.html">oscillation_test</a>
+      
+      <a class="list-group-item" href="../type/tvd_runge_kutta_integrator%7E2.html">tvd_runge_kutta_integrator</a>
+      
+      <a class="list-group-item" href="../type/tvd_runge_kutta_integrator.html">tvd_runge_kutta_integrator</a>
+      
+    </div>
+  </div>
+</div>
+
+
+</div>  
+
+    </div>
+    
+    <div class="col-md-9" id='text'>
+      <h2>type, public, abstract :: integrator_object</h2>
+    
+    <p>Abstract type of FOODIE ODE integrators.</p>
+    
+    
+    <h3>Inherited By</h3>
+    
+                <div class="depgraph"><?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.40.1 (20161225.0304)
+ -->
+<!-- Title: type~~integrator_object~~InheritedByGraph Pages: 1 -->
+<svg id="typeintegrator_objectInheritedByGraph" width="553pt" height="448pt"
+ viewBox="0.00 0.00 553.00 448.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="type~~integrator_object~~InheritedByGraph" class="graph" transform="scale(1 1) rotate(0) translate(4 444)">
+<title>type~~integrator_object~~InheritedByGraph</title>
+<polygon fill="#ffffff" stroke="transparent" points="-4,4 -4,-444 549,-444 549,4 -4,4"/>
+<!-- type~integrator_object -->
+<g id="type~~integrator_object~~InheritedByGraph_node1" class="node">
+<title>type~integrator_object</title>
+<polygon fill="none" stroke="#000000" points="93,-254 0,-254 0,-230 93,-230 93,-254"/>
+<text text-anchor="middle" x="46.5" y="-239.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#000000">integrator_object</text>
+</g>
+<!-- type~integrator_adams_bashforth -->
+<g id="type~~integrator_object~~InheritedByGraph_node2" class="node">
+<title>type~integrator_adams_bashforth</title>
+<g id="a_type~~integrator_object~~InheritedByGraph_node2"><a xlink:href="../type/integrator_adams_bashforth.html" xlink:title="integrator_adams_bashforth">
+<polygon fill="#5cb85c" stroke="#5cb85c" points="278,-440 130,-440 130,-416 278,-416 278,-440"/>
+<text text-anchor="middle" x="204" y="-425.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">integrator_adams_bashforth</text>
+</a>
+</g>
+</g>
+<!-- type~integrator_object&#45;&gt;type~integrator_adams_bashforth -->
+<g id="type~~integrator_object~~InheritedByGraph_edge3" class="edge">
+<title>type~integrator_object&#45;&gt;type~integrator_adams_bashforth</title>
+<path fill="none" stroke="#000000" d="M111.5,-242C148.1532,-237.7704 106.147,-378.8507 130,-407 130.7338,-407.866 131.5005,-408.6977 132.2971,-409.4963"/>
+<polygon fill="#000000" stroke="#000000" points="130.2008,-412.3016 140.1915,-415.828 134.5805,-406.841 130.2008,-412.3016"/>
+</g>
+<!-- type~integrator_back_df -->
+<g id="type~~integrator_object~~InheritedByGraph_node3" class="node">
+<title>type~integrator_back_df</title>
+<g id="a_type~~integrator_object~~InheritedByGraph_node3"><a xlink:href="../type/integrator_back_df.html" xlink:title="integrator_back_df">
+<polygon fill="#5cb85c" stroke="#5cb85c" points="255,-398 153,-398 153,-374 255,-374 255,-398"/>
+<text text-anchor="middle" x="204" y="-383.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">integrator_back_df</text>
+</a>
+</g>
+</g>
+<!-- type~integrator_object&#45;&gt;type~integrator_back_df -->
+<g id="type~~integrator_object~~InheritedByGraph_edge4" class="edge">
+<title>type~integrator_object&#45;&gt;type~integrator_back_df</title>
+<path fill="none" stroke="#000000" d="M111.5,-242C138.9586,-238.8314 111.737,-344.2521 130,-365 133.8052,-369.323 138.4283,-372.7854 143.4859,-375.5545"/>
+<polygon fill="#000000" stroke="#000000" points="142.4202,-378.9131 152.9756,-379.8264 145.2936,-372.53 142.4202,-378.9131"/>
+</g>
+<!-- type~integrator_euler_explicit -->
+<g id="type~~integrator_object~~InheritedByGraph_node4" class="node">
+<title>type~integrator_euler_explicit</title>
+<g id="a_type~~integrator_object~~InheritedByGraph_node4"><a xlink:href="../type/integrator_euler_explicit.html" xlink:title="integrator_euler_explicit">
+<polygon fill="#5cb85c" stroke="#5cb85c" points="267.5,-356 140.5,-356 140.5,-332 267.5,-332 267.5,-356"/>
+<text text-anchor="middle" x="204" y="-341.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">integrator_euler_explicit</text>
+</a>
+</g>
+</g>
+<!-- type~integrator_object&#45;&gt;type~integrator_euler_explicit -->
+<g id="type~~integrator_object~~InheritedByGraph_edge5" class="edge">
+<title>type~integrator_object&#45;&gt;type~integrator_euler_explicit</title>
+<path fill="none" stroke="#000000" d="M111.5,-242C148.1836,-237.7669 104.5759,-296.219 130,-323 130.9309,-323.9806 131.904,-324.9165 132.9144,-325.8097"/>
+<polygon fill="#000000" stroke="#000000" points="131.1513,-328.853 141.3122,-331.8541 135.2405,-323.1716 131.1513,-328.853"/>
+</g>
+<!-- type~integrator_lmm_ssp_vss -->
+<g id="type~~integrator_object~~InheritedByGraph_node5" class="node">
+<title>type~integrator_lmm_ssp_vss</title>
+<g id="a_type~~integrator_object~~InheritedByGraph_node5"><a xlink:href="../type/integrator_lmm_ssp_vss.html" xlink:title="integrator_lmm_ssp_vss">
+<polygon fill="#5cb85c" stroke="#5cb85c" points="268.5,-314 139.5,-314 139.5,-290 268.5,-290 268.5,-314"/>
+<text text-anchor="middle" x="204" y="-299.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">integrator_lmm_ssp_vss</text>
+</a>
+</g>
+</g>
+<!-- type~integrator_object&#45;&gt;type~integrator_lmm_ssp_vss -->
+<g id="type~~integrator_object~~InheritedByGraph_edge6" class="edge">
+<title>type~integrator_object&#45;&gt;type~integrator_lmm_ssp_vss</title>
+<path fill="none" stroke="#000000" d="M111.5,-242C128.5898,-240.0279 116.8998,-264.8494 130,-276 134.2774,-279.6408 139.0976,-282.7834 144.1747,-285.4937"/>
+<polygon fill="#000000" stroke="#000000" points="142.993,-288.8066 153.5291,-289.9198 145.9869,-282.4791 142.993,-288.8066"/>
+</g>
+<!-- type~integrator_adams_bashforth_moulton -->
+<g id="type~~integrator_object~~InheritedByGraph_node6" class="node">
+<title>type~integrator_adams_bashforth_moulton</title>
+<g id="a_type~~integrator_object~~InheritedByGraph_node6"><a xlink:href="../type/integrator_adams_bashforth_moulton.html" xlink:title="integrator_adams_bashforth_moulton">
+<polygon fill="#5cb85c" stroke="#5cb85c" points="545,-274 353,-274 353,-250 545,-250 545,-274"/>
+<text text-anchor="middle" x="449" y="-259.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">integrator_adams_bashforth_moulton</text>
+</a>
+</g>
+</g>
+<!-- type~integrator_object&#45;&gt;type~integrator_adams_bashforth_moulton -->
+<g id="type~~integrator_object~~InheritedByGraph_edge7" class="edge">
+<title>type~integrator_object&#45;&gt;type~integrator_adams_bashforth_moulton</title>
+<path fill="none" stroke="#000000" d="M111.5,-242C112.2289,-241.9159 243.8906,-249.7499 342.5294,-255.6369"/>
+<polygon fill="#000000" stroke="#000000" points="342.3779,-259.134 352.5687,-256.2362 342.7951,-252.1465 342.3779,-259.134"/>
+</g>
+<!-- type~integrator_adams_moulton -->
+<g id="type~~integrator_object~~InheritedByGraph_node7" class="node">
+<title>type~integrator_adams_moulton</title>
+<g id="a_type~~integrator_object~~InheritedByGraph_node7"><a xlink:href="../type/integrator_adams_moulton.html" xlink:title="integrator_adams_moulton">
+<polygon fill="#5cb85c" stroke="#5cb85c" points="274.5,-234 133.5,-234 133.5,-210 274.5,-210 274.5,-234"/>
+<text text-anchor="middle" x="204" y="-219.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">integrator_adams_moulton</text>
+</a>
+</g>
+</g>
+<!-- type~integrator_object&#45;&gt;type~integrator_adams_moulton -->
+<g id="type~~integrator_object~~InheritedByGraph_edge8" class="edge">
+<title>type~integrator_object&#45;&gt;type~integrator_adams_moulton</title>
+<path fill="none" stroke="#000000" d="M111.5,-242C122.9877,-240.6744 135.1507,-238.5659 146.7492,-236.2052"/>
+<polygon fill="#000000" stroke="#000000" points="147.7101,-239.5793 156.7654,-234.0791 146.2565,-232.7319 147.7101,-239.5793"/>
+</g>
+<!-- type~integrator_leapfrog -->
+<g id="type~~integrator_object~~InheritedByGraph_node8" class="node">
+<title>type~integrator_leapfrog</title>
+<g id="a_type~~integrator_object~~InheritedByGraph_node8"><a xlink:href="../type/integrator_leapfrog.html" xlink:title="integrator_leapfrog">
+<polygon fill="#5cb85c" stroke="#5cb85c" points="255.5,-192 152.5,-192 152.5,-168 255.5,-168 255.5,-192"/>
+<text text-anchor="middle" x="204" y="-177.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">integrator_leapfrog</text>
+</a>
+</g>
+</g>
+<!-- type~integrator_object&#45;&gt;type~integrator_leapfrog -->
+<g id="type~~integrator_object~~InheritedByGraph_edge9" class="edge">
+<title>type~integrator_object&#45;&gt;type~integrator_leapfrog</title>
+<path fill="none" stroke="#000000" d="M111.5,-242C131.3596,-239.7083 114.8618,-214.0571 130,-201 133.9439,-197.5983 138.4036,-194.7456 143.1304,-192.3537"/>
+<polygon fill="#000000" stroke="#000000" points="144.7013,-195.4875 152.4841,-188.2986 141.917,-189.0651 144.7013,-195.4875"/>
+</g>
+<!-- type~integrator_runge_kutta_ls -->
+<g id="type~~integrator_object~~InheritedByGraph_node9" class="node">
+<title>type~integrator_runge_kutta_ls</title>
+<g id="a_type~~integrator_object~~InheritedByGraph_node9"><a xlink:href="../type/integrator_runge_kutta_ls.html" xlink:title="integrator_runge_kutta_ls">
+<polygon fill="#5cb85c" stroke="#5cb85c" points="271.5,-150 136.5,-150 136.5,-126 271.5,-126 271.5,-150"/>
+<text text-anchor="middle" x="204" y="-135.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">integrator_runge_kutta_ls</text>
+</a>
+</g>
+</g>
+<!-- type~integrator_object&#45;&gt;type~integrator_runge_kutta_ls -->
+<g id="type~~integrator_object~~InheritedByGraph_edge10" class="edge">
+<title>type~integrator_object&#45;&gt;type~integrator_runge_kutta_ls</title>
+<path fill="none" stroke="#000000" d="M111.5,-242C149.045,-237.6675 104.0508,-186.4779 130,-159 130.9284,-158.0169 131.8991,-157.0788 132.9073,-156.1835"/>
+<polygon fill="#000000" stroke="#000000" points="135.2352,-158.8197 141.2919,-150.1268 131.1362,-153.1453 135.2352,-158.8197"/>
+</g>
+<!-- type~integrator_runge_kutta_tvd -->
+<g id="type~~integrator_object~~InheritedByGraph_node10" class="node">
+<title>type~integrator_runge_kutta_tvd</title>
+<g id="a_type~~integrator_object~~InheritedByGraph_node10"><a xlink:href="../type/integrator_runge_kutta_tvd.html" xlink:title="integrator_runge_kutta_tvd">
+<polygon fill="#5cb85c" stroke="#5cb85c" points="275,-108 133,-108 133,-84 275,-84 275,-108"/>
+<text text-anchor="middle" x="204" y="-93.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">integrator_runge_kutta_tvd</text>
+</a>
+</g>
+</g>
+<!-- type~integrator_object&#45;&gt;type~integrator_runge_kutta_tvd -->
+<g id="type~~integrator_object~~InheritedByGraph_edge11" class="edge">
+<title>type~integrator_object&#45;&gt;type~integrator_runge_kutta_tvd</title>
+<path fill="none" stroke="#000000" d="M111.5,-242C139.3952,-238.781 111.4714,-138.0997 130,-117 130.8674,-116.0122 131.7775,-115.0693 132.7258,-114.1694"/>
+<polygon fill="#000000" stroke="#000000" points="134.863,-116.9412 140.6668,-108.0774 130.6022,-111.3872 134.863,-116.9412"/>
+</g>
+<!-- type~integrator_runge_kutta_emd -->
+<g id="type~~integrator_object~~InheritedByGraph_node11" class="node">
+<title>type~integrator_runge_kutta_emd</title>
+<g id="a_type~~integrator_object~~InheritedByGraph_node11"><a xlink:href="../type/integrator_runge_kutta_emd.html" xlink:title="integrator_runge_kutta_emd">
+<polygon fill="#5cb85c" stroke="#5cb85c" points="278,-66 130,-66 130,-42 278,-42 278,-66"/>
+<text text-anchor="middle" x="204" y="-51.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">integrator_runge_kutta_emd</text>
+</a>
+</g>
+</g>
+<!-- type~integrator_object&#45;&gt;type~integrator_runge_kutta_emd -->
+<g id="type~~integrator_object~~InheritedByGraph_edge12" class="edge">
+<title>type~integrator_object&#45;&gt;type~integrator_runge_kutta_emd</title>
+<path fill="none" stroke="#000000" d="M111.5,-242C148.592,-237.7197 105.8803,-103.5022 130,-75 130.7333,-74.1335 131.4994,-73.3014 132.2955,-72.5023"/>
+<polygon fill="#000000" stroke="#000000" points="134.5794,-75.1572 140.1864,-66.1676 130.1972,-69.6985 134.5794,-75.1572"/>
+</g>
+<!-- type~integrator_lmm_ssp -->
+<g id="type~~integrator_object~~InheritedByGraph_node12" class="node">
+<title>type~integrator_lmm_ssp</title>
+<g id="a_type~~integrator_object~~InheritedByGraph_node12"><a xlink:href="../type/integrator_lmm_ssp.html" xlink:title="integrator_lmm_ssp">
+<polygon fill="#5cb85c" stroke="#5cb85c" points="257.5,-24 150.5,-24 150.5,0 257.5,0 257.5,-24"/>
+<text text-anchor="middle" x="204" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">integrator_lmm_ssp</text>
+</a>
+</g>
+</g>
+<!-- type~integrator_object&#45;&gt;type~integrator_lmm_ssp -->
+<g id="type~~integrator_object~~InheritedByGraph_edge13" class="edge">
+<title>type~integrator_object&#45;&gt;type~integrator_lmm_ssp</title>
+<path fill="none" stroke="#000000" d="M93.0875,-243.2934C99.2912,-243.0874 105.5585,-242.6856 111.5,-242"/>
+<path fill="none" stroke="#000000" d="M111.5,-242C134.6593,-239.3275 115.1373,-50.961 130,-33 133.1847,-29.1514 137.0187,-25.9791 141.2442,-23.3677"/>
+<polygon fill="#000000" stroke="#000000" points="143.0319,-26.3861 150.3848,-18.7581 139.88,-20.1358 143.0319,-26.3861"/>
+</g>
+<!-- type~integrator_adams_bashforth&#45;&gt;type~integrator_adams_bashforth_moulton -->
+<g id="type~~integrator_object~~InheritedByGraph_edge1" class="edge">
+<title>type~integrator_adams_bashforth&#45;&gt;type~integrator_adams_bashforth_moulton</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M257.2345,-415.8833C264.4071,-413.3966 271.519,-410.4562 278,-407 341.3712,-373.2059 402.2239,-312.8015 431.2684,-281.7008"/>
+<polygon fill="#000000" stroke="#000000" points="434.0664,-283.8295 438.272,-274.105 428.9201,-279.0844 434.0664,-283.8295"/>
+<text text-anchor="middle" x="315.5" y="-397.4" font-family="Helvetica,sans-Serif" font-size="9.50" fill="#000000">predictor</text>
+</g>
+<!-- type~integrator_adams_moulton&#45;&gt;type~integrator_adams_bashforth_moulton -->
+<g id="type~~integrator_object~~InheritedByGraph_edge2" class="edge">
+<title>type~integrator_adams_moulton&#45;&gt;type~integrator_adams_bashforth_moulton</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M274.5251,-229.4855C294.1535,-231.8751 315.4487,-234.7542 335,-238 351.6883,-240.7705 369.6409,-244.2926 386.2502,-247.7794"/>
+<polygon fill="#000000" stroke="#000000" points="385.8854,-251.2801 396.395,-249.9388 387.3428,-244.4335 385.8854,-251.2801"/>
+<text text-anchor="middle" x="315.5" y="-240.4" font-family="Helvetica,sans-Serif" font-size="9.50" fill="#000000">corrector</text>
+</g>
+</g>
+</svg>
+</div>
+                <div><a type="button" class="graph-help" data-toggle="modal" href="#graph-help-text">Help</a></div>
+                <div class="modal fade" id="graph-help-text" tabindex="-1" role="dialog">
+                  <div class="modal-dialog modal-lg" role="document">
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title" id="-graph-help-label">Graph Key</h4>
+                      </div>
+                      <div class="modal-body">
+                        
+    <p>Nodes of different colours represent the following: </p>
+    <?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.40.1 (20161225.0304)
+ -->
+<!-- Title: Graph Key Pages: 1 -->
+<svg width="178pt" height="32pt"
+ viewBox="0.00 0.00 177.50 32.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(4 28)">
+<title>Graph Key</title>
+<polygon fill="#ffffff" stroke="transparent" points="-4,4 -4,-28 173.5,-28 173.5,4 -4,4"/>
+<!-- Type -->
+<g id="node1" class="node">
+<title>Type</title>
+<polygon fill="#5cb85c" stroke="#5cb85c" points="54,-24 0,-24 0,0 54,0 54,-24"/>
+<text text-anchor="middle" x="27" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">Type</text>
+</g>
+<!-- This Page&#39;s Entity -->
+<g id="node2" class="node">
+<title>This Page&#39;s Entity</title>
+<polygon fill="none" stroke="#000000" points="169.5,-24 72.5,-24 72.5,0 169.5,0 169.5,-24"/>
+<text text-anchor="middle" x="121" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#000000">This Page&#39;s Entity</text>
+</g>
+</g>
+</svg>
+
+    
+    <p>Solid arrows point from one derived type to another which extends
+    (inherits from) it. Dashed arrows point from a derived type to another
+    type containing it as a components, with a label listing the name(s) of
+    said component(s).
+    </p>
+    
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                
+    
+
+    <section class="visible-xs visible-sm hidden-md">
+      
+
+
+<div class="panel panel-primary">
+  <div class="panel-heading text-left"><h3 class="panel-title"><a data-toggle="collapse" href="#vars-1">Variables</a></h3></div>
+  <div id="vars-1" class="panel-collapse collapse">
+    <div class="list-group">
+      
+      <a class="list-group-item" href="../type/integrator_object.html#variable-error">error</a>
+      
+      <a class="list-group-item" href="../type/integrator_object.html#variable-error_message">error_message</a>
+      
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="panel panel-primary">
+  <div class="panel-heading text-left"><h3 class="panel-title"><a data-toggle="collapse" href="#boundprocs-1">Type-Bound Procedures</a></h3></div>
+  <div id="boundprocs-1" class="panel-collapse collapse">
+    <div class="list-group">
+      
+      <a class="list-group-item" href="../type/integrator_object.html#boundprocedure-assign_abstract">assign_abstract</a>
+      
+      <a class="list-group-item" href="../type/integrator_object.html#boundprocedure-assignment%28%3D%29%7E9">assignment(=)</a>
+      
+      <a class="list-group-item" href="../type/integrator_object.html#boundprocedure-check_error">check_error</a>
+      
+      <a class="list-group-item" href="../type/integrator_object.html#boundprocedure-description%7E8">description</a>
+      
+      <a class="list-group-item" href="../type/integrator_object.html#boundprocedure-destroy_abstract">destroy_abstract</a>
+      
+      <a class="list-group-item" href="../type/integrator_object.html#boundprocedure-integr_assign_integr%7E9">integr_assign_integr</a>
+      
+      <a class="list-group-item" href="../type/integrator_object.html#boundprocedure-trigger_error">trigger_error</a>
+      
+    </div>
+  </div>
+</div>
+
+
+
+<div class="panel panel-primary">
+  <div class="panel-heading text-left"><h3 class="panel-title">Source Code</h3></div>
+  <div class="list-group">
+    <a class="list-group-item" href="../type/integrator_object.html#src">integrator_object</a>
+  </div>
+</div>
+
+
+    </section>
+    <br class="visible-xs visible-sm hidden-md">
+
+    
+    <section>
+    <h2>Components</h2>
+    
+<table class="table table-striped varlist">
+<thead><tr><th>Type</th><th>Visibility</th>
+
+<th>Attributes</th><th></th><th>Name</th><th></th><th>Initial</th><th></th></thead>
+
+
+
+<tbody>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-error"></span>integer(kind=I_P),</td>
+  
+  <td>public</td>
+  <td></td><td>::</td>
+  <td><strong>error</strong></td><td> =</td><td>0</td><td><p>Error status code.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-error_message"></span>character(len=:),</td>
+  
+  <td>public,</td>
+  <td>allocatable</td><td>::</td>
+  <td><strong>error_message</strong></td><td></td><td></td><td><p>Error message, hopefully meaningful.</p></td>
+  
+</tr>
+
+</tbody>
+</table>
+
+    </section>
+    <br>
+    
+    
+    
+    
+    
+    
+     
+    <section>
+    <h2>Type-Bound Procedures</h2>
+    
+	   
+<div class="panel panel-default">
+  <div class="panel-heading codesum"><span class="anchor" id="boundprocedure-assign_abstract"></span><h3>procedure, public, pass(lhs) :: <strong>assign_abstract</strong>  
+    
+  </h3></div>
+  
+  <div class="panel-body">
+    
+
+
+    <p>Assign ony members of abstract <a href="../type/integrator_object.html">integrator_object</a> type.</p>
+  </div>
+  
+  <ul class="list-group">
+    
+      <li class="list-group-item">
+      
+         
+    
+    <h3>
+private pure subroutine <a href='../proc/assign_abstract.html'>assign_abstract</a>(lhs, rhs)
+    
+    
+	 
+</h3>
+    
+
+
+
+
+
+
+
+<p>Assign ony members of abstract <a href="../type/integrator_object.html">integrator_object</a> type.</p>
+    
+    <h4>Arguments</h4>
+    
+      
+      
+<table class="table table-striped varlist">
+<thead><tr><th>Type</th>
+<th>Intent</th><th>Optional</th>
+<th>Attributes</th><th></th><th>Name</th><th></th></thead>
+
+
+
+<tbody>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>class(<a href='../type/integrator_object.html'>integrator_object</a>),</td>
+  <td>intent(inout)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>lhs</strong></td><td><p>Left hand side.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>class(<a href='../type/integrator_object.html'>integrator_object</a>),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>rhs</strong></td><td><p>Right hand side.</p></td>
+  
+</tr>
+
+</tbody>
+</table>
+
+      
+    
+    
+
+      
+      </li>
+    
+  </ul>
+</div>
+
+    
+	   
+<div class="panel panel-default">
+  <div class="panel-heading codesum"><span class="anchor" id="boundprocedure-assignment%28%3D%29%7E9"></span><h3>generic, public :: <strong>assignment(=)</strong>  => <a href='../type/integrator_adams_bashforth_moulton.html#boundprocedure-integr_assign_integr%7E2'>integr_assign_integr</a> 
+    
+  </h3></div>
+  
+  <div class="panel-body">
+    
+
+
+    <p>Overload <code>=</code>.</p>
+  </div>
+  
+  <ul class="list-group">
+    
+      <li class="list-group-item">
+      
+         
+            
+    
+    <h3>
+private pure subroutine <a href='../proc/integr_assign_integr%7E11.html'>integr_assign_integr</a>(lhs, rhs)
+    
+    
+	 
+</h3>
+    
+
+
+
+
+
+
+
+<p>Operator <code>=</code>.</p>
+    
+    <h4>Arguments</h4>
+    
+      
+      
+<table class="table table-striped varlist">
+<thead><tr><th>Type</th>
+<th>Intent</th><th>Optional</th>
+<th>Attributes</th><th></th><th>Name</th><th></th></thead>
+
+
+
+<tbody>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>class(<a href='../type/integrator_adams_bashforth_moulton.html'>integrator_adams_bashforth_moulton</a>),</td>
+  <td>intent(inout)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>lhs</strong></td><td><p>Left hand side.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>class(<a href='../type/integrator_object.html'>integrator_object</a>),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>rhs</strong></td><td><p>Right hand side.</p></td>
+  
+</tr>
+
+</tbody>
+</table>
+
+      
+    
+    
+
+         
+      
+      </li>
+    
+  </ul>
+</div>
+
+    
+	   
+<div class="panel panel-default">
+  <div class="panel-heading codesum"><span class="anchor" id="boundprocedure-check_error"></span><h3>procedure, public, pass(self) :: <strong>check_error</strong>  
+    
+  </h3></div>
+  
+  <div class="panel-body">
+    
+
+
+    <p>Check for error occurrencies.</p>
+  </div>
+  
+  <ul class="list-group">
+    
+      <li class="list-group-item">
+      
+         
+    
+    <h3>
+private subroutine <a href='../proc/check_error.html'>check_error</a>(self, is_severe)
+    
+    
+	 
+</h3>
+    
+
+
+
+
+
+
+
+<p>Check for error occurencies.</p>
+    
+    <h4>Arguments</h4>
+    
+      
+      
+<table class="table table-striped varlist">
+<thead><tr><th>Type</th>
+<th>Intent</th><th>Optional</th>
+<th>Attributes</th><th></th><th>Name</th><th></th></thead>
+
+
+
+<tbody>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>class(<a href='../type/integrator_object.html'>integrator_object</a>),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>self</strong></td><td><p>Integrator.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>logical,</td>
+  <td>intent(in),</td>
+  <td>optional</td>
+  
+  <td></td><td>::</td>
+  <td><strong>is_severe</strong></td><td><p>Flag to activate severe faliure, namely errors trigger a stop.</p></td>
+  
+</tr>
+
+</tbody>
+</table>
+
+      
+    
+    
+
+      
+      </li>
+    
+  </ul>
+</div>
+
+    
+	   
+<div class="panel panel-default">
+  <div class="panel-heading codesum"><span class="anchor" id="boundprocedure-description%7E8"></span><h3>procedure(<a href='../interface/description_interface.html'>description_interface</a>), public, deferred, pass(self) :: <strong>description</strong>  
+    
+  </h3></div>
+  
+  <div class="panel-body">
+    
+
+
+    <p>Return pretty-printed object description.</p>
+  </div>
+  
+  <ul class="list-group">
+    
+      <li class="list-group-item">
+      
+         
+            
+    
+    <h3>
+pure function <a href='../interface/description_interface.html'>description_interface</a>(self, prefix) result(desc)
+    
+    
+	 
+<small>Prototype</small></h3>
+    
+
+
+
+
+
+
+
+<p>Return a pretty-formatted object description.</p>
+    
+    <h4>Arguments</h4>
+    
+      
+      
+<table class="table table-striped varlist">
+<thead><tr><th>Type</th>
+<th>Intent</th><th>Optional</th>
+<th>Attributes</th><th></th><th>Name</th><th></th></thead>
+
+
+
+<tbody>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>class(<a href='../type/integrator_object.html'>integrator_object</a>),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>self</strong></td><td><p>Integrator.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>character(len=*),</td>
+  <td>intent(in),</td>
+  <td>optional</td>
+  
+  <td></td><td>::</td>
+  <td><strong>prefix</strong></td><td><p>Prefixing string.</p></td>
+  
+</tr>
+
+</tbody>
+</table>
+
+      
+    
+    
+
+  
+  
+  
+  
+     <h4>Return Value <small>character(len=:),
+  allocatable</small></h4>
+  <p>Description.</p>
+    
+
+         
+      
+      </li>
+    
+  </ul>
+</div>
+
+    
+	   
+<div class="panel panel-default">
+  <div class="panel-heading codesum"><span class="anchor" id="boundprocedure-destroy_abstract"></span><h3>procedure, public, pass(self) :: <strong>destroy_abstract</strong>  
+    
+  </h3></div>
+  
+  <div class="panel-body">
+    
+
+
+    <p>Destroy only members of abstract <a href="../type/integrator_object.html">integrator_object</a> type.</p>
+  </div>
+  
+  <ul class="list-group">
+    
+      <li class="list-group-item">
+      
+         
+    
+    <h3>
+private elemental subroutine <a href='../proc/destroy_abstract.html'>destroy_abstract</a>(self)
+    
+    
+	 
+</h3>
+    
+
+
+
+
+
+
+
+<p>Destroy only members of abstract <a href="../type/integrator_object.html">integrator_object</a> type.</p>
+    
+    <h4>Arguments</h4>
+    
+      
+      
+<table class="table table-striped varlist">
+<thead><tr><th>Type</th>
+<th>Intent</th><th>Optional</th>
+<th>Attributes</th><th></th><th>Name</th><th></th></thead>
+
+
+
+<tbody>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>class(<a href='../type/integrator_object.html'>integrator_object</a>),</td>
+  <td>intent(inout)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>self</strong></td><td><p>Integrator.</p></td>
+  
+</tr>
+
+</tbody>
+</table>
+
+      
+    
+    
+
+      
+      </li>
+    
+  </ul>
+</div>
+
+    
+	   
+<div class="panel panel-default">
+  <div class="panel-heading codesum"><span class="anchor" id="boundprocedure-integr_assign_integr%7E9"></span><h3>procedure(<a href='../interface/assignment_interface.html'>assignment_interface</a>), public, deferred, pass(lhs) :: <strong>integr_assign_integr</strong>  
+    
+  </h3></div>
+  
+  <div class="panel-body">
+    
+
+
+    <p>Operator <code>=</code>.</p>
+  </div>
+  
+  <ul class="list-group">
+    
+      <li class="list-group-item">
+      
+         
+            
+    
+    <h3>
+pure subroutine <a href='../interface/assignment_interface.html'>assignment_interface</a>(lhs, rhs)
+    
+    
+	 
+<small>Prototype</small></h3>
+    
+
+
+
+
+
+
+
+<p>Operator <code>=</code>.</p>
+    
+    <h4>Arguments</h4>
+    
+      
+      
+<table class="table table-striped varlist">
+<thead><tr><th>Type</th>
+<th>Intent</th><th>Optional</th>
+<th>Attributes</th><th></th><th>Name</th><th></th></thead>
+
+
+
+<tbody>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>class(<a href='../type/integrator_object.html'>integrator_object</a>),</td>
+  <td>intent(inout)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>lhs</strong></td><td><p>Left hand side.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>class(<a href='../type/integrator_object.html'>integrator_object</a>),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>rhs</strong></td><td><p>Right hand side.</p></td>
+  
+</tr>
+
+</tbody>
+</table>
+
+      
+    
+    
+
+         
+      
+      </li>
+    
+  </ul>
+</div>
+
+    
+	   
+<div class="panel panel-default">
+  <div class="panel-heading codesum"><span class="anchor" id="boundprocedure-trigger_error"></span><h3>procedure, public, pass(self) :: <strong>trigger_error</strong>  
+    
+  </h3></div>
+  
+  <div class="panel-body">
+    
+
+
+    <p>Trigger an error.</p>
+  </div>
+  
+  <ul class="list-group">
+    
+      <li class="list-group-item">
+      
+         
+    
+    <h3>
+private subroutine <a href='../proc/trigger_error.html'>trigger_error</a>(self, error, error_message, is_severe)
+    
+    
+	 
+</h3>
+    
+
+
+
+
+
+
+
+<p>Check for error occurencies.</p>
+    
+    <h4>Arguments</h4>
+    
+      
+      
+<table class="table table-striped varlist">
+<thead><tr><th>Type</th>
+<th>Intent</th><th>Optional</th>
+<th>Attributes</th><th></th><th>Name</th><th></th></thead>
+
+
+
+<tbody>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>class(<a href='../type/integrator_object.html'>integrator_object</a>),</td>
+  <td>intent(inout)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>self</strong></td><td><p>Integrator.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>integer(kind=I_P),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>error</strong></td><td><p>Error status code.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>character(len=*),</td>
+  <td>intent(in),</td>
+  <td>optional</td>
+  
+  <td></td><td>::</td>
+  <td><strong>error_message</strong></td><td><p>Error message, hopefully meaningful.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>logical,</td>
+  <td>intent(in),</td>
+  <td>optional</td>
+  
+  <td></td><td>::</td>
+  <td><strong>is_severe</strong></td><td><p>Flag to activate severe faliure, namely errors trigger a stop.</p></td>
+  
+</tr>
+
+</tbody>
+</table>
+
+      
+    
+    
+
+      
+      </li>
+    
+  </ul>
+</div>
+
+    
+    </section>
+    
+    
+    
+    <section>
+    <h2><span class="anchor" id="src"></span>Source Code</h2>
+    <div class="highlight"><pre><span></span><span class="k">type</span><span class="p">,</span> <span class="k">abstract</span> <span class="kd">::</span> <span class="n">integrator_object</span>
+  <span class="c">!&lt; Abstract type of FOODIE ODE integrators.</span>
+  <span class="kt">integer</span><span class="p">(</span><span class="n">I_P</span><span class="p">)</span>                  <span class="kd">::</span> <span class="n">error</span><span class="o">=</span><span class="mi">0</span>       <span class="c">!&lt; Error status code.</span>
+  <span class="kt">character</span><span class="p">(</span><span class="nb">len</span><span class="o">=</span><span class="p">:),</span> <span class="k">allocatable</span> <span class="kd">::</span> <span class="n">error_message</span> <span class="c">!&lt; Error message, hopefully meaningful.</span>
+  <span class="k">contains</span>
+    <span class="c">! public methods</span>
+    <span class="k">procedure</span><span class="p">,</span> <span class="k">pass</span><span class="p">(</span><span class="n">lhs</span><span class="p">)</span>  <span class="kd">::</span> <span class="n">assign_abstract</span>  <span class="c">!&lt; Assign ony members of abstract [[integrator_object]] type.</span>
+    <span class="k">procedure</span><span class="p">,</span> <span class="k">pass</span><span class="p">(</span><span class="n">self</span><span class="p">)</span> <span class="kd">::</span> <span class="n">check_error</span>      <span class="c">!&lt; Check for error occurrencies.</span>
+    <span class="k">procedure</span><span class="p">,</span> <span class="k">pass</span><span class="p">(</span><span class="n">self</span><span class="p">)</span> <span class="kd">::</span> <span class="n">destroy_abstract</span> <span class="c">!&lt; Destroy only members of abstract [[integrator_object]] type.</span>
+    <span class="k">procedure</span><span class="p">,</span> <span class="k">pass</span><span class="p">(</span><span class="n">self</span><span class="p">)</span> <span class="kd">::</span> <span class="n">trigger_error</span>    <span class="c">!&lt; Trigger an error.</span>
+    <span class="c">! deferred methods</span>
+    <span class="k">procedure</span><span class="p">(</span><span class="n">description_interface</span><span class="p">),</span> <span class="k">pass</span><span class="p">(</span><span class="n">self</span><span class="p">),</span> <span class="k">deferred</span> <span class="kd">::</span> <span class="n">description</span>          <span class="c">!&lt; Return pretty-printed object description.</span>
+    <span class="k">procedure</span><span class="p">(</span><span class="n">assignment_interface</span><span class="p">),</span>  <span class="k">pass</span><span class="p">(</span><span class="n">lhs</span><span class="p">),</span>  <span class="k">deferred</span> <span class="kd">::</span> <span class="n">integr_assign_integr</span> <span class="c">!&lt; Operator `=`.</span>
+    <span class="c">! operators</span>
+    <span class="k">generic</span> <span class="kd">::</span> <span class="n">assignment</span><span class="p">(</span><span class="o">=</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="n">integr_assign_integr</span> <span class="c">!&lt; Overload `=`.</span>
+<span class="n">endtype</span> <span class="n">integrator_object</span>
+</pre></div>
+
+    </section>
+    
+    
+    </div>
+  </div>
+
+  <section class="visible-xs visible-sm hidden-md">
+    <hr>
+    
+
+<div class="panel panel-default">
+  <div class="panel-heading text-left"><h3 class="panel-title"><a data-toggle="collapse" href="#alltypes-1">All Derived Types</a></h3></div>
+  <div id="alltypes-1" class="panel-collapse collapse">
+    <div class="list-group">
+      
+      <a class="list-group-item" href="../type/burgers.html">burgers</a>
+      
+      <a class="list-group-item" href="../type/euler_1d.html">euler_1D</a>
+      
+      <a class="list-group-item" href="../type/euler_1d_caf.html">euler_1D_caf</a>
+      
+      <a class="list-group-item" href="../type/euler_1d_caf_nf.html">euler_1D_caf_nf</a>
+      
+      <a class="list-group-item" href="../type/euler_1d_omp_nf.html">euler_1D_omp_nf</a>
+      
+      <a class="list-group-item" href="../type/euler_1d_openmp.html">euler_1D_openmp</a>
+      
+      <a class="list-group-item" href="../type/integrand.html">integrand</a>
+      
+      <a class="list-group-item" href="../type/integrator_adams_bashforth.html">integrator_adams_bashforth</a>
+      
+      <a class="list-group-item" href="../type/integrator_adams_bashforth_moulton.html">integrator_adams_bashforth_moulton</a>
+      
+      <a class="list-group-item" href="../type/integrator_adams_moulton.html">integrator_adams_moulton</a>
+      
+      <a class="list-group-item" href="../type/integrator_back_df.html">integrator_back_df</a>
+      
+      <a class="list-group-item" href="../type/integrator_euler_explicit.html">integrator_euler_explicit</a>
+      
+      <a class="list-group-item" href="../type/integrator_leapfrog.html">integrator_leapfrog</a>
+      
+      <a class="list-group-item" href="../type/integrator_lmm_ssp.html">integrator_lmm_ssp</a>
+      
+      <a class="list-group-item" href="../type/integrator_lmm_ssp_vss.html">integrator_lmm_ssp_vss</a>
+      
+      <a class="list-group-item" href="../type/integrator_object.html">integrator_object</a>
+      
+      <a class="list-group-item" href="../type/integrator_runge_kutta_emd.html">integrator_runge_kutta_emd</a>
+      
+      <a class="list-group-item" href="../type/integrator_runge_kutta_ls.html">integrator_runge_kutta_ls</a>
+      
+      <a class="list-group-item" href="../type/integrator_runge_kutta_tvd.html">integrator_runge_kutta_tvd</a>
+      
+      <a class="list-group-item" href="../type/lorenz.html">lorenz</a>
+      
+      <a class="list-group-item" href="../type/oscillation.html">oscillation</a>
+      
+      <a class="list-group-item" href="../type/oscillation_test.html">oscillation_test</a>
+      
+      <a class="list-group-item" href="../type/tvd_runge_kutta_integrator%7E2.html">tvd_runge_kutta_integrator</a>
+      
+      <a class="list-group-item" href="../type/tvd_runge_kutta_integrator.html">tvd_runge_kutta_integrator</a>
+      
+    </div>
+  </div>
+</div>
+
+
+  </section>
+
+    <hr>    
+    </div> <!-- /container -->
+    <footer>
+      <div class="container">
+      <div class="row">
+        <div class="col-xs-6 col-md-4"><p>&copy; 2017 </p></div>
+        <div class="col-xs-6 col-md-4 col-md-push-4">
+          <p class="text-right">
+            Documentation generated by 
+            <a href="https://github.com/cmacmackin/ford">FORD</a>
+             on 2017-03-31 16:42  
+          </p>
+        </div>
+        <div class="col-xs-12 col-md-4 col-md-pull-4"><p class="text-center"> FOODIE was developed by Fortran-FOSS-Programmers Group</p></div>
+      </div>
+      <br>
+      </div> <!-- /container -->    
+    </footer>
+
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+<!--
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+-->
+    <script src="../js/bootstrap.min.js"></script>
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+    <script src="../js/ie10-viewport-bug-workaround.js"></script>
+
+    <!-- MathJax JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        TeX: { extensions: ['AMSmath.js','AMSsymbols.js','noErrors.js','noUndefined.js'], equationNumbers: { autoNumber: 'AMS' } },
+        jax: ['input/TeX','input/MathML','output/HTML-CSS'],
+        extensions: ['tex2jax.js','mml2jax.js','MathMenu.js','MathZoom.js'],
+        'HTML-CSS': { 
+           styles: { '.MathJax_Display, .MathJax .mo, .MathJax .mi, .MathJax .mn': {color: '#000000 ! important'} }
+        }
+      });
+    </script>
+    <script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+  </body>
+</html>

@@ -6,11 +6,11 @@ program integrate_lorenz
 
 !-----------------------------------------------------------------------------------------------------------------------------------
 use flap, only : command_line_interface
-use foodie, only : adams_bashforth_integrator, &
-                   euler_explicit_integrator, &
-                   leapfrog_integrator, &
-                   ls_runge_kutta_integrator, &
-                   tvd_runge_kutta_integrator
+use foodie, only : integrator_adams_bashforth, &
+                   integrator_euler_explicit, &
+                   integrator_leapfrog, &
+                   integrator_runge_kutta_ls, &
+                   integrator_runge_kutta_tvd
 use IR_Precision, only : R_P, I_P, FR_P, str
 use pyplot_module, only :  pyplot
 use type_lorenz, only : lorenz
@@ -126,10 +126,10 @@ contains
   !---------------------------------------------------------------------------------------------------------------------------------
   !< Test explicit Adams-Bashforth class of ODE solvers.
   !---------------------------------------------------------------------------------------------------------------------------------
-  type(tvd_runge_kutta_integrator) :: rk_integrator         !< Runge-Kutta integrator.
+  type(integrator_runge_kutta_tvd) :: rk_integrator         !< Runge-Kutta integrator.
   integer, parameter               :: rk_stages=5           !< Runge-Kutta stages number.
   type(lorenz)                     :: rk_stage(1:rk_stages) !< Runge-Kutta stages.
-  type(adams_bashforth_integrator) :: ab_integrator         !< Adams-Bashforth integrator.
+  type(integrator_adams_bashforth) :: ab_integrator         !< Adams-Bashforth integrator.
   integer, parameter               :: ab_steps=4            !< Adams-Bashforth steps number.
   type(lorenz)                     :: previous(1:ab_steps)  !< Previous time steps solutions.
   integer(I_P)                     :: s                     !< AB steps counter.
@@ -173,7 +173,7 @@ contains
   !---------------------------------------------------------------------------------------------------------------------------------
   !< Test explicit forward Euler ODE solver.
   !---------------------------------------------------------------------------------------------------------------------------------
-  type(euler_explicit_integrator) :: euler_integrator !< Euler integrator.
+  type(integrator_euler_explicit) :: euler_integrator !< Euler integrator.
   integer(I_P)                    :: step             !< Time steps counter.
   !---------------------------------------------------------------------------------------------------------------------------------
 
@@ -198,11 +198,11 @@ contains
   !---------------------------------------------------------------------------------------------------------------------------------
   !< Test explicit leapfrog class of ODE solvers.
   !---------------------------------------------------------------------------------------------------------------------------------
-  type(tvd_runge_kutta_integrator) :: rk_integrator         !< Runge-Kutta integrator.
+  type(integrator_runge_kutta_tvd) :: rk_integrator         !< Runge-Kutta integrator.
   integer, parameter               :: rk_stages=5           !< Runge-Kutta stages number.
   type(lorenz)                     :: rk_stage(1:rk_stages) !< Runge-Kutta stages.
   type(lorenz)                     :: filter                !< Filter displacement.
-  type(leapfrog_integrator)        :: lf_integrator         !< Leapfrog integrator.
+  type(integrator_leapfrog)        :: lf_integrator         !< Leapfrog integrator.
   type(lorenz)                     :: previous(1:2)         !< Previous time steps solutions.
   integer                          :: step                  !< Time steps counter.
   !---------------------------------------------------------------------------------------------------------------------------------
@@ -236,7 +236,7 @@ contains
   !---------------------------------------------------------------------------------------------------------------------------------
   !< Test explicit low storage Runge-Kutta class of ODE solvers.
   !---------------------------------------------------------------------------------------------------------------------------------
-  type(ls_runge_kutta_integrator) :: rk_integrator         !< Runge-Kutta integrator.
+  type(integrator_runge_kutta_ls) :: rk_integrator         !< Runge-Kutta integrator.
   integer, parameter              :: rk_stages=5           !< Runge-Kutta stages number.
   integer, parameter              :: registers=2           !< Runge-Kutta stages number.
   type(lorenz)                    :: rk_stage(1:registers) !< Runge-Kutta stages.
@@ -272,7 +272,7 @@ contains
   !---------------------------------------------------------------------------------------------------------------------------------
   !< Test explicit TVD/SSP Runge-Kutta class of ODE solvers.
   !---------------------------------------------------------------------------------------------------------------------------------
-  type(tvd_runge_kutta_integrator) :: rk_integrator         !< Runge-Kutta integrator.
+  type(integrator_runge_kutta_tvd) :: rk_integrator         !< Runge-Kutta integrator.
   integer, parameter               :: rk_stages=5           !< Runge-Kutta stages number.
   type(lorenz)                     :: rk_stage(1:rk_stages) !< Runge-Kutta stages.
   integer(I_P)                     :: s                     !< RK stages counter.

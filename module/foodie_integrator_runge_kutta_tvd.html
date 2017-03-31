@@ -1,0 +1,2008 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+	 
+	 <meta name="description" content="Fortran Object oriented Ordinary Differential Equations integration library">
+    
+    <meta name="author" content="Fortran-FOSS-Programmers Group" >
+    <link rel="icon" href="../favicon.png">
+
+    <title>foodie_integrator_runge_kutta_tvd &ndash; FOODIE</title>
+
+    <link href="../css/bootstrap.min.css" rel="stylesheet">
+    <link href="../css/pygments.css" rel="stylesheet">
+    <link href="../css/font-awesome.min.css" rel="stylesheet">
+    <link href="../css/local.css" rel="stylesheet">
+    
+
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+    
+    <script src="../js/jquery-2.1.3.min.js"></script>
+    <script src="../js/svg-pan-zoom.min.js"></script>
+
+    
+    <script src="../tipuesearch/tipuesearch_content.js"></script>
+    <link  href="../tipuesearch/tipuesearch.css" rel="stylesheet">
+    <script src="../tipuesearch/tipuesearch_set.js"></script>
+    <script src="../tipuesearch/tipuesearch.js"></script>
+    
+
+  </head>
+
+  <body>
+
+    <!-- Fixed navbar -->
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="../index.html">FOODIE </a>
+        </div>
+        <div id="navbar" class="navbar-collapse collapse">
+          <ul class="nav navbar-nav">
+				
+            <li class="dropdown hidden-xs visible-sm visible-md hidden-lg">
+              <a href="#" class="dropdown-toggle"
+              data-toggle="dropdown" role="button"
+              aria-haspopup="true"
+		 aria-expanded="false">Contents <span class="caret"></span></a>
+	      <ul class="dropdown-menu">
+              
+            <li><a href="../lists/files.html">Source Files</a></li>
+				
+				
+            <li><a href="../lists/modules.html">Modules</a></li>
+				
+            
+                                
+            <li><a href="../lists/procedures.html">Procedures</a></li>
+				
+				
+            <li><a href="../lists/absint.html">Abstract Interfaces</a></li>
+								
+            <li><a href="../lists/types.html">Derived Types</a></li>
+				
+				
+            <li><a href="../lists/programs.html">Programs</a></li>
+				
+            </ul>
+            </li>
+
+<li class="visible-xs hidden-sm visible-lg"><a href="../lists/files.html">Source Files</a></li>
+
+
+<li class="visible-xs hidden-sm visible-lg"><a href="../lists/modules.html">Modules</a></li>
+
+
+
+<li class="visible-xs hidden-sm visible-lg"><a href="../lists/procedures.html">Procedures</a></li>
+
+
+<li class="visible-xs hidden-sm visible-lg"><a href="../lists/absint.html">Abstract Interfaces</a></li>
+                             
+<li class="visible-xs hidden-sm visible-lg"><a href="../lists/types.html">Derived Types</a></li>
+
+
+<li class="visible-xs hidden-sm visible-lg"><a href="../lists/programs.html">Programs</a></li>
+
+          </ul>
+        
+        <form action="../search.html" class="navbar-form navbar-right" role="search">
+        <div class="form-group">
+          <input type="text" class="form-control" placeholder="Search" name="q" id="tipue_search_input" autocomplete="off" required>
+        </div>
+<!--
+        <button type="submit" class="btn btn-default">Submit</button>
+-->
+        </form>
+        
+        </div><!--/.nav-collapse -->
+      </div>
+    </nav>
+
+    <div class="container">
+    
+  
+  <div class="row">
+    <h1>foodie_integrator_runge_kutta_tvd 
+    <small>Module</small>
+    
+    </h1>
+    
+<div class="row">
+  <div class="col-lg-12">
+<div class="well well-sm">
+  <ul class="list-inline" style="margin-bottom:0px;display:inline">
+     
+     
+     
+     
+    
+    
+     <li><i class="fa fa-list-ol"></i>
+       <a data-toggle="tooltip"
+	  data-placement="bottom" data-html="true"
+	  title=" 2.2% of total for modules and submodules.">149 statements</a>
+     </li> 
+     
+     
+    <li><i class="fa fa-code"></i><a href="../src/foodie_integrator_runge_kutta_tvd.f90"> Source File</a></li>
+     
+  </ul>
+  <ol class="breadcrumb in-well text-right">
+  
+     <li><a href='../sourcefile/foodie_integrator_runge_kutta_tvd.f90.html'>foodie_integrator_runge_kutta_tvd.f90</a></li>
+  
+     <li class="active">foodie_integrator_runge_kutta_tvd</li>
+  </ol>
+</div>
+</div>
+</div>
+<script>
+  $(function () {
+  $('[data-toggle="tooltip"]').tooltip()
+  })
+</script>
+
+  </div>
+  
+  <div class="row">
+    <div class="col-md-3 hidden-xs hidden-sm visible-md visible-lg">
+    
+<div id="sidebar">
+  
+
+
+<div class="panel panel-primary">
+  <div class="panel-heading text-left"><h3 class="panel-title"><a data-toggle="collapse" href="#vars-0">Variables</a></h3></div>
+  <div id="vars-0" class="panel-collapse collapse">
+    <div class="list-group">
+      
+      <a class="list-group-item" href="../module/foodie_integrator_runge_kutta_tvd.html#variable-max_ss%7E4">max_ss</a>
+      
+      <a class="list-group-item" href="../module/foodie_integrator_runge_kutta_tvd.html#variable-min_ss%7E4">min_ss</a>
+      
+      <a class="list-group-item" href="../module/foodie_integrator_runge_kutta_tvd.html#variable-supported_stages">supported_stages</a>
+      
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
+
+
+
+
+<div class="panel panel-primary">
+  <div class="panel-heading text-left"><h3 class="panel-title"><a data-toggle="collapse" href="#types-0">Derived Types</a></h3></div>
+  <div id="types-0" class="panel-collapse collapse">
+    <div class="list-group">
+      
+      <a class="list-group-item" href="../module/foodie_integrator_runge_kutta_tvd.html#type-integrator_runge_kutta_tvd">integrator_runge_kutta_tvd</a>
+      
+    </div>
+  </div>
+</div>
+
+
+<div class="panel panel-primary">
+  <div class="panel-heading text-left"><h3 class="panel-title"><a data-toggle="collapse" href="#funcs-0">Functions</a></h3></div>
+  <div id="funcs-0" class="panel-collapse collapse">
+    <div class="list-group">
+      
+      <a class="list-group-item" href="../module/foodie_integrator_runge_kutta_tvd.html#proc-description%7E4">description</a>
+      
+      <a class="list-group-item" href="../module/foodie_integrator_runge_kutta_tvd.html#proc-is_supported%7E4">is_supported</a>
+      
+      <a class="list-group-item" href="../module/foodie_integrator_runge_kutta_tvd.html#proc-max_stages">max_stages</a>
+      
+      <a class="list-group-item" href="../module/foodie_integrator_runge_kutta_tvd.html#proc-min_stages">min_stages</a>
+      
+    </div>
+  </div>
+</div>
+
+
+<div class="panel panel-primary">
+  <div class="panel-heading text-left"><h3 class="panel-title"><a data-toggle="collapse" href="#subs-0">Subroutines</a></h3></div>
+  <div class="list-group">
+    <div id="subs-0" class="panel-collapse collapse">
+      
+      <a class="list-group-item" href="../module/foodie_integrator_runge_kutta_tvd.html#proc-destroy%7E4">destroy</a>
+      
+      <a class="list-group-item" href="../module/foodie_integrator_runge_kutta_tvd.html#proc-init%7E3">init</a>
+      
+      <a class="list-group-item" href="../module/foodie_integrator_runge_kutta_tvd.html#proc-integr_assign_integr%7E4">integr_assign_integr</a>
+      
+      <a class="list-group-item" href="../module/foodie_integrator_runge_kutta_tvd.html#proc-integrate%7E4">integrate</a>
+      
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
+
+
+
+  <hr>
+  
+
+<div class="panel panel-default">
+  <div class="panel-heading text-left"><h3 class="panel-title"><a data-toggle="collapse" href="#allmods-0">All Modules</a></h3></div>
+  <div id="allmods-0" class="panel-collapse collapse">
+    <div class="list-group">
+      
+      <a class="list-group-item" href="../module/foodie.html">foodie</a>
+      
+      <a class="list-group-item" href="../module/foodie_adt_integrand.html">foodie_adt_integrand</a>
+      
+      <a class="list-group-item" href="../module/foodie_error_codes.html">foodie_error_codes</a>
+      
+      <a class="list-group-item" href="../module/foodie_integrator_adams_bashforth.html">foodie_integrator_adams_bashforth</a>
+      
+      <a class="list-group-item" href="../module/foodie_integrator_adams_bashforth_moulton.html">foodie_integrator_adams_bashforth_moulton</a>
+      
+      <a class="list-group-item" href="../module/foodie_integrator_adams_moulton.html">foodie_integrator_adams_moulton</a>
+      
+      <a class="list-group-item" href="../module/foodie_integrator_backward_differentiation_formula.html">foodie_integrator_backward_differentiation_formula</a>
+      
+      <a class="list-group-item" href="../module/foodie_integrator_euler_explicit.html">foodie_integrator_euler_explicit</a>
+      
+      <a class="list-group-item" href="../module/foodie_integrator_leapfrog.html">foodie_integrator_leapfrog</a>
+      
+      <a class="list-group-item" href="../module/foodie_integrator_lmm_ssp.html">foodie_integrator_lmm_ssp</a>
+      
+      <a class="list-group-item" href="../module/foodie_integrator_lmm_ssp_vss.html">foodie_integrator_lmm_ssp_vss</a>
+      
+      <a class="list-group-item" href="../module/foodie_integrator_object.html">foodie_integrator_object</a>
+      
+      <a class="list-group-item" href="../module/foodie_integrator_runge_kutta_emd.html">foodie_integrator_runge_kutta_emd</a>
+      
+      <a class="list-group-item" href="../module/foodie_integrator_runge_kutta_low_storage.html">foodie_integrator_runge_kutta_low_storage</a>
+      
+      <a class="list-group-item" href="../module/foodie_integrator_runge_kutta_tvd.html">foodie_integrator_runge_kutta_tvd</a>
+      
+      <a class="list-group-item" href="../module/foodie_kinds.html">foodie_kinds</a>
+      
+      <a class="list-group-item" href="../module/foodie_utils.html">foodie_utils</a>
+      
+      <a class="list-group-item" href="../module/oscillation_t.html">oscillation_t</a>
+      
+      <a class="list-group-item" href="../module/oscillation_test_t.html">oscillation_test_t</a>
+      
+      <a class="list-group-item" href="../module/type_burgers.html">type_burgers</a>
+      
+      <a class="list-group-item" href="../module/type_euler_1d.html">type_euler_1D</a>
+      
+      <a class="list-group-item" href="../module/type_euler_1d_caf.html">type_euler_1D_caf</a>
+      
+      <a class="list-group-item" href="../module/type_euler_1d_caf_no_foodie.html">type_euler_1D_caf_no_foodie</a>
+      
+      <a class="list-group-item" href="../module/type_euler_1d_openmp.html">type_euler_1D_openmp</a>
+      
+      <a class="list-group-item" href="../module/type_euler_1d_openmp_no_foodie.html">type_euler_1D_openmp_no_foodie</a>
+      
+      <a class="list-group-item" href="../module/type_lorenz.html">type_lorenz</a>
+      
+    </div>
+  </div>
+</div>
+
+
+</div>  
+
+    </div>
+    
+    <div class="col-md-9" id='text'>
+      
+    
+  
+    <ul class="list-inline">
+      <li><h4>Uses:</h4></li>
+      
+      <li><a href='../module/foodie_adt_integrand.html'>foodie_adt_integrand</a></li>
+      
+      <li><a href='../module/foodie_error_codes.html'>foodie_error_codes</a></li>
+      
+      <li><a href='../module/foodie_kinds.html'>foodie_kinds</a></li>
+      
+      <li><a href='../module/foodie_integrator_object.html'>foodie_integrator_object</a></li>
+      
+      <li><a href='../module/foodie_utils.html'>foodie_utils</a></li>
+      
+    </ul>
+    
+                <div class="depgraph"><?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.40.1 (20161225.0304)
+ -->
+<!-- Title: module~~foodie_integrator_runge_kutta_tvd~~UsesGraph Pages: 1 -->
+<svg id="modulefoodie_integrator_runge_kutta_tvdUsesGraph" width="472pt" height="179pt"
+ viewBox="0.00 0.00 472.00 179.31" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="module~~foodie_integrator_runge_kutta_tvd~~UsesGraph" class="graph" transform="scale(1 1) rotate(0) translate(4 175.3102)">
+<title>module~~foodie_integrator_runge_kutta_tvd~~UsesGraph</title>
+<polygon fill="#ffffff" stroke="transparent" points="-4,4 -4,-175.3102 468,-175.3102 468,4 -4,4"/>
+<!-- module~foodie_integrator_runge_kutta_tvd -->
+<g id="module~~foodie_integrator_runge_kutta_tvd~~UsesGraph_node1" class="node">
+<title>module~foodie_integrator_runge_kutta_tvd</title>
+<polygon fill="none" stroke="#000000" points="464,-108 287,-108 287,-84 464,-84 464,-108"/>
+<text text-anchor="middle" x="375.5" y="-93.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#000000">foodie_integrator_runge_kutta_tvd</text>
+</g>
+<!-- module~foodie_utils -->
+<g id="module~~foodie_integrator_runge_kutta_tvd~~UsesGraph_node2" class="node">
+<title>module~foodie_utils</title>
+<g id="a_module~~foodie_integrator_runge_kutta_tvd~~UsesGraph_node2"><a xlink:href="../module/foodie_utils.html" xlink:title="foodie_utils">
+<polygon fill="#337ab7" stroke="#337ab7" points="220.5,-150 153.5,-150 153.5,-126 220.5,-126 220.5,-150"/>
+<text text-anchor="middle" x="187" y="-135.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">foodie_utils</text>
+</a>
+</g>
+</g>
+<!-- module~foodie_utils&#45;&gt;module~foodie_integrator_runge_kutta_tvd -->
+<g id="module~~foodie_integrator_runge_kutta_tvd~~UsesGraph_edge6" class="edge">
+<title>module~foodie_utils&#45;&gt;module~foodie_integrator_runge_kutta_tvd</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M220.7,-130.4912C245.8175,-124.8948 280.8844,-117.0815 311.2921,-110.3063"/>
+<polygon fill="#000000" stroke="#000000" points="312.4051,-113.6442 321.4046,-108.0531 310.8827,-106.8117 312.4051,-113.6442"/>
+</g>
+<!-- module~foodie_error_codes -->
+<g id="module~~foodie_integrator_runge_kutta_tvd~~UsesGraph_node3" class="node">
+<title>module~foodie_error_codes</title>
+<g id="a_module~~foodie_integrator_runge_kutta_tvd~~UsesGraph_node3"><a xlink:href="../module/foodie_error_codes.html" xlink:title="foodie_error_codes">
+<polygon fill="#337ab7" stroke="#337ab7" points="240,-108 134,-108 134,-84 240,-84 240,-108"/>
+<text text-anchor="middle" x="187" y="-93.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">foodie_error_codes</text>
+</a>
+</g>
+</g>
+<!-- module~foodie_error_codes&#45;&gt;module~foodie_integrator_runge_kutta_tvd -->
+<g id="module~~foodie_integrator_runge_kutta_tvd~~UsesGraph_edge7" class="edge">
+<title>module~foodie_error_codes&#45;&gt;module~foodie_integrator_runge_kutta_tvd</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M240.0094,-96C251.5232,-96 264.0598,-96 276.7058,-96"/>
+<polygon fill="#000000" stroke="#000000" points="276.8537,-99.5001 286.8537,-96 276.8536,-92.5001 276.8537,-99.5001"/>
+</g>
+<!-- module~foodie_integrator_object -->
+<g id="module~~foodie_integrator_runge_kutta_tvd~~UsesGraph_node4" class="node">
+<title>module~foodie_integrator_object</title>
+<g id="a_module~~foodie_integrator_runge_kutta_tvd~~UsesGraph_node4"><a xlink:href="../module/foodie_integrator_object.html" xlink:title="foodie_integrator_object">
+<polygon fill="#337ab7" stroke="#337ab7" points="251,-24 123,-24 123,0 251,0 251,-24"/>
+<text text-anchor="middle" x="187" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">foodie_integrator_object</text>
+</a>
+</g>
+</g>
+<!-- module~foodie_integrator_object&#45;&gt;module~foodie_integrator_runge_kutta_tvd -->
+<g id="module~~foodie_integrator_runge_kutta_tvd~~UsesGraph_edge8" class="edge">
+<title>module~foodie_integrator_object&#45;&gt;module~foodie_integrator_runge_kutta_tvd</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M226.9447,-24.0715C234.9908,-26.7919 243.3295,-29.8223 251,-33 283.9421,-46.6472 320.1622,-65.4287 344.9999,-78.9284"/>
+<polygon fill="#000000" stroke="#000000" points="343.4796,-82.0863 353.9313,-83.8219 346.8432,-75.9474 343.4796,-82.0863"/>
+</g>
+<!-- module~foodie_adt_integrand -->
+<g id="module~~foodie_integrator_runge_kutta_tvd~~UsesGraph_node5" class="node">
+<title>module~foodie_adt_integrand</title>
+<g id="a_module~~foodie_integrator_runge_kutta_tvd~~UsesGraph_node5"><a xlink:href="../module/foodie_adt_integrand.html" xlink:title="foodie_adt_integrand">
+<polygon fill="#337ab7" stroke="#337ab7" points="244,-66 130,-66 130,-42 244,-42 244,-66"/>
+<text text-anchor="middle" x="187" y="-51.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">foodie_adt_integrand</text>
+</a>
+</g>
+</g>
+<!-- module~foodie_adt_integrand&#45;&gt;module~foodie_integrator_runge_kutta_tvd -->
+<g id="module~~foodie_integrator_runge_kutta_tvd~~UsesGraph_edge9" class="edge">
+<title>module~foodie_adt_integrand&#45;&gt;module~foodie_integrator_runge_kutta_tvd</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M241.0165,-66.0355C263.0027,-70.9343 288.5848,-76.6343 311.4986,-81.7398"/>
+<polygon fill="#000000" stroke="#000000" points="310.9537,-85.2041 321.4756,-83.9627 312.4761,-78.3716 310.9537,-85.2041"/>
+</g>
+<!-- module~foodie_kinds -->
+<g id="module~~foodie_integrator_runge_kutta_tvd~~UsesGraph_node6" class="node">
+<title>module~foodie_kinds</title>
+<g id="a_module~~foodie_integrator_runge_kutta_tvd~~UsesGraph_node6"><a xlink:href="../module/foodie_kinds.html" xlink:title="foodie_kinds">
+<polygon fill="#337ab7" stroke="#337ab7" points="80,-108 7,-108 7,-84 80,-84 80,-108"/>
+<text text-anchor="middle" x="43.5" y="-93.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">foodie_kinds</text>
+</a>
+</g>
+</g>
+<!-- module~foodie_kinds&#45;&gt;module~foodie_integrator_runge_kutta_tvd -->
+<g id="module~~foodie_integrator_runge_kutta_tvd~~UsesGraph_edge10" class="edge">
+<title>module~foodie_kinds&#45;&gt;module~foodie_integrator_runge_kutta_tvd</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M53.8376,-108.1492C67.7345,-123.4407 94.0619,-148.9241 123,-159 176.7253,-177.7066 195.6645,-172.2034 251,-159 287.3549,-150.3254 325.1113,-129.2231 349.3743,-113.8242"/>
+<polygon fill="#000000" stroke="#000000" points="351.4978,-116.6186 357.9817,-108.2394 347.6877,-110.7464 351.4978,-116.6186"/>
+</g>
+<!-- module~foodie_kinds&#45;&gt;module~foodie_utils -->
+<g id="module~~foodie_integrator_runge_kutta_tvd~~UsesGraph_edge1" class="edge">
+<title>module~foodie_kinds&#45;&gt;module~foodie_utils</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M80.0824,-106.707C99.4925,-112.3881 123.4645,-119.4043 143.7874,-125.3524"/>
+<polygon fill="#000000" stroke="#000000" points="142.8543,-128.7261 153.4349,-128.1761 144.8207,-122.0079 142.8543,-128.7261"/>
+</g>
+<!-- module~foodie_kinds&#45;&gt;module~foodie_error_codes -->
+<g id="module~~foodie_integrator_runge_kutta_tvd~~UsesGraph_edge2" class="edge">
+<title>module~foodie_kinds&#45;&gt;module~foodie_error_codes</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M80.0824,-96C93.3737,-96 108.804,-96 123.7369,-96"/>
+<polygon fill="#000000" stroke="#000000" points="123.9633,-99.5001 133.9633,-96 123.9632,-92.5001 123.9633,-99.5001"/>
+</g>
+<!-- module~foodie_kinds&#45;&gt;module~foodie_integrator_object -->
+<g id="module~~foodie_integrator_runge_kutta_tvd~~UsesGraph_edge4" class="edge">
+<title>module~foodie_kinds&#45;&gt;module~foodie_integrator_object</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M55.9877,-83.754C70.85,-69.7687 96.9459,-47.0173 123,-33 126.4354,-31.1517 130.0622,-29.4286 133.7723,-27.8293"/>
+<polygon fill="#000000" stroke="#000000" points="135.1117,-31.0633 143.1042,-24.1084 132.519,-24.5611 135.1117,-31.0633"/>
+</g>
+<!-- module~foodie_kinds&#45;&gt;module~foodie_adt_integrand -->
+<g id="module~~foodie_integrator_runge_kutta_tvd~~UsesGraph_edge5" class="edge">
+<title>module~foodie_kinds&#45;&gt;module~foodie_adt_integrand</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M80.0824,-85.293C97.1162,-80.3074 117.6633,-74.2937 136.1742,-68.8758"/>
+<polygon fill="#000000" stroke="#000000" points="137.311,-72.19 145.9252,-66.0219 135.3446,-65.4719 137.311,-72.19"/>
+</g>
+<!-- iso_fortran_env -->
+<g id="module~~foodie_integrator_runge_kutta_tvd~~UsesGraph_node7" class="node">
+<title>iso_fortran_env</title>
+<g id="a_module~~foodie_integrator_runge_kutta_tvd~~UsesGraph_node7"><a xlink:href="https://gcc.gnu.org/onlinedocs/gfortran/ISO_005fFORTRAN_005fENV.html" xlink:title="iso_fortran_env">
+<polygon fill="#337ab7" stroke="#337ab7" points="87,-24 0,-24 0,0 87,0 87,-24"/>
+<text text-anchor="middle" x="43.5" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">iso_fortran_env</text>
+</a>
+</g>
+</g>
+<!-- iso_fortran_env&#45;&gt;module~foodie_integrator_object -->
+<g id="module~~foodie_integrator_runge_kutta_tvd~~UsesGraph_edge3" class="edge">
+<title>iso_fortran_env&#45;&gt;module~foodie_integrator_object</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M87.3345,-12C95.3913,-12 104.0046,-12 112.6681,-12"/>
+<polygon fill="#000000" stroke="#000000" points="112.8311,-15.5001 122.8311,-12 112.831,-8.5001 112.8311,-15.5001"/>
+</g>
+</g>
+</svg>
+</div>
+                <div><a type="button" class="graph-help" data-toggle="modal" href="#graph-help-text">Help</a></div>
+                <div class="modal fade" id="graph-help-text" tabindex="-1" role="dialog">
+                  <div class="modal-dialog modal-lg" role="document">
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title" id="-graph-help-label">Graph Key</h4>
+                      </div>
+                      <div class="modal-body">
+                        
+    <p>Nodes of different colours represent the following: </p>
+    <?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.40.1 (20161225.0304)
+ -->
+<!-- Title: Graph Key Pages: 1 -->
+<svg width="490pt" height="32pt"
+ viewBox="0.00 0.00 489.50 32.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(4 28)">
+<title>Graph Key</title>
+<polygon fill="#ffffff" stroke="transparent" points="-4,4 -4,-28 485.5,-28 485.5,4 -4,4"/>
+<!-- Module -->
+<g id="node1" class="node">
+<title>Module</title>
+<polygon fill="#337ab7" stroke="#337ab7" points="54,-24 0,-24 0,0 54,0 54,-24"/>
+<text text-anchor="middle" x="27" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">Module</text>
+</g>
+<!-- Submodule -->
+<g id="node2" class="node">
+<title>Submodule</title>
+<polygon fill="#5bc0de" stroke="#5bc0de" points="139.5,-24 72.5,-24 72.5,0 139.5,0 139.5,-24"/>
+<text text-anchor="middle" x="106" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">Submodule</text>
+</g>
+<!-- Subroutine -->
+<g id="node3" class="node">
+<title>Subroutine</title>
+<polygon fill="#d9534f" stroke="#d9534f" points="222,-24 158,-24 158,0 222,0 222,-24"/>
+<text text-anchor="middle" x="190" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">Subroutine</text>
+</g>
+<!-- Function -->
+<g id="node4" class="node">
+<title>Function</title>
+<polygon fill="#d94e8f" stroke="#d94e8f" points="294,-24 240,-24 240,0 294,0 294,-24"/>
+<text text-anchor="middle" x="267" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">Function</text>
+</g>
+<!-- Program -->
+<g id="node5" class="node">
+<title>Program</title>
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="366,-24 312,-24 312,0 366,0 366,-24"/>
+<text text-anchor="middle" x="339" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">Program</text>
+</g>
+<!-- This Page&#39;s Entity -->
+<g id="node6" class="node">
+<title>This Page&#39;s Entity</title>
+<polygon fill="none" stroke="#000000" points="481.5,-24 384.5,-24 384.5,0 481.5,0 481.5,-24"/>
+<text text-anchor="middle" x="433" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#000000">This Page&#39;s Entity</text>
+</g>
+</g>
+</svg>
+
+    
+    <p>Solid arrows point from a parent (sub)module to the submodule which is
+    descended from it. Dashed arrows point from a module being used to the
+    module or program unit using it.
+    </p>
+    
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                
+    
+
+    
+    <p>FOODIE integrator: provide an explicit class of TVD or SSP Runge-Kutta schemes, from 1st to 4th order accurate.</p>
+<p>The integrators provided have the Total Variation Diminishing (TVD) property or the Strong Stability Preserving (SSP)
+ one. The schemes are explicit and defined through the Butcher's table syntax, see[1] .</p>
+<p>Considering the following ODE system:</p>
+<p>$$ U_t = R(t,U) $$</p>
+<p>where \(U_t = \frac{dU}{dt}\), <em>U</em> is the vector of <em>state</em> variables being a function of the time-like independent variable
+ <em>t</em>, <em>R</em> is the (vectorial) residual function, the class of schemes implemented are written in the form:</p>
+<p>$$ U^{n+1} = U^n +\Delta t \sum_{s=1}^{Ns}\beta^s K^s $$</p>
+<p>where Ns is the number of stages used and \(K^s\) is the \(s^{th}\) stage computed as:</p>
+<p>$$ K^s = R\left( t^n+\gamma^s \Delta t, U^n +\Delta t \sum_{i=1}^{s-1}\alpha^{s,i} K^i \right) $$</p>
+<p></p><div class="alert alert-info" role="alert"><h4>Note</h4><p>The value of \(\Delta t\) must be provided, it not being computed by the integrator.</p></div>
+<p>The schemes are explicit thus the above summation is up to \(s-1\). The coefficients \(\beta\), \(\alpha\) and \(\gamma\) are
+ given in the Butcher table form:</p>
+<div class="codehilite"><pre><span></span>  gamma^1    | alpha^{1,1}       alpha^{1,2}       ...        alpha^{1,Ns}
+  gamma^2    | alpha^{2,1}       alpha^{2,2}       ...        alpha^{2,Ns}
+  .          | .                 .                 .          .
+  .          | .                 .                  .         .
+  .          | .                 .                   .        .
+  gamma^{Ns} | alpha^{Ns,1}      alpha^{Ns,2}      ...        alpha^{Ns,Ns}
+ ------------|-------------------------------------------------------------
+             | beta^1            beta^2            ...        beta^{Ns}
+</pre></div>
+
+
+<p>Because only explicit schemes are considered the Butcher table reduces to diagonal matrix:</p>
+<div class="codehilite"><pre><span></span>  gamma^1    | 0                 0                 ...        0
+  gamma^2    | alpha^{2,1}       0                 ...        0
+  .          | .                 .                 .          .
+  .          | .                 .                  .         .
+  .          | .                 .                   .        .
+  gamma^{Ns} | alpha^{Ns,1}      alpha^{Ns,2}      ...        0
+ ------------|-------------------------------------------------------------
+             | beta^1            beta^2            ...        beta^{Ns}
+</pre></div>
+
+
+<p>Moreover the following relation always holds:
+ \( \gamma^s = \sum_{i=1}^{Ns}\alpha^{s,i} \)</p>
+<p>The different schemes are selected accordingly to the number of stages used. Currently the following schemes are available:</p>
+<h5 id="1-stage-explicit-forward-euler-1st-order"><a class="toclink" href="#1-stage-explicit-forward-euler-1st-order">1 stage, Explicit Forward Euler, 1st order</a></h5>
+<p>This scheme is TVD and reverts to Explicit Forward Euler, it being 1st order.</p>
+<div class="codehilite"><pre><span></span>  0 | 0
+ ---|---
+    | 1
+</pre></div>
+
+
+<h5 id="2-stages-ssp-2nd-order"><a class="toclink" href="#2-stages-ssp-2nd-order">2 stages, SSP, 2nd order</a></h5>
+<p>This scheme is an optmial SSP(2, 2) without low-storage algorithm, see [2].</p>
+<div class="codehilite"><pre><span></span>  0 | 0     0
+  1 | 1     0
+ ---|-----------
+    | 1/2   1/2
+</pre></div>
+
+
+<h5 id="3-stages-ssp-3rd-order"><a class="toclink" href="#3-stages-ssp-3rd-order">3 stages, SSP, 3rd order</a></h5>
+<p>This scheme is an optmial SSP(3, 3) without low-storage algorithm, see [2].</p>
+<div class="codehilite"><pre><span></span>  0   | 0     0     0
+  1   | 1     0     0
+  1/2 | 1/4   1/4   0
+ -----|-----------------
+      | 1/6   1/6   1/3
+</pre></div>
+
+
+<h5 id="5-stages-ssp-4th-order"><a class="toclink" href="#5-stages-ssp-4th-order">5 stages, SSP, 4th order</a></h5>
+<p>This scheme is an optmial SSP(5, 4) without low-storage algorithm, see [2].</p>
+<div class="codehilite"><pre><span></span>  0                | 0                  0                  0                  0                  0
+  0.39175222700392 | 0.39175222700392   0                  0                  0                  0
+  0.58607968896780 | 0.21766909633821   0.36841059262959   0                  0                  0
+  0.47454236302687 | 0.08269208670950   0.13995850206999   0.25189177424738   0                  0
+  0.93501063100924 | 0.06796628370320   0.11503469844438   0.20703489864929   0.54497475021237   0
+ ------------------|---------------------------------------------------------------------------------------------
+                   | 0.14681187618661   0.24848290924556   0.10425883036650   0.27443890091960   0.22600748319395
+</pre></div>
+
+
+<h4 id="bibliography"><a class="toclink" href="#bibliography">Bibliography</a></h4>
+<p>[1] <em>Coefficients for the study of Runge-Kutta integration processes</em>, Butcher, J.C., J. Austral. Math. Soc., Vol. 3,
+ pages: 185&ndash;201, 1963.</p>
+<p>[2] <em>High Order Strong Stability Preserving Time Discretizations</em>, Gottlieb, S., Ketcheson, D. I., Shu, C.W., Journal of
+ Scientific Computing, vol. 38, N. 3, 2009, pp. 251-289.</p>
+    
+    
+    <h3>Used By</h3>
+    
+                <div class="depgraph"><?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.40.1 (20161225.0304)
+ -->
+<!-- Title: module~~foodie_integrator_runge_kutta_tvd~~UsedByGraph Pages: 1 -->
+<svg id="modulefoodie_integrator_runge_kutta_tvdUsedByGraph" width="641pt" height="360pt"
+ viewBox="0.00 0.00 641.00 359.88" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="module~~foodie_integrator_runge_kutta_tvd~~UsedByGraph" class="graph" transform="scale(.8368 .8368) rotate(0) translate(4 426.0626)">
+<title>module~~foodie_integrator_runge_kutta_tvd~~UsedByGraph</title>
+<polygon fill="#ffffff" stroke="transparent" points="-4,4 -4,-426.0626 762,-426.0626 762,4 -4,4"/>
+<!-- module~foodie_integrator_runge_kutta_tvd -->
+<g id="module~~foodie_integrator_runge_kutta_tvd~~UsedByGraph_node1" class="node">
+<title>module~foodie_integrator_runge_kutta_tvd</title>
+<polygon fill="none" stroke="#000000" points="177,-222.0626 0,-222.0626 0,-198.0626 177,-198.0626 177,-222.0626"/>
+<text text-anchor="middle" x="88.5" y="-207.6626" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#000000">foodie_integrator_runge_kutta_tvd</text>
+</g>
+<!-- module~foodie -->
+<g id="module~~foodie_integrator_runge_kutta_tvd~~UsedByGraph_node2" class="node">
+<title>module~foodie</title>
+<g id="a_module~~foodie_integrator_runge_kutta_tvd~~UsedByGraph_node2"><a xlink:href="../module/foodie.html" xlink:title="foodie">
+<polygon fill="#337ab7" stroke="#337ab7" points="267,-222.0626 213,-222.0626 213,-198.0626 267,-198.0626 267,-222.0626"/>
+<text text-anchor="middle" x="240" y="-207.6626" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">foodie</text>
+</a>
+</g>
+</g>
+<!-- module~foodie_integrator_runge_kutta_tvd&#45;&gt;module~foodie -->
+<g id="module~~foodie_integrator_runge_kutta_tvd~~UsedByGraph_edge20" class="edge">
+<title>module~foodie_integrator_runge_kutta_tvd&#45;&gt;module~foodie</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M177.0665,-210.0626C185.97,-210.0626 194.6303,-210.0626 202.5357,-210.0626"/>
+<polygon fill="#000000" stroke="#000000" points="202.8001,-213.5627 212.8001,-210.0626 202.8,-206.5627 202.8001,-213.5627"/>
+</g>
+<!-- module~type_euler_1d_openmp -->
+<g id="module~~foodie_integrator_runge_kutta_tvd~~UsedByGraph_node3" class="node">
+<title>module~type_euler_1d_openmp</title>
+<g id="a_module~~foodie_integrator_runge_kutta_tvd~~UsedByGraph_node3"><a xlink:href="../module/type_euler_1d_openmp.html" xlink:title="type_euler_1D_openmp">
+<polygon fill="#337ab7" stroke="#337ab7" points="430,-422.0626 303,-422.0626 303,-398.0626 430,-398.0626 430,-422.0626"/>
+<text text-anchor="middle" x="366.5" y="-407.6626" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">type_euler_1D_openmp</text>
+</a>
+</g>
+</g>
+<!-- module~foodie&#45;&gt;module~type_euler_1d_openmp -->
+<g id="module~~foodie_integrator_runge_kutta_tvd~~UsedByGraph_edge8" class="edge">
+<title>module~foodie&#45;&gt;module~type_euler_1d_openmp</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M241.0754,-222.3702C244.4321,-253.5508 257.3992,-336.5414 303,-384.0626 306.3301,-387.533 310.1894,-390.5554 314.3279,-393.1849"/>
+<polygon fill="#000000" stroke="#000000" points="312.6892,-396.2782 323.1352,-398.048 316.0729,-390.1502 312.6892,-396.2782"/>
+</g>
+<!-- module~type_burgers -->
+<g id="module~~foodie_integrator_runge_kutta_tvd~~UsedByGraph_node4" class="node">
+<title>module~type_burgers</title>
+<g id="a_module~~foodie_integrator_runge_kutta_tvd~~UsedByGraph_node4"><a xlink:href="../module/type_burgers.html" xlink:title="type_burgers">
+<polygon fill="#337ab7" stroke="#337ab7" points="404.5,-342.0626 328.5,-342.0626 328.5,-318.0626 404.5,-318.0626 404.5,-342.0626"/>
+<text text-anchor="middle" x="366.5" y="-327.6626" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">type_burgers</text>
+</a>
+</g>
+</g>
+<!-- module~foodie&#45;&gt;module~type_burgers -->
+<g id="module~~foodie_integrator_runge_kutta_tvd~~UsedByGraph_edge9" class="edge">
+<title>module~foodie&#45;&gt;module~type_burgers</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M245.2051,-222.1214C254.2607,-241.8057 274.69,-280.9587 303,-304.0626 307.8454,-308.0169 313.374,-311.4428 319.1018,-314.3908"/>
+<polygon fill="#000000" stroke="#000000" points="317.6554,-317.5781 328.1972,-318.637 320.6167,-311.2353 317.6554,-317.5781"/>
+</g>
+<!-- module~type_euler_1d_caf -->
+<g id="module~~foodie_integrator_runge_kutta_tvd~~UsedByGraph_node5" class="node">
+<title>module~type_euler_1d_caf</title>
+<g id="a_module~~foodie_integrator_runge_kutta_tvd~~UsedByGraph_node5"><a xlink:href="../module/type_euler_1d_caf.html" xlink:title="type_euler_1D_caf">
+<polygon fill="#337ab7" stroke="#337ab7" points="418,-262.0626 315,-262.0626 315,-238.0626 418,-238.0626 418,-262.0626"/>
+<text text-anchor="middle" x="366.5" y="-247.6626" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">type_euler_1D_caf</text>
+</a>
+</g>
+</g>
+<!-- module~foodie&#45;&gt;module~type_euler_1d_caf -->
+<g id="module~~foodie_integrator_runge_kutta_tvd~~UsedByGraph_edge10" class="edge">
+<title>module~foodie&#45;&gt;module~type_euler_1d_caf</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M267.1374,-218.6436C282.0664,-223.3642 301.032,-229.3612 318.3833,-234.8478"/>
+<polygon fill="#000000" stroke="#000000" points="317.7803,-238.3279 328.3703,-238.0058 319.8908,-231.6536 317.7803,-238.3279"/>
+</g>
+<!-- module~type_lorenz -->
+<g id="module~~foodie_integrator_runge_kutta_tvd~~UsedByGraph_node6" class="node">
+<title>module~type_lorenz</title>
+<g id="a_module~~foodie_integrator_runge_kutta_tvd~~UsedByGraph_node6"><a xlink:href="../module/type_lorenz.html" xlink:title="type_lorenz">
+<polygon fill="#337ab7" stroke="#337ab7" points="400.5,-182.0626 332.5,-182.0626 332.5,-158.0626 400.5,-158.0626 400.5,-182.0626"/>
+<text text-anchor="middle" x="366.5" y="-167.6626" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">type_lorenz</text>
+</a>
+</g>
+</g>
+<!-- module~foodie&#45;&gt;module~type_lorenz -->
+<g id="module~~foodie_integrator_runge_kutta_tvd~~UsedByGraph_edge11" class="edge">
+<title>module~foodie&#45;&gt;module~type_lorenz</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M267.1374,-201.4816C283.2603,-196.3835 304.0912,-189.7966 322.5123,-183.9718"/>
+<polygon fill="#000000" stroke="#000000" points="323.6901,-187.2702 332.1695,-180.9181 321.5796,-180.5959 323.6901,-187.2702"/>
+</g>
+<!-- program~integrate_euler_1d -->
+<g id="module~~foodie_integrator_runge_kutta_tvd~~UsedByGraph_node7" class="node">
+<title>program~integrate_euler_1d</title>
+<g id="a_module~~foodie_integrator_runge_kutta_tvd~~UsedByGraph_node7"><a xlink:href="../program/integrate_euler_1d.html" xlink:title="integrate_euler_1D">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="592.5,-102.0626 488.5,-102.0626 488.5,-78.0626 592.5,-78.0626 592.5,-102.0626"/>
+<text text-anchor="middle" x="540.5" y="-87.6626" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">integrate_euler_1D</text>
+</a>
+</g>
+</g>
+<!-- module~foodie&#45;&gt;program~integrate_euler_1d -->
+<g id="module~~foodie_integrator_runge_kutta_tvd~~UsedByGraph_edge12" class="edge">
+<title>module~foodie&#45;&gt;program~integrate_euler_1d</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M249.3921,-197.9777C260.6964,-184.2226 280.932,-161.9927 303,-149.0626 328.417,-134.1703 338.6921,-139.7849 366.5,-130.0626"/>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M366.5,-130.0626C402.695,-117.4081 444.5385,-107.6434 478.1202,-100.9305"/>
+<polygon fill="#000000" stroke="#000000" points="479.1201,-104.3013 488.2615,-98.9453 477.7754,-97.4317 479.1201,-104.3013"/>
+</g>
+<!-- module~type_euler_1d -->
+<g id="module~~foodie_integrator_runge_kutta_tvd~~UsedByGraph_node8" class="node">
+<title>module~type_euler_1d</title>
+<g id="a_module~~foodie_integrator_runge_kutta_tvd~~UsedByGraph_node8"><a xlink:href="../module/type_euler_1d.html" xlink:title="type_euler_1D">
+<polygon fill="#337ab7" stroke="#337ab7" points="407.5,-102.0626 325.5,-102.0626 325.5,-78.0626 407.5,-78.0626 407.5,-102.0626"/>
+<text text-anchor="middle" x="366.5" y="-87.6626" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">type_euler_1D</text>
+</a>
+</g>
+</g>
+<!-- module~foodie&#45;&gt;module~type_euler_1d -->
+<g id="module~~foodie_integrator_runge_kutta_tvd~~UsedByGraph_edge13" class="edge">
+<title>module~foodie&#45;&gt;module~type_euler_1d</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M245.2051,-198.0039C254.2607,-178.3195 274.69,-139.1665 303,-116.0626 307.3262,-112.532 312.1971,-109.4226 317.2682,-106.6985"/>
+<polygon fill="#000000" stroke="#000000" points="319.067,-109.7161 326.5379,-102.2037 316.0128,-103.4175 319.067,-109.7161"/>
+</g>
+<!-- module~oscillation_t -->
+<g id="module~~foodie_integrator_runge_kutta_tvd~~UsedByGraph_node9" class="node">
+<title>module~oscillation_t</title>
+<g id="a_module~~foodie_integrator_runge_kutta_tvd~~UsedByGraph_node9"><a xlink:href="../module/oscillation_t.html" xlink:title="oscillation_t">
+<polygon fill="#337ab7" stroke="#337ab7" points="400.5,-60.0626 332.5,-60.0626 332.5,-36.0626 400.5,-36.0626 400.5,-60.0626"/>
+<text text-anchor="middle" x="366.5" y="-45.6626" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">oscillation_t</text>
+</a>
+</g>
+</g>
+<!-- module~foodie&#45;&gt;module~oscillation_t -->
+<g id="module~~foodie_integrator_runge_kutta_tvd~~UsedByGraph_edge14" class="edge">
+<title>module~foodie&#45;&gt;module~oscillation_t</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M242.0145,-197.9353C247.1443,-170.8541 263.2205,-105.0213 303,-69.0626 308.6259,-63.9771 315.5144,-60.1196 322.655,-57.1945"/>
+<polygon fill="#000000" stroke="#000000" points="324.1767,-60.3698 332.4536,-53.756 321.8587,-53.7647 324.1767,-60.3698"/>
+</g>
+<!-- program~integrate_euler_1d_openmp -->
+<g id="module~~foodie_integrator_runge_kutta_tvd~~UsedByGraph_node10" class="node">
+<title>program~integrate_euler_1d_openmp</title>
+<g id="a_module~~foodie_integrator_runge_kutta_tvd~~UsedByGraph_node10"><a xlink:href="../program/integrate_euler_1d_openmp.html" xlink:title="integrate_euler_1D_openmp">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="615,-392.0626 466,-392.0626 466,-368.0626 615,-368.0626 615,-392.0626"/>
+<text text-anchor="middle" x="540.5" y="-377.6626" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">integrate_euler_1D_openmp</text>
+</a>
+</g>
+</g>
+<!-- module~foodie&#45;&gt;program~integrate_euler_1d_openmp -->
+<g id="module~~foodie_integrator_runge_kutta_tvd~~UsedByGraph_edge15" class="edge">
+<title>module~foodie&#45;&gt;program~integrate_euler_1d_openmp</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M241.4711,-222.358C245.5343,-250.3849 259.6474,-319.05 303,-351.0626 346.2856,-383.0258 406.5748,-390.0672 455.5772,-389.224"/>
+<polygon fill="#000000" stroke="#000000" points="455.9564,-392.7147 465.8523,-388.9306 455.7565,-385.7176 455.9564,-392.7147"/>
+</g>
+<!-- module~oscillation_test_t -->
+<g id="module~~foodie_integrator_runge_kutta_tvd~~UsedByGraph_node11" class="node">
+<title>module~oscillation_test_t</title>
+<g id="a_module~~foodie_integrator_runge_kutta_tvd~~UsedByGraph_node11"><a xlink:href="../module/oscillation_test_t.html" xlink:title="oscillation_test_t">
+<polygon fill="#337ab7" stroke="#337ab7" points="586,-40.0626 495,-40.0626 495,-16.0626 586,-16.0626 586,-40.0626"/>
+<text text-anchor="middle" x="540.5" y="-25.6626" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">oscillation_test_t</text>
+</a>
+</g>
+</g>
+<!-- module~foodie&#45;&gt;module~oscillation_test_t -->
+<g id="module~~foodie_integrator_runge_kutta_tvd~~UsedByGraph_edge16" class="edge">
+<title>module~foodie&#45;&gt;module~oscillation_test_t</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M242.3214,-197.8026C249.7139,-160.2008 273.936,-47.7951 303,-27.0626 359.0161,12.8958 442.9209,.3351 494.5534,-13.254"/>
+<polygon fill="#000000" stroke="#000000" points="493.8617,-16.6936 504.4318,-15.9702 495.7176,-9.9441 493.8617,-16.6936"/>
+</g>
+<!-- program~integrate_euler_1d_caf -->
+<g id="module~~foodie_integrator_runge_kutta_tvd~~UsedByGraph_node12" class="node">
+<title>program~integrate_euler_1d_caf</title>
+<g id="a_module~~foodie_integrator_runge_kutta_tvd~~UsedByGraph_node12"><a xlink:href="../program/integrate_euler_1d_caf.html" xlink:title="integrate_euler_1D_caf">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="602.5,-242.0626 478.5,-242.0626 478.5,-218.0626 602.5,-218.0626 602.5,-242.0626"/>
+<text text-anchor="middle" x="540.5" y="-227.6626" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">integrate_euler_1D_caf</text>
+</a>
+</g>
+</g>
+<!-- module~foodie&#45;&gt;program~integrate_euler_1d_caf -->
+<g id="module~~foodie_integrator_runge_kutta_tvd~~UsedByGraph_edge17" class="edge">
+<title>module~foodie&#45;&gt;program~integrate_euler_1d_caf</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M267.1974,-211.8727C312.1785,-214.8665 403.5153,-220.9455 468.1977,-225.2505"/>
+<polygon fill="#000000" stroke="#000000" points="468.1284,-228.7535 478.3388,-225.9254 468.5933,-221.769 468.1284,-228.7535"/>
+</g>
+<!-- program~integrate_lorenz -->
+<g id="module~~foodie_integrator_runge_kutta_tvd~~UsedByGraph_node13" class="node">
+<title>program~integrate_lorenz</title>
+<g id="a_module~~foodie_integrator_runge_kutta_tvd~~UsedByGraph_node13"><a xlink:href="../program/integrate_lorenz.html" xlink:title="integrate_lorenz">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="585.5,-144.0626 495.5,-144.0626 495.5,-120.0626 585.5,-120.0626 585.5,-144.0626"/>
+<text text-anchor="middle" x="540.5" y="-129.6626" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">integrate_lorenz</text>
+</a>
+</g>
+</g>
+<!-- module~foodie&#45;&gt;program~integrate_lorenz -->
+<g id="module~~foodie_integrator_runge_kutta_tvd~~UsedByGraph_edge18" class="edge">
+<title>module~foodie&#45;&gt;program~integrate_lorenz</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M366.5,-130.0626C404.5248,-116.7683 450.1428,-117.8653 485.1286,-121.9687"/>
+<polygon fill="#000000" stroke="#000000" points="484.7957,-125.4546 495.1609,-123.2608 485.6899,-118.512 484.7957,-125.4546"/>
+</g>
+<!-- program~integrate_burgers -->
+<g id="module~~foodie_integrator_runge_kutta_tvd~~UsedByGraph_node14" class="node">
+<title>program~integrate_burgers</title>
+<g id="a_module~~foodie_integrator_runge_kutta_tvd~~UsedByGraph_node14"><a xlink:href="../program/integrate_burgers.html" xlink:title="integrate_burgers">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="589,-331.0626 492,-331.0626 492,-307.0626 589,-307.0626 589,-331.0626"/>
+<text text-anchor="middle" x="540.5" y="-316.6626" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">integrate_burgers</text>
+</a>
+</g>
+</g>
+<!-- module~foodie&#45;&gt;program~integrate_burgers -->
+<g id="module~~foodie_integrator_runge_kutta_tvd~~UsedByGraph_edge19" class="edge">
+<title>module~foodie&#45;&gt;program~integrate_burgers</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M249.191,-222.5093C260.3065,-236.6044 280.3648,-259.1532 303,-271.0626 333.441,-287.079 421.9121,-302.2207 481.8483,-311.069"/>
+<polygon fill="#000000" stroke="#000000" points="481.547,-314.562 491.9472,-312.5405 482.5563,-307.6352 481.547,-314.562"/>
+</g>
+<!-- module~type_euler_1d_openmp&#45;&gt;program~integrate_euler_1d_openmp -->
+<g id="module~~foodie_integrator_runge_kutta_tvd~~UsedByGraph_edge1" class="edge">
+<title>module~type_euler_1d_openmp&#45;&gt;program~integrate_euler_1d_openmp</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M430.3032,-399.0621C440.1963,-397.3564 450.5211,-395.5762 460.713,-393.819"/>
+<polygon fill="#000000" stroke="#000000" points="461.5798,-397.2213 470.8397,-392.073 460.3904,-390.323 461.5798,-397.2213"/>
+</g>
+<!-- module~type_burgers&#45;&gt;program~integrate_burgers -->
+<g id="module~~foodie_integrator_runge_kutta_tvd~~UsedByGraph_edge2" class="edge">
+<title>module~type_burgers&#45;&gt;program~integrate_burgers</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M404.685,-327.6486C427.1937,-326.2256 456.1478,-324.3952 481.5356,-322.7902"/>
+<polygon fill="#000000" stroke="#000000" points="482.0407,-326.2654 491.7999,-322.1413 481.599,-319.2793 482.0407,-326.2654"/>
+</g>
+<!-- module~type_euler_1d_caf&#45;&gt;program~integrate_euler_1d_caf -->
+<g id="module~~foodie_integrator_runge_kutta_tvd~~UsedByGraph_edge3" class="edge">
+<title>module~type_euler_1d_caf&#45;&gt;program~integrate_euler_1d_caf</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M418.2346,-244.1161C433.8309,-242.3234 451.2472,-240.3215 467.9347,-238.4034"/>
+<polygon fill="#000000" stroke="#000000" points="468.6731,-241.8417 478.208,-237.2226 467.8737,-234.8875 468.6731,-241.8417"/>
+</g>
+<!-- module~type_lorenz&#45;&gt;program~integrate_lorenz -->
+<g id="module~~foodie_integrator_runge_kutta_tvd~~UsedByGraph_edge4" class="edge">
+<title>module~type_lorenz&#45;&gt;program~integrate_lorenz</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M400.8768,-162.555C424.9577,-157.296 457.6544,-150.1553 485.3533,-144.1061"/>
+<polygon fill="#000000" stroke="#000000" points="486.2839,-147.4855 495.3069,-141.9324 484.7903,-140.6467 486.2839,-147.4855"/>
+</g>
+<!-- module~type_euler_1d&#45;&gt;program~integrate_euler_1d -->
+<g id="module~~foodie_integrator_runge_kutta_tvd~~UsedByGraph_edge5" class="edge">
+<title>module~type_euler_1d&#45;&gt;program~integrate_euler_1d</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M407.7356,-90.0626C428.7456,-90.0626 454.7335,-90.0626 478.1311,-90.0626"/>
+<polygon fill="#000000" stroke="#000000" points="478.3238,-93.5627 488.3237,-90.0626 478.3237,-86.5627 478.3238,-93.5627"/>
+</g>
+<!-- module~oscillation_t&#45;&gt;module~oscillation_test_t -->
+<g id="module~~foodie_integrator_runge_kutta_tvd~~UsedByGraph_edge6" class="edge">
+<title>module~oscillation_t&#45;&gt;module~oscillation_test_t</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M400.8768,-44.1112C424.7642,-41.3656 457.1296,-37.6454 484.6849,-34.4781"/>
+<polygon fill="#000000" stroke="#000000" points="485.4475,-37.9136 494.9824,-33.2945 484.6481,-30.9594 485.4475,-37.9136"/>
+</g>
+<!-- program~integrate_oscillation -->
+<g id="module~~foodie_integrator_runge_kutta_tvd~~UsedByGraph_node15" class="node">
+<title>program~integrate_oscillation</title>
+<g id="a_module~~foodie_integrator_runge_kutta_tvd~~UsedByGraph_node15"><a xlink:href="../program/integrate_oscillation.html" xlink:title="integrate_oscillation">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="758,-40.0626 651,-40.0626 651,-16.0626 758,-16.0626 758,-40.0626"/>
+<text text-anchor="middle" x="704.5" y="-25.6626" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">integrate_oscillation</text>
+</a>
+</g>
+</g>
+<!-- module~oscillation_test_t&#45;&gt;program~integrate_oscillation -->
+<g id="module~~foodie_integrator_runge_kutta_tvd~~UsedByGraph_edge7" class="edge">
+<title>module~oscillation_test_t&#45;&gt;program~integrate_oscillation</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M586.1831,-28.0626C603.058,-28.0626 622.5044,-28.0626 640.6931,-28.0626"/>
+<polygon fill="#000000" stroke="#000000" points="640.9351,-31.5627 650.935,-28.0626 640.935,-24.5627 640.9351,-31.5627"/>
+</g>
+</g>
+</svg>
+</div>
+                <script>var panmodulefoodie_integrator_runge_kutta_tvdUsedByGraph = svgPanZoom('#modulefoodie_integrator_runge_kutta_tvdUsedByGraph', {
+                    zoomEnabled: true,
+                    controlIconsEnabled: true,
+                    fit: true,
+                    center: true,});
+                    </script>
+                <div><a type="button" class="graph-help" data-toggle="modal" href="#graph-help-text">Help</a></div>
+                <div class="modal fade" id="graph-help-text" tabindex="-1" role="dialog">
+                  <div class="modal-dialog modal-lg" role="document">
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title" id="-graph-help-label">Graph Key</h4>
+                      </div>
+                      <div class="modal-body">
+                        
+    <p>Nodes of different colours represent the following: </p>
+    <?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.40.1 (20161225.0304)
+ -->
+<!-- Title: Graph Key Pages: 1 -->
+<svg width="490pt" height="32pt"
+ viewBox="0.00 0.00 489.50 32.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(4 28)">
+<title>Graph Key</title>
+<polygon fill="#ffffff" stroke="transparent" points="-4,4 -4,-28 485.5,-28 485.5,4 -4,4"/>
+<!-- Module -->
+<g id="node1" class="node">
+<title>Module</title>
+<polygon fill="#337ab7" stroke="#337ab7" points="54,-24 0,-24 0,0 54,0 54,-24"/>
+<text text-anchor="middle" x="27" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">Module</text>
+</g>
+<!-- Submodule -->
+<g id="node2" class="node">
+<title>Submodule</title>
+<polygon fill="#5bc0de" stroke="#5bc0de" points="139.5,-24 72.5,-24 72.5,0 139.5,0 139.5,-24"/>
+<text text-anchor="middle" x="106" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">Submodule</text>
+</g>
+<!-- Subroutine -->
+<g id="node3" class="node">
+<title>Subroutine</title>
+<polygon fill="#d9534f" stroke="#d9534f" points="222,-24 158,-24 158,0 222,0 222,-24"/>
+<text text-anchor="middle" x="190" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">Subroutine</text>
+</g>
+<!-- Function -->
+<g id="node4" class="node">
+<title>Function</title>
+<polygon fill="#d94e8f" stroke="#d94e8f" points="294,-24 240,-24 240,0 294,0 294,-24"/>
+<text text-anchor="middle" x="267" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">Function</text>
+</g>
+<!-- Program -->
+<g id="node5" class="node">
+<title>Program</title>
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="366,-24 312,-24 312,0 366,0 366,-24"/>
+<text text-anchor="middle" x="339" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">Program</text>
+</g>
+<!-- This Page&#39;s Entity -->
+<g id="node6" class="node">
+<title>This Page&#39;s Entity</title>
+<polygon fill="none" stroke="#000000" points="481.5,-24 384.5,-24 384.5,0 481.5,0 481.5,-24"/>
+<text text-anchor="middle" x="433" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#000000">This Page&#39;s Entity</text>
+</g>
+</g>
+</svg>
+
+    
+    <p>Solid arrows point from a parent (sub)module to the submodule which is
+    descended from it. Dashed arrows point from a module being used to the
+    module or program unit using it.
+    </p>
+    
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                
+    <br>
+    
+
+    <section class="visible-xs visible-sm hidden-md">
+      
+
+
+<div class="panel panel-primary">
+  <div class="panel-heading text-left"><h3 class="panel-title"><a data-toggle="collapse" href="#vars-1">Variables</a></h3></div>
+  <div id="vars-1" class="panel-collapse collapse">
+    <div class="list-group">
+      
+      <a class="list-group-item" href="../module/foodie_integrator_runge_kutta_tvd.html#variable-max_ss%7E4">max_ss</a>
+      
+      <a class="list-group-item" href="../module/foodie_integrator_runge_kutta_tvd.html#variable-min_ss%7E4">min_ss</a>
+      
+      <a class="list-group-item" href="../module/foodie_integrator_runge_kutta_tvd.html#variable-supported_stages">supported_stages</a>
+      
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
+
+
+
+
+<div class="panel panel-primary">
+  <div class="panel-heading text-left"><h3 class="panel-title"><a data-toggle="collapse" href="#types-1">Derived Types</a></h3></div>
+  <div id="types-1" class="panel-collapse collapse">
+    <div class="list-group">
+      
+      <a class="list-group-item" href="../module/foodie_integrator_runge_kutta_tvd.html#type-integrator_runge_kutta_tvd">integrator_runge_kutta_tvd</a>
+      
+    </div>
+  </div>
+</div>
+
+
+<div class="panel panel-primary">
+  <div class="panel-heading text-left"><h3 class="panel-title"><a data-toggle="collapse" href="#funcs-1">Functions</a></h3></div>
+  <div id="funcs-1" class="panel-collapse collapse">
+    <div class="list-group">
+      
+      <a class="list-group-item" href="../module/foodie_integrator_runge_kutta_tvd.html#proc-description%7E4">description</a>
+      
+      <a class="list-group-item" href="../module/foodie_integrator_runge_kutta_tvd.html#proc-is_supported%7E4">is_supported</a>
+      
+      <a class="list-group-item" href="../module/foodie_integrator_runge_kutta_tvd.html#proc-max_stages">max_stages</a>
+      
+      <a class="list-group-item" href="../module/foodie_integrator_runge_kutta_tvd.html#proc-min_stages">min_stages</a>
+      
+    </div>
+  </div>
+</div>
+
+
+<div class="panel panel-primary">
+  <div class="panel-heading text-left"><h3 class="panel-title"><a data-toggle="collapse" href="#subs-1">Subroutines</a></h3></div>
+  <div class="list-group">
+    <div id="subs-1" class="panel-collapse collapse">
+      
+      <a class="list-group-item" href="../module/foodie_integrator_runge_kutta_tvd.html#proc-destroy%7E4">destroy</a>
+      
+      <a class="list-group-item" href="../module/foodie_integrator_runge_kutta_tvd.html#proc-init%7E3">init</a>
+      
+      <a class="list-group-item" href="../module/foodie_integrator_runge_kutta_tvd.html#proc-integr_assign_integr%7E4">integr_assign_integr</a>
+      
+      <a class="list-group-item" href="../module/foodie_integrator_runge_kutta_tvd.html#proc-integrate%7E4">integrate</a>
+      
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
+
+
+
+    </section>
+    <br class="visible-xs visible-sm hidden-md">
+
+    
+
+    
+    <section>
+    <h2>Variables</h2>
+    
+<table class="table table-striped varlist">
+<thead><tr><th>Type</th><th>Visibility</th>
+
+<th>Attributes</th><th></th><th>Name</th><th></th><th>Initial</th><th></th></thead>
+
+
+
+<tbody>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-max_ss%7E4"></span>integer(kind=I_P),</td>
+  
+  <td>private,</td>
+  <td>parameter</td><td>::</td>
+  <td><strong>max_ss</strong></td><td> =</td><td>5</td><td><p>Maximum number of stages supported.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-min_ss%7E4"></span>integer(kind=I_P),</td>
+  
+  <td>private,</td>
+  <td>parameter</td><td>::</td>
+  <td><strong>min_ss</strong></td><td> =</td><td>1</td><td><p>Minimum number of stages supported.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-supported_stages"></span>character(len=99),</td>
+  
+  <td>private,</td>
+  <td>parameter</td><td>::</td>
+  <td><strong>supported_stages</strong></td><td> =</td><td>'1-3,5'</td><td><p>List of supported stages number. Valid format is <code>1-2,4,9-23...</code>.</p></td>
+  
+</tr>
+
+</tbody>
+</table>
+
+    </section>
+    <br>
+    
+    
+    
+    
+    
+
+    
+    
+    
+    <section>
+     <h2>Derived Types</h2>
+	 
+	   
+<div class="panel panel-default">
+  <div class="panel-heading codesum"><span class="anchor" id="type-integrator_runge_kutta_tvd"></span><h3>type, public, extends(<a href='../type/integrator_object.html'>integrator_object</a>) :: <a href='../type/integrator_runge_kutta_tvd.html'>integrator_runge_kutta_tvd</a>
+    
+  </h3></div>
+  <div class="panel-body">
+    
+    
+    <p>FOODIE integrator: provide an explicit class of TVD or SSP Runge-Kutta schemes, from 1st to 4th order accurate.</p>
+    
+     
+     <h4>Components</h4>
+    
+<table class="table table-striped varlist">
+<thead><tr><th>Type</th><th>Visibility</th>
+
+<th>Attributes</th><th></th><th>Name</th><th></th><th>Initial</th><th></th></thead>
+
+
+
+<tbody>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-alph"></span>real(kind=R_P),</td>
+  
+  <td>private,</td>
+  <td>allocatable</td><td>::</td>
+  <td><strong>alph</strong>(:,:)</td><td></td><td></td><td><p>\(\alpha\) Butcher's coefficients.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-beta"></span>real(kind=R_P),</td>
+  
+  <td>private,</td>
+  <td>allocatable</td><td>::</td>
+  <td><strong>beta</strong>(:)</td><td></td><td></td><td><p>\(\beta\) Butcher's coefficients.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-error"></span>integer(kind=I_P),</td>
+  
+  <td>public</td>
+  <td></td><td>::</td>
+  <td><strong>error</strong></td><td> =</td><td>0</td><td><p>Error status code.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-error_message"></span>character(len=:),</td>
+  
+  <td>public,</td>
+  <td>allocatable</td><td>::</td>
+  <td><strong>error_message</strong></td><td></td><td></td><td><p>Error message, hopefully meaningful.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-gamm"></span>real(kind=R_P),</td>
+  
+  <td>private,</td>
+  <td>allocatable</td><td>::</td>
+  <td><strong>gamm</strong>(:)</td><td></td><td></td><td><p>\(\gamma\) Butcher's coefficients.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-stages"></span>integer(kind=I_P),</td>
+  
+  <td>private</td>
+  <td></td><td>::</td>
+  <td><strong>stages</strong></td><td> =</td><td>0</td><td><p>Number of stages.</p></td>
+  
+</tr>
+
+</tbody>
+</table>
+
+     
+     
+          
+     
+     <h4>Type-Bound Procedures</h4>
+      <table class="table table-striped varlist">
+      <tbody>
+      
+       <tr><td>procedure, public, pass(lhs) :: <strong><a href='../type/integrator_object.html#boundprocedure-assign_abstract'>assign_abstract</a></strong>  </td>
+       <td><p>Assign ony members of abstract <a href="../type/integrator_object.html">integrator_object</a> type.</p></td></tr>
+      
+       <tr><td>generic, public :: <strong><a href='../type/integrator_runge_kutta_tvd.html#boundprocedure-assignment%28%3D%29%7E5'>assignment(=)</a></strong>  => integr_assign_integr </td>
+       <td><p>Overload <code>=</code>.</p></td></tr>
+      
+       <tr><td>procedure, public, pass(self) :: <strong><a href='../type/integrator_object.html#boundprocedure-check_error'>check_error</a></strong>  </td>
+       <td><p>Check for error occurrencies.</p></td></tr>
+      
+       <tr><td>procedure, public, pass(self) :: <strong><a href='../type/integrator_runge_kutta_tvd.html#boundprocedure-description%7E4'>description</a></strong>  </td>
+       <td><p>Return pretty-printed object description.</p></td></tr>
+      
+       <tr><td>procedure, public, pass(self) :: <strong><a href='../type/integrator_runge_kutta_tvd.html#boundprocedure-destroy%7E4'>destroy</a></strong>  </td>
+       <td><p>Destroy the integrator.</p></td></tr>
+      
+       <tr><td>procedure, public, pass(self) :: <strong><a href='../type/integrator_object.html#boundprocedure-destroy_abstract'>destroy_abstract</a></strong>  </td>
+       <td><p>Destroy only members of abstract <a href="../type/integrator_object.html">integrator_object</a> type.</p></td></tr>
+      
+       <tr><td>procedure, public, pass(self) :: <strong><a href='../type/integrator_runge_kutta_tvd.html#boundprocedure-init%7E3'>init</a></strong>  </td>
+       <td><p>Initialize (create) the integrator.</p></td></tr>
+      
+       <tr><td>procedure, public, pass(lhs) :: <strong><a href='../type/integrator_runge_kutta_tvd.html#boundprocedure-integr_assign_integr%7E5'>integr_assign_integr</a></strong>  </td>
+       <td><p>Operator <code>=</code>.</p></td></tr>
+      
+       <tr><td>procedure, public, pass(self) :: <strong><a href='../type/integrator_runge_kutta_tvd.html#boundprocedure-integrate%7E4'>integrate</a></strong>  </td>
+       <td><p>Integrate integrand field.</p></td></tr>
+      
+       <tr><td>procedure, public, nopass :: <strong><a href='../type/integrator_runge_kutta_tvd.html#boundprocedure-is_supported%7E4'>is_supported</a></strong>  </td>
+       <td><p>Check if the queried number of stages is supported or not.</p></td></tr>
+      
+       <tr><td>procedure, public, nopass :: <strong><a href='../type/integrator_runge_kutta_tvd.html#boundprocedure-max_stages'>max_stages</a></strong>  </td>
+       <td><p>Return the maximum number of stages supported.</p></td></tr>
+      
+       <tr><td>procedure, public, nopass :: <strong><a href='../type/integrator_runge_kutta_tvd.html#boundprocedure-min_stages'>min_stages</a></strong>  </td>
+       <td><p>Return the minimum number of stages supported.</p></td></tr>
+      
+       <tr><td>procedure, public, pass(self) :: <strong><a href='../type/integrator_object.html#boundprocedure-trigger_error'>trigger_error</a></strong>  </td>
+       <td><p>Trigger an error.</p></td></tr>
+      
+       </tbody>
+       </table>
+     
+  </div>
+</div>
+
+     
+    </section>
+	<br>
+    
+    
+     
+    <section>
+    <h2>Functions</h2>
+    
+    
+  <div class="panel panel-default">
+  <div class="panel-heading codesum"><span class="anchor" id="proc-description%7E4"></span><h3>
+private pure function <a href='../proc/description%7E4.html'>description</a>(self, prefix) result(desc)
+    
+    
+	 
+</h3></div>
+  <div class="panel-body">
+       
+    
+
+
+
+
+
+
+
+<p>Return a pretty-formatted object description.</p>
+    
+    <h4>Arguments</h4>
+    
+      
+      
+<table class="table table-striped varlist">
+<thead><tr><th>Type</th>
+<th>Intent</th><th>Optional</th>
+<th>Attributes</th><th></th><th>Name</th><th></th></thead>
+
+
+
+<tbody>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>class(<a href='../type/integrator_runge_kutta_tvd.html'>integrator_runge_kutta_tvd</a>),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>self</strong></td><td><p>Integrator.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>character(len=*),</td>
+  <td>intent(in),</td>
+  <td>optional</td>
+  
+  <td></td><td>::</td>
+  <td><strong>prefix</strong></td><td><p>Prefixing string.</p></td>
+  
+</tr>
+
+</tbody>
+</table>
+
+      
+    
+    
+
+  
+  
+  
+  
+     <h4>Return Value <small>character(len=:),
+  allocatable</small></h4>
+  <p>Description.</p>
+    
+
+  </div>
+  </div>
+
+    
+    
+  <div class="panel panel-default">
+  <div class="panel-heading codesum"><span class="anchor" id="proc-is_supported%7E4"></span><h3>
+private elemental function <a href='../proc/is_supported%7E4.html'>is_supported</a>(stages)
+    
+    
+	 
+</h3></div>
+  <div class="panel-body">
+       
+    
+
+
+
+
+
+
+
+<p>Check if the queried number of stages is supported or not.</p>
+    
+    <h4>Arguments</h4>
+    
+      
+      
+<table class="table table-striped varlist">
+<thead><tr><th>Type</th>
+<th>Intent</th><th>Optional</th>
+<th>Attributes</th><th></th><th>Name</th><th></th></thead>
+
+
+
+<tbody>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>integer(kind=I_P),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>stages</strong></td><td><p>Number of stages used.</p></td>
+  
+</tr>
+
+</tbody>
+</table>
+
+      
+    
+    
+
+  
+  
+  
+  
+     <h4>Return Value <small>logical
+  </small></h4>
+  <p>Is true is the stages number is in <em>supported_stages</em>.</p>
+    
+
+  </div>
+  </div>
+
+    
+    
+  <div class="panel panel-default">
+  <div class="panel-heading codesum"><span class="anchor" id="proc-max_stages"></span><h3>
+private pure function <a href='../proc/max_stages.html'>max_stages</a>()
+    
+    
+	 
+</h3></div>
+  <div class="panel-body">
+       
+    
+
+
+
+
+
+
+
+<p>Return the maximum number of stages supported.</p>
+    
+    <h4>Arguments</h4>
+    
+      <em>None</em>
+    
+    
+
+  
+  
+  
+  
+     <h4>Return Value <small>integer(kind=I_P)
+  </small></h4>
+  <p>Maximum number of stages supported.</p>
+    
+
+  </div>
+  </div>
+
+    
+    
+  <div class="panel panel-default">
+  <div class="panel-heading codesum"><span class="anchor" id="proc-min_stages"></span><h3>
+private pure function <a href='../proc/min_stages.html'>min_stages</a>()
+    
+    
+	 
+</h3></div>
+  <div class="panel-body">
+       
+    
+
+
+
+
+
+
+
+<p>Return the minimum number of stages supported.</p>
+    
+    <h4>Arguments</h4>
+    
+      <em>None</em>
+    
+    
+
+  
+  
+  
+  
+     <h4>Return Value <small>integer(kind=I_P)
+  </small></h4>
+  <p>Minimum number of stages supported.</p>
+    
+
+  </div>
+  </div>
+
+    
+    </section>
+    <br>
+    
+
+    
+    <section>
+    <h2>Subroutines</h2>
+    
+    
+  <div class="panel panel-default">
+  <div class="panel-heading codesum"><span class="anchor" id="proc-destroy%7E4"></span><h3>
+private elemental subroutine <a href='../proc/destroy%7E4.html'>destroy</a>(self)
+    
+    
+	 
+</h3></div>
+  <div class="panel-body">
+       
+    
+
+
+
+
+
+
+
+<p>Destroy the integrator.</p>
+    
+    <h4>Arguments</h4>
+    
+      
+      
+<table class="table table-striped varlist">
+<thead><tr><th>Type</th>
+<th>Intent</th><th>Optional</th>
+<th>Attributes</th><th></th><th>Name</th><th></th></thead>
+
+
+
+<tbody>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>class(<a href='../type/integrator_runge_kutta_tvd.html'>integrator_runge_kutta_tvd</a>),</td>
+  <td>intent(inout)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>self</strong></td><td><p>Integrator.</p></td>
+  
+</tr>
+
+</tbody>
+</table>
+
+      
+    
+    
+
+  </div>
+  </div>
+
+    
+    
+  <div class="panel panel-default">
+  <div class="panel-heading codesum"><span class="anchor" id="proc-init%7E3"></span><h3>
+private subroutine <a href='../proc/init%7E3.html'>init</a>(self, stages, stop_on_fail)
+    
+    
+	 
+</h3></div>
+  <div class="panel-body">
+       
+    
+
+
+
+
+
+
+
+<p>Create the actual RK integrator: initialize the Butcher' table coefficients.</p>
+    
+    <h4>Arguments</h4>
+    
+      
+      
+<table class="table table-striped varlist">
+<thead><tr><th>Type</th>
+<th>Intent</th><th>Optional</th>
+<th>Attributes</th><th></th><th>Name</th><th></th></thead>
+
+
+
+<tbody>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>class(<a href='../type/integrator_runge_kutta_tvd.html'>integrator_runge_kutta_tvd</a>),</td>
+  <td>intent(inout)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>self</strong></td><td><p>Integrator.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>integer(kind=I_P),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>stages</strong></td><td><p>Number of stages used.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>logical,</td>
+  <td>intent(in),</td>
+  <td>optional</td>
+  
+  <td></td><td>::</td>
+  <td><strong>stop_on_fail</strong></td><td><p>Stop execution if initialization fail.</p></td>
+  
+</tr>
+
+</tbody>
+</table>
+
+      
+    
+    
+
+  </div>
+  </div>
+
+    
+    
+  <div class="panel panel-default">
+  <div class="panel-heading codesum"><span class="anchor" id="proc-integr_assign_integr%7E4"></span><h3>
+private pure subroutine <a href='../proc/integr_assign_integr%7E4.html'>integr_assign_integr</a>(lhs, rhs)
+    
+    
+	 
+</h3></div>
+  <div class="panel-body">
+       
+    
+
+
+
+
+
+
+
+<p>Operator <code>=</code>.</p>
+    
+    <h4>Arguments</h4>
+    
+      
+      
+<table class="table table-striped varlist">
+<thead><tr><th>Type</th>
+<th>Intent</th><th>Optional</th>
+<th>Attributes</th><th></th><th>Name</th><th></th></thead>
+
+
+
+<tbody>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>class(<a href='../type/integrator_runge_kutta_tvd.html'>integrator_runge_kutta_tvd</a>),</td>
+  <td>intent(inout)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>lhs</strong></td><td><p>Left hand side.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>class(<a href='../type/integrator_object.html'>integrator_object</a>),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>rhs</strong></td><td><p>Right hand side.</p></td>
+  
+</tr>
+
+</tbody>
+</table>
+
+      
+    
+    
+
+  </div>
+  </div>
+
+    
+    
+  <div class="panel panel-default">
+  <div class="panel-heading codesum"><span class="anchor" id="proc-integrate%7E4"></span><h3>
+private subroutine <a href='../proc/integrate%7E4.html'>integrate</a>(self, U, stage, Dt, t)
+    
+    
+	 
+</h3></div>
+  <div class="panel-body">
+       
+    
+
+
+
+
+
+
+
+<p>Integrate field with explicit TVD (or SSP) Runge-Kutta scheme.</p>
+    
+    <h4>Arguments</h4>
+    
+      
+      
+<table class="table table-striped varlist">
+<thead><tr><th>Type</th>
+<th>Intent</th><th>Optional</th>
+<th>Attributes</th><th></th><th>Name</th><th></th></thead>
+
+
+
+<tbody>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>class(<a href='../type/integrator_runge_kutta_tvd.html'>integrator_runge_kutta_tvd</a>),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>self</strong></td><td><p>Integrator.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>class(<a href='../type/integrand.html'>integrand</a>),</td>
+  <td>intent(inout)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>U</strong></td><td><p>Field to be integrated.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>class(<a href='../type/integrand.html'>integrand</a>),</td>
+  <td>intent(inout)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>stage</strong>(1:)</td><td><p>Runge-Kutta stages [1:stages].</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>real(kind=R_P),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>Dt</strong></td><td><p>Time step.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>real(kind=R_P),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>t</strong></td><td><p>Time.</p></td>
+  
+</tr>
+
+</tbody>
+</table>
+
+      
+    
+    
+
+  </div>
+  </div>
+
+    
+    </section>    
+    <br>
+    
+    
+    
+    </div>
+  </div>
+
+  <section class="visible-xs visible-sm hidden-md">
+    <hr>
+    
+
+<div class="panel panel-default">
+  <div class="panel-heading text-left"><h3 class="panel-title"><a data-toggle="collapse" href="#allmods-1">All Modules</a></h3></div>
+  <div id="allmods-1" class="panel-collapse collapse">
+    <div class="list-group">
+      
+      <a class="list-group-item" href="../module/foodie.html">foodie</a>
+      
+      <a class="list-group-item" href="../module/foodie_adt_integrand.html">foodie_adt_integrand</a>
+      
+      <a class="list-group-item" href="../module/foodie_error_codes.html">foodie_error_codes</a>
+      
+      <a class="list-group-item" href="../module/foodie_integrator_adams_bashforth.html">foodie_integrator_adams_bashforth</a>
+      
+      <a class="list-group-item" href="../module/foodie_integrator_adams_bashforth_moulton.html">foodie_integrator_adams_bashforth_moulton</a>
+      
+      <a class="list-group-item" href="../module/foodie_integrator_adams_moulton.html">foodie_integrator_adams_moulton</a>
+      
+      <a class="list-group-item" href="../module/foodie_integrator_backward_differentiation_formula.html">foodie_integrator_backward_differentiation_formula</a>
+      
+      <a class="list-group-item" href="../module/foodie_integrator_euler_explicit.html">foodie_integrator_euler_explicit</a>
+      
+      <a class="list-group-item" href="../module/foodie_integrator_leapfrog.html">foodie_integrator_leapfrog</a>
+      
+      <a class="list-group-item" href="../module/foodie_integrator_lmm_ssp.html">foodie_integrator_lmm_ssp</a>
+      
+      <a class="list-group-item" href="../module/foodie_integrator_lmm_ssp_vss.html">foodie_integrator_lmm_ssp_vss</a>
+      
+      <a class="list-group-item" href="../module/foodie_integrator_object.html">foodie_integrator_object</a>
+      
+      <a class="list-group-item" href="../module/foodie_integrator_runge_kutta_emd.html">foodie_integrator_runge_kutta_emd</a>
+      
+      <a class="list-group-item" href="../module/foodie_integrator_runge_kutta_low_storage.html">foodie_integrator_runge_kutta_low_storage</a>
+      
+      <a class="list-group-item" href="../module/foodie_integrator_runge_kutta_tvd.html">foodie_integrator_runge_kutta_tvd</a>
+      
+      <a class="list-group-item" href="../module/foodie_kinds.html">foodie_kinds</a>
+      
+      <a class="list-group-item" href="../module/foodie_utils.html">foodie_utils</a>
+      
+      <a class="list-group-item" href="../module/oscillation_t.html">oscillation_t</a>
+      
+      <a class="list-group-item" href="../module/oscillation_test_t.html">oscillation_test_t</a>
+      
+      <a class="list-group-item" href="../module/type_burgers.html">type_burgers</a>
+      
+      <a class="list-group-item" href="../module/type_euler_1d.html">type_euler_1D</a>
+      
+      <a class="list-group-item" href="../module/type_euler_1d_caf.html">type_euler_1D_caf</a>
+      
+      <a class="list-group-item" href="../module/type_euler_1d_caf_no_foodie.html">type_euler_1D_caf_no_foodie</a>
+      
+      <a class="list-group-item" href="../module/type_euler_1d_openmp.html">type_euler_1D_openmp</a>
+      
+      <a class="list-group-item" href="../module/type_euler_1d_openmp_no_foodie.html">type_euler_1D_openmp_no_foodie</a>
+      
+      <a class="list-group-item" href="../module/type_lorenz.html">type_lorenz</a>
+      
+    </div>
+  </div>
+</div>
+
+
+  </section>
+  
+    <hr>    
+    </div> <!-- /container -->
+    <footer>
+      <div class="container">
+      <div class="row">
+        <div class="col-xs-6 col-md-4"><p>&copy; 2017 </p></div>
+        <div class="col-xs-6 col-md-4 col-md-push-4">
+          <p class="text-right">
+            Documentation generated by 
+            <a href="https://github.com/cmacmackin/ford">FORD</a>
+             on 2017-03-31 16:42  
+          </p>
+        </div>
+        <div class="col-xs-12 col-md-4 col-md-pull-4"><p class="text-center"> FOODIE was developed by Fortran-FOSS-Programmers Group</p></div>
+      </div>
+      <br>
+      </div> <!-- /container -->    
+    </footer>
+
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+<!--
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+-->
+    <script src="../js/bootstrap.min.js"></script>
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+    <script src="../js/ie10-viewport-bug-workaround.js"></script>
+
+    <!-- MathJax JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        TeX: { extensions: ['AMSmath.js','AMSsymbols.js','noErrors.js','noUndefined.js'], equationNumbers: { autoNumber: 'AMS' } },
+        jax: ['input/TeX','input/MathML','output/HTML-CSS'],
+        extensions: ['tex2jax.js','mml2jax.js','MathMenu.js','MathZoom.js'],
+        'HTML-CSS': { 
+           styles: { '.MathJax_Display, .MathJax .mo, .MathJax .mi, .MathJax .mn': {color: '#000000 ! important'} }
+        }
+      });
+    </script>
+    <script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+  </body>
+</html>

@@ -6,7 +6,7 @@ program integrate_euler_1D_caf
 
 !-----------------------------------------------------------------------------------------------------------------------------------
 use flap, only : command_line_interface
-use foodie, only : tvd_runge_kutta_integrator
+use foodie, only : integrator_runge_kutta_tvd
 use IR_Precision, only : R_P, I_P, FR_P, str, strz
 use pyplot_module, only : pyplot
 use type_euler_1D_caf, only : euler_1D_caf
@@ -15,7 +15,7 @@ use type_euler_1D_caf, only : euler_1D_caf
 !-----------------------------------------------------------------------------------------------------------------------------------
 implicit none
 type(command_line_interface)     :: cli                   !< Command line interface handler.
-type(tvd_runge_kutta_integrator) :: rk_integrator         !< Runge-Kutta integrator.
+type(integrator_runge_kutta_tvd) :: rk_integrator         !< Runge-Kutta integrator.
 integer, parameter               :: rk_stages=5           !< Runge-Kutta stages number.
 type(euler_1D_caf)               :: rk_stage(1:rk_stages) !< Runge-Kutta stages.
 integer, parameter               :: ord=7                 !< Space reconstruciton order,

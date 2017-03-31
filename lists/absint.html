@@ -7,7 +7,7 @@
 	 
 	 <meta name="description" content="Fortran Object oriented Ordinary Differential Equations integration library">
     
-    <meta name="author" content="Chris MacMackin" >
+    <meta name="author" content="Fortran-FOSS-Programmers Group" >
     <link rel="icon" href="../favicon.png">
 
     <title>
@@ -55,13 +55,20 @@ All Abstract Interfaces &ndash; FOODIE
         <div id="navbar" class="navbar-collapse collapse">
           <ul class="nav navbar-nav">
 				
-                
+            <li class="dropdown hidden-xs visible-sm visible-md hidden-lg">
+              <a href="#" class="dropdown-toggle"
+              data-toggle="dropdown" role="button"
+              aria-haspopup="true"
+		 aria-expanded="false">Contents <span class="caret"></span></a>
+	      <ul class="dropdown-menu">
+              
             <li><a href="../lists/files.html">Source Files</a></li>
 				
 				
             <li><a href="../lists/modules.html">Modules</a></li>
 				
-				
+            
+                                
             <li><a href="../lists/procedures.html">Procedures</a></li>
 				
 				
@@ -72,6 +79,26 @@ All Abstract Interfaces &ndash; FOODIE
 				
             <li><a href="../lists/programs.html">Programs</a></li>
 				
+            </ul>
+            </li>
+
+<li class="visible-xs hidden-sm visible-lg"><a href="../lists/files.html">Source Files</a></li>
+
+
+<li class="visible-xs hidden-sm visible-lg"><a href="../lists/modules.html">Modules</a></li>
+
+
+
+<li class="visible-xs hidden-sm visible-lg"><a href="../lists/procedures.html">Procedures</a></li>
+
+
+<li class="visible-xs hidden-sm visible-lg"><a href="../lists/absint.html">Abstract Interfaces</a></li>
+                             
+<li class="visible-xs hidden-sm visible-lg"><a href="../lists/types.html">Derived Types</a></li>
+
+
+<li class="visible-xs hidden-sm visible-lg"><a href="../lists/programs.html">Programs</a></li>
+
           </ul>
         
         <form action="../search.html" class="navbar-form navbar-right" role="search">
@@ -97,17 +124,15 @@ All Abstract Interfaces &ndash; FOODIE
 			 <tr><th>Abstract Interface</th><th>Location</th><th>Description</th></tr>
 			 </thead><tbody>
 			 
-			   <tr><td><a href='../interface/abstract_constructor.html'>abstract_constructor</a></td><td><a href='../module/type_weno_interpolator.html'>type_weno_interpolator</a></td><td><p>Create a WENO interpolator.</p></td></tr>
-			 
-			   <tr><td><a href='../interface/abstract_description.html'>abstract_description</a></td><td><a href='../module/type_weno_interpolator.html'>type_weno_interpolator</a></td><td><p>Return a string describing a WENO interpolator.</p></td></tr>
-			 
-			   <tr><td><a href='../interface/abstract_destructor.html'>abstract_destructor</a></td><td><a href='../module/type_weno_interpolator.html'>type_weno_interpolator</a></td><td><p>Destoy a WENO interpolator.</p></td></tr>
-			 
-			   <tr><td><a href='../interface/abstract_interpolate.html'>abstract_interpolate</a></td><td><a href='../module/type_weno_interpolator.html'>type_weno_interpolator</a></td><td><p>Interpolate the stecil input values computing the actual interpolation.</p></td></tr>
-			 
 			   <tr><td><a href='../interface/assignment_integrand.html'>assignment_integrand</a></td><td><a href='../module/foodie_adt_integrand.html'>foodie_adt_integrand</a></td><td><p>Symmetric assignment integrand = integrand.</p></td></tr>
 			 
+			   <tr><td><a href='../interface/assignment_interface.html'>assignment_interface</a></td><td><a href='../module/foodie_integrator_object.html'>foodie_integrator_object</a></td><td><p>Operator <code>=</code>.</p></td></tr>
+			 
+			   <tr><td><a href='../interface/description_interface.html'>description_interface</a></td><td><a href='../module/foodie_integrator_object.html'>foodie_integrator_object</a></td><td><p>Return a pretty-formatted object description.</p></td></tr>
+			 
 			   <tr><td><a href='../interface/integrand_op_real.html'>integrand_op_real</a></td><td><a href='../module/foodie_adt_integrand.html'>foodie_adt_integrand</a></td><td><p>Asymmetric type operator integrand.op.real.</p></td></tr>
+			 
+			   <tr><td><a href='../interface/integrate_interface.html'>integrate_interface</a></td><td><a href='../module/foodie_integrator_lmm_ssp_vss.html'>foodie_integrator_lmm_ssp_vss</a></td><td><p>Integrate field with LMM-SSP class scheme.</p></td></tr>
 			 
 			   <tr><td><a href='../interface/local_error_operator.html'>local_error_operator</a></td><td><a href='../module/foodie_adt_integrand.html'>foodie_adt_integrand</a></td><td><p>Estimate local truncation error between 2 solution approximations.</p></td></tr>
 			 
@@ -121,23 +146,24 @@ All Abstract Interfaces &ndash; FOODIE
         </div>
       </div>
 
-    <hr>
+    <hr>    
+    </div> <!-- /container -->
     <footer>
+      <div class="container">
       <div class="row">
-        <div class="col-md-4">&copy; 2016 </div>
-        <div class="col-md-4"><span class="text-center"> FOODIE was developed by Fortran-FOSS-Programmers Group</span></div>
-        <div class="col-md-4">
-          <span class="pull-right">
+        <div class="col-xs-6 col-md-4"><p>&copy; 2017 </p></div>
+        <div class="col-xs-6 col-md-4 col-md-push-4">
+          <p class="text-right">
             Documentation generated by 
             <a href="https://github.com/cmacmackin/ford">FORD</a>
-            
-          </span>
+             on 2017-03-31 16:42  
+          </p>
         </div>
+        <div class="col-xs-12 col-md-4 col-md-pull-4"><p class="text-center"> FOODIE was developed by Fortran-FOSS-Programmers Group</p></div>
       </div>
       <br>
+      </div> <!-- /container -->    
     </footer>
-    </div> <!-- /container -->
-
 
     <!-- Bootstrap core JavaScript
     ================================================== -->

@@ -10,7 +10,7 @@ use foodie, only : adams_bashforth_integrator, &
                    euler_explicit_integrator, &
                    leapfrog_integrator, &
                    ls_runge_kutta_integrator, &
-                   tvd_runge_kutta_integrator
+                   integrator_runge_kutta_tvd
 use IR_Precision, only : R_P, I_P, FR_P, str
 #ifdef OPENMP
 use OMP_LIB
@@ -22,7 +22,7 @@ use type_euler_1D_openmp, only : euler_1D_openmp
 !-----------------------------------------------------------------------------------------------------------------------------------
 implicit none
 type(command_line_interface)     :: cli                   !< Command line interface handler.
-type(tvd_runge_kutta_integrator) :: rk_integrator         !< Runge-Kutta integrator.
+type(integrator_runge_kutta_tvd) :: rk_integrator         !< Runge-Kutta integrator.
 integer, parameter               :: rk_stages=5           !< Runge-Kutta stages number.
 type(euler_1D_openmp)            :: rk_stage(1:rk_stages) !< Runge-Kutta stages.
 real(R_P)                        :: dt                    !< Time step.

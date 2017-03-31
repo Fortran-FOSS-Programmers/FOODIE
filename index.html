@@ -7,7 +7,7 @@
 	 
 	 <meta name="description" content="Fortran Object oriented Ordinary Differential Equations integration library">
     
-    <meta name="author" content="Chris MacMackin" >
+    <meta name="author" content="Fortran-FOSS-Programmers Group" >
     <link rel="icon" href="./favicon.png">
 
     <title> FOODIE </title>
@@ -53,13 +53,20 @@
         <div id="navbar" class="navbar-collapse collapse">
           <ul class="nav navbar-nav">
 				
-                
+            <li class="dropdown hidden-xs visible-sm visible-md hidden-lg">
+              <a href="#" class="dropdown-toggle"
+              data-toggle="dropdown" role="button"
+              aria-haspopup="true"
+		 aria-expanded="false">Contents <span class="caret"></span></a>
+	      <ul class="dropdown-menu">
+              
             <li><a href="./lists/files.html">Source Files</a></li>
 				
 				
             <li><a href="./lists/modules.html">Modules</a></li>
 				
-				
+            
+                                
             <li><a href="./lists/procedures.html">Procedures</a></li>
 				
 				
@@ -70,6 +77,26 @@
 				
             <li><a href="./lists/programs.html">Programs</a></li>
 				
+            </ul>
+            </li>
+
+<li class="visible-xs hidden-sm visible-lg"><a href="./lists/files.html">Source Files</a></li>
+
+
+<li class="visible-xs hidden-sm visible-lg"><a href="./lists/modules.html">Modules</a></li>
+
+
+
+<li class="visible-xs hidden-sm visible-lg"><a href="./lists/procedures.html">Procedures</a></li>
+
+
+<li class="visible-xs hidden-sm visible-lg"><a href="./lists/absint.html">Abstract Interfaces</a></li>
+                             
+<li class="visible-xs hidden-sm visible-lg"><a href="./lists/types.html">Derived Types</a></li>
+
+
+<li class="visible-xs hidden-sm visible-lg"><a href="./lists/programs.html">Programs</a></li>
+
           </ul>
         
         <form action="./search.html" class="navbar-form navbar-right" role="search">
@@ -101,12 +128,14 @@
 			 
 	         
 			 
+          <a class="btn btn-lg btn-danger" style="float:right" href="https://github.com/Fortran-FOSS-Programmers/FOODIE/releases/latest" role="button">Download the Source</a>
+			 
         </p>
       </div>
 
       <div class="row" id='text'>
 		  
-        <div class="col-lg-8">
+        <div class="col-md-8">
 		  
           <h1>FOODIE</h1>
           <p><a name="top"></a></p>
@@ -192,8 +221,14 @@
 <li><input type="checkbox" disabled checked> Robert-Asselin-Williams filtered leapfrog, 3rd order accurate, see [5, 6];</li>
 </ul>
 </li>
+<li><input type="checkbox" disabled checked> <a href="http://fortran-foss-programmers.github.io/FOODIE/module/foodie_integrator_lmm_ssp.html">Linear Multistep Methods SSP</a> schemes see [16]:<ul class="checklist">
+<li><input type="checkbox" disabled checked> 3 steps, 2nd order accurate;</li>
+<li><input type="checkbox" disabled checked> 4 steps, 3rd order accurate;</li>
+<li><input type="checkbox" disabled checked> 5 steps, 3rd order accurate;</li>
+</ul>
+</li>
 <li><input type="checkbox" disabled> Runge-Kutta schemes:<ul class="checklist">
-<li><input type="checkbox" disabled> <a href="http://fortran-foss-programmers.github.io/FOODIE/module/foodie_integrator_low_storage_runge_kutta.html">low-storage</a> schemes, see [1, 2, 3]:<ul class="checklist">
+<li><input type="checkbox" disabled> <a href="http://fortran-foss-programmers.github.io/FOODIE/module/foodie_integrator_runge_kutta_low_storage.html">low-storage</a> schemes, see [1, 2, 3]:<ul class="checklist">
 <li><input type="checkbox" disabled checked> 1 stage, namely the forward explicit Euler scheme, 1st order accurate;</li>
 <li><input type="checkbox" disabled> 2 stages;</li>
 <li><input type="checkbox" disabled> 3 stages;</li>
@@ -206,7 +241,7 @@
 <li><input type="checkbox" disabled checked> 14 stages, 4th order accurate, 2N registers, see [10];</li>
 </ul>
 </li>
-<li><input type="checkbox" disabled> <a href="http://fortran-foss-programmers.github.io/FOODIE/module/foodie_integrator_tvd_runge_kutta.html">TVD/SSP</a> schemes, see [1]:<ul class="checklist">
+<li><input type="checkbox" disabled> <a href="http://fortran-foss-programmers.github.io/FOODIE/module/foodie_integrator_kutta_tvd_runge.html">TVD/SSP</a> schemes, see [1]:<ul class="checklist">
 <li><input type="checkbox" disabled checked> 1 stage, namely the forward explicit Euler scheme, 1st order accurate;</li>
 <li><input type="checkbox" disabled checked> 2 stages, 2nd order accurate;</li>
 <li><input type="checkbox" disabled checked> 3 stages, 3rd order accurate;</li>
@@ -214,7 +249,7 @@
 <li><input type="checkbox" disabled checked> 5 stages, 4th order accurate;</li>
 </ul>
 </li>
-<li><input type="checkbox" disabled> <a href="http://fortran-foss-programmers.github.io/FOODIE/module/foodie_integrator_emd_runge_kutta.html">embedded (adaptive)</a> schemes:<ul class="checklist">
+<li><input type="checkbox" disabled> <a href="http://fortran-foss-programmers.github.io/FOODIE/module/foodie_integrator_runge_kutta_embeddedd.html">embedded (adaptive)</a> schemes:<ul class="checklist">
 <li><input type="checkbox" disabled checked> Heun-Euler, 2 stages, 2nd order accurate;</li>
 <li><input type="checkbox" disabled> Runge-Kutta-Fehlberg, 5 stages, 4th order accurate;</li>
 <li><input type="checkbox" disabled checked> Runge-Kutta-Cash-Karp, 6 stages, 5th order accurate, see [13];</li>
@@ -292,6 +327,7 @@
 <p>[13] <em>A variable order Runge-Kutta method for initial value problems with rapidly varying right-hand sides</em>, J. R. Cash, A. H. Karp, ACM Transactions on Mathematical Software, vol. 16,  pp. 201&ndash;222, 1990, doi:10.1145/79505.79507.</p>
 <p>[14] <em>A New Embedded Pair of Runge-Kutta Formulas of orders 5 and 6</em>, M. Calvo, J.I. Montijano, L. Randez, Computers &amp; Mathematics with Applications, Volume 20, Issue 1, 1990, Pages 15&ndash;24, ISSN 0898-1221, http://dx.doi.org/10.1016/0898-1221(90)90064-Q.</p>
 <p>[15] <em>A tenth-order Runge-Kutta method with error estimate</em>, Feagin, T., Proceedings of the IAENG Conf. on Scientific Computing. 2007.</p>
+<p>[16] <em>Strong Stability Preserving Runge-Kutta and Multistep Time Discretizations</em>, S. Gottlieb, D. Ketcheson, C.W. Shu, 2011, 978-981-4289-26-9, doi:10.1142/7498, World Scientific Publishing Co. Pte. Ltd.</p>
 <p>Go to <a href="#top">Top</a></p>
 <h2 id="status"><a class="toclink" href="#status">Status <a href=""><img alt="Status" src="https://img.shields.io/badge/status-beta-orange.svg"></a></a></h2>
 <p>FOODIE project is young, but developed with love. Many integrators have been implemented using the Rouson's Abstract Data Type Pattern and tested with complex problems, but the library API is still in beta testing status. Nevertheless, FOODIE is already proven to be able to integrate a wide range of different ODE problems, from pure ODEs (Lorenz and inertial oscillations equations) to complex PDEs (Burgers and Euler equations), see the documentation.</p>
@@ -311,10 +347,10 @@
 <p>Go to <a href="#top">Top</a></p>
 <h2 id="documentation"><a class="toclink" href="#documentation">Documentation</a></h2>
 <p>Besides this README file the FOODIE documentation is contained into its own <a href="https://github.com/Fortran-FOSS-Programmers/FOODIE/wiki">wiki</a>. Detailed documentation of the API is contained into the <a href="http://Fortran-FOSS-Programmers.github.io/FOODIE/index.html">GitHub Pages</a> that can also be created locally by means of <a href="https://github.com/cmacmackin/ford">ford tool</a>.</p>
-<p>Go to <a href="#top">Top</a></p>
+<h2 id="go-to-top"><a class="toclink" href="#go-to-top">Go to <a href="#top">Top</a></a></h2>
         </div>
 		  
-        <div class="col-lg-4">
+        <div class="col-md-4">
 	  <div class="well">
           <h2>Developer Info</h2>
           <h4>Fortran-FOSS-Programmers Group</h4>
@@ -322,6 +358,8 @@
           
 			   
             <div class="text-center"><div class="btn-group" role="group">
+              
+              <a class="btn btn-lg btn-primary" href="mailto:stefano.zaghi@gmail.com"><i class="fa fa-envelope fa-lg"></i></a>
               
               
              <a class="btn btn-lg btn-primary" href="http://fortran-foss-programmers.github.io/"><i class="fa fa-globe fa-lg"></i></a>
@@ -346,7 +384,7 @@
       
 		
       <div class="row">
-          <div class="col-lg-3">
+        <div class="col-xs-6 col-sm-3">
               <h3>Source Files</h3>
               <ul>
                 
@@ -375,19 +413,19 @@
                   
                 
                   
-                    <li><a href='./sourcefile/flap.f90.html'>flap.f90</a></li>
+                    <li><a href='./sourcefile/foodie.f90.html'>foodie.f90</a></li>
                   
                 
                   
-                    <li><a href='./sourcefile/flap_command_line_argument_t.f90.html'>flap_command_line_argument_t.F90</a></li>
+                    <li><a href='./sourcefile/foodie_adt_integrand.f90.html'>foodie_adt_integrand.f90</a></li>
                   
                 
                   
-                    <li><a href='./sourcefile/flap_command_line_arguments_group_t.f90.html'>flap_command_line_arguments_group_t.f90</a></li>
+                    <li><a href='./sourcefile/foodie_error_codes.f90.html'>foodie_error_codes.f90</a></li>
                   
                 
                   
-                    <li><a href='./sourcefile/flap_command_line_interface_t.f90.html'>flap_command_line_interface_t.F90</a></li>
+                    <li><a href='./sourcefile/foodie_integrator_adams_bashforth.f90.html'>foodie_integrator_adams_bashforth.f90</a></li>
                   
                 
                   
@@ -438,82 +476,12 @@
                 
                   
                 
-                  
-                
-                  
-                
-                  
-                
-                  
-                
-                  
-                
-                  
-                
-                  
-                
-                  
-                
-                  
-                
-                  
-                
-                  
-                
-                  
-                
-                  
-                
-                  
-                
-                  
-                
-                  
-                
-                  
-                
-                  
-                
-                  
-                
-                  
-                
-                  
-                
-                  
-                
-                  
-                
               </ul>
           </div>
           
-          <div class="col-lg-3">
+		  <div class="col-xs-6 col-sm-3">
               <h3>Modules</h3>
               <ul>
-                
-                  
-                    <li><a href='./module/flap.html'>flap</a></li>
-                  
-                
-                  
-                    <li><a href='./module/flap_command_line_argument_t.html'>flap_command_line_argument_t</a></li>
-                  
-                
-                  
-                    <li><a href='./module/flap_command_line_arguments_group_t.html'>flap_command_line_arguments_group_t</a></li>
-                  
-                
-                  
-                    <li><a href='./module/flap_command_line_interface_t.html'>flap_command_line_interface_t</a></li>
-                  
-                
-                  
-                    <li><a href='./module/flap_object_t.html'>flap_object_t</a></li>
-                  
-                
-                  
-                    <li><a href='./module/flap_utils_m.html'>flap_utils_m</a></li>
-                  
                 
                   
                     <li><a href='./module/foodie.html'>foodie</a></li>
@@ -524,11 +492,35 @@
                   
                 
                   
+                    <li><a href='./module/foodie_error_codes.html'>foodie_error_codes</a></li>
+                  
+                
+                  
                     <li><a href='./module/foodie_integrator_adams_bashforth.html'>foodie_integrator_adams_bashforth</a></li>
                   
                 
                   
                     <li><a href='./module/foodie_integrator_adams_bashforth_moulton.html'>foodie_integrator_adams_bashforth_moulton</a></li>
+                  
+                
+                  
+                    <li><a href='./module/foodie_integrator_adams_moulton.html'>foodie_integrator_adams_moulton</a></li>
+                  
+                
+                  
+                    <li><a href='./module/foodie_integrator_backward_differentiation_formula.html'>foodie_integrator_backward_differentiation_formula</a></li>
+                  
+                
+                  
+                    <li><a href='./module/foodie_integrator_euler_explicit.html'>foodie_integrator_euler_explicit</a></li>
+                  
+                
+                  
+                    <li><a href='./module/foodie_integrator_leapfrog.html'>foodie_integrator_leapfrog</a></li>
+                  
+                
+                  
+                    <li><a href='./module/foodie_integrator_lmm_ssp.html'>foodie_integrator_lmm_ssp</a></li>
                   
                 
                   
@@ -565,49 +557,11 @@
                 
                   
                 
-                  
-                
-                  
-                
-                  
-                
-                  
-                
-                  
-                
-                  
-                
-                  
-                
-                  
-                
-                  
-                
-                  
-                
-                  
-                
-                  
-                
-                  
-                
-                  
-                
-                  
-                
-                  
-                
-                  
-                
-                  
-                
-                  
-                
               </ul>
           </div>
           
           
-          <div class="col-lg-3">
+		  <div class="col-xs-6 col-sm-3">
               <h3>Procedures</h3>
               <ul>
                 
@@ -632,23 +586,23 @@
                   
                 
                   
-                    <li><a href='./proc/add.html'>add</a></li>
+                    <li><a href='./proc/add_burgers.html'>add_burgers</a></li>
                   
                 
                   
-                    <li><a href='./proc/add%7E2.html'>add</a></li>
+                    <li><a href='./proc/add_euler.html'>add_euler</a></li>
                   
                 
                   
-                    <li><a href='./proc/add_3d_plot.html'>add_3d_plot</a></li>
+                    <li><a href='./proc/add_euler%7E2.html'>add_euler</a></li>
                   
                 
                   
-                    <li><a href='./proc/add_3d_plot%7E2.html'>add_3d_plot</a></li>
+                    <li><a href='./proc/add_euler%7E3.html'>add_euler</a></li>
                   
                 
                   
-                    <li><a href='./proc/add_bar.html'>add_bar</a></li>
+                    <li><a href='./proc/add_lorenz.html'>add_lorenz</a></li>
                   
                 
                   
@@ -1241,668 +1195,52 @@
                 
                   
                 
-                  
-                
-                  
-                
-                  
-                
-                  
-                
-                  
-                
-                  
-                
-                  
-                
-                  
-                
-                  
-                
-                  
-                
-                  
-                
-                  
-                
-                  
-                
-                  
-                
-                  
-                
-                  
-                
-                  
-                
-                  
-                
-                  
-                
-                  
-                
-                  
-                
-                  
-                
-                  
-                
-                  
-                
-                  
-                
-                  
-                
-                  
-                
-                  
-                
-                  
-                
-                  
-                
-                  
-                
-                  
-                
-                  
-                
-                  
-                
-                  
-                
-                  
-                
-                  
-                
-                  
-                
-                  
-                
-                  
-                
-                  
-                
-                  
-                
-                  
-                
-                  
-                
-                  
-                
-                  
-                
-                  
-                
-                  
-                
-                  
-                
-                  
-                
-                  
-                
-                  
-                
-                  
-                
-                  
-                
-                  
-                
-                  
-                
-                  
-                
-                  
-                
-                  
-                
-                  
-                
-                  
-                
-                  
-                
-                  
-                
-                  
-                
-                  
-                
-                  
-                
-                  
-                
-                  
-                
-                  
-                
-                  
-                
-                  
-                
-                  
-                
-                  
-                
-                  
-                
-                  
-                
-                  
-                
-                  
-                
-                  
-                
-                  
-                
-                  
-                
-                  
-                
-                  
-                
-                  
-                
-                  
-                
-                  
-                
-                  
-                
-                  
-                
-                  
-                
-                  
-                
-                  
-                
-                  
-                
-                  
-                
-                  
-                
-                  
-                
-                  
-                
-                  
-                
-                  
-                
-                  
-                
-                  
-                
-                  
-                
-                  
-                
-                  
-                
-                  
-                
-                  
-                
-                  
-                
-                  
-                
-                  
-                
-                  
-                
-                  
-                
-                  
-                
-                  
-                
-                  
-                
-                  
-                
-                  
-                
-                  
-                
-                  
-                
-                  
-                
-                  
-                
-                  
-                
-                  
-                
-                  
-                
-                  
-                
-                  
-                
-                  
-                
-                  
-                
-                  
-                
-                  
-                
-                  
-                
-                  
-                
-                  
-                
-                  
-                
-                  
-                
-                  
-                
-                  
-                
-                  
-                
-                  
-                
-                  
-                
-                  
-                
-                  
-                
-                  
-                
-                  
-                
-                  
-                
-                  
-                
-                  
-                
-                  
-                
-                  
-                
-                  
-                
-                  
-                
-                  
-                
-                  
-                
-                  
-                
-                  
-                
-                  
-                
-                  
-                
-                  
-                
-                  
-                
-                  
-                
-                  
-                
-                  
-                
-                  
-                
-                  
-                
-                  
-                
-                  
-                
-                  
-                
-                  
-                
-                  
-                
-                  
-                
-                  
-                
-                  
-                
-                  
-                
-                  
-                
-                  
-                
-                  
-                
-                  
-                
-                  
-                
-                  
-                
-                  
-                
-                  
-                
-                  
-                
-                  
-                
-                  
-                
-                  
-                
-                  
-                
-                  
-                
-                  
-                
-                  
-                
-                  
-                
-                  
-                
-                  
-                
-                  
-                
-                  
-                
-                  
-                
-                  
-                
-                  
-                
-                  
-                
-                  
-                
-                  
-                
-                  
-                
-                  
-                
-                  
-                
-                  
-                
-                  
-                
-                  
-                
-                  
-                
-                  
-                
-                  
-                
-                  
-                
-                  
-                
-                  
-                
-                  
-                
-                  
-                
-                  
-                
-                  
-                
-                  
-                
-                  
-                
-                  
-                
-                  
-                
-                  
-                
-                  
-                
-                  
-                
-                  
-                
-                  
-                
-                  
-                
-                  
-                
-                  
-                
-                  
-                
-                  
-                
-                  
-                
-                  
-                
-                  
-                
-                  
-                
-                  
-                
-                  
-                
-                  
-                
-                  
-                
-                  
-                
-                  
-                
-                  
-                
-                  
-                
-                  
-                
-                  
-                
-                  
-                
-                  
-                
-                  
-                
-                  
-                
-                  
-                
-                  
-                
-                  
-                
-                  
-                
-                  
-                
-                  
-                
-                  
-                
-                  
-                
-                  
-                
-                  
-                
-                  
-                
-                  
-                
-                  
-                
-                  
-                
-                  
-                
-                  
-                
-                  
-                
-                  
-                
-                  
-                
-                  
-                
-                  
-                
-                  
-                
-                  
-                
-                  
-                
-                  
-                
-                  
-                
-                  
-                
-                  
-                
-                  
-                
-                  
-                
-                  
-                
-                  
-                
-                  
-                
-                  
-                
-                  
-                
-                  
-                
-                  
-                
-                  
-                
-                  
-                
-                  
-                
-                  
-                
-                  
-                
-                  
-                
-                  
-                
-                  
-                
-                  
-                
-                  
-                
-                  
-                
-                  
-                
-                  
-                
-                  
-                
-                  
-                
-                  
-                
-                  
-                
-                  
-                
-                  
-                
-                  
-                
-                  
-                
-                  
-                
-                  
-                
-                  
-                
-                  
-                
-                  
-                
               </ul>
           </div>
           
           
-          <div class="col-lg-3">
+		  <div class="col-xs-6 col-sm-3">
               <h3>Derived Types</h3>
               <ul>
-                
-                  
-                    <li><a href='./type/adams_bashforth_integrator.html'>adams_bashforth_integrator</a></li>
-                  
-                
-                  
-                    <li><a href='./type/adams_bashforth_moulton_integrator.html'>adams_bashforth_moulton_integrator</a></li>
-                  
-                
-                  
-                    <li><a href='./type/adams_moulton_integrator.html'>adams_moulton_integrator</a></li>
-                  
-                
-                  
-                    <li><a href='./type/back_df_integrator.html'>back_df_integrator</a></li>
-                  
                 
                   
                     <li><a href='./type/burgers.html'>burgers</a></li>
                   
                 
                   
-                    <li><a href='./type/command_line_argument.html'>command_line_argument</a></li>
-                  
-                
-                  
-                    <li><a href='./type/command_line_arguments_group.html'>command_line_arguments_group</a></li>
-                  
-                
-                  
-                    <li><a href='./type/command_line_interface.html'>command_line_interface</a></li>
-                  
-                
-                  
-                    <li><a href='./type/emd_runge_kutta_integrator.html'>emd_runge_kutta_integrator</a></li>
-                  
-                
-                  
                     <li><a href='./type/euler_1d.html'>euler_1D</a></li>
+                  
+                
+                  
+                    <li><a href='./type/euler_1d_caf.html'>euler_1D_caf</a></li>
+                  
+                
+                  
+                    <li><a href='./type/euler_1d_caf_nf.html'>euler_1D_caf_nf</a></li>
+                  
+                
+                  
+                    <li><a href='./type/euler_1d_omp_nf.html'>euler_1D_omp_nf</a></li>
+                  
+                
+                  
+                    <li><a href='./type/euler_1d_openmp.html'>euler_1D_openmp</a></li>
+                  
+                
+                  
+                    <li><a href='./type/integrand.html'>integrand</a></li>
+                  
+                
+                  
+                    <li><a href='./type/integrator_adams_bashforth.html'>integrator_adams_bashforth</a></li>
+                  
+                
+                  
+                    <li><a href='./type/integrator_adams_bashforth_moulton.html'>integrator_adams_bashforth_moulton</a></li>
+                  
+                
+                  
+                    <li><a href='./type/integrator_adams_moulton.html'>integrator_adams_moulton</a></li>
                   
                 
                   
@@ -1935,44 +1273,29 @@
                 
                   
                 
-                  
-                
-                  
-                
-                  
-                
-                  
-                
-                  
-                
-                  
-                
-                  
-                
-                  
-                
               </ul>
           </div>
           
       </div>
 
-    <hr>
+    <hr>    
+    </div> <!-- /container -->
     <footer>
+      <div class="container">
       <div class="row">
-        <div class="col-md-4">&copy; 2016 </div>
-        <div class="col-md-4"><span class="text-center"> FOODIE was developed by Fortran-FOSS-Programmers Group</span></div>
-        <div class="col-md-4">
-          <span class="pull-right">
+        <div class="col-xs-6 col-md-4"><p>&copy; 2017 </p></div>
+        <div class="col-xs-6 col-md-4 col-md-push-4">
+          <p class="text-right">
             Documentation generated by 
             <a href="https://github.com/cmacmackin/ford">FORD</a>
-            
-          </span>
+             on 2017-03-31 16:42  
+          </p>
         </div>
+        <div class="col-xs-12 col-md-4 col-md-pull-4"><p class="text-center"> FOODIE was developed by Fortran-FOSS-Programmers Group</p></div>
       </div>
       <br>
+      </div> <!-- /container -->    
     </footer>
-    </div> <!-- /container -->
-
 
     <!-- Bootstrap core JavaScript
     ================================================== -->
