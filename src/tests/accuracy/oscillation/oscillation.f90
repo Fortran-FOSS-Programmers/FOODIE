@@ -11,6 +11,7 @@ use foodie, only : integrator_adams_bashforth,         &
                    integrator_euler_explicit,          &
                    integrator_leapfrog,                &
                    integrator_lmm_ssp,                 &
+                   integrator_lmm_ssp_vss,             &
                    integrator_runge_kutta_emd,         &
                    integrator_runge_kutta_ls,          &
                    integrator_runge_kutta_tvd
@@ -24,7 +25,7 @@ public :: oscillation_test
 
 integer,       parameter :: space_dimension=2                                !< Space dimensions.
 real(R_P),     parameter :: initial_state(1:space_dimension)=[0._R_P,1._R_P] !< Initial state.
-character(99), parameter :: solvers(1:12) = ["all                    ", &
+character(99), parameter :: solvers(1:13) = ["all                    ", &
                                              "adams-bashforth        ", &
                                              "adams-bashforth-moulton", &
                                              "adams-moulton          ", &
@@ -34,6 +35,7 @@ character(99), parameter :: solvers(1:12) = ["all                    ", &
                                              "leapfrog               ", &
                                              "leapfrog-raw           ", &
                                              "lmm-ssp                ", &
+                                             "lmm-ssp-vss            ", &
                                              "ls-runge-kutta         ", &
                                              "tvd-runge-kutta        "]      !< List of available solvers.
 
@@ -54,6 +56,7 @@ type :: oscillation_test
   logical                      :: plots=.false.            !< Flag for activating plots saving.
   logical                      :: results=.false.          !< Flag for activating results saving.
   character(99)                :: solver='adams-bashforth' !< Solver used.
+  integer(I_P)                 :: order=0                  !< (Formal) Order of accuracy.
   integer(I_P), allocatable    :: stages_steps(:)          !< Number of stages/steps used.
   real(R_P),    allocatable    :: Dt(:)                    !< Time step(s) exercised.
   real(R_P),    allocatable    :: tolerance(:)             !< Tolerance(s) exercised on local truncation error.
@@ -108,6 +111,7 @@ contains
       call cli%add(switch='--iterations', help='Number of iterations for implicit solvers', required=.false., act='store', def='5')
       call cli%add(switch='--frequency', switch_ab='-f', help='Oscillation frequency', required=.false., def='1e-4', act='store')
       call cli%add(switch='--ss', nargs='+', help='Stages/steps used', required=.false., def='-1', act='store')
+      call cli%add(switch='--order', switch_ab='-o', help='ODE solver order', required=.false., def='1', act='store')
       call cli%add(switch='--time_step', switch_ab='-Dt', nargs='+', help='Time step', required=.false., def='100.d0', act='store')
       call cli%add(switch='--tolerance', switch_ab='-tol', nargs='+', help='Error Tolerance', required=.false., def='0.001d0', &
                    act='store')
@@ -128,6 +132,7 @@ contains
     call self%cli%get(switch='--iterations', val=self%implicit_iterations, error=self%error) ; if (self%error/=0) stop
     call self%cli%get(switch='-f', val=self%frequency, error=self%error) ; if (self%error/=0) stop
     call self%cli%get_varying(switch='--ss', val=self%stages_steps, error=self%error) ; if (self%error/=0) stop
+    call self%cli%get(switch='-o', val=self%order, error=self%error) ; if (self%error/=0) stop
     call self%cli%get_varying(switch='-Dt', val=self%Dt, error=self%error) ; if (self%error/=0) stop
     call self%cli%get_varying(switch='-tol', val=self%tolerance, error=self%error) ; if (self%error/=0) stop
     call self%cli%get(switch='-tf', val=self%final_time, error=self%error) ; if (self%error/=0) stop
@@ -163,7 +168,7 @@ contains
     integer(I_P) :: s               !< Counter.
 
     is_solver_valid = .false.
-    do s=1, ubound(solvers, dim=1)
+    do s=lbound(solvers, dim=1), ubound(solvers, dim=1)
       is_solver_valid = (trim(adjustl(self%solver))==trim(adjustl(solvers(s))))
       if (is_solver_valid) exit
     enddo
@@ -187,7 +192,7 @@ contains
     integer(I_P)                  :: s    !< Solvers counter.
 
     list = 'Valid solver names are:' // new_line('a')
-    do s=1, ubound(solvers, dim=1)
+    do s=lbound(solvers, dim=1), ubound(solvers, dim=1)
       list = list // '  + ' // trim(adjustl(solvers(s))) // new_line('a')
     enddo
     endfunction list_solvers
@@ -198,16 +203,17 @@ contains
   class(oscillation_test), intent(in) :: self   !< Test.
   character(*),            intent(in) :: solver !< Selected solver.
   ! FOODIE integrators
-  type(integrator_adams_bashforth)         :: ab_integrator      !< Adams-Bashforth integrator.
-  type(integrator_adams_bashforth_moulton) :: abm_integrator     !< Adams-Bashforth-Moulton integrator.
-  type(integrator_adams_moulton)           :: am_integrator      !< Adams-Moulton integrator.
-  type(integrator_back_df)                 :: bdf_integrator     !< BDF integrator.
-  type(integrator_runge_kutta_emd)         :: emd_rk_integrator  !< Runge-Kutta integrator.
-  type(integrator_euler_explicit)          :: euler_integrator   !< Euler integrator.
-  type(integrator_leapfrog)                :: lf_integrator      !< Leapfrog integrator.
-  type(integrator_lmm_ssp)                 :: lmm_ssp_integrator !< LMM SSP integrator.
-  type(integrator_runge_kutta_ls)          :: ls_rk_integrator   !< Low Storage Runge-Kutta integrator.
-  type(integrator_runge_kutta_tvd)         :: tvd_rk_integrator  !< TVD Runge-Kutta integrator.
+  type(integrator_adams_bashforth)         :: ab_integrator          !< Adams-Bashforth integrator.
+  type(integrator_adams_bashforth_moulton) :: abm_integrator         !< Adams-Bashforth-Moulton integrator.
+  type(integrator_adams_moulton)           :: am_integrator          !< Adams-Moulton integrator.
+  type(integrator_back_df)                 :: bdf_integrator         !< BDF integrator.
+  type(integrator_runge_kutta_emd)         :: emd_rk_integrator      !< Runge-Kutta integrator.
+  type(integrator_euler_explicit)          :: euler_integrator       !< Euler integrator.
+  type(integrator_leapfrog)                :: lf_integrator          !< Leapfrog integrator.
+  type(integrator_lmm_ssp)                 :: lmm_ssp_integrator     !< LMM SSP integrator.
+  type(integrator_lmm_ssp_vss)             :: lmm_ssp_vss_integrator !< LMM SSP VSS integrator.
+  type(integrator_runge_kutta_ls)          :: ls_rk_integrator       !< Low Storage Runge-Kutta integrator.
+  type(integrator_runge_kutta_tvd)         :: tvd_rk_integrator      !< TVD Runge-Kutta integrator.
   ! Auxiliary variables
   real(R_P), allocatable :: solution(:,:)           !< Solution at each time step.
   real(R_P), allocatable :: error(:,:)              !< Error (norm L2) with respect the exact solution.
@@ -246,6 +252,8 @@ contains
       stages_steps_range = [lf_integrator%min_steps(), lf_integrator%max_steps()]
     case('lmm-ssp')
       stages_steps_range = [lmm_ssp_integrator%min_steps(), lmm_ssp_integrator%max_steps()]
+    case('lmm-ssp-vss')
+      stages_steps_range = [lmm_ssp_vss_integrator%min_steps(), lmm_ssp_vss_integrator%max_steps()]
     case('ls-runge-kutta')
       stages_steps_range = [ls_rk_integrator%min_stages(), ls_rk_integrator%max_stages()]
     case('tvd-runge-kutta')
@@ -284,6 +292,7 @@ contains
                    frequency=self%frequency,            &
                    final_time=self%final_time,          &
                    stages_steps=s,                      &
+                   order=self%order,                    &
                    iterations=self%implicit_iterations, &
                    solution=solution,                   &
                    error=error(:, t),                   &
@@ -300,11 +309,11 @@ contains
             order(:, t-1) = observed_order(error=error(:, t-1:t), Dt=Dt_mean(t-1:t))
             print "(A,F10.2,A,F10.2)", "      Observed order, O(x): ", order(1, t-1), ", O(y): " , order(2, t-1)
           endif
-          call save_results(results=self%results,                                    &
-                            plots=self%plots,                                        &
-                            output_cli=self%output_cli,                              &
-                            solver=trim(adjustl(solver))//'-'//trim(str(s, .true.)), &
-                            frequency=self%frequency,                                &
+          call save_results(results=self%results,                                                                              &
+                            plots=self%plots,                                                                                  &
+                            output_cli=self%output_cli,                                                                        &
+                            solver=trim(adjustl(solver))//'-'//trim(str(s, .true.))//'-order_'//trim(str(self%order, .true.)), &
+                            frequency=self%frequency,                                                                          &
                             solution=solution(:, 0:last_step))
         endif
       enddo
@@ -314,6 +323,7 @@ contains
                    frequency=self%frequency,            &
                    final_time=self%final_time,          &
                    stages_steps=s,                      &
+                   order=self%order,                    &
                    iterations=self%implicit_iterations, &
                    solution=solution,                   &
                    error=error(:, t),                   &
@@ -329,11 +339,11 @@ contains
             order(:, t-1) = observed_order(error=error(:, t-1:t), Dt=self%Dt(t-1:t))
             print "(A,F10.2,A,F10.2)", "      Observed order, O(x): ", order(1, t-1), ", O(y): " , order(2, t-1)
           endif
-          call save_results(results=self%results,                                    &
-                            plots=self%plots,                                        &
-                            output_cli=self%output_cli,                              &
-                            solver=trim(adjustl(solver))//'-'//trim(str(s, .true.)), &
-                            frequency=self%frequency,                                &
+          call save_results(results=self%results,                                                                              &
+                            plots=self%plots,                                                                                  &
+                            output_cli=self%output_cli,                                                                        &
+                            solver=trim(adjustl(solver))//'-'//trim(str(s, .true.))//'-order_'//trim(str(self%order, .true.)), &
+                            frequency=self%frequency,                                                                          &
                             solution=solution(:, 0:last_step))
         endif
       enddo
@@ -342,7 +352,7 @@ contains
   endsubroutine test
 
   ! non type bound procedures
-  subroutine solve(solver, frequency, final_time, stages_steps, iterations, solution, error, last_step, Dt, tolerance)
+  subroutine solve(solver, frequency, final_time, stages_steps, order, iterations, solution, error, last_step, Dt, tolerance)
   !< Rune the solver selected.
   !<
   !< The actual solver is selected by means of the *solver* input string that must be a valid string as defined into *solvers*
@@ -351,6 +361,7 @@ contains
   real(R_P),              intent(in)  :: frequency     !< Oscillation frequency.
   real(R_P),              intent(in)  :: final_time    !< Final integration time.
   integer(I_P),           intent(in)  :: stages_steps  !< Number of stages/steps used.
+  integer(I_P),           intent(in)  :: order         !< (Formal) order of accuracy.
   integer(I_P),           intent(in)  :: iterations    !< Number of fixed point iterations.
   real(R_P), allocatable, intent(out) :: solution(:,:) !< Solution at each time step, X-Y.
   real(R_P),              intent(out) :: error(1:)     !< Error (norm L2) with respect the exact solution.
@@ -358,16 +369,17 @@ contains
   real(R_P), optional,    intent(in)  :: Dt            !< Time step.
   real(R_P), optional,    intent(in)  :: tolerance     !< Local error tolerance.
   ! FOODIE integrators
-  type(integrator_adams_bashforth)         :: ab_integrator      !< Adams-Bashforth integrator.
-  type(integrator_adams_bashforth_moulton) :: abm_integrator     !< Adams-Bashforth-Moulton integrator.
-  type(integrator_adams_moulton)           :: am_integrator      !< Adams-Moulton integrator.
-  type(integrator_back_df)                 :: bdf_integrator     !< BDF integrator.
-  type(integrator_runge_kutta_emd)         :: emd_rk_integrator  !< Runge-Kutta integrator.
-  type(integrator_euler_explicit)          :: euler_integrator   !< Euler integrator.
-  type(integrator_leapfrog)                :: lf_integrator      !< Leapfrog integrator.
-  type(integrator_lmm_ssp)                 :: lmm_ssp_integrator !< LMM SSP integrator.
-  type(integrator_runge_kutta_ls)          :: ls_rk_integrator   !< Low Storage Runge-Kutta integrator.
-  type(integrator_runge_kutta_tvd)         :: tvd_rk_integrator  !< TVD Runge-Kutta integrator.
+  type(integrator_adams_bashforth)         :: ab_integrator          !< Adams-Bashforth integrator.
+  type(integrator_adams_bashforth_moulton) :: abm_integrator         !< Adams-Bashforth-Moulton integrator.
+  type(integrator_adams_moulton)           :: am_integrator          !< Adams-Moulton integrator.
+  type(integrator_back_df)                 :: bdf_integrator         !< BDF integrator.
+  type(integrator_runge_kutta_emd)         :: emd_rk_integrator      !< Runge-Kutta integrator.
+  type(integrator_euler_explicit)          :: euler_integrator       !< Euler integrator.
+  type(integrator_leapfrog)                :: lf_integrator          !< Leapfrog integrator.
+  type(integrator_lmm_ssp)                 :: lmm_ssp_integrator     !< LMM SSP integrator.
+  type(integrator_lmm_ssp_vss)             :: lmm_ssp_vss_integrator !< LMM SSP VSS integrator.
+  type(integrator_runge_kutta_ls)          :: ls_rk_integrator       !< Low Storage Runge-Kutta integrator.
+  type(integrator_runge_kutta_tvd)         :: tvd_rk_integrator      !< TVD Runge-Kutta integrator.
   ! Auxiliary variables
   integer(I_P), parameter        :: max_rk_stages=5 !< Max RK stages used to init high order multi-step solver.
   type(oscillation)              :: oscillator      !< Oscillation field.
@@ -376,6 +388,7 @@ contains
   integer                        :: step_offset     !< Time steps counter offset for slicing previous data array.
   logical                        :: adaptive        !< Flag for tagging time step adaptive class of solvers.
   real(R_P)                      :: Dt_a            !< Adaptive time step.
+  real(R_P), allocatable         :: Dts(:)          !< Time steps for variable stepsize methods.
   type(oscillation), allocatable :: rk_stage(:)     !< Runge-Kutta stages.
   type(oscillation), allocatable :: previous(:)     !< Previous time steps solutions.
   type(oscillation)              :: filter          !< Filter displacement.
@@ -452,6 +465,13 @@ contains
     supported = lmm_ssp_integrator%is_supported(stages_steps)
     multistep = .true.
     call lmm_ssp_integrator%init(steps=stages_steps)
+    if (allocated(previous)) deallocate(previous) ; allocate(previous(1:stages_steps))
+
+  case("lmm-ssp-vss")
+    supported = lmm_ssp_vss_integrator%is_supported(steps=stages_steps, order=order)
+    multistep = .true.
+    call lmm_ssp_vss_integrator%init(steps=stages_steps, order=order)
+    if (allocated(Dts)) deallocate(Dts) ; allocate(Dts(1:stages_steps)) ; Dts = Dt
     if (allocated(previous)) deallocate(previous) ; allocate(previous(1:stages_steps))
 
   case("ls-runge-kutta")
@@ -546,6 +566,11 @@ contains
                                             previous=previous, &
                                             Dt=Dt,             &
                                             t=solution(0, step-step_offset:step-1))
+        case("lmm-ssp-vss")
+          call lmm_ssp_vss_integrator%integrate(U=oscillator,      &
+                                                previous=previous, &
+                                                Dt=Dts,            &
+                                                t=solution(0, step-step_offset:step-1))
         endselect
       endif
     else

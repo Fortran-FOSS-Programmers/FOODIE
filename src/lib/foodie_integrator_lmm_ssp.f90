@@ -115,39 +115,39 @@ contains
   if (self%is_supported(steps)) then
     call self%destroy
     self%steps = steps
-    allocate(self%a(1:steps)) ; self%a = 0.0_R_P
-    allocate(self%b(1:steps)) ; self%b = 0.0_R_P
+    allocate(self%a(1:steps)) ; self%a = 0._R_P
+    allocate(self%b(1:steps)) ; self%b = 0._R_P
     select case(steps)
     case(3) ! LMM-SSP(3,2)
-      self%a(1) = 1.0_R_P/4.0_R_P
-      self%a(2) = 0.0_R_P
-      self%a(3) = 3.0_R_P/4.0_R_P
+      self%a(1) = 1._R_P/4._R_P
+      self%a(2) = 0._R_P
+      self%a(3) = 3._R_P/4._R_P
 
-      self%b(1) = 0.0_R_P
-      self%b(2) = 0.0_R_P
-      self%b(3) = 3.0_R_P/2.0_R_P
+      self%b(1) = 0._R_P
+      self%b(2) = 0._R_P
+      self%b(3) = 3._R_P/2._R_P
     case(4) ! LMM-SSP(4,3)
-      self%a(1) = 11.0_R_P/27.0_R_P
-      self%a(2) = 0.0_R_P
-      self%a(3) = 0.0_R_P
-      self%a(4) = 16.0_R_P/27.0_R_P
+      self%a(1) = 11._R_P/27._R_P
+      self%a(2) = 0._R_P
+      self%a(3) = 0._R_P
+      self%a(4) = 16._R_P/27._R_P
 
-      self%b(1) = 12.0_R_P/27.0_R_P
-      self%b(2) = 0.0_R_P
-      self%b(3) = 0.0_R_P
-      self%b(4) = 16.0_R_P/9.0_R_P
+      self%b(1) = 12._R_P/27._R_P
+      self%b(2) = 0._R_P
+      self%b(3) = 0._R_P
+      self%b(4) = 16._R_P/9._R_P
     case(5) ! LMM-SSP(5,3)
-      self%a(1) = 7.0_R_P/32.0_R_P
-      self%a(2) = 0.0_R_P
-      self%a(3) = 0.0_R_P
-      self%a(4) = 0.0_R_P
-      self%a(5) = 25.0_R_P/32.0_R_P
+      self%a(1) = 7._R_P/32._R_P
+      self%a(2) = 0._R_P
+      self%a(3) = 0._R_P
+      self%a(4) = 0._R_P
+      self%a(5) = 25._R_P/32._R_P
 
-      self%b(1) = 5.0_R_P/16.0_R_P
-      self%b(2) = 0.0_R_P
-      self%b(3) = 0.0_R_P
-      self%b(4) = 0.0_R_P
-      self%b(5) = 25.0_R_P/16.0_R_P
+      self%b(1) = 5._R_P/16._R_P
+      self%b(2) = 0._R_P
+      self%b(3) = 0._R_P
+      self%b(4) = 0._R_P
+      self%b(5) = 25._R_P/16._R_P
     endselect
   else
     call self%trigger_error(error=ERROR_BAD_STEPS_NUMBER,                           &
@@ -170,7 +170,9 @@ contains
   autoupdate_ = .true. ; if (present(autoupdate)) autoupdate_ = autoupdate
   U = U * 0._R_P
   do s=1, self%steps
-    U = U + previous(s) * self%a(s) + previous(s)%t(t=t(s)) * (Dt * self%b(s))
+    if (self%a(s) /= 0._R_P) U = U + previous(s) * self%a(s)
+    if (self%b(s) /= 0._R_P) U = U + previous(s)%t(t=t(s)) * (Dt * self%b(s))
+    ! U = U + previous(s) * self%a(s) + previous(s)%t(t=t(s)) * (Dt * self%b(s))
   enddo
   if (autoupdate_) call self%update_previous(U=U, previous=previous)
   endsubroutine integrate

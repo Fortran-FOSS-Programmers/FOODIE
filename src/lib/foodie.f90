@@ -72,6 +72,7 @@ use foodie_integrator_backward_differentiation_formula, only : integrator_back_d
 use foodie_integrator_euler_explicit, only : integrator_euler_explicit
 use foodie_integrator_leapfrog, only : integrator_leapfrog
 use foodie_integrator_lmm_ssp, only : integrator_lmm_ssp
+use foodie_integrator_lmm_ssp_vss, only : integrator_lmm_ssp_vss
 use foodie_integrator_runge_kutta_emd, only : integrator_runge_kutta_emd
 use foodie_integrator_runge_kutta_low_storage, only : integrator_runge_kutta_ls
 use foodie_integrator_runge_kutta_tvd, only : integrator_runge_kutta_tvd
@@ -87,13 +88,14 @@ public :: integrator_back_df
 public :: integrator_euler_explicit
 public :: integrator_leapfrog
 public :: integrator_lmm_ssp
+public :: integrator_lmm_ssp_vss
 public :: integrator_runge_kutta_emd
 public :: integrator_runge_kutta_ls
 public :: foodie_integrator
 public :: integrator_runge_kutta_tvd
 
 contains
-  function foodie_integrator(scheme, steps, stages, tolerance, nu, alpha) result(integrator)
+  function foodie_integrator(scheme, steps, stages, order, tolerance, nu, alpha) result(integrator)
   !< Return a concrete instance of [[integrator]] given a scheme selection.
   !<
   !< This is the FOODIE integrators factory.
@@ -102,6 +104,7 @@ contains
   character(*), intent(in)              :: scheme     !< Selected integrator given.
   integer(I_P), intent(in), optional    :: steps      !< Number of time steps used in multi-step schemes.
   integer(I_P), intent(in), optional    :: stages     !< Number of Runge-Kutta stages used in multi-stage schemes.
+  integer(I_P), intent(in), optional    :: order      !< Order of accuracy.
   real(R_P),    intent(in), optional    :: tolerance  !< Tolerance on the local truncation error.
   real(R_P),    intent(in), optional    :: nu         !< Williams-Robert-Asselin filter coefficient.
   real(R_P),    intent(in), optional    :: alpha      !< Robert-Asselin filter coefficient.
@@ -175,6 +178,18 @@ contains
       call integrator%trigger_error(error=ERROR_MISSING_STEPS_NUMBER,                                  &
                                     error_message='missing steps number for initializing integrator!', &
                                     is_severe=.true.)
+    endif
+  case('lmm_ssp_vss')
+    allocate(integrator_lmm_ssp_vss :: integrator)
+    if ((.not.present(steps)).or.(.not.present(order))) then
+      call integrator%trigger_error(error=ERROR_MISSING_STEPS_NUMBER,                                  &
+                                    error_message='missing steps number for initializing integrator!', &
+                                    is_severe=.true.)
+    else
+      select type(integrator)
+      type is(integrator_lmm_ssp_vss)
+        call integrator%init(steps=steps, order=order)
+      endselect
     endif
   case('runge_kutta_emd')
     allocate(integrator_runge_kutta_emd :: integrator)
