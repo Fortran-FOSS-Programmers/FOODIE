@@ -74,6 +74,7 @@ use foodie_integrator_euler_explicit, only : integrator_euler_explicit
 use foodie_integrator_leapfrog, only : integrator_leapfrog
 use foodie_integrator_lmm_ssp, only : integrator_lmm_ssp
 use foodie_integrator_lmm_ssp_vss, only : integrator_lmm_ssp_vss
+use foodie_integrator_ms_runge_kutta_ssp, only : integrator_ms_runge_kutta_ssp
 use foodie_integrator_runge_kutta_emd, only : integrator_runge_kutta_emd
 use foodie_integrator_runge_kutta_low_storage, only : integrator_runge_kutta_ls
 use foodie_integrator_runge_kutta_ssp, only : integrator_runge_kutta_ssp
@@ -93,6 +94,7 @@ public :: integrator_euler_explicit
 public :: integrator_leapfrog
 public :: integrator_lmm_ssp
 public :: integrator_lmm_ssp_vss
+public :: integrator_ms_runge_kutta_ssp
 public :: integrator_runge_kutta_emd
 public :: integrator_runge_kutta_ls
 public :: integrator_runge_kutta_ssp
@@ -120,6 +122,7 @@ contains
   type(integrator_leapfrog)                :: int_leapfrog                !< Integrator leapfrog.
   type(integrator_lmm_ssp)                 :: int_lmm_ssp                 !< Integrator lmm ssp.
   type(integrator_lmm_ssp_vss)             :: int_lmm_ssp_vss             !< Integrator lmm ssp_vss.
+  type(integrator_ms_runge_kutta_ssp)      :: int_ms_runge_kutta_ssp      !< Integrator multistep Runge Kutta ssp.
   type(integrator_runge_kutta_emd)         :: int_runge_kutta_emd         !< Integrator Runge Kutta_embdedded.
   type(integrator_runge_kutta_ls)          :: int_runge_kutta_ls          !< Integrator Runge Kutta low storage.
   type(integrator_runge_kutta_ssp)         :: int_runge_kutta_ssp         !< Integrator Runge Kutta ssp.
@@ -168,6 +171,12 @@ contains
     type is(integrator_lmm_ssp)
       call integrator%initialize(scheme=scheme)
     endselect
+  elseif (index(trim(adjustl(scheme)), trim(int_ms_runge_kutta_ssp%class_name())) > 0) then
+    allocate(integrator_ms_runge_kutta_ssp :: integrator)
+    select type(integrator)
+    type is(integrator_ms_runge_kutta_ssp)
+      call integrator%initialize(scheme=scheme)
+    endselect
   elseif (index(trim(adjustl(scheme)), trim(int_runge_kutta_emd%class_name())) > 0) then
     allocate(integrator_runge_kutta_emd :: integrator)
     select type(integrator)
@@ -203,6 +212,7 @@ contains
   type(integrator_leapfrog)                :: int_leapfrog                !< Integrator leapfrog.
   type(integrator_lmm_ssp)                 :: int_lmm_ssp                 !< Integrator lmm ssp.
   type(integrator_lmm_ssp_vss)             :: int_lmm_ssp_vss             !< Integrator lmm ssp_vss.
+  type(integrator_ms_runge_kutta_ssp)      :: int_ms_runge_kutta_ssp      !< Integrator multistep Runge Kutta ssp.
   type(integrator_runge_kutta_emd)         :: int_runge_kutta_emd         !< Integrator Runge Kutta_embdedded.
   type(integrator_runge_kutta_ls)          :: int_runge_kutta_ls          !< Integrator Runge Kutta low storage.
   type(integrator_runge_kutta_ssp)         :: int_runge_kutta_ssp         !< Integrator Runge Kutta ssp.
@@ -215,6 +225,7 @@ contains
   names = [names, int_leapfrog                % class_name()]
   names = [names, int_lmm_ssp                 % class_name()]
   names = [names, int_lmm_ssp_vss             % class_name()]
+  names = [names, int_ms_runge_kutta_ssp      % class_name()]
   names = [names, int_runge_kutta_emd         % class_name()]
   names = [names, int_runge_kutta_ls          % class_name()]
   names = [names, int_runge_kutta_ssp         % class_name()]
@@ -235,6 +246,7 @@ contains
   type(integrator_leapfrog)                :: int_leapfrog                !< Integrator leapfrog.
   type(integrator_lmm_ssp)                 :: int_lmm_ssp                 !< Integrator lmm ssp.
   type(integrator_lmm_ssp_vss)             :: int_lmm_ssp_vss             !< Integrator lmm ssp_vss.
+  type(integrator_ms_runge_kutta_ssp)      :: int_ms_runge_kutta_ssp      !< Integrator multistep Runge Kutta ssp.
   type(integrator_runge_kutta_emd)         :: int_runge_kutta_emd         !< Integrator Runge Kutta_embdedded.
   type(integrator_runge_kutta_ls)          :: int_runge_kutta_ls          !< Integrator Runge Kutta low storage.
   type(integrator_runge_kutta_ssp)         :: int_runge_kutta_ssp         !< Integrator Runge Kutta ssp.
@@ -256,6 +268,8 @@ contains
       schemes = int_lmm_ssp%supported_schemes()
     elseif (trim(int_lmm_ssp_vss%class_name()) == trim(adjustl(class_name))) then
       schemes = int_lmm_ssp_vss%supported_schemes()
+    elseif (trim(int_ms_runge_kutta_ssp%class_name()) == trim(adjustl(class_name))) then
+      schemes = int_ms_runge_kutta_ssp%supported_schemes()
     elseif (trim(int_runge_kutta_emd%class_name()) == trim(adjustl(class_name))) then
       schemes = int_runge_kutta_emd%supported_schemes()
     elseif (trim(int_runge_kutta_ls%class_name()) == trim(adjustl(class_name))) then
@@ -272,6 +286,7 @@ contains
     schemes = [schemes, int_leapfrog                % supported_schemes()]
     schemes = [schemes, int_lmm_ssp                 % supported_schemes()]
     schemes = [schemes, int_lmm_ssp_vss             % supported_schemes()]
+    schemes = [schemes, int_ms_runge_kutta_ssp      % supported_schemes()]
     schemes = [schemes, int_runge_kutta_emd         % supported_schemes()]
     schemes = [schemes, int_runge_kutta_ls          % supported_schemes()]
     schemes = [schemes, int_runge_kutta_ssp         % supported_schemes()]

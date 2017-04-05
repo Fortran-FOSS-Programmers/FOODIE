@@ -134,18 +134,18 @@
      <li><i class="fa fa-list-ol"></i>
        <a data-toggle="tooltip"
 	  data-placement="bottom" data-html="true"
-	  title=" 0.2% of total for procedures.">19 statements</a>
+	  title=" 0.2% of total for procedures.">15 statements</a>
      </li> 
      
      
-    <li><i class="fa fa-code"></i><a href="../src/foodie_integrator_runge_kutta_ssp.f90"> Source File</a></li>
+    <li><i class="fa fa-code"></i><a href="../src/foodie_integrator_runge_kutta_low_storage.f90"> Source File</a></li>
      
   </ul>
   <ol class="breadcrumb in-well text-right">
   
-     <li><a href='../sourcefile/foodie_integrator_runge_kutta_ssp.f90.html'>foodie_integrator_runge_kutta_ssp.f90</a></li>
+     <li><a href='../sourcefile/foodie_integrator_runge_kutta_low_storage.f90.html'>foodie_integrator_runge_kutta_low_storage.f90</a></li>
   
-     <li><a href='../module/foodie_integrator_runge_kutta_ssp.html'>foodie_integrator_runge_kutta_ssp</a></li>
+     <li><a href='../module/foodie_integrator_runge_kutta_low_storage.html'>foodie_integrator_runge_kutta_low_storage</a></li>
   
      <li class="active">integrate</li>
   </ol>
@@ -261,6 +261,8 @@
       
       <a class="list-group-item" href="../proc/class_name%7E11.html">class_name</a>
       
+      <a class="list-group-item" href="../proc/class_name%7E12.html">class_name</a>
+      
       <a class="list-group-item" href="../proc/compute_dt.html">compute_dt</a>
       
       <a class="list-group-item" href="../proc/compute_dt%7E2.html">compute_dt</a>
@@ -321,6 +323,8 @@
       
       <a class="list-group-item" href="../proc/description%7E11.html">description</a>
       
+      <a class="list-group-item" href="../proc/description%7E12.html">description</a>
+      
       <a class="list-group-item" href="../proc/destroy.html">destroy</a>
       
       <a class="list-group-item" href="../proc/destroy%7E2.html">destroy</a>
@@ -352,6 +356,8 @@
       <a class="list-group-item" href="../proc/destroy%7E15.html">destroy</a>
       
       <a class="list-group-item" href="../proc/destroy%7E16.html">destroy</a>
+      
+      <a class="list-group-item" href="../proc/destroy%7E17.html">destroy</a>
       
       <a class="list-group-item" href="../proc/destroy_abstract.html">destroy_abstract</a>
       
@@ -505,6 +511,8 @@
       
       <a class="list-group-item" href="../proc/initialize%7E11.html">initialize</a>
       
+      <a class="list-group-item" href="../proc/initialize%7E12.html">initialize</a>
+      
       <a class="list-group-item" href="../proc/integr_assign_integr.html">integr_assign_integr</a>
       
       <a class="list-group-item" href="../proc/integr_assign_integr%7E2.html">integr_assign_integr</a>
@@ -527,6 +535,8 @@
       
       <a class="list-group-item" href="../proc/integr_assign_integr%7E11.html">integr_assign_integr</a>
       
+      <a class="list-group-item" href="../proc/integr_assign_integr%7E12.html">integr_assign_integr</a>
+      
       <a class="list-group-item" href="../proc/integrate.html">integrate</a>
       
       <a class="list-group-item" href="../proc/integrate%7E2.html">integrate</a>
@@ -548,6 +558,8 @@
       <a class="list-group-item" href="../proc/integrate%7E10.html">integrate</a>
       
       <a class="list-group-item" href="../proc/integrate%7E11.html">integrate</a>
+      
+      <a class="list-group-item" href="../proc/integrate%7E12.html">integrate</a>
       
       <a class="list-group-item" href="../proc/integrate_adams_bashforth.html">integrate_adams_bashforth</a>
       
@@ -608,6 +620,8 @@
       <a class="list-group-item" href="../proc/is_supported%7E10.html">is_supported</a>
       
       <a class="list-group-item" href="../proc/is_supported%7E11.html">is_supported</a>
+      
+      <a class="list-group-item" href="../proc/is_supported%7E12.html">is_supported</a>
       
       <a class="list-group-item" href="../proc/lorenz_assign_lorenz.html">lorenz_assign_lorenz</a>
       
@@ -781,6 +795,8 @@
       
       <a class="list-group-item" href="../proc/supported_schemes%7E11.html">supported_schemes</a>
       
+      <a class="list-group-item" href="../proc/supported_schemes%7E12.html">supported_schemes</a>
+      
       <a class="list-group-item" href="../proc/synchronize.html">synchronize</a>
       
       <a class="list-group-item" href="../proc/synchronize%7E2.html">synchronize</a>
@@ -835,6 +851,8 @@
       
       <a class="list-group-item" href="../proc/update_previous%7E5.html">update_previous</a>
       
+      <a class="list-group-item" href="../proc/update_previous%7E6.html">update_previous</a>
+      
       <a class="list-group-item" href="../proc/update_previous_steps.html">update_previous_steps</a>
       
       <a class="list-group-item" href="../proc/update_previous_steps%7E2.html">update_previous_steps</a>
@@ -862,7 +880,7 @@ private subroutine integrate(self, U, stage, Dt, t)
 
 
     
-    <p>Integrate field with explicit TVD (or SSP) Runge-Kutta scheme.</p>
+    <p>Integrate field with explicit low storage Runge-Kutta scheme.</p>
 <p></p><div class="alert alert-info" role="alert"><h4>Note</h4><p>This method can be used <strong>after</strong> the integrator is created (i.e. the RK coefficients are initialized).</p></div>
     
 
@@ -884,7 +902,7 @@ private subroutine integrate(self, U, stage, Dt, t)
   
 <tr>
   
-  <td><span class="anchor" id="variable-self%7E93"></span>class(<a href='../type/integrator_runge_kutta_ssp.html'>integrator_runge_kutta_ssp</a>),</td>
+  <td><span class="anchor" id="variable-self%7E94"></span>class(<a href='../type/integrator_runge_kutta_ls.html'>integrator_runge_kutta_ls</a>),</td>
   <td>intent(in)</td>
   <td></td>
   
@@ -899,7 +917,7 @@ private subroutine integrate(self, U, stage, Dt, t)
   
 <tr>
   
-  <td><span class="anchor" id="variable-u%7E27"></span>class(<a href='../type/integrand.html'>integrand</a>),</td>
+  <td><span class="anchor" id="variable-u%7E28"></span>class(<a href='../type/integrand.html'>integrand</a>),</td>
   <td>intent(inout)</td>
   <td></td>
   
@@ -919,7 +937,7 @@ private subroutine integrate(self, U, stage, Dt, t)
   <td></td>
   
   <td></td><td>::</td>
-  <td><strong>stage</strong>(1:)</td><td><p>Runge-Kutta stages [1:stages].</p></td>
+  <td><strong>stage</strong>(1:)</td><td><p>Runge-Kutta registers.</p></td>
   
 </tr>
 
@@ -1016,29 +1034,24 @@ private subroutine integrate(self, U, stage, Dt, t)
     <section>
     <h2><span class="anchor" id="src"></span>Source Code</h2>
     <div class="highlight"><pre><span></span>  <span class="k">subroutine </span><span class="n">integrate</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">U</span><span class="p">,</span> <span class="n">stage</span><span class="p">,</span> <span class="n">Dt</span><span class="p">,</span> <span class="n">t</span><span class="p">)</span>
-  <span class="c">!&lt; Integrate field with explicit TVD (or SSP) Runge-Kutta scheme.</span>
+  <span class="c">!&lt; Integrate field with explicit low storage Runge-Kutta scheme.</span>
   <span class="c">!&lt;</span>
   <span class="c">!&lt; @note This method can be used **after** the integrator is created (i.e. the RK coefficients are initialized).</span>
-  <span class="k">class</span><span class="p">(</span><span class="n">integrator_runge_kutta_ssp</span><span class="p">),</span> <span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span>    <span class="kd">::</span> <span class="n">self</span>      <span class="c">!&lt; Integrator.</span>
-  <span class="k">class</span><span class="p">(</span><span class="n">integrand</span><span class="p">),</span>                  <span class="k">intent</span><span class="p">(</span><span class="n">inout</span><span class="p">)</span> <span class="kd">::</span> <span class="n">U</span>         <span class="c">!&lt; Field to be integrated.</span>
-  <span class="k">class</span><span class="p">(</span><span class="n">integrand</span><span class="p">),</span>                  <span class="k">intent</span><span class="p">(</span><span class="n">inout</span><span class="p">)</span> <span class="kd">::</span> <span class="n">stage</span><span class="p">(</span><span class="mi">1</span><span class="p">:)</span> <span class="c">!&lt; Runge-Kutta stages [1:stages].</span>
-  <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">),</span>                         <span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span>    <span class="kd">::</span> <span class="n">Dt</span>        <span class="c">!&lt; Time step.</span>
-  <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">),</span>                         <span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span>    <span class="kd">::</span> <span class="n">t</span>         <span class="c">!&lt; Time.</span>
-  <span class="kt">integer</span><span class="p">(</span><span class="n">I_P</span><span class="p">)</span>                                     <span class="kd">::</span> <span class="n">s</span>         <span class="c">!&lt; First stages counter.</span>
-  <span class="kt">integer</span><span class="p">(</span><span class="n">I_P</span><span class="p">)</span>                                     <span class="kd">::</span> <span class="n">ss</span>        <span class="c">!&lt; Second stages counter.</span>
+  <span class="k">class</span><span class="p">(</span><span class="n">integrator_runge_kutta_ls</span><span class="p">),</span> <span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span>    <span class="kd">::</span> <span class="n">self</span>      <span class="c">!&lt; Integrator.</span>
+  <span class="k">class</span><span class="p">(</span><span class="n">integrand</span><span class="p">),</span>                 <span class="k">intent</span><span class="p">(</span><span class="n">inout</span><span class="p">)</span> <span class="kd">::</span> <span class="n">U</span>         <span class="c">!&lt; Field to be integrated.</span>
+  <span class="k">class</span><span class="p">(</span><span class="n">integrand</span><span class="p">),</span>                 <span class="k">intent</span><span class="p">(</span><span class="n">inout</span><span class="p">)</span> <span class="kd">::</span> <span class="n">stage</span><span class="p">(</span><span class="mi">1</span><span class="p">:)</span> <span class="c">!&lt; Runge-Kutta registers.</span>
+  <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">),</span>                        <span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span>    <span class="kd">::</span> <span class="n">Dt</span>        <span class="c">!&lt; Time step.</span>
+  <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">),</span>                        <span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span>    <span class="kd">::</span> <span class="n">t</span>         <span class="c">!&lt; Time.</span>
+  <span class="kt">integer</span><span class="p">(</span><span class="n">I_P</span><span class="p">)</span>                                    <span class="kd">::</span> <span class="n">s</span>         <span class="c">!&lt; First stages counter.</span>
 
   <span class="c">! computing stages</span>
+  <span class="n">stage</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">=</span> <span class="n">U</span>
+  <span class="n">stage</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span> <span class="o">=</span> <span class="n">U</span> <span class="o">*</span> <span class="mf">0._R_P</span>
   <span class="k">do </span><span class="n">s</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">self</span><span class="p">%</span><span class="n">stages</span>
-    <span class="n">stage</span><span class="p">(</span><span class="n">s</span><span class="p">)</span> <span class="o">=</span> <span class="n">U</span>
-    <span class="k">do </span><span class="n">ss</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">s</span> <span class="o">-</span> <span class="mi">1</span>
-      <span class="n">stage</span><span class="p">(</span><span class="n">s</span><span class="p">)</span> <span class="o">=</span> <span class="n">stage</span><span class="p">(</span><span class="n">s</span><span class="p">)</span> <span class="o">+</span> <span class="n">stage</span><span class="p">(</span><span class="n">ss</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="n">Dt</span> <span class="o">*</span> <span class="n">self</span><span class="p">%</span><span class="n">alph</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">ss</span><span class="p">))</span>
-    <span class="n">enddo</span>
-    <span class="n">stage</span><span class="p">(</span><span class="n">s</span><span class="p">)</span> <span class="o">=</span> <span class="n">stage</span><span class="p">(</span><span class="n">s</span><span class="p">)%</span><span class="n">t</span><span class="p">(</span><span class="n">t</span><span class="o">=</span><span class="n">t</span> <span class="o">+</span> <span class="n">self</span><span class="p">%</span><span class="n">gamm</span><span class="p">(</span><span class="n">s</span><span class="p">)</span> <span class="o">*</span> <span class="n">Dt</span><span class="p">)</span>
+    <span class="n">stage</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span> <span class="o">=</span> <span class="n">stage</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span> <span class="o">*</span> <span class="n">self</span><span class="p">%</span><span class="n">A</span><span class="p">(</span><span class="n">s</span><span class="p">)</span> <span class="o">+</span> <span class="n">stage</span><span class="p">(</span><span class="mi">1</span><span class="p">)%</span><span class="n">t</span><span class="p">(</span><span class="n">t</span><span class="o">=</span><span class="n">t</span> <span class="o">+</span> <span class="n">self</span><span class="p">%</span><span class="n">C</span><span class="p">(</span><span class="n">s</span><span class="p">)</span> <span class="o">*</span> <span class="n">Dt</span><span class="p">)</span> <span class="o">*</span> <span class="n">Dt</span>
+    <span class="n">stage</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">=</span> <span class="n">stage</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">+</span> <span class="n">stage</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span> <span class="o">*</span> <span class="n">self</span><span class="p">%</span><span class="n">B</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
   <span class="n">enddo</span>
-  <span class="c">! computing new time step</span>
-  <span class="k">do </span><span class="n">s</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">self</span><span class="p">%</span><span class="n">stages</span>
-    <span class="n">U</span> <span class="o">=</span> <span class="n">U</span> <span class="o">+</span> <span class="n">stage</span><span class="p">(</span><span class="n">s</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="n">Dt</span> <span class="o">*</span> <span class="n">self</span><span class="p">%</span><span class="n">beta</span><span class="p">(</span><span class="n">s</span><span class="p">))</span>
-  <span class="n">enddo</span>
+  <span class="n">U</span> <span class="o">=</span> <span class="n">stage</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
   <span class="n">endsubroutine</span> <span class="n">integrate</span>
 </pre></div>
 
@@ -1118,6 +1131,8 @@ private subroutine integrate(self, U, stage, Dt, t)
       
       <a class="list-group-item" href="../proc/class_name%7E11.html">class_name</a>
       
+      <a class="list-group-item" href="../proc/class_name%7E12.html">class_name</a>
+      
       <a class="list-group-item" href="../proc/compute_dt.html">compute_dt</a>
       
       <a class="list-group-item" href="../proc/compute_dt%7E2.html">compute_dt</a>
@@ -1178,6 +1193,8 @@ private subroutine integrate(self, U, stage, Dt, t)
       
       <a class="list-group-item" href="../proc/description%7E11.html">description</a>
       
+      <a class="list-group-item" href="../proc/description%7E12.html">description</a>
+      
       <a class="list-group-item" href="../proc/destroy.html">destroy</a>
       
       <a class="list-group-item" href="../proc/destroy%7E2.html">destroy</a>
@@ -1209,6 +1226,8 @@ private subroutine integrate(self, U, stage, Dt, t)
       <a class="list-group-item" href="../proc/destroy%7E15.html">destroy</a>
       
       <a class="list-group-item" href="../proc/destroy%7E16.html">destroy</a>
+      
+      <a class="list-group-item" href="../proc/destroy%7E17.html">destroy</a>
       
       <a class="list-group-item" href="../proc/destroy_abstract.html">destroy_abstract</a>
       
@@ -1362,6 +1381,8 @@ private subroutine integrate(self, U, stage, Dt, t)
       
       <a class="list-group-item" href="../proc/initialize%7E11.html">initialize</a>
       
+      <a class="list-group-item" href="../proc/initialize%7E12.html">initialize</a>
+      
       <a class="list-group-item" href="../proc/integr_assign_integr.html">integr_assign_integr</a>
       
       <a class="list-group-item" href="../proc/integr_assign_integr%7E2.html">integr_assign_integr</a>
@@ -1384,6 +1405,8 @@ private subroutine integrate(self, U, stage, Dt, t)
       
       <a class="list-group-item" href="../proc/integr_assign_integr%7E11.html">integr_assign_integr</a>
       
+      <a class="list-group-item" href="../proc/integr_assign_integr%7E12.html">integr_assign_integr</a>
+      
       <a class="list-group-item" href="../proc/integrate.html">integrate</a>
       
       <a class="list-group-item" href="../proc/integrate%7E2.html">integrate</a>
@@ -1405,6 +1428,8 @@ private subroutine integrate(self, U, stage, Dt, t)
       <a class="list-group-item" href="../proc/integrate%7E10.html">integrate</a>
       
       <a class="list-group-item" href="../proc/integrate%7E11.html">integrate</a>
+      
+      <a class="list-group-item" href="../proc/integrate%7E12.html">integrate</a>
       
       <a class="list-group-item" href="../proc/integrate_adams_bashforth.html">integrate_adams_bashforth</a>
       
@@ -1465,6 +1490,8 @@ private subroutine integrate(self, U, stage, Dt, t)
       <a class="list-group-item" href="../proc/is_supported%7E10.html">is_supported</a>
       
       <a class="list-group-item" href="../proc/is_supported%7E11.html">is_supported</a>
+      
+      <a class="list-group-item" href="../proc/is_supported%7E12.html">is_supported</a>
       
       <a class="list-group-item" href="../proc/lorenz_assign_lorenz.html">lorenz_assign_lorenz</a>
       
@@ -1638,6 +1665,8 @@ private subroutine integrate(self, U, stage, Dt, t)
       
       <a class="list-group-item" href="../proc/supported_schemes%7E11.html">supported_schemes</a>
       
+      <a class="list-group-item" href="../proc/supported_schemes%7E12.html">supported_schemes</a>
+      
       <a class="list-group-item" href="../proc/synchronize.html">synchronize</a>
       
       <a class="list-group-item" href="../proc/synchronize%7E2.html">synchronize</a>
@@ -1692,6 +1721,8 @@ private subroutine integrate(self, U, stage, Dt, t)
       
       <a class="list-group-item" href="../proc/update_previous%7E5.html">update_previous</a>
       
+      <a class="list-group-item" href="../proc/update_previous%7E6.html">update_previous</a>
+      
       <a class="list-group-item" href="../proc/update_previous_steps.html">update_previous_steps</a>
       
       <a class="list-group-item" href="../proc/update_previous_steps%7E2.html">update_previous_steps</a>
@@ -1715,7 +1746,7 @@ private subroutine integrate(self, U, stage, Dt, t)
           <p class="text-right">
             Documentation generated by 
             <a href="https://github.com/cmacmackin/ford">FORD</a>
-             on 2017-04-05 10:53  
+             on 2017-04-05 16:25  
           </p>
         </div>
         <div class="col-xs-12 col-md-4 col-md-pull-4"><p class="text-center"> FOODIE was developed by Fortran-FOSS-Programmers Group</p></div>

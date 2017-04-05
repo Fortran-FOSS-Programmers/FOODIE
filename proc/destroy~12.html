@@ -134,18 +134,18 @@
      <li><i class="fa fa-list-ol"></i>
        <a data-toggle="tooltip"
 	  data-placement="bottom" data-html="true"
-	  title=" 0.3% of total for procedures.">21 statements</a>
+	  title=" 0.1% of total for procedures.">8 statements</a>
      </li> 
      
      
-    <li><i class="fa fa-code"></i><a href="../src/type_euler-1D-caf_no_foodie.f90"> Source File</a></li>
+    <li><i class="fa fa-code"></i><a href="../src/foodie_integrator_runge_kutta_ssp.f90"> Source File</a></li>
      
   </ul>
   <ol class="breadcrumb in-well text-right">
   
-     <li><a href='../sourcefile/type_euler-1d-caf_no_foodie.f90.html'>type_euler-1D-caf_no_foodie.f90</a></li>
+     <li><a href='../sourcefile/foodie_integrator_runge_kutta_ssp.f90.html'>foodie_integrator_runge_kutta_ssp.f90</a></li>
   
-     <li><a href='../module/type_euler_1d_caf_no_foodie.html'>type_euler_1D_caf_no_foodie</a></li>
+     <li><a href='../module/foodie_integrator_runge_kutta_ssp.html'>foodie_integrator_runge_kutta_ssp</a></li>
   
      <li class="active">destroy</li>
   </ol>
@@ -261,6 +261,8 @@
       
       <a class="list-group-item" href="../proc/class_name%7E11.html">class_name</a>
       
+      <a class="list-group-item" href="../proc/class_name%7E12.html">class_name</a>
+      
       <a class="list-group-item" href="../proc/compute_dt.html">compute_dt</a>
       
       <a class="list-group-item" href="../proc/compute_dt%7E2.html">compute_dt</a>
@@ -321,6 +323,8 @@
       
       <a class="list-group-item" href="../proc/description%7E11.html">description</a>
       
+      <a class="list-group-item" href="../proc/description%7E12.html">description</a>
+      
       <a class="list-group-item" href="../proc/destroy.html">destroy</a>
       
       <a class="list-group-item" href="../proc/destroy%7E2.html">destroy</a>
@@ -352,6 +356,8 @@
       <a class="list-group-item" href="../proc/destroy%7E15.html">destroy</a>
       
       <a class="list-group-item" href="../proc/destroy%7E16.html">destroy</a>
+      
+      <a class="list-group-item" href="../proc/destroy%7E17.html">destroy</a>
       
       <a class="list-group-item" href="../proc/destroy_abstract.html">destroy_abstract</a>
       
@@ -505,6 +511,8 @@
       
       <a class="list-group-item" href="../proc/initialize%7E11.html">initialize</a>
       
+      <a class="list-group-item" href="../proc/initialize%7E12.html">initialize</a>
+      
       <a class="list-group-item" href="../proc/integr_assign_integr.html">integr_assign_integr</a>
       
       <a class="list-group-item" href="../proc/integr_assign_integr%7E2.html">integr_assign_integr</a>
@@ -527,6 +535,8 @@
       
       <a class="list-group-item" href="../proc/integr_assign_integr%7E11.html">integr_assign_integr</a>
       
+      <a class="list-group-item" href="../proc/integr_assign_integr%7E12.html">integr_assign_integr</a>
+      
       <a class="list-group-item" href="../proc/integrate.html">integrate</a>
       
       <a class="list-group-item" href="../proc/integrate%7E2.html">integrate</a>
@@ -548,6 +558,8 @@
       <a class="list-group-item" href="../proc/integrate%7E10.html">integrate</a>
       
       <a class="list-group-item" href="../proc/integrate%7E11.html">integrate</a>
+      
+      <a class="list-group-item" href="../proc/integrate%7E12.html">integrate</a>
       
       <a class="list-group-item" href="../proc/integrate_adams_bashforth.html">integrate_adams_bashforth</a>
       
@@ -608,6 +620,8 @@
       <a class="list-group-item" href="../proc/is_supported%7E10.html">is_supported</a>
       
       <a class="list-group-item" href="../proc/is_supported%7E11.html">is_supported</a>
+      
+      <a class="list-group-item" href="../proc/is_supported%7E12.html">is_supported</a>
       
       <a class="list-group-item" href="../proc/lorenz_assign_lorenz.html">lorenz_assign_lorenz</a>
       
@@ -781,6 +795,8 @@
       
       <a class="list-group-item" href="../proc/supported_schemes%7E11.html">supported_schemes</a>
       
+      <a class="list-group-item" href="../proc/supported_schemes%7E12.html">supported_schemes</a>
+      
       <a class="list-group-item" href="../proc/synchronize.html">synchronize</a>
       
       <a class="list-group-item" href="../proc/synchronize%7E2.html">synchronize</a>
@@ -835,6 +851,8 @@
       
       <a class="list-group-item" href="../proc/update_previous%7E5.html">update_previous</a>
       
+      <a class="list-group-item" href="../proc/update_previous%7E6.html">update_previous</a>
+      
       <a class="list-group-item" href="../proc/update_previous_steps.html">update_previous_steps</a>
       
       <a class="list-group-item" href="../proc/update_previous_steps%7E2.html">update_previous_steps</a>
@@ -852,7 +870,7 @@
     
     <div class="col-md-9" id='text'>
     <h2>
-private subroutine destroy(self)
+private elemental subroutine destroy(self)
     
     
 	 
@@ -862,7 +880,7 @@ private subroutine destroy(self)
 
 
     
-    <p>Destroy field.</p>
+    <p>Destroy the integrator.</p>
     
 
     <h3>Arguments</h3>
@@ -883,12 +901,12 @@ private subroutine destroy(self)
   
 <tr>
   
-  <td><span class="anchor" id="variable-self%7E105"></span>class(<a href='../type/euler_1d_caf_nf.html'>euler_1D_caf_nf</a>),</td>
+  <td><span class="anchor" id="variable-self%7E99"></span>class(<a href='../type/integrator_runge_kutta_ssp.html'>integrator_runge_kutta_ssp</a>),</td>
   <td>intent(inout)</td>
   <td></td>
   
   <td></td><td>::</td>
-  <td><strong>self</strong></td><td><p>Euler field.</p></td>
+  <td><strong>self</strong></td><td><p>Integrator.</p></td>
   
 </tr>
 
@@ -954,33 +972,15 @@ private subroutine destroy(self)
     
     <section>
     <h2><span class="anchor" id="src"></span>Source Code</h2>
-    <div class="highlight"><pre><span></span>  <span class="k">subroutine </span><span class="n">destroy</span><span class="p">(</span><span class="n">self</span><span class="p">)</span>
-  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
-  <span class="c">!&lt; Destroy field.</span>
-  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
-  <span class="k">class</span><span class="p">(</span><span class="n">euler_1D_caf_nf</span><span class="p">),</span> <span class="k">intent</span><span class="p">(</span><span class="n">INOUT</span><span class="p">)</span> <span class="kd">::</span> <span class="n">self</span> <span class="c">!&lt; Euler field.</span>
-  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+    <div class="highlight"><pre><span></span>  <span class="k">elemental subroutine </span><span class="n">destroy</span><span class="p">(</span><span class="n">self</span><span class="p">)</span>
+  <span class="c">!&lt; Destroy the integrator.</span>
+  <span class="k">class</span><span class="p">(</span><span class="n">integrator_runge_kutta_ssp</span><span class="p">),</span> <span class="k">intent</span><span class="p">(</span><span class="n">inout</span><span class="p">)</span> <span class="kd">::</span> <span class="n">self</span> <span class="c">!&lt; Integrator.</span>
 
-  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
-  <span class="n">self</span><span class="p">%</span><span class="n">ord</span> <span class="o">=</span> <span class="mi">0</span>
-  <span class="n">self</span><span class="p">%</span><span class="n">Ni</span> <span class="o">=</span> <span class="mi">0</span>
-  <span class="n">self</span><span class="p">%</span><span class="n">Ng</span> <span class="o">=</span> <span class="mi">0</span>
-  <span class="n">self</span><span class="p">%</span><span class="n">Ns</span> <span class="o">=</span> <span class="mi">0</span>
-  <span class="n">self</span><span class="p">%</span><span class="n">Nc</span> <span class="o">=</span> <span class="mi">0</span>
-  <span class="n">self</span><span class="p">%</span><span class="n">Np</span> <span class="o">=</span> <span class="mi">0</span>
-  <span class="n">self</span><span class="p">%</span><span class="n">Dx</span> <span class="o">=</span> <span class="mf">0._R_P</span>
-  <span class="k">if</span> <span class="p">(</span><span class="nb">allocated</span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">U</span><span class="p">))</span> <span class="k">deallocate</span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">U</span><span class="p">)</span>
-  <span class="k">if</span> <span class="p">(</span><span class="nb">allocated</span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">cp0</span><span class="p">))</span> <span class="k">deallocate</span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">cp0</span><span class="p">)</span>
-  <span class="k">if</span> <span class="p">(</span><span class="nb">allocated</span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">cv0</span><span class="p">))</span> <span class="k">deallocate</span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">cv0</span><span class="p">)</span>
-  <span class="k">if</span> <span class="p">(</span><span class="nb">allocated</span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">BC_L</span><span class="p">))</span> <span class="k">deallocate</span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">BC_L</span><span class="p">)</span>
-  <span class="k">if</span> <span class="p">(</span><span class="nb">allocated</span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">BC_R</span><span class="p">))</span> <span class="k">deallocate</span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">BC_R</span><span class="p">)</span>
-  <span class="n">self</span><span class="p">%</span><span class="n">me</span> <span class="o">=</span> <span class="mi">0</span>
-  <span class="n">self</span><span class="p">%</span><span class="n">we</span> <span class="o">=</span> <span class="mi">0</span>
-  <span class="k">if</span> <span class="p">(</span><span class="nb">allocated</span><span class="p">(</span><span class="n">remote_U</span><span class="p">))</span> <span class="k">deallocate</span><span class="p">(</span><span class="n">remote_U</span><span class="p">)</span>
-  <span class="k">if</span> <span class="p">(</span><span class="nb">allocated</span><span class="p">(</span><span class="n">U_L</span><span class="p">))</span> <span class="k">deallocate</span><span class="p">(</span><span class="n">U_L</span><span class="p">)</span>
-  <span class="k">if</span> <span class="p">(</span><span class="nb">allocated</span><span class="p">(</span><span class="n">U_R</span><span class="p">))</span> <span class="k">deallocate</span><span class="p">(</span><span class="n">U_R</span><span class="p">)</span>
-  <span class="k">return</span>
-  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+  <span class="k">call </span><span class="n">self</span><span class="p">%</span><span class="n">destroy_abstract</span>
+  <span class="n">self</span><span class="p">%</span><span class="n">stages</span> <span class="o">=</span> <span class="mi">0</span>
+  <span class="k">if</span> <span class="p">(</span><span class="nb">allocated</span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">alph</span><span class="p">))</span> <span class="k">deallocate</span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">alph</span><span class="p">)</span>
+  <span class="k">if</span> <span class="p">(</span><span class="nb">allocated</span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">beta</span><span class="p">))</span> <span class="k">deallocate</span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">beta</span><span class="p">)</span>
+  <span class="k">if</span> <span class="p">(</span><span class="nb">allocated</span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">gamm</span><span class="p">))</span> <span class="k">deallocate</span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">gamm</span><span class="p">)</span>
   <span class="n">endsubroutine</span> <span class="n">destroy</span>
 </pre></div>
 
@@ -1060,6 +1060,8 @@ private subroutine destroy(self)
       
       <a class="list-group-item" href="../proc/class_name%7E11.html">class_name</a>
       
+      <a class="list-group-item" href="../proc/class_name%7E12.html">class_name</a>
+      
       <a class="list-group-item" href="../proc/compute_dt.html">compute_dt</a>
       
       <a class="list-group-item" href="../proc/compute_dt%7E2.html">compute_dt</a>
@@ -1120,6 +1122,8 @@ private subroutine destroy(self)
       
       <a class="list-group-item" href="../proc/description%7E11.html">description</a>
       
+      <a class="list-group-item" href="../proc/description%7E12.html">description</a>
+      
       <a class="list-group-item" href="../proc/destroy.html">destroy</a>
       
       <a class="list-group-item" href="../proc/destroy%7E2.html">destroy</a>
@@ -1151,6 +1155,8 @@ private subroutine destroy(self)
       <a class="list-group-item" href="../proc/destroy%7E15.html">destroy</a>
       
       <a class="list-group-item" href="../proc/destroy%7E16.html">destroy</a>
+      
+      <a class="list-group-item" href="../proc/destroy%7E17.html">destroy</a>
       
       <a class="list-group-item" href="../proc/destroy_abstract.html">destroy_abstract</a>
       
@@ -1304,6 +1310,8 @@ private subroutine destroy(self)
       
       <a class="list-group-item" href="../proc/initialize%7E11.html">initialize</a>
       
+      <a class="list-group-item" href="../proc/initialize%7E12.html">initialize</a>
+      
       <a class="list-group-item" href="../proc/integr_assign_integr.html">integr_assign_integr</a>
       
       <a class="list-group-item" href="../proc/integr_assign_integr%7E2.html">integr_assign_integr</a>
@@ -1326,6 +1334,8 @@ private subroutine destroy(self)
       
       <a class="list-group-item" href="../proc/integr_assign_integr%7E11.html">integr_assign_integr</a>
       
+      <a class="list-group-item" href="../proc/integr_assign_integr%7E12.html">integr_assign_integr</a>
+      
       <a class="list-group-item" href="../proc/integrate.html">integrate</a>
       
       <a class="list-group-item" href="../proc/integrate%7E2.html">integrate</a>
@@ -1347,6 +1357,8 @@ private subroutine destroy(self)
       <a class="list-group-item" href="../proc/integrate%7E10.html">integrate</a>
       
       <a class="list-group-item" href="../proc/integrate%7E11.html">integrate</a>
+      
+      <a class="list-group-item" href="../proc/integrate%7E12.html">integrate</a>
       
       <a class="list-group-item" href="../proc/integrate_adams_bashforth.html">integrate_adams_bashforth</a>
       
@@ -1407,6 +1419,8 @@ private subroutine destroy(self)
       <a class="list-group-item" href="../proc/is_supported%7E10.html">is_supported</a>
       
       <a class="list-group-item" href="../proc/is_supported%7E11.html">is_supported</a>
+      
+      <a class="list-group-item" href="../proc/is_supported%7E12.html">is_supported</a>
       
       <a class="list-group-item" href="../proc/lorenz_assign_lorenz.html">lorenz_assign_lorenz</a>
       
@@ -1580,6 +1594,8 @@ private subroutine destroy(self)
       
       <a class="list-group-item" href="../proc/supported_schemes%7E11.html">supported_schemes</a>
       
+      <a class="list-group-item" href="../proc/supported_schemes%7E12.html">supported_schemes</a>
+      
       <a class="list-group-item" href="../proc/synchronize.html">synchronize</a>
       
       <a class="list-group-item" href="../proc/synchronize%7E2.html">synchronize</a>
@@ -1634,6 +1650,8 @@ private subroutine destroy(self)
       
       <a class="list-group-item" href="../proc/update_previous%7E5.html">update_previous</a>
       
+      <a class="list-group-item" href="../proc/update_previous%7E6.html">update_previous</a>
+      
       <a class="list-group-item" href="../proc/update_previous_steps.html">update_previous_steps</a>
       
       <a class="list-group-item" href="../proc/update_previous_steps%7E2.html">update_previous_steps</a>
@@ -1657,7 +1675,7 @@ private subroutine destroy(self)
           <p class="text-right">
             Documentation generated by 
             <a href="https://github.com/cmacmackin/ford">FORD</a>
-             on 2017-04-05 10:53  
+             on 2017-04-05 16:25  
           </p>
         </div>
         <div class="col-xs-12 col-md-4 col-md-pull-4"><p class="text-center"> FOODIE was developed by Fortran-FOSS-Programmers Group</p></div>

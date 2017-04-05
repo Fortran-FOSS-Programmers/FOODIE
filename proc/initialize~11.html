@@ -134,18 +134,18 @@
      <li><i class="fa fa-list-ol"></i>
        <a data-toggle="tooltip"
 	  data-placement="bottom" data-html="true"
-	  title=" 1.0% of total for procedures.">78 statements</a>
+	  title=" 1.0% of total for procedures.">76 statements</a>
      </li> 
      
      
-    <li><i class="fa fa-code"></i><a href="../src/oscillation.f90"> Source File</a></li>
+    <li><i class="fa fa-code"></i><a href="../src/foodie_integrator_runge_kutta_ssp.f90"> Source File</a></li>
      
   </ul>
   <ol class="breadcrumb in-well text-right">
   
-     <li><a href='../sourcefile/oscillation.f90.html'>oscillation.f90</a></li>
+     <li><a href='../sourcefile/foodie_integrator_runge_kutta_ssp.f90.html'>foodie_integrator_runge_kutta_ssp.f90</a></li>
   
-     <li><a href='../module/oscillation_test_t.html'>oscillation_test_t</a></li>
+     <li><a href='../module/foodie_integrator_runge_kutta_ssp.html'>foodie_integrator_runge_kutta_ssp</a></li>
   
      <li class="active">initialize</li>
   </ol>
@@ -261,6 +261,8 @@
       
       <a class="list-group-item" href="../proc/class_name%7E11.html">class_name</a>
       
+      <a class="list-group-item" href="../proc/class_name%7E12.html">class_name</a>
+      
       <a class="list-group-item" href="../proc/compute_dt.html">compute_dt</a>
       
       <a class="list-group-item" href="../proc/compute_dt%7E2.html">compute_dt</a>
@@ -321,6 +323,8 @@
       
       <a class="list-group-item" href="../proc/description%7E11.html">description</a>
       
+      <a class="list-group-item" href="../proc/description%7E12.html">description</a>
+      
       <a class="list-group-item" href="../proc/destroy.html">destroy</a>
       
       <a class="list-group-item" href="../proc/destroy%7E2.html">destroy</a>
@@ -352,6 +356,8 @@
       <a class="list-group-item" href="../proc/destroy%7E15.html">destroy</a>
       
       <a class="list-group-item" href="../proc/destroy%7E16.html">destroy</a>
+      
+      <a class="list-group-item" href="../proc/destroy%7E17.html">destroy</a>
       
       <a class="list-group-item" href="../proc/destroy_abstract.html">destroy_abstract</a>
       
@@ -505,6 +511,8 @@
       
       <a class="list-group-item" href="../proc/initialize%7E11.html">initialize</a>
       
+      <a class="list-group-item" href="../proc/initialize%7E12.html">initialize</a>
+      
       <a class="list-group-item" href="../proc/integr_assign_integr.html">integr_assign_integr</a>
       
       <a class="list-group-item" href="../proc/integr_assign_integr%7E2.html">integr_assign_integr</a>
@@ -527,6 +535,8 @@
       
       <a class="list-group-item" href="../proc/integr_assign_integr%7E11.html">integr_assign_integr</a>
       
+      <a class="list-group-item" href="../proc/integr_assign_integr%7E12.html">integr_assign_integr</a>
+      
       <a class="list-group-item" href="../proc/integrate.html">integrate</a>
       
       <a class="list-group-item" href="../proc/integrate%7E2.html">integrate</a>
@@ -548,6 +558,8 @@
       <a class="list-group-item" href="../proc/integrate%7E10.html">integrate</a>
       
       <a class="list-group-item" href="../proc/integrate%7E11.html">integrate</a>
+      
+      <a class="list-group-item" href="../proc/integrate%7E12.html">integrate</a>
       
       <a class="list-group-item" href="../proc/integrate_adams_bashforth.html">integrate_adams_bashforth</a>
       
@@ -608,6 +620,8 @@
       <a class="list-group-item" href="../proc/is_supported%7E10.html">is_supported</a>
       
       <a class="list-group-item" href="../proc/is_supported%7E11.html">is_supported</a>
+      
+      <a class="list-group-item" href="../proc/is_supported%7E12.html">is_supported</a>
       
       <a class="list-group-item" href="../proc/lorenz_assign_lorenz.html">lorenz_assign_lorenz</a>
       
@@ -781,6 +795,8 @@
       
       <a class="list-group-item" href="../proc/supported_schemes%7E11.html">supported_schemes</a>
       
+      <a class="list-group-item" href="../proc/supported_schemes%7E12.html">supported_schemes</a>
+      
       <a class="list-group-item" href="../proc/synchronize.html">synchronize</a>
       
       <a class="list-group-item" href="../proc/synchronize%7E2.html">synchronize</a>
@@ -835,6 +851,8 @@
       
       <a class="list-group-item" href="../proc/update_previous%7E5.html">update_previous</a>
       
+      <a class="list-group-item" href="../proc/update_previous%7E6.html">update_previous</a>
+      
       <a class="list-group-item" href="../proc/update_previous_steps.html">update_previous_steps</a>
       
       <a class="list-group-item" href="../proc/update_previous_steps%7E2.html">update_previous_steps</a>
@@ -852,7 +870,7 @@
     
     <div class="col-md-9" id='text'>
     <h2>
-private subroutine initialize(self)
+private subroutine initialize(self, scheme, stop_on_fail)
     
     
 	 
@@ -862,7 +880,7 @@ private subroutine initialize(self)
 
 
     
-    <p>Initialize test: set Command Line Interface, parse it and check its validity.</p>
+    <p>Create the actual RK integrator: initialize the Butcher' table coefficients.</p>
     
 
     <h3>Arguments</h3>
@@ -883,12 +901,42 @@ private subroutine initialize(self)
   
 <tr>
   
-  <td><span class="anchor" id="variable-self%7E95"></span>class(<a href='../type/oscillation_test.html'>oscillation_test</a>),</td>
+  <td><span class="anchor" id="variable-self%7E100"></span>class(<a href='../type/integrator_runge_kutta_ssp.html'>integrator_runge_kutta_ssp</a>),</td>
   <td>intent(inout)</td>
   <td></td>
   
   <td></td><td>::</td>
-  <td><strong>self</strong></td><td><p>Test.</p></td>
+  <td><strong>self</strong></td><td><p>Integrator.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-scheme%7E31"></span>character(len=*),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>scheme</strong></td><td><p>Selected scheme.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-stop_on_fail%7E5"></span>logical,</td>
+  <td>intent(in),</td>
+  <td>optional</td>
+  
+  <td></td><td>::</td>
+  <td><strong>stop_on_fail</strong></td><td><p>Stop execution if initialization fail.</p></td>
   
 </tr>
 
@@ -954,93 +1002,77 @@ private subroutine initialize(self)
     
     <section>
     <h2><span class="anchor" id="src"></span>Source Code</h2>
-    <div class="highlight"><pre><span></span>  <span class="k">subroutine </span><span class="n">initialize</span><span class="p">(</span><span class="n">self</span><span class="p">)</span>
-  <span class="c">!&lt; Initialize test: set Command Line Interface, parse it and check its validity.</span>
-  <span class="k">class</span><span class="p">(</span><span class="n">oscillation_test</span><span class="p">),</span> <span class="k">intent</span><span class="p">(</span><span class="n">inout</span><span class="p">)</span> <span class="kd">::</span> <span class="n">self</span> <span class="c">!&lt; Test.</span>
+    <div class="highlight"><pre><span></span>  <span class="k">subroutine </span><span class="n">initialize</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">scheme</span><span class="p">,</span> <span class="n">stop_on_fail</span><span class="p">)</span>
+  <span class="c">!&lt; Create the actual RK integrator: initialize the Butcher&#39; table coefficients.</span>
+  <span class="k">class</span><span class="p">(</span><span class="n">integrator_runge_kutta_ssp</span><span class="p">),</span> <span class="k">intent</span><span class="p">(</span><span class="n">inout</span><span class="p">)</span>        <span class="kd">::</span> <span class="n">self</span>         <span class="c">!&lt; Integrator.</span>
+  <span class="kt">character</span><span class="p">(</span><span class="o">*</span><span class="p">),</span>                      <span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span>           <span class="kd">::</span> <span class="n">scheme</span>       <span class="c">!&lt; Selected scheme.</span>
+  <span class="kt">logical</span><span class="p">,</span>                           <span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">),</span> <span class="k">optional</span> <span class="kd">::</span> <span class="n">stop_on_fail</span> <span class="c">!&lt; Stop execution if initialization fail.</span>
 
-  <span class="k">call </span><span class="n">set_cli</span>
-  <span class="k">call </span><span class="n">parse_cli</span>
-  <span class="k">contains</span>
-<span class="k">    subroutine </span><span class="n">set_cli</span><span class="p">()</span>
-    <span class="c">!&lt; Set Command Line Interface.</span>
+  <span class="k">if</span> <span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">is_supported</span><span class="p">(</span><span class="n">scheme</span><span class="o">=</span><span class="n">scheme</span><span class="p">))</span> <span class="k">then</span>
+<span class="k">    call </span><span class="n">self</span><span class="p">%</span><span class="n">destroy</span>
+    <span class="k">select case</span><span class="p">(</span><span class="nb">trim</span><span class="p">(</span><span class="nb">adjustl</span><span class="p">(</span><span class="n">scheme</span><span class="p">)))</span>
+    <span class="k">case</span><span class="p">(</span><span class="s1">&#39;runge_kutta_ssp_stages_1_order_1&#39;</span><span class="p">)</span>
+      <span class="n">self</span><span class="p">%</span><span class="n">stages</span> <span class="o">=</span> <span class="mi">1</span>
+      <span class="k">allocate</span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">beta</span><span class="p">(</span><span class="mi">1</span><span class="p">:</span><span class="n">self</span><span class="p">%</span><span class="n">stages</span>               <span class="p">))</span> <span class="p">;</span> <span class="n">self</span><span class="p">%</span><span class="n">beta</span> <span class="o">=</span> <span class="mf">0._R_P</span>
+      <span class="k">allocate</span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">alph</span><span class="p">(</span><span class="mi">1</span><span class="p">:</span><span class="n">self</span><span class="p">%</span><span class="n">stages</span><span class="p">,</span> <span class="mi">1</span><span class="p">:</span><span class="n">self</span><span class="p">%</span><span class="n">stages</span><span class="p">))</span> <span class="p">;</span> <span class="n">self</span><span class="p">%</span><span class="n">alph</span> <span class="o">=</span> <span class="mf">0._R_P</span>
+      <span class="k">allocate</span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">gamm</span><span class="p">(</span>               <span class="mi">1</span><span class="p">:</span><span class="n">self</span><span class="p">%</span><span class="n">stages</span><span class="p">))</span> <span class="p">;</span> <span class="n">self</span><span class="p">%</span><span class="n">gamm</span> <span class="o">=</span> <span class="mf">0._R_P</span>
 
-    <span class="k">associate</span><span class="p">(</span><span class="n">cli</span> <span class="o">=&gt;</span> <span class="n">self</span><span class="p">%</span><span class="n">cli</span><span class="p">)</span>
-      <span class="k">call </span><span class="n">cli</span><span class="p">%</span><span class="n">init</span><span class="p">(</span><span class="n">progname</span>    <span class="o">=</span> <span class="s1">&#39;oscillation&#39;</span><span class="p">,</span>                                              <span class="p">&amp;</span>
-                    <span class="n">authors</span>     <span class="o">=</span> <span class="s1">&#39;Fortran-FOSS-Programmers&#39;</span><span class="p">,</span>                                 <span class="p">&amp;</span>
-                    <span class="n">license</span>     <span class="o">=</span> <span class="s1">&#39;GNU GPLv3&#39;</span><span class="p">,</span>                                                <span class="p">&amp;</span>
-                    <span class="n">description</span> <span class="o">=</span> <span class="s1">&#39;Test FOODIE library on Oscillation equations integration&#39;</span><span class="p">,</span> <span class="p">&amp;</span>
-                    <span class="n">examples</span>    <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;oscillation --scheme euler_explicit --save_results  &quot;</span><span class="p">,</span>    <span class="p">&amp;</span>
-                                   <span class="s2">&quot;oscillation --scheme all -r                         &quot;</span><span class="p">])</span>
-      <span class="k">call </span><span class="n">cli</span><span class="p">%</span><span class="n">add</span><span class="p">(</span><span class="n">switch</span><span class="o">=</span><span class="s1">&#39;--scheme&#39;</span><span class="p">,</span> <span class="n">switch_ab</span><span class="o">=</span><span class="s1">&#39;-s&#39;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s1">&#39;integrator scheme used&#39;</span><span class="p">,</span> <span class="n">required</span><span class="o">=</span><span class="p">.</span><span class="n">false</span><span class="p">.,</span> <span class="n">def</span><span class="o">=</span><span class="s1">&#39;all&#39;</span><span class="p">,</span> <span class="n">act</span><span class="o">=</span><span class="s1">&#39;store&#39;</span><span class="p">)</span>
-      <span class="k">call </span><span class="n">cli</span><span class="p">%</span><span class="n">add</span><span class="p">(</span><span class="n">switch</span><span class="o">=</span><span class="s1">&#39;--iterations&#39;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s1">&#39;number of iterations for implicit schemes&#39;</span><span class="p">,</span> <span class="n">required</span><span class="o">=</span><span class="p">.</span><span class="n">false</span><span class="p">.,</span> <span class="n">act</span><span class="o">=</span><span class="s1">&#39;store&#39;</span><span class="p">,</span> <span class="n">def</span><span class="o">=</span><span class="s1">&#39;5&#39;</span><span class="p">)</span>
-      <span class="k">call </span><span class="n">cli</span><span class="p">%</span><span class="n">add</span><span class="p">(</span><span class="n">switch</span><span class="o">=</span><span class="s1">&#39;--frequency&#39;</span><span class="p">,</span> <span class="n">switch_ab</span><span class="o">=</span><span class="s1">&#39;-f&#39;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s1">&#39;oscillation frequency&#39;</span><span class="p">,</span> <span class="n">required</span><span class="o">=</span><span class="p">.</span><span class="n">false</span><span class="p">.,</span> <span class="n">def</span><span class="o">=</span><span class="s1">&#39;1e-4&#39;</span><span class="p">,</span> <span class="n">act</span><span class="o">=</span><span class="s1">&#39;store&#39;</span><span class="p">)</span>
-      <span class="k">call </span><span class="n">cli</span><span class="p">%</span><span class="n">add</span><span class="p">(</span><span class="n">switch</span><span class="o">=</span><span class="s1">&#39;--time_step&#39;</span><span class="p">,</span> <span class="n">switch_ab</span><span class="o">=</span><span class="s1">&#39;-Dt&#39;</span><span class="p">,</span> <span class="n">nargs</span><span class="o">=</span><span class="s1">&#39;+&#39;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s1">&#39;time step&#39;</span><span class="p">,</span> <span class="n">required</span><span class="o">=</span><span class="p">.</span><span class="n">false</span><span class="p">.,</span> <span class="n">def</span><span class="o">=</span><span class="s1">&#39;100.d0&#39;</span><span class="p">,</span> <span class="n">act</span><span class="o">=</span><span class="s1">&#39;store&#39;</span><span class="p">)</span>
-      <span class="k">call </span><span class="n">cli</span><span class="p">%</span><span class="n">add</span><span class="p">(</span><span class="n">switch</span><span class="o">=</span><span class="s1">&#39;--tolerance&#39;</span><span class="p">,</span> <span class="n">switch_ab</span><span class="o">=</span><span class="s1">&#39;-tol&#39;</span><span class="p">,</span> <span class="n">nargs</span><span class="o">=</span><span class="s1">&#39;+&#39;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s1">&#39;error tolerance&#39;</span><span class="p">,</span> <span class="n">required</span><span class="o">=</span><span class="p">.</span><span class="n">false</span><span class="p">.,</span> <span class="n">def</span><span class="o">=</span><span class="s1">&#39;0.001d0&#39;</span><span class="p">,</span> <span class="p">&amp;</span>
-                   <span class="n">act</span><span class="o">=</span><span class="s1">&#39;store&#39;</span><span class="p">)</span>
-      <span class="k">call </span><span class="n">cli</span><span class="p">%</span><span class="n">add</span><span class="p">(</span><span class="n">switch</span><span class="o">=</span><span class="s1">&#39;--t_final&#39;</span><span class="p">,</span> <span class="n">switch_ab</span><span class="o">=</span><span class="s1">&#39;-tf&#39;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s1">&#39;final integration time&#39;</span><span class="p">,</span> <span class="n">required</span><span class="o">=</span><span class="p">.</span><span class="n">false</span><span class="p">.,</span> <span class="n">def</span><span class="o">=</span><span class="s1">&#39;1e6&#39;</span><span class="p">,</span> <span class="n">act</span><span class="o">=</span><span class="s1">&#39;store&#39;</span><span class="p">)</span>
-      <span class="k">call </span><span class="n">cli</span><span class="p">%</span><span class="n">add</span><span class="p">(</span><span class="n">switch</span><span class="o">=</span><span class="s1">&#39;--save_results&#39;</span><span class="p">,</span> <span class="n">switch_ab</span><span class="o">=</span><span class="s1">&#39;-r&#39;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s1">&#39;save results&#39;</span><span class="p">,</span> <span class="n">required</span><span class="o">=</span><span class="p">.</span><span class="n">false</span><span class="p">.,</span> <span class="n">act</span><span class="o">=</span><span class="s1">&#39;store_true&#39;</span><span class="p">,</span> <span class="n">def</span><span class="o">=</span><span class="s1">&#39;.false.&#39;</span><span class="p">)</span>
-      <span class="k">call </span><span class="n">cli</span><span class="p">%</span><span class="n">add</span><span class="p">(</span><span class="n">switch</span><span class="o">=</span><span class="s1">&#39;--output&#39;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s1">&#39;output files basename&#39;</span><span class="p">,</span> <span class="n">required</span><span class="o">=</span><span class="p">.</span><span class="n">false</span><span class="p">.,</span> <span class="n">act</span><span class="o">=</span><span class="s1">&#39;store&#39;</span><span class="p">,</span> <span class="n">def</span><span class="o">=</span><span class="s1">&#39;unset&#39;</span><span class="p">)</span>
-      <span class="k">call </span><span class="n">cli</span><span class="p">%</span><span class="n">add</span><span class="p">(</span><span class="n">switch</span><span class="o">=</span><span class="s1">&#39;--errors_analysis&#39;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s1">&#39;peform errors analysis&#39;</span><span class="p">,</span> <span class="n">required</span><span class="o">=</span><span class="p">.</span><span class="n">false</span><span class="p">.,</span> <span class="n">act</span><span class="o">=</span><span class="s1">&#39;store_true&#39;</span><span class="p">,</span> <span class="n">def</span><span class="o">=</span><span class="s1">&#39;.false.&#39;</span><span class="p">)</span>
-    <span class="n">endassociate</span>
-    <span class="n">endsubroutine</span> <span class="n">set_cli</span>
+      <span class="n">self</span><span class="p">%</span><span class="n">beta</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">=</span> <span class="mf">1._R_P</span>
+    <span class="k">case</span><span class="p">(</span><span class="s1">&#39;runge_kutta_ssp_stages_2_order_2&#39;</span><span class="p">)</span>
+      <span class="n">self</span><span class="p">%</span><span class="n">stages</span> <span class="o">=</span> <span class="mi">2</span>
+      <span class="k">allocate</span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">beta</span><span class="p">(</span><span class="mi">1</span><span class="p">:</span><span class="n">self</span><span class="p">%</span><span class="n">stages</span>               <span class="p">))</span> <span class="p">;</span> <span class="n">self</span><span class="p">%</span><span class="n">beta</span> <span class="o">=</span> <span class="mf">0._R_P</span>
+      <span class="k">allocate</span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">alph</span><span class="p">(</span><span class="mi">1</span><span class="p">:</span><span class="n">self</span><span class="p">%</span><span class="n">stages</span><span class="p">,</span> <span class="mi">1</span><span class="p">:</span><span class="n">self</span><span class="p">%</span><span class="n">stages</span><span class="p">))</span> <span class="p">;</span> <span class="n">self</span><span class="p">%</span><span class="n">alph</span> <span class="o">=</span> <span class="mf">0._R_P</span>
+      <span class="k">allocate</span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">gamm</span><span class="p">(</span>               <span class="mi">1</span><span class="p">:</span><span class="n">self</span><span class="p">%</span><span class="n">stages</span><span class="p">))</span> <span class="p">;</span> <span class="n">self</span><span class="p">%</span><span class="n">gamm</span> <span class="o">=</span> <span class="mf">0._R_P</span>
 
-    <span class="k">subroutine </span><span class="n">parse_cli</span><span class="p">()</span>
-    <span class="c">!&lt; Parse Command Line Interface and check its validity.</span>
-    <span class="kt">character</span><span class="p">(</span><span class="mi">99</span><span class="p">),</span> <span class="k">allocatable</span> <span class="kd">::</span> <span class="n">integrator_class_names</span><span class="p">(:)</span> <span class="c">!&lt; Name of FOODIE integrator classes.</span>
-    <span class="kt">character</span><span class="p">(</span><span class="mi">99</span><span class="p">),</span> <span class="k">allocatable</span> <span class="kd">::</span> <span class="n">integrator_schemes</span><span class="p">(:)</span>     <span class="c">!&lt; Name of FOODIE integrator schemes.</span>
-    <span class="kt">integer</span><span class="p">(</span><span class="n">I_P</span><span class="p">)</span>               <span class="kd">::</span> <span class="n">i</span>                         <span class="c">!&lt; Counter.</span>
+      <span class="n">self</span><span class="p">%</span><span class="n">beta</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">=</span> <span class="mf">0.5_R_P</span>
+      <span class="n">self</span><span class="p">%</span><span class="n">beta</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span> <span class="o">=</span> <span class="mf">0.5_R_P</span>
 
-    <span class="k">call </span><span class="n">self</span><span class="p">%</span><span class="n">cli</span><span class="p">%</span><span class="n">parse</span><span class="p">(</span><span class="n">error</span><span class="o">=</span><span class="n">self</span><span class="p">%</span><span class="n">error</span><span class="p">)</span>
-    <span class="k">call </span><span class="n">self</span><span class="p">%</span><span class="n">cli</span><span class="p">%</span><span class="n">get</span><span class="p">(</span><span class="n">switch</span><span class="o">=</span><span class="s1">&#39;-s&#39;</span><span class="p">,</span> <span class="n">val</span><span class="o">=</span><span class="n">self</span><span class="p">%</span><span class="n">scheme</span><span class="p">,</span> <span class="n">error</span><span class="o">=</span><span class="n">self</span><span class="p">%</span><span class="n">error</span><span class="p">)</span> <span class="p">;</span> <span class="k">if</span> <span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">error</span><span class="o">/=</span><span class="mi">0</span><span class="p">)</span> <span class="k">stop</span>
-<span class="k">    call </span><span class="n">self</span><span class="p">%</span><span class="n">cli</span><span class="p">%</span><span class="n">get</span><span class="p">(</span><span class="n">switch</span><span class="o">=</span><span class="s1">&#39;--iterations&#39;</span><span class="p">,</span> <span class="n">val</span><span class="o">=</span><span class="n">self</span><span class="p">%</span><span class="n">implicit_iterations</span><span class="p">,</span> <span class="n">error</span><span class="o">=</span><span class="n">self</span><span class="p">%</span><span class="n">error</span><span class="p">)</span> <span class="p">;</span> <span class="k">if</span> <span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">error</span><span class="o">/=</span><span class="mi">0</span><span class="p">)</span> <span class="k">stop</span>
-<span class="k">    call </span><span class="n">self</span><span class="p">%</span><span class="n">cli</span><span class="p">%</span><span class="n">get</span><span class="p">(</span><span class="n">switch</span><span class="o">=</span><span class="s1">&#39;-f&#39;</span><span class="p">,</span> <span class="n">val</span><span class="o">=</span><span class="n">self</span><span class="p">%</span><span class="n">frequency</span><span class="p">,</span> <span class="n">error</span><span class="o">=</span><span class="n">self</span><span class="p">%</span><span class="n">error</span><span class="p">)</span> <span class="p">;</span> <span class="k">if</span> <span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">error</span><span class="o">/=</span><span class="mi">0</span><span class="p">)</span> <span class="k">stop</span>
-<span class="k">    call </span><span class="n">self</span><span class="p">%</span><span class="n">cli</span><span class="p">%</span><span class="n">get_varying</span><span class="p">(</span><span class="n">switch</span><span class="o">=</span><span class="s1">&#39;-Dt&#39;</span><span class="p">,</span> <span class="n">val</span><span class="o">=</span><span class="n">self</span><span class="p">%</span><span class="n">Dt</span><span class="p">,</span> <span class="n">error</span><span class="o">=</span><span class="n">self</span><span class="p">%</span><span class="n">error</span><span class="p">)</span> <span class="p">;</span> <span class="k">if</span> <span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">error</span><span class="o">/=</span><span class="mi">0</span><span class="p">)</span> <span class="k">stop</span>
-<span class="k">    call </span><span class="n">self</span><span class="p">%</span><span class="n">cli</span><span class="p">%</span><span class="n">get_varying</span><span class="p">(</span><span class="n">switch</span><span class="o">=</span><span class="s1">&#39;-tol&#39;</span><span class="p">,</span> <span class="n">val</span><span class="o">=</span><span class="n">self</span><span class="p">%</span><span class="n">tolerance</span><span class="p">,</span> <span class="n">error</span><span class="o">=</span><span class="n">self</span><span class="p">%</span><span class="n">error</span><span class="p">)</span> <span class="p">;</span> <span class="k">if</span> <span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">error</span><span class="o">/=</span><span class="mi">0</span><span class="p">)</span> <span class="k">stop</span>
-<span class="k">    call </span><span class="n">self</span><span class="p">%</span><span class="n">cli</span><span class="p">%</span><span class="n">get</span><span class="p">(</span><span class="n">switch</span><span class="o">=</span><span class="s1">&#39;-tf&#39;</span><span class="p">,</span> <span class="n">val</span><span class="o">=</span><span class="n">self</span><span class="p">%</span><span class="n">final_time</span><span class="p">,</span> <span class="n">error</span><span class="o">=</span><span class="n">self</span><span class="p">%</span><span class="n">error</span><span class="p">)</span> <span class="p">;</span> <span class="k">if</span> <span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">error</span><span class="o">/=</span><span class="mi">0</span><span class="p">)</span> <span class="k">stop</span>
-<span class="k">    call </span><span class="n">self</span><span class="p">%</span><span class="n">cli</span><span class="p">%</span><span class="n">get</span><span class="p">(</span><span class="n">switch</span><span class="o">=</span><span class="s1">&#39;-r&#39;</span><span class="p">,</span> <span class="n">val</span><span class="o">=</span><span class="n">self</span><span class="p">%</span><span class="n">results</span><span class="p">,</span> <span class="n">error</span><span class="o">=</span><span class="n">self</span><span class="p">%</span><span class="n">error</span><span class="p">)</span> <span class="p">;</span> <span class="k">if</span> <span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">error</span><span class="o">/=</span><span class="mi">0</span><span class="p">)</span> <span class="k">stop</span>
-<span class="k">    call </span><span class="n">self</span><span class="p">%</span><span class="n">cli</span><span class="p">%</span><span class="n">get</span><span class="p">(</span><span class="n">switch</span><span class="o">=</span><span class="s1">&#39;--output&#39;</span><span class="p">,</span> <span class="n">val</span><span class="o">=</span><span class="n">self</span><span class="p">%</span><span class="n">output_cli</span><span class="p">,</span> <span class="n">error</span><span class="o">=</span><span class="n">self</span><span class="p">%</span><span class="n">error</span><span class="p">)</span> <span class="p">;</span> <span class="k">if</span> <span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">error</span><span class="o">/=</span><span class="mi">0</span><span class="p">)</span> <span class="k">stop</span>
-<span class="k">    call </span><span class="n">self</span><span class="p">%</span><span class="n">cli</span><span class="p">%</span><span class="n">get</span><span class="p">(</span><span class="n">switch</span><span class="o">=</span><span class="s1">&#39;--errors_analysis&#39;</span><span class="p">,</span> <span class="n">val</span><span class="o">=</span><span class="n">self</span><span class="p">%</span><span class="n">errors_analysis</span><span class="p">,</span> <span class="n">error</span><span class="o">=</span><span class="n">self</span><span class="p">%</span><span class="n">error</span><span class="p">)</span> <span class="p">;</span> <span class="k">if</span> <span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">error</span><span class="o">/=</span><span class="mi">0</span><span class="p">)</span> <span class="k">stop</span>
+      <span class="n">self</span><span class="p">%</span><span class="n">alph</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span> <span class="o">=</span> <span class="mf">1._R_P</span>
 
-<span class="k">    if</span> <span class="p">(</span><span class="nb">trim</span><span class="p">(</span><span class="nb">adjustl</span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">scheme</span><span class="p">))</span> <span class="o">/=</span> <span class="s1">&#39;all&#39;</span><span class="p">)</span> <span class="k">then</span>
-<span class="k">      if</span> <span class="p">(.</span><span class="nb">not</span><span class="p">.</span><span class="n">is_available</span><span class="p">(</span><span class="n">scheme</span><span class="o">=</span><span class="n">self</span><span class="p">%</span><span class="n">scheme</span><span class="p">))</span> <span class="k">then</span>
-<span class="k">        </span><span class="n">integrator_class_names</span> <span class="o">=</span> <span class="n">foodie_integrator_class_names</span><span class="p">()</span>
-        <span class="n">integrator_schemes</span>     <span class="o">=</span> <span class="n">foodie_integrator_schemes</span><span class="p">()</span>
-        <span class="k">print</span> <span class="s1">&#39;(A)&#39;</span><span class="p">,</span> <span class="s1">&#39;Error: the scheme &quot;&#39;</span><span class="o">//</span><span class="nb">trim</span><span class="p">(</span><span class="nb">adjustl</span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">scheme</span><span class="p">))</span><span class="o">//</span><span class="s1">&#39;&quot; is unknown!&#39;</span>
-        <span class="k">print</span> <span class="s1">&#39;(A)&#39;</span><span class="p">,</span> <span class="s1">&#39;Supported classes of schemes are:&#39;</span>
-        <span class="k">do </span><span class="n">i</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">size</span><span class="p">(</span><span class="n">integrator_class_names</span><span class="p">,</span> <span class="nb">dim</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
-          <span class="k">print</span> <span class="s1">&#39;(A)&#39;</span><span class="p">,</span> <span class="s1">&#39;  &#39;</span><span class="o">//</span><span class="nb">trim</span><span class="p">(</span><span class="n">integrator_class_names</span><span class="p">(</span><span class="n">i</span><span class="p">))</span>
-        <span class="n">enddo</span>
-        <span class="k">print</span> <span class="s1">&#39;(A)&#39;</span><span class="p">,</span> <span class="s1">&#39;Supported schemes are:&#39;</span>
-        <span class="k">do </span><span class="n">i</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">size</span><span class="p">(</span><span class="n">integrator_schemes</span><span class="p">,</span> <span class="nb">dim</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
-          <span class="k">print</span> <span class="s1">&#39;(A)&#39;</span><span class="p">,</span> <span class="s1">&#39;  &#39;</span><span class="o">//</span><span class="nb">trim</span><span class="p">(</span><span class="n">integrator_schemes</span><span class="p">(</span><span class="n">i</span><span class="p">))</span>
-        <span class="n">enddo</span>
-        <span class="k">stop</span>
-<span class="k">      </span><span class="n">endif</span>
-    <span class="n">endif</span>
+      <span class="n">self</span><span class="p">%</span><span class="n">gamm</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span> <span class="o">=</span> <span class="mf">1._R_P</span>
+    <span class="k">case</span><span class="p">(</span><span class="s1">&#39;runge_kutta_ssp_stages_3_order_3&#39;</span><span class="p">)</span>
+      <span class="n">self</span><span class="p">%</span><span class="n">stages</span> <span class="o">=</span> <span class="mi">3</span>
+      <span class="k">allocate</span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">beta</span><span class="p">(</span><span class="mi">1</span><span class="p">:</span><span class="n">self</span><span class="p">%</span><span class="n">stages</span>               <span class="p">))</span> <span class="p">;</span> <span class="n">self</span><span class="p">%</span><span class="n">beta</span> <span class="o">=</span> <span class="mf">0._R_P</span>
+      <span class="k">allocate</span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">alph</span><span class="p">(</span><span class="mi">1</span><span class="p">:</span><span class="n">self</span><span class="p">%</span><span class="n">stages</span><span class="p">,</span> <span class="mi">1</span><span class="p">:</span><span class="n">self</span><span class="p">%</span><span class="n">stages</span><span class="p">))</span> <span class="p">;</span> <span class="n">self</span><span class="p">%</span><span class="n">alph</span> <span class="o">=</span> <span class="mf">0._R_P</span>
+      <span class="k">allocate</span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">gamm</span><span class="p">(</span>               <span class="mi">1</span><span class="p">:</span><span class="n">self</span><span class="p">%</span><span class="n">stages</span><span class="p">))</span> <span class="p">;</span> <span class="n">self</span><span class="p">%</span><span class="n">gamm</span> <span class="o">=</span> <span class="mf">0._R_P</span>
 
-    <span class="k">if</span> <span class="p">(.</span><span class="nb">not</span><span class="p">.</span><span class="n">is_dt_valid</span><span class="p">())</span> <span class="k">then</span>
-<span class="k">      print</span> <span class="s2">&quot;(A)&quot;</span><span class="p">,</span> <span class="s1">&#39;Error: the final integration time must be an exact multiple of the time step used!&#39;</span>
-      <span class="k">print</span> <span class="s2">&quot;(A)&quot;</span><span class="p">,</span> <span class="s1">&#39;Final integration time: &#39;</span><span class="o">//</span><span class="n">str</span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">final_time</span><span class="p">,</span> <span class="p">.</span><span class="n">true</span><span class="p">.)</span>
-      <span class="k">print</span> <span class="s2">&quot;(A)&quot;</span><span class="p">,</span> <span class="s1">&#39;Time step: &#39;</span><span class="o">//</span><span class="n">str</span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">Dt</span><span class="p">,</span> <span class="p">.</span><span class="n">true</span><span class="p">.)</span>
-      <span class="k">stop</span>
-<span class="k">    </span><span class="n">endif</span>
+      <span class="n">self</span><span class="p">%</span><span class="n">beta</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">=</span> <span class="mf">1._R_P</span><span class="o">/</span><span class="mf">6._R_P</span>
+      <span class="n">self</span><span class="p">%</span><span class="n">beta</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span> <span class="o">=</span> <span class="mf">1._R_P</span><span class="o">/</span><span class="mf">6._R_P</span>
+      <span class="n">self</span><span class="p">%</span><span class="n">beta</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span> <span class="o">=</span> <span class="mf">2._R_P</span><span class="o">/</span><span class="mf">3._R_P</span>
 
-    <span class="k">if</span> <span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">errors_analysis</span><span class="p">)</span> <span class="k">then</span>
-<span class="k">      if</span> <span class="p">((.</span><span class="nb">not</span><span class="p">.(</span><span class="n">size</span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">Dt</span><span class="p">,</span> <span class="nb">dim</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">)).</span><span class="nb">and</span><span class="p">.(.</span><span class="nb">not</span><span class="p">.(</span><span class="n">size</span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">tolerance</span><span class="p">,</span> <span class="nb">dim</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">)))</span> <span class="n">self</span><span class="p">%</span><span class="n">errors_analysis</span> <span class="o">=</span> <span class="p">.</span><span class="n">false</span><span class="p">.</span>
-    <span class="n">endif</span>
-    <span class="n">endsubroutine</span> <span class="n">parse_cli</span>
+      <span class="n">self</span><span class="p">%</span><span class="n">alph</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span> <span class="o">=</span> <span class="mf">1._R_P</span>
+      <span class="n">self</span><span class="p">%</span><span class="n">alph</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span> <span class="o">=</span> <span class="mf">0.25_R_P</span> <span class="p">;</span> <span class="n">self</span><span class="p">%</span><span class="n">alph</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span> <span class="o">=</span> <span class="mf">0.25_R_P</span>
 
-    <span class="k">function </span><span class="n">is_dt_valid</span><span class="p">()</span>
-    <span class="c">!&lt; Verify if the selected time step Dt is valid.</span>
-    <span class="kt">logical</span>      <span class="kd">::</span> <span class="n">is_dt_valid</span> <span class="c">!&lt; Return true is the selected time step Dt is valid.</span>
-    <span class="kt">integer</span><span class="p">(</span><span class="n">I_P</span><span class="p">)</span> <span class="kd">::</span> <span class="n">t</span>           <span class="c">!&lt; Counter.</span>
+      <span class="n">self</span><span class="p">%</span><span class="n">gamm</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span> <span class="o">=</span> <span class="mf">1._R_P</span>
+      <span class="n">self</span><span class="p">%</span><span class="n">gamm</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span> <span class="o">=</span> <span class="mf">0.5_R_P</span>
+    <span class="k">case</span><span class="p">(</span><span class="s1">&#39;runge_kutta_ssp_stages_5_order_4&#39;</span><span class="p">)</span>
+      <span class="n">self</span><span class="p">%</span><span class="n">stages</span> <span class="o">=</span> <span class="mi">5</span>
+      <span class="k">allocate</span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">beta</span><span class="p">(</span><span class="mi">1</span><span class="p">:</span><span class="n">self</span><span class="p">%</span><span class="n">stages</span>               <span class="p">))</span> <span class="p">;</span> <span class="n">self</span><span class="p">%</span><span class="n">beta</span> <span class="o">=</span> <span class="mf">0._R_P</span>
+      <span class="k">allocate</span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">alph</span><span class="p">(</span><span class="mi">1</span><span class="p">:</span><span class="n">self</span><span class="p">%</span><span class="n">stages</span><span class="p">,</span> <span class="mi">1</span><span class="p">:</span><span class="n">self</span><span class="p">%</span><span class="n">stages</span><span class="p">))</span> <span class="p">;</span> <span class="n">self</span><span class="p">%</span><span class="n">alph</span> <span class="o">=</span> <span class="mf">0._R_P</span>
+      <span class="k">allocate</span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">gamm</span><span class="p">(</span>               <span class="mi">1</span><span class="p">:</span><span class="n">self</span><span class="p">%</span><span class="n">stages</span><span class="p">))</span> <span class="p">;</span> <span class="n">self</span><span class="p">%</span><span class="n">gamm</span> <span class="o">=</span> <span class="mf">0._R_P</span>
 
-    <span class="n">is_dt_valid</span> <span class="o">=</span> <span class="p">.</span><span class="n">true</span><span class="p">.</span>
-    <span class="k">do </span><span class="n">t</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">size</span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">Dt</span><span class="p">)</span>
-      <span class="n">is_dt_valid</span> <span class="o">=</span> <span class="p">((</span><span class="n">self</span><span class="p">%</span><span class="n">final_time</span> <span class="o">-</span> <span class="nb">int</span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">final_time</span><span class="o">/</span><span class="n">self</span><span class="p">%</span><span class="n">Dt</span><span class="p">(</span><span class="n">t</span><span class="p">),</span> <span class="n">I_P</span><span class="p">)</span><span class="o">*</span><span class="n">self</span><span class="p">%</span><span class="n">Dt</span><span class="p">(</span><span class="n">t</span><span class="p">))</span><span class="o">==</span><span class="mi">0</span><span class="p">)</span>
-      <span class="k">if</span> <span class="p">(.</span><span class="nb">not</span><span class="p">.</span><span class="n">is_dt_valid</span><span class="p">)</span> <span class="k">exit</span>
-<span class="k">    </span><span class="n">enddo</span>
-    <span class="n">endfunction</span> <span class="n">is_dt_valid</span>
+      <span class="n">self</span><span class="p">%</span><span class="n">beta</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">=</span> <span class="mf">0.14681187618661_R_P</span>
+      <span class="n">self</span><span class="p">%</span><span class="n">beta</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span> <span class="o">=</span> <span class="mf">0.24848290924556_R_P</span>
+      <span class="n">self</span><span class="p">%</span><span class="n">beta</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span> <span class="o">=</span> <span class="mf">0.10425883036650_R_P</span>
+      <span class="n">self</span><span class="p">%</span><span class="n">beta</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span> <span class="o">=</span> <span class="mf">0.27443890091960_R_P</span>
+      <span class="n">self</span><span class="p">%</span><span class="n">beta</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span> <span class="o">=</span> <span class="mf">0.22600748319395_R_P</span>
+
+      <span class="n">self</span><span class="p">%</span><span class="n">alph</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span><span class="o">=</span><span class="mf">0.39175222700392_R_P</span>
+      <span class="n">self</span><span class="p">%</span><span class="n">alph</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span><span class="o">=</span><span class="mf">0.21766909633821_R_P</span><span class="p">;</span><span class="n">self</span><span class="p">%</span><span class="n">alph</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span><span class="o">=</span><span class="mf">0.36841059262959_R_P</span>
+      <span class="n">self</span><span class="p">%</span><span class="n">alph</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span><span class="o">=</span><span class="mf">0.08269208670950_R_P</span><span class="p">;</span><span class="n">self</span><span class="p">%</span><span class="n">alph</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span><span class="o">=</span><span class="mf">0.13995850206999_R_P</span><span class="p">;</span><span class="n">self</span><span class="p">%</span><span class="n">alph</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span><span class="o">=</span><span class="mf">0.25189177424738_R_P</span>
+      <span class="n">self</span><span class="p">%</span><span class="n">alph</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span><span class="o">=</span><span class="mf">0.06796628370320_R_P</span><span class="p">;</span><span class="n">self</span><span class="p">%</span><span class="n">alph</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span><span class="o">=</span><span class="mf">0.11503469844438_R_P</span><span class="p">;</span><span class="n">self</span><span class="p">%</span><span class="n">alph</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span><span class="o">=</span><span class="mf">0.20703489864929_R_P</span>
+      <span class="n">self</span><span class="p">%</span><span class="n">alph</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">4</span><span class="p">)</span><span class="o">=</span><span class="mf">0.54497475021237_R_P</span>
+
+      <span class="n">self</span><span class="p">%</span><span class="n">gamm</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span> <span class="o">=</span> <span class="mf">0.39175222700392_R_P</span>
+      <span class="n">self</span><span class="p">%</span><span class="n">gamm</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span> <span class="o">=</span> <span class="mf">0.58607968896780_R_P</span>
+      <span class="n">self</span><span class="p">%</span><span class="n">gamm</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span> <span class="o">=</span> <span class="mf">0.47454236302687_R_P</span>
+      <span class="n">self</span><span class="p">%</span><span class="n">gamm</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span> <span class="o">=</span> <span class="mf">0.93501063100924_R_P</span>
+    <span class="n">endselect</span>
+  <span class="k">else</span>
+<span class="k">    call </span><span class="n">self</span><span class="p">%</span><span class="n">trigger_error</span><span class="p">(</span><span class="n">error</span><span class="o">=</span><span class="n">ERROR_UNSUPPORTED_SCHEME</span><span class="p">,</span>                                   <span class="p">&amp;</span>
+                            <span class="n">error_message</span><span class="o">=</span><span class="s1">&#39;&quot;&#39;</span><span class="o">//</span><span class="nb">trim</span><span class="p">(</span><span class="nb">adjustl</span><span class="p">(</span><span class="n">scheme</span><span class="p">))</span><span class="o">//</span><span class="s1">&#39;&quot; unsupported scheme&#39;</span><span class="p">,</span> <span class="p">&amp;</span>
+                            <span class="n">is_severe</span><span class="o">=</span><span class="n">stop_on_fail</span><span class="p">)</span>
+  <span class="n">endif</span>
   <span class="n">endsubroutine</span> <span class="n">initialize</span>
 </pre></div>
 
@@ -1120,6 +1152,8 @@ private subroutine initialize(self)
       
       <a class="list-group-item" href="../proc/class_name%7E11.html">class_name</a>
       
+      <a class="list-group-item" href="../proc/class_name%7E12.html">class_name</a>
+      
       <a class="list-group-item" href="../proc/compute_dt.html">compute_dt</a>
       
       <a class="list-group-item" href="../proc/compute_dt%7E2.html">compute_dt</a>
@@ -1180,6 +1214,8 @@ private subroutine initialize(self)
       
       <a class="list-group-item" href="../proc/description%7E11.html">description</a>
       
+      <a class="list-group-item" href="../proc/description%7E12.html">description</a>
+      
       <a class="list-group-item" href="../proc/destroy.html">destroy</a>
       
       <a class="list-group-item" href="../proc/destroy%7E2.html">destroy</a>
@@ -1211,6 +1247,8 @@ private subroutine initialize(self)
       <a class="list-group-item" href="../proc/destroy%7E15.html">destroy</a>
       
       <a class="list-group-item" href="../proc/destroy%7E16.html">destroy</a>
+      
+      <a class="list-group-item" href="../proc/destroy%7E17.html">destroy</a>
       
       <a class="list-group-item" href="../proc/destroy_abstract.html">destroy_abstract</a>
       
@@ -1364,6 +1402,8 @@ private subroutine initialize(self)
       
       <a class="list-group-item" href="../proc/initialize%7E11.html">initialize</a>
       
+      <a class="list-group-item" href="../proc/initialize%7E12.html">initialize</a>
+      
       <a class="list-group-item" href="../proc/integr_assign_integr.html">integr_assign_integr</a>
       
       <a class="list-group-item" href="../proc/integr_assign_integr%7E2.html">integr_assign_integr</a>
@@ -1386,6 +1426,8 @@ private subroutine initialize(self)
       
       <a class="list-group-item" href="../proc/integr_assign_integr%7E11.html">integr_assign_integr</a>
       
+      <a class="list-group-item" href="../proc/integr_assign_integr%7E12.html">integr_assign_integr</a>
+      
       <a class="list-group-item" href="../proc/integrate.html">integrate</a>
       
       <a class="list-group-item" href="../proc/integrate%7E2.html">integrate</a>
@@ -1407,6 +1449,8 @@ private subroutine initialize(self)
       <a class="list-group-item" href="../proc/integrate%7E10.html">integrate</a>
       
       <a class="list-group-item" href="../proc/integrate%7E11.html">integrate</a>
+      
+      <a class="list-group-item" href="../proc/integrate%7E12.html">integrate</a>
       
       <a class="list-group-item" href="../proc/integrate_adams_bashforth.html">integrate_adams_bashforth</a>
       
@@ -1467,6 +1511,8 @@ private subroutine initialize(self)
       <a class="list-group-item" href="../proc/is_supported%7E10.html">is_supported</a>
       
       <a class="list-group-item" href="../proc/is_supported%7E11.html">is_supported</a>
+      
+      <a class="list-group-item" href="../proc/is_supported%7E12.html">is_supported</a>
       
       <a class="list-group-item" href="../proc/lorenz_assign_lorenz.html">lorenz_assign_lorenz</a>
       
@@ -1640,6 +1686,8 @@ private subroutine initialize(self)
       
       <a class="list-group-item" href="../proc/supported_schemes%7E11.html">supported_schemes</a>
       
+      <a class="list-group-item" href="../proc/supported_schemes%7E12.html">supported_schemes</a>
+      
       <a class="list-group-item" href="../proc/synchronize.html">synchronize</a>
       
       <a class="list-group-item" href="../proc/synchronize%7E2.html">synchronize</a>
@@ -1694,6 +1742,8 @@ private subroutine initialize(self)
       
       <a class="list-group-item" href="../proc/update_previous%7E5.html">update_previous</a>
       
+      <a class="list-group-item" href="../proc/update_previous%7E6.html">update_previous</a>
+      
       <a class="list-group-item" href="../proc/update_previous_steps.html">update_previous_steps</a>
       
       <a class="list-group-item" href="../proc/update_previous_steps%7E2.html">update_previous_steps</a>
@@ -1717,7 +1767,7 @@ private subroutine initialize(self)
           <p class="text-right">
             Documentation generated by 
             <a href="https://github.com/cmacmackin/ford">FORD</a>
-             on 2017-04-05 10:53  
+             on 2017-04-05 16:25  
           </p>
         </div>
         <div class="col-xs-12 col-md-4 col-md-pull-4"><p class="text-center"> FOODIE was developed by Fortran-FOSS-Programmers Group</p></div>
