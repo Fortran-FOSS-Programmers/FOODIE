@@ -27,42 +27,63 @@ module foodie_integrator_adams_bashforth
 !< [2] *Linear multistep method*, [wikipedia article](https://en.wikipedia.org/wiki/Linear_multistep_method).
 
 use foodie_adt_integrand, only : integrand
-use foodie_error_codes, only : ERROR_BAD_STEPS_NUMBER
+use foodie_error_codes, only : ERROR_UNSUPPORTED_SCHEME
 use foodie_kinds, only : I_P, R_P
 use foodie_integrator_object, only : integrator_object
-use foodie_utils, only : is_admissible
 
 implicit none
 private
 public :: integrator_adams_bashforth
 
-character(len=99), parameter :: supported_steps='1-16' !< List of supported steps number. Valid format is `1-2,4,9-23...`.
-integer(I_P),      parameter :: min_ss=1               !< Minimum number of steps supported.
-integer(I_P),      parameter :: max_ss=16              !< Maximum number of steps supported.
+character(len=99), parameter :: class_name_='adams_bashforth'                       !< Name of the class of schemes.
+character(len=99), parameter :: supported_schemes_(1:16)=[trim(class_name_)//'_1 ', &
+                                                          trim(class_name_)//'_2 ', &
+                                                          trim(class_name_)//'_3 ', &
+                                                          trim(class_name_)//'_4 ', &
+                                                          trim(class_name_)//'_5 ', &
+                                                          trim(class_name_)//'_6 ', &
+                                                          trim(class_name_)//'_7 ', &
+                                                          trim(class_name_)//'_8 ', &
+                                                          trim(class_name_)//'_9 ', &
+                                                          trim(class_name_)//'_10', &
+                                                          trim(class_name_)//'_11', &
+                                                          trim(class_name_)//'_12', &
+                                                          trim(class_name_)//'_13', &
+                                                          trim(class_name_)//'_14', &
+                                                          trim(class_name_)//'_15', &
+                                                          trim(class_name_)//'_16'] !< List of supported schemes.
 
 type, extends(integrator_object) :: integrator_adams_bashforth
   !< FOODIE integrator: provide an explicit class of Adams-Bashforth multi-step schemes, from 1st to 16th order accurate.
   !<
   !< @note The integrator must be created or initialized (initialize the *b* coefficients) before used.
   private
-  integer(I_P)           :: steps=0 !< Number of time steps.
+  integer(I_P), public   :: steps=0 !< Number of time steps.
   real(R_P), allocatable :: b(:)    !< *b* coefficients.
   contains
     ! deferred methods
+    procedure, pass(self) :: class_name           !< Return the class name of schemes.
     procedure, pass(self) :: description          !< Return pretty-printed object description.
     procedure, pass(lhs)  :: integr_assign_integr !< Operator `=`.
+    procedure, pass(self) :: is_supported         !< Return .true. if the integrator class support the given scheme.
+    procedure, pass(self) :: supported_schemes    !< Return the list of supported schemes.
     ! public methods
     procedure, pass(self) :: destroy         !< Destroy the integrator.
-    procedure, pass(self) :: init            !< Initialize (create) the integrator.
+    procedure, pass(self) :: initialize      !< Initialize (create) the integrator.
     procedure, pass(self) :: integrate       !< Integrate integrand field.
-    procedure, nopass     :: is_supported    !< Check if the queried number of steps is supported or not.
-    procedure, nopass     :: min_steps       !< Return the minimum number of steps supported.
-    procedure, nopass     :: max_steps       !< Return the maximum number of steps supported.
     procedure, pass(self) :: update_previous !< Cyclic update previous time steps.
 endtype integrator_adams_bashforth
 
 contains
   ! deferred methods
+  pure function class_name(self)
+  !< Return the class name of schemes.
+  class(integrator_adams_bashforth), intent(in) :: self       !< Integrator.
+  character(len=99)                             :: class_name !< Class name.
+
+  class_name = trim(adjustl(class_name_))
+  endfunction class_name
+
   pure function description(self, prefix) result(desc)
   !< Return a pretty-formatted object description.
   class(integrator_adams_bashforth), intent(in)           :: self             !< Integrator.
@@ -70,11 +91,16 @@ contains
   character(len=:), allocatable                           :: desc             !< Description.
   character(len=:), allocatable                           :: prefix_          !< Prefixing string, local variable.
   character(len=1), parameter                             :: NL=new_line('a') !< New line character.
+  integer(I_P)                                            :: s                !< Counter.
 
   prefix_ = '' ; if (present(prefix)) prefix_ = prefix
   desc = ''
   desc = desc//prefix_//'Adams-Bashforth multi-step schemes class'//NL
-  desc = desc//prefix_//'  Supported steps numbers: ['//trim(adjustl(supported_steps))//']'
+  desc = desc//prefix_//'  Supported schemes:'//NL
+  do s=lbound(supported_schemes_, dim=1), ubound(supported_schemes_, dim=1) - 1
+    desc = desc//prefix_//'    + '//supported_schemes_(s)//NL
+  enddo
+  desc = desc//prefix_//'    + '//supported_schemes_(ubound(supported_schemes_, dim=1))
   endfunction description
 
   pure subroutine integr_assign_integr(lhs, rhs)
@@ -90,6 +116,31 @@ contains
   endselect
   endsubroutine integr_assign_integr
 
+  elemental function is_supported(self, scheme)
+  !< Return .true. if the integrator class support the given scheme.
+  class(integrator_adams_bashforth), intent(in) :: self         !< Integrator.
+  character(*),                      intent(in) :: scheme       !< Selected scheme.
+  logical                                       :: is_supported !< Inquire result.
+  integer(I_P)                                  :: s            !< Counter.
+
+  is_supported = .false.
+  do s=lbound(supported_schemes_, dim=1), ubound(supported_schemes_, dim=1)
+    if (trim(adjustl(scheme)) == trim(adjustl(supported_schemes_(s)))) then
+      is_supported = .true.
+      return
+    endif
+  enddo
+  endfunction is_supported
+
+  pure function supported_schemes(self) result(schemes)
+  !< Return the list of supported schemes.
+  class(integrator_adams_bashforth), intent(in) :: self       !< Integrator.
+  character(len=99), allocatable                :: schemes(:) !< Queried scheme.
+
+  allocate(schemes(lbound(supported_schemes_, dim=1):ubound(supported_schemes_, dim=1)))
+  schemes = supported_schemes_
+  endfunction supported_schemes
+
   ! public methods
   elemental subroutine destroy(self)
   !< Destroy the integrator.
@@ -100,48 +151,52 @@ contains
   if (allocated(self%b)) deallocate(self%b)
   endsubroutine destroy
 
-  subroutine init(self, steps)
+  subroutine initialize(self, scheme)
   !< Create the actual Adams-Bashforth integrator: initialize the *b* coefficients.
   !<
   !< @note If the integrator is initialized with a bad (unsupported) number of required time steps the initialization fails and
   !< the integrator error status is updated consistently for external-provided errors handling.
-  class(integrator_adams_bashforth), intent(inout) :: self  !< Integrator.
-  integer(I_P),                      intent(in)    :: steps !< Number of time steps used.
+  class(integrator_adams_bashforth), intent(inout) :: self   !< Integrator.
+  character(*),                      intent(in)    :: scheme !< Selected scheme.
 
-  if (self%is_supported(steps)) then
+  if (self%is_supported(scheme=scheme)) then
     call self%destroy
-    self%steps = steps
-    allocate(self%b(1:steps)) ; self%b = 0.0_R_P
-    select case(steps)
-    case(1)
-      ! AB(1) Forward-Euler
+    select case(trim(adjustl(scheme)))
+    case('adams_bashforth_1')
+      self%steps = 1 ; allocate(self%b(1:self%steps)) ; self%b = 0.0_R_P
       self%b(1) = 1.0_R_P
-    case(2)
+    case('adams_bashforth_2')
+      self%steps = 2 ; allocate(self%b(1:self%steps)) ; self%b = 0.0_R_P
       self%b(1) = -1.0_R_P/2.0_R_P
       self%b(2) = 3.0_R_P/2.0_R_P
-    case(3)
+    case('adams_bashforth_3')
+      self%steps = 3 ; allocate(self%b(1:self%steps)) ; self%b = 0.0_R_P
       self%b(1) = 5.0_R_P/12.0_R_P
       self%b(2) = -16.0_R_P/12.0_R_P
       self%b(3) = 23.0_R_P/12.0_R_P
-    case(4)
+    case('adams_bashforth_4')
+      self%steps = 4 ; allocate(self%b(1:self%steps)) ; self%b = 0.0_R_P
       self%b(1) = -9.0_R_P/24.0_R_P
       self%b(2) = 37.0_R_P/24.0_R_P
       self%b(3) = -59.0_R_P/24.0_R_P
       self%b(4) = 55.0_R_P/24.0_R_P
-    case(5)
+    case('adams_bashforth_5')
+      self%steps = 5 ; allocate(self%b(1:self%steps)) ; self%b = 0.0_R_P
       self%b(1) = 251.0_R_P/720.0_R_P
       self%b(2) = -1274.0_R_P/720.0_R_P
       self%b(3) = 2616.0_R_P/720.0_R_P
       self%b(4) = -2774.0_R_P/720.0_R_P
       self%b(5) = 1901.0_R_P/720.0_R_P
-    case(6)
+    case('adams_bashforth_6')
+      self%steps = 6 ; allocate(self%b(1:self%steps)) ; self%b = 0.0_R_P
       self%b(1) = -475.0_R_P/1440.0_R_P
       self%b(2) = 2877.0_R_P/1440.0_R_P
       self%b(3) = -7298.0_R_P/1440.0_R_P
       self%b(4) = 9982.0_R_P/1440.0_R_P
       self%b(5) = -7923.0_R_P/1440.0_R_P
       self%b(6) = 4277.0_R_P/1440.0_R_P
-    case(7)
+    case('adams_bashforth_7')
+      self%steps = 7 ; allocate(self%b(1:self%steps)) ; self%b = 0.0_R_P
       self%b(1) = 19087.0_R_P/60480.0_R_P
       self%b(2) = -134472.0_R_P/60480.0_R_P
       self%b(3) = 407139.0_R_P/60480.0_R_P
@@ -149,7 +204,8 @@ contains
       self%b(5) = 705549.0_R_P/60480.0_R_P
       self%b(6) = -447288.0_R_P/60480.0_R_P
       self%b(7) = 198721.0_R_P/60480.0_R_P
-    case(8)
+    case('adams_bashforth_8')
+      self%steps = 8 ; allocate(self%b(1:self%steps)) ; self%b = 0.0_R_P
       self%b(1) = -36799.0_R_P/120960.0_R_P
       self%b(2) = 295767.0_R_P/120960.0_R_P
       self%b(3) = -1041723.0_R_P/120960.0_R_P
@@ -158,7 +214,8 @@ contains
       self%b(6) = 2183877.0_R_P/120960.0_R_P
       self%b(7) = -1152169.0_R_P/120960.0_R_P
       self%b(8) = 434241.0_R_P/120960.0_R_P
-    case(9)
+    case('adams_bashforth_9')
+      self%steps = 9 ; allocate(self%b(1:self%steps)) ; self%b = 0.0_R_P
       self%b(1) = 1070017.0_R_P/3628800.0_R_P
       self%b(2) = -9664106.0_R_P/3628800.0_R_P
       self%b(3) = 38833486.0_R_P/3628800.0_R_P
@@ -168,7 +225,8 @@ contains
       self%b(7) = 95476786.0_R_P/3628800.0_R_P
       self%b(8) = -43125206.0_R_P/3628800.0_R_P
       self%b(9) = 14097247.0_R_P/3628800.0_R_P
-    case(10)
+    case('adams_bashforth_10')
+      self%steps = 10 ; allocate(self%b(1:self%steps)) ; self%b = 0.0_R_P
       self%b(1) = -2082753.0_R_P/7257600.0_R_P
       self%b(2) = 20884811.0_R_P/7257600.0_R_P
       self%b(3) = -94307320.0_R_P/7257600.0_R_P
@@ -179,7 +237,8 @@ contains
       self%b(8) = 265932680.0_R_P/7257600.0_R_P
       self%b(9) = -104995189.0_R_P/7257600.0_R_P
       self%b(10) = 30277247.0_R_P/7257600.0_R_P
-    case(11)
+    case('adams_bashforth_11')
+      self%steps = 11 ; allocate(self%b(1:self%steps)) ; self%b = 0.0_R_P
       self%b(1) = 134211265.0_R_P/479001600.0_R_P
       self%b(2) = -1479574348.0_R_P/479001600.0_R_P
       self%b(3) = 7417904451.0_R_P/479001600.0_R_P
@@ -191,7 +250,8 @@ contains
       self%b(9) = 23591063805.0_R_P/479001600.0_R_P
       self%b(10) = -8271795124.0_R_P/479001600.0_R_P
       self%b(11) = 2132509567.0_R_P/479001600.0_R_P
-    case(12)
+    case('adams_bashforth_12')
+      self%steps = 12 ; allocate(self%b(1:self%steps)) ; self%b = 0.0_R_P
       self%b(1) = -262747265.0_R_P/958003200.0_R_P
       self%b(2) = 3158642445.0_R_P/958003200.0_R_P
       self%b(3) = -17410248271.0_R_P/958003200.0_R_P
@@ -204,7 +264,8 @@ contains
       self%b(10) = 61633227185.0_R_P/958003200.0_R_P
       self%b(11) = -19433810163.0_R_P/958003200.0_R_P
       self%b(12) = 4527766399.0_R_P/958003200.0_R_P
-    case(13)
+    case('adams_bashforth_13')
+      self%steps = 13 ; allocate(self%b(1:self%steps)) ; self%b = 0.0_R_P
       self%b(1) = 703604254357.0_R_P/2615348736000.0_R_P
       self%b(2) = -9160551085734.0_R_P/2615348736000.0_R_P
       self%b(3) = 55060974662412.0_R_P/2615348736000.0_R_P
@@ -218,7 +279,8 @@ contains
       self%b(11) = 214696591002612.0_R_P/2615348736000.0_R_P
       self%b(12) = -61497552797274.0_R_P/2615348736000.0_R_P
       self%b(13) = 13064406523627.0_R_P/2615348736000.0_R_P
-    case(14)
+    case('adams_bashforth_14')
+      self%steps = 14 ; allocate(self%b(1:self%steps)) ; self%b = 0.0_R_P
       self%b(1) = -1382741929621.0_R_P/5230697472000.0_R_P
       self%b(2) = 19382853593787.0_R_P/5230697472000.0_R_P
       self%b(3) = -126174972681906.0_R_P/5230697472000.0_R_P
@@ -233,7 +295,8 @@ contains
       self%b(12) = 537247052515662.0_R_P/5230697472000.0_R_P
       self%b(13) = -140970750679621.0_R_P/5230697472000.0_R_P
       self%b(14) = 27511554976875.0_R_P/5230697472000.0_R_P
-    case(15)
+    case('adams_bashforth_15')
+      self%steps = 15 ; allocate(self%b(1:self%steps)) ; self%b = 0.0_R_P
       self%b(1) = 8164168737599.0_R_P/31384184832000.0_R_P
       self%b(2) = -122594813904112.0_R_P/31384184832000.0_R_P
       self%b(3) = 859236476684231.0_R_P/31384184832000.0_R_P
@@ -249,7 +312,8 @@ contains
       self%b(13) = 3966421670215481.0_R_P/31384184832000.0_R_P
       self%b(14) = -960122866404112.0_R_P/31384184832000.0_R_P
       self%b(15) = 173233498598849.0_R_P/31384184832000.0_R_P
-    case(16)
+    case('adams_bashforth_16')
+      self%steps = 16 ; allocate(self%b(1:self%steps)) ; self%b = 0.0_R_P
       self%b(1) = -16088129229375.0_R_P/62768369664000.0_R_P
       self%b(2) = 257650275915823.0_R_P/62768369664000.0_R_P
       self%b(3) = -1934443196892599.0_R_P/62768369664000.0_R_P
@@ -268,11 +332,11 @@ contains
       self%b(16) = 362555126427073.0_R_P/62768369664000.0_R_P
     endselect
   else
-    call self%trigger_error(error=ERROR_BAD_STEPS_NUMBER,                           &
-                            error_message='bad (unsupported) number of time steps', &
+    call self%trigger_error(error=ERROR_UNSUPPORTED_SCHEME,                                   &
+                            error_message='"'//trim(adjustl(scheme))//'" unsupported scheme', &
                             is_severe=.true.)
   endif
-  endsubroutine init
+  endsubroutine initialize
 
   subroutine integrate(self, U, previous, Dt, t, autoupdate)
   !< Integrate field with Adams-Bashforth class scheme.
@@ -291,28 +355,6 @@ contains
   enddo
   if (autoupdate_) call self%update_previous(U=U, previous=previous)
   endsubroutine integrate
-
-  elemental function is_supported(steps)
-  !< Check if the queried number of steps is supported or not.
-  integer(I_P), intent(in) :: steps        !< Number of time steps used.
-  logical                  :: is_supported !< Is true if the steps number is in *supported_steps*.
-
-  is_supported = is_admissible(n=steps, adm_range=trim(supported_steps))
-  endfunction is_supported
-
-  pure function min_steps()
-  !< Return the minimum number of steps supported.
-  integer(I_P) :: min_steps !< Minimum number of steps supported.
-
-  min_steps = min_ss
-  endfunction min_steps
-
-  pure function max_steps()
-  !< Return the maximum number of steps supported.
-  integer(I_P) :: max_steps !< Maximum number of steps supported.
-
-  max_steps = max_ss
-  endfunction max_steps
 
   subroutine update_previous(self, U, previous)
   !< Cyclic update previous time steps.
