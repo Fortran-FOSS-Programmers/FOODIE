@@ -38,19 +38,20 @@ module foodie_integrator_lmm_ssp_vss
 !< L. Loczi, A. Nemeth, 2016, SIAM, Vol. 54, N. 5, pp. 2799-2832.
 
 use foodie_adt_integrand, only : integrand
-use foodie_error_codes, only : ERROR_INTEGRATOR_INIT_FAIL
+use foodie_error_codes, only : ERROR_UNSUPPORTED_SCHEME
 use foodie_kinds, only : I_P, R_P
 use foodie_integrator_object, only : integrator_object
-use foodie_utils, only : is_admissible
 
 implicit none
 private
 public :: integrator_lmm_ssp_vss
 
-character(len=99), parameter :: supported_steps='2-5'        !< List of supported steps number. Valid format is `1-2,4,9-23...`.
-character(len=99), parameter :: supported_orders='2-3'       !< List of supported accuracy orders. Valid format is `1-2,4,9-23...`.
-integer(I_P),      parameter :: supported_steps_(1:2)=[2,5]  !< Supported steps range.
-integer(I_P),      parameter :: supported_orders_(1:2)=[2,3] !< Supported orders range.
+character(len=99), parameter :: class_name_='lmm_ssp_vss'                                       !< Name of the class of schemes.
+character(len=99), parameter :: supported_schemes_(1:5)=[trim(class_name_)//'_steps_2_order_2', &
+                                                         trim(class_name_)//'_steps_3_order_2', &
+                                                         trim(class_name_)//'_steps_3_order_3', &
+                                                         trim(class_name_)//'_steps_4_order_3', &
+                                                         trim(class_name_)//'_steps_5_order_3'] !< List of supported schemes.
 
 type, extends(integrator_object) :: integrator_lmm_ssp_vss
   !< FOODIE integrator: provide an explicit class of Linear Multi-step Methods (LLM) with Strong Stability Preserving property and
@@ -58,20 +59,19 @@ type, extends(integrator_object) :: integrator_lmm_ssp_vss
   !<
   !< @note The integrator must be created or initialized before used.
   private
-  integer(I_P) :: steps=0 !< Number of time steps.
-  integer(I_P) :: order=0 !< Order of accuracy.
+  integer(I_P), public                    :: steps=0                         !< Number of time steps.
   procedure(integrate_interface), pointer :: integrate_ => integrate_order_2 !< Integrate integrand field.
   contains
     ! deferred methods
+    procedure, pass(self) :: class_name           !< Return the class name of schemes.
     procedure, pass(self) :: description          !< Return pretty-printed object description.
     procedure, pass(lhs)  :: integr_assign_integr !< Operator `=`.
+    procedure, pass(self) :: is_supported         !< Return .true. if the integrator class support the given scheme.
+    procedure, pass(self) :: supported_schemes    !< Return the list of supported schemes.
     ! public methods
     procedure, pass(self) :: destroy         !< Destroy the integrator.
-    procedure, pass(self) :: init            !< Initialize (create) the integrator.
+    procedure, pass(self) :: initialize      !< Initialize (create) the integrator.
     procedure, pass(self) :: integrate       !< Integrate integrand field.
-    procedure, nopass     :: is_supported    !< Check if the queried number of steps is supported or not.
-    procedure, nopass     :: min_steps       !< Return the minimum number of steps supported.
-    procedure, nopass     :: max_steps       !< Return the maximum number of steps supported.
     procedure, pass(self) :: update_previous !< Cyclic update previous time steps.
     ! private methods
     procedure, pass(self), private :: integrate_order_2 !< Integrate integrand field by 2nd order formula.
@@ -93,6 +93,14 @@ endinterface
 
 contains
   ! deferred methods
+  pure function class_name(self)
+  !< Return the class name of schemes.
+  class(integrator_lmm_ssp_vss), intent(in) :: self       !< Integrator.
+  character(len=99)                         :: class_name !< Class name.
+
+  class_name = trim(adjustl(class_name_))
+  endfunction class_name
+
   pure function description(self, prefix) result(desc)
   !< Return a pretty-formatted object description.
   class(integrator_lmm_ssp_vss), intent(in)           :: self             !< Integrator.
@@ -100,13 +108,16 @@ contains
   character(len=:), allocatable                       :: desc             !< Description.
   character(len=:), allocatable                       :: prefix_          !< Prefixing string, local variable.
   character(len=1), parameter                         :: NL=new_line('a') !< New line character.
+  integer(I_P)                                        :: s                !< Counter.
 
   prefix_ = '' ; if (present(prefix)) prefix_ = prefix
   desc = ''
   desc = desc//prefix_//'Strong Stability preserving Linear-Multistep-Methods Variable Stepsize class'//NL
-  desc = desc//prefix_//'  Supported steps numbers: ['//trim(adjustl(supported_steps))//']'//NL
-  desc = desc//prefix_//'  Supported orders:        ['//trim(adjustl(supported_orders))//']'//NL
-  desc = desc//prefix_//'  Not all steps/order combinations are supported'
+  desc = desc//prefix_//'  Supported schemes:'//NL
+  do s=lbound(supported_schemes_, dim=1), ubound(supported_schemes_, dim=1) - 1
+    desc = desc//prefix_//'    + '//supported_schemes_(s)//NL
+  enddo
+  desc = desc//prefix_//'    + '//supported_schemes_(ubound(supported_schemes_, dim=1))
   endfunction description
 
   pure subroutine integr_assign_integr(lhs, rhs)
@@ -118,10 +129,34 @@ contains
   select type(rhs)
   class is (integrator_lmm_ssp_vss)
                                     lhs%steps      =  rhs%steps
-                                    lhs%order      =  rhs%order
     if (associated(rhs%integrate_)) lhs%integrate_ => rhs%integrate_
   endselect
   endsubroutine integr_assign_integr
+
+  elemental function is_supported(self, scheme)
+  !< Return .true. if the integrator class support the given scheme.
+  class(integrator_lmm_ssp_vss), intent(in) :: self         !< Integrator.
+  character(*),                  intent(in) :: scheme       !< Selected scheme.
+  logical                                   :: is_supported !< Inquire result.
+  integer(I_P)                              :: s            !< Counter.
+
+  is_supported = .false.
+  do s=lbound(supported_schemes_, dim=1), ubound(supported_schemes_, dim=1)
+    if (trim(adjustl(scheme)) == trim(adjustl(supported_schemes_(s)))) then
+      is_supported = .true.
+      return
+    endif
+  enddo
+  endfunction is_supported
+
+  pure function supported_schemes(self) result(schemes)
+  !< Return the list of supported schemes.
+  class(integrator_lmm_ssp_vss), intent(in) :: self       !< Integrator.
+  character(len=99), allocatable            :: schemes(:) !< Queried scheme.
+
+  allocate(schemes(lbound(supported_schemes_, dim=1):ubound(supported_schemes_, dim=1)))
+  schemes = supported_schemes_
+  endfunction supported_schemes
 
   ! public methods
   elemental subroutine destroy(self)
@@ -130,36 +165,43 @@ contains
 
   call self%destroy_abstract
   self%steps = 0
-  self%order = 0
   self%integrate_ => integrate_order_2
   endsubroutine destroy
 
-  subroutine init(self, steps, order, stop_on_fail)
+  subroutine initialize(self, scheme, stop_on_fail)
   !< Create the actual LMM-SSP-VSS integrator.
   !<
   !< @note If the integrator is initialized with a bad (unsupported) number of required time steps the initialization fails and
   !< the integrator error status is updated consistently for external-provided errors handling.
   class(integrator_lmm_ssp_vss), intent(inout)        :: self         !< Integrator.
-  integer(I_P),                  intent(in)           :: steps        !< Number of time steps used.
-  integer(I_P),                  intent(in)           :: order        !< Order of accuracy.
+  character(*),                  intent(in)           :: scheme       !< Selected scheme.
   logical,                       intent(in), optional :: stop_on_fail !< Stop execution if initialization fail.
 
-  if (self%is_supported(steps=steps, order=order)) then
+  if (self%is_supported(scheme=scheme)) then
     call self%destroy
-    self%steps = steps
-    self%order = order
-    select case(order)
-    case(2) ! LMM-SSP-VSS(steps,2)
+    select case(trim(adjustl(scheme)))
+    case('lmm_ssp_vss_steps_2_order_2')
+      self%steps = 2
       self%integrate_ => integrate_order_2
-    case(3) ! LMM-SSP-VSS(steps,3)
+    case('lmm_ssp_vss_steps_3_order_2')
+      self%steps = 3
+      self%integrate_ => integrate_order_2
+    case('lmm_ssp_vss_steps_3_order_3')
+      self%steps = 3
+      self%integrate_ => integrate_order_3
+    case('lmm_ssp_vss_steps_4_order_3')
+      self%steps = 4
+      self%integrate_ => integrate_order_3
+    case('lmm_ssp_vss_steps_5_order_3')
+      self%steps = 5
       self%integrate_ => integrate_order_3
     endselect
   else
-    call self%trigger_error(error=ERROR_INTEGRATOR_INIT_FAIL,                                            &
-                            error_message='bad (unsupported) scheme'//new_line('a')//self%description(), &
+    call self%trigger_error(error=ERROR_UNSUPPORTED_SCHEME,                                   &
+                            error_message='"'//trim(adjustl(scheme))//'" unsupported scheme', &
                             is_severe=stop_on_fail)
   endif
-  endsubroutine init
+  endsubroutine initialize
 
   subroutine integrate(self, U, previous, Dt, t, autoupdate)
   !< Integrate field with LMM-SSP class scheme.
@@ -172,38 +214,6 @@ contains
 
   call self%integrate_(U=U, previous=previous, Dt=Dt, t=t, autoupdate=autoupdate)
   endsubroutine integrate
-
-  elemental function is_supported(steps, order)
-  !< Check if the queried number of steps is supported or not.
-  integer(I_P), intent(in) :: steps        !< Number of time steps used.
-  integer(I_P), intent(in) :: order        !< Order of accuracy.
-  logical                  :: is_supported !< Is true if the steps number is in *supported_steps*.
-
-  is_supported = is_admissible(n=steps, adm_range=trim(supported_steps))
-  if (is_supported) is_supported = is_admissible(n=order, adm_range=trim(supported_orders))
-  if (is_supported) then
-     select case(order)
-     case(2)
-       is_supported = steps >= 2
-     case(3)
-       is_supported = steps >= 4
-     endselect
-  endif
-  endfunction is_supported
-
-  pure function min_steps()
-  !< Return the minimum number of steps supported.
-  integer(I_P) :: min_steps !< Minimum number of steps supported.
-
-  min_steps = supported_steps_(1)
-  endfunction min_steps
-
-  pure function max_steps()
-  !< Return the maximum number of steps supported.
-  integer(I_P) :: max_steps !< Maximum number of steps supported.
-
-  max_steps = supported_steps_(1)
-  endfunction max_steps
 
   subroutine update_previous(self, U, previous, Dt)
   !< Cyclic update previous time steps.

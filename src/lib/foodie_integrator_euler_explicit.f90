@@ -17,15 +17,13 @@ module foodie_integrator_euler_explicit
 use foodie_adt_integrand, only : integrand
 use foodie_kinds, only : I_P, R_P
 use foodie_integrator_object, only : integrator_object
-use foodie_utils, only : is_admissible
 
 implicit none
 private
 public :: integrator_euler_explicit
 
-character(len=1), parameter :: supported_stages_steps='1' !< List of supported stages/steps number. Valid format is `1-2,4,9-23...`.
-integer(I_P),     parameter :: min_ss=1                   !< Minimum number of stages/steps supported.
-integer(I_P),     parameter :: max_ss=1                   !< Maximum number of stages/steps supported.
+character(len=99), parameter :: class_name_='euler_explicit'                !< Name of the class of schemes.
+character(len=99), parameter :: supported_schemes_(1:1)=[trim(class_name_)] !< List of supported schemes.
 
 type, extends(integrator_object) :: integrator_euler_explicit
   !< FOODIE integrator: provide explicit Euler scheme, it being 1st order accurate.
@@ -33,17 +31,25 @@ type, extends(integrator_object) :: integrator_euler_explicit
   !< @note The integrator can be used directly without any initialization.
   contains
     ! deferred methods
+    procedure, pass(self) :: class_name           !< Return the class name of schemes.
     procedure, pass(self) :: description          !< Return pretty-printed object description.
     procedure, pass(lhs)  :: integr_assign_integr !< Operator `=`.
+    procedure, pass(self) :: is_supported         !< Return .true. if the integrator class support the given scheme.
+    procedure, pass(self) :: supported_schemes    !< Return the list of supported schemes.
     ! public methods
-    procedure, pass(self) :: destroy          !< Destroy the integrator.
-    procedure, nopass     :: integrate        !< Integrate integrand field.
-    procedure, nopass     :: is_supported     !< Check if the queried number of stages/steps is supported or not.
-    procedure, nopass     :: min_stages_steps !< Return the minimum number of stages/steps supported.
-    procedure, nopass     :: max_stages_steps !< Return the maximum number of stages/steps supported.
+    procedure, pass(self) :: destroy   !< Destroy the integrator.
+    procedure, nopass     :: integrate !< Integrate integrand field.
 endtype integrator_euler_explicit
 contains
   ! deferred methods
+  pure function class_name(self)
+  !< Return the class name of schemes.
+  class(integrator_euler_explicit), intent(in) :: self       !< Integrator.
+  character(len=99)                            :: class_name !< Class name.
+
+  class_name = trim(adjustl(class_name_))
+  endfunction class_name
+
   pure function description(self, prefix) result(desc)
   !< Return a pretty-formatted object description.
   class(integrator_euler_explicit), intent(in)           :: self    !< Integrator.
@@ -63,6 +69,31 @@ contains
   call lhs%assign_abstract(rhs=rhs)
   endsubroutine integr_assign_integr
 
+  elemental function is_supported(self, scheme)
+  !< Return .true. if the integrator class support the given scheme.
+  class(integrator_euler_explicit), intent(in) :: self         !< Integrator.
+  character(*),                     intent(in) :: scheme       !< Selected scheme.
+  logical                                      :: is_supported !< Inquire result.
+  integer(I_P)                                 :: s            !< Counter.
+
+  is_supported = .false.
+  do s=lbound(supported_schemes_, dim=1), ubound(supported_schemes_, dim=1)
+    if (trim(adjustl(scheme)) == trim(adjustl(supported_schemes_(s)))) then
+      is_supported = .true.
+      return
+    endif
+  enddo
+  endfunction is_supported
+
+  pure function supported_schemes(self) result(schemes)
+  !< Return the list of supported schemes.
+  class(integrator_euler_explicit), intent(in) :: self       !< Integrator.
+  character(len=99), allocatable               :: schemes(:) !< Queried scheme.
+
+  allocate(schemes(lbound(supported_schemes_, dim=1):ubound(supported_schemes_, dim=1)))
+  schemes = supported_schemes_
+  endfunction supported_schemes
+
   ! public methods
   elemental subroutine destroy(self)
   !< Destroy the integrator.
@@ -79,26 +110,4 @@ contains
 
   U = U + U%t(t=t) * Dt
   endsubroutine integrate
-
-  elemental function is_supported(stages_steps)
-  !< Check if the queried number of stages/steps is supported or not.
-  integer(I_P), intent(in) :: stages_steps !< Number of stages/steps used.
-  logical                  :: is_supported !< Is true is the stages number is in *supported_stages_steps*.
-
-  is_supported = is_admissible(n=stages_steps, adm_range=trim(supported_stages_steps))
-  endfunction is_supported
-
-  pure function min_stages_steps()
-  !< Return the minimum number of stages/steps supported.
-  integer(I_P) :: min_stages_steps !< Minimum number of stages/steps supported.
-
-  min_stages_steps = min_ss
-  endfunction min_stages_steps
-
-  pure function max_stages_steps()
-  !< Return the maximum number of stages/steps supported.
-  integer(I_P) :: max_stages_steps !< Maximum number of stages/steps supported.
-
-  max_stages_steps = max_ss
-  endfunction max_stages_steps
 endmodule foodie_integrator_euler_explicit

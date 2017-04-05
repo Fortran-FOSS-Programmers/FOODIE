@@ -21,14 +21,25 @@ type, abstract :: integrator_object
     procedure, pass(self) :: destroy_abstract !< Destroy only members of abstract [[integrator_object]] type.
     procedure, pass(self) :: trigger_error    !< Trigger an error.
     ! deferred methods
-    procedure(description_interface), pass(self), deferred :: description          !< Return pretty-printed object description.
-    procedure(assignment_interface),  pass(lhs),  deferred :: integr_assign_integr !< Operator `=`.
+    procedure(class_name_interface),        pass(self), deferred :: class_name           !< Return the class name of schemes.
+    procedure(description_interface),       pass(self), deferred :: description          !< Return pretty-printed object description.
+    procedure(assignment_interface),        pass(lhs),  deferred :: integr_assign_integr !< Operator `=`.
+    procedure(is_supported_interface),      pass(self), deferred :: is_supported         !< Return .true. if the integrator class
+                                                                                         !< support the given scheme.
+    procedure(supported_schemes_interface), pass(self), deferred :: supported_schemes    !< Return the list of supported schemes.
     ! operators
     generic :: assignment(=) => integr_assign_integr !< Overload `=`.
 endtype integrator_object
 
 abstract interface
   !< Abstract interfaces of deferred methods of [[integrator_object]].
+  pure function class_name_interface(self) result(class_name)
+  !< Return the class name of schemes.
+  import :: integrator_object
+  class(integrator_object), intent(in) :: self       !< Integrator.
+  character(len=99)                    :: class_name !< Class name.
+  endfunction class_name_interface
+
   pure function description_interface(self, prefix) result(desc)
   !< Return a pretty-formatted object description.
   import :: integrator_object
@@ -43,6 +54,21 @@ abstract interface
   class(integrator_object), intent(inout) :: lhs !< Left hand side.
   class(integrator_object), intent(in)    :: rhs !< Right hand side.
   endsubroutine assignment_interface
+
+  elemental function is_supported_interface(self, scheme) result(is_supported)
+  !< Return .true. if the integrator class support the given scheme.
+  import :: integrator_object
+  class(integrator_object), intent(in) :: self         !< Integrator.
+  character(*),             intent(in) :: scheme       !< Queried scheme.
+  logical                              :: is_supported !< Inquire result.
+  endfunction is_supported_interface
+
+  pure function supported_schemes_interface(self) result(schemes)
+  !< Return the list of supported schemes.
+  import :: integrator_object
+  class(integrator_object), intent(in) :: self       !< Integrator.
+  character(len=99), allocatable       :: schemes(:) !< Queried scheme.
+  endfunction supported_schemes_interface
 endinterface
 
 contains

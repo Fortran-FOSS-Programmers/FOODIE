@@ -27,18 +27,18 @@ module foodie_integrator_lmm_ssp
 !< 2011, 978-981-4289-26-9, doi:10.1142/7498, World Scientific Publishing Co. Pte. Ltd.
 
 use foodie_adt_integrand, only : integrand
-use foodie_error_codes, only : ERROR_BAD_STEPS_NUMBER
+use foodie_error_codes, only : ERROR_UNSUPPORTED_SCHEME
 use foodie_kinds, only : I_P, R_P
 use foodie_integrator_object, only : integrator_object
-use foodie_utils, only : is_admissible
 
 implicit none
 private
 public :: integrator_lmm_ssp
 
-character(len=99), parameter :: supported_steps='3-5' !< List of supported steps number. Valid format is `1-2,4,9-23...`.
-integer(I_P),      parameter :: min_ss=3              !< Minimum number of steps supported.
-integer(I_P),      parameter :: max_ss=5              !< Maximum number of steps supported.
+character(len=99), parameter :: class_name_='lmm_ssp'                                           !< Name of the class of schemes.
+character(len=99), parameter :: supported_schemes_(1:3)=[trim(class_name_)//'_steps_3_order_2', &
+                                                         trim(class_name_)//'_steps_4_order_3', &
+                                                         trim(class_name_)//'_steps_5_order_3'] !< List of supported schemes.
 
 type, extends(integrator_object) :: integrator_lmm_ssp
   !< FOODIE integrator: provide an explicit class of Linear Multi-step Methods (LLM) with Strong Stability Preserving property,
@@ -46,25 +46,33 @@ type, extends(integrator_object) :: integrator_lmm_ssp
   !<
   !< @note The integrator must be created or initialized (initialize the *a,b* coefficients) before used.
   private
-  integer(I_P)           :: steps=0 !< Number of time steps.
+  integer(I_P), public   :: steps=0 !< Number of time steps.
   real(R_P), allocatable :: a(:)    !< *a* coefficients.
   real(R_P), allocatable :: b(:)    !< *b* coefficients.
   contains
     ! deferred methods
+    procedure, pass(self) :: class_name           !< Return the class name of schemes.
     procedure, pass(self) :: description          !< Return pretty-printed object description.
     procedure, pass(lhs)  :: integr_assign_integr !< Operator `=`.
+    procedure, pass(self) :: is_supported         !< Return .true. if the integrator class support the given scheme.
+    procedure, pass(self) :: supported_schemes    !< Return the list of supported schemes.
     ! public methods
     procedure, pass(self) :: destroy         !< Destroy the integrator.
-    procedure, pass(self) :: init            !< Initialize (create) the integrator.
+    procedure, pass(self) :: initialize      !< Initialize (create) the integrator.
     procedure, pass(self) :: integrate       !< Integrate integrand field.
-    procedure, nopass     :: is_supported    !< Check if the queried number of steps is supported or not.
-    procedure, nopass     :: min_steps       !< Return the minimum number of steps supported.
-    procedure, nopass     :: max_steps       !< Return the maximum number of steps supported.
     procedure, pass(self) :: update_previous !< Cyclic update previous time steps.
 endtype integrator_lmm_ssp
 
 contains
   ! deferred methods
+  pure function class_name(self)
+  !< Return the class name of schemes.
+  class(integrator_lmm_ssp), intent(in) :: self       !< Integrator.
+  character(len=99)                     :: class_name !< Class name.
+
+  class_name = trim(adjustl(class_name_))
+  endfunction class_name
+
   pure function description(self, prefix) result(desc)
   !< Return a pretty-formatted object description.
   class(integrator_lmm_ssp), intent(in)           :: self             !< Integrator.
@@ -72,11 +80,16 @@ contains
   character(len=:), allocatable                   :: desc             !< Description.
   character(len=:), allocatable                   :: prefix_          !< Prefixing string, local variable.
   character(len=1), parameter                     :: NL=new_line('a') !< New line character.
+  integer(I_P)                                    :: s                !< Counter.
 
   prefix_ = '' ; if (present(prefix)) prefix_ = prefix
   desc = ''
   desc = desc//prefix_//'Strong Stability preserving Linear-Multistep-Methods class'//NL
-  desc = desc//prefix_//'  Supported steps numbers: ['//trim(adjustl(supported_steps))//']'
+  desc = desc//prefix_//'  Supported schemes:'//NL
+  do s=lbound(supported_schemes_, dim=1), ubound(supported_schemes_, dim=1) - 1
+    desc = desc//prefix_//'    + '//supported_schemes_(s)//NL
+  enddo
+  desc = desc//prefix_//'    + '//supported_schemes_(ubound(supported_schemes_, dim=1))
   endfunction description
 
   pure subroutine integr_assign_integr(lhs, rhs)
@@ -93,6 +106,31 @@ contains
   endselect
   endsubroutine integr_assign_integr
 
+  elemental function is_supported(self, scheme)
+  !< Return .true. if the integrator class support the given scheme.
+  class(integrator_lmm_ssp), intent(in) :: self         !< Integrator.
+  character(*),              intent(in) :: scheme       !< Selected scheme.
+  logical                               :: is_supported !< Inquire result.
+  integer(I_P)                          :: s            !< Counter.
+
+  is_supported = .false.
+  do s=lbound(supported_schemes_, dim=1), ubound(supported_schemes_, dim=1)
+    if (trim(adjustl(scheme)) == trim(adjustl(supported_schemes_(s)))) then
+      is_supported = .true.
+      return
+    endif
+  enddo
+  endfunction is_supported
+
+  pure function supported_schemes(self) result(schemes)
+  !< Return the list of supported schemes.
+  class(integrator_lmm_ssp), intent(in) :: self       !< Integrator.
+  character(len=99), allocatable        :: schemes(:) !< Queried scheme.
+
+  allocate(schemes(lbound(supported_schemes_, dim=1):ubound(supported_schemes_, dim=1)))
+  schemes = supported_schemes_
+  endfunction supported_schemes
+
   ! public methods
   elemental subroutine destroy(self)
   !< Destroy the integrator.
@@ -104,21 +142,21 @@ contains
   if (allocated(self%b)) deallocate(self%b)
   endsubroutine destroy
 
-  subroutine init(self, steps)
+  subroutine initialize(self, scheme)
   !< Create the actual LMM-SSP integrator: initialize the *a,b* coefficients.
   !<
   !< @note If the integrator is initialized with a bad (unsupported) number of required time steps the initialization fails and
   !< the integrator error status is updated consistently for external-provided errors handling.
-  class(integrator_lmm_ssp), intent(inout) :: self  !< Integrator.
-  integer(I_P),              intent(in)    :: steps !< Number of time steps used.
+  class(integrator_lmm_ssp), intent(inout) :: self   !< Integrator.
+  character(*),              intent(in)    :: scheme !< Selected scheme.
 
-  if (self%is_supported(steps)) then
+  if (self%is_supported(scheme=scheme)) then
     call self%destroy
-    self%steps = steps
-    allocate(self%a(1:steps)) ; self%a = 0._R_P
-    allocate(self%b(1:steps)) ; self%b = 0._R_P
-    select case(steps)
-    case(3) ! LMM-SSP(3,2)
+    select case(trim(adjustl(scheme)))
+    case('lmm_ssp_steps_3_order_2')
+      self%steps = 3
+      allocate(self%a(1:self%steps)) ; self%a = 0.0_R_P
+      allocate(self%b(1:self%steps)) ; self%b = 0.0_R_P
       self%a(1) = 1._R_P/4._R_P
       self%a(2) = 0._R_P
       self%a(3) = 3._R_P/4._R_P
@@ -126,7 +164,10 @@ contains
       self%b(1) = 0._R_P
       self%b(2) = 0._R_P
       self%b(3) = 3._R_P/2._R_P
-    case(4) ! LMM-SSP(4,3)
+    case('lmm_ssp_steps_4_order_3')
+      self%steps = 4
+      allocate(self%a(1:self%steps)) ; self%a = 0.0_R_P
+      allocate(self%b(1:self%steps)) ; self%b = 0.0_R_P
       self%a(1) = 11._R_P/27._R_P
       self%a(2) = 0._R_P
       self%a(3) = 0._R_P
@@ -136,7 +177,10 @@ contains
       self%b(2) = 0._R_P
       self%b(3) = 0._R_P
       self%b(4) = 16._R_P/9._R_P
-    case(5) ! LMM-SSP(5,3)
+    case('lmm_ssp_steps_5_order_3')
+      self%steps = 5
+      allocate(self%a(1:self%steps)) ; self%a = 0.0_R_P
+      allocate(self%b(1:self%steps)) ; self%b = 0.0_R_P
       self%a(1) = 7._R_P/32._R_P
       self%a(2) = 0._R_P
       self%a(3) = 0._R_P
@@ -150,11 +194,11 @@ contains
       self%b(5) = 25._R_P/16._R_P
     endselect
   else
-    call self%trigger_error(error=ERROR_BAD_STEPS_NUMBER,                           &
-                            error_message='bad (unsupported) number of time steps', &
+    call self%trigger_error(error=ERROR_UNSUPPORTED_SCHEME,                                   &
+                            error_message='"'//trim(adjustl(scheme))//'" unsupported scheme', &
                             is_severe=.true.)
   endif
-  endsubroutine init
+  endsubroutine initialize
 
   subroutine integrate(self, U, previous, Dt, t, autoupdate)
   !< Integrate field with LMM-SSP class scheme.
@@ -172,32 +216,9 @@ contains
   do s=1, self%steps
     if (self%a(s) /= 0._R_P) U = U + previous(s) * self%a(s)
     if (self%b(s) /= 0._R_P) U = U + previous(s)%t(t=t(s)) * (Dt * self%b(s))
-    ! U = U + previous(s) * self%a(s) + previous(s)%t(t=t(s)) * (Dt * self%b(s))
   enddo
   if (autoupdate_) call self%update_previous(U=U, previous=previous)
   endsubroutine integrate
-
-  elemental function is_supported(steps)
-  !< Check if the queried number of steps is supported or not.
-  integer(I_P), intent(in) :: steps        !< Number of time steps used.
-  logical                  :: is_supported !< Is true if the steps number is in *supported_steps*.
-
-  is_supported = is_admissible(n=steps, adm_range=trim(supported_steps))
-  endfunction is_supported
-
-  pure function min_steps()
-  !< Return the minimum number of steps supported.
-  integer(I_P) :: min_steps !< Minimum number of steps supported.
-
-  min_steps = min_ss
-  endfunction min_steps
-
-  pure function max_steps()
-  !< Return the maximum number of steps supported.
-  integer(I_P) :: max_steps !< Maximum number of steps supported.
-
-  max_steps = max_ss
-  endfunction max_steps
 
   subroutine update_previous(self, U, previous)
   !< Cyclic update previous time steps.
