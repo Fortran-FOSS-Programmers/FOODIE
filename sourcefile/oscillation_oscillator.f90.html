@@ -1,0 +1,1292 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+	 
+	 <meta name="description" content="Fortran Object oriented Ordinary Differential Equations integration library">
+    
+    <meta name="author" content="Fortran-FOSS-Programmers Group" >
+    <link rel="icon" href="../favicon.png">
+
+    <title>oscillation_oscillator.f90 &ndash; FOODIE</title>
+
+    <link href="../css/bootstrap.min.css" rel="stylesheet">
+    <link href="../css/pygments.css" rel="stylesheet">
+    <link href="../css/font-awesome.min.css" rel="stylesheet">
+    <link href="../css/local.css" rel="stylesheet">
+    
+
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+    
+    <script src="../js/jquery-2.1.3.min.js"></script>
+    <script src="../js/svg-pan-zoom.min.js"></script>
+
+    
+    <script src="../tipuesearch/tipuesearch_content.js"></script>
+    <link  href="../tipuesearch/tipuesearch.css" rel="stylesheet">
+    <script src="../tipuesearch/tipuesearch_set.js"></script>
+    <script src="../tipuesearch/tipuesearch.js"></script>
+    
+
+  </head>
+
+  <body>
+
+    <!-- Fixed navbar -->
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="../index.html">FOODIE </a>
+        </div>
+        <div id="navbar" class="navbar-collapse collapse">
+          <ul class="nav navbar-nav">
+				
+            <li class="dropdown hidden-xs visible-sm visible-md hidden-lg">
+              <a href="#" class="dropdown-toggle"
+              data-toggle="dropdown" role="button"
+              aria-haspopup="true"
+		 aria-expanded="false">Contents <span class="caret"></span></a>
+	      <ul class="dropdown-menu">
+              
+            <li><a href="../lists/files.html">Source Files</a></li>
+				
+				
+            <li><a href="../lists/modules.html">Modules</a></li>
+				
+            
+                                
+            <li><a href="../lists/procedures.html">Procedures</a></li>
+				
+				
+            <li><a href="../lists/absint.html">Abstract Interfaces</a></li>
+								
+            <li><a href="../lists/types.html">Derived Types</a></li>
+				
+				
+            <li><a href="../lists/programs.html">Programs</a></li>
+				
+            </ul>
+            </li>
+
+<li class="visible-xs hidden-sm visible-lg"><a href="../lists/files.html">Source Files</a></li>
+
+
+<li class="visible-xs hidden-sm visible-lg"><a href="../lists/modules.html">Modules</a></li>
+
+
+
+<li class="visible-xs hidden-sm visible-lg"><a href="../lists/procedures.html">Procedures</a></li>
+
+
+<li class="visible-xs hidden-sm visible-lg"><a href="../lists/absint.html">Abstract Interfaces</a></li>
+                             
+<li class="visible-xs hidden-sm visible-lg"><a href="../lists/types.html">Derived Types</a></li>
+
+
+<li class="visible-xs hidden-sm visible-lg"><a href="../lists/programs.html">Programs</a></li>
+
+          </ul>
+        
+        <form action="../search.html" class="navbar-form navbar-right" role="search">
+        <div class="form-group">
+          <input type="text" class="form-control" placeholder="Search" name="q" id="tipue_search_input" autocomplete="off" required>
+        </div>
+<!--
+        <button type="submit" class="btn btn-default">Submit</button>
+-->
+        </form>
+        
+        </div><!--/.nav-collapse -->
+      </div>
+    </nav>
+
+    <div class="container">
+    
+  
+  <div class="row">
+    <h1>oscillation_oscillator.f90
+    <small>Source File</small>
+    
+    </h1>
+    
+<div class="row">
+  <div class="col-lg-12">
+<div class="well well-sm">
+  <ul class="list-inline" style="margin-bottom:0px;display:inline">
+     
+     
+     
+     
+    
+    
+     <li><i class="fa fa-list-ol"></i>
+       <a data-toggle="tooltip"
+	  data-placement="bottom" data-html="true"
+	  title=" 1.6% of total for source files.">148 statements</a>
+     </li> 
+     
+     
+    <li><i class="fa fa-code"></i><a href="../src/oscillation_oscillator.f90"> Source File</a></li>
+     
+  </ul>
+  <ol class="breadcrumb in-well text-right">
+  
+     <li class="active">oscillation_oscillator.f90</li>
+  </ol>
+</div>
+</div>
+</div>
+<script>
+  $(function () {
+  $('[data-toggle="tooltip"]').tooltip()
+  })
+</script>
+
+  </div>
+  <div class="row">
+    <div class="col-md-3 hidden-xs hidden-sm visible-md visible-lg">
+    
+<div id="sidebar">
+  
+
+
+
+
+
+
+<div class="panel panel-primary">
+  <div class="panel-heading text-left"><h3 class="panel-title"><a data-toggle="collapse" href="#mods-0">Modules</a></h3></div>
+  <div id="mods-0" class="panel-collapse collapse">
+    <div class="list-group">
+      
+      <a class="list-group-item" href="../module/oscillation_oscillator.html">oscillation_oscillator</a>
+      
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="panel panel-primary">
+  <div class="panel-heading text-left"><h3 class="panel-title">Source Code</h3></div>
+  <div class="list-group">
+    <a class="list-group-item" href="../sourcefile/oscillation_oscillator.f90.html#src">oscillation_oscillator.f90</a>
+  </div>
+</div>
+
+
+  <hr>
+  
+
+<div class="panel panel-default">
+  <div class="panel-heading text-left"><h3 class="panel-title"><a data-toggle="collapse" href="#allfiles-0">All Source Files</a></h3></div>
+  <div id="allfiles-0" class="panel-collapse collapse">
+    <div class="list-group">
+      
+      <a class="list-group-item" href="../sourcefile/burgers.f90.html">burgers.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/euler-1d-caf.f90.html">euler-1D-caf.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/euler-1d-caf_no_foodie.f90.html">euler-1D-caf_no_foodie.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/euler-1d-openmp.f90.html">euler-1D-openmp.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/euler-1d-openmp_no_foodie.f90.html">euler-1D-openmp_no_foodie.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/euler-1d.f90.html">euler-1D.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/foodie.f90.html">foodie.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/foodie_adt_integrand.f90.html">foodie_adt_integrand.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/foodie_error_codes.f90.html">foodie_error_codes.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/foodie_integrator_adams_bashforth.f90.html">foodie_integrator_adams_bashforth.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/foodie_integrator_adams_bashforth_moulton.f90.html">foodie_integrator_adams_bashforth_moulton.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/foodie_integrator_adams_moulton.f90.html">foodie_integrator_adams_moulton.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/foodie_integrator_backward_differentiation_formula.f90.html">foodie_integrator_backward_differentiation_formula.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/foodie_integrator_euler_explicit.f90.html">foodie_integrator_euler_explicit.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/foodie_integrator_leapfrog.f90.html">foodie_integrator_leapfrog.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/foodie_integrator_lmm_ssp.f90.html">foodie_integrator_lmm_ssp.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/foodie_integrator_lmm_ssp_vss.f90.html">foodie_integrator_lmm_ssp_vss.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/foodie_integrator_object.f90.html">foodie_integrator_object.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/foodie_integrator_runge_kutta_embedded.f90.html">foodie_integrator_runge_kutta_embedded.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/foodie_integrator_runge_kutta_low_storage.f90.html">foodie_integrator_runge_kutta_low_storage.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/foodie_integrator_runge_kutta_ssp.f90.html">foodie_integrator_runge_kutta_ssp.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/foodie_kinds.f90.html">foodie_kinds.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/foodie_utils.f90.html">foodie_utils.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/lorenz.f90.html">lorenz.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/oscillation.f90.html">oscillation.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/oscillation_oscillator.f90.html">oscillation_oscillator.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/type_burgers.f90.html">type_burgers.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/type_euler-1d-caf.f90.html">type_euler-1D-caf.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/type_euler-1d-caf_no_foodie.f90.html">type_euler-1D-caf_no_foodie.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/type_euler-1d-openmp.f90.html">type_euler-1D-openmp.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/type_euler-1d-openmp_no_foodie.f90.html">type_euler-1D-openmp_no_foodie.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/type_euler-1d.f90.html">type_euler-1D.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/type_lorenz.f90.html">type_lorenz.f90</a>
+      
+    </div>
+  </div>
+</div>
+
+
+</div>  
+
+    </div>
+    <div class="col-md-9" id='text'>
+    <p>Define <a href="../type/oscillator.html">oscillator</a>, the Oscillation test field that is a concrete extension of the abstract integrand type.</p>
+    
+    <h3>This File Depends On</h3>
+    
+                <div class="depgraph"><?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.26.3 (20100126.1600)
+ -->
+<!-- Title: sourcefile~~oscillation_oscillator.f90~~EfferentGraph Pages: 1 -->
+<svg id="sourcefileoscillation_oscillatorf90EfferentGraph" width="641pt" height="391pt"
+ viewBox="0.00 0.00 641.00 390.75" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="sourcefile~~oscillation_oscillator.f90~~EfferentGraph" class="graph" transform="scale(0.565256 0.565256) rotate(0) translate(4 687.285)">
+<title>sourcefile~~oscillation_oscillator.f90~~EfferentGraph</title>
+<polygon fill="white" stroke="white" points="-4,5 -4,-687.285 1131,-687.285 1131,5 -4,5"/>
+<!-- sourcefile~oscillation_oscillator.f90 -->
+<g id="node1" class="node"><title>sourcefile~oscillation_oscillator.f90</title>
+<polygon fill="none" stroke="black" points="1125,-234.175 1001,-234.175 1001,-208.175 1125,-208.175 1125,-234.175"/>
+<text text-anchor="middle" x="1063" y="-218.725" font-family="Helvetica,sans-Serif" font-size="10.50">oscillation_oscillator.f90</text>
+</g>
+<!-- sourcefile~foodie.f90 -->
+<g id="node2" class="node"><title>sourcefile~foodie.f90</title>
+<a xlink:href="../sourcefile/foodie.f90.html" xlink:title="foodie.f90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="964,-234.175 904,-234.175 904,-208.175 964,-208.175 964,-234.175"/>
+<text text-anchor="middle" x="934" y="-218.725" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">foodie.f90</text>
+</a>
+</g>
+<!-- sourcefile~foodie.f90&#45;&gt;sourcefile~oscillation_oscillator.f90 -->
+<g id="edge128" class="edge"><title>sourcefile~foodie.f90&#45;&gt;sourcefile~oscillation_oscillator.f90</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M964.245,-221.175C972.229,-221.175 981.2,-221.175 990.395,-221.175"/>
+<polygon fill="#000000" stroke="#000000" points="990.423,-224.675 1000.42,-221.175 990.423,-217.675 990.423,-224.675"/>
+</g>
+<!-- sourcefile~foodie_integrator_runge_kutta_ssp.f90 -->
+<g id="node3" class="node"><title>sourcefile~foodie_integrator_runge_kutta_ssp.f90</title>
+<a xlink:href="../sourcefile/foodie_integrator_runge_kutta_ssp.f90.html" xlink:title="foodie_integrator_runge_kutta_ssp.f90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="546,-466.175 350,-466.175 350,-440.175 546,-440.175 546,-466.175"/>
+<text text-anchor="middle" x="448" y="-450.725" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">foodie_integrator_runge_kutta_ssp.f90</text>
+</a>
+</g>
+<!-- sourcefile~foodie_integrator_runge_kutta_ssp.f90&#45;&gt;sourcefile~foodie.f90 -->
+<g id="edge98" class="edge"><title>sourcefile~foodie_integrator_runge_kutta_ssp.f90&#45;&gt;sourcefile~foodie.f90</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M546.691,-462.41C619.398,-467.504 711.254,-469.849 745,-453.175"/>
+</g>
+<!-- sourcefile~foodie_integrator_leapfrog.f90 -->
+<g id="node4" class="node"><title>sourcefile~foodie_integrator_leapfrog.f90</title>
+<a xlink:href="../sourcefile/foodie_integrator_leapfrog.f90.html" xlink:title="foodie_integrator_leapfrog.f90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="526,-510.175 370,-510.175 370,-484.175 526,-484.175 526,-510.175"/>
+<text text-anchor="middle" x="448" y="-494.725" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">foodie_integrator_leapfrog.f90</text>
+</a>
+</g>
+<!-- sourcefile~foodie_integrator_leapfrog.f90&#45;&gt;sourcefile~foodie.f90 -->
+<g id="edge100" class="edge"><title>sourcefile~foodie_integrator_leapfrog.f90&#45;&gt;sourcefile~foodie.f90</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M526.635,-498.488C588.871,-496.555 676.421,-487.06 745,-453.175"/>
+</g>
+<!-- sourcefile~foodie_integrator_lmm_ssp_vss.f90 -->
+<g id="node5" class="node"><title>sourcefile~foodie_integrator_lmm_ssp_vss.f90</title>
+<a xlink:href="../sourcefile/foodie_integrator_lmm_ssp_vss.f90.html" xlink:title="foodie_integrator_lmm_ssp_vss.f90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="539,-422.175 357,-422.175 357,-396.175 539,-396.175 539,-422.175"/>
+<text text-anchor="middle" x="448" y="-406.725" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">foodie_integrator_lmm_ssp_vss.f90</text>
+</a>
+</g>
+<!-- sourcefile~foodie_integrator_lmm_ssp_vss.f90&#45;&gt;sourcefile~foodie.f90 -->
+<g id="edge102" class="edge"><title>sourcefile~foodie_integrator_lmm_ssp_vss.f90&#45;&gt;sourcefile~foodie.f90</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M532.202,-422.231C619.162,-435.63 742.583,-454.369 745,-453.175"/>
+</g>
+<!-- sourcefile~foodie_kinds.f90 -->
+<g id="node6" class="node"><title>sourcefile~foodie_kinds.f90</title>
+<a xlink:href="../sourcefile/foodie_kinds.f90.html" xlink:title="foodie_kinds.f90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="91,-378.175 1,-378.175 1,-352.175 91,-352.175 91,-378.175"/>
+<text text-anchor="middle" x="46" y="-362.725" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">foodie_kinds.f90</text>
+</a>
+</g>
+<!-- sourcefile~foodie_kinds.f90&#45;&gt;sourcefile~foodie.f90 -->
+<g id="edge104" class="edge"><title>sourcefile~foodie_kinds.f90&#45;&gt;sourcefile~foodie.f90</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M201,-664.175C304.512,-700.732 338.792,-675.342 448,-664.175"/>
+</g>
+<!-- sourcefile~foodie_kinds.f90&#45;&gt;sourcefile~foodie_integrator_runge_kutta_ssp.f90 -->
+<g id="edge8" class="edge"><title>sourcefile~foodie_kinds.f90&#45;&gt;sourcefile~foodie_integrator_runge_kutta_ssp.f90</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M47.102,-378.352C52.2915,-430.443 79.4321,-621.241 201,-664.175"/>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M201,-664.175C292.434,-696.466 230.127,-530.157 310,-475.175 318.951,-469.013 328.993,-464.335 339.472,-460.808"/>
+<polygon fill="#000000" stroke="#000000" points="340.63,-464.115 349.2,-457.884 338.615,-457.411 340.63,-464.115"/>
+</g>
+<!-- sourcefile~foodie_kinds.f90&#45;&gt;sourcefile~foodie_integrator_leapfrog.f90 -->
+<g id="edge16" class="edge"><title>sourcefile~foodie_kinds.f90&#45;&gt;sourcefile~foodie_integrator_leapfrog.f90</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M201,-664.175C277.021,-691.023 240.938,-560.774 310,-519.175 324.767,-510.28 341.967,-504.628 359.113,-501.104"/>
+<polygon fill="#000000" stroke="#000000" points="359.974,-504.505 369.183,-499.267 358.718,-497.619 359.974,-504.505"/>
+</g>
+<!-- sourcefile~foodie_kinds.f90&#45;&gt;sourcefile~foodie_integrator_lmm_ssp_vss.f90 -->
+<g id="edge24" class="edge"><title>sourcefile~foodie_kinds.f90&#45;&gt;sourcefile~foodie_integrator_lmm_ssp_vss.f90</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M201,-406.175C248.845,-410.536 302.115,-411.655 346.901,-411.534"/>
+<polygon fill="#000000" stroke="#000000" points="346.928,-415.034 356.911,-411.486 346.894,-408.034 346.928,-415.034"/>
+</g>
+<!-- sourcefile~foodie_integrator_lmm_ssp.f90 -->
+<g id="node7" class="node"><title>sourcefile~foodie_integrator_lmm_ssp.f90</title>
+<a xlink:href="../sourcefile/foodie_integrator_lmm_ssp.f90.html" xlink:title="foodie_integrator_lmm_ssp.f90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="528,-554.175 368,-554.175 368,-528.175 528,-528.175 528,-554.175"/>
+<text text-anchor="middle" x="448" y="-538.725" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">foodie_integrator_lmm_ssp.f90</text>
+</a>
+</g>
+<!-- sourcefile~foodie_kinds.f90&#45;&gt;sourcefile~foodie_integrator_lmm_ssp.f90 -->
+<g id="edge32" class="edge"><title>sourcefile~foodie_kinds.f90&#45;&gt;sourcefile~foodie_integrator_lmm_ssp.f90</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M201,-664.175C253.76,-682.808 260.04,-626.371 310,-601.175 341.508,-585.285 378.185,-569.459 405.805,-558.054"/>
+<polygon fill="#000000" stroke="#000000" points="407.25,-561.244 415.174,-554.211 404.594,-554.768 407.25,-561.244"/>
+</g>
+<!-- sourcefile~foodie_adt_integrand.f90 -->
+<g id="node8" class="node"><title>sourcefile~foodie_adt_integrand.f90</title>
+<a xlink:href="../sourcefile/foodie_adt_integrand.f90.html" xlink:title="foodie_adt_integrand.f90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="267,-460.175 135,-460.175 135,-434.175 267,-434.175 267,-460.175"/>
+<text text-anchor="middle" x="201" y="-444.725" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">foodie_adt_integrand.f90</text>
+</a>
+</g>
+<!-- sourcefile~foodie_kinds.f90&#45;&gt;sourcefile~foodie_adt_integrand.f90 -->
+<g id="edge34" class="edge"><title>sourcefile~foodie_kinds.f90&#45;&gt;sourcefile~foodie_adt_integrand.f90</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M62.8617,-378.224C78.948,-390.242 104.189,-408.004 128,-420.175 135.271,-423.891 143.177,-427.358 151.013,-430.485"/>
+<polygon fill="#000000" stroke="#000000" points="149.899,-433.806 160.489,-434.125 152.409,-427.272 149.899,-433.806"/>
+</g>
+<!-- sourcefile~foodie_error_codes.f90 -->
+<g id="node9" class="node"><title>sourcefile~foodie_error_codes.f90</title>
+<a xlink:href="../sourcefile/foodie_error_codes.f90.html" xlink:title="foodie_error_codes.f90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="263,-296.175 139,-296.175 139,-270.175 263,-270.175 263,-296.175"/>
+<text text-anchor="middle" x="201" y="-280.725" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">foodie_error_codes.f90</text>
+</a>
+</g>
+<!-- sourcefile~foodie_kinds.f90&#45;&gt;sourcefile~foodie_error_codes.f90 -->
+<g id="edge36" class="edge"><title>sourcefile~foodie_kinds.f90&#45;&gt;sourcefile~foodie_error_codes.f90</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M62.8617,-352.126C78.948,-340.107 104.189,-322.346 128,-310.175 135.271,-306.458 143.177,-302.992 151.013,-299.864"/>
+<polygon fill="#000000" stroke="#000000" points="152.409,-303.077 160.489,-296.224 149.899,-296.543 152.409,-303.077"/>
+</g>
+<!-- sourcefile~foodie_integrator_euler_explicit.f90 -->
+<g id="node10" class="node"><title>sourcefile~foodie_integrator_euler_explicit.f90</title>
+<a xlink:href="../sourcefile/foodie_integrator_euler_explicit.f90.html" xlink:title="foodie_integrator_euler_explicit.f90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="538,-636.175 358,-636.175 358,-610.175 538,-610.175 538,-636.175"/>
+<text text-anchor="middle" x="448" y="-620.725" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">foodie_integrator_euler_explicit.f90</text>
+</a>
+</g>
+<!-- sourcefile~foodie_kinds.f90&#45;&gt;sourcefile~foodie_integrator_euler_explicit.f90 -->
+<g id="edge40" class="edge"><title>sourcefile~foodie_kinds.f90&#45;&gt;sourcefile~foodie_integrator_euler_explicit.f90</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M201,-664.175C209.045,-667.016 300.153,-650.946 369.398,-638.095"/>
+<polygon fill="#000000" stroke="#000000" points="370.252,-641.496 379.443,-636.225 368.971,-634.614 370.252,-641.496"/>
+</g>
+<!-- sourcefile~foodie_integrator_adams_bashforth_moulton.f90 -->
+<g id="node11" class="node"><title>sourcefile~foodie_integrator_adams_bashforth_moulton.f90</title>
+<a xlink:href="../sourcefile/foodie_integrator_adams_bashforth_moulton.f90.html" xlink:title="foodie_integrator_adams_bashforth_moulton.f90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="867,-234.175 623,-234.175 623,-208.175 867,-208.175 867,-234.175"/>
+<text text-anchor="middle" x="745" y="-218.725" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">foodie_integrator_adams_bashforth_moulton.f90</text>
+</a>
+</g>
+<!-- sourcefile~foodie_kinds.f90&#45;&gt;sourcefile~foodie_integrator_adams_bashforth_moulton.f90 -->
+<g id="edge44" class="edge"><title>sourcefile~foodie_kinds.f90&#45;&gt;sourcefile~foodie_integrator_adams_bashforth_moulton.f90</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M47.8629,-352.002C55.587,-303.151 90.0763,-132.228 201,-75.1747"/>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M201,-75.1747C353.412,3.21719 428.573,14.5857 586,-53.1747 590.6,-55.1546 684.611,-156.096 725.869,-200.54"/>
+<polygon fill="#000000" stroke="#000000" points="723.331,-202.951 732.699,-207.901 728.463,-198.19 723.331,-202.951"/>
+</g>
+<!-- sourcefile~foodie_integrator_adams_bashforth.f90 -->
+<g id="node12" class="node"><title>sourcefile~foodie_integrator_adams_bashforth.f90</title>
+<a xlink:href="../sourcefile/foodie_integrator_adams_bashforth.f90.html" xlink:title="foodie_integrator_adams_bashforth.f90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="548,-214.175 348,-214.175 348,-188.175 548,-188.175 548,-214.175"/>
+<text text-anchor="middle" x="448" y="-198.725" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">foodie_integrator_adams_bashforth.f90</text>
+</a>
+</g>
+<!-- sourcefile~foodie_kinds.f90&#45;&gt;sourcefile~foodie_integrator_adams_bashforth.f90 -->
+<g id="edge62" class="edge"><title>sourcefile~foodie_kinds.f90&#45;&gt;sourcefile~foodie_integrator_adams_bashforth.f90</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M201,-75.1747C251.362,-49.2714 259.696,-115.159 310,-141.175 341.137,-157.278 377.545,-172.984 405.145,-184.285"/>
+<polygon fill="#000000" stroke="#000000" points="403.935,-187.571 414.517,-188.092 406.57,-181.086 403.935,-187.571"/>
+</g>
+<!-- sourcefile~foodie_integrator_runge_kutta_embedded.f90 -->
+<g id="node13" class="node"><title>sourcefile~foodie_integrator_runge_kutta_embedded.f90</title>
+<a xlink:href="../sourcefile/foodie_integrator_runge_kutta_embedded.f90.html" xlink:title="foodie_integrator_runge_kutta_embedded.f90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="564,-88.1747 332,-88.1747 332,-62.1747 564,-62.1747 564,-88.1747"/>
+<text text-anchor="middle" x="448" y="-72.7247" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">foodie_integrator_runge_kutta_embedded.f90</text>
+</a>
+</g>
+<!-- sourcefile~foodie_kinds.f90&#45;&gt;sourcefile~foodie_integrator_runge_kutta_embedded.f90 -->
+<g id="edge70" class="edge"><title>sourcefile~foodie_kinds.f90&#45;&gt;sourcefile~foodie_integrator_runge_kutta_embedded.f90</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M201,-75.1747C258.558,-45.5703 334.107,-50.8754 386.424,-60.216"/>
+<polygon fill="#000000" stroke="#000000" points="386.09,-63.7147 396.566,-62.1288 387.388,-56.8359 386.09,-63.7147"/>
+</g>
+<!-- sourcefile~foodie_integrator_runge_kutta_low_storage.f90 -->
+<g id="node14" class="node"><title>sourcefile~foodie_integrator_runge_kutta_low_storage.f90</title>
+<a xlink:href="../sourcefile/foodie_integrator_runge_kutta_low_storage.f90.html" xlink:title="foodie_integrator_runge_kutta_low_storage.f90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="567,-132.175 329,-132.175 329,-106.175 567,-106.175 567,-132.175"/>
+<text text-anchor="middle" x="448" y="-116.725" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">foodie_integrator_runge_kutta_low_storage.f90</text>
+</a>
+</g>
+<!-- sourcefile~foodie_kinds.f90&#45;&gt;sourcefile~foodie_integrator_runge_kutta_low_storage.f90 -->
+<g id="edge78" class="edge"><title>sourcefile~foodie_kinds.f90&#45;&gt;sourcefile~foodie_integrator_runge_kutta_low_storage.f90</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M201,-75.1747C244.949,-52.57 261.365,-88.3937 310,-97.1747 323.87,-99.6789 338.551,-102.179 352.962,-104.549"/>
+<polygon fill="#000000" stroke="#000000" points="352.448,-108.012 362.882,-106.167 353.575,-101.103 352.448,-108.012"/>
+</g>
+<!-- sourcefile~foodie_integrator_object.f90 -->
+<g id="node15" class="node"><title>sourcefile~foodie_integrator_object.f90</title>
+<a xlink:href="../sourcefile/foodie_integrator_object.f90.html" xlink:title="foodie_integrator_object.f90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="274,-378.175 128,-378.175 128,-352.175 274,-352.175 274,-378.175"/>
+<text text-anchor="middle" x="201" y="-362.725" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">foodie_integrator_object.f90</text>
+</a>
+</g>
+<!-- sourcefile~foodie_kinds.f90&#45;&gt;sourcefile~foodie_integrator_object.f90 -->
+<g id="edge80" class="edge"><title>sourcefile~foodie_kinds.f90&#45;&gt;sourcefile~foodie_integrator_object.f90</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M91.6668,-365.175C99.9067,-365.175 108.728,-365.175 117.653,-365.175"/>
+<polygon fill="#000000" stroke="#000000" points="117.748,-368.675 127.748,-365.175 117.748,-361.675 117.748,-368.675"/>
+</g>
+<!-- sourcefile~foodie_integrator_backward_differentiation_formula.f90 -->
+<g id="node16" class="node"><title>sourcefile~foodie_integrator_backward_differentiation_formula.f90</title>
+<a xlink:href="../sourcefile/foodie_integrator_backward_differentiation_formula.f90.html" xlink:title="foodie_integrator_backward_differentiation_formula.f90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="586,-378.175 310,-378.175 310,-352.175 586,-352.175 586,-378.175"/>
+<text text-anchor="middle" x="448" y="-362.725" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">foodie_integrator_backward_differentiation_formula.f90</text>
+</a>
+</g>
+<!-- sourcefile~foodie_kinds.f90&#45;&gt;sourcefile~foodie_integrator_backward_differentiation_formula.f90 -->
+<g id="edge88" class="edge"><title>sourcefile~foodie_kinds.f90&#45;&gt;sourcefile~foodie_integrator_backward_differentiation_formula.f90</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M81.4036,-378.179C112.429,-388.69 159.004,-402.346 201,-406.175"/>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M201,-406.175C249.972,-410.639 261.496,-395.268 310,-387.175 324.624,-384.735 340.131,-382.206 355.265,-379.769"/>
+<polygon fill="#000000" stroke="#000000" points="355.825,-383.225 365.143,-378.184 354.715,-376.313 355.825,-383.225"/>
+</g>
+<!-- sourcefile~foodie_integrator_adams_moulton.f90 -->
+<g id="node17" class="node"><title>sourcefile~foodie_integrator_adams_moulton.f90</title>
+<a xlink:href="../sourcefile/foodie_integrator_adams_moulton.f90.html" xlink:title="foodie_integrator_adams_moulton.f90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="545,-296.175 351,-296.175 351,-270.175 545,-270.175 545,-296.175"/>
+<text text-anchor="middle" x="448" y="-280.725" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">foodie_integrator_adams_moulton.f90</text>
+</a>
+</g>
+<!-- sourcefile~foodie_kinds.f90&#45;&gt;sourcefile~foodie_integrator_adams_moulton.f90 -->
+<g id="edge96" class="edge"><title>sourcefile~foodie_kinds.f90&#45;&gt;sourcefile~foodie_integrator_adams_moulton.f90</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M91.8167,-352.217C103.566,-349.077 116.215,-345.856 128,-343.175 205.689,-325.497 294.843,-309.096 359.281,-297.925"/>
+<polygon fill="#000000" stroke="#000000" points="360.146,-301.327 369.405,-296.177 358.956,-294.429 360.146,-301.327"/>
+</g>
+<!-- sourcefile~foodie_integrator_lmm_ssp.f90&#45;&gt;sourcefile~foodie.f90 -->
+<g id="edge106" class="edge"><title>sourcefile~foodie_integrator_lmm_ssp.f90&#45;&gt;sourcefile~foodie.f90</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M528.238,-531.651C547.357,-528.486 567.558,-524.393 586,-519.175 659.622,-498.341 676.404,-487.069 745,-453.175"/>
+</g>
+<!-- sourcefile~foodie_adt_integrand.f90&#45;&gt;sourcefile~foodie.f90 -->
+<g id="edge108" class="edge"><title>sourcefile~foodie_adt_integrand.f90&#45;&gt;sourcefile~foodie.f90</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M203.902,-460.309C212.676,-496.637 242.577,-598.831 310,-645.175 361.021,-680.245 386.409,-670.473 448,-664.175"/>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M448,-664.175C509.591,-657.877 531.906,-675.29 586,-645.175 682.805,-591.282 645.752,-502.422 745,-453.175"/>
+</g>
+<!-- sourcefile~foodie_adt_integrand.f90&#45;&gt;sourcefile~foodie_integrator_runge_kutta_ssp.f90 -->
+<g id="edge2" class="edge"><title>sourcefile~foodie_adt_integrand.f90&#45;&gt;sourcefile~foodie_integrator_runge_kutta_ssp.f90</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M267.191,-448.783C289.296,-449.32 314.548,-449.933 339.028,-450.528"/>
+<polygon fill="#000000" stroke="#000000" points="339.01,-454.028 349.092,-450.772 339.18,-447.03 339.01,-454.028"/>
+</g>
+<!-- sourcefile~foodie_adt_integrand.f90&#45;&gt;sourcefile~foodie_integrator_leapfrog.f90 -->
+<g id="edge10" class="edge"><title>sourcefile~foodie_adt_integrand.f90&#45;&gt;sourcefile~foodie_integrator_leapfrog.f90</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M247.721,-460.198C266.921,-465.283 289.435,-470.904 310,-475.175 325.835,-478.463 342.782,-481.531 359.186,-484.27"/>
+<polygon fill="#000000" stroke="#000000" points="358.881,-487.767 369.315,-485.932 360.014,-480.859 358.881,-487.767"/>
+</g>
+<!-- sourcefile~foodie_adt_integrand.f90&#45;&gt;sourcefile~foodie_integrator_lmm_ssp_vss.f90 -->
+<g id="edge18" class="edge"><title>sourcefile~foodie_adt_integrand.f90&#45;&gt;sourcefile~foodie_integrator_lmm_ssp_vss.f90</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M267.191,-436.991C293.652,-432.921 324.622,-428.156 353.379,-423.732"/>
+<polygon fill="#000000" stroke="#000000" points="354.096,-427.163 363.447,-422.183 353.031,-420.244 354.096,-427.163"/>
+</g>
+<!-- sourcefile~foodie_adt_integrand.f90&#45;&gt;sourcefile~foodie_integrator_lmm_ssp.f90 -->
+<g id="edge26" class="edge"><title>sourcefile~foodie_adt_integrand.f90&#45;&gt;sourcefile~foodie_integrator_lmm_ssp.f90</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M216.065,-460.201C236.084,-476.749 273.222,-504.871 310,-519.175 324.98,-525.001 341.448,-529.285 357.632,-532.435"/>
+<polygon fill="#000000" stroke="#000000" points="357.192,-535.912 367.656,-534.253 358.441,-529.024 357.192,-535.912"/>
+</g>
+<!-- sourcefile~foodie_adt_integrand.f90&#45;&gt;sourcefile~foodie_integrator_euler_explicit.f90 -->
+<g id="edge38" class="edge"><title>sourcefile~foodie_adt_integrand.f90&#45;&gt;sourcefile~foodie_integrator_euler_explicit.f90</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M206.6,-460.509C219.804,-490.188 255.902,-561.788 310,-596.175 321.522,-603.499 334.596,-608.911 347.994,-612.898"/>
+<polygon fill="#000000" stroke="#000000" points="347.222,-616.315 357.789,-615.556 349.055,-609.559 347.222,-616.315"/>
+</g>
+<!-- sourcefile~foodie_adt_integrand.f90&#45;&gt;sourcefile~foodie_integrator_adams_bashforth_moulton.f90 -->
+<g id="edge46" class="edge"><title>sourcefile~foodie_adt_integrand.f90&#45;&gt;sourcefile~foodie_integrator_adams_bashforth_moulton.f90</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M208.425,-460.546C223.57,-486.249 260.795,-541.891 310,-563.175 366.293,-587.524 536.956,-600.005 586,-563.175 631.888,-528.714 599.752,-492.073 622,-439.175 653.684,-363.842 705.195,-281.544 730.304,-243.169"/>
+<polygon fill="#000000" stroke="#000000" points="733.51,-244.665 736.091,-234.39 727.665,-240.813 733.51,-244.665"/>
+</g>
+<!-- sourcefile~foodie_adt_integrand.f90&#45;&gt;sourcefile~foodie_integrator_adams_bashforth.f90 -->
+<g id="edge56" class="edge"><title>sourcefile~foodie_adt_integrand.f90&#45;&gt;sourcefile~foodie_integrator_adams_bashforth.f90</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M255.552,-434.095C262.489,-430.519 268.924,-425.967 274,-420.175 321.754,-365.683 263.786,-316.979 310,-261.175 327.211,-240.392 352.999,-226.612 377.64,-217.568"/>
+<polygon fill="#000000" stroke="#000000" points="379.058,-220.781 387.37,-214.211 376.775,-214.164 379.058,-220.781"/>
+</g>
+<!-- sourcefile~foodie_adt_integrand.f90&#45;&gt;sourcefile~foodie_integrator_runge_kutta_embedded.f90 -->
+<g id="edge64" class="edge"><title>sourcefile~foodie_adt_integrand.f90&#45;&gt;sourcefile~foodie_integrator_runge_kutta_embedded.f90</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M257.229,-434.008C263.657,-430.446 269.504,-425.922 274,-420.175 362.991,-306.399 210.295,-201.689 310,-97.1747 313.925,-93.0605 318.288,-89.5151 322.976,-86.4691"/>
+<polygon fill="#000000" stroke="#000000" points="324.76,-89.4808 331.74,-81.5103 321.313,-83.3883 324.76,-89.4808"/>
+</g>
+<!-- sourcefile~foodie_adt_integrand.f90&#45;&gt;sourcefile~foodie_integrator_runge_kutta_low_storage.f90 -->
+<g id="edge72" class="edge"><title>sourcefile~foodie_adt_integrand.f90&#45;&gt;sourcefile~foodie_integrator_runge_kutta_low_storage.f90</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M256.671,-434.045C263.27,-430.478 269.313,-425.942 274,-420.175 342.301,-336.128 244.073,-265.096 310,-179.175 326.005,-158.315 350.754,-144.584 374.898,-135.6"/>
+<polygon fill="#000000" stroke="#000000" points="376.168,-138.863 384.459,-132.267 373.864,-132.253 376.168,-138.863"/>
+</g>
+<!-- sourcefile~foodie_adt_integrand.f90&#45;&gt;sourcefile~foodie_integrator_backward_differentiation_formula.f90 -->
+<g id="edge82" class="edge"><title>sourcefile~foodie_adt_integrand.f90&#45;&gt;sourcefile~foodie_integrator_backward_differentiation_formula.f90</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M244.751,-434.132C254.713,-430.319 265.004,-425.667 274,-420.175 292.526,-408.865 290.456,-396.616 310,-387.175 314.168,-385.161 318.481,-383.326 322.894,-381.653"/>
+<polygon fill="#000000" stroke="#000000" points="324.403,-384.834 332.699,-378.245 322.104,-378.222 324.403,-384.834"/>
+</g>
+<!-- sourcefile~foodie_adt_integrand.f90&#45;&gt;sourcefile~foodie_integrator_adams_moulton.f90 -->
+<g id="edge90" class="edge"><title>sourcefile~foodie_adt_integrand.f90&#45;&gt;sourcefile~foodie_integrator_adams_moulton.f90</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M252.231,-434.105C260.133,-430.502 267.736,-425.939 274,-420.175 301.799,-394.594 282.926,-369.522 310,-343.175 330.835,-322.899 359.633,-308.913 385.534,-299.58"/>
+<polygon fill="#000000" stroke="#000000" points="386.976,-302.786 395.297,-296.227 384.702,-296.165 386.976,-302.786"/>
+</g>
+<!-- sourcefile~foodie_error_codes.f90&#45;&gt;sourcefile~foodie.f90 -->
+<g id="edge110" class="edge"><title>sourcefile~foodie_error_codes.f90&#45;&gt;sourcefile~foodie.f90</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M205.198,-269.953C219.799,-224.889 269.671,-78.6906 310,-53.1747 473.587,50.327 559.538,-19.7005 745,-75.1747"/>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M745,-75.1747C819.937,-96.5367 886.706,-165.218 916.914,-200.23"/>
+<polygon fill="#000000" stroke="#000000" points="914.326,-202.59 923.46,-207.959 919.668,-198.066 914.326,-202.59"/>
+</g>
+<!-- sourcefile~foodie_error_codes.f90&#45;&gt;sourcefile~foodie_integrator_runge_kutta_ssp.f90 -->
+<g id="edge6" class="edge"><title>sourcefile~foodie_error_codes.f90&#45;&gt;sourcefile~foodie_integrator_runge_kutta_ssp.f90</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M221.976,-296.212C238.037,-307.095 259.781,-323.9 274,-343.175 299.086,-377.18 276.885,-404.924 310,-431.175 318.823,-438.169 328.982,-443.35 339.702,-447.146"/>
+<polygon fill="#000000" stroke="#000000" points="338.659,-450.487 349.248,-450.136 340.752,-443.807 338.659,-450.487"/>
+</g>
+<!-- sourcefile~foodie_error_codes.f90&#45;&gt;sourcefile~foodie_integrator_leapfrog.f90 -->
+<g id="edge14" class="edge"><title>sourcefile~foodie_error_codes.f90&#45;&gt;sourcefile~foodie_integrator_leapfrog.f90</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M223.32,-296.192C239.669,-306.839 261.162,-323.344 274,-343.175 307.047,-394.221 264.74,-434.563 310,-475.175 323.636,-487.41 341.235,-494.342 359.273,-498.033"/>
+<polygon fill="#000000" stroke="#000000" points="358.868,-501.515 369.317,-499.764 360.057,-494.617 358.868,-501.515"/>
+</g>
+<!-- sourcefile~foodie_error_codes.f90&#45;&gt;sourcefile~foodie_integrator_lmm_ssp_vss.f90 -->
+<g id="edge22" class="edge"><title>sourcefile~foodie_error_codes.f90&#45;&gt;sourcefile~foodie_integrator_lmm_ssp_vss.f90</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M218.938,-296.326C234.249,-307.915 256.503,-325.639 274,-343.175 291.846,-361.061 288.093,-374.585 310,-387.175 321.315,-393.677 333.967,-398.418 346.895,-401.851"/>
+<polygon fill="#000000" stroke="#000000" points="346.277,-405.302 356.818,-404.228 347.909,-398.494 346.277,-405.302"/>
+</g>
+<!-- sourcefile~foodie_error_codes.f90&#45;&gt;sourcefile~foodie_integrator_lmm_ssp.f90 -->
+<g id="edge30" class="edge"><title>sourcefile~foodie_error_codes.f90&#45;&gt;sourcefile~foodie_integrator_lmm_ssp.f90</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M224.036,-296.18C240.533,-306.714 261.893,-323.081 274,-343.175 315.207,-411.561 252.324,-463.964 310,-519.175 323.087,-531.702 340.28,-538.793 358.071,-542.553"/>
+<polygon fill="#000000" stroke="#000000" points="357.537,-546.013 367.994,-544.313 358.759,-539.12 357.537,-546.013"/>
+</g>
+<!-- sourcefile~foodie_error_codes.f90&#45;&gt;sourcefile~foodie_integrator_adams_bashforth_moulton.f90 -->
+<g id="edge48" class="edge"><title>sourcefile~foodie_error_codes.f90&#45;&gt;sourcefile~foodie_integrator_adams_bashforth_moulton.f90</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M209.544,-270.058C225.775,-246.499 263.625,-197.749 310,-179.175 445.425,-124.933 622.813,-175.864 702.732,-204.58"/>
+<polygon fill="#000000" stroke="#000000" points="701.847,-207.983 712.441,-208.133 704.253,-201.41 701.847,-207.983"/>
+</g>
+<!-- sourcefile~foodie_error_codes.f90&#45;&gt;sourcefile~foodie_integrator_adams_bashforth.f90 -->
+<g id="edge60" class="edge"><title>sourcefile~foodie_error_codes.f90&#45;&gt;sourcefile~foodie_integrator_adams_bashforth.f90</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M222.763,-269.94C244.225,-257.44 278.32,-239.035 310,-228.175 323.416,-223.576 337.849,-219.673 352.148,-216.389"/>
+<polygon fill="#000000" stroke="#000000" points="353,-219.785 362.011,-214.212 351.491,-212.949 353,-219.785"/>
+</g>
+<!-- sourcefile~foodie_error_codes.f90&#45;&gt;sourcefile~foodie_integrator_runge_kutta_embedded.f90 -->
+<g id="edge68" class="edge"><title>sourcefile~foodie_error_codes.f90&#45;&gt;sourcefile~foodie_integrator_runge_kutta_embedded.f90</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M204.421,-270.144C214.245,-235.518 246.03,-140.883 310,-97.1747 313.984,-94.4523 318.183,-92.0202 322.538,-89.8496"/>
+<polygon fill="#000000" stroke="#000000" points="323.985,-93.0365 331.679,-85.7523 321.122,-86.6488 323.985,-93.0365"/>
+</g>
+<!-- sourcefile~foodie_error_codes.f90&#45;&gt;sourcefile~foodie_integrator_runge_kutta_low_storage.f90 -->
+<g id="edge76" class="edge"><title>sourcefile~foodie_error_codes.f90&#45;&gt;sourcefile~foodie_integrator_runge_kutta_low_storage.f90</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M207.33,-270.076C221.491,-242.288 258.568,-177.424 310,-146.175 316.675,-142.119 323.836,-138.656 331.259,-135.7"/>
+<polygon fill="#000000" stroke="#000000" points="332.592,-138.939 340.784,-132.22 330.19,-132.364 332.592,-138.939"/>
+</g>
+<!-- sourcefile~foodie_error_codes.f90&#45;&gt;sourcefile~foodie_integrator_backward_differentiation_formula.f90 -->
+<g id="edge86" class="edge"><title>sourcefile~foodie_error_codes.f90&#45;&gt;sourcefile~foodie_integrator_backward_differentiation_formula.f90</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M240.411,-296.259C283.517,-310.569 352.651,-333.52 399.165,-348.962"/>
+<polygon fill="#000000" stroke="#000000" points="398.136,-352.308 408.729,-352.138 400.341,-345.665 398.136,-352.308"/>
+</g>
+<!-- sourcefile~foodie_error_codes.f90&#45;&gt;sourcefile~foodie_integrator_adams_moulton.f90 -->
+<g id="edge94" class="edge"><title>sourcefile~foodie_error_codes.f90&#45;&gt;sourcefile~foodie_integrator_adams_moulton.f90</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M263.01,-283.175C286.579,-283.175 314.159,-283.175 340.721,-283.175"/>
+<polygon fill="#000000" stroke="#000000" points="340.84,-286.675 350.84,-283.175 340.84,-279.675 340.84,-286.675"/>
+</g>
+<!-- sourcefile~foodie_integrator_euler_explicit.f90&#45;&gt;sourcefile~foodie.f90 -->
+<g id="edge112" class="edge"><title>sourcefile~foodie_integrator_euler_explicit.f90&#45;&gt;sourcefile~foodie.f90</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M525.108,-610.17C545.588,-604.982 567.218,-597.862 586,-588.175 668.39,-545.682 661.889,-494.241 745,-453.175"/>
+</g>
+<!-- sourcefile~foodie_integrator_adams_bashforth_moulton.f90&#45;&gt;sourcefile~foodie.f90 -->
+<g id="edge114" class="edge"><title>sourcefile~foodie_integrator_adams_bashforth_moulton.f90&#45;&gt;sourcefile~foodie.f90</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M867.631,-221.175C876.878,-221.175 885.729,-221.175 893.784,-221.175"/>
+<polygon fill="#000000" stroke="#000000" points="893.881,-224.675 903.881,-221.175 893.881,-217.675 893.881,-224.675"/>
+</g>
+<!-- sourcefile~foodie_integrator_adams_bashforth.f90&#45;&gt;sourcefile~foodie.f90 -->
+<g id="edge116" class="edge"><title>sourcefile~foodie_integrator_adams_bashforth.f90&#45;&gt;sourcefile~foodie.f90</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M477.983,-188.161C552.719,-155.761 741.558,-74.1452 745,-75.1747"/>
+</g>
+<!-- sourcefile~foodie_integrator_adams_bashforth.f90&#45;&gt;sourcefile~foodie_integrator_adams_bashforth_moulton.f90 -->
+<g id="edge50" class="edge"><title>sourcefile~foodie_integrator_adams_bashforth.f90&#45;&gt;sourcefile~foodie_integrator_adams_bashforth_moulton.f90</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M548.551,-207.946C569.035,-209.325 590.882,-210.796 612.288,-212.238"/>
+<polygon fill="#000000" stroke="#000000" points="612.204,-215.74 622.417,-212.92 612.675,-208.756 612.204,-215.74"/>
+</g>
+<!-- sourcefile~foodie_integrator_runge_kutta_embedded.f90&#45;&gt;sourcefile~foodie.f90 -->
+<g id="edge118" class="edge"><title>sourcefile~foodie_integrator_runge_kutta_embedded.f90&#45;&gt;sourcefile~foodie.f90</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M536.008,-62.1461C596.143,-56.3709 676.952,-54.8205 745,-75.1747"/>
+</g>
+<!-- sourcefile~foodie_integrator_runge_kutta_low_storage.f90&#45;&gt;sourcefile~foodie.f90 -->
+<g id="edge120" class="edge"><title>sourcefile~foodie_integrator_runge_kutta_low_storage.f90&#45;&gt;sourcefile~foodie.f90</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M530.004,-106.17C616.105,-92.6429 739.811,-73.6226 745,-75.1747"/>
+</g>
+<!-- sourcefile~foodie_integrator_object.f90&#45;&gt;sourcefile~foodie.f90 -->
+<g id="edge122" class="edge"><title>sourcefile~foodie_integrator_object.f90&#45;&gt;sourcefile~foodie.f90</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M247.628,-352.146C321.365,-333.816 468.57,-306.514 586,-343.175 668.025,-368.783 667.962,-491.24 745,-453.175"/>
+</g>
+<!-- sourcefile~foodie_integrator_object.f90&#45;&gt;sourcefile~foodie_integrator_runge_kutta_ssp.f90 -->
+<g id="edge4" class="edge"><title>sourcefile~foodie_integrator_object.f90&#45;&gt;sourcefile~foodie_integrator_runge_kutta_ssp.f90</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M246.627,-378.278C256.085,-382.011 265.69,-386.613 274,-392.175 293.604,-405.295 289.206,-420.037 310,-431.175 319.157,-436.079 329.111,-439.959 339.34,-443.019"/>
+<polygon fill="#000000" stroke="#000000" points="338.645,-446.457 349.213,-445.708 340.485,-439.703 338.645,-446.457"/>
+</g>
+<!-- sourcefile~foodie_integrator_object.f90&#45;&gt;sourcefile~foodie_integrator_leapfrog.f90 -->
+<g id="edge12" class="edge"><title>sourcefile~foodie_integrator_object.f90&#45;&gt;sourcefile~foodie_integrator_leapfrog.f90</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M252.746,-378.269C260.496,-381.863 267.915,-386.416 274,-392.175 303.203,-419.815 278.231,-450.527 310,-475.175 324.021,-486.052 341.295,-492.51 358.82,-496.185"/>
+<polygon fill="#000000" stroke="#000000" points="358.683,-499.717 369.144,-498.04 359.92,-492.827 358.683,-499.717"/>
+</g>
+<!-- sourcefile~foodie_integrator_object.f90&#45;&gt;sourcefile~foodie_integrator_lmm_ssp_vss.f90 -->
+<g id="edge20" class="edge"><title>sourcefile~foodie_integrator_object.f90&#45;&gt;sourcefile~foodie_integrator_lmm_ssp_vss.f90</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M263.168,-378.181C278.458,-381.253 294.802,-384.431 310,-387.175 323.87,-389.679 338.551,-392.179 352.962,-394.549"/>
+<polygon fill="#000000" stroke="#000000" points="352.448,-398.012 362.882,-396.167 353.575,-391.103 352.448,-398.012"/>
+</g>
+<!-- sourcefile~foodie_integrator_object.f90&#45;&gt;sourcefile~foodie_integrator_lmm_ssp.f90 -->
+<g id="edge28" class="edge"><title>sourcefile~foodie_integrator_object.f90&#45;&gt;sourcefile~foodie_integrator_lmm_ssp.f90</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M254.907,-378.319C262.021,-381.888 268.679,-386.421 274,-392.175 313.835,-435.246 266.139,-480.211 310,-519.175 323.267,-530.96 340.218,-537.807 357.666,-541.575"/>
+<polygon fill="#000000" stroke="#000000" points="357.506,-545.103 367.972,-543.452 358.761,-538.217 357.506,-545.103"/>
+</g>
+<!-- sourcefile~foodie_integrator_object.f90&#45;&gt;sourcefile~foodie_integrator_euler_explicit.f90 -->
+<g id="edge42" class="edge"><title>sourcefile~foodie_integrator_object.f90&#45;&gt;sourcefile~foodie_integrator_euler_explicit.f90</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M255.632,-378.185C262.557,-381.771 268.968,-386.344 274,-392.175 324.744,-450.971 260.918,-502.984 310,-563.175 326.98,-583.998 352.59,-597.774 377.155,-606.804"/>
+<polygon fill="#000000" stroke="#000000" points="376.266,-610.2 386.86,-610.155 378.55,-603.583 376.266,-610.2"/>
+</g>
+<!-- sourcefile~foodie_integrator_object.f90&#45;&gt;sourcefile~foodie_integrator_adams_bashforth_moulton.f90 -->
+<g id="edge52" class="edge"><title>sourcefile~foodie_integrator_object.f90&#45;&gt;sourcefile~foodie_integrator_adams_bashforth_moulton.f90</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M218.938,-352.024C234.249,-340.434 256.503,-322.711 274,-305.175 291.846,-287.288 287.687,-273.03 310,-261.175 336.295,-247.204 494.037,-235.321 612.053,-228.221"/>
+<polygon fill="#000000" stroke="#000000" points="612.492,-231.702 622.266,-227.613 612.076,-224.714 612.492,-231.702"/>
+</g>
+<!-- sourcefile~foodie_integrator_object.f90&#45;&gt;sourcefile~foodie_integrator_adams_bashforth.f90 -->
+<g id="edge58" class="edge"><title>sourcefile~foodie_integrator_object.f90&#45;&gt;sourcefile~foodie_integrator_adams_bashforth.f90</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M221.39,-352.166C237.338,-341.18 259.213,-324.225 274,-305.175 297.165,-275.333 280.233,-251.436 310,-228.175 318.309,-221.682 327.743,-216.611 337.685,-212.668"/>
+<polygon fill="#000000" stroke="#000000" points="339.109,-215.876 347.354,-209.223 336.759,-209.282 339.109,-215.876"/>
+</g>
+<!-- sourcefile~foodie_integrator_object.f90&#45;&gt;sourcefile~foodie_integrator_runge_kutta_embedded.f90 -->
+<g id="edge66" class="edge"><title>sourcefile~foodie_integrator_object.f90&#45;&gt;sourcefile~foodie_integrator_runge_kutta_embedded.f90</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M224.564,-352.054C241.103,-341.567 262.282,-325.308 274,-305.175 321.194,-224.09 243.221,-163.072 310,-97.1747 313.894,-93.3326 318.172,-89.9966 322.737,-87.1073"/>
+<polygon fill="#000000" stroke="#000000" points="324.776,-89.9798 331.843,-82.0863 321.396,-83.8499 324.776,-89.9798"/>
+</g>
+<!-- sourcefile~foodie_integrator_object.f90&#45;&gt;sourcefile~foodie_integrator_runge_kutta_low_storage.f90 -->
+<g id="edge74" class="edge"><title>sourcefile~foodie_integrator_object.f90&#45;&gt;sourcefile~foodie_integrator_runge_kutta_low_storage.f90</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M223.252,-352.113C239.565,-341.443 261.043,-324.927 274,-305.175 305.945,-256.476 271.619,-222.98 310,-179.175 328.166,-158.44 354.803,-144.605 379.84,-135.504"/>
+<polygon fill="#000000" stroke="#000000" points="381.015,-138.801 389.337,-132.243 378.742,-132.181 381.015,-138.801"/>
+</g>
+<!-- sourcefile~foodie_integrator_object.f90&#45;&gt;sourcefile~foodie_integrator_backward_differentiation_formula.f90 -->
+<g id="edge84" class="edge"><title>sourcefile~foodie_integrator_object.f90&#45;&gt;sourcefile~foodie_integrator_backward_differentiation_formula.f90</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M274.106,-365.175C282.374,-365.175 291.006,-365.175 299.813,-365.175"/>
+<polygon fill="#000000" stroke="#000000" points="299.821,-368.675 309.821,-365.175 299.821,-361.675 299.821,-368.675"/>
+</g>
+<!-- sourcefile~foodie_integrator_object.f90&#45;&gt;sourcefile~foodie_integrator_adams_moulton.f90 -->
+<g id="edge92" class="edge"><title>sourcefile~foodie_integrator_object.f90&#45;&gt;sourcefile~foodie_integrator_adams_moulton.f90</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M243.291,-352.033C253.615,-348.152 264.435,-343.496 274,-338.175 291.714,-328.321 291.551,-318.572 310,-310.175 319.782,-305.723 330.28,-302.003 340.96,-298.896"/>
+<polygon fill="#000000" stroke="#000000" points="342.076,-302.22 350.803,-296.212 340.234,-295.466 342.076,-302.22"/>
+</g>
+<!-- sourcefile~foodie_integrator_backward_differentiation_formula.f90&#45;&gt;sourcefile~foodie.f90 -->
+<g id="edge124" class="edge"><title>sourcefile~foodie_integrator_backward_differentiation_formula.f90&#45;&gt;sourcefile~foodie.f90</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M547.736,-378.204C560.711,-380.736 573.744,-383.707 586,-387.175 659.622,-408.008 676.404,-487.069 745,-453.175"/>
+</g>
+<!-- sourcefile~foodie_integrator_adams_moulton.f90&#45;&gt;sourcefile~foodie.f90 -->
+<g id="edge126" class="edge"><title>sourcefile~foodie_integrator_adams_moulton.f90&#45;&gt;sourcefile~foodie.f90</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M545.222,-295.299C559.318,-299.009 573.33,-303.853 586,-310.175 671.043,-352.61 659.792,-495.277 745,-453.175"/>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M745,-453.175C837.813,-407.315 900.651,-292.278 923.943,-243.547"/>
+<polygon fill="#000000" stroke="#000000" points="927.126,-245.005 928.191,-234.463 920.785,-242.039 927.126,-245.005"/>
+</g>
+<!-- sourcefile~foodie_integrator_adams_moulton.f90&#45;&gt;sourcefile~foodie_integrator_adams_bashforth_moulton.f90 -->
+<g id="edge54" class="edge"><title>sourcefile~foodie_integrator_adams_moulton.f90&#45;&gt;sourcefile~foodie_integrator_adams_bashforth_moulton.f90</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M516.149,-270.17C538.435,-265.829 563.293,-260.894 586,-256.175 616.077,-249.923 649.275,-242.671 677.522,-236.395"/>
+<polygon fill="#000000" stroke="#000000" points="678.293,-239.809 687.293,-234.219 676.772,-232.976 678.293,-239.809"/>
+</g>
+</g>
+</svg>
+</div>
+                <script>var pansourcefileoscillation_oscillatorf90EfferentGraph = svgPanZoom('#sourcefileoscillation_oscillatorf90EfferentGraph', {
+                    zoomEnabled: true,
+                    controlIconsEnabled: true,
+                    fit: true,
+                    center: true,});
+                    </script>
+                <div><a type="button" class="graph-help" data-toggle="modal" href="#graph-help-text">Help</a></div>
+                <div class="modal fade" id="graph-help-text" tabindex="-1" role="dialog">
+                  <div class="modal-dialog modal-lg" role="document">
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title" id="-graph-help-label">Graph Key</h4>
+                      </div>
+                      <div class="modal-body">
+                        
+    <p>Nodes of different colours represent the following: </p>
+    <?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.26.3 (20100126.1600)
+ -->
+<!-- Title: Graph Key Pages: 1 -->
+<svg width="188pt" height="34pt"
+ viewBox="0.00 0.00 188.00 34.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="graph1" class="graph" transform="scale(1 1) rotate(0) translate(4 30)">
+<title>Graph Key</title>
+<polygon fill="white" stroke="white" points="-4,5 -4,-30 185,-30 185,5 -4,5"/>
+<!-- Source File -->
+<g id="node1" class="node"><title>Source File</title>
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="66,-26 2.84217e-14,-26 0,-1.24345e-14 66,-3.55271e-15 66,-26"/>
+<text text-anchor="middle" x="33" y="-10.55" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Source File</text>
+</g>
+<!-- This Page&#39;s Entity -->
+<g id="node2" class="node"><title>This Page&#39;s Entity</title>
+<polygon fill="none" stroke="black" points="180,-26 84,-26 84,-1.24345e-14 180,-3.55271e-15 180,-26"/>
+<text text-anchor="middle" x="132" y="-10.55" font-family="Helvetica,sans-Serif" font-size="10.50">This Page&#39;s Entity</text>
+</g>
+</g>
+</svg>
+
+    
+    <p>Solid arrows point from a file to a file which depends upon it. A file 
+    is dependent upon another if the latter must be compiled before the former
+    can be.
+    </p>
+    
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                
+    
+      
+      <h3>Files Dependent On This One</h3>
+      
+                <div class="depgraph"><?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.26.3 (20100126.1600)
+ -->
+<!-- Title: sourcefile~~oscillation_oscillator.f90~~AfferentGraph Pages: 1 -->
+<svg id="sourcefileoscillation_oscillatorf90AfferentGraph" width="248pt" height="34pt"
+ viewBox="0.00 0.00 248.00 34.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="sourcefile~~oscillation_oscillator.f90~~AfferentGraph" class="graph" transform="scale(1 1) rotate(0) translate(4 30)">
+<title>sourcefile~~oscillation_oscillator.f90~~AfferentGraph</title>
+<polygon fill="white" stroke="white" points="-4,5 -4,-30 245,-30 245,5 -4,5"/>
+<!-- sourcefile~oscillation_oscillator.f90 -->
+<g id="node1" class="node"><title>sourcefile~oscillation_oscillator.f90</title>
+<polygon fill="none" stroke="black" points="125,-26 1,-26 1,-1.24345e-14 125,-3.55271e-15 125,-26"/>
+<text text-anchor="middle" x="63" y="-10.55" font-family="Helvetica,sans-Serif" font-size="10.50">oscillation_oscillator.f90</text>
+</g>
+<!-- sourcefile~oscillation.f90 -->
+<g id="node2" class="node"><title>sourcefile~oscillation.f90</title>
+<a xlink:href="../sourcefile/oscillation.f90.html" xlink:title="oscillation.f90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="239,-26 163,-26 163,-1.24345e-14 239,-3.55271e-15 239,-26"/>
+<text text-anchor="middle" x="201" y="-10.55" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">oscillation.f90</text>
+</a>
+</g>
+<!-- sourcefile~oscillation_oscillator.f90&#45;&gt;sourcefile~oscillation.f90 -->
+<g id="edge2" class="edge"><title>sourcefile~oscillation_oscillator.f90&#45;&gt;sourcefile~oscillation.f90</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M125.54,-13C134.463,-13 143.532,-13 152.142,-13"/>
+<polygon fill="#000000" stroke="#000000" points="152.376,-16.5001 162.376,-13 152.376,-9.5001 152.376,-16.5001"/>
+</g>
+</g>
+</svg>
+</div>
+                <div><a type="button" class="graph-help" data-toggle="modal" href="#graph-help-text">Help</a></div>
+                <div class="modal fade" id="graph-help-text" tabindex="-1" role="dialog">
+                  <div class="modal-dialog modal-lg" role="document">
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title" id="-graph-help-label">Graph Key</h4>
+                      </div>
+                      <div class="modal-body">
+                        
+    <p>Nodes of different colours represent the following: </p>
+    <?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.26.3 (20100126.1600)
+ -->
+<!-- Title: Graph Key Pages: 1 -->
+<svg width="188pt" height="34pt"
+ viewBox="0.00 0.00 188.00 34.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="graph1" class="graph" transform="scale(1 1) rotate(0) translate(4 30)">
+<title>Graph Key</title>
+<polygon fill="white" stroke="white" points="-4,5 -4,-30 185,-30 185,5 -4,5"/>
+<!-- Source File -->
+<g id="node1" class="node"><title>Source File</title>
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="66,-26 2.84217e-14,-26 0,-1.24345e-14 66,-3.55271e-15 66,-26"/>
+<text text-anchor="middle" x="33" y="-10.55" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Source File</text>
+</g>
+<!-- This Page&#39;s Entity -->
+<g id="node2" class="node"><title>This Page&#39;s Entity</title>
+<polygon fill="none" stroke="black" points="180,-26 84,-26 84,-1.24345e-14 180,-3.55271e-15 180,-26"/>
+<text text-anchor="middle" x="132" y="-10.55" font-family="Helvetica,sans-Serif" font-size="10.50">This Page&#39;s Entity</text>
+</g>
+</g>
+</svg>
+
+    
+    <p>Solid arrows point from a file to a file which depends upon it. A file 
+    is dependent upon another if the latter must be compiled before the former
+    can be.
+    </p>
+    
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                
+      
+      <br>
+
+    <section class="visible-xs visible-sm hidden-md">
+      
+
+
+
+
+
+
+<div class="panel panel-primary">
+  <div class="panel-heading text-left"><h3 class="panel-title"><a data-toggle="collapse" href="#mods-1">Modules</a></h3></div>
+  <div id="mods-1" class="panel-collapse collapse">
+    <div class="list-group">
+      
+      <a class="list-group-item" href="../module/oscillation_oscillator.html">oscillation_oscillator</a>
+      
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="panel panel-primary">
+  <div class="panel-heading text-left"><h3 class="panel-title">Source Code</h3></div>
+  <div class="list-group">
+    <a class="list-group-item" href="../sourcefile/oscillation_oscillator.f90.html#src">oscillation_oscillator.f90</a>
+  </div>
+</div>
+
+
+    </section>
+    <br class="visible-xs visible-sm hidden-md">
+
+    <section>
+      <h2><span class="anchor" id="src"></span>Source Code</h2>
+    <div class="hl"><pre><span></span><a name="ln-1"></a><span class="c">!&lt; Define [[oscillator]], the Oscillation test field that is a concrete extension of the abstract integrand type.</span>
+<a name="ln-2"></a>
+<a name="ln-3"></a><span class="k">module </span><span class="n">oscillation_oscillator</span>
+<a name="ln-4"></a><span class="c">!&lt; Define [[oscillator]], the Oscillation test field that is a concrete extension of the abstract integrand type.</span>
+<a name="ln-5"></a>
+<a name="ln-6"></a><span class="k">use </span><span class="n">foodie</span><span class="p">,</span> <span class="n">only</span> <span class="p">:</span> <span class="n">integrand</span>
+<a name="ln-7"></a><span class="k">use </span><span class="n">penf</span><span class="p">,</span> <span class="n">only</span> <span class="p">:</span> <span class="n">R_P</span><span class="p">,</span> <span class="n">I_P</span>
+<a name="ln-8"></a>
+<a name="ln-9"></a><span class="k">implicit none</span>
+<a name="ln-10"></a><span class="k">private</span>
+<a name="ln-11"></a><span class="k">public</span> <span class="kd">::</span> <span class="n">oscillator</span>
+<a name="ln-12"></a>
+<a name="ln-13"></a><span class="k">type</span><span class="p">,</span> <span class="k">extends</span><span class="p">(</span><span class="n">integrand</span><span class="p">)</span> <span class="kd">::</span> <span class="n">oscillator</span>
+<a name="ln-14"></a>  <span class="c">!&lt; Oscillator, the Oscillation equations field.</span>
+<a name="ln-15"></a>  <span class="c">!&lt;</span>
+<a name="ln-16"></a>  <span class="c">!&lt; It is a FOODIE integrand class concrete extension.</span>
+<a name="ln-17"></a>  <span class="c">!&lt;</span>
+<a name="ln-18"></a>  <span class="c">!&lt;### Oscillation ODEs system</span>
+<a name="ln-19"></a>  <span class="c">!&lt;The (inertial) Oscillation equations system is a non linear system of pure ODEs and it can be written as:</span>
+<a name="ln-20"></a>  <span class="c">!&lt;</span>
+<a name="ln-21"></a>  <span class="c">!&lt;$$\begin{matrix}</span>
+<a name="ln-22"></a>  <span class="c">!&lt; U_t = R(U)  \\</span>
+<a name="ln-23"></a>  <span class="c">!&lt; U = \begin{bmatrix}</span>
+<a name="ln-24"></a>  <span class="c">!&lt; v_1 \\</span>
+<a name="ln-25"></a>  <span class="c">!&lt; v_2</span>
+<a name="ln-26"></a>  <span class="c">!&lt; \end{bmatrix}\;\;\;</span>
+<a name="ln-27"></a>  <span class="c">!&lt; R(U) = \begin{bmatrix}</span>
+<a name="ln-28"></a>  <span class="c">!&lt; -f v_2 \\</span>
+<a name="ln-29"></a>  <span class="c">!&lt; f v_1</span>
+<a name="ln-30"></a>  <span class="c">!&lt; \end{bmatrix}</span>
+<a name="ln-31"></a>  <span class="c">!&lt;\end{matrix}$$</span>
+<a name="ln-32"></a>  <span class="c">!&lt;</span>
+<a name="ln-33"></a>  <span class="c">!&lt;The frequency *f* is constant and it is here selected as *f=10^-4*.</span>
+<a name="ln-34"></a>  <span class="c">!&lt;</span>
+<a name="ln-35"></a>  <span class="c">!&lt;In the space *v1-v2* the path of the oscillation must be a circle, but for the frequency selected some ODE solvers are not</span>
+<a name="ln-36"></a>  <span class="c">!&lt;stable leading to a wrong path, see [1].</span>
+<a name="ln-37"></a>  <span class="c">!&lt;</span>
+<a name="ln-38"></a>  <span class="c">!&lt;#### Bibliography</span>
+<a name="ln-39"></a>  <span class="c">!&lt;</span>
+<a name="ln-40"></a>  <span class="c">!&lt;[1] *Numerical Methods for Fluid Dynamics With Applications to Geophysics*, Dale R. Durran, Springer, 2010.</span>
+<a name="ln-41"></a>  <span class="c">!&lt;</span>
+<a name="ln-42"></a>  <span class="c">!&lt;#### State variables organization</span>
+<a name="ln-43"></a>  <span class="c">!&lt; State variables are organized as an array (rank 1) of reals of *dims* elements, in this case 2 elements.</span>
+<a name="ln-44"></a>  <span class="k">private</span>
+<a name="ln-45"></a><span class="k">  </span><span class="kt">integer</span><span class="p">(</span><span class="n">I_P</span><span class="p">)</span>                         <span class="kd">::</span> <span class="n">dims</span><span class="o">=</span><span class="mi">0</span>   <span class="c">!&lt; Space dimensions.</span>
+<a name="ln-46"></a>  <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">)</span>                            <span class="kd">::</span> <span class="n">f</span><span class="o">=</span><span class="mf">0._R_P</span> <span class="c">!&lt; Oscillation frequency (Hz).</span>
+<a name="ln-47"></a>  <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">),</span> <span class="k">dimension</span><span class="p">(:),</span> <span class="k">allocatable</span> <span class="kd">::</span> <span class="n">U</span>        <span class="c">!&lt; Integrand (state) variables, [1:dims].</span>
+<a name="ln-48"></a>  <span class="k">contains</span>
+<a name="ln-49"></a>    <span class="c">! auxiliary methods</span>
+<a name="ln-50"></a>    <span class="k">procedure</span><span class="p">,</span> <span class="k">pass</span><span class="p">(</span><span class="n">self</span><span class="p">),</span> <span class="k">public</span> <span class="kd">::</span> <span class="n">init</span>   <span class="c">!&lt; Init field.</span>
+<a name="ln-51"></a>    <span class="k">procedure</span><span class="p">,</span> <span class="k">pass</span><span class="p">(</span><span class="n">self</span><span class="p">),</span> <span class="k">public</span> <span class="kd">::</span> <span class="n">output</span> <span class="c">!&lt; Extract Oscillation field.</span>
+<a name="ln-52"></a>    <span class="c">! ADT integrand deferred methods</span>
+<a name="ln-53"></a>    <span class="k">procedure</span><span class="p">,</span> <span class="k">pass</span><span class="p">(</span><span class="n">self</span><span class="p">),</span> <span class="k">public</span> <span class="kd">::</span> <span class="n">t</span> <span class="o">=&gt;</span> <span class="n">dOscillation_dt</span>                                             <span class="c">!&lt; Time derivative, residuals.</span>
+<a name="ln-54"></a>    <span class="k">procedure</span><span class="p">,</span> <span class="k">pass</span><span class="p">(</span><span class="n">lhs</span><span class="p">),</span>  <span class="k">public</span> <span class="kd">::</span> <span class="n">local_error</span> <span class="o">=&gt;</span> <span class="n">oscillation_local_error</span>                           <span class="c">!&lt;||Oscillation-oscillation||.</span>
+<a name="ln-55"></a>    <span class="k">procedure</span><span class="p">,</span> <span class="k">pass</span><span class="p">(</span><span class="n">lhs</span><span class="p">),</span>  <span class="k">public</span> <span class="kd">::</span> <span class="n">integrand_multiply_integrand</span> <span class="o">=&gt;</span> <span class="n">oscillation_multiply_oscillation</span> <span class="c">!&lt; Oscillation * oscillation.</span>
+<a name="ln-56"></a>    <span class="k">procedure</span><span class="p">,</span> <span class="k">pass</span><span class="p">(</span><span class="n">lhs</span><span class="p">),</span>  <span class="k">public</span> <span class="kd">::</span> <span class="n">integrand_multiply_real</span> <span class="o">=&gt;</span> <span class="n">oscillation_multiply_real</span>             <span class="c">!&lt; Oscillation * real.</span>
+<a name="ln-57"></a>    <span class="k">procedure</span><span class="p">,</span> <span class="k">pass</span><span class="p">(</span><span class="n">rhs</span><span class="p">),</span>  <span class="k">public</span> <span class="kd">::</span> <span class="n">real_multiply_integrand</span> <span class="o">=&gt;</span> <span class="n">real_multiply_oscillation</span>             <span class="c">!&lt; Real * Oscillation.</span>
+<a name="ln-58"></a>    <span class="k">procedure</span><span class="p">,</span> <span class="k">pass</span><span class="p">(</span><span class="n">lhs</span><span class="p">),</span>  <span class="k">public</span> <span class="kd">::</span> <span class="n">add</span> <span class="o">=&gt;</span> <span class="n">add_oscillation</span>                                           <span class="c">!&lt; Oscillation + Oscillation.</span>
+<a name="ln-59"></a>    <span class="k">procedure</span><span class="p">,</span> <span class="k">pass</span><span class="p">(</span><span class="n">lhs</span><span class="p">),</span>  <span class="k">public</span> <span class="kd">::</span> <span class="n">sub</span> <span class="o">=&gt;</span> <span class="n">sub_oscillation</span>                                           <span class="c">!&lt; Oscillation - Oscillation.</span>
+<a name="ln-60"></a>    <span class="k">procedure</span><span class="p">,</span> <span class="k">pass</span><span class="p">(</span><span class="n">lhs</span><span class="p">),</span>  <span class="k">public</span> <span class="kd">::</span> <span class="n">assign_integrand</span> <span class="o">=&gt;</span> <span class="n">oscillation_assign_oscillation</span>               <span class="c">!&lt; Oscillation = Oscillation.</span>
+<a name="ln-61"></a><span class="n">endtype</span> <span class="n">oscillator</span>
+<a name="ln-62"></a>
+<a name="ln-63"></a><span class="k">contains</span>
+<a name="ln-64"></a>  <span class="c">! auxiliary methods</span>
+<a name="ln-65"></a>  <span class="k">pure subroutine </span><span class="n">init</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">initial_state</span><span class="p">,</span> <span class="n">frequency</span><span class="p">)</span>
+<a name="ln-66"></a>  <span class="c">!&lt; Construct an initialized Oscillation field.</span>
+<a name="ln-67"></a>  <span class="k">class</span><span class="p">(</span><span class="n">oscillator</span><span class="p">),</span>       <span class="k">intent</span><span class="p">(</span><span class="n">inout</span><span class="p">)</span> <span class="kd">::</span> <span class="n">self</span>          <span class="c">!&lt; Oscillation field.</span>
+<a name="ln-68"></a>  <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">),</span> <span class="k">dimension</span><span class="p">(:),</span> <span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span>    <span class="kd">::</span> <span class="n">initial_state</span> <span class="c">!&lt; Initial state of the Oscillation field vector.</span>
+<a name="ln-69"></a>  <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">),</span>               <span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span>    <span class="kd">::</span> <span class="n">frequency</span>     <span class="c">!&lt; Frequency of oscillation.</span>
+<a name="ln-70"></a>
+<a name="ln-71"></a>  <span class="n">self</span><span class="p">%</span><span class="n">dims</span> <span class="o">=</span> <span class="n">size</span><span class="p">(</span><span class="n">initial_state</span><span class="p">)</span>
+<a name="ln-72"></a>  <span class="n">self</span><span class="p">%</span><span class="n">f</span> <span class="o">=</span> <span class="n">frequency</span>
+<a name="ln-73"></a>  <span class="k">if</span> <span class="p">(</span><span class="nb">allocated</span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">U</span><span class="p">))</span> <span class="k">deallocate</span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">U</span><span class="p">)</span> <span class="p">;</span> <span class="k">allocate</span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">U</span><span class="p">(</span><span class="mi">1</span><span class="p">:</span><span class="n">self</span><span class="p">%</span><span class="n">dims</span><span class="p">))</span> <span class="p">;</span> <span class="n">self</span><span class="p">%</span><span class="n">U</span> <span class="o">=</span> <span class="n">initial_state</span>
+<a name="ln-74"></a>  <span class="n">endsubroutine</span> <span class="n">init</span>
+<a name="ln-75"></a>
+<a name="ln-76"></a>  <span class="k">pure function </span><span class="n">output</span><span class="p">(</span><span class="n">self</span><span class="p">)</span> <span class="k">result</span><span class="p">(</span><span class="n">state</span><span class="p">)</span>
+<a name="ln-77"></a>  <span class="c">!&lt; Output the Oscillation field state.</span>
+<a name="ln-78"></a>  <span class="k">class</span><span class="p">(</span><span class="n">oscillator</span><span class="p">),</span> <span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span>        <span class="kd">::</span> <span class="n">self</span>  <span class="c">!&lt; Oscillation field.</span>
+<a name="ln-79"></a>  <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">),</span> <span class="k">dimension</span><span class="p">(:),</span> <span class="k">allocatable</span> <span class="kd">::</span> <span class="n">state</span> <span class="c">!&lt; Oscillation state vector.</span>
+<a name="ln-80"></a>
+<a name="ln-81"></a>  <span class="n">state</span> <span class="o">=</span> <span class="n">self</span><span class="p">%</span><span class="n">U</span>
+<a name="ln-82"></a>  <span class="n">endfunction</span> <span class="n">output</span>
+<a name="ln-83"></a>
+<a name="ln-84"></a>  <span class="c">! ADT integrand deferred methods</span>
+<a name="ln-85"></a><span class="cp">#ifdef PURE</span>
+<a name="ln-86"></a>  <span class="k">pure function </span><span class="n">dOscillation_dt</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">t</span><span class="p">)</span> <span class="k">result</span><span class="p">(</span><span class="n">dState_dt</span><span class="p">)</span>
+<a name="ln-87"></a><span class="cp">#else</span>
+<a name="ln-88"></a>  <span class="k">function </span><span class="n">dOscillation_dt</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">t</span><span class="p">)</span> <span class="k">result</span><span class="p">(</span><span class="n">dState_dt</span><span class="p">)</span>
+<a name="ln-89"></a><span class="cp">#endif</span>
+<a name="ln-90"></a>  <span class="c">!&lt; Time derivative of Oscillation field.</span>
+<a name="ln-91"></a>  <span class="k">class</span><span class="p">(</span><span class="n">oscillator</span><span class="p">),</span> <span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span>           <span class="kd">::</span> <span class="n">self</span>      <span class="c">!&lt; Oscillation field.</span>
+<a name="ln-92"></a>  <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">),</span>         <span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">),</span> <span class="k">optional</span> <span class="kd">::</span> <span class="n">t</span>         <span class="c">!&lt; Time.</span>
+<a name="ln-93"></a>  <span class="k">class</span><span class="p">(</span><span class="n">integrand</span><span class="p">),</span>  <span class="k">allocatable</span>          <span class="kd">::</span> <span class="n">dState_dt</span> <span class="c">!&lt; Oscillation field time derivative.</span>
+<a name="ln-94"></a>
+<a name="ln-95"></a>  <span class="k">allocate</span><span class="p">(</span><span class="n">oscillator</span> <span class="kd">::</span> <span class="n">dState_dt</span><span class="p">)</span>
+<a name="ln-96"></a>  <span class="k">select type</span><span class="p">(</span><span class="n">dState_dt</span><span class="p">)</span>
+<a name="ln-97"></a>  <span class="k">class is</span><span class="p">(</span><span class="n">oscillator</span><span class="p">)</span>
+<a name="ln-98"></a>    <span class="n">dState_dt</span> <span class="o">=</span> <span class="n">self</span>
+<a name="ln-99"></a>    <span class="n">dState_dt</span><span class="p">%</span><span class="n">U</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">=</span> <span class="o">-</span><span class="n">self</span><span class="p">%</span><span class="n">f</span> <span class="o">*</span> <span class="n">self</span><span class="p">%</span><span class="n">U</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+<a name="ln-100"></a>    <span class="n">dState_dt</span><span class="p">%</span><span class="n">U</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span> <span class="o">=</span>  <span class="n">self</span><span class="p">%</span><span class="n">f</span> <span class="o">*</span> <span class="n">self</span><span class="p">%</span><span class="n">U</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+<a name="ln-101"></a>  <span class="n">endselect</span>
+<a name="ln-102"></a>  <span class="n">endfunction</span> <span class="n">dOscillation_dt</span>
+<a name="ln-103"></a>
+<a name="ln-104"></a><span class="cp">#ifdef PURE</span>
+<a name="ln-105"></a>  <span class="k">pure function </span><span class="n">oscillation_local_error</span><span class="p">(</span><span class="n">lhs</span><span class="p">,</span> <span class="n">rhs</span><span class="p">)</span> <span class="k">result</span><span class="p">(</span><span class="n">error</span><span class="p">)</span>
+<a name="ln-106"></a><span class="cp">#else</span>
+<a name="ln-107"></a>  <span class="k">function </span><span class="n">oscillation_local_error</span><span class="p">(</span><span class="n">lhs</span><span class="p">,</span> <span class="n">rhs</span><span class="p">)</span> <span class="k">result</span><span class="p">(</span><span class="n">error</span><span class="p">)</span>
+<a name="ln-108"></a><span class="cp">#endif</span>
+<a name="ln-109"></a>  <span class="c">!&lt; Estimate local truncation error between 2 oscillation approximations.</span>
+<a name="ln-110"></a>  <span class="c">!&lt;</span>
+<a name="ln-111"></a>  <span class="c">!&lt; The estimation is done by norm L2 of U:</span>
+<a name="ln-112"></a>  <span class="c">!&lt;</span>
+<a name="ln-113"></a>  <span class="c">!&lt; $$ error = \sqrt{ \sum_i{ \frac{(lhs\%U_i - rhs\%U_i)^2}{lhs\%U_i^2} }} $$</span>
+<a name="ln-114"></a>  <span class="k">class</span><span class="p">(</span><span class="n">oscillator</span><span class="p">),</span> <span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span> <span class="kd">::</span> <span class="n">lhs</span>   <span class="c">!&lt; Left hand side.</span>
+<a name="ln-115"></a>  <span class="k">class</span><span class="p">(</span><span class="n">integrand</span><span class="p">),</span>  <span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span> <span class="kd">::</span> <span class="n">rhs</span>   <span class="c">!&lt; Right hand side.</span>
+<a name="ln-116"></a>  <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">)</span>                     <span class="kd">::</span> <span class="n">error</span> <span class="c">!&lt; Error estimation.</span>
+<a name="ln-117"></a>  <span class="kt">integer</span><span class="p">(</span><span class="n">I_P</span><span class="p">)</span>                  <span class="kd">::</span> <span class="n">i</span>     <span class="c">!&lt; Space counter.</span>
+<a name="ln-118"></a>
+<a name="ln-119"></a>  <span class="k">select type</span><span class="p">(</span><span class="n">rhs</span><span class="p">)</span>
+<a name="ln-120"></a>  <span class="k">class is</span><span class="p">(</span><span class="n">oscillator</span><span class="p">)</span>
+<a name="ln-121"></a>    <span class="n">error</span> <span class="o">=</span> <span class="mf">0._R_P</span>
+<a name="ln-122"></a>    <span class="k">do </span><span class="n">i</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">lhs</span><span class="p">%</span><span class="n">dims</span>
+<a name="ln-123"></a>      <span class="n">error</span> <span class="o">=</span> <span class="n">error</span> <span class="o">+</span> <span class="p">(</span><span class="n">lhs</span><span class="p">%</span><span class="n">U</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="o">-</span> <span class="n">rhs</span><span class="p">%</span><span class="n">U</span><span class="p">(</span><span class="n">i</span><span class="p">))</span> <span class="o">**</span> <span class="mi">2</span> <span class="o">/</span> <span class="n">lhs</span><span class="p">%</span><span class="n">U</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span>
+<a name="ln-124"></a>    <span class="n">enddo</span>
+<a name="ln-125"></a>    <span class="n">error</span> <span class="o">=</span> <span class="nb">sqrt</span><span class="p">(</span><span class="n">error</span><span class="p">)</span>
+<a name="ln-126"></a>  <span class="n">endselect</span>
+<a name="ln-127"></a>  <span class="n">endfunction</span> <span class="n">oscillation_local_error</span>
+<a name="ln-128"></a>
+<a name="ln-129"></a><span class="cp">#ifdef PURE</span>
+<a name="ln-130"></a>  <span class="k">pure function </span><span class="n">oscillation_multiply_oscillation</span><span class="p">(</span><span class="n">lhs</span><span class="p">,</span> <span class="n">rhs</span><span class="p">)</span> <span class="k">result</span><span class="p">(</span><span class="n">opr</span><span class="p">)</span>
+<a name="ln-131"></a><span class="cp">#else</span>
+<a name="ln-132"></a>  <span class="k">function </span><span class="n">oscillation_multiply_oscillation</span><span class="p">(</span><span class="n">lhs</span><span class="p">,</span> <span class="n">rhs</span><span class="p">)</span> <span class="k">result</span><span class="p">(</span><span class="n">opr</span><span class="p">)</span>
+<a name="ln-133"></a><span class="cp">#endif</span>
+<a name="ln-134"></a>  <span class="c">!&lt; Multiply a oscillation field by another one.</span>
+<a name="ln-135"></a>  <span class="k">class</span><span class="p">(</span><span class="n">oscillator</span><span class="p">),</span> <span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span> <span class="kd">::</span> <span class="n">lhs</span> <span class="c">!&lt; Left hand side.</span>
+<a name="ln-136"></a>  <span class="k">class</span><span class="p">(</span><span class="n">integrand</span><span class="p">),</span>  <span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span> <span class="kd">::</span> <span class="n">rhs</span> <span class="c">!&lt; Right hand side.</span>
+<a name="ln-137"></a>  <span class="k">class</span><span class="p">(</span><span class="n">integrand</span><span class="p">),</span> <span class="k">allocatable</span> <span class="kd">::</span> <span class="n">opr</span> <span class="c">!&lt; Operator result.</span>
+<a name="ln-138"></a>
+<a name="ln-139"></a>  <span class="k">allocate</span><span class="p">(</span><span class="n">oscillator</span> <span class="kd">::</span> <span class="n">opr</span><span class="p">)</span>
+<a name="ln-140"></a>  <span class="k">select type</span><span class="p">(</span><span class="n">opr</span><span class="p">)</span>
+<a name="ln-141"></a>  <span class="k">class is</span><span class="p">(</span><span class="n">oscillator</span><span class="p">)</span>
+<a name="ln-142"></a>    <span class="n">opr</span> <span class="o">=</span> <span class="n">lhs</span>
+<a name="ln-143"></a>    <span class="k">select type</span><span class="p">(</span><span class="n">rhs</span><span class="p">)</span>
+<a name="ln-144"></a>    <span class="k">class is</span><span class="p">(</span><span class="n">oscillator</span><span class="p">)</span>
+<a name="ln-145"></a>      <span class="n">opr</span><span class="p">%</span><span class="n">U</span> <span class="o">=</span> <span class="n">lhs</span><span class="p">%</span><span class="n">U</span> <span class="o">*</span> <span class="n">rhs</span><span class="p">%</span><span class="n">U</span>
+<a name="ln-146"></a>    <span class="n">endselect</span>
+<a name="ln-147"></a>  <span class="n">endselect</span>
+<a name="ln-148"></a>  <span class="n">endfunction</span> <span class="n">oscillation_multiply_oscillation</span>
+<a name="ln-149"></a>
+<a name="ln-150"></a><span class="cp">#ifdef PURE</span>
+<a name="ln-151"></a>  <span class="k">pure function </span><span class="n">oscillation_multiply_real</span><span class="p">(</span><span class="n">lhs</span><span class="p">,</span> <span class="n">rhs</span><span class="p">)</span> <span class="k">result</span><span class="p">(</span><span class="n">opr</span><span class="p">)</span>
+<a name="ln-152"></a><span class="cp">#else</span>
+<a name="ln-153"></a>  <span class="k">function </span><span class="n">oscillation_multiply_real</span><span class="p">(</span><span class="n">lhs</span><span class="p">,</span> <span class="n">rhs</span><span class="p">)</span> <span class="k">result</span><span class="p">(</span><span class="n">opr</span><span class="p">)</span>
+<a name="ln-154"></a><span class="cp">#endif</span>
+<a name="ln-155"></a>  <span class="c">!&lt; Multiply a Oscillation field by a real scalar.</span>
+<a name="ln-156"></a>  <span class="k">class</span><span class="p">(</span><span class="n">oscillator</span><span class="p">),</span> <span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span> <span class="kd">::</span> <span class="n">lhs</span> <span class="c">!&lt; Left hand side.</span>
+<a name="ln-157"></a>  <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">),</span>         <span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span> <span class="kd">::</span> <span class="n">rhs</span> <span class="c">!&lt; Right hand side.</span>
+<a name="ln-158"></a>  <span class="k">class</span><span class="p">(</span><span class="n">integrand</span><span class="p">),</span> <span class="k">allocatable</span> <span class="kd">::</span> <span class="n">opr</span> <span class="c">!&lt; Operator result.</span>
+<a name="ln-159"></a>
+<a name="ln-160"></a>  <span class="k">allocate</span><span class="p">(</span><span class="n">oscillator</span> <span class="kd">::</span> <span class="n">opr</span><span class="p">)</span>
+<a name="ln-161"></a>  <span class="k">select type</span><span class="p">(</span><span class="n">opr</span><span class="p">)</span>
+<a name="ln-162"></a>  <span class="k">class is</span><span class="p">(</span><span class="n">oscillator</span><span class="p">)</span>
+<a name="ln-163"></a>    <span class="n">opr</span> <span class="o">=</span> <span class="n">lhs</span>
+<a name="ln-164"></a>    <span class="n">opr</span><span class="p">%</span><span class="n">U</span> <span class="o">=</span> <span class="n">lhs</span><span class="p">%</span><span class="n">U</span> <span class="o">*</span> <span class="n">rhs</span>
+<a name="ln-165"></a>  <span class="n">endselect</span>
+<a name="ln-166"></a>  <span class="n">endfunction</span> <span class="n">oscillation_multiply_real</span>
+<a name="ln-167"></a>
+<a name="ln-168"></a><span class="cp">#ifdef PURE</span>
+<a name="ln-169"></a>  <span class="k">pure function </span><span class="n">real_multiply_oscillation</span><span class="p">(</span><span class="n">lhs</span><span class="p">,</span> <span class="n">rhs</span><span class="p">)</span> <span class="k">result</span><span class="p">(</span><span class="n">opr</span><span class="p">)</span>
+<a name="ln-170"></a><span class="cp">#else</span>
+<a name="ln-171"></a>  <span class="k">function </span><span class="n">real_multiply_oscillation</span><span class="p">(</span><span class="n">lhs</span><span class="p">,</span> <span class="n">rhs</span><span class="p">)</span> <span class="k">result</span><span class="p">(</span><span class="n">opr</span><span class="p">)</span>
+<a name="ln-172"></a><span class="cp">#endif</span>
+<a name="ln-173"></a>  <span class="c">!&lt; Multiply a real scalar by a Oscillation field.</span>
+<a name="ln-174"></a>  <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">),</span>         <span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span> <span class="kd">::</span> <span class="n">lhs</span> <span class="c">!&lt; Left hand side.</span>
+<a name="ln-175"></a>  <span class="k">class</span><span class="p">(</span><span class="n">oscillator</span><span class="p">),</span> <span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span> <span class="kd">::</span> <span class="n">rhs</span> <span class="c">!&lt; Right hand side.</span>
+<a name="ln-176"></a>  <span class="k">class</span><span class="p">(</span><span class="n">integrand</span><span class="p">),</span> <span class="k">allocatable</span> <span class="kd">::</span> <span class="n">opr</span> <span class="c">!&lt; Operator result.</span>
+<a name="ln-177"></a>
+<a name="ln-178"></a>  <span class="k">allocate</span><span class="p">(</span><span class="n">oscillator</span> <span class="kd">::</span> <span class="n">opr</span><span class="p">)</span>
+<a name="ln-179"></a>  <span class="k">select type</span><span class="p">(</span><span class="n">opr</span><span class="p">)</span>
+<a name="ln-180"></a>  <span class="k">class is</span><span class="p">(</span><span class="n">oscillator</span><span class="p">)</span>
+<a name="ln-181"></a>    <span class="n">opr</span> <span class="o">=</span> <span class="n">rhs</span>
+<a name="ln-182"></a>    <span class="n">opr</span><span class="p">%</span><span class="n">U</span> <span class="o">=</span> <span class="n">rhs</span><span class="p">%</span><span class="n">U</span> <span class="o">*</span> <span class="n">lhs</span>
+<a name="ln-183"></a>  <span class="n">endselect</span>
+<a name="ln-184"></a>  <span class="n">endfunction</span> <span class="n">real_multiply_oscillation</span>
+<a name="ln-185"></a>
+<a name="ln-186"></a><span class="cp">#ifdef PURE</span>
+<a name="ln-187"></a>  <span class="k">pure function </span><span class="n">add_oscillation</span><span class="p">(</span><span class="n">lhs</span><span class="p">,</span> <span class="n">rhs</span><span class="p">)</span> <span class="k">result</span><span class="p">(</span><span class="n">opr</span><span class="p">)</span>
+<a name="ln-188"></a><span class="cp">#else</span>
+<a name="ln-189"></a>  <span class="k">function </span><span class="n">add_oscillation</span><span class="p">(</span><span class="n">lhs</span><span class="p">,</span> <span class="n">rhs</span><span class="p">)</span> <span class="k">result</span><span class="p">(</span><span class="n">opr</span><span class="p">)</span>
+<a name="ln-190"></a><span class="cp">#endif</span>
+<a name="ln-191"></a>  <span class="c">!&lt; Add two Oscillation fields.</span>
+<a name="ln-192"></a>  <span class="k">class</span><span class="p">(</span><span class="n">oscillator</span><span class="p">),</span> <span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span> <span class="kd">::</span> <span class="n">lhs</span> <span class="c">!&lt; Left hand side.</span>
+<a name="ln-193"></a>  <span class="k">class</span><span class="p">(</span><span class="n">integrand</span><span class="p">),</span>  <span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span> <span class="kd">::</span> <span class="n">rhs</span> <span class="c">!&lt; Right hand side.</span>
+<a name="ln-194"></a>  <span class="k">class</span><span class="p">(</span><span class="n">integrand</span><span class="p">),</span> <span class="k">allocatable</span> <span class="kd">::</span> <span class="n">opr</span> <span class="c">!&lt; Operator result.</span>
+<a name="ln-195"></a>
+<a name="ln-196"></a>  <span class="k">allocate</span><span class="p">(</span><span class="n">oscillator</span> <span class="kd">::</span> <span class="n">opr</span><span class="p">)</span>
+<a name="ln-197"></a>  <span class="k">select type</span><span class="p">(</span><span class="n">opr</span><span class="p">)</span>
+<a name="ln-198"></a>  <span class="k">class is</span><span class="p">(</span><span class="n">oscillator</span><span class="p">)</span>
+<a name="ln-199"></a>    <span class="n">opr</span> <span class="o">=</span> <span class="n">lhs</span>
+<a name="ln-200"></a>    <span class="k">select type</span><span class="p">(</span><span class="n">rhs</span><span class="p">)</span>
+<a name="ln-201"></a>    <span class="k">class is</span><span class="p">(</span><span class="n">oscillator</span><span class="p">)</span>
+<a name="ln-202"></a>      <span class="n">opr</span><span class="p">%</span><span class="n">U</span> <span class="o">=</span> <span class="n">lhs</span><span class="p">%</span><span class="n">U</span> <span class="o">+</span> <span class="n">rhs</span><span class="p">%</span><span class="n">U</span>
+<a name="ln-203"></a>    <span class="n">endselect</span>
+<a name="ln-204"></a>  <span class="n">endselect</span>
+<a name="ln-205"></a>  <span class="n">endfunction</span> <span class="n">add_Oscillation</span>
+<a name="ln-206"></a>
+<a name="ln-207"></a><span class="cp">#ifdef PURE</span>
+<a name="ln-208"></a>  <span class="k">pure function </span><span class="n">sub_oscillation</span><span class="p">(</span><span class="n">lhs</span><span class="p">,</span> <span class="n">rhs</span><span class="p">)</span> <span class="k">result</span><span class="p">(</span><span class="n">opr</span><span class="p">)</span>
+<a name="ln-209"></a><span class="cp">#else</span>
+<a name="ln-210"></a>  <span class="k">function </span><span class="n">sub_oscillation</span><span class="p">(</span><span class="n">lhs</span><span class="p">,</span> <span class="n">rhs</span><span class="p">)</span> <span class="k">result</span><span class="p">(</span><span class="n">opr</span><span class="p">)</span>
+<a name="ln-211"></a><span class="cp">#endif</span>
+<a name="ln-212"></a>  <span class="c">!&lt; Subtract two Oscillation fields.</span>
+<a name="ln-213"></a>  <span class="k">class</span><span class="p">(</span><span class="n">oscillator</span><span class="p">),</span> <span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span> <span class="kd">::</span> <span class="n">lhs</span> <span class="c">!&lt; Left hand side.</span>
+<a name="ln-214"></a>  <span class="k">class</span><span class="p">(</span><span class="n">integrand</span><span class="p">),</span>  <span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span> <span class="kd">::</span> <span class="n">rhs</span> <span class="c">!&lt; Right hand side.</span>
+<a name="ln-215"></a>  <span class="k">class</span><span class="p">(</span><span class="n">integrand</span><span class="p">),</span> <span class="k">allocatable</span> <span class="kd">::</span> <span class="n">opr</span> <span class="c">!&lt; Operator result.</span>
+<a name="ln-216"></a>
+<a name="ln-217"></a>  <span class="k">allocate</span><span class="p">(</span><span class="n">oscillator</span> <span class="kd">::</span> <span class="n">opr</span><span class="p">)</span>
+<a name="ln-218"></a>  <span class="k">select type</span><span class="p">(</span><span class="n">opr</span><span class="p">)</span>
+<a name="ln-219"></a>  <span class="k">class is</span><span class="p">(</span><span class="n">oscillator</span><span class="p">)</span>
+<a name="ln-220"></a>    <span class="n">opr</span> <span class="o">=</span> <span class="n">lhs</span>
+<a name="ln-221"></a>    <span class="k">select type</span><span class="p">(</span><span class="n">rhs</span><span class="p">)</span>
+<a name="ln-222"></a>    <span class="k">class is</span><span class="p">(</span><span class="n">oscillator</span><span class="p">)</span>
+<a name="ln-223"></a>      <span class="n">opr</span><span class="p">%</span><span class="n">U</span> <span class="o">=</span> <span class="n">lhs</span><span class="p">%</span><span class="n">U</span> <span class="o">-</span> <span class="n">rhs</span><span class="p">%</span><span class="n">U</span>
+<a name="ln-224"></a>    <span class="n">endselect</span>
+<a name="ln-225"></a>  <span class="n">endselect</span>
+<a name="ln-226"></a>  <span class="n">endfunction</span> <span class="n">sub_Oscillation</span>
+<a name="ln-227"></a>
+<a name="ln-228"></a><span class="cp">#ifdef PURE</span>
+<a name="ln-229"></a>  <span class="k">pure subroutine </span><span class="n">oscillation_assign_oscillation</span><span class="p">(</span><span class="n">lhs</span><span class="p">,</span> <span class="n">rhs</span><span class="p">)</span>
+<a name="ln-230"></a><span class="cp">#else</span>
+<a name="ln-231"></a>  <span class="k">subroutine </span><span class="n">oscillation_assign_oscillation</span><span class="p">(</span><span class="n">lhs</span><span class="p">,</span> <span class="n">rhs</span><span class="p">)</span>
+<a name="ln-232"></a><span class="cp">#endif</span>
+<a name="ln-233"></a>  <span class="c">!&lt; Assign one Oscillation field to another.</span>
+<a name="ln-234"></a>  <span class="k">class</span><span class="p">(</span><span class="n">oscillator</span><span class="p">),</span> <span class="k">intent</span><span class="p">(</span><span class="n">inout</span><span class="p">)</span> <span class="kd">::</span> <span class="n">lhs</span> <span class="c">!&lt; Left hand side.</span>
+<a name="ln-235"></a>  <span class="k">class</span><span class="p">(</span><span class="n">integrand</span><span class="p">),</span>  <span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span>    <span class="kd">::</span> <span class="n">rhs</span> <span class="c">!&lt; Right hand side.</span>
+<a name="ln-236"></a>
+<a name="ln-237"></a>  <span class="k">select type</span><span class="p">(</span><span class="n">rhs</span><span class="p">)</span>
+<a name="ln-238"></a>  <span class="k">class is</span><span class="p">(</span><span class="n">oscillator</span><span class="p">)</span>
+<a name="ln-239"></a>    <span class="n">lhs</span><span class="p">%</span><span class="n">dims</span> <span class="o">=</span> <span class="n">rhs</span><span class="p">%</span><span class="n">dims</span>
+<a name="ln-240"></a>    <span class="n">lhs</span><span class="p">%</span><span class="n">f</span> <span class="o">=</span> <span class="n">rhs</span><span class="p">%</span><span class="n">f</span>
+<a name="ln-241"></a>    <span class="k">if</span> <span class="p">(</span><span class="nb">allocated</span><span class="p">(</span><span class="n">rhs</span><span class="p">%</span><span class="n">U</span><span class="p">))</span> <span class="n">lhs</span><span class="p">%</span><span class="n">U</span> <span class="o">=</span> <span class="n">rhs</span><span class="p">%</span><span class="n">U</span>
+<a name="ln-242"></a>  <span class="n">endselect</span>
+<a name="ln-243"></a>  <span class="n">endsubroutine</span> <span class="n">oscillation_assign_oscillation</span>
+<a name="ln-244"></a><span class="n">endmodule</span> <span class="n">oscillation_oscillator</span>
+</pre></div>
+
+    </section>
+    </div>
+  </div>
+
+  <section class="visible-xs visible-sm hidden-md">
+    <hr>
+    
+
+<div class="panel panel-default">
+  <div class="panel-heading text-left"><h3 class="panel-title"><a data-toggle="collapse" href="#allfiles-1">All Source Files</a></h3></div>
+  <div id="allfiles-1" class="panel-collapse collapse">
+    <div class="list-group">
+      
+      <a class="list-group-item" href="../sourcefile/burgers.f90.html">burgers.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/euler-1d-caf.f90.html">euler-1D-caf.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/euler-1d-caf_no_foodie.f90.html">euler-1D-caf_no_foodie.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/euler-1d-openmp.f90.html">euler-1D-openmp.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/euler-1d-openmp_no_foodie.f90.html">euler-1D-openmp_no_foodie.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/euler-1d.f90.html">euler-1D.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/foodie.f90.html">foodie.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/foodie_adt_integrand.f90.html">foodie_adt_integrand.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/foodie_error_codes.f90.html">foodie_error_codes.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/foodie_integrator_adams_bashforth.f90.html">foodie_integrator_adams_bashforth.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/foodie_integrator_adams_bashforth_moulton.f90.html">foodie_integrator_adams_bashforth_moulton.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/foodie_integrator_adams_moulton.f90.html">foodie_integrator_adams_moulton.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/foodie_integrator_backward_differentiation_formula.f90.html">foodie_integrator_backward_differentiation_formula.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/foodie_integrator_euler_explicit.f90.html">foodie_integrator_euler_explicit.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/foodie_integrator_leapfrog.f90.html">foodie_integrator_leapfrog.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/foodie_integrator_lmm_ssp.f90.html">foodie_integrator_lmm_ssp.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/foodie_integrator_lmm_ssp_vss.f90.html">foodie_integrator_lmm_ssp_vss.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/foodie_integrator_object.f90.html">foodie_integrator_object.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/foodie_integrator_runge_kutta_embedded.f90.html">foodie_integrator_runge_kutta_embedded.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/foodie_integrator_runge_kutta_low_storage.f90.html">foodie_integrator_runge_kutta_low_storage.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/foodie_integrator_runge_kutta_ssp.f90.html">foodie_integrator_runge_kutta_ssp.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/foodie_kinds.f90.html">foodie_kinds.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/foodie_utils.f90.html">foodie_utils.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/lorenz.f90.html">lorenz.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/oscillation.f90.html">oscillation.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/oscillation_oscillator.f90.html">oscillation_oscillator.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/type_burgers.f90.html">type_burgers.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/type_euler-1d-caf.f90.html">type_euler-1D-caf.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/type_euler-1d-caf_no_foodie.f90.html">type_euler-1D-caf_no_foodie.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/type_euler-1d-openmp.f90.html">type_euler-1D-openmp.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/type_euler-1d-openmp_no_foodie.f90.html">type_euler-1D-openmp_no_foodie.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/type_euler-1d.f90.html">type_euler-1D.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/type_lorenz.f90.html">type_lorenz.f90</a>
+      
+    </div>
+  </div>
+</div>
+
+
+  </section>
+  
+    <hr>    
+    </div> <!-- /container -->
+    <footer>
+      <div class="container">
+      <div class="row">
+        <div class="col-xs-6 col-md-4"><p>&copy; 2017 </p></div>
+        <div class="col-xs-6 col-md-4 col-md-push-4">
+          <p class="text-right">
+            Documentation generated by 
+            <a href="https://github.com/cmacmackin/ford">FORD</a>
+             on 2017-04-05 10:53  
+          </p>
+        </div>
+        <div class="col-xs-12 col-md-4 col-md-pull-4"><p class="text-center"> FOODIE was developed by Fortran-FOSS-Programmers Group</p></div>
+      </div>
+      <br>
+      </div> <!-- /container -->    
+    </footer>
+
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+<!--
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+-->
+    <script src="../js/bootstrap.min.js"></script>
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+    <script src="../js/ie10-viewport-bug-workaround.js"></script>
+
+    <!-- MathJax JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        TeX: { extensions: ['AMSmath.js','AMSsymbols.js','noErrors.js','noUndefined.js'], equationNumbers: { autoNumber: 'AMS' } },
+        jax: ['input/TeX','input/MathML','output/HTML-CSS'],
+        extensions: ['tex2jax.js','mml2jax.js','MathMenu.js','MathZoom.js'],
+        'HTML-CSS': { 
+           styles: { '.MathJax_Display, .MathJax .mo, .MathJax .mi, .MathJax .mn': {color: '#000000 ! important'} }
+        }
+      });
+    </script>
+    <script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+  </body>
+</html>

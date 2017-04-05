@@ -267,18 +267,19 @@ module foodie_integrator_runge_kutta_emd
 !< Computing. 2007.
 
 use foodie_adt_integrand, only : integrand
-use foodie_error_codes, only : ERROR_BAD_STAGES_NUMBER
+use foodie_error_codes, only : ERROR_UNSUPPORTED_SCHEME
 use foodie_kinds, only : I_P, R_P
 use foodie_integrator_object, only : integrator_object
-use foodie_utils, only : is_admissible
 
 implicit none
 private
 public :: integrator_runge_kutta_emd
 
-character(len=99), parameter :: supported_stages='6,7,9,17' !< List of supported stages number. Valid format is `1-2,4,9-23...`.
-integer(I_P),      parameter :: min_ss=6                    !< Minimum number of stages supported.
-integer(I_P),      parameter :: max_ss=17                   !< Maximum number of stages supported.
+character(len=99), parameter :: class_name_='runge_kutta_emd'                                      !< Name of the class of schemes.
+character(len=99), parameter :: supported_schemes_(1:4)=[trim(class_name_)//'_stages_6_order_5  ', &
+                                                         trim(class_name_)//'_stages_7_order_4  ', &
+                                                         trim(class_name_)//'_stages_9_order_6  ', &
+                                                         trim(class_name_)//'_stages_17_order_10'] !< List of supported schemes.
 
 type, extends(integrator_object) :: integrator_runge_kutta_emd
   !< FOODIE integrator: provide an explicit class of embedded Runge-Kutta schemes, from 2nd to 10th order accurate.
@@ -287,26 +288,34 @@ type, extends(integrator_object) :: integrator_runge_kutta_emd
   private
   real(R_P)              :: tolerance=0._R_P !< Tolerance on the local truncation error.
   real(R_P)              :: pp1_inv=0._R_P   !< \(1/(p+1)\) where p is the accuracy order of the lower accurate scheme of the pair.
-  integer(I_P)           :: stages=0         !< Number of stages.
+  integer(I_P), public   :: stages=0         !< Number of stages.
   real(R_P), allocatable :: alph(:,:)        !< \(\alpha\) Butcher's coefficients.
   real(R_P), allocatable :: beta(:,:)        !< \(\beta\) Butcher's coefficients.
   real(R_P), allocatable :: gamm(:)          !< \(\gamma\) Butcher's coefficients.
   contains
     ! deferred methods
+    procedure, pass(self) :: class_name           !< Return the class name of schemes.
     procedure, pass(self) :: description          !< Return pretty-printed object description.
     procedure, pass(lhs)  :: integr_assign_integr !< Operator `=`.
+    procedure, pass(self) :: is_supported         !< Return .true. if the integrator class support the given scheme.
+    procedure, pass(self) :: supported_schemes    !< Return the list of supported schemes.
     ! public methods
-    procedure, pass(self) :: destroy      !< Destroy the integrator.
-    procedure, pass(self) :: init         !< Initialize (create) the integrator.
-    procedure, pass(self) :: integrate    !< Integrate integrand field.
-    procedure, nopass     :: is_supported !< Check if the queried number of stages is supported or not.
-    procedure, nopass     :: min_stages   !< Return the minimum number of stages supported.
-    procedure, nopass     :: max_stages   !< Return the maximum number of stages supported.
+    procedure, pass(self) :: destroy    !< Destroy the integrator.
+    procedure, pass(self) :: initialize !< Initialize (create) the integrator.
+    procedure, pass(self) :: integrate  !< Integrate integrand field.
     ! private methods
     procedure, pass(self), private :: new_Dt !< Compute new estimation of the time step Dt.
 endtype integrator_runge_kutta_emd
 contains
   ! deferred methods
+  pure function class_name(self)
+  !< Return the class name of schemes.
+  class(integrator_runge_kutta_emd), intent(in) :: self       !< Integrator.
+  character(len=99)                             :: class_name !< Class name.
+
+  class_name = trim(adjustl(class_name_))
+  endfunction class_name
+
   pure function description(self, prefix) result(desc)
   !< Return a pretty-formatted object description.
   class(integrator_runge_kutta_emd), intent(in)           :: self             !< Integrator.
@@ -314,11 +323,16 @@ contains
   character(len=:), allocatable                           :: desc             !< Description.
   character(len=:), allocatable                           :: prefix_          !< Prefixing string, local variable.
   character(len=1), parameter                             :: NL=new_line('a') !< New line character.
+  integer(I_P)                                            :: s                !< Counter.
 
   prefix_ = '' ; if (present(prefix)) prefix_ = prefix
   desc = ''
   desc = desc//prefix_//'Embedded Runge-Kutta multi-stage schemes class'//NL
-  desc = desc//prefix_//'  Supported stages numbers: ['//trim(adjustl(supported_stages))//']'
+  desc = desc//prefix_//'  Supported schemes:'//NL
+  do s=lbound(supported_schemes_, dim=1), ubound(supported_schemes_, dim=1) - 1
+    desc = desc//prefix_//'    + '//supported_schemes_(s)//NL
+  enddo
+  desc = desc//prefix_//'    + '//supported_schemes_(ubound(supported_schemes_, dim=1))
   endfunction description
 
   pure subroutine integr_assign_integr(lhs, rhs)
@@ -338,6 +352,31 @@ contains
   endselect
   endsubroutine integr_assign_integr
 
+  elemental function is_supported(self, scheme)
+  !< Return .true. if the integrator class support the given scheme.
+  class(integrator_runge_kutta_emd), intent(in) :: self         !< Integrator.
+  character(*),                      intent(in) :: scheme       !< Selected scheme.
+  logical                                       :: is_supported !< Inquire result.
+  integer(I_P)                                  :: s            !< Counter.
+
+  is_supported = .false.
+  do s=lbound(supported_schemes_, dim=1), ubound(supported_schemes_, dim=1)
+    if (trim(adjustl(scheme)) == trim(adjustl(supported_schemes_(s)))) then
+      is_supported = .true.
+      return
+    endif
+  enddo
+  endfunction is_supported
+
+  pure function supported_schemes(self) result(schemes)
+  !< Return the list of supported schemes.
+  class(integrator_runge_kutta_emd), intent(in) :: self       !< Integrator.
+  character(len=99), allocatable                :: schemes(:) !< Queried scheme.
+
+  allocate(schemes(lbound(supported_schemes_, dim=1):ubound(supported_schemes_, dim=1)))
+  schemes = supported_schemes_
+  endfunction supported_schemes
+
   ! public methods
   elemental subroutine destroy(self)
   !< Destroy the integrator.
@@ -352,27 +391,27 @@ contains
   if (allocated(self%gamm)) deallocate(self%gamm)
   endsubroutine destroy
 
-  subroutine init(self, stages, tolerance, stop_on_fail)
+  subroutine initialize(self, scheme, tolerance, stop_on_fail)
   !< Create the actual RK integrator: initialize the Butcher' table coefficients.
   class(integrator_runge_kutta_emd), intent(inout)        :: self         !< Integrator.
-  integer(I_P),                      intent(in)           :: stages       !< Number of stages used.
+  character(*),                      intent(in)           :: scheme       !< Selected scheme.
   real(R_P),                         intent(in), optional :: tolerance    !< Tolerance on the local truncation error (default 0.01).
   logical,                           intent(in), optional :: stop_on_fail !< Stop execution if initialization fail.
 
-  if (self%is_supported(stages)) then
+  if (self%is_supported(scheme=scheme)) then
     call self%destroy
     if (present(tolerance)) then
       self%tolerance = tolerance
     else
       self%tolerance = 0.01_R_P
     endif
-    self%stages = stages
-    allocate(self%beta(1:stages, 1:2     )) ; self%beta = 0._R_P
-    allocate(self%alph(1:stages, 1:stages)) ; self%alph = 0._R_P
-    allocate(self%gamm(          1:stages)) ; self%gamm = 0._R_P
-    select case(stages)
-    case(2) ! do not use, seems to not work!
-      ! HERK(2,2)
+    select case(trim(adjustl(scheme)))
+    case('runge_kutta_emd_stages_2_order_2') ! do not use, seems to not work!
+      self%stages = 2
+      allocate(self%beta(1:self%stages, 1:2          )) ; self%beta = 0._R_P
+      allocate(self%alph(1:self%stages, 1:self%stages)) ; self%alph = 0._R_P
+      allocate(self%gamm(               1:self%stages)) ; self%gamm = 0._R_P
+
       self%pp1_inv = 1._R_P/(2._R_P + 1._R_P)
 
       self%beta(1, 1) =  0.5_R_P ; self%beta(1, 2) =  5._R_P
@@ -381,8 +420,12 @@ contains
       self%alph(2, 1) = 1._R_P
 
       self%gamm(2) = 1._R_P
-    case(6)
-      ! CKRK(6,5)
+    case('runge_kutta_emd_stages_6_order_5')
+      self%stages = 6
+      allocate(self%beta(1:self%stages, 1:2          )) ; self%beta = 0._R_P
+      allocate(self%alph(1:self%stages, 1:self%stages)) ; self%alph = 0._R_P
+      allocate(self%gamm(               1:self%stages)) ; self%gamm = 0._R_P
+
       self%pp1_inv = 1._R_P/(5._R_P + 1._R_P)
 
       self%beta(1, 1) = 37._R_P/378._R_P   ; self%beta(1, 2) = 2825._R_P/27648._R_P
@@ -406,8 +449,12 @@ contains
       self%gamm(4) = 3._R_P/5._R_P
       self%gamm(5) = 1._R_P
       self%gamm(6) = 7._R_P/8._R_P
-    case(7)
-      ! DPRK(7,4)
+    case('runge_kutta_emd_stages_7_order_4')
+      self%stages = 7
+      allocate(self%beta(1:self%stages, 1:2          )) ; self%beta = 0._R_P
+      allocate(self%alph(1:self%stages, 1:self%stages)) ; self%alph = 0._R_P
+      allocate(self%gamm(               1:self%stages)) ; self%gamm = 0._R_P
+
       self%pp1_inv = 1._R_P/(4._R_P + 1._R_P)
 
       self%beta(1, 1) =   35._R_P/384._R_P    ; self%beta(1, 2) =  5179._R_P/57600._R_P
@@ -435,8 +482,12 @@ contains
       self%gamm(5) = 8._R_P/9._R_P
       self%gamm(6) = 1._R_P
       self%gamm(7) = 1._R_P
-    case(9)
-      ! CMRK(9,6)
+    case('runge_kutta_emd_stages_9_order_6')
+      self%stages = 9
+      allocate(self%beta(1:self%stages, 1:2          )) ; self%beta = 0._R_P
+      allocate(self%alph(1:self%stages, 1:self%stages)) ; self%alph = 0._R_P
+      allocate(self%gamm(               1:self%stages)) ; self%gamm = 0._R_P
+
       self%pp1_inv = 1._R_P/(6._R_P + 1._R_P)
 
       self%beta(1, 1) = 17572349._R_P/289262523._R_P  ; self%beta(1, 2) = 15231665._R_P/510830334._R_P
@@ -481,8 +532,12 @@ contains
       self%gamm(7) = 35226607._R_P/35688279._R_P
       self%gamm(8) = 1._R_P
       self%gamm(9) = 1._R_P
-    case(17)
-      ! FRK(17,10)
+    case('runge_kutta_emd_stages_17_order_10')
+      self%stages = 17
+      allocate(self%beta(1:self%stages, 1:2          )) ; self%beta = 0._R_P
+      allocate(self%alph(1:self%stages, 1:self%stages)) ; self%alph = 0._R_P
+      allocate(self%gamm(               1:self%stages)) ; self%gamm = 0._R_P
+
       self%pp1_inv = 1._R_P/(10._R_P + 1._R_P)
 
       self%beta(1 , 1) = 0.033333333333333333333_R_P; self%beta(1 , 2) = 0.033333333333333333333_R_P
@@ -601,11 +656,11 @@ contains
       self%gamm(17) = 1._R_P
     endselect
   else
-    call self%trigger_error(error=ERROR_BAD_STAGES_NUMBER,                                  &
-                            error_message='bad (unsupported) number of Runge-Kutta stages', &
+    call self%trigger_error(error=ERROR_UNSUPPORTED_SCHEME,                                   &
+                            error_message='"'//trim(adjustl(scheme))//'" unsupported scheme', &
                             is_severe=stop_on_fail)
   endif
-  endsubroutine init
+  endsubroutine initialize
 
   subroutine integrate(self, U, stage, Dt, t)
   !< Integrate field with explicit embedded Runge-Kutta scheme.
@@ -648,28 +703,6 @@ contains
   enddo
   U = U1
   endsubroutine integrate
-
-  elemental function is_supported(stages)
-  !< Check if the queried number of stages is supported or not.
-  integer(I_P), intent(in) :: stages       !< Number of stages used.
-  logical                  :: is_supported !< Is true is the stages number is in *supported_stages*.
-
-  is_supported = is_admissible(n=stages, adm_range=trim(supported_stages))
-  endfunction is_supported
-
-  pure function min_stages()
-  !< Return the minimum number of stages supported.
-  integer(I_P) :: min_stages !< Minimum number of stages supported.
-
-  min_stages = min_ss
-  endfunction min_stages
-
-  pure function max_stages()
-  !< Return the maximum number of stages supported.
-  integer(I_P) :: max_stages !< Maximum number of stages supported.
-
-  max_stages = max_ss
-  endfunction max_stages
 
   ! private methods
   elemental subroutine new_Dt(self, error, Dt)

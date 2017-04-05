@@ -134,7 +134,7 @@
      <li><i class="fa fa-list-ol"></i>
        <a data-toggle="tooltip"
 	  data-placement="bottom" data-html="true"
-	  title="<p> 4.6% of total for derived types.</p>Including implementation: 243 statements,  3.6% of total for derived types.">22 statements</a>
+	  title="<p> 3.7% of total for derived types.</p>Including implementation: 205 statements,  2.9% of total for derived types.">18 statements</a>
      </li> 
      
      
@@ -186,17 +186,11 @@
       
       <a class="list-group-item" href="../type/oscillation_test.html#variable-implicit_iterations">implicit_iterations</a>
       
-      <a class="list-group-item" href="../type/oscillation_test.html#variable-order%7E2">order</a>
-      
       <a class="list-group-item" href="../type/oscillation_test.html#variable-output_cli">output_cli</a>
-      
-      <a class="list-group-item" href="../type/oscillation_test.html#variable-plots">plots</a>
       
       <a class="list-group-item" href="../type/oscillation_test.html#variable-results">results</a>
       
-      <a class="list-group-item" href="../type/oscillation_test.html#variable-solver">solver</a>
-      
-      <a class="list-group-item" href="../type/oscillation_test.html#variable-stages_steps">stages_steps</a>
+      <a class="list-group-item" href="../type/oscillation_test.html#variable-scheme">scheme</a>
       
       <a class="list-group-item" href="../type/oscillation_test.html#variable-tolerance%7E2">tolerance</a>
       
@@ -227,7 +221,7 @@
       
       <a class="list-group-item" href="../type/oscillation_test.html#boundprocedure-execute">execute</a>
       
-      <a class="list-group-item" href="../type/oscillation_test.html#boundprocedure-init%7E11">init</a>
+      <a class="list-group-item" href="../type/oscillation_test.html#boundprocedure-initialize%7E11">initialize</a>
       
       <a class="list-group-item" href="../type/oscillation_test.html#boundprocedure-test">test</a>
       
@@ -289,13 +283,13 @@
       
       <a class="list-group-item" href="../type/integrator_runge_kutta_ls.html">integrator_runge_kutta_ls</a>
       
-      <a class="list-group-item" href="../type/integrator_runge_kutta_tvd.html">integrator_runge_kutta_tvd</a>
+      <a class="list-group-item" href="../type/integrator_runge_kutta_ssp.html">integrator_runge_kutta_ssp</a>
       
       <a class="list-group-item" href="../type/lorenz.html">lorenz</a>
       
-      <a class="list-group-item" href="../type/oscillation.html">oscillation</a>
-      
       <a class="list-group-item" href="../type/oscillation_test.html">oscillation_test</a>
+      
+      <a class="list-group-item" href="../type/oscillator.html">oscillator</a>
       
       <a class="list-group-item" href="../type/tvd_runge_kutta_integrator.html">tvd_runge_kutta_integrator</a>
       
@@ -422,17 +416,11 @@
       
       <a class="list-group-item" href="../type/oscillation_test.html#variable-implicit_iterations">implicit_iterations</a>
       
-      <a class="list-group-item" href="../type/oscillation_test.html#variable-order%7E2">order</a>
-      
       <a class="list-group-item" href="../type/oscillation_test.html#variable-output_cli">output_cli</a>
-      
-      <a class="list-group-item" href="../type/oscillation_test.html#variable-plots">plots</a>
       
       <a class="list-group-item" href="../type/oscillation_test.html#variable-results">results</a>
       
-      <a class="list-group-item" href="../type/oscillation_test.html#variable-solver">solver</a>
-      
-      <a class="list-group-item" href="../type/oscillation_test.html#variable-stages_steps">stages_steps</a>
+      <a class="list-group-item" href="../type/oscillation_test.html#variable-scheme">scheme</a>
       
       <a class="list-group-item" href="../type/oscillation_test.html#variable-tolerance%7E2">tolerance</a>
       
@@ -463,7 +451,7 @@
       
       <a class="list-group-item" href="../type/oscillation_test.html#boundprocedure-execute">execute</a>
       
-      <a class="list-group-item" href="../type/oscillation_test.html#boundprocedure-init%7E11">init</a>
+      <a class="list-group-item" href="../type/oscillation_test.html#boundprocedure-initialize%7E11">initialize</a>
       
       <a class="list-group-item" href="../type/oscillation_test.html#boundprocedure-test">test</a>
       
@@ -601,39 +589,11 @@
   
 <tr>
   
-  <td><span class="anchor" id="variable-order%7E2"></span>integer(kind=I_P),</td>
-  
-  <td>private</td>
-  <td></td><td>::</td>
-  <td><strong>order</strong></td><td> =</td><td>0</td><td><p>(Formal) Order of accuracy.</p></td>
-  
-</tr>
-
-  
-  
-  
-  
-<tr>
-  
   <td><span class="anchor" id="variable-output_cli"></span>character(len=99),</td>
   
   <td>private</td>
   <td></td><td>::</td>
   <td><strong>output_cli</strong></td><td> =</td><td>'unset'</td><td><p>Output files basename.</p></td>
-  
-</tr>
-
-  
-  
-  
-  
-<tr>
-  
-  <td><span class="anchor" id="variable-plots"></span>logical,</td>
-  
-  <td>private</td>
-  <td></td><td>::</td>
-  <td><strong>plots</strong></td><td> =</td><td>.false.</td><td><p>Flag for activating plots saving.</p></td>
   
 </tr>
 
@@ -657,25 +617,11 @@
   
 <tr>
   
-  <td><span class="anchor" id="variable-solver"></span>character(len=99),</td>
+  <td><span class="anchor" id="variable-scheme"></span>character(len=99),</td>
   
   <td>private</td>
   <td></td><td>::</td>
-  <td><strong>solver</strong></td><td> =</td><td>'adams-bashforth'</td><td><p>Solver used.</p></td>
-  
-</tr>
-
-  
-  
-  
-  
-<tr>
-  
-  <td><span class="anchor" id="variable-stages_steps"></span>integer(kind=I_P),</td>
-  
-  <td>private,</td>
-  <td>allocatable</td><td>::</td>
-  <td><strong>stages_steps</strong>(:)</td><td></td><td></td><td><p>Number of stages/steps used.</p></td>
+  <td><strong>scheme</strong></td><td> =</td><td>'adams_bashforth'</td><td><p>Scheme used.</p></td>
   
 </tr>
 
@@ -787,7 +733,7 @@ private subroutine <a href='../proc/execute.html'>execute</a>(self)
     
 	   
 <div class="panel panel-default">
-  <div class="panel-heading codesum"><span class="anchor" id="boundprocedure-init%7E11"></span><h3>procedure, private, pass(self) :: <strong>init</strong>  
+  <div class="panel-heading codesum"><span class="anchor" id="boundprocedure-initialize%7E11"></span><h3>procedure, private, pass(self) :: <strong>initialize</strong>  
     
   </h3></div>
   
@@ -805,7 +751,7 @@ private subroutine <a href='../proc/execute.html'>execute</a>(self)
          
     
     <h3>
-private subroutine <a href='../proc/init%7E11.html'>init</a>(self)
+private subroutine <a href='../proc/initialize%7E11.html'>initialize</a>(self)
     
     
 	 
@@ -882,7 +828,7 @@ private subroutine <a href='../proc/init%7E11.html'>init</a>(self)
          
     
     <h3>
-private subroutine <a href='../proc/test.html'>test</a>(self, solver)
+private subroutine <a href='../proc/test.html'>test</a>(self, scheme)
     
     
 	 
@@ -936,7 +882,7 @@ private subroutine <a href='../proc/test.html'>test</a>(self, solver)
   <td></td>
   
   <td></td><td>::</td>
-  <td><strong>solver</strong></td><td><p>Selected solver.</p></td>
+  <td><strong>scheme</strong></td><td><p>Selected scheme.</p></td>
   
 </tr>
 
@@ -969,25 +915,21 @@ private subroutine <a href='../proc/test.html'>test</a>(self, solver)
   <span class="k">private</span>
 <span class="k">  type</span><span class="p">(</span><span class="n">command_line_interface</span><span class="p">)</span> <span class="kd">::</span> <span class="n">cli</span>                      <span class="c">!&lt; Command line interface handler.</span>
   <span class="kt">integer</span><span class="p">(</span><span class="n">I_P</span><span class="p">)</span>                 <span class="kd">::</span> <span class="n">error</span><span class="o">=</span><span class="mi">0</span>                  <span class="c">!&lt; Error handler.</span>
-  <span class="kt">logical</span>                      <span class="kd">::</span> <span class="n">errors_analysis</span><span class="o">=</span><span class="p">.</span><span class="n">false</span><span class="p">.</span>  <span class="c">!&lt; Flag for activating errors analysis.</span>
   <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">)</span>                    <span class="kd">::</span> <span class="n">frequency</span><span class="o">=</span><span class="mf">0.0_R_P</span>        <span class="c">!&lt; Oscillation frequency.</span>
   <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">)</span>                    <span class="kd">::</span> <span class="n">final_time</span><span class="o">=</span><span class="mf">0.0_R_P</span>       <span class="c">!&lt; Final integration time.</span>
   <span class="kt">integer</span><span class="p">(</span><span class="n">I_P</span><span class="p">)</span>                 <span class="kd">::</span> <span class="n">implicit_iterations</span><span class="o">=</span><span class="mi">0</span>    <span class="c">!&lt; Number of iterations (implicit solvers).</span>
   <span class="kt">character</span><span class="p">(</span><span class="mi">99</span><span class="p">)</span>                <span class="kd">::</span> <span class="n">output_cli</span><span class="o">=</span><span class="s1">&#39;unset&#39;</span>       <span class="c">!&lt; Output files basename.</span>
-  <span class="kt">logical</span>                      <span class="kd">::</span> <span class="n">plots</span><span class="o">=</span><span class="p">.</span><span class="n">false</span><span class="p">.</span>            <span class="c">!&lt; Flag for activating plots saving.</span>
-  <span class="kt">logical</span>                      <span class="kd">::</span> <span class="n">results</span><span class="o">=</span><span class="p">.</span><span class="n">false</span><span class="p">.</span>          <span class="c">!&lt; Flag for activating results saving.</span>
-  <span class="kt">character</span><span class="p">(</span><span class="mi">99</span><span class="p">)</span>                <span class="kd">::</span> <span class="n">solver</span><span class="o">=</span><span class="s1">&#39;adams-bashforth&#39;</span> <span class="c">!&lt; Solver used.</span>
-  <span class="kt">integer</span><span class="p">(</span><span class="n">I_P</span><span class="p">)</span>                 <span class="kd">::</span> <span class="n">order</span><span class="o">=</span><span class="mi">0</span>                  <span class="c">!&lt; (Formal) Order of accuracy.</span>
-  <span class="kt">integer</span><span class="p">(</span><span class="n">I_P</span><span class="p">),</span> <span class="k">allocatable</span>    <span class="kd">::</span> <span class="n">stages_steps</span><span class="p">(:)</span>          <span class="c">!&lt; Number of stages/steps used.</span>
+  <span class="kt">character</span><span class="p">(</span><span class="mi">99</span><span class="p">)</span>                <span class="kd">::</span> <span class="n">scheme</span><span class="o">=</span><span class="s1">&#39;adams_bashforth&#39;</span> <span class="c">!&lt; Scheme used.</span>
   <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">),</span>    <span class="k">allocatable</span>    <span class="kd">::</span> <span class="n">Dt</span><span class="p">(:)</span>                    <span class="c">!&lt; Time step(s) exercised.</span>
   <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">),</span>    <span class="k">allocatable</span>    <span class="kd">::</span> <span class="n">tolerance</span><span class="p">(:)</span>             <span class="c">!&lt; Tolerance(s) exercised on local truncation error.</span>
+  <span class="kt">logical</span>                      <span class="kd">::</span> <span class="n">errors_analysis</span><span class="o">=</span><span class="p">.</span><span class="n">false</span><span class="p">.</span>  <span class="c">!&lt; Flag for activating errors analysis.</span>
+  <span class="kt">logical</span>                      <span class="kd">::</span> <span class="n">results</span><span class="o">=</span><span class="p">.</span><span class="n">false</span><span class="p">.</span>          <span class="c">!&lt; Flag for activating results saving.</span>
   <span class="k">contains</span>
-<span class="k">    private</span>
-    <span class="c">! Public methods</span>
-    <span class="k">procedure</span><span class="p">,</span> <span class="k">pass</span><span class="p">(</span><span class="n">self</span><span class="p">),</span> <span class="k">public</span>  <span class="kd">::</span> <span class="n">execute</span> <span class="c">!&lt; Execute selected test(s).</span>
-    <span class="c">! Private methods</span>
-    <span class="k">procedure</span><span class="p">,</span> <span class="k">pass</span><span class="p">(</span><span class="n">self</span><span class="p">),</span> <span class="k">private</span> <span class="kd">::</span> <span class="n">init</span>    <span class="c">!&lt; Initialize test: set Command Line Interface, parse it and check its validity.</span>
-    <span class="k">procedure</span><span class="p">,</span> <span class="k">pass</span><span class="p">(</span><span class="n">self</span><span class="p">),</span> <span class="k">private</span> <span class="kd">::</span> <span class="n">test</span>    <span class="c">!&lt; Perform the test.</span>
+    <span class="c">! public methods</span>
+    <span class="k">procedure</span><span class="p">,</span> <span class="k">pass</span><span class="p">(</span><span class="n">self</span><span class="p">)</span> <span class="kd">::</span> <span class="n">execute</span> <span class="c">!&lt; Execute selected test(s).</span>
+    <span class="c">! private methods</span>
+    <span class="k">procedure</span><span class="p">,</span> <span class="k">pass</span><span class="p">(</span><span class="n">self</span><span class="p">),</span> <span class="k">private</span> <span class="kd">::</span> <span class="n">initialize</span> <span class="c">!&lt; Initialize test: set Command Line Interface, parse it and check its validity.</span>
+    <span class="k">procedure</span><span class="p">,</span> <span class="k">pass</span><span class="p">(</span><span class="n">self</span><span class="p">),</span> <span class="k">private</span> <span class="kd">::</span> <span class="n">test</span>       <span class="c">!&lt; Perform the test.</span>
 <span class="n">endtype</span> <span class="n">oscillation_test</span>
 </pre></div>
 
@@ -1042,13 +984,13 @@ private subroutine <a href='../proc/test.html'>test</a>(self, solver)
       
       <a class="list-group-item" href="../type/integrator_runge_kutta_ls.html">integrator_runge_kutta_ls</a>
       
-      <a class="list-group-item" href="../type/integrator_runge_kutta_tvd.html">integrator_runge_kutta_tvd</a>
+      <a class="list-group-item" href="../type/integrator_runge_kutta_ssp.html">integrator_runge_kutta_ssp</a>
       
       <a class="list-group-item" href="../type/lorenz.html">lorenz</a>
       
-      <a class="list-group-item" href="../type/oscillation.html">oscillation</a>
-      
       <a class="list-group-item" href="../type/oscillation_test.html">oscillation_test</a>
+      
+      <a class="list-group-item" href="../type/oscillator.html">oscillator</a>
       
       <a class="list-group-item" href="../type/tvd_runge_kutta_integrator.html">tvd_runge_kutta_integrator</a>
       
@@ -1071,7 +1013,7 @@ private subroutine <a href='../proc/test.html'>test</a>(self, solver)
           <p class="text-right">
             Documentation generated by 
             <a href="https://github.com/cmacmackin/ford">FORD</a>
-             on 2017-03-31 15:32  
+             on 2017-04-05 10:53  
           </p>
         </div>
         <div class="col-xs-12 col-md-4 col-md-pull-4"><p class="text-center"> FOODIE was developed by Fortran-FOSS-Programmers Group</p></div>

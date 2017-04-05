@@ -134,7 +134,7 @@
      <li><i class="fa fa-list-ol"></i>
        <a data-toggle="tooltip"
 	  data-placement="bottom" data-html="true"
-	  title="<p> 2.1% of total for derived types.</p>Including implementation: 87 statements,  1.3% of total for derived types.">10 statements</a>
+	  title="<p> 2.1% of total for derived types.</p>Including implementation: 98 statements,  1.4% of total for derived types.">10 statements</a>
      </li> 
      
      
@@ -207,6 +207,8 @@
       
       <a class="list-group-item" href="../type/integrator_euler_explicit.html#boundprocedure-check_error">check_error</a>
       
+      <a class="list-group-item" href="../type/integrator_euler_explicit.html#boundprocedure-class_name%7E5">class_name</a>
+      
       <a class="list-group-item" href="../type/integrator_euler_explicit.html#boundprocedure-description%7E5">description</a>
       
       <a class="list-group-item" href="../type/integrator_euler_explicit.html#boundprocedure-destroy%7E5">destroy</a>
@@ -219,9 +221,7 @@
       
       <a class="list-group-item" href="../type/integrator_euler_explicit.html#boundprocedure-is_supported%7E5">is_supported</a>
       
-      <a class="list-group-item" href="../type/integrator_euler_explicit.html#boundprocedure-max_stages_steps">max_stages_steps</a>
-      
-      <a class="list-group-item" href="../type/integrator_euler_explicit.html#boundprocedure-min_stages_steps">min_stages_steps</a>
+      <a class="list-group-item" href="../type/integrator_euler_explicit.html#boundprocedure-supported_schemes%7E5">supported_schemes</a>
       
       <a class="list-group-item" href="../type/integrator_euler_explicit.html#boundprocedure-trigger_error">trigger_error</a>
       
@@ -283,13 +283,13 @@
       
       <a class="list-group-item" href="../type/integrator_runge_kutta_ls.html">integrator_runge_kutta_ls</a>
       
-      <a class="list-group-item" href="../type/integrator_runge_kutta_tvd.html">integrator_runge_kutta_tvd</a>
+      <a class="list-group-item" href="../type/integrator_runge_kutta_ssp.html">integrator_runge_kutta_ssp</a>
       
       <a class="list-group-item" href="../type/lorenz.html">lorenz</a>
       
-      <a class="list-group-item" href="../type/oscillation.html">oscillation</a>
-      
       <a class="list-group-item" href="../type/oscillation_test.html">oscillation_test</a>
+      
+      <a class="list-group-item" href="../type/oscillator.html">oscillator</a>
       
       <a class="list-group-item" href="../type/tvd_runge_kutta_integrator.html">tvd_runge_kutta_integrator</a>
       
@@ -437,6 +437,8 @@
       
       <a class="list-group-item" href="../type/integrator_euler_explicit.html#boundprocedure-check_error">check_error</a>
       
+      <a class="list-group-item" href="../type/integrator_euler_explicit.html#boundprocedure-class_name%7E5">class_name</a>
+      
       <a class="list-group-item" href="../type/integrator_euler_explicit.html#boundprocedure-description%7E5">description</a>
       
       <a class="list-group-item" href="../type/integrator_euler_explicit.html#boundprocedure-destroy%7E5">destroy</a>
@@ -449,9 +451,7 @@
       
       <a class="list-group-item" href="../type/integrator_euler_explicit.html#boundprocedure-is_supported%7E5">is_supported</a>
       
-      <a class="list-group-item" href="../type/integrator_euler_explicit.html#boundprocedure-max_stages_steps">max_stages_steps</a>
-      
-      <a class="list-group-item" href="../type/integrator_euler_explicit.html#boundprocedure-min_stages_steps">min_stages_steps</a>
+      <a class="list-group-item" href="../type/integrator_euler_explicit.html#boundprocedure-supported_schemes%7E5">supported_schemes</a>
       
       <a class="list-group-item" href="../type/integrator_euler_explicit.html#boundprocedure-trigger_error">trigger_error</a>
       
@@ -797,6 +797,92 @@ private subroutine <a href='../proc/check_error.html'>check_error</a>(self, is_s
 
       
     
+    
+
+      
+      </li>
+    
+  </ul>
+</div>
+
+    
+	   
+<div class="panel panel-default">
+  <div class="panel-heading codesum"><span class="anchor" id="boundprocedure-class_name%7E5"></span><h3>procedure, public, pass(self) :: <strong>class_name</strong>  
+    
+  </h3></div>
+  
+  <div class="panel-body">
+    
+
+
+    <p>Return the class name of schemes.</p>
+  </div>
+  
+  <ul class="list-group">
+    
+      <li class="list-group-item">
+      
+         
+    
+    <h3>
+private pure function <a href='../proc/class_name%7E5.html'>class_name</a>(self)
+    
+    
+	 
+</h3>
+    
+
+
+
+
+
+
+
+<p>Return the class name of schemes.</p>
+    
+    <h4>Arguments</h4>
+    
+      
+      
+<table class="table table-striped varlist">
+<thead><tr><th>Type</th>
+<th>Intent</th><th>Optional</th>
+<th>Attributes</th><th></th><th>Name</th><th></th></thead>
+
+
+
+<tbody>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>class(<a href='../type/integrator_euler_explicit.html'>integrator_euler_explicit</a>),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>self</strong></td><td><p>Integrator.</p></td>
+  
+</tr>
+
+</tbody>
+</table>
+
+      
+    
+    
+
+  
+  
+  
+  
+     <h4>Return Value <small>character(len=99)
+  </small></h4>
+  <p>Class name.</p>
     
 
       
@@ -1262,7 +1348,7 @@ private subroutine <a href='../proc/integrate%7E5.html'>integrate</a>(U, Dt, t)
     
 	   
 <div class="panel panel-default">
-  <div class="panel-heading codesum"><span class="anchor" id="boundprocedure-is_supported%7E5"></span><h3>procedure, public, nopass :: <strong>is_supported</strong>  
+  <div class="panel-heading codesum"><span class="anchor" id="boundprocedure-is_supported%7E5"></span><h3>procedure, public, pass(self) :: <strong>is_supported</strong>  
     
   </h3></div>
   
@@ -1270,7 +1356,7 @@ private subroutine <a href='../proc/integrate%7E5.html'>integrate</a>(U, Dt, t)
     
 
 
-    <p>Check if the queried number of stages/steps is supported or not.</p>
+    <p>Return .true. if the integrator class support the given scheme.</p>
   </div>
   
   <ul class="list-group">
@@ -1280,7 +1366,7 @@ private subroutine <a href='../proc/integrate%7E5.html'>integrate</a>(U, Dt, t)
          
     
     <h3>
-private elemental function <a href='../proc/is_supported%7E5.html'>is_supported</a>(stages_steps)
+private elemental function <a href='../proc/is_supported%7E5.html'>is_supported</a>(self, scheme)
     
     
 	 
@@ -1293,7 +1379,7 @@ private elemental function <a href='../proc/is_supported%7E5.html'>is_supported<
 
 
 
-<p>Check if the queried number of stages/steps is supported or not.</p>
+<p>Return .true. if the integrator class support the given scheme.</p>
     
     <h4>Arguments</h4>
     
@@ -1314,12 +1400,27 @@ private elemental function <a href='../proc/is_supported%7E5.html'>is_supported<
   
 <tr>
   
-  <td><span class="anchor" ></span>integer(kind=I_P),</td>
+  <td><span class="anchor" ></span>class(<a href='../type/integrator_euler_explicit.html'>integrator_euler_explicit</a>),</td>
   <td>intent(in)</td>
   <td></td>
   
   <td></td><td>::</td>
-  <td><strong>stages_steps</strong></td><td><p>Number of stages/steps used.</p></td>
+  <td><strong>self</strong></td><td><p>Integrator.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>character(len=*),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>scheme</strong></td><td><p>Selected scheme.</p></td>
   
 </tr>
 
@@ -1336,7 +1437,7 @@ private elemental function <a href='../proc/is_supported%7E5.html'>is_supported<
   
      <h4>Return Value <small>logical
   </small></h4>
-  <p>Is true is the stages number is in <em>supported_stages_steps</em>.</p>
+  <p>Inquire result.</p>
     
 
       
@@ -1348,7 +1449,7 @@ private elemental function <a href='../proc/is_supported%7E5.html'>is_supported<
     
 	   
 <div class="panel panel-default">
-  <div class="panel-heading codesum"><span class="anchor" id="boundprocedure-max_stages_steps"></span><h3>procedure, public, nopass :: <strong>max_stages_steps</strong>  
+  <div class="panel-heading codesum"><span class="anchor" id="boundprocedure-supported_schemes%7E5"></span><h3>procedure, public, pass(self) :: <strong>supported_schemes</strong>  
     
   </h3></div>
   
@@ -1356,7 +1457,7 @@ private elemental function <a href='../proc/is_supported%7E5.html'>is_supported<
     
 
 
-    <p>Return the maximum number of stages/steps supported.</p>
+    <p>Return the list of supported schemes.</p>
   </div>
   
   <ul class="list-group">
@@ -1366,7 +1467,7 @@ private elemental function <a href='../proc/is_supported%7E5.html'>is_supported<
          
     
     <h3>
-private pure function <a href='../proc/max_stages_steps.html'>max_stages_steps</a>()
+private pure function <a href='../proc/supported_schemes%7E5.html'>supported_schemes</a>(self) result(schemes)
     
     
 	 
@@ -1379,68 +1480,40 @@ private pure function <a href='../proc/max_stages_steps.html'>max_stages_steps</
 
 
 
-<p>Return the maximum number of stages/steps supported.</p>
+<p>Return the list of supported schemes.</p>
     
     <h4>Arguments</h4>
     
-      <em>None</em>
-    
-    
+      
+      
+<table class="table table-striped varlist">
+<thead><tr><th>Type</th>
+<th>Intent</th><th>Optional</th>
+<th>Attributes</th><th></th><th>Name</th><th></th></thead>
+
+
+
+<tbody>
 
   
   
   
   
-     <h4>Return Value <small>integer(kind=I_P)
-  </small></h4>
-  <p>Maximum number of stages/steps supported.</p>
-    
+<tr>
+  
+  <td><span class="anchor" ></span>class(<a href='../type/integrator_euler_explicit.html'>integrator_euler_explicit</a>),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>self</strong></td><td><p>Integrator.</p></td>
+  
+</tr>
+
+</tbody>
+</table>
 
       
-      </li>
-    
-  </ul>
-</div>
-
-    
-	   
-<div class="panel panel-default">
-  <div class="panel-heading codesum"><span class="anchor" id="boundprocedure-min_stages_steps"></span><h3>procedure, public, nopass :: <strong>min_stages_steps</strong>  
-    
-  </h3></div>
-  
-  <div class="panel-body">
-    
-
-
-    <p>Return the minimum number of stages/steps supported.</p>
-  </div>
-  
-  <ul class="list-group">
-    
-      <li class="list-group-item">
-      
-         
-    
-    <h3>
-private pure function <a href='../proc/min_stages_steps.html'>min_stages_steps</a>()
-    
-    
-	 
-</h3>
-    
-
-
-
-
-
-
-
-<p>Return the minimum number of stages/steps supported.</p>
-    
-    <h4>Arguments</h4>
-    
-      <em>None</em>
     
     
 
@@ -1448,9 +1521,9 @@ private pure function <a href='../proc/min_stages_steps.html'>min_stages_steps</
   
   
   
-     <h4>Return Value <small>integer(kind=I_P)
-  </small></h4>
-  <p>Minimum number of stages/steps supported.</p>
+     <h4>Return Value <small>character(len=99),
+  allocatable, (:)</small></h4>
+  <p>Queried scheme.</p>
     
 
       
@@ -1594,14 +1667,14 @@ private subroutine <a href='../proc/trigger_error.html'>trigger_error</a>(self, 
   <span class="c">!&lt; @note The integrator can be used directly without any initialization.</span>
   <span class="k">contains</span>
     <span class="c">! deferred methods</span>
+    <span class="k">procedure</span><span class="p">,</span> <span class="k">pass</span><span class="p">(</span><span class="n">self</span><span class="p">)</span> <span class="kd">::</span> <span class="n">class_name</span>           <span class="c">!&lt; Return the class name of schemes.</span>
     <span class="k">procedure</span><span class="p">,</span> <span class="k">pass</span><span class="p">(</span><span class="n">self</span><span class="p">)</span> <span class="kd">::</span> <span class="n">description</span>          <span class="c">!&lt; Return pretty-printed object description.</span>
     <span class="k">procedure</span><span class="p">,</span> <span class="k">pass</span><span class="p">(</span><span class="n">lhs</span><span class="p">)</span>  <span class="kd">::</span> <span class="n">integr_assign_integr</span> <span class="c">!&lt; Operator `=`.</span>
+    <span class="k">procedure</span><span class="p">,</span> <span class="k">pass</span><span class="p">(</span><span class="n">self</span><span class="p">)</span> <span class="kd">::</span> <span class="n">is_supported</span>         <span class="c">!&lt; Return .true. if the integrator class support the given scheme.</span>
+    <span class="k">procedure</span><span class="p">,</span> <span class="k">pass</span><span class="p">(</span><span class="n">self</span><span class="p">)</span> <span class="kd">::</span> <span class="n">supported_schemes</span>    <span class="c">!&lt; Return the list of supported schemes.</span>
     <span class="c">! public methods</span>
-    <span class="k">procedure</span><span class="p">,</span> <span class="k">pass</span><span class="p">(</span><span class="n">self</span><span class="p">)</span> <span class="kd">::</span> <span class="n">destroy</span>          <span class="c">!&lt; Destroy the integrator.</span>
-    <span class="k">procedure</span><span class="p">,</span> <span class="k">nopass</span>     <span class="kd">::</span> <span class="n">integrate</span>        <span class="c">!&lt; Integrate integrand field.</span>
-    <span class="k">procedure</span><span class="p">,</span> <span class="k">nopass</span>     <span class="kd">::</span> <span class="n">is_supported</span>     <span class="c">!&lt; Check if the queried number of stages/steps is supported or not.</span>
-    <span class="k">procedure</span><span class="p">,</span> <span class="k">nopass</span>     <span class="kd">::</span> <span class="n">min_stages_steps</span> <span class="c">!&lt; Return the minimum number of stages/steps supported.</span>
-    <span class="k">procedure</span><span class="p">,</span> <span class="k">nopass</span>     <span class="kd">::</span> <span class="n">max_stages_steps</span> <span class="c">!&lt; Return the maximum number of stages/steps supported.</span>
+    <span class="k">procedure</span><span class="p">,</span> <span class="k">pass</span><span class="p">(</span><span class="n">self</span><span class="p">)</span> <span class="kd">::</span> <span class="n">destroy</span>   <span class="c">!&lt; Destroy the integrator.</span>
+    <span class="k">procedure</span><span class="p">,</span> <span class="k">nopass</span>     <span class="kd">::</span> <span class="n">integrate</span> <span class="c">!&lt; Integrate integrand field.</span>
 <span class="n">endtype</span> <span class="n">integrator_euler_explicit</span>
 </pre></div>
 
@@ -1656,13 +1729,13 @@ private subroutine <a href='../proc/trigger_error.html'>trigger_error</a>(self, 
       
       <a class="list-group-item" href="../type/integrator_runge_kutta_ls.html">integrator_runge_kutta_ls</a>
       
-      <a class="list-group-item" href="../type/integrator_runge_kutta_tvd.html">integrator_runge_kutta_tvd</a>
+      <a class="list-group-item" href="../type/integrator_runge_kutta_ssp.html">integrator_runge_kutta_ssp</a>
       
       <a class="list-group-item" href="../type/lorenz.html">lorenz</a>
       
-      <a class="list-group-item" href="../type/oscillation.html">oscillation</a>
-      
       <a class="list-group-item" href="../type/oscillation_test.html">oscillation_test</a>
+      
+      <a class="list-group-item" href="../type/oscillator.html">oscillator</a>
       
       <a class="list-group-item" href="../type/tvd_runge_kutta_integrator.html">tvd_runge_kutta_integrator</a>
       
@@ -1685,7 +1758,7 @@ private subroutine <a href='../proc/trigger_error.html'>trigger_error</a>(self, 
           <p class="text-right">
             Documentation generated by 
             <a href="https://github.com/cmacmackin/ford">FORD</a>
-             on 2017-03-31 15:32  
+             on 2017-04-05 10:53  
           </p>
         </div>
         <div class="col-xs-12 col-md-4 col-md-pull-4"><p class="text-center"> FOODIE was developed by Fortran-FOSS-Programmers Group</p></div>

@@ -77,44 +77,66 @@ module foodie_integrator_adams_bashforth_moulton
 !<
 
 use foodie_adt_integrand, only : integrand
-use foodie_error_codes, only : ERROR_BAD_STEPS_NUMBER
+use foodie_error_codes, only : ERROR_UNSUPPORTED_SCHEME
 use foodie_kinds, only : I_P, R_P
 use foodie_integrator_adams_bashforth, only : integrator_adams_bashforth
 use foodie_integrator_adams_moulton, only : integrator_adams_moulton
 use foodie_integrator_object, only : integrator_object
-use foodie_utils, only : is_admissible
 
 implicit none
 private
 public :: integrator_adams_bashforth_moulton
 
-character(len=99), parameter :: supported_steps='1-16' !< List of supported steps number. Valid format is `1-2,4,9-23...`.
-integer(I_P),      parameter :: min_ss=1               !< Minimum number of steps supported.
-integer(I_P),      parameter :: max_ss=16              !< Maximum number of steps supported.
+character(len=99), parameter :: class_name_='adams_bashforth_moulton'               !< Name of the class of schemes.
+character(len=99), parameter :: supported_schemes_(1:16)=[trim(class_name_)//'_1 ', &
+                                                          trim(class_name_)//'_2 ', &
+                                                          trim(class_name_)//'_3 ', &
+                                                          trim(class_name_)//'_4 ', &
+                                                          trim(class_name_)//'_5 ', &
+                                                          trim(class_name_)//'_6 ', &
+                                                          trim(class_name_)//'_7 ', &
+                                                          trim(class_name_)//'_8 ', &
+                                                          trim(class_name_)//'_9 ', &
+                                                          trim(class_name_)//'_10', &
+                                                          trim(class_name_)//'_11', &
+                                                          trim(class_name_)//'_12', &
+                                                          trim(class_name_)//'_13', &
+                                                          trim(class_name_)//'_14', &
+                                                          trim(class_name_)//'_15', &
+                                                          trim(class_name_)//'_16'] !< List of supported schemes.
 
 type, extends(integrator_object) :: integrator_adams_bashforth_moulton
   !< FOODIE integrator: provide an explicit class of Adams-Bashforth-Moulton multi-step schemes, from 1st to 4rd order accurate.
   !<
   !< @note The integrator must be created or initialized (predictor and corrector schemes selection) before used.
   private
-  integer(I_P)                     :: steps=-1  !< Number of time steps.
+  integer(I_P), public             :: steps=0   !< Number of time steps.
   type(integrator_adams_bashforth) :: predictor !< Predictor solver.
   type(integrator_adams_moulton)   :: corrector !< Corrector solver.
   contains
     ! deferred methods
+    procedure, pass(self) :: class_name           !< Return the class name of schemes.
     procedure, pass(self) :: description          !< Return pretty-printed object description.
     procedure, pass(lhs)  :: integr_assign_integr !< Operator `=`.
+    procedure, pass(self) :: is_supported         !< Return .true. if the integrator class support the given scheme.
+    procedure, pass(self) :: supported_schemes    !< Return the list of supported schemes.
     ! public methods
-    procedure, pass(self) :: destroy      !< Destroy the integrator.
-    procedure, pass(self) :: init         !< Initialize (create) the integrator.
-    procedure, pass(self) :: integrate    !< Integrate integrand field.
-    procedure, nopass     :: is_supported !< Check if the queried number of steps is supported or not.
-    procedure, nopass     :: min_steps    !< Return the minimum number of steps supported.
-    procedure, nopass     :: max_steps    !< Return the maximum number of steps supported.
+    procedure, pass(self) :: destroy       !< Destroy the integrator.
+    procedure, pass(self) :: initialize    !< Initialize (create) the integrator.
+    procedure, pass(self) :: integrate     !< Integrate integrand field.
+    procedure, pass(self) :: scheme_number !< Return the scheme number in the list of supported schemes.
 endtype integrator_adams_bashforth_moulton
 
 contains
   ! deferred methods
+  pure function class_name(self)
+  !< Return the class name of schemes.
+  class(integrator_adams_bashforth_moulton), intent(in) :: self       !< Integrator.
+  character(len=99)                                     :: class_name !< Class name.
+
+  class_name = trim(adjustl(class_name_))
+  endfunction class_name
+
   pure function description(self, prefix) result(desc)
   !< Return a pretty-formatted object description.
   class(integrator_adams_bashforth_moulton), intent(in)           :: self             !< Integrator.
@@ -122,11 +144,16 @@ contains
   character(len=:), allocatable                                   :: desc             !< Description.
   character(len=:), allocatable                                   :: prefix_          !< Prefixing string, local variable.
   character(len=1), parameter                                     :: NL=new_line('a') !< New line character.
+  integer(I_P)                                                    :: s                !< Counter.
 
   prefix_ = '' ; if (present(prefix)) prefix_ = prefix
   desc = ''
-  desc = desc//prefix_//'Adams-Bashforth-Moulton multi-step schemes class'//NL
-  desc = desc//prefix_//'  Supported steps numbers: ['//trim(adjustl(supported_steps))//']'
+  desc = desc//prefix_//'Adams-Bashforth-Moulton multi-step (predictor-corrector) schemes class'//NL
+  desc = desc//prefix_//'  Supported schemes:'//NL
+  do s=lbound(supported_schemes_, dim=1), ubound(supported_schemes_, dim=1) - 1
+    desc = desc//prefix_//'    + '//supported_schemes_(s)//NL
+  enddo
+  desc = desc//prefix_//'    + '//supported_schemes_(ubound(supported_schemes_, dim=1))
   endfunction description
 
   pure subroutine integr_assign_integr(lhs, rhs)
@@ -143,33 +170,64 @@ contains
   endselect
   endsubroutine integr_assign_integr
 
+  elemental function is_supported(self, scheme)
+  !< Return .true. if the integrator class support the given scheme.
+  class(integrator_adams_bashforth_moulton), intent(in) :: self         !< Integrator.
+  character(*),                              intent(in) :: scheme       !< Selected scheme.
+  logical                                               :: is_supported !< Inquire result.
+  integer(I_P)                                          :: s            !< Counter.
+
+  is_supported = .false.
+  do s=lbound(supported_schemes_, dim=1), ubound(supported_schemes_, dim=1)
+    if (trim(adjustl(scheme)) == trim(adjustl(supported_schemes_(s)))) then
+      is_supported = .true.
+      return
+    endif
+  enddo
+  endfunction is_supported
+
+  pure function supported_schemes(self) result(schemes)
+  !< Return the list of supported schemes.
+  class(integrator_adams_bashforth_moulton), intent(in) :: self       !< Integrator.
+  character(len=99), allocatable                        :: schemes(:) !< Queried scheme.
+
+  allocate(schemes(lbound(supported_schemes_, dim=1):ubound(supported_schemes_, dim=1)))
+  schemes = supported_schemes_
+  endfunction supported_schemes
+
   ! public methods
   elemental subroutine destroy(self)
   !< Destroy the integrator.
   class(integrator_adams_bashforth_moulton), intent(inout) :: self !< Integrator.
 
   call self%destroy_abstract
-  self%steps = -1
+  self%steps = 0
   call self%predictor%destroy
   call self%corrector%destroy
   endsubroutine destroy
 
-  subroutine init(self, steps)
+  subroutine initialize(self, scheme)
   !< Create the actual Adams-Bashforth-Moulton integrator: initialize the *b* coefficients.
-  class(integrator_adams_bashforth_moulton), intent(inout) :: self  !< Integrator.
-  integer(I_P),                              intent(in)    :: steps !< Number of time steps used.
+  class(integrator_adams_bashforth_moulton), intent(inout) :: self           !< Integrator.
+  character(*),                              intent(in)    :: scheme         !< Selected scheme.
+  character(len=99), allocatable                           :: schemes_ab(:)  !< Adams-Bashforth schemes.
+  character(len=99), allocatable                           :: schemes_am(:)  !< Adams-Moulton schemes.
+  integer(I_P)                                             :: scheme_number_ !< Scheme number in the list of supported schemes.
 
-  if (self%is_supported(steps)) then
+  if (self%is_supported(scheme=scheme)) then
     call self%destroy
-    self%steps = steps
-    call self%predictor%init(steps=steps)
-    call self%corrector%init(steps=steps-1)
+    scheme_number_ = self%scheme_number(scheme=scheme)
+    schemes_ab = self%predictor%supported_schemes()
+    schemes_am = self%corrector%supported_schemes()
+    call self%predictor%initialize(scheme=schemes_ab(scheme_number_))
+    call self%corrector%initialize(scheme=schemes_am(scheme_number_))
+    self%steps = self%predictor%steps
   else
-    call self%trigger_error(error=ERROR_BAD_STEPS_NUMBER,                           &
-                            error_message='bad (unsupported) number of time steps', &
+    call self%trigger_error(error=ERROR_UNSUPPORTED_SCHEME,                                   &
+                            error_message='"'//trim(adjustl(scheme))//'" unsupported scheme', &
                             is_severe=.true.)
   endif
-  endsubroutine init
+  endsubroutine initialize
 
   subroutine integrate(self, U, previous, Dt, t, iterations)
   !< Integrate field with Adams-Bashforth-Moulton class scheme.
@@ -185,25 +243,19 @@ contains
   call self%predictor%update_previous(U=U, previous=previous)
   endsubroutine integrate
 
-  elemental function is_supported(steps)
-  !< Check if the queried number of steps is supported or not.
-  integer(I_P), intent(in) :: steps        !< Number of time steps used.
-  logical                  :: is_supported !< Is true is the steps number is in *supported_steps*.
+  elemental function scheme_number(self, scheme)
+  !< Return the scheme number in the list of supported schemes.
+  class(integrator_adams_bashforth_moulton), intent(in) :: self          !< Integrator.
+  character(*),                              intent(in) :: scheme        !< Selected scheme.
+  integer(I_P)                                          :: scheme_number !< Scheme number in the list of supported schemes.
+  integer(I_P)                                          :: s             !< Counter.
 
-  is_supported = is_admissible(n=steps, adm_range=trim(supported_steps))
-  endfunction is_supported
-
-  pure function min_steps()
-  !< Return the minimum number of steps supported.
-  integer(I_P) :: min_steps !< Minimum number of steps supported.
-
-  min_steps = min_ss
-  endfunction min_steps
-
-  pure function max_steps()
-  !< Return the maximum number of steps supported.
-  integer(I_P) :: max_steps !< Maximum number of steps supported.
-
-  max_steps = max_ss
-  endfunction max_steps
+  scheme_number = 0
+  do s=lbound(supported_schemes_, dim=1), ubound(supported_schemes_, dim=1)
+    if (trim(adjustl(scheme)) == trim(adjustl(supported_schemes_(s)))) then
+      scheme_number = s
+      exit
+    endif
+  enddo
+  endfunction scheme_number
 endmodule foodie_integrator_adams_bashforth_moulton

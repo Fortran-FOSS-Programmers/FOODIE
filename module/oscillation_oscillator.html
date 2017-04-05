@@ -1,0 +1,2161 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+	 
+	 <meta name="description" content="Fortran Object oriented Ordinary Differential Equations integration library">
+    
+    <meta name="author" content="Fortran-FOSS-Programmers Group" >
+    <link rel="icon" href="../favicon.png">
+
+    <title>oscillation_oscillator &ndash; FOODIE</title>
+
+    <link href="../css/bootstrap.min.css" rel="stylesheet">
+    <link href="../css/pygments.css" rel="stylesheet">
+    <link href="../css/font-awesome.min.css" rel="stylesheet">
+    <link href="../css/local.css" rel="stylesheet">
+    
+
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+    
+    <script src="../js/jquery-2.1.3.min.js"></script>
+    <script src="../js/svg-pan-zoom.min.js"></script>
+
+    
+    <script src="../tipuesearch/tipuesearch_content.js"></script>
+    <link  href="../tipuesearch/tipuesearch.css" rel="stylesheet">
+    <script src="../tipuesearch/tipuesearch_set.js"></script>
+    <script src="../tipuesearch/tipuesearch.js"></script>
+    
+
+  </head>
+
+  <body>
+
+    <!-- Fixed navbar -->
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="../index.html">FOODIE </a>
+        </div>
+        <div id="navbar" class="navbar-collapse collapse">
+          <ul class="nav navbar-nav">
+				
+            <li class="dropdown hidden-xs visible-sm visible-md hidden-lg">
+              <a href="#" class="dropdown-toggle"
+              data-toggle="dropdown" role="button"
+              aria-haspopup="true"
+		 aria-expanded="false">Contents <span class="caret"></span></a>
+	      <ul class="dropdown-menu">
+              
+            <li><a href="../lists/files.html">Source Files</a></li>
+				
+				
+            <li><a href="../lists/modules.html">Modules</a></li>
+				
+            
+                                
+            <li><a href="../lists/procedures.html">Procedures</a></li>
+				
+				
+            <li><a href="../lists/absint.html">Abstract Interfaces</a></li>
+								
+            <li><a href="../lists/types.html">Derived Types</a></li>
+				
+				
+            <li><a href="../lists/programs.html">Programs</a></li>
+				
+            </ul>
+            </li>
+
+<li class="visible-xs hidden-sm visible-lg"><a href="../lists/files.html">Source Files</a></li>
+
+
+<li class="visible-xs hidden-sm visible-lg"><a href="../lists/modules.html">Modules</a></li>
+
+
+
+<li class="visible-xs hidden-sm visible-lg"><a href="../lists/procedures.html">Procedures</a></li>
+
+
+<li class="visible-xs hidden-sm visible-lg"><a href="../lists/absint.html">Abstract Interfaces</a></li>
+                             
+<li class="visible-xs hidden-sm visible-lg"><a href="../lists/types.html">Derived Types</a></li>
+
+
+<li class="visible-xs hidden-sm visible-lg"><a href="../lists/programs.html">Programs</a></li>
+
+          </ul>
+        
+        <form action="../search.html" class="navbar-form navbar-right" role="search">
+        <div class="form-group">
+          <input type="text" class="form-control" placeholder="Search" name="q" id="tipue_search_input" autocomplete="off" required>
+        </div>
+<!--
+        <button type="submit" class="btn btn-default">Submit</button>
+-->
+        </form>
+        
+        </div><!--/.nav-collapse -->
+      </div>
+    </nav>
+
+    <div class="container">
+    
+  
+  <div class="row">
+    <h1>oscillation_oscillator 
+    <small>Module</small>
+    
+    </h1>
+    
+<div class="row">
+  <div class="col-lg-12">
+<div class="well well-sm">
+  <ul class="list-inline" style="margin-bottom:0px;display:inline">
+     
+     
+     
+     
+    
+    
+     <li><i class="fa fa-list-ol"></i>
+       <a data-toggle="tooltip"
+	  data-placement="bottom" data-html="true"
+	  title=" 2.0% of total for modules and submodules.">148 statements</a>
+     </li> 
+     
+     
+    <li><i class="fa fa-code"></i><a href="../src/oscillation_oscillator.f90"> Source File</a></li>
+     
+  </ul>
+  <ol class="breadcrumb in-well text-right">
+  
+     <li><a href='../sourcefile/oscillation_oscillator.f90.html'>oscillation_oscillator.f90</a></li>
+  
+     <li class="active">oscillation_oscillator</li>
+  </ol>
+</div>
+</div>
+</div>
+<script>
+  $(function () {
+  $('[data-toggle="tooltip"]').tooltip()
+  })
+</script>
+
+  </div>
+  
+  <div class="row">
+    <div class="col-md-3 hidden-xs hidden-sm visible-md visible-lg">
+    
+<div id="sidebar">
+  
+
+
+
+
+
+
+
+
+
+
+
+<div class="panel panel-primary">
+  <div class="panel-heading text-left"><h3 class="panel-title"><a data-toggle="collapse" href="#types-0">Derived Types</a></h3></div>
+  <div id="types-0" class="panel-collapse collapse">
+    <div class="list-group">
+      
+      <a class="list-group-item" href="../module/oscillation_oscillator.html#type-oscillator">oscillator</a>
+      
+    </div>
+  </div>
+</div>
+
+
+<div class="panel panel-primary">
+  <div class="panel-heading text-left"><h3 class="panel-title"><a data-toggle="collapse" href="#funcs-0">Functions</a></h3></div>
+  <div id="funcs-0" class="panel-collapse collapse">
+    <div class="list-group">
+      
+      <a class="list-group-item" href="../module/oscillation_oscillator.html#proc-add_oscillation">add_oscillation</a>
+      
+      <a class="list-group-item" href="../module/oscillation_oscillator.html#proc-doscillation_dt">dOscillation_dt</a>
+      
+      <a class="list-group-item" href="../module/oscillation_oscillator.html#proc-oscillation_local_error">oscillation_local_error</a>
+      
+      <a class="list-group-item" href="../module/oscillation_oscillator.html#proc-oscillation_multiply_oscillation">oscillation_multiply_oscillation</a>
+      
+      <a class="list-group-item" href="../module/oscillation_oscillator.html#proc-oscillation_multiply_real">oscillation_multiply_real</a>
+      
+      <a class="list-group-item" href="../module/oscillation_oscillator.html#proc-output">output</a>
+      
+      <a class="list-group-item" href="../module/oscillation_oscillator.html#proc-real_multiply_oscillation">real_multiply_oscillation</a>
+      
+      <a class="list-group-item" href="../module/oscillation_oscillator.html#proc-sub_oscillation">sub_oscillation</a>
+      
+    </div>
+  </div>
+</div>
+
+
+<div class="panel panel-primary">
+  <div class="panel-heading text-left"><h3 class="panel-title"><a data-toggle="collapse" href="#subs-0">Subroutines</a></h3></div>
+  <div class="list-group">
+    <div id="subs-0" class="panel-collapse collapse">
+      
+      <a class="list-group-item" href="../module/oscillation_oscillator.html#proc-init">init</a>
+      
+      <a class="list-group-item" href="../module/oscillation_oscillator.html#proc-oscillation_assign_oscillation">oscillation_assign_oscillation</a>
+      
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
+
+
+
+  <hr>
+  
+
+<div class="panel panel-default">
+  <div class="panel-heading text-left"><h3 class="panel-title"><a data-toggle="collapse" href="#allmods-0">All Modules</a></h3></div>
+  <div id="allmods-0" class="panel-collapse collapse">
+    <div class="list-group">
+      
+      <a class="list-group-item" href="../module/foodie.html">foodie</a>
+      
+      <a class="list-group-item" href="../module/foodie_adt_integrand.html">foodie_adt_integrand</a>
+      
+      <a class="list-group-item" href="../module/foodie_error_codes.html">foodie_error_codes</a>
+      
+      <a class="list-group-item" href="../module/foodie_integrator_adams_bashforth.html">foodie_integrator_adams_bashforth</a>
+      
+      <a class="list-group-item" href="../module/foodie_integrator_adams_bashforth_moulton.html">foodie_integrator_adams_bashforth_moulton</a>
+      
+      <a class="list-group-item" href="../module/foodie_integrator_adams_moulton.html">foodie_integrator_adams_moulton</a>
+      
+      <a class="list-group-item" href="../module/foodie_integrator_backward_differentiation_formula.html">foodie_integrator_backward_differentiation_formula</a>
+      
+      <a class="list-group-item" href="../module/foodie_integrator_euler_explicit.html">foodie_integrator_euler_explicit</a>
+      
+      <a class="list-group-item" href="../module/foodie_integrator_leapfrog.html">foodie_integrator_leapfrog</a>
+      
+      <a class="list-group-item" href="../module/foodie_integrator_lmm_ssp.html">foodie_integrator_lmm_ssp</a>
+      
+      <a class="list-group-item" href="../module/foodie_integrator_lmm_ssp_vss.html">foodie_integrator_lmm_ssp_vss</a>
+      
+      <a class="list-group-item" href="../module/foodie_integrator_object.html">foodie_integrator_object</a>
+      
+      <a class="list-group-item" href="../module/foodie_integrator_runge_kutta_emd.html">foodie_integrator_runge_kutta_emd</a>
+      
+      <a class="list-group-item" href="../module/foodie_integrator_runge_kutta_low_storage.html">foodie_integrator_runge_kutta_low_storage</a>
+      
+      <a class="list-group-item" href="../module/foodie_integrator_runge_kutta_ssp.html">foodie_integrator_runge_kutta_ssp</a>
+      
+      <a class="list-group-item" href="../module/foodie_kinds.html">foodie_kinds</a>
+      
+      <a class="list-group-item" href="../module/foodie_utils.html">foodie_utils</a>
+      
+      <a class="list-group-item" href="../module/oscillation_oscillator.html">oscillation_oscillator</a>
+      
+      <a class="list-group-item" href="../module/oscillation_test_t.html">oscillation_test_t</a>
+      
+      <a class="list-group-item" href="../module/type_burgers.html">type_burgers</a>
+      
+      <a class="list-group-item" href="../module/type_euler_1d.html">type_euler_1D</a>
+      
+      <a class="list-group-item" href="../module/type_euler_1d_caf.html">type_euler_1D_caf</a>
+      
+      <a class="list-group-item" href="../module/type_euler_1d_caf_no_foodie.html">type_euler_1D_caf_no_foodie</a>
+      
+      <a class="list-group-item" href="../module/type_euler_1d_openmp.html">type_euler_1D_openmp</a>
+      
+      <a class="list-group-item" href="../module/type_euler_1d_openmp_no_foodie.html">type_euler_1D_openmp_no_foodie</a>
+      
+      <a class="list-group-item" href="../module/type_lorenz.html">type_lorenz</a>
+      
+    </div>
+  </div>
+</div>
+
+
+</div>  
+
+    </div>
+    
+    <div class="col-md-9" id='text'>
+      
+    
+  
+    <ul class="list-inline">
+      <li><h4>Uses:</h4></li>
+      
+      <li><a href='../module/foodie.html'>foodie</a></li>
+      
+      <li>penf</li>
+      
+    </ul>
+    
+                <div class="depgraph"><?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.26.3 (20100126.1600)
+ -->
+<!-- Title: module~~oscillation_oscillator~~UsesGraph Pages: 1 -->
+<svg id="moduleoscillation_oscillatorUsesGraph" width="641pt" height="390pt"
+ viewBox="0.00 0.00 641.00 389.55" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="module~~oscillation_oscillator~~UsesGraph" class="graph" transform="scale(0.609316 0.609316) rotate(0) translate(4 635.319)">
+<title>module~~oscillation_oscillator~~UsesGraph</title>
+<polygon fill="white" stroke="white" points="-4,5 -4,-635.319 1049,-635.319 1049,5 -4,5"/>
+<!-- module~oscillation_oscillator -->
+<g id="node1" class="node"><title>module~oscillation_oscillator</title>
+<polygon fill="none" stroke="black" points="1043,-263.978 937,-263.978 937,-237.978 1043,-237.978 1043,-263.978"/>
+<text text-anchor="middle" x="990" y="-248.528" font-family="Helvetica,sans-Serif" font-size="10.50">oscillation_oscillator</text>
+</g>
+<!-- module~foodie -->
+<g id="node2" class="node"><title>module~foodie</title>
+<a xlink:href="../module/foodie.html" xlink:title="foodie">
+<polygon fill="#337ab7" stroke="#337ab7" points="900,-285.978 846,-285.978 846,-259.978 900,-259.978 900,-285.978"/>
+<text text-anchor="middle" x="873" y="-270.528" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">foodie</text>
+</a>
+</g>
+<!-- module~foodie&#45;&gt;module~oscillation_oscillator -->
+<g id="edge132" class="edge"><title>module~foodie&#45;&gt;module~oscillation_oscillator</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M900.136,-267.875C908.068,-266.384 917.092,-264.687 926.29,-262.958"/>
+<polygon fill="#000000" stroke="#000000" points="927.113,-266.364 936.294,-261.076 925.819,-259.485 927.113,-266.364"/>
+</g>
+<!-- penf -->
+<g id="node3" class="node"><title>penf</title>
+<polygon fill="#337ab7" stroke="#337ab7" points="900,-241.978 846,-241.978 846,-215.978 900,-215.978 900,-241.978"/>
+<text text-anchor="middle" x="873" y="-226.528" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">penf</text>
+</g>
+<!-- penf&#45;&gt;module~oscillation_oscillator -->
+<g id="edge134" class="edge"><title>penf&#45;&gt;module~oscillation_oscillator</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M900.136,-234.08C908.068,-235.572 917.092,-237.269 926.29,-238.998"/>
+<polygon fill="#000000" stroke="#000000" points="925.819,-242.471 936.294,-240.879 927.113,-235.591 925.819,-242.471"/>
+</g>
+<!-- module~foodie_integrator_lmm_ssp -->
+<g id="node4" class="node"><title>module~foodie_integrator_lmm_ssp</title>
+<a xlink:href="../module/foodie_integrator_lmm_ssp.html" xlink:title="foodie_integrator_lmm_ssp">
+<polygon fill="#337ab7" stroke="#337ab7" points="488,-389.978 346,-389.978 346,-363.978 488,-363.978 488,-389.978"/>
+<text text-anchor="middle" x="417" y="-374.528" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">foodie_integrator_lmm_ssp</text>
+</a>
+</g>
+<!-- module~foodie_integrator_lmm_ssp&#45;&gt;module~foodie -->
+<g id="edge100" class="edge"><title>module~foodie_integrator_lmm_ssp&#45;&gt;module~foodie</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M488.307,-383.112C507.549,-386.37 528.01,-391.354 546,-398.978 622.119,-431.235 619.376,-540.015 696,-508.978"/>
+</g>
+<!-- module~foodie_integrator_adams_moulton -->
+<g id="node5" class="node"><title>module~foodie_integrator_adams_moulton</title>
+<a xlink:href="../module/foodie_integrator_adams_moulton.html" xlink:title="foodie_integrator_adams_moulton">
+<polygon fill="#337ab7" stroke="#337ab7" points="505,-307.978 329,-307.978 329,-281.978 505,-281.978 505,-307.978"/>
+<text text-anchor="middle" x="417" y="-292.528" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">foodie_integrator_adams_moulton</text>
+</a>
+</g>
+<!-- module~foodie_integrator_adams_moulton&#45;&gt;module~foodie -->
+<g id="edge102" class="edge"><title>module~foodie_integrator_adams_moulton&#45;&gt;module~foodie</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M505.122,-304.925C519.441,-308.885 533.617,-314.377 546,-321.978 636.802,-377.717 597.248,-548.978 696,-508.978"/>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M696,-508.978C791.48,-470.303 846.19,-346.709 865.253,-295.516"/>
+<polygon fill="#000000" stroke="#000000" points="868.579,-296.612 868.687,-286.018 861.996,-294.232 868.579,-296.612"/>
+</g>
+<!-- module~foodie_integrator_adams_bashforth_moulton -->
+<g id="node17" class="node"><title>module~foodie_integrator_adams_bashforth_moulton</title>
+<a xlink:href="../module/foodie_integrator_adams_bashforth_moulton.html" xlink:title="foodie_integrator_adams_bashforth_moulton">
+<polygon fill="#337ab7" stroke="#337ab7" points="809,-285.978 583,-285.978 583,-259.978 809,-259.978 809,-285.978"/>
+<text text-anchor="middle" x="696" y="-270.528" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">foodie_integrator_adams_bashforth_moulton</text>
+</a>
+</g>
+<!-- module~foodie_integrator_adams_moulton&#45;&gt;module~foodie_integrator_adams_bashforth_moulton -->
+<g id="edge72" class="edge"><title>module~foodie_integrator_adams_moulton&#45;&gt;module~foodie_integrator_adams_bashforth_moulton</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M505.277,-288.017C526.624,-286.334 549.829,-284.504 572.465,-282.719"/>
+<polygon fill="#000000" stroke="#000000" points="572.776,-286.205 582.47,-281.93 572.226,-279.227 572.776,-286.205"/>
+</g>
+<!-- module~foodie_integrator_runge_kutta_ssp -->
+<g id="node6" class="node"><title>module~foodie_integrator_runge_kutta_ssp</title>
+<a xlink:href="../module/foodie_integrator_runge_kutta_ssp.html" xlink:title="foodie_integrator_runge_kutta_ssp">
+<polygon fill="#337ab7" stroke="#337ab7" points="506,-565.978 328,-565.978 328,-539.978 506,-539.978 506,-565.978"/>
+<text text-anchor="middle" x="417" y="-550.528" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">foodie_integrator_runge_kutta_ssp</text>
+</a>
+</g>
+<!-- module~foodie_integrator_runge_kutta_ssp&#45;&gt;module~foodie -->
+<g id="edge104" class="edge"><title>module~foodie_integrator_runge_kutta_ssp&#45;&gt;module~foodie</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M506.784,-549.196C562.882,-544.341 635.666,-533.416 696,-508.978"/>
+</g>
+<!-- module~foodie_integrator_runge_kutta_low_storage -->
+<g id="node7" class="node"><title>module~foodie_integrator_runge_kutta_low_storage</title>
+<a xlink:href="../module/foodie_integrator_runge_kutta_low_storage.html" xlink:title="foodie_integrator_runge_kutta_low_storage">
+<polygon fill="#337ab7" stroke="#337ab7" points="527,-521.978 307,-521.978 307,-495.978 527,-495.978 527,-521.978"/>
+<text text-anchor="middle" x="417" y="-506.528" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">foodie_integrator_runge_kutta_low_storage</text>
+</a>
+</g>
+<!-- module~foodie_integrator_runge_kutta_low_storage&#45;&gt;module~foodie -->
+<g id="edge106" class="edge"><title>module~foodie_integrator_runge_kutta_low_storage&#45;&gt;module~foodie</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M479.678,-522.008C537.965,-531.16 626.077,-537.3 696,-508.978"/>
+</g>
+<!-- module~foodie_kinds -->
+<g id="node8" class="node"><title>module~foodie_kinds</title>
+<a xlink:href="../module/foodie_kinds.html" xlink:title="foodie_kinds">
+<polygon fill="#337ab7" stroke="#337ab7" points="80,-348.978 8,-348.978 8,-322.978 80,-322.978 80,-348.978"/>
+<text text-anchor="middle" x="44" y="-333.528" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">foodie_kinds</text>
+</a>
+</g>
+<!-- module~foodie_kinds&#45;&gt;module~foodie -->
+<g id="edge108" class="edge"><title>module~foodie_kinds&#45;&gt;module~foodie</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M188,-552.978C234.471,-573.307 238.872,-595.359 288,-607.978 399.062,-636.505 436.177,-640.952 546,-607.978 622.504,-585.008 621.965,-538.966 696,-508.978"/>
+</g>
+<!-- module~foodie_kinds&#45;&gt;module~foodie_integrator_lmm_ssp -->
+<g id="edge8" class="edge"><title>module~foodie_kinds&#45;&gt;module~foodie_integrator_lmm_ssp</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M80.6898,-347.754C94.174,-351.633 109.653,-355.566 124,-357.978 194.924,-369.901 276.667,-374.453 335.762,-376.137"/>
+<polygon fill="#000000" stroke="#000000" points="335.696,-379.637 345.784,-376.402 335.88,-372.639 335.696,-379.637"/>
+</g>
+<!-- module~foodie_kinds&#45;&gt;module~foodie_integrator_adams_moulton -->
+<g id="edge16" class="edge"><title>module~foodie_kinds&#45;&gt;module~foodie_integrator_adams_moulton</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M188,-294.978C230.317,-286.989 277.823,-285.761 318.55,-287.002"/>
+<polygon fill="#000000" stroke="#000000" points="318.631,-290.508 328.75,-287.369 318.882,-283.512 318.631,-290.508"/>
+</g>
+<!-- module~foodie_kinds&#45;&gt;module~foodie_integrator_runge_kutta_ssp -->
+<g id="edge24" class="edge"><title>module~foodie_kinds&#45;&gt;module~foodie_integrator_runge_kutta_ssp</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M188,-552.978C237.205,-574.502 298.246,-573.31 344.931,-567.383"/>
+<polygon fill="#000000" stroke="#000000" points="345.532,-570.833 354.965,-566.009 344.582,-563.898 345.532,-570.833"/>
+</g>
+<!-- module~foodie_kinds&#45;&gt;module~foodie_integrator_runge_kutta_low_storage -->
+<g id="edge32" class="edge"><title>module~foodie_kinds&#45;&gt;module~foodie_integrator_runge_kutta_low_storage</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M188,-552.978C229.693,-571.216 243.335,-539.694 288,-530.978 300.616,-528.516 313.957,-526.067 327.085,-523.747"/>
+<polygon fill="#000000" stroke="#000000" points="327.821,-527.171 337.068,-521.999 326.614,-520.276 327.821,-527.171"/>
+</g>
+<!-- module~foodie_integrator_object -->
+<g id="node10" class="node"><title>module~foodie_integrator_object</title>
+<a xlink:href="../module/foodie_integrator_object.html" xlink:title="foodie_integrator_object">
+<polygon fill="#337ab7" stroke="#337ab7" points="252,-175.978 124,-175.978 124,-149.978 252,-149.978 252,-175.978"/>
+<text text-anchor="middle" x="188" y="-160.528" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">foodie_integrator_object</text>
+</a>
+</g>
+<!-- module~foodie_kinds&#45;&gt;module~foodie_integrator_object -->
+<g id="edge36" class="edge"><title>module~foodie_kinds&#45;&gt;module~foodie_integrator_object</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M54.8234,-322.975C79.5292,-293.293 140.264,-220.328 170.422,-184.096"/>
+<polygon fill="#000000" stroke="#000000" points="173.344,-186.057 177.051,-176.132 167.963,-181.579 173.344,-186.057"/>
+</g>
+<!-- module~foodie_integrator_lmm_ssp_vss -->
+<g id="node11" class="node"><title>module~foodie_integrator_lmm_ssp_vss</title>
+<a xlink:href="../module/foodie_integrator_lmm_ssp_vss.html" xlink:title="foodie_integrator_lmm_ssp_vss">
+<polygon fill="#337ab7" stroke="#337ab7" points="499,-477.978 335,-477.978 335,-451.978 499,-451.978 499,-477.978"/>
+<text text-anchor="middle" x="417" y="-462.528" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">foodie_integrator_lmm_ssp_vss</text>
+</a>
+</g>
+<!-- module~foodie_kinds&#45;&gt;module~foodie_integrator_lmm_ssp_vss -->
+<g id="edge44" class="edge"><title>module~foodie_kinds&#45;&gt;module~foodie_integrator_lmm_ssp_vss</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M188,-552.978C236.788,-574.32 238.471,-506.539 288,-486.978 299.588,-482.401 312.131,-478.776 324.688,-475.904"/>
+<polygon fill="#000000" stroke="#000000" points="325.694,-479.268 334.744,-473.759 324.234,-472.422 325.694,-479.268"/>
+</g>
+<!-- module~foodie_integrator_leapfrog -->
+<g id="node12" class="node"><title>module~foodie_integrator_leapfrog</title>
+<a xlink:href="../module/foodie_integrator_leapfrog.html" xlink:title="foodie_integrator_leapfrog">
+<polygon fill="#337ab7" stroke="#337ab7" points="486,-433.978 348,-433.978 348,-407.978 486,-407.978 486,-433.978"/>
+<text text-anchor="middle" x="417" y="-418.528" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">foodie_integrator_leapfrog</text>
+</a>
+</g>
+<!-- module~foodie_kinds&#45;&gt;module~foodie_integrator_leapfrog -->
+<g id="edge52" class="edge"><title>module~foodie_kinds&#45;&gt;module~foodie_integrator_leapfrog</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M47.3553,-349.021C58.6715,-389.788 99.7672,-514.38 188,-552.978"/>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M188,-552.978C248.533,-579.458 230.047,-474.709 288,-442.978 302.992,-434.769 320.314,-429.485 337.301,-426.115"/>
+<polygon fill="#000000" stroke="#000000" points="338.013,-429.544 347.244,-424.345 336.786,-422.652 338.013,-429.544"/>
+</g>
+<!-- module~foodie_error_codes -->
+<g id="node13" class="node"><title>module~foodie_error_codes</title>
+<a xlink:href="../module/foodie_error_codes.html" xlink:title="foodie_error_codes">
+<polygon fill="#337ab7" stroke="#337ab7" points="241,-430.978 135,-430.978 135,-404.978 241,-404.978 241,-430.978"/>
+<text text-anchor="middle" x="188" y="-415.528" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">foodie_error_codes</text>
+</a>
+</g>
+<!-- module~foodie_kinds&#45;&gt;module~foodie_error_codes -->
+<g id="edge54" class="edge"><title>module~foodie_kinds&#45;&gt;module~foodie_error_codes</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M60.83,-349.049C76.5896,-360.919 101.083,-378.436 124,-390.978 130.4,-394.48 137.35,-397.836 144.232,-400.917"/>
+<polygon fill="#000000" stroke="#000000" points="142.948,-404.176 153.516,-404.938 145.73,-397.752 142.948,-404.176"/>
+</g>
+<!-- module~foodie_integrator_euler_explicit -->
+<g id="node14" class="node"><title>module~foodie_integrator_euler_explicit</title>
+<a xlink:href="../module/foodie_integrator_euler_explicit.html" xlink:title="foodie_integrator_euler_explicit">
+<polygon fill="#337ab7" stroke="#337ab7" points="498,-93.9778 336,-93.9778 336,-67.9778 498,-67.9778 498,-93.9778"/>
+<text text-anchor="middle" x="417" y="-78.5278" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">foodie_integrator_euler_explicit</text>
+</a>
+</g>
+<!-- module~foodie_kinds&#45;&gt;module~foodie_integrator_euler_explicit -->
+<g id="edge58" class="edge"><title>module~foodie_kinds&#45;&gt;module~foodie_integrator_euler_explicit</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M188,-80.9778C238.309,-57.4036 301.932,-59.567 349.341,-66.3933"/>
+<polygon fill="#000000" stroke="#000000" points="349.087,-69.8954 359.504,-67.9629 350.155,-62.9774 349.087,-69.8954"/>
+</g>
+<!-- module~foodie_adt_integrand -->
+<g id="node15" class="node"><title>module~foodie_adt_integrand</title>
+<a xlink:href="../module/foodie_adt_integrand.html" xlink:title="foodie_adt_integrand">
+<polygon fill="#337ab7" stroke="#337ab7" points="245,-348.978 131,-348.978 131,-322.978 245,-322.978 245,-348.978"/>
+<text text-anchor="middle" x="188" y="-333.528" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">foodie_adt_integrand</text>
+</a>
+</g>
+<!-- module~foodie_kinds&#45;&gt;module~foodie_adt_integrand -->
+<g id="edge62" class="edge"><title>module~foodie_kinds&#45;&gt;module~foodie_adt_integrand</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M80.7099,-335.978C92.9805,-335.978 107.068,-335.978 120.912,-335.978"/>
+<polygon fill="#000000" stroke="#000000" points="120.92,-339.478 130.92,-335.978 120.92,-332.478 120.92,-339.478"/>
+</g>
+<!-- module~foodie_integrator_runge_kutta_emd -->
+<g id="node16" class="node"><title>module~foodie_integrator_runge_kutta_emd</title>
+<a xlink:href="../module/foodie_integrator_runge_kutta_emd.html" xlink:title="foodie_integrator_runge_kutta_emd">
+<polygon fill="#337ab7" stroke="#337ab7" points="509,-219.978 325,-219.978 325,-193.978 509,-193.978 509,-219.978"/>
+<text text-anchor="middle" x="417" y="-204.528" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">foodie_integrator_runge_kutta_emd</text>
+</a>
+</g>
+<!-- module~foodie_kinds&#45;&gt;module~foodie_integrator_runge_kutta_emd -->
+<g id="edge70" class="edge"><title>module~foodie_kinds&#45;&gt;module~foodie_integrator_runge_kutta_emd</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M188,-80.9778C223.306,-64.4341 225.375,-112.494 252,-140.978 269.254,-159.436 266.161,-172.27 288,-184.978 296.468,-189.905 305.744,-193.797 315.315,-196.862"/>
+<polygon fill="#000000" stroke="#000000" points="314.387,-200.237 324.966,-199.659 316.336,-193.514 314.387,-200.237"/>
+</g>
+<!-- module~foodie_kinds&#45;&gt;module~foodie_integrator_adams_bashforth_moulton -->
+<g id="edge82" class="edge"><title>module~foodie_kinds&#45;&gt;module~foodie_integrator_adams_bashforth_moulton</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M46.108,-322.974C54.2508,-277.77 88.3271,-127.683 188,-80.9778"/>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M188,-80.9778C260.175,-47.1579 481.942,-11.5481 546,-58.9778 590.067,-91.6054 551.791,-131.22 582,-176.978 603.551,-209.621 639.404,-237.189 665.152,-254.291"/>
+<polygon fill="#000000" stroke="#000000" points="663.502,-257.393 673.798,-259.895 667.31,-251.519 663.502,-257.393"/>
+</g>
+<!-- module~foodie_integrator_backward_differentiation_formula -->
+<g id="node18" class="node"><title>module~foodie_integrator_backward_differentiation_formula</title>
+<a xlink:href="../module/foodie_integrator_backward_differentiation_formula.html" xlink:title="foodie_integrator_backward_differentiation_formula">
+<polygon fill="#337ab7" stroke="#337ab7" points="546,-175.978 288,-175.978 288,-149.978 546,-149.978 546,-175.978"/>
+<text text-anchor="middle" x="417" y="-160.528" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">foodie_integrator_backward_differentiation_formula</text>
+</a>
+</g>
+<!-- module~foodie_kinds&#45;&gt;module~foodie_integrator_backward_differentiation_formula -->
+<g id="edge90" class="edge"><title>module~foodie_kinds&#45;&gt;module~foodie_integrator_backward_differentiation_formula</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M188,-80.9778C205.74,-72.665 318.093,-119.492 378.569,-145.887"/>
+<polygon fill="#000000" stroke="#000000" points="377.243,-149.127 387.807,-149.936 380.053,-142.716 377.243,-149.127"/>
+</g>
+<!-- module~foodie_integrator_adams_bashforth -->
+<g id="node19" class="node"><title>module~foodie_integrator_adams_bashforth</title>
+<a xlink:href="../module/foodie_integrator_adams_bashforth.html" xlink:title="foodie_integrator_adams_bashforth">
+<polygon fill="#337ab7" stroke="#337ab7" points="508,-263.978 326,-263.978 326,-237.978 508,-237.978 508,-263.978"/>
+<text text-anchor="middle" x="417" y="-248.528" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">foodie_integrator_adams_bashforth</text>
+</a>
+</g>
+<!-- module~foodie_kinds&#45;&gt;module~foodie_integrator_adams_bashforth -->
+<g id="edge98" class="edge"><title>module~foodie_kinds&#45;&gt;module~foodie_integrator_adams_bashforth</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M80.5537,-323.577C109.4,-314.279 150.836,-301.993 188,-294.978"/>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M188,-294.978C232.717,-286.536 243.335,-281.694 288,-272.978 300.616,-270.516 313.957,-268.067 327.085,-265.747"/>
+<polygon fill="#000000" stroke="#000000" points="327.821,-269.171 337.068,-263.999 326.614,-262.276 327.821,-269.171"/>
+</g>
+<!-- iso_fortran_env -->
+<g id="node9" class="node"><title>iso_fortran_env</title>
+<a xlink:href="https://gcc.gnu.org/onlinedocs/gfortran/ISO_005fFORTRAN_005fENV.html" xlink:title="iso_fortran_env">
+<polygon fill="#337ab7" stroke="#337ab7" points="87,-95.9778 1,-95.9778 1,-69.9778 87,-69.9778 87,-95.9778"/>
+<text text-anchor="middle" x="44" y="-80.5278" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">iso_fortran_env</text>
+</a>
+</g>
+<!-- iso_fortran_env&#45;&gt;module~foodie -->
+<g id="edge110" class="edge"><title>iso_fortran_env&#45;&gt;module~foodie</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M74.0702,-69.9321C136.968,-44.0997 287.346,10.0722 417,-1.97778"/>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M417,-1.97778C475.848,-5.70257 493.561,-6.01242 546,-32.9778 624.455,-73.3212 612.196,-135.417 696,-162.978"/>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M696,-162.978C727.539,-173.35 804.831,-225.388 846.062,-254.018"/>
+<polygon fill="#000000" stroke="#000000" points="844.318,-257.069 854.523,-259.917 848.322,-251.327 844.318,-257.069"/>
+</g>
+<!-- iso_fortran_env&#45;&gt;module~foodie_integrator_object -->
+<g id="edge34" class="edge"><title>iso_fortran_env&#45;&gt;module~foodie_integrator_object</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M67.4566,-96.0092C91.4101,-109.317 128.781,-130.078 155.562,-144.957"/>
+<polygon fill="#000000" stroke="#000000" points="154.112,-148.155 164.553,-149.952 157.512,-142.036 154.112,-148.155"/>
+</g>
+<!-- module~foodie_integrator_object&#45;&gt;module~foodie -->
+<g id="edge112" class="edge"><title>module~foodie_integrator_object&#45;&gt;module~foodie</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M200.291,-149.929C225.878,-122.802 282.921,-62.5319 288,-58.9778 339.357,-23.0425 354.588,3.82273 417,-1.97778"/>
+</g>
+<!-- module~foodie_integrator_object&#45;&gt;module~foodie_integrator_lmm_ssp -->
+<g id="edge4" class="edge"><title>module~foodie_integrator_object&#45;&gt;module~foodie_integrator_lmm_ssp</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M195.172,-176.037C207.081,-197.758 231.64,-242.709 252,-280.978 268.246,-311.515 260.424,-329.096 288,-349.978 301.876,-360.485 318.896,-367.132 335.967,-371.285"/>
+<polygon fill="#000000" stroke="#000000" points="335.486,-374.762 346,-373.453 336.964,-367.92 335.486,-374.762"/>
+</g>
+<!-- module~foodie_integrator_object&#45;&gt;module~foodie_integrator_adams_moulton -->
+<g id="edge12" class="edge"><title>module~foodie_integrator_object&#45;&gt;module~foodie_integrator_adams_moulton</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M195.704,-176.072C210.377,-199.723 244.762,-249.303 288,-272.978 297.612,-278.241 308.181,-282.301 319.006,-285.426"/>
+<polygon fill="#000000" stroke="#000000" points="318.439,-288.895 328.999,-288.04 320.21,-282.123 318.439,-288.895"/>
+</g>
+<!-- module~foodie_integrator_object&#45;&gt;module~foodie_integrator_runge_kutta_ssp -->
+<g id="edge20" class="edge"><title>module~foodie_integrator_object&#45;&gt;module~foodie_integrator_runge_kutta_ssp</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M197.139,-176.07C211.35,-197.122 238.511,-240.273 252,-280.978 269.656,-334.257 248.828,-490.778 288,-530.978 296.216,-539.41 306.392,-545.33 317.397,-549.409"/>
+<polygon fill="#000000" stroke="#000000" points="316.664,-552.848 327.254,-552.536 318.781,-546.176 316.664,-552.848"/>
+</g>
+<!-- module~foodie_integrator_object&#45;&gt;module~foodie_integrator_runge_kutta_low_storage -->
+<g id="edge28" class="edge"><title>module~foodie_integrator_object&#45;&gt;module~foodie_integrator_runge_kutta_low_storage</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M196.994,-176.119C211.008,-197.239 237.902,-240.48 252,-280.978 282.556,-368.755 222.145,-421.392 288,-486.978 291.124,-490.089 294.516,-492.855 298.116,-495.31"/>
+<polygon fill="#000000" stroke="#000000" points="296.482,-498.41 306.87,-500.491 300.047,-492.386 296.482,-498.41"/>
+</g>
+<!-- module~foodie_integrator_object&#45;&gt;module~foodie_integrator_lmm_ssp_vss -->
+<g id="edge40" class="edge"><title>module~foodie_integrator_object&#45;&gt;module~foodie_integrator_lmm_ssp_vss</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M196.776,-176.198C210.49,-197.426 236.981,-240.812 252,-280.978 277.832,-350.063 234.565,-392.138 288,-442.978 298.265,-452.744 311.184,-459.058 324.855,-463.021"/>
+<polygon fill="#000000" stroke="#000000" points="324.367,-466.506 334.915,-465.508 326.047,-459.71 324.367,-466.506"/>
+</g>
+<!-- module~foodie_integrator_object&#45;&gt;module~foodie_integrator_leapfrog -->
+<g id="edge48" class="edge"><title>module~foodie_integrator_object&#45;&gt;module~foodie_integrator_leapfrog</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M196.195,-175.996C209.34,-197.295 235.348,-241.209 252,-280.978 273.177,-331.554 246.843,-362.749 288,-398.978 301.669,-411.01 319.426,-417.665 337.369,-421.129"/>
+<polygon fill="#000000" stroke="#000000" points="336.902,-424.599 347.333,-422.74 338.019,-417.689 336.902,-424.599"/>
+</g>
+<!-- module~foodie_integrator_object&#45;&gt;module~foodie_integrator_euler_explicit -->
+<g id="edge60" class="edge"><title>module~foodie_integrator_object&#45;&gt;module~foodie_integrator_euler_explicit</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M207.837,-149.747C227.431,-137.25 258.642,-118.847 288,-107.978 300.226,-103.451 313.4,-99.6024 326.494,-96.3534"/>
+<polygon fill="#000000" stroke="#000000" points="327.553,-99.6993 336.474,-93.9846 325.936,-92.8885 327.553,-99.6993"/>
+</g>
+<!-- module~foodie_integrator_object&#45;&gt;module~foodie_integrator_runge_kutta_emd -->
+<g id="edge66" class="edge"><title>module~foodie_integrator_object&#45;&gt;module~foodie_integrator_runge_kutta_emd</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M245.015,-176.013C259.043,-179.084 274.042,-182.254 288,-184.978 300.616,-187.44 313.957,-189.888 327.085,-192.209"/>
+<polygon fill="#000000" stroke="#000000" points="326.614,-195.679 337.068,-193.956 327.821,-188.784 326.614,-195.679"/>
+</g>
+<!-- module~foodie_integrator_object&#45;&gt;module~foodie_integrator_adams_bashforth_moulton -->
+<g id="edge76" class="edge"><title>module~foodie_integrator_object&#45;&gt;module~foodie_integrator_adams_bashforth_moulton</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M226.655,-149.909C294.334,-129.306 437.412,-95.9992 546,-140.978 566.905,-149.637 565.331,-161.676 582,-176.978 611.879,-204.405 647.908,-234.236 671.354,-253.245"/>
+<polygon fill="#000000" stroke="#000000" points="669.409,-256.174 679.388,-259.734 673.808,-250.728 669.409,-256.174"/>
+</g>
+<!-- module~foodie_integrator_object&#45;&gt;module~foodie_integrator_backward_differentiation_formula -->
+<g id="edge86" class="edge"><title>module~foodie_integrator_object&#45;&gt;module~foodie_integrator_backward_differentiation_formula</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M252.094,-162.978C260.265,-162.978 268.865,-162.978 277.67,-162.978"/>
+<polygon fill="#000000" stroke="#000000" points="277.688,-166.478 287.687,-162.978 277.687,-159.478 277.688,-166.478"/>
+</g>
+<!-- module~foodie_integrator_object&#45;&gt;module~foodie_integrator_adams_bashforth -->
+<g id="edge94" class="edge"><title>module~foodie_integrator_object&#45;&gt;module~foodie_integrator_adams_bashforth</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M203.469,-176.19C222.196,-191.437 255.303,-216.064 288,-228.978 296.783,-232.446 306.114,-235.369 315.583,-237.831"/>
+<polygon fill="#000000" stroke="#000000" points="314.942,-241.276 325.485,-240.233 316.593,-234.474 314.942,-241.276"/>
+</g>
+<!-- module~foodie_integrator_lmm_ssp_vss&#45;&gt;module~foodie -->
+<g id="edge114" class="edge"><title>module~foodie_integrator_lmm_ssp_vss&#45;&gt;module~foodie</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M493.361,-477.992C574.323,-491.647 691.263,-510.896 696,-508.978"/>
+</g>
+<!-- module~foodie_integrator_leapfrog&#45;&gt;module~foodie -->
+<g id="edge116" class="edge"><title>module~foodie_integrator_leapfrog&#45;&gt;module~foodie</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M486.68,-429.65C506.107,-432.932 527.069,-437.293 546,-442.978 615.758,-463.924 628.493,-536.322 696,-508.978"/>
+</g>
+<!-- module~foodie_error_codes&#45;&gt;module~foodie -->
+<g id="edge118" class="edge"><title>module~foodie_error_codes&#45;&gt;module~foodie</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M417,-593.978C546.616,-595.68 575.855,-557.643 696,-508.978"/>
+</g>
+<!-- module~foodie_error_codes&#45;&gt;module~foodie_integrator_lmm_ssp -->
+<g id="edge6" class="edge"><title>module~foodie_error_codes&#45;&gt;module~foodie_integrator_lmm_ssp</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M241.16,-407.685C256.285,-404.808 272.783,-401.721 288,-398.978 303.407,-396.201 319.865,-393.325 335.694,-390.604"/>
+<polygon fill="#000000" stroke="#000000" points="336.721,-393.979 345.987,-388.842 335.54,-387.08 336.721,-393.979"/>
+</g>
+<!-- module~foodie_error_codes&#45;&gt;module~foodie_integrator_adams_moulton -->
+<g id="edge14" class="edge"><title>module~foodie_error_codes&#45;&gt;module~foodie_integrator_adams_moulton</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M202.359,-404.763C215.412,-392.692 235.15,-374.293 252,-357.978 268.256,-342.238 268.098,-332.744 288,-321.978 297.729,-316.715 308.383,-312.477 319.266,-309.065"/>
+<polygon fill="#000000" stroke="#000000" points="320.245,-312.425 328.871,-306.274 318.292,-305.703 320.245,-312.425"/>
+</g>
+<!-- module~foodie_error_codes&#45;&gt;module~foodie_integrator_runge_kutta_ssp -->
+<g id="edge22" class="edge"><title>module~foodie_error_codes&#45;&gt;module~foodie_integrator_runge_kutta_ssp</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M195.383,-431.05C209.772,-455.19 244.045,-506.527 288,-530.978 297.103,-536.041 307.082,-539.997 317.333,-543.079"/>
+<polygon fill="#000000" stroke="#000000" points="316.656,-546.522 327.225,-545.773 318.496,-539.768 316.656,-546.522"/>
+</g>
+<!-- module~foodie_error_codes&#45;&gt;module~foodie_integrator_runge_kutta_low_storage -->
+<g id="edge30" class="edge"><title>module~foodie_error_codes&#45;&gt;module~foodie_integrator_runge_kutta_low_storage</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M202.703,-431.251C221.196,-447.164 254.591,-473.383 288,-486.978 293.527,-489.227 299.278,-491.246 305.149,-493.059"/>
+<polygon fill="#000000" stroke="#000000" points="304.546,-496.527 315.123,-495.919 306.476,-489.798 304.546,-496.527"/>
+</g>
+<!-- module~foodie_error_codes&#45;&gt;module~foodie_integrator_lmm_ssp_vss -->
+<g id="edge42" class="edge"><title>module~foodie_error_codes&#45;&gt;module~foodie_integrator_lmm_ssp_vss</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M236.911,-430.995C253.111,-435.095 271.275,-439.466 288,-442.978 299.93,-445.483 312.526,-447.904 324.985,-450.167"/>
+<polygon fill="#000000" stroke="#000000" points="324.472,-453.63 334.932,-451.946 325.705,-446.74 324.472,-453.63"/>
+</g>
+<!-- module~foodie_error_codes&#45;&gt;module~foodie_integrator_leapfrog -->
+<g id="edge50" class="edge"><title>module~foodie_error_codes&#45;&gt;module~foodie_integrator_leapfrog</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M241.113,-418.674C269.607,-419.047 305.303,-419.514 337.078,-419.931"/>
+<polygon fill="#000000" stroke="#000000" points="337.198,-423.433 347.243,-420.064 337.29,-416.433 337.198,-423.433"/>
+</g>
+<!-- module~foodie_error_codes&#45;&gt;module~foodie_integrator_runge_kutta_emd -->
+<g id="edge68" class="edge"><title>module~foodie_error_codes&#45;&gt;module~foodie_integrator_runge_kutta_emd</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M206.91,-404.797C221.279,-393.835 240.474,-376.994 252,-357.978 282.853,-307.074 243.795,-268.84 288,-228.978 295.863,-221.887 305.139,-216.649 315.052,-212.824"/>
+<polygon fill="#000000" stroke="#000000" points="316.361,-216.076 324.727,-209.575 314.133,-209.44 316.361,-216.076"/>
+</g>
+<!-- module~foodie_error_codes&#45;&gt;module~foodie_integrator_adams_bashforth_moulton -->
+<g id="edge78" class="edge"><title>module~foodie_error_codes&#45;&gt;module~foodie_integrator_adams_bashforth_moulton</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M194.503,-431.033C211.872,-465.365 259.93,-556.789 288,-574.978 336.634,-606.491 359.053,-593.217 417,-593.978"/>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M417,-593.978C474.947,-594.739 499.764,-609.915 546,-574.978 577.108,-551.472 565.089,-530.109 582,-494.978 617.514,-421.2 662.72,-335.368 683.955,-295.485"/>
+<polygon fill="#000000" stroke="#000000" points="687.198,-296.841 688.816,-286.371 681.022,-293.547 687.198,-296.841"/>
+</g>
+<!-- module~foodie_error_codes&#45;&gt;module~foodie_integrator_backward_differentiation_formula -->
+<g id="edge88" class="edge"><title>module~foodie_error_codes&#45;&gt;module~foodie_integrator_backward_differentiation_formula</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M207.567,-404.781C222.095,-393.928 241.192,-377.236 252,-357.978 290.436,-289.49 231.469,-239.496 288,-184.978 288.989,-184.024 290.003,-183.103 291.041,-182.214"/>
+<polygon fill="#000000" stroke="#000000" points="293.474,-184.767 299.427,-176.003 289.308,-179.142 293.474,-184.767"/>
+</g>
+<!-- module~foodie_error_codes&#45;&gt;module~foodie_integrator_adams_bashforth -->
+<g id="edge96" class="edge"><title>module~foodie_error_codes&#45;&gt;module~foodie_integrator_adams_bashforth</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M205.675,-404.823C219.728,-393.63 239.103,-376.465 252,-357.978 275.474,-324.33 255.831,-298.44 288,-272.978 296.235,-266.46 305.702,-261.578 315.688,-257.955"/>
+<polygon fill="#000000" stroke="#000000" points="316.936,-261.231 325.398,-254.854 314.807,-254.562 316.936,-261.231"/>
+</g>
+<!-- module~foodie_integrator_euler_explicit&#45;&gt;module~foodie -->
+<g id="edge120" class="edge"><title>module~foodie_integrator_euler_explicit&#45;&gt;module~foodie</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M468.955,-94.0143C492.547,-100.103 520.763,-107.62 546,-114.978 613.199,-134.571 629.507,-141.11 696,-162.978"/>
+</g>
+<!-- module~foodie_adt_integrand&#45;&gt;module~foodie -->
+<g id="edge122" class="edge"><title>module~foodie_adt_integrand&#45;&gt;module~foodie</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M417,-335.978C474.678,-341.609 494.395,-328.608 546,-354.978 631.082,-398.453 607.443,-544.848 696,-508.978"/>
+</g>
+<!-- module~foodie_adt_integrand&#45;&gt;module~foodie_integrator_lmm_ssp -->
+<g id="edge2" class="edge"><title>module~foodie_adt_integrand&#45;&gt;module~foodie_integrator_lmm_ssp</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M245.196,-346.218C272.571,-351.119 305.834,-357.075 335.773,-362.435"/>
+<polygon fill="#000000" stroke="#000000" points="335.326,-365.91 345.786,-364.228 336.559,-359.02 335.326,-365.91"/>
+</g>
+<!-- module~foodie_adt_integrand&#45;&gt;module~foodie_integrator_adams_moulton -->
+<g id="edge10" class="edge"><title>module~foodie_adt_integrand&#45;&gt;module~foodie_integrator_adams_moulton</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M245.196,-325.738C272.095,-320.922 304.679,-315.088 334.208,-309.801"/>
+<polygon fill="#000000" stroke="#000000" points="334.866,-313.239 344.093,-308.031 333.633,-306.348 334.866,-313.239"/>
+</g>
+<!-- module~foodie_adt_integrand&#45;&gt;module~foodie_integrator_runge_kutta_ssp -->
+<g id="edge18" class="edge"><title>module~foodie_adt_integrand&#45;&gt;module~foodie_integrator_runge_kutta_ssp</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M206.971,-349.122C221.373,-360.064 240.584,-376.895 252,-395.978 283.879,-449.267 242.125,-489.127 288,-530.978 296.503,-538.735 306.692,-544.283 317.568,-548.193"/>
+<polygon fill="#000000" stroke="#000000" points="316.688,-551.585 327.276,-551.222 318.772,-544.903 316.688,-551.585"/>
+</g>
+<!-- module~foodie_adt_integrand&#45;&gt;module~foodie_integrator_runge_kutta_low_storage -->
+<g id="edge26" class="edge"><title>module~foodie_adt_integrand&#45;&gt;module~foodie_integrator_runge_kutta_low_storage</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M205.793,-349.051C219.915,-360.197 239.325,-377.338 252,-395.978 276.457,-431.944 254.221,-459.578 288,-486.978 291.136,-489.522 294.458,-491.818 297.926,-493.89"/>
+<polygon fill="#000000" stroke="#000000" points="296.345,-497.013 306.822,-498.588 299.614,-490.823 296.345,-497.013"/>
+</g>
+<!-- module~foodie_adt_integrand&#45;&gt;module~foodie_integrator_lmm_ssp_vss -->
+<g id="edge38" class="edge"><title>module~foodie_adt_integrand&#45;&gt;module~foodie_integrator_lmm_ssp_vss</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M203.414,-349.141C216.815,-360.88 236.465,-378.814 252,-395.978 269.657,-415.486 265.473,-429.381 288,-442.978 299.237,-449.76 311.973,-454.602 324.958,-458.033"/>
+<polygon fill="#000000" stroke="#000000" points="324.378,-461.493 334.915,-460.391 325.991,-454.681 324.378,-461.493"/>
+</g>
+<!-- module~foodie_adt_integrand&#45;&gt;module~foodie_integrator_leapfrog -->
+<g id="edge46" class="edge"><title>module~foodie_adt_integrand&#45;&gt;module~foodie_integrator_leapfrog</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M204.251,-349.085C223.193,-363.651 255.997,-386.729 288,-398.978 303.463,-404.896 320.575,-409.228 337.146,-412.396"/>
+<polygon fill="#000000" stroke="#000000" points="336.914,-415.91 347.374,-414.223 338.145,-409.019 336.914,-415.91"/>
+</g>
+<!-- module~foodie_adt_integrand&#45;&gt;module~foodie_integrator_euler_explicit -->
+<g id="edge56" class="edge"><title>module~foodie_adt_integrand&#45;&gt;module~foodie_integrator_euler_explicit</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M234.344,-322.885C241.021,-319.292 247.233,-314.738 252,-308.978 300.686,-250.149 240.385,-200.676 288,-140.978 304.311,-120.527 329.205,-106.728 352.788,-97.5778"/>
+<polygon fill="#000000" stroke="#000000" points="354.243,-100.773 362.436,-94.0551 351.842,-94.1974 354.243,-100.773"/>
+</g>
+<!-- module~foodie_adt_integrand&#45;&gt;module~foodie_integrator_runge_kutta_emd -->
+<g id="edge64" class="edge"><title>module~foodie_adt_integrand&#45;&gt;module~foodie_integrator_runge_kutta_emd</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M231.36,-322.951C238.868,-319.298 246.133,-314.707 252,-308.978 279.894,-281.736 257.161,-252.835 288,-228.978 296.171,-222.657 305.508,-217.888 315.341,-214.318"/>
+<polygon fill="#000000" stroke="#000000" points="316.445,-217.639 324.897,-211.251 314.306,-210.974 316.445,-217.639"/>
+</g>
+<!-- module~foodie_adt_integrand&#45;&gt;module~foodie_integrator_adams_bashforth_moulton -->
+<g id="edge80" class="edge"><title>module~foodie_adt_integrand&#45;&gt;module~foodie_integrator_adams_bashforth_moulton</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M245.086,-332.907C291.505,-331.148 358.636,-330.28 417,-335.978"/>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M417,-335.978C504.237,-344.494 603.815,-311.315 657.241,-289.89"/>
+<polygon fill="#000000" stroke="#000000" points="658.733,-293.061 666.667,-286.039 656.086,-286.581 658.733,-293.061"/>
+</g>
+<!-- module~foodie_adt_integrand&#45;&gt;module~foodie_integrator_backward_differentiation_formula -->
+<g id="edge84" class="edge"><title>module~foodie_adt_integrand&#45;&gt;module~foodie_integrator_backward_differentiation_formula</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M233.343,-322.927C240.305,-319.315 246.87,-314.744 252,-308.978 290.144,-266.103 245.183,-223.186 288,-184.978 289.311,-183.808 290.661,-182.688 292.045,-181.618"/>
+<polygon fill="#000000" stroke="#000000" points="294.017,-184.509 300.334,-176.003 290.091,-178.714 294.017,-184.509"/>
+</g>
+<!-- module~foodie_adt_integrand&#45;&gt;module~foodie_integrator_adams_bashforth -->
+<g id="edge92" class="edge"><title>module~foodie_adt_integrand&#45;&gt;module~foodie_integrator_adams_bashforth</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M225.807,-322.877C234.744,-319.02 243.996,-314.364 252,-308.978 270.773,-296.345 267.9,-283.37 288,-272.978 296.538,-268.564 305.776,-265.008 315.251,-262.147"/>
+<polygon fill="#000000" stroke="#000000" points="316.479,-265.439 325.191,-259.41 314.621,-258.69 316.479,-265.439"/>
+</g>
+<!-- module~foodie_integrator_runge_kutta_emd&#45;&gt;module~foodie -->
+<g id="edge124" class="edge"><title>module~foodie_integrator_runge_kutta_emd&#45;&gt;module~foodie</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M494.047,-193.959C574.941,-180.418 691.16,-161.386 696,-162.978"/>
+</g>
+<!-- module~foodie_integrator_adams_bashforth_moulton&#45;&gt;module~foodie -->
+<g id="edge126" class="edge"><title>module~foodie_integrator_adams_bashforth_moulton&#45;&gt;module~foodie</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M809.599,-272.978C818.867,-272.978 827.735,-272.978 835.748,-272.978"/>
+<polygon fill="#000000" stroke="#000000" points="835.751,-276.478 845.751,-272.978 835.751,-269.478 835.751,-276.478"/>
+</g>
+<!-- module~foodie_integrator_backward_differentiation_formula&#45;&gt;module~foodie -->
+<g id="edge128" class="edge"><title>module~foodie_integrator_backward_differentiation_formula&#45;&gt;module~foodie</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M496.956,-149.961C553.903,-143.786 631.467,-141.755 696,-162.978"/>
+</g>
+<!-- module~foodie_integrator_adams_bashforth&#45;&gt;module~foodie -->
+<g id="edge130" class="edge"><title>module~foodie_integrator_adams_bashforth&#45;&gt;module~foodie</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M508.562,-238.234C521.253,-235.636 534.032,-232.571 546,-228.978 615.758,-208.031 626.811,-140.223 696,-162.978"/>
+</g>
+<!-- module~foodie_integrator_adams_bashforth&#45;&gt;module~foodie_integrator_adams_bashforth_moulton -->
+<g id="edge74" class="edge"><title>module~foodie_integrator_adams_bashforth&#45;&gt;module~foodie_integrator_adams_bashforth_moulton</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M508.741,-258.212C529.034,-259.812 550.859,-261.533 572.189,-263.215"/>
+<polygon fill="#000000" stroke="#000000" points="572.034,-266.713 582.278,-264.01 572.584,-259.735 572.034,-266.713"/>
+</g>
+</g>
+</svg>
+</div>
+                <script>var panmoduleoscillation_oscillatorUsesGraph = svgPanZoom('#moduleoscillation_oscillatorUsesGraph', {
+                    zoomEnabled: true,
+                    controlIconsEnabled: true,
+                    fit: true,
+                    center: true,});
+                    </script>
+                <div><a type="button" class="graph-help" data-toggle="modal" href="#graph-help-text">Help</a></div>
+                <div class="modal fade" id="graph-help-text" tabindex="-1" role="dialog">
+                  <div class="modal-dialog modal-lg" role="document">
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title" id="-graph-help-label">Graph Key</h4>
+                      </div>
+                      <div class="modal-body">
+                        
+    <p>Nodes of different colours represent the following: </p>
+    <?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.26.3 (20100126.1600)
+ -->
+<!-- Title: Graph Key Pages: 1 -->
+<svg width="486pt" height="34pt"
+ viewBox="0.00 0.00 486.00 34.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="graph1" class="graph" transform="scale(1 1) rotate(0) translate(4 30)">
+<title>Graph Key</title>
+<polygon fill="white" stroke="white" points="-4,5 -4,-30 483,-30 483,5 -4,5"/>
+<!-- Module -->
+<g id="node1" class="node"><title>Module</title>
+<polygon fill="#337ab7" stroke="#337ab7" points="54,-26 2.13163e-14,-26 0,-1.24345e-14 54,-3.55271e-15 54,-26"/>
+<text text-anchor="middle" x="27" y="-10.55" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Module</text>
+</g>
+<!-- Submodule -->
+<g id="node2" class="node"><title>Submodule</title>
+<polygon fill="#5bc0de" stroke="#5bc0de" points="138,-26 72,-26 72,-1.24345e-14 138,-3.55271e-15 138,-26"/>
+<text text-anchor="middle" x="105" y="-10.55" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Submodule</text>
+</g>
+<!-- Subroutine -->
+<g id="node3" class="node"><title>Subroutine</title>
+<polygon fill="#d9534f" stroke="#d9534f" points="220,-26 156,-26 156,-1.24345e-14 220,-3.55271e-15 220,-26"/>
+<text text-anchor="middle" x="188" y="-10.55" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Subroutine</text>
+</g>
+<!-- Function -->
+<g id="node4" class="node"><title>Function</title>
+<polygon fill="#d94e8f" stroke="#d94e8f" points="292,-26 238,-26 238,-1.24345e-14 292,-3.55271e-15 292,-26"/>
+<text text-anchor="middle" x="265" y="-10.55" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Function</text>
+</g>
+<!-- Program -->
+<g id="node5" class="node"><title>Program</title>
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="364,-26 310,-26 310,-1.24345e-14 364,-3.55271e-15 364,-26"/>
+<text text-anchor="middle" x="337" y="-10.55" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Program</text>
+</g>
+<!-- This Page&#39;s Entity -->
+<g id="node6" class="node"><title>This Page&#39;s Entity</title>
+<polygon fill="none" stroke="black" points="478,-26 382,-26 382,-1.24345e-14 478,-3.55271e-15 478,-26"/>
+<text text-anchor="middle" x="430" y="-10.55" font-family="Helvetica,sans-Serif" font-size="10.50">This Page&#39;s Entity</text>
+</g>
+</g>
+</svg>
+
+    
+    <p>Solid arrows point from a parent (sub)module to the submodule which is
+    descended from it. Dashed arrows point from a module being used to the
+    module or program unit using it.
+    </p>
+    
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                
+    
+
+    
+    <p>Define <a href="../type/oscillator.html">oscillator</a>, the Oscillation test field that is a concrete extension of the abstract integrand type.</p>
+    
+    
+    <h3>Used By</h3>
+    
+                <div class="depgraph"><?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.26.3 (20100126.1600)
+ -->
+<!-- Title: module~~oscillation_oscillator~~UsedByGraph Pages: 1 -->
+<svg id="moduleoscillation_oscillatorUsedByGraph" width="388pt" height="34pt"
+ viewBox="0.00 0.00 388.00 34.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="module~~oscillation_oscillator~~UsedByGraph" class="graph" transform="scale(1 1) rotate(0) translate(4 30)">
+<title>module~~oscillation_oscillator~~UsedByGraph</title>
+<polygon fill="white" stroke="white" points="-4,5 -4,-30 385,-30 385,5 -4,5"/>
+<!-- module~oscillation_oscillator -->
+<g id="node1" class="node"><title>module~oscillation_oscillator</title>
+<polygon fill="none" stroke="black" points="107,-26 1,-26 1,-1.24345e-14 107,-3.55271e-15 107,-26"/>
+<text text-anchor="middle" x="54" y="-10.55" font-family="Helvetica,sans-Serif" font-size="10.50">oscillation_oscillator</text>
+</g>
+<!-- module~oscillation_test_t -->
+<g id="node2" class="node"><title>module~oscillation_test_t</title>
+<a xlink:href="../module/oscillation_test_t.html" xlink:title="oscillation_test_t">
+<polygon fill="#337ab7" stroke="#337ab7" points="235,-26 145,-26 145,-1.24345e-14 235,-3.55271e-15 235,-26"/>
+<text text-anchor="middle" x="190" y="-10.55" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">oscillation_test_t</text>
+</a>
+</g>
+<!-- module~oscillation_oscillator&#45;&gt;module~oscillation_test_t -->
+<g id="edge4" class="edge"><title>module~oscillation_oscillator&#45;&gt;module~oscillation_test_t</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M107.751,-13C116.396,-13 125.363,-13 134.058,-13"/>
+<polygon fill="#000000" stroke="#000000" points="134.105,-16.5001 144.105,-13 134.105,-9.5001 134.105,-16.5001"/>
+</g>
+<!-- program~integrate_oscillation -->
+<g id="node3" class="node"><title>program~integrate_oscillation</title>
+<a xlink:href="../program/integrate_oscillation.html" xlink:title="integrate_oscillation">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="379,-26 273,-26 273,-1.24345e-14 379,-3.55271e-15 379,-26"/>
+<text text-anchor="middle" x="326" y="-10.55" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">integrate_oscillation</text>
+</a>
+</g>
+<!-- module~oscillation_test_t&#45;&gt;program~integrate_oscillation -->
+<g id="edge2" class="edge"><title>module~oscillation_test_t&#45;&gt;program~integrate_oscillation</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M235.664,-13C244.186,-13 253.235,-13 262.187,-13"/>
+<polygon fill="#000000" stroke="#000000" points="262.219,-16.5001 272.219,-13 262.219,-9.5001 262.219,-16.5001"/>
+</g>
+</g>
+</svg>
+</div>
+                <div><a type="button" class="graph-help" data-toggle="modal" href="#graph-help-text">Help</a></div>
+                <div class="modal fade" id="graph-help-text" tabindex="-1" role="dialog">
+                  <div class="modal-dialog modal-lg" role="document">
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title" id="-graph-help-label">Graph Key</h4>
+                      </div>
+                      <div class="modal-body">
+                        
+    <p>Nodes of different colours represent the following: </p>
+    <?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.26.3 (20100126.1600)
+ -->
+<!-- Title: Graph Key Pages: 1 -->
+<svg width="486pt" height="34pt"
+ viewBox="0.00 0.00 486.00 34.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="graph1" class="graph" transform="scale(1 1) rotate(0) translate(4 30)">
+<title>Graph Key</title>
+<polygon fill="white" stroke="white" points="-4,5 -4,-30 483,-30 483,5 -4,5"/>
+<!-- Module -->
+<g id="node1" class="node"><title>Module</title>
+<polygon fill="#337ab7" stroke="#337ab7" points="54,-26 2.13163e-14,-26 0,-1.24345e-14 54,-3.55271e-15 54,-26"/>
+<text text-anchor="middle" x="27" y="-10.55" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Module</text>
+</g>
+<!-- Submodule -->
+<g id="node2" class="node"><title>Submodule</title>
+<polygon fill="#5bc0de" stroke="#5bc0de" points="138,-26 72,-26 72,-1.24345e-14 138,-3.55271e-15 138,-26"/>
+<text text-anchor="middle" x="105" y="-10.55" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Submodule</text>
+</g>
+<!-- Subroutine -->
+<g id="node3" class="node"><title>Subroutine</title>
+<polygon fill="#d9534f" stroke="#d9534f" points="220,-26 156,-26 156,-1.24345e-14 220,-3.55271e-15 220,-26"/>
+<text text-anchor="middle" x="188" y="-10.55" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Subroutine</text>
+</g>
+<!-- Function -->
+<g id="node4" class="node"><title>Function</title>
+<polygon fill="#d94e8f" stroke="#d94e8f" points="292,-26 238,-26 238,-1.24345e-14 292,-3.55271e-15 292,-26"/>
+<text text-anchor="middle" x="265" y="-10.55" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Function</text>
+</g>
+<!-- Program -->
+<g id="node5" class="node"><title>Program</title>
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="364,-26 310,-26 310,-1.24345e-14 364,-3.55271e-15 364,-26"/>
+<text text-anchor="middle" x="337" y="-10.55" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Program</text>
+</g>
+<!-- This Page&#39;s Entity -->
+<g id="node6" class="node"><title>This Page&#39;s Entity</title>
+<polygon fill="none" stroke="black" points="478,-26 382,-26 382,-1.24345e-14 478,-3.55271e-15 478,-26"/>
+<text text-anchor="middle" x="430" y="-10.55" font-family="Helvetica,sans-Serif" font-size="10.50">This Page&#39;s Entity</text>
+</g>
+</g>
+</svg>
+
+    
+    <p>Solid arrows point from a parent (sub)module to the submodule which is
+    descended from it. Dashed arrows point from a module being used to the
+    module or program unit using it.
+    </p>
+    
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                
+    <br>
+    
+
+    <section class="visible-xs visible-sm hidden-md">
+      
+
+
+
+
+
+
+
+
+
+
+
+<div class="panel panel-primary">
+  <div class="panel-heading text-left"><h3 class="panel-title"><a data-toggle="collapse" href="#types-1">Derived Types</a></h3></div>
+  <div id="types-1" class="panel-collapse collapse">
+    <div class="list-group">
+      
+      <a class="list-group-item" href="../module/oscillation_oscillator.html#type-oscillator">oscillator</a>
+      
+    </div>
+  </div>
+</div>
+
+
+<div class="panel panel-primary">
+  <div class="panel-heading text-left"><h3 class="panel-title"><a data-toggle="collapse" href="#funcs-1">Functions</a></h3></div>
+  <div id="funcs-1" class="panel-collapse collapse">
+    <div class="list-group">
+      
+      <a class="list-group-item" href="../module/oscillation_oscillator.html#proc-add_oscillation">add_oscillation</a>
+      
+      <a class="list-group-item" href="../module/oscillation_oscillator.html#proc-doscillation_dt">dOscillation_dt</a>
+      
+      <a class="list-group-item" href="../module/oscillation_oscillator.html#proc-oscillation_local_error">oscillation_local_error</a>
+      
+      <a class="list-group-item" href="../module/oscillation_oscillator.html#proc-oscillation_multiply_oscillation">oscillation_multiply_oscillation</a>
+      
+      <a class="list-group-item" href="../module/oscillation_oscillator.html#proc-oscillation_multiply_real">oscillation_multiply_real</a>
+      
+      <a class="list-group-item" href="../module/oscillation_oscillator.html#proc-output">output</a>
+      
+      <a class="list-group-item" href="../module/oscillation_oscillator.html#proc-real_multiply_oscillation">real_multiply_oscillation</a>
+      
+      <a class="list-group-item" href="../module/oscillation_oscillator.html#proc-sub_oscillation">sub_oscillation</a>
+      
+    </div>
+  </div>
+</div>
+
+
+<div class="panel panel-primary">
+  <div class="panel-heading text-left"><h3 class="panel-title"><a data-toggle="collapse" href="#subs-1">Subroutines</a></h3></div>
+  <div class="list-group">
+    <div id="subs-1" class="panel-collapse collapse">
+      
+      <a class="list-group-item" href="../module/oscillation_oscillator.html#proc-init">init</a>
+      
+      <a class="list-group-item" href="../module/oscillation_oscillator.html#proc-oscillation_assign_oscillation">oscillation_assign_oscillation</a>
+      
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
+
+
+
+    </section>
+    <br class="visible-xs visible-sm hidden-md">
+
+    
+
+    
+    
+    
+    
+    
+
+    
+    
+    
+    <section>
+     <h2>Derived Types</h2>
+	 
+	   
+<div class="panel panel-default">
+  <div class="panel-heading codesum"><span class="anchor" id="type-oscillator"></span><h3>type, public, extends(<a href='../type/integrand.html'>integrand</a>) :: <a href='../type/oscillator.html'>oscillator</a>
+    
+  </h3></div>
+  <div class="panel-body">
+    
+    
+    <p>Oscillator, the Oscillation equations field.</p>
+    
+     
+     <h4>Components</h4>
+    
+<table class="table table-striped varlist">
+<thead><tr><th>Type</th><th>Visibility</th>
+
+<th>Attributes</th><th></th><th>Name</th><th></th><th>Initial</th><th></th></thead>
+
+
+
+<tbody>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-u"></span>real(kind=R_P),</td>
+  
+  <td>private,</td>
+  <td>dimension(:), allocatable</td><td>::</td>
+  <td><strong>U</strong></td><td></td><td></td><td><p>Integrand (state) variables, [1:dims].</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-dims"></span>integer(kind=I_P),</td>
+  
+  <td>private</td>
+  <td></td><td>::</td>
+  <td><strong>dims</strong></td><td> =</td><td>0</td><td><p>Space dimensions.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-dummy_to_allow_extensions"></span>class(*),</td>
+  
+  <td>public,</td>
+  <td>allocatable</td><td>::</td>
+  <td><strong>dummy_to_allow_extensions</strong>[:]</td><td></td><td></td><td><p>Dummy member to allow concrete extensions with coarray members.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-f"></span>real(kind=R_P),</td>
+  
+  <td>private</td>
+  <td></td><td>::</td>
+  <td><strong>f</strong></td><td> =</td><td>0._R_P</td><td><p>Oscillation frequency (Hz).</p></td>
+  
+</tr>
+
+</tbody>
+</table>
+
+     
+     
+          
+     
+     <h4>Type-Bound Procedures</h4>
+      <table class="table table-striped varlist">
+      <tbody>
+      
+       <tr><td>procedure, public, pass(lhs) :: <strong><a href='../type/oscillator.html#boundprocedure-add%7E3'>add</a></strong>  => add_oscillation </td>
+       <td><p>Oscillation + Oscillation.</p></td></tr>
+      
+       <tr><td>procedure, public, pass(lhs) :: <strong><a href='../type/oscillator.html#boundprocedure-assign_integrand%7E3'>assign_integrand</a></strong>  => oscillation_assign_oscillation </td>
+       <td><p>Oscillation = Oscillation.</p></td></tr>
+      
+       <tr><td>generic, public :: <strong><a href='../type/oscillator.html#boundprocedure-assignment%28%3D%29%7E14'>assignment(=)</a></strong>  => assign_integrand </td>
+       <td><p>Overloading = assignament.</p></td></tr>
+      
+       <tr><td>procedure, public, pass(self) :: <strong><a href='../type/oscillator.html#boundprocedure-init'>init</a></strong>  </td>
+       <td><p>Init field.</p></td></tr>
+      
+       <tr><td>procedure, public, pass(lhs) :: <strong><a href='../type/oscillator.html#boundprocedure-integrand_multiply_integrand%7E3'>integrand_multiply_integrand</a></strong>  => oscillation_multiply_oscillation </td>
+       <td><p>Oscillation * oscillation.</p></td></tr>
+      
+       <tr><td>procedure, public, pass(lhs) :: <strong><a href='../type/oscillator.html#boundprocedure-integrand_multiply_real%7E3'>integrand_multiply_real</a></strong>  => oscillation_multiply_real </td>
+       <td><p>Oscillation * real.</p></td></tr>
+      
+       <tr><td>procedure, public, pass(lhs) :: <strong><a href='../type/oscillator.html#boundprocedure-local_error%7E3'>local_error</a></strong>  => oscillation_local_error </td>
+       <td><p>||Oscillation-oscillation||.</p></td></tr>
+      
+       <tr><td>generic, public :: <strong><a href='../type/oscillator.html#boundprocedure-operator%28%2A%29%7E2'>operator(*)</a></strong>  => integrand_multiply_integrand, real_multiply_integrand, integrand_multiply_real </td>
+       <td><p>Overloading * operator.</p></td></tr>
+      
+       <tr><td>generic, public :: <strong><a href='../type/oscillator.html#boundprocedure-operator%28%2B%29%7E2'>operator(+)</a></strong>  => add </td>
+       <td><p>Overloading + operator.</p></td></tr>
+      
+       <tr><td>generic, public :: <strong><a href='../type/oscillator.html#boundprocedure-operator%28-%29%7E2'>operator(-)</a></strong>  => sub </td>
+       <td><p>Overloading - operator.</p></td></tr>
+      
+       <tr><td>generic, public :: <strong><a href='../type/oscillator.html#boundprocedure-operator%28.lterror.%29%7E2'>operator(.lterror.)</a></strong>  => local_error </td>
+       <td><p>Estimate local truncation error.</p></td></tr>
+      
+       <tr><td>procedure, public, pass(self) :: <strong><a href='../type/oscillator.html#boundprocedure-output'>output</a></strong>  </td>
+       <td><p>Extract Oscillation field.</p></td></tr>
+      
+       <tr><td>procedure, public, pass(rhs) :: <strong><a href='../type/oscillator.html#boundprocedure-real_multiply_integrand%7E3'>real_multiply_integrand</a></strong>  => real_multiply_oscillation </td>
+       <td><p>Real * Oscillation.</p></td></tr>
+      
+       <tr><td>procedure, public, pass(lhs) :: <strong><a href='../type/oscillator.html#boundprocedure-sub%7E3'>sub</a></strong>  => sub_oscillation </td>
+       <td><p>Oscillation - Oscillation.</p></td></tr>
+      
+       <tr><td>procedure, public, pass(self) :: <strong><a href='../type/oscillator.html#boundprocedure-t%7E2'>t</a></strong>  => dOscillation_dt </td>
+       <td><p>Time derivative, residuals.</p></td></tr>
+      
+       </tbody>
+       </table>
+     
+  </div>
+</div>
+
+     
+    </section>
+	<br>
+    
+    
+     
+    <section>
+    <h2>Functions</h2>
+    
+    
+  <div class="panel panel-default">
+  <div class="panel-heading codesum"><span class="anchor" id="proc-add_oscillation"></span><h3>
+private pure function <a href='../proc/add_oscillation.html'>add_oscillation</a>(lhs, rhs) result(opr)
+    
+    
+	 
+</h3></div>
+  <div class="panel-body">
+       
+    
+
+
+
+
+
+
+
+<p>Add two Oscillation fields.</p>
+    
+    <h4>Arguments</h4>
+    
+      
+      
+<table class="table table-striped varlist">
+<thead><tr><th>Type</th>
+<th>Intent</th><th>Optional</th>
+<th>Attributes</th><th></th><th>Name</th><th></th></thead>
+
+
+
+<tbody>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>class(<a href='../type/oscillator.html'>oscillator</a>),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>lhs</strong></td><td><p>Left hand side.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>class(<a href='../type/integrand.html'>integrand</a>),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>rhs</strong></td><td><p>Right hand side.</p></td>
+  
+</tr>
+
+</tbody>
+</table>
+
+      
+    
+    
+
+  
+  
+  
+  
+     <h4>Return Value <small>class(<a href='../type/integrand.html'>integrand</a>),
+  allocatable</small></h4>
+  <p>Operator result.</p>
+    
+
+  </div>
+  </div>
+
+    
+    
+  <div class="panel panel-default">
+  <div class="panel-heading codesum"><span class="anchor" id="proc-doscillation_dt"></span><h3>
+private pure function <a href='../proc/doscillation_dt.html'>dOscillation_dt</a>(self, t) result(dState_dt)
+    
+    
+	 
+</h3></div>
+  <div class="panel-body">
+       
+    
+
+
+
+
+
+
+
+<p>Time derivative of Oscillation field.</p>
+    
+    <h4>Arguments</h4>
+    
+      
+      
+<table class="table table-striped varlist">
+<thead><tr><th>Type</th>
+<th>Intent</th><th>Optional</th>
+<th>Attributes</th><th></th><th>Name</th><th></th></thead>
+
+
+
+<tbody>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>class(<a href='../type/oscillator.html'>oscillator</a>),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>self</strong></td><td><p>Oscillation field.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>real(kind=R_P),</td>
+  <td>intent(in),</td>
+  <td>optional</td>
+  
+  <td></td><td>::</td>
+  <td><strong>t</strong></td><td><p>Time.</p></td>
+  
+</tr>
+
+</tbody>
+</table>
+
+      
+    
+    
+
+  
+  
+  
+  
+     <h4>Return Value <small>class(<a href='../type/integrand.html'>integrand</a>),
+  allocatable</small></h4>
+  <p>Oscillation field time derivative.</p>
+    
+
+  </div>
+  </div>
+
+    
+    
+  <div class="panel panel-default">
+  <div class="panel-heading codesum"><span class="anchor" id="proc-oscillation_local_error"></span><h3>
+private pure function <a href='../proc/oscillation_local_error.html'>oscillation_local_error</a>(lhs, rhs) result(error)
+    
+    
+	 
+</h3></div>
+  <div class="panel-body">
+       
+    
+
+
+
+
+
+
+
+<p>Estimate local truncation error between 2 oscillation approximations.</p>
+    
+    <h4>Arguments</h4>
+    
+      
+      
+<table class="table table-striped varlist">
+<thead><tr><th>Type</th>
+<th>Intent</th><th>Optional</th>
+<th>Attributes</th><th></th><th>Name</th><th></th></thead>
+
+
+
+<tbody>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>class(<a href='../type/oscillator.html'>oscillator</a>),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>lhs</strong></td><td><p>Left hand side.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>class(<a href='../type/integrand.html'>integrand</a>),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>rhs</strong></td><td><p>Right hand side.</p></td>
+  
+</tr>
+
+</tbody>
+</table>
+
+      
+    
+    
+
+  
+  
+  
+  
+     <h4>Return Value <small>real(kind=R_P)
+  </small></h4>
+  <p>Error estimation.</p>
+    
+
+  </div>
+  </div>
+
+    
+    
+  <div class="panel panel-default">
+  <div class="panel-heading codesum"><span class="anchor" id="proc-oscillation_multiply_oscillation"></span><h3>
+private pure function <a href='../proc/oscillation_multiply_oscillation.html'>oscillation_multiply_oscillation</a>(lhs, rhs) result(opr)
+    
+    
+	 
+</h3></div>
+  <div class="panel-body">
+       
+    
+
+
+
+
+
+
+
+<p>Multiply a oscillation field by another one.</p>
+    
+    <h4>Arguments</h4>
+    
+      
+      
+<table class="table table-striped varlist">
+<thead><tr><th>Type</th>
+<th>Intent</th><th>Optional</th>
+<th>Attributes</th><th></th><th>Name</th><th></th></thead>
+
+
+
+<tbody>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>class(<a href='../type/oscillator.html'>oscillator</a>),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>lhs</strong></td><td><p>Left hand side.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>class(<a href='../type/integrand.html'>integrand</a>),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>rhs</strong></td><td><p>Right hand side.</p></td>
+  
+</tr>
+
+</tbody>
+</table>
+
+      
+    
+    
+
+  
+  
+  
+  
+     <h4>Return Value <small>class(<a href='../type/integrand.html'>integrand</a>),
+  allocatable</small></h4>
+  <p>Operator result.</p>
+    
+
+  </div>
+  </div>
+
+    
+    
+  <div class="panel panel-default">
+  <div class="panel-heading codesum"><span class="anchor" id="proc-oscillation_multiply_real"></span><h3>
+private pure function <a href='../proc/oscillation_multiply_real.html'>oscillation_multiply_real</a>(lhs, rhs) result(opr)
+    
+    
+	 
+</h3></div>
+  <div class="panel-body">
+       
+    
+
+
+
+
+
+
+
+<p>Multiply a Oscillation field by a real scalar.</p>
+    
+    <h4>Arguments</h4>
+    
+      
+      
+<table class="table table-striped varlist">
+<thead><tr><th>Type</th>
+<th>Intent</th><th>Optional</th>
+<th>Attributes</th><th></th><th>Name</th><th></th></thead>
+
+
+
+<tbody>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>class(<a href='../type/oscillator.html'>oscillator</a>),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>lhs</strong></td><td><p>Left hand side.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>real(kind=R_P),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>rhs</strong></td><td><p>Right hand side.</p></td>
+  
+</tr>
+
+</tbody>
+</table>
+
+      
+    
+    
+
+  
+  
+  
+  
+     <h4>Return Value <small>class(<a href='../type/integrand.html'>integrand</a>),
+  allocatable</small></h4>
+  <p>Operator result.</p>
+    
+
+  </div>
+  </div>
+
+    
+    
+  <div class="panel panel-default">
+  <div class="panel-heading codesum"><span class="anchor" id="proc-output"></span><h3>
+private pure function <a href='../proc/output.html'>output</a>(self) result(state)
+    
+    
+	 
+</h3></div>
+  <div class="panel-body">
+       
+    
+
+
+
+
+
+
+
+<p>Output the Oscillation field state.</p>
+    
+    <h4>Arguments</h4>
+    
+      
+      
+<table class="table table-striped varlist">
+<thead><tr><th>Type</th>
+<th>Intent</th><th>Optional</th>
+<th>Attributes</th><th></th><th>Name</th><th></th></thead>
+
+
+
+<tbody>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>class(<a href='../type/oscillator.html'>oscillator</a>),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>self</strong></td><td><p>Oscillation field.</p></td>
+  
+</tr>
+
+</tbody>
+</table>
+
+      
+    
+    
+
+  
+  
+  
+  
+     <h4>Return Value <small>real(kind=R_P),
+  dimension(:), allocatable</small></h4>
+  <p>Oscillation state vector.</p>
+    
+
+  </div>
+  </div>
+
+    
+    
+  <div class="panel panel-default">
+  <div class="panel-heading codesum"><span class="anchor" id="proc-real_multiply_oscillation"></span><h3>
+private pure function <a href='../proc/real_multiply_oscillation.html'>real_multiply_oscillation</a>(lhs, rhs) result(opr)
+    
+    
+	 
+</h3></div>
+  <div class="panel-body">
+       
+    
+
+
+
+
+
+
+
+<p>Multiply a real scalar by a Oscillation field.</p>
+    
+    <h4>Arguments</h4>
+    
+      
+      
+<table class="table table-striped varlist">
+<thead><tr><th>Type</th>
+<th>Intent</th><th>Optional</th>
+<th>Attributes</th><th></th><th>Name</th><th></th></thead>
+
+
+
+<tbody>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>real(kind=R_P),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>lhs</strong></td><td><p>Left hand side.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>class(<a href='../type/oscillator.html'>oscillator</a>),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>rhs</strong></td><td><p>Right hand side.</p></td>
+  
+</tr>
+
+</tbody>
+</table>
+
+      
+    
+    
+
+  
+  
+  
+  
+     <h4>Return Value <small>class(<a href='../type/integrand.html'>integrand</a>),
+  allocatable</small></h4>
+  <p>Operator result.</p>
+    
+
+  </div>
+  </div>
+
+    
+    
+  <div class="panel panel-default">
+  <div class="panel-heading codesum"><span class="anchor" id="proc-sub_oscillation"></span><h3>
+private pure function <a href='../proc/sub_oscillation.html'>sub_oscillation</a>(lhs, rhs) result(opr)
+    
+    
+	 
+</h3></div>
+  <div class="panel-body">
+       
+    
+
+
+
+
+
+
+
+<p>Subtract two Oscillation fields.</p>
+    
+    <h4>Arguments</h4>
+    
+      
+      
+<table class="table table-striped varlist">
+<thead><tr><th>Type</th>
+<th>Intent</th><th>Optional</th>
+<th>Attributes</th><th></th><th>Name</th><th></th></thead>
+
+
+
+<tbody>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>class(<a href='../type/oscillator.html'>oscillator</a>),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>lhs</strong></td><td><p>Left hand side.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>class(<a href='../type/integrand.html'>integrand</a>),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>rhs</strong></td><td><p>Right hand side.</p></td>
+  
+</tr>
+
+</tbody>
+</table>
+
+      
+    
+    
+
+  
+  
+  
+  
+     <h4>Return Value <small>class(<a href='../type/integrand.html'>integrand</a>),
+  allocatable</small></h4>
+  <p>Operator result.</p>
+    
+
+  </div>
+  </div>
+
+    
+    </section>
+    <br>
+    
+
+    
+    <section>
+    <h2>Subroutines</h2>
+    
+    
+  <div class="panel panel-default">
+  <div class="panel-heading codesum"><span class="anchor" id="proc-init"></span><h3>
+private pure subroutine <a href='../proc/init.html'>init</a>(self, initial_state, frequency)
+    
+    
+	 
+</h3></div>
+  <div class="panel-body">
+       
+    
+
+
+
+
+
+
+
+<p>Construct an initialized Oscillation field.</p>
+    
+    <h4>Arguments</h4>
+    
+      
+      
+<table class="table table-striped varlist">
+<thead><tr><th>Type</th>
+<th>Intent</th><th>Optional</th>
+<th>Attributes</th><th></th><th>Name</th><th></th></thead>
+
+
+
+<tbody>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>class(<a href='../type/oscillator.html'>oscillator</a>),</td>
+  <td>intent(inout)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>self</strong></td><td><p>Oscillation field.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>real(kind=R_P),</td>
+  <td>intent(in),</td>
+  <td></td>
+  
+  <td>dimension(:)</td><td>::</td>
+  <td><strong>initial_state</strong></td><td><p>Initial state of the Oscillation field vector.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>real(kind=R_P),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>frequency</strong></td><td><p>Frequency of oscillation.</p></td>
+  
+</tr>
+
+</tbody>
+</table>
+
+      
+    
+    
+
+  </div>
+  </div>
+
+    
+    
+  <div class="panel panel-default">
+  <div class="panel-heading codesum"><span class="anchor" id="proc-oscillation_assign_oscillation"></span><h3>
+private pure subroutine <a href='../proc/oscillation_assign_oscillation.html'>oscillation_assign_oscillation</a>(lhs, rhs)
+    
+    
+	 
+</h3></div>
+  <div class="panel-body">
+       
+    
+
+
+
+
+
+
+
+<p>Assign one Oscillation field to another.</p>
+    
+    <h4>Arguments</h4>
+    
+      
+      
+<table class="table table-striped varlist">
+<thead><tr><th>Type</th>
+<th>Intent</th><th>Optional</th>
+<th>Attributes</th><th></th><th>Name</th><th></th></thead>
+
+
+
+<tbody>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>class(<a href='../type/oscillator.html'>oscillator</a>),</td>
+  <td>intent(inout)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>lhs</strong></td><td><p>Left hand side.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>class(<a href='../type/integrand.html'>integrand</a>),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>rhs</strong></td><td><p>Right hand side.</p></td>
+  
+</tr>
+
+</tbody>
+</table>
+
+      
+    
+    
+
+  </div>
+  </div>
+
+    
+    </section>    
+    <br>
+    
+    
+    
+    </div>
+  </div>
+
+  <section class="visible-xs visible-sm hidden-md">
+    <hr>
+    
+
+<div class="panel panel-default">
+  <div class="panel-heading text-left"><h3 class="panel-title"><a data-toggle="collapse" href="#allmods-1">All Modules</a></h3></div>
+  <div id="allmods-1" class="panel-collapse collapse">
+    <div class="list-group">
+      
+      <a class="list-group-item" href="../module/foodie.html">foodie</a>
+      
+      <a class="list-group-item" href="../module/foodie_adt_integrand.html">foodie_adt_integrand</a>
+      
+      <a class="list-group-item" href="../module/foodie_error_codes.html">foodie_error_codes</a>
+      
+      <a class="list-group-item" href="../module/foodie_integrator_adams_bashforth.html">foodie_integrator_adams_bashforth</a>
+      
+      <a class="list-group-item" href="../module/foodie_integrator_adams_bashforth_moulton.html">foodie_integrator_adams_bashforth_moulton</a>
+      
+      <a class="list-group-item" href="../module/foodie_integrator_adams_moulton.html">foodie_integrator_adams_moulton</a>
+      
+      <a class="list-group-item" href="../module/foodie_integrator_backward_differentiation_formula.html">foodie_integrator_backward_differentiation_formula</a>
+      
+      <a class="list-group-item" href="../module/foodie_integrator_euler_explicit.html">foodie_integrator_euler_explicit</a>
+      
+      <a class="list-group-item" href="../module/foodie_integrator_leapfrog.html">foodie_integrator_leapfrog</a>
+      
+      <a class="list-group-item" href="../module/foodie_integrator_lmm_ssp.html">foodie_integrator_lmm_ssp</a>
+      
+      <a class="list-group-item" href="../module/foodie_integrator_lmm_ssp_vss.html">foodie_integrator_lmm_ssp_vss</a>
+      
+      <a class="list-group-item" href="../module/foodie_integrator_object.html">foodie_integrator_object</a>
+      
+      <a class="list-group-item" href="../module/foodie_integrator_runge_kutta_emd.html">foodie_integrator_runge_kutta_emd</a>
+      
+      <a class="list-group-item" href="../module/foodie_integrator_runge_kutta_low_storage.html">foodie_integrator_runge_kutta_low_storage</a>
+      
+      <a class="list-group-item" href="../module/foodie_integrator_runge_kutta_ssp.html">foodie_integrator_runge_kutta_ssp</a>
+      
+      <a class="list-group-item" href="../module/foodie_kinds.html">foodie_kinds</a>
+      
+      <a class="list-group-item" href="../module/foodie_utils.html">foodie_utils</a>
+      
+      <a class="list-group-item" href="../module/oscillation_oscillator.html">oscillation_oscillator</a>
+      
+      <a class="list-group-item" href="../module/oscillation_test_t.html">oscillation_test_t</a>
+      
+      <a class="list-group-item" href="../module/type_burgers.html">type_burgers</a>
+      
+      <a class="list-group-item" href="../module/type_euler_1d.html">type_euler_1D</a>
+      
+      <a class="list-group-item" href="../module/type_euler_1d_caf.html">type_euler_1D_caf</a>
+      
+      <a class="list-group-item" href="../module/type_euler_1d_caf_no_foodie.html">type_euler_1D_caf_no_foodie</a>
+      
+      <a class="list-group-item" href="../module/type_euler_1d_openmp.html">type_euler_1D_openmp</a>
+      
+      <a class="list-group-item" href="../module/type_euler_1d_openmp_no_foodie.html">type_euler_1D_openmp_no_foodie</a>
+      
+      <a class="list-group-item" href="../module/type_lorenz.html">type_lorenz</a>
+      
+    </div>
+  </div>
+</div>
+
+
+  </section>
+  
+    <hr>    
+    </div> <!-- /container -->
+    <footer>
+      <div class="container">
+      <div class="row">
+        <div class="col-xs-6 col-md-4"><p>&copy; 2017 </p></div>
+        <div class="col-xs-6 col-md-4 col-md-push-4">
+          <p class="text-right">
+            Documentation generated by 
+            <a href="https://github.com/cmacmackin/ford">FORD</a>
+             on 2017-04-05 10:53  
+          </p>
+        </div>
+        <div class="col-xs-12 col-md-4 col-md-pull-4"><p class="text-center"> FOODIE was developed by Fortran-FOSS-Programmers Group</p></div>
+      </div>
+      <br>
+      </div> <!-- /container -->    
+    </footer>
+
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+<!--
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+-->
+    <script src="../js/bootstrap.min.js"></script>
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+    <script src="../js/ie10-viewport-bug-workaround.js"></script>
+
+    <!-- MathJax JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        TeX: { extensions: ['AMSmath.js','AMSsymbols.js','noErrors.js','noUndefined.js'], equationNumbers: { autoNumber: 'AMS' } },
+        jax: ['input/TeX','input/MathML','output/HTML-CSS'],
+        extensions: ['tex2jax.js','mml2jax.js','MathMenu.js','MathZoom.js'],
+        'HTML-CSS': { 
+           styles: { '.MathJax_Display, .MathJax .mo, .MathJax .mi, .MathJax .mn': {color: '#000000 ! important'} }
+        }
+      });
+    </script>
+    <script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+  </body>
+</html>
