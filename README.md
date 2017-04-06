@@ -76,10 +76,28 @@ FOODIE is aimed to be a KISS-pure-Fortran library for integrating Ordinary Diffe
             + [x] unfiltered leapfrog, 2nd order accurate, mostly unstable, see [4];
             + [x] Robert-Asselin filtered leapfrog, 1st order accurate, see [4, 5, 6];
             + [x] Robert-Asselin-Williams filtered leapfrog, 3rd order accurate, see [5, 6];
-        + [x] [Linear Multistep Methods SSP](http://fortran-foss-programmers.github.io/FOODIE/module/foodie_integrator_lmm_ssp.html) schemes see [16]:
+        + [x] [Linear Multistep Methods, SSP](http://fortran-foss-programmers.github.io/FOODIE/module/foodie_integrator_lmm_ssp.html) schemes see [16]:
             + [x] 3 steps, 2nd order accurate;
             + [x] 4 steps, 3rd order accurate;
             + [x] 5 steps, 3rd order accurate;
+        + [x] [Linear Multistep Methods, SSP with Variable Step Size (VSS)](http://fortran-foss-programmers.github.io/FOODIE/module/foodie_integrator_lmm_ssp_vss.html) schemes see [17]:
+            + [x] 2 steps, 2nd order accurate;
+            + [x] 3 steps, 2nd order accurate;
+            + [x] 3 steps, 3rd order accurate;
+            + [x] 4 steps, 3rd order accurate;
+            + [x] 5 steps, 3rd order accurate;
+        + [ ] [Linear Multistep Runge-Kutta Methods SSP](http://fortran-foss-programmers.github.io/FOODIE/module/foodie_integrator_ms_runge_kutta_ssp.html) schemes see [18]:
+            + [x] 2 steps, 2 stages, 3rd order accurate;
+            + [x] 3 steps, 2 stages, 3rd order accurate;
+            + [ ] 4 steps, 3 stages, 5th order accurate;
+            + [ ] 3 steps, 6 stages, 5th order accurate;
+            + [ ] 3 steps, 5 stages, 6th order accurate;
+            + [ ] 3 steps, 7 stages, 7th order accurate;
+            + [ ] 4 steps, 7 stages, 7th order accurate;
+            + [x] 4 steps, 5 stages, 8th order accurate;
+            + [ ] 5 steps, 9 stages, 8th order accurate;
+            + [ ] 4 steps, 9 stages, 9th order accurate;
+            + [ ] 3 steps, 20 stages, 10th order accurate;
         + [ ] Runge-Kutta schemes:
             + [ ] [low-storage](http://fortran-foss-programmers.github.io/FOODIE/module/foodie_integrator_runge_kutta_low_storage.html) schemes, see [1, 2, 3]:
                 + [x] 1 stage, namely the forward explicit Euler scheme, 1st order accurate;
@@ -170,6 +188,10 @@ Any feature request is welcome.
 [15] *A tenth-order Runge-Kutta method with error estimate*, Feagin, T., Proceedings of the IAENG Conf. on Scientific Computing. 2007.
 
 [16] *Strong Stability Preserving Runge-Kutta and Multistep Time Discretizations*, S. Gottlieb, D. Ketcheson, C.W. Shu, 2011, 978-981-4289-26-9, doi:10.1142/7498, World Scientific Publishing Co. Pte. Ltd.
+
+[17] *Strong Stability Preserving Explicit Linear Multistep Methods with Variable Step Size*, Y. Hadjimichael, D. Ketcheson, L. Lóczi, A. Németh, 2016, SIAM J. Numer. Anal., 54(5), 2799–2832.DOI:10.1137/15M101717X.
+
+[18] *Explicit Strong Stability Preserving Multistep Runge-Kutta Methods*, C. Bresten, S. Gottlieb, Z. Grant, D. Higgs, D. Ketcheson, A. Nemeth, Mathematics of Computation, 2016, http://dx.doi.org/10.1090/mcom/3115.
 
 Go to [Top](#top)
 
