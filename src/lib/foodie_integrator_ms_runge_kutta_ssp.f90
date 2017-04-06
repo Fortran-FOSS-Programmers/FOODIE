@@ -44,7 +44,8 @@ private
 public :: integrator_ms_runge_kutta_ssp
 
 character(len=99), parameter :: class_name_='ms_runge_kutta_ssp' !< Name of the class of schemes.
-character(len=99), parameter :: supported_schemes_(1:2)=[trim(class_name_)//'_steps_2_stages_2_order_3', &
+character(len=99), parameter :: supported_schemes_(1:3)=[trim(class_name_)//'_steps_2_stages_2_order_3', &
+                                                         trim(class_name_)//'_steps_3_stages_2_order_3', &
                                                          trim(class_name_)//'_steps_4_stages_5_order_8'] !< List of supported
                                                                                                          !< schemes.
 
@@ -54,8 +55,8 @@ type, extends(integrator_object) :: integrator_ms_runge_kutta_ssp
   !<
   !< @note The integrator must be created or initialized (initialize the *A,Ahat,B,Bhat,D,T* coefficients) before used.
   private
-  integer(I_P)           :: steps=0   !< Number of time steps.
-  integer(I_P)           :: stages=0  !< Number of stages.
+  integer(I_P), public   :: steps=0   !< Number of time steps.
+  integer(I_P), public   :: stages=0  !< Number of stages.
   real(R_P), allocatable :: A(:,:)    !< *A* coefficients.
   real(R_P), allocatable :: Ahat(:,:) !< *Ahat* coefficients.
   real(R_P), allocatable :: B(:)      !< *B* coefficients.
@@ -175,7 +176,57 @@ contains
     call self%destroy
     select case(trim(adjustl(scheme)))
     case('ms_runge_kutta_ssp_steps_2_stages_2_order_3')
-       error stop 'error: "ms_runge_kutta_ssp_steps_2_stages_2_order_3" to be implemented!'
+      self%steps = 2
+      self%stages = 2
+
+      allocate(self%A(1:self%stages, 1:self%stages)) ; self%A = 0._R_P
+      self%A(2, 1) = 0.910683602522959_R_P
+
+      allocate(self%Ahat(1:self%stages, 1:self%steps)) ; self%Ahat = 0._R_P
+      self%Ahat(2, 1) = -1.11985107194706e-19_R_P
+
+      allocate(self%B(1:self%stages)) ; self%B = 0._R_P
+      self%B(1) = 0.535898384862245_R_P
+      self%B(2) = 0.803847577293368_R_P
+
+      allocate(self%Bhat(1:self%steps)) ; self%Bhat = 0._R_P
+      self%Bhat(1) = 0.267949192431123_R_P
+
+      allocate(self%D(1:self%stages, 1:self%steps)) ; self%D = 0._R_P
+      self%D(2, 1) = 1._R_P / 3._R_P
+      self%D(2, 2) = 2._R_P / 3._R_P
+
+      allocate(self%T(1:self%steps)) ; self%T = 0._R_P
+      self%T(1) = 0.607695154586736_R_P
+      self%T(2) = 0.392304845413264_R_P
+
+    case('ms_runge_kutta_ssp_steps_3_stages_2_order_3')
+      self%steps = 3
+      self%stages = 2
+
+      allocate(self%A(1:self%stages, 1:self%stages)) ; self%A = 0._R_P
+      self%A(2, 1) = 0.731058363135786_R_P
+
+      allocate(self%Ahat(1:self%stages, 1:self%steps)) ; self%Ahat = 0._R_P
+      self%Ahat(2, 1) = 0.127467809251820_R_P
+
+      allocate(self%B(1:self%stages)) ; self%B = 0._R_P
+      self%B(1) = 0.618048297723782_R_P
+      self%B(2) = 0.759677988437936_R_P
+
+      allocate(self%Bhat(1:self%steps)) ; self%Bhat = 0._R_P
+      self%Bhat(1) = 0.246670340394148_R_P
+
+      allocate(self%D(1:self%stages, 1:self%steps)) ; self%D = 0._R_P
+      self%D(2, 1) = 0.186433848116852_R_P
+      self%D(2, 2) = 1.80945758995975e-24_R_P
+      self%D(2, 3) = 0.813566151883148_R_P
+
+      allocate(self%T(1:self%steps)) ; self%T = 0._R_P
+      self%T(1) = 0.312198313277933_R_P
+      self%T(2) = 2.58493941422821e-24_R_P
+      self%T(3) = 0.687801686722067_R_P
+
     case('ms_runge_kutta_ssp_steps_4_stages_5_order_8')
       self%steps = 4
       self%stages = 5
@@ -223,25 +274,25 @@ contains
       self%Bhat(3) = 0.541410372692778_R_P
 
       allocate(self%D(1:self%stages, 1:self%steps)) ; self%D = 0._R_P
-      self%D(1, 1) = 0.0273928990974108_R_P
-      self%D(2, 1) = 0.283607987548794_R_P
-      self%D(3, 1) = 0.0642241421937960_R_P
-      self%D(4, 1) = 0.194681462814288_R_P
+      self%D(2, 1) = 0.0273928990974108_R_P
+      self%D(3, 1) = 0.283607987548794_R_P
+      self%D(4, 1) = 0.0642241421937960_R_P
+      self%D(5, 1) = 0.194681462814288_R_P
 
-      self%D(1, 2) = 0.554039201229659_R_P
-      self%D(2, 2) = 0.0914454235177934_R_P
-      self%D(3, 2) = 0.198601843371796_R_P
-      self%D(4, 2) = 0.293086617882372_R_P
+      self%D(2, 2) = 0.554039201229659_R_P
+      self%D(3, 2) = 0.0914454235177934_R_P
+      self%D(4, 2) = 0.198601843371796_R_P
+      self%D(5, 2) = 0.293086617882372_R_P
 
-      self%D(1, 3) = 0.348927848402249_R_P
-      self%D(2, 3) = 0.437897855084625_R_P
-      self%D(3, 3) = 0.662266498804591_R_P
-      self%D(4, 3) = 0.158740367819382_R_P
+      self%D(2, 3) = 0.348927848402249_R_P
+      self%D(3, 3) = 0.437897855084625_R_P
+      self%D(4, 3) = 0.662266498804591_R_P
+      self%D(5, 3) = 0.158740367819382_R_P
 
-      self%D(1, 4) = 0.0696400512706807_R_P
-      self%D(2, 4) = 0.187048733848788_R_P
-      self%D(3, 4) = 0.0749075156298171_R_P
-      self%D(4, 4) = 0.353491551483958_R_P
+      self%D(2, 4) = 0.0696400512706807_R_P
+      self%D(3, 4) = 0.187048733848788_R_P
+      self%D(4, 4) = 0.0749075156298171_R_P
+      self%D(5, 4) = 0.353491551483958_R_P
 
       allocate(self%T(1:self%steps)) ; self%T = 0._R_P
       self%T(1) = 0.0273988434707855_R_P
