@@ -134,7 +134,7 @@
      <li><i class="fa fa-list-ol"></i>
        <a data-toggle="tooltip"
 	  data-placement="bottom" data-html="true"
-	  title=" 1.1% of total for procedures.">90 statements</a>
+	  title=" 1.2% of total for procedures.">93 statements</a>
      </li> 
      
      
@@ -577,6 +577,8 @@
       
       <a class="list-group-item" href="../proc/integrate_lmm_ssp_vss.html">integrate_lmm_ssp_vss</a>
       
+      <a class="list-group-item" href="../proc/integrate_ms_runge_kutta_ssp.html">integrate_ms_runge_kutta_ssp</a>
+      
       <a class="list-group-item" href="../proc/integrate_order_2.html">integrate_order_2</a>
       
       <a class="list-group-item" href="../proc/integrate_order_3.html">integrate_order_3</a>
@@ -916,7 +918,7 @@ private subroutine test(self, scheme)
   
 <tr>
   
-  <td><span class="anchor" id="variable-scheme%7E44"></span>character(len=*),</td>
+  <td><span class="anchor" id="variable-scheme%7E45"></span>character(len=*),</td>
   <td>intent(in)</td>
   <td></td>
   
@@ -973,27 +975,27 @@ private subroutine test(self, scheme)
 <path fill="none" stroke="#000000" d="M54.0006,-51.4485C64.1519,-49.3613 76.0061,-46.924 87.4313,-44.5749"/>
 <polygon fill="#000000" stroke="#000000" points="88.2175,-47.9865 97.3077,-42.5442 86.8077,-41.13 88.2175,-47.9865"/>
 </g>
-<!-- strz -->
-<g id="node4" class="node"><title>strz</title>
-<polygon fill="#777777" stroke="#777777" points="290,-70 236,-70 236,-44 290,-44 290,-70"/>
-<text text-anchor="middle" x="263" y="-54.55" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">strz</text>
-</g>
-<!-- proc~save_results&#45;&gt;strz -->
-<g id="edge2" class="edge"><title>proc~save_results&#45;&gt;strz</title>
-<path fill="none" stroke="#000000" d="M170.621,-41.2455C187.77,-44.17 208.174,-47.6498 225.439,-50.5943"/>
-<polygon fill="#000000" stroke="#000000" points="225.28,-54.1176 235.726,-52.3487 226.457,-47.2172 225.28,-54.1176"/>
-</g>
 <!-- proc~exact_solution_xy -->
-<g id="node5" class="node"><title>proc~exact_solution_xy</title>
+<g id="node4" class="node"><title>proc~exact_solution_xy</title>
 <a xlink:href="../proc/exact_solution_xy.html" xlink:title="exact_solution_xy">
-<polygon fill="#d94e8f" stroke="#d94e8f" points="311,-26 215,-26 215,-1.24345e-14 311,-3.55271e-15 311,-26"/>
-<text text-anchor="middle" x="263" y="-10.55" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">exact_solution_xy</text>
+<polygon fill="#d94e8f" stroke="#d94e8f" points="311,-70 215,-70 215,-44 311,-44 311,-70"/>
+<text text-anchor="middle" x="263" y="-54.55" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">exact_solution_xy</text>
 </a>
 </g>
 <!-- proc~save_results&#45;&gt;proc~exact_solution_xy -->
-<g id="edge4" class="edge"><title>proc~save_results&#45;&gt;proc~exact_solution_xy</title>
-<path fill="none" stroke="#000000" d="M170.621,-28.7545C181.107,-26.9663 192.809,-24.9705 204.267,-23.0165"/>
-<polygon fill="#000000" stroke="#000000" points="204.967,-26.4477 214.236,-21.3163 203.79,-19.5473 204.967,-26.4477"/>
+<g id="edge2" class="edge"><title>proc~save_results&#45;&gt;proc~exact_solution_xy</title>
+<path fill="none" stroke="#000000" d="M170.621,-41.2455C181.107,-43.0337 192.809,-45.0295 204.267,-46.9835"/>
+<polygon fill="#000000" stroke="#000000" points="203.79,-50.4527 214.236,-48.6837 204.967,-43.5523 203.79,-50.4527"/>
+</g>
+<!-- strz -->
+<g id="node5" class="node"><title>strz</title>
+<polygon fill="#777777" stroke="#777777" points="290,-26 236,-26 236,-1.24345e-14 290,-3.55271e-15 290,-26"/>
+<text text-anchor="middle" x="263" y="-10.55" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">strz</text>
+</g>
+<!-- proc~save_results&#45;&gt;strz -->
+<g id="edge4" class="edge"><title>proc~save_results&#45;&gt;strz</title>
+<path fill="none" stroke="#000000" d="M170.621,-28.7545C187.77,-25.83 208.174,-22.3502 225.439,-19.4057"/>
+<polygon fill="#000000" stroke="#000000" points="226.457,-22.7828 235.726,-17.6513 225.28,-15.8824 226.457,-22.7828"/>
 </g>
 </g>
 </svg>
@@ -1201,6 +1203,7 @@ private subroutine test(self, scheme)
     <span class="k">type</span><span class="p">(</span><span class="n">integrator_leapfrog</span><span class="p">)</span>                <span class="kd">::</span> <span class="n">int_leapfrog</span>                <span class="c">!&lt; Leapfrog integrator.</span>
     <span class="k">type</span><span class="p">(</span><span class="n">integrator_lmm_ssp</span><span class="p">)</span>                 <span class="kd">::</span> <span class="n">int_lmm_ssp</span>                 <span class="c">!&lt; LMM SSP integrator.</span>
     <span class="k">type</span><span class="p">(</span><span class="n">integrator_lmm_ssp_vss</span><span class="p">)</span>             <span class="kd">::</span> <span class="n">int_lmm_ssp_vss</span>             <span class="c">!&lt; LMM SSP VSS integrator.</span>
+    <span class="k">type</span><span class="p">(</span><span class="n">integrator_ms_runge_kutta_ssp</span><span class="p">)</span>      <span class="kd">::</span> <span class="n">int_ms_runge_kutta_ssp</span>      <span class="c">!&lt; Multistep Runge Kutta SSP integrator.</span>
     <span class="k">type</span><span class="p">(</span><span class="n">integrator_runge_kutta_ls</span><span class="p">)</span>          <span class="kd">::</span> <span class="n">int_runge_kutta_ls</span>          <span class="c">!&lt; Runge Kutta low storage integrator.</span>
     <span class="k">type</span><span class="p">(</span><span class="n">integrator_runge_kutta_ssp</span><span class="p">)</span>         <span class="kd">::</span> <span class="n">int_runge_kutta_ssp</span>         <span class="c">!&lt; Runge Kutta SSP integrator.</span>
 
@@ -1220,6 +1223,8 @@ private subroutine test(self, scheme)
 <span class="k">       </span><span class="n">integrate</span> <span class="o">=&gt;</span> <span class="n">integrate_lmm_ssp_vss</span>
     <span class="n">elseif</span> <span class="p">(</span><span class="nb">index</span><span class="p">(</span><span class="nb">trim</span><span class="p">(</span><span class="nb">adjustl</span><span class="p">(</span><span class="n">scheme</span><span class="p">)),</span> <span class="nb">trim</span><span class="p">(</span><span class="n">int_lmm_ssp</span><span class="p">%</span><span class="n">class_name</span><span class="p">()))</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span> <span class="k">then</span>
 <span class="k">       </span><span class="n">integrate</span> <span class="o">=&gt;</span> <span class="n">integrate_lmm_ssp</span>
+    <span class="n">elseif</span> <span class="p">(</span><span class="nb">index</span><span class="p">(</span><span class="nb">trim</span><span class="p">(</span><span class="nb">adjustl</span><span class="p">(</span><span class="n">scheme</span><span class="p">)),</span> <span class="nb">trim</span><span class="p">(</span><span class="n">int_ms_runge_kutta_ssp</span><span class="p">%</span><span class="n">class_name</span><span class="p">()))</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span> <span class="k">then</span>
+<span class="k">       </span><span class="n">integrate</span> <span class="o">=&gt;</span> <span class="n">integrate_ms_runge_kutta_ssp</span>
     <span class="n">elseif</span> <span class="p">(</span><span class="nb">index</span><span class="p">(</span><span class="nb">trim</span><span class="p">(</span><span class="nb">adjustl</span><span class="p">(</span><span class="n">scheme</span><span class="p">)),</span> <span class="nb">trim</span><span class="p">(</span><span class="n">int_runge_kutta_emd</span><span class="p">%</span><span class="n">class_name</span><span class="p">()))</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span> <span class="k">then</span>
 <span class="k">       </span><span class="n">integrate</span> <span class="o">=&gt;</span> <span class="n">integrate_runge_kutta_emd</span>
     <span class="n">elseif</span> <span class="p">(</span><span class="nb">index</span><span class="p">(</span><span class="nb">trim</span><span class="p">(</span><span class="nb">adjustl</span><span class="p">(</span><span class="n">scheme</span><span class="p">)),</span> <span class="nb">trim</span><span class="p">(</span><span class="n">int_runge_kutta_ls</span><span class="p">%</span><span class="n">class_name</span><span class="p">()))</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span> <span class="k">then</span>
@@ -1633,6 +1638,8 @@ private subroutine test(self, scheme)
       
       <a class="list-group-item" href="../proc/integrate_lmm_ssp_vss.html">integrate_lmm_ssp_vss</a>
       
+      <a class="list-group-item" href="../proc/integrate_ms_runge_kutta_ssp.html">integrate_ms_runge_kutta_ssp</a>
+      
       <a class="list-group-item" href="../proc/integrate_order_2.html">integrate_order_2</a>
       
       <a class="list-group-item" href="../proc/integrate_order_3.html">integrate_order_3</a>
@@ -1932,7 +1939,7 @@ private subroutine test(self, scheme)
           <p class="text-right">
             Documentation generated by 
             <a href="https://github.com/cmacmackin/ford">FORD</a>
-             on 2017-04-05 16:25  
+             on 2017-04-06 12:20  
           </p>
         </div>
         <div class="col-xs-12 col-md-4 col-md-pull-4"><p class="text-center"> FOODIE was developed by Fortran-FOSS-Programmers Group</p></div>

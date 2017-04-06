@@ -10,7 +10,7 @@
     <meta name="author" content="Fortran-FOSS-Programmers Group" >
     <link rel="icon" href="../favicon.png">
 
-    <title>destroy_rk &ndash; FOODIE</title>
+    <title>integrate_ms_runge_kutta_ssp &ndash; FOODIE</title>
 
     <link href="../css/bootstrap.min.css" rel="stylesheet">
     <link href="../css/pygments.css" rel="stylesheet">
@@ -116,7 +116,7 @@
     
   
   <div class="row">
-    <h1>destroy_rk
+    <h1>integrate_ms_runge_kutta_ssp
       <small>Subroutine</small>
     
     </h1>
@@ -134,20 +134,20 @@
      <li><i class="fa fa-list-ol"></i>
        <a data-toggle="tooltip"
 	  data-placement="bottom" data-html="true"
-	  title=" 0.1% of total for procedures.">8 statements</a>
+	  title=" 0.6% of total for procedures.">45 statements</a>
      </li> 
      
      
-    <li><i class="fa fa-code"></i><a href="../src/type_euler-1D-caf_no_foodie.f90"> Source File</a></li>
+    <li><i class="fa fa-code"></i><a href="../src/oscillation.f90"> Source File</a></li>
      
   </ul>
   <ol class="breadcrumb in-well text-right">
   
-     <li><a href='../sourcefile/type_euler-1d-caf_no_foodie.f90.html'>type_euler-1D-caf_no_foodie.f90</a></li>
+     <li><a href='../sourcefile/oscillation.f90.html'>oscillation.f90</a></li>
   
-     <li><a href='../module/type_euler_1d_caf_no_foodie.html'>type_euler_1D_caf_no_foodie</a></li>
+     <li><a href='../module/oscillation_test_t.html'>oscillation_test_t</a></li>
   
-     <li class="active">destroy_rk</li>
+     <li class="active">integrate_ms_runge_kutta_ssp</li>
   </ol>
 </div>
 </div>
@@ -188,7 +188,7 @@
 <div class="panel panel-primary">
   <div class="panel-heading text-left"><h3 class="panel-title">Source Code</h3></div>
   <div class="list-group">
-    <a class="list-group-item" href="../proc/destroy_rk.html#src">destroy_rk</a>
+    <a class="list-group-item" href="../proc/integrate_ms_runge_kutta_ssp.html#src">integrate_ms_runge_kutta_ssp</a>
   </div>
 </div>
 
@@ -872,7 +872,7 @@
     
     <div class="col-md-9" id='text'>
     <h2>
-private elemental subroutine destroy_rk(self)
+private subroutine integrate_ms_runge_kutta_ssp(scheme, frequency, final_time, solution, error, last_step, iterations, Dt, tolerance)
     
     
 	 
@@ -882,7 +882,7 @@ private elemental subroutine destroy_rk(self)
 
 
     
-    <p>Destoy the integrator.</p>
+    <p>Integrate domain by means of the Multistep Runge-Kutta SSP scheme.</p>
     
 
     <h3>Arguments</h3>
@@ -903,12 +903,132 @@ private elemental subroutine destroy_rk(self)
   
 <tr>
   
-  <td><span class="anchor" id="variable-self%7E114"></span>class(<a href='../type/tvd_runge_kutta_integrator.html'>tvd_runge_kutta_integrator</a>),</td>
-  <td>intent(inout)</td>
+  <td><span class="anchor" id="variable-scheme%7E40"></span>character(len=*),</td>
+  <td>intent(in)</td>
   <td></td>
   
   <td></td><td>::</td>
-  <td><strong>self</strong></td><td><p>Integrator.</p></td>
+  <td><strong>scheme</strong></td><td><p>Selected scheme.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-frequency%7E13"></span>real(kind=R_P),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>frequency</strong></td><td><p>Oscillation frequency.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-final_time%7E11"></span>real(kind=R_P),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>final_time</strong></td><td><p>Final integration time.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-solution%7E11"></span>real(kind=R_P),</td>
+  <td>intent(out),</td>
+  <td></td>
+  
+  <td>allocatable</td><td>::</td>
+  <td><strong>solution</strong>(:,:)</td><td><p>Solution at each time step, X-Y.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-error%7E16"></span>real(kind=R_P),</td>
+  <td>intent(out)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>error</strong>(1:)</td><td><p>Error (norm L2) with respect the exact solution.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-last_step%7E10"></span>integer(kind=I_P),</td>
+  <td>intent(out)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>last_step</strong></td><td><p>Last time step computed.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-iterations%7E13"></span>integer(kind=I_P),</td>
+  <td>intent(in),</td>
+  <td>optional</td>
+  
+  <td></td><td>::</td>
+  <td><strong>iterations</strong></td><td><p>Number of fixed point iterations.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-dt%7E31"></span>real(kind=R_P),</td>
+  <td>intent(in),</td>
+  <td>optional</td>
+  
+  <td></td><td>::</td>
+  <td><strong>Dt</strong></td><td><p>Time step.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-tolerance%7E14"></span>real(kind=R_P),</td>
+  <td>intent(in),</td>
+  <td>optional</td>
+  
+  <td></td><td>::</td>
+  <td><strong>tolerance</strong></td><td><p>Local error tolerance.</p></td>
   
 </tr>
 
@@ -918,6 +1038,119 @@ private elemental subroutine destroy_rk(self)
     
     
     
+     <h3>Calls</h3>
+     
+                <div class="depgraph"><?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.26.3 (20100126.1600)
+ -->
+<!-- Title: proc~~integrate_ms_runge_kutta_ssp~~CallsGraph Pages: 1 -->
+<svg id="procintegrate_ms_runge_kutta_sspCallsGraph" width="392pt" height="34pt"
+ viewBox="0.00 0.00 392.00 34.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="proc~~integrate_ms_runge_kutta_ssp~~CallsGraph" class="graph" transform="scale(1 1) rotate(0) translate(4 30)">
+<title>proc~~integrate_ms_runge_kutta_ssp~~CallsGraph</title>
+<polygon fill="white" stroke="white" points="-4,5 -4,-30 389,-30 389,5 -4,5"/>
+<!-- proc~integrate_ms_runge_kutta_ssp -->
+<g id="node1" class="node"><title>proc~integrate_ms_runge_kutta_ssp</title>
+<polygon fill="none" stroke="black" points="160,-26 7.10543e-14,-26 0,-1.24345e-14 160,-3.55271e-15 160,-26"/>
+<text text-anchor="middle" x="80" y="-10.55" font-family="Helvetica,sans-Serif" font-size="10.50">integrate_ms_runge_kutta_ssp</text>
+</g>
+<!-- proc~error_l2 -->
+<g id="node2" class="node"><title>proc~error_l2</title>
+<a xlink:href="../proc/error_l2.html" xlink:title="error_L2">
+<polygon fill="#d94e8f" stroke="#d94e8f" points="250,-26 196,-26 196,-1.24345e-14 250,-3.55271e-15 250,-26"/>
+<text text-anchor="middle" x="223" y="-10.55" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">error_L2</text>
+</a>
+</g>
+<!-- proc~integrate_ms_runge_kutta_ssp&#45;&gt;proc~error_l2 -->
+<g id="edge4" class="edge"><title>proc~integrate_ms_runge_kutta_ssp&#45;&gt;proc~error_l2</title>
+<path fill="none" stroke="#000000" d="M160.278,-13C169.032,-13 177.608,-13 185.47,-13"/>
+<polygon fill="#000000" stroke="#000000" points="185.698,-16.5001 195.698,-13 185.698,-9.5001 185.698,-16.5001"/>
+</g>
+<!-- proc~exact_solution_xy -->
+<g id="node3" class="node"><title>proc~exact_solution_xy</title>
+<a xlink:href="../proc/exact_solution_xy.html" xlink:title="exact_solution_xy">
+<polygon fill="#d94e8f" stroke="#d94e8f" points="383,-26 287,-26 287,-1.24345e-14 383,-3.55271e-15 383,-26"/>
+<text text-anchor="middle" x="335" y="-10.55" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">exact_solution_xy</text>
+</a>
+</g>
+<!-- proc~error_l2&#45;&gt;proc~exact_solution_xy -->
+<g id="edge2" class="edge"><title>proc~error_l2&#45;&gt;proc~exact_solution_xy</title>
+<path fill="none" stroke="#000000" d="M250.112,-13C258.014,-13 266.973,-13 276.036,-13"/>
+<polygon fill="#000000" stroke="#000000" points="276.262,-16.5001 286.262,-13 276.262,-9.5001 276.262,-16.5001"/>
+</g>
+</g>
+</svg>
+</div>
+                <div><a type="button" class="graph-help" data-toggle="modal" href="#graph-help-text">Help</a></div>
+                <div class="modal fade" id="graph-help-text" tabindex="-1" role="dialog">
+                  <div class="modal-dialog modal-lg" role="document">
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title" id="-graph-help-label">Graph Key</h4>
+                      </div>
+                      <div class="modal-body">
+                        
+    <p>Nodes of different colours represent the following: </p>
+    <?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.26.3 (20100126.1600)
+ -->
+<!-- Title: Graph Key Pages: 1 -->
+<svg width="556pt" height="34pt"
+ viewBox="0.00 0.00 556.00 34.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="graph1" class="graph" transform="scale(1 1) rotate(0) translate(4 30)">
+<title>Graph Key</title>
+<polygon fill="white" stroke="white" points="-4,5 -4,-30 553,-30 553,5 -4,5"/>
+<!-- Subroutine -->
+<g id="node1" class="node"><title>Subroutine</title>
+<polygon fill="#d9534f" stroke="#d9534f" points="64,-26 3.19744e-14,-26 0,-1.24345e-14 64,-3.55271e-15 64,-26"/>
+<text text-anchor="middle" x="32" y="-10.55" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Subroutine</text>
+</g>
+<!-- Function -->
+<g id="node2" class="node"><title>Function</title>
+<polygon fill="#d94e8f" stroke="#d94e8f" points="136,-26 82,-26 82,-1.24345e-14 136,-3.55271e-15 136,-26"/>
+<text text-anchor="middle" x="109" y="-10.55" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Function</text>
+</g>
+<!-- Interface -->
+<g id="node3" class="node"><title>Interface</title>
+<polygon fill="#a7506f" stroke="#a7506f" points="208,-26 154,-26 154,-1.24345e-14 208,-3.55271e-15 208,-26"/>
+<text text-anchor="middle" x="181" y="-10.55" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Interface</text>
+</g>
+<!-- Unknown Procedure Type -->
+<g id="node4" class="node"><title>Unknown Procedure Type</title>
+<polygon fill="#777777" stroke="#777777" points="362,-26 226,-26 226,-1.24345e-14 362,-3.55271e-15 362,-26"/>
+<text text-anchor="middle" x="294" y="-10.55" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Unknown Procedure Type</text>
+</g>
+<!-- Program -->
+<g id="node5" class="node"><title>Program</title>
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="434,-26 380,-26 380,-1.24345e-14 434,-3.55271e-15 434,-26"/>
+<text text-anchor="middle" x="407" y="-10.55" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Program</text>
+</g>
+<!-- This Page&#39;s Entity -->
+<g id="node6" class="node"><title>This Page&#39;s Entity</title>
+<polygon fill="none" stroke="black" points="548,-26 452,-26 452,-1.24345e-14 548,-3.55271e-15 548,-26"/>
+<text text-anchor="middle" x="500" y="-10.55" font-family="Helvetica,sans-Serif" font-size="10.50">This Page&#39;s Entity</text>
+</g>
+</g>
+</svg>
+
+    
+    <p>Solid arrows point from a procedure to one which it calls. Dashed 
+    arrows point from an interface to procedures which implement that interface.
+    This could include the module procedures in a generic interface or the
+    implementation in a submodule of an interface in a parent module.
+    </p>
+    
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                
+     
      
     <br>
 
@@ -946,7 +1179,7 @@ private elemental subroutine destroy_rk(self)
 <div class="panel panel-primary">
   <div class="panel-heading text-left"><h3 class="panel-title">Source Code</h3></div>
   <div class="list-group">
-    <a class="list-group-item" href="../proc/destroy_rk.html#src">destroy_rk</a>
+    <a class="list-group-item" href="../proc/integrate_ms_runge_kutta_ssp.html#src">integrate_ms_runge_kutta_ssp</a>
   </div>
 </div>
 
@@ -974,21 +1207,61 @@ private elemental subroutine destroy_rk(self)
     
     <section>
     <h2><span class="anchor" id="src"></span>Source Code</h2>
-    <div class="highlight"><pre><span></span>  <span class="k">elemental subroutine </span><span class="n">destroy_rk</span><span class="p">(</span><span class="n">self</span><span class="p">)</span>
-  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
-  <span class="c">!&lt; Destoy the integrator.</span>
-  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
-  <span class="k">class</span><span class="p">(</span><span class="n">tvd_runge_kutta_integrator</span><span class="p">),</span> <span class="k">intent</span><span class="p">(</span><span class="n">INOUT</span><span class="p">)</span> <span class="kd">::</span> <span class="n">self</span> <span class="c">!&lt; Integrator.</span>
-  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
+    <div class="highlight"><pre><span></span>  <span class="k">subroutine </span><span class="n">integrate_ms_runge_kutta_ssp</span><span class="p">(</span><span class="n">scheme</span><span class="p">,</span> <span class="n">frequency</span><span class="p">,</span> <span class="n">final_time</span><span class="p">,</span> <span class="n">solution</span><span class="p">,</span> <span class="n">error</span><span class="p">,</span> <span class="n">last_step</span><span class="p">,</span> <span class="n">iterations</span><span class="p">,</span> <span class="n">Dt</span><span class="p">,</span> <span class="n">tolerance</span><span class="p">)</span>
+  <span class="c">!&lt; Integrate domain by means of the Multistep Runge-Kutta SSP scheme.</span>
+  <span class="kt">character</span><span class="p">(</span><span class="o">*</span><span class="p">),</span>           <span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span>           <span class="kd">::</span> <span class="n">scheme</span>        <span class="c">!&lt; Selected scheme.</span>
+  <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">),</span>              <span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span>           <span class="kd">::</span> <span class="n">frequency</span>     <span class="c">!&lt; Oscillation frequency.</span>
+  <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">),</span>              <span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span>           <span class="kd">::</span> <span class="n">final_time</span>    <span class="c">!&lt; Final integration time.</span>
+  <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">),</span> <span class="k">allocatable</span><span class="p">,</span> <span class="k">intent</span><span class="p">(</span><span class="n">out</span><span class="p">)</span>          <span class="kd">::</span> <span class="n">solution</span><span class="p">(:,:)</span> <span class="c">!&lt; Solution at each time step, X-Y.</span>
+  <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">),</span>              <span class="k">intent</span><span class="p">(</span><span class="n">out</span><span class="p">)</span>          <span class="kd">::</span> <span class="n">error</span><span class="p">(</span><span class="mi">1</span><span class="p">:)</span>     <span class="c">!&lt; Error (norm L2) with respect the exact solution.</span>
+  <span class="kt">integer</span><span class="p">(</span><span class="n">I_P</span><span class="p">),</span>           <span class="k">intent</span><span class="p">(</span><span class="n">out</span><span class="p">)</span>          <span class="kd">::</span> <span class="n">last_step</span>     <span class="c">!&lt; Last time step computed.</span>
+  <span class="kt">integer</span><span class="p">(</span><span class="n">I_P</span><span class="p">),</span>           <span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">),</span> <span class="k">optional</span> <span class="kd">::</span> <span class="n">iterations</span>    <span class="c">!&lt; Number of fixed point iterations.</span>
+  <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">),</span>              <span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">),</span> <span class="k">optional</span> <span class="kd">::</span> <span class="n">Dt</span>            <span class="c">!&lt; Time step.</span>
+  <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">),</span>              <span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">),</span> <span class="k">optional</span> <span class="kd">::</span> <span class="n">tolerance</span>     <span class="c">!&lt; Local error tolerance.</span>
+  <span class="k">type</span><span class="p">(</span><span class="n">integrator_ms_runge_kutta_ssp</span><span class="p">)</span>          <span class="kd">::</span> <span class="n">integrator</span>    <span class="c">!&lt; The integrator.</span>
+  <span class="k">type</span><span class="p">(</span><span class="n">integrator_runge_kutta_ssp</span><span class="p">)</span>             <span class="kd">::</span> <span class="n">integrator_rk</span> <span class="c">!&lt; RK integrator for starting non self-starting integrators.</span>
+  <span class="k">type</span><span class="p">(</span><span class="n">oscillator</span><span class="p">)</span>                             <span class="kd">::</span> <span class="n">domain</span>        <span class="c">!&lt; Oscillation field.</span>
+  <span class="k">type</span><span class="p">(</span><span class="n">oscillator</span><span class="p">),</span> <span class="k">allocatable</span>                <span class="kd">::</span> <span class="n">rk_stage</span><span class="p">(:)</span>   <span class="c">!&lt; Runge-Kutta stages for the RK initial integrator.</span>
+  <span class="k">type</span><span class="p">(</span><span class="n">oscillator</span><span class="p">),</span> <span class="k">allocatable</span>                <span class="kd">::</span> <span class="n">stage</span><span class="p">(:)</span>      <span class="c">!&lt; Runge-Kutta stages.</span>
+  <span class="k">type</span><span class="p">(</span><span class="n">oscillator</span><span class="p">),</span> <span class="k">allocatable</span>                <span class="kd">::</span> <span class="n">previous</span><span class="p">(:)</span>   <span class="c">!&lt; Previous time steps solutions.</span>
+  <span class="kt">integer</span>                                      <span class="kd">::</span> <span class="n">step</span>          <span class="c">!&lt; Time steps counter.</span>
 
-  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
-  <span class="n">self</span><span class="p">%</span><span class="n">stages</span> <span class="o">=</span> <span class="mi">0</span>
-  <span class="k">if</span> <span class="p">(</span><span class="nb">allocated</span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">alph</span><span class="p">))</span> <span class="k">deallocate</span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">alph</span><span class="p">)</span>
-  <span class="k">if</span> <span class="p">(</span><span class="nb">allocated</span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">beta</span><span class="p">))</span> <span class="k">deallocate</span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">beta</span><span class="p">)</span>
-  <span class="k">if</span> <span class="p">(</span><span class="nb">allocated</span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">gamm</span><span class="p">))</span> <span class="k">deallocate</span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">gamm</span><span class="p">)</span>
-  <span class="k">return</span>
-  <span class="c">!---------------------------------------------------------------------------------------------------------------------------------</span>
-  <span class="n">endsubroutine</span> <span class="n">destroy_rk</span>
+  <span class="k">call </span><span class="n">domain</span><span class="p">%</span><span class="n">init</span><span class="p">(</span><span class="n">initial_state</span><span class="o">=</span><span class="n">initial_state</span><span class="p">,</span> <span class="n">frequency</span><span class="o">=</span><span class="n">frequency</span><span class="p">)</span>
+
+  <span class="k">if</span> <span class="p">(</span><span class="nb">allocated</span><span class="p">(</span><span class="n">solution</span><span class="p">))</span> <span class="k">deallocate</span><span class="p">(</span><span class="n">solution</span><span class="p">)</span> <span class="p">;</span> <span class="k">allocate</span><span class="p">(</span><span class="n">solution</span><span class="p">(</span><span class="mi">0</span><span class="p">:</span><span class="n">space_dimension</span><span class="p">,</span> <span class="mi">0</span><span class="p">:</span><span class="nb">int</span><span class="p">(</span><span class="n">final_time</span><span class="o">/</span><span class="n">Dt</span><span class="p">)))</span>
+  <span class="n">solution</span> <span class="o">=</span> <span class="mf">0.0_R_P</span>
+  <span class="n">solution</span><span class="p">(</span><span class="mi">1</span><span class="p">:,</span> <span class="mi">0</span><span class="p">)</span> <span class="o">=</span> <span class="n">domain</span><span class="p">%</span><span class="n">output</span><span class="p">()</span>
+
+  <span class="k">call </span><span class="n">integrator</span><span class="p">%</span><span class="n">initialize</span><span class="p">(</span><span class="n">scheme</span><span class="o">=</span><span class="n">scheme</span><span class="p">)</span>
+  <span class="k">if</span> <span class="p">(</span><span class="nb">allocated</span><span class="p">(</span><span class="n">previous</span><span class="p">))</span> <span class="k">deallocate</span><span class="p">(</span><span class="n">previous</span><span class="p">)</span> <span class="p">;</span> <span class="k">allocate</span><span class="p">(</span><span class="n">previous</span><span class="p">(</span><span class="mi">1</span><span class="p">:</span><span class="n">integrator</span><span class="p">%</span><span class="n">steps</span><span class="p">))</span>
+  <span class="k">if</span> <span class="p">(</span><span class="nb">allocated</span><span class="p">(</span><span class="n">stage</span><span class="p">))</span> <span class="k">deallocate</span><span class="p">(</span><span class="n">stage</span><span class="p">)</span> <span class="p">;</span> <span class="k">allocate</span><span class="p">(</span><span class="n">stage</span><span class="p">(</span><span class="mi">1</span><span class="p">:</span><span class="n">integrator</span><span class="p">%</span><span class="n">stages</span><span class="p">))</span>
+
+  <span class="k">call </span><span class="n">integrator_rk</span><span class="p">%</span><span class="n">initialize</span><span class="p">(</span><span class="n">scheme</span><span class="o">=</span><span class="s1">&#39;runge_kutta_ssp_stages_5_order_4&#39;</span><span class="p">)</span>
+  <span class="k">if</span> <span class="p">(</span><span class="nb">allocated</span><span class="p">(</span><span class="n">rk_stage</span><span class="p">))</span> <span class="k">deallocate</span><span class="p">(</span><span class="n">rk_stage</span><span class="p">)</span> <span class="p">;</span> <span class="k">allocate</span><span class="p">(</span><span class="n">rk_stage</span><span class="p">(</span><span class="mi">1</span><span class="p">:</span><span class="n">integrator_rk</span><span class="p">%</span><span class="n">stages</span><span class="p">))</span>
+
+  <span class="n">step</span> <span class="o">=</span> <span class="mi">0</span>
+  <span class="k">do while</span><span class="p">(</span><span class="n">solution</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">step</span><span class="p">)</span> <span class="o">&lt;</span> <span class="n">final_time</span> <span class="p">.</span><span class="nb">and</span><span class="p">.</span> <span class="n">step</span> <span class="o">&lt;</span> <span class="nb">ubound</span><span class="p">(</span><span class="n">solution</span><span class="p">,</span> <span class="nb">dim</span><span class="o">=</span><span class="mi">2</span><span class="p">))</span>
+    <span class="n">step</span> <span class="o">=</span> <span class="n">step</span> <span class="o">+</span> <span class="mi">1</span>
+
+    <span class="k">if</span> <span class="p">(</span><span class="n">integrator</span><span class="p">%</span><span class="n">steps</span> <span class="o">&gt;=</span> <span class="n">step</span><span class="p">)</span> <span class="k">then</span>
+<span class="k">      call </span><span class="n">integrator_rk</span><span class="p">%</span><span class="n">integrate</span><span class="p">(</span><span class="n">U</span><span class="o">=</span><span class="n">domain</span><span class="p">,</span> <span class="n">stage</span><span class="o">=</span><span class="n">rk_stage</span><span class="p">,</span> <span class="n">Dt</span><span class="o">=</span><span class="n">Dt</span><span class="p">,</span> <span class="n">t</span><span class="o">=</span><span class="n">solution</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">step</span><span class="p">))</span>
+      <span class="n">previous</span><span class="p">(</span><span class="n">step</span><span class="p">)</span> <span class="o">=</span> <span class="n">domain</span>
+    <span class="k">else</span>
+<span class="k">      call </span><span class="n">integrator</span><span class="p">%</span><span class="n">integrate</span><span class="p">(</span><span class="n">U</span><span class="o">=</span><span class="n">domain</span><span class="p">,</span>          <span class="p">&amp;</span>
+                                <span class="n">previous</span><span class="o">=</span><span class="n">previous</span><span class="p">,</span> <span class="p">&amp;</span>
+                                <span class="n">stage</span><span class="o">=</span><span class="n">stage</span><span class="p">,</span>       <span class="p">&amp;</span>
+                                <span class="n">Dt</span><span class="o">=</span><span class="n">Dt</span><span class="p">,</span>             <span class="p">&amp;</span>
+                                <span class="n">t</span><span class="o">=</span><span class="n">solution</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">step</span><span class="o">-</span><span class="n">integrator</span><span class="p">%</span><span class="n">steps</span><span class="p">:</span><span class="n">step</span><span class="o">-</span><span class="mi">1</span><span class="p">))</span>
+    <span class="n">endif</span>
+
+    <span class="n">solution</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">step</span><span class="p">)</span> <span class="o">=</span> <span class="n">step</span> <span class="o">*</span> <span class="n">Dt</span>
+
+    <span class="n">solution</span><span class="p">(</span><span class="mi">1</span><span class="p">:,</span> <span class="n">step</span><span class="p">)</span> <span class="o">=</span> <span class="n">domain</span><span class="p">%</span><span class="n">output</span><span class="p">()</span>
+  <span class="n">enddo</span>
+  <span class="n">last_step</span> <span class="o">=</span> <span class="n">step</span>
+
+  <span class="n">error</span> <span class="o">=</span> <span class="n">error_L2</span><span class="p">(</span><span class="n">frequency</span><span class="o">=</span><span class="n">frequency</span><span class="p">,</span> <span class="n">solution</span><span class="o">=</span><span class="n">solution</span><span class="p">(:,</span> <span class="mi">0</span><span class="p">:</span><span class="n">last_step</span><span class="p">))</span>
+  <span class="n">endsubroutine</span> <span class="n">integrate_ms_runge_kutta_ssp</span>
 </pre></div>
 
     </section>

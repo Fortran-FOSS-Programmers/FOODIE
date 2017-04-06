@@ -15,6 +15,7 @@ use foodie, only : foodie_integrator,                  &
                    integrator_leapfrog,                &
                    integrator_lmm_ssp,                 &
                    integrator_lmm_ssp_vss,             &
+                   integrator_ms_runge_kutta_ssp,      &
                    integrator_object,                  &
                    integrator_runge_kutta_emd,         &
                    integrator_runge_kutta_ls,          &
@@ -265,6 +266,7 @@ contains
     type(integrator_leapfrog)                :: int_leapfrog                !< Leapfrog integrator.
     type(integrator_lmm_ssp)                 :: int_lmm_ssp                 !< LMM SSP integrator.
     type(integrator_lmm_ssp_vss)             :: int_lmm_ssp_vss             !< LMM SSP VSS integrator.
+    type(integrator_ms_runge_kutta_ssp)      :: int_ms_runge_kutta_ssp      !< Multistep Runge Kutta SSP integrator.
     type(integrator_runge_kutta_ls)          :: int_runge_kutta_ls          !< Runge Kutta low storage integrator.
     type(integrator_runge_kutta_ssp)         :: int_runge_kutta_ssp         !< Runge Kutta SSP integrator.
 
@@ -284,6 +286,8 @@ contains
        integrate => integrate_lmm_ssp_vss
     elseif (index(trim(adjustl(scheme)), trim(int_lmm_ssp%class_name())) > 0) then
        integrate => integrate_lmm_ssp
+    elseif (index(trim(adjustl(scheme)), trim(int_ms_runge_kutta_ssp%class_name())) > 0) then
+       integrate => integrate_ms_runge_kutta_ssp
     elseif (index(trim(adjustl(scheme)), trim(int_runge_kutta_emd%class_name())) > 0) then
        integrate => integrate_runge_kutta_emd
     elseif (index(trim(adjustl(scheme)), trim(int_runge_kutta_ls%class_name())) > 0) then
@@ -750,6 +754,62 @@ contains
 
   error = error_L2(frequency=frequency, solution=solution(:, 0:last_step))
   endsubroutine integrate_lmm_ssp_vss
+
+  subroutine integrate_ms_runge_kutta_ssp(scheme, frequency, final_time, solution, error, last_step, iterations, Dt, tolerance)
+  !< Integrate domain by means of the Multistep Runge-Kutta SSP scheme.
+  character(*),           intent(in)           :: scheme        !< Selected scheme.
+  real(R_P),              intent(in)           :: frequency     !< Oscillation frequency.
+  real(R_P),              intent(in)           :: final_time    !< Final integration time.
+  real(R_P), allocatable, intent(out)          :: solution(:,:) !< Solution at each time step, X-Y.
+  real(R_P),              intent(out)          :: error(1:)     !< Error (norm L2) with respect the exact solution.
+  integer(I_P),           intent(out)          :: last_step     !< Last time step computed.
+  integer(I_P),           intent(in), optional :: iterations    !< Number of fixed point iterations.
+  real(R_P),              intent(in), optional :: Dt            !< Time step.
+  real(R_P),              intent(in), optional :: tolerance     !< Local error tolerance.
+  type(integrator_ms_runge_kutta_ssp)          :: integrator    !< The integrator.
+  type(integrator_runge_kutta_ssp)             :: integrator_rk !< RK integrator for starting non self-starting integrators.
+  type(oscillator)                             :: domain        !< Oscillation field.
+  type(oscillator), allocatable                :: rk_stage(:)   !< Runge-Kutta stages for the RK initial integrator.
+  type(oscillator), allocatable                :: stage(:)      !< Runge-Kutta stages.
+  type(oscillator), allocatable                :: previous(:)   !< Previous time steps solutions.
+  integer                                      :: step          !< Time steps counter.
+
+  call domain%init(initial_state=initial_state, frequency=frequency)
+
+  if (allocated(solution)) deallocate(solution) ; allocate(solution(0:space_dimension, 0:int(final_time/Dt)))
+  solution = 0.0_R_P
+  solution(1:, 0) = domain%output()
+
+  call integrator%initialize(scheme=scheme)
+  if (allocated(previous)) deallocate(previous) ; allocate(previous(1:integrator%steps))
+  if (allocated(stage)) deallocate(stage) ; allocate(stage(1:integrator%stages))
+
+  call integrator_rk%initialize(scheme='runge_kutta_ssp_stages_5_order_4')
+  if (allocated(rk_stage)) deallocate(rk_stage) ; allocate(rk_stage(1:integrator_rk%stages))
+
+  step = 0
+  do while(solution(0, step) < final_time .and. step < ubound(solution, dim=2))
+    step = step + 1
+
+    if (integrator%steps >= step) then
+      call integrator_rk%integrate(U=domain, stage=rk_stage, Dt=Dt, t=solution(0, step))
+      previous(step) = domain
+    else
+      call integrator%integrate(U=domain,          &
+                                previous=previous, &
+                                stage=stage,       &
+                                Dt=Dt,             &
+                                t=solution(0, step-integrator%steps:step-1))
+    endif
+
+    solution(0, step) = step * Dt
+
+    solution(1:, step) = domain%output()
+  enddo
+  last_step = step
+
+  error = error_L2(frequency=frequency, solution=solution(:, 0:last_step))
+  endsubroutine integrate_ms_runge_kutta_ssp
 
   subroutine integrate_runge_kutta_emd(scheme, frequency, final_time, solution, error, last_step, iterations, Dt, tolerance)
   !< Integrate domain by means of the Runge Kutta embedded scheme.
