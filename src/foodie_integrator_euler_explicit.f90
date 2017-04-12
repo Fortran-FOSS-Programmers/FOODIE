@@ -15,8 +15,8 @@ module foodie_integrator_euler_explicit
 !< @note The value of \(\Delta t\) must be provided, it not being computed by the integrator.
 
 use foodie_adt_integrand, only : integrand
-use foodie_kinds, only : I_P, R_P
 use foodie_integrator_object, only : integrator_object
+use penf, only : I_P, R_P
 
 implicit none
 private

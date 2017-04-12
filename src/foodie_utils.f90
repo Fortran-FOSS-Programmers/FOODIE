@@ -3,7 +3,7 @@
 module foodie_utils
 !< FOODIE utils: module of (possible) unrelated utilities of FOODIE library.
 
-use foodie_kinds, only : I_P
+use penf, only : I_P
 
 implicit none
 private
