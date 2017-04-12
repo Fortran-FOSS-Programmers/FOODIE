@@ -3,7 +3,7 @@
 module foodie_adt_integrand
 !< Define the abstract type *integrand* for building FOODIE ODE integrators.
 
-use foodie_kinds, only : R_P
+use penf, only : R_P
 
 implicit none
 private

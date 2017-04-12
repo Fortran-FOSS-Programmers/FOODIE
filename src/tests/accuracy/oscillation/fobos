@@ -6,16 +6,16 @@ modes = gnu gnu-debug gnu-coverage
         intel-pure intel-debug-pure
 
 [common-variables]
-$CSTATIC_GNU          = -cpp -c -frealloc-lhs
-$CSTATIC_INT          = -cpp -c -assume realloc_lhs
-$DEBUG_GNU            = -Og -g3 -Warray-bounds -Wcharacter-truncation -Wline-truncation -Wimplicit-interface -Wimplicit-procedure -Wunderflow -Wuninitialized -fcheck=all -fmodule-private -ffree-line-length-132 -fimplicit-none -fbacktrace -fdump-core -finit-real=nan -std=f2008 -fall-intrinsics
-$DEBUG_INT            = -O0 -debug all -check all -warn all -extend-source 132 -traceback -gen-interfaces -fp-stack-check -fstack-protector-all -ftrapuv -no-ftz -std08
-$OPTIMIZE             = -O2
-$EXDIRS               = src/tests/parallel/ src/tests/regression/
-                        PENF/src/tests/
-                        FACE/src/tests/ FACE/src/third_party/
-                        FLAP/src/tests/ FLAP/src/third_party/
-                        WenOOF/src/tests/ WenOOF/src/third_party/
+$CSTATIC_GNU = -cpp -c -frealloc-lhs
+$CSTATIC_INT = -cpp -c -assume realloc_lhs
+$DEBUG_GNU   = -Og -g3 -Warray-bounds -Wcharacter-truncation -Wline-truncation -Wimplicit-interface -Wimplicit-procedure -Wunderflow -Wuninitialized -fcheck=all -fmodule-private -ffree-line-length-132 -fimplicit-none -fbacktrace -fdump-core -finit-real=nan -std=f2008 -fall-intrinsics
+$DEBUG_INT   = -O0 -debug all -check all -warn all -extend-source 132 -traceback -gen-interfaces -fp-stack-check -fstack-protector-all -ftrapuv -no-ftz -std08
+$OPTIMIZE    = -O2
+$EXDIRS      = src/tests/parallel/ src/tests/regression/
+               PENF/src/tests/
+               FACE/src/tests/ FACE/src/third_party/
+               FLAP/src/tests/ FLAP/src/third_party/
+               WenOOF/src/tests/ WenOOF/src/third_party/
 
 # main modes
 [gnu]
@@ -35,8 +35,8 @@ template = template-common
 [gnu-coverage]
 help     = Build test in release coverage mode with GNU gfortran
 compiler = gnu
-cflags   = $CSTATIC_GNU $OPTIMIZE
-lflags   = $OPTIMIZE
+cflags   = $CSTATIC_GNU $DEBUG_GNU
+lflags   = $DEBUG_GNU
 coverage = True
 template = template-common
 
@@ -125,4 +125,3 @@ colors          = True
 quiet           = False
 log             = True
 jobs            = 10
-

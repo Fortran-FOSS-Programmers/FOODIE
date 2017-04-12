@@ -4,7 +4,7 @@ module foodie_integrator_object
 !< Define the abstract type *integrator* of FOODIE ODE integrators.
 
 use, intrinsic :: iso_fortran_env, only : stderr=>error_unit
-use foodie_kinds, only : I_P
+use penf, only : I_P
 
 implicit none
 private

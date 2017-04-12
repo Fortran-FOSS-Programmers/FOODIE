@@ -65,7 +65,6 @@ use, intrinsic :: iso_fortran_env, only : stderr=>error_unit
 use foodie_adt_integrand, only : integrand
 use foodie_error_codes, only : ERROR_UNSUPPORTED_SCHEME
 use foodie_integrator_object, only : integrator_object
-use foodie_kinds, only : I_P, R_P
 use foodie_integrator_adams_bashforth, only : integrator_adams_bashforth
 use foodie_integrator_adams_bashforth_moulton, only : integrator_adams_bashforth_moulton
 use foodie_integrator_adams_moulton, only : integrator_adams_moulton
@@ -78,6 +77,7 @@ use foodie_integrator_ms_runge_kutta_ssp, only : integrator_ms_runge_kutta_ssp
 use foodie_integrator_runge_kutta_emd, only : integrator_runge_kutta_emd
 use foodie_integrator_runge_kutta_low_storage, only : integrator_runge_kutta_ls
 use foodie_integrator_runge_kutta_ssp, only : integrator_runge_kutta_ssp
+use penf, only : I_P, R_P
 
 implicit none
 private

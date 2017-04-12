@@ -3,7 +3,7 @@
 module foodie_error_codes
 !< FOODIE error codes list.
 
-use foodie_kinds, only : I_P
+use penf, only : I_P
 
 implicit none
 private

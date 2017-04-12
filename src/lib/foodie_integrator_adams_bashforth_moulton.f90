@@ -78,10 +78,10 @@ module foodie_integrator_adams_bashforth_moulton
 
 use foodie_adt_integrand, only : integrand
 use foodie_error_codes, only : ERROR_UNSUPPORTED_SCHEME
-use foodie_kinds, only : I_P, R_P
 use foodie_integrator_adams_bashforth, only : integrator_adams_bashforth
 use foodie_integrator_adams_moulton, only : integrator_adams_moulton
 use foodie_integrator_object, only : integrator_object
+use penf, only : I_P, R_P
 
 implicit none
 private
