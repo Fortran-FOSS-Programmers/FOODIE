@@ -99,6 +99,9 @@ FOODIE is aimed to be a KISS-pure-Fortran library for integrating Ordinary Diffe
             + [ ] 4 steps, 9 stages, 9th order accurate;
             + [ ] 3 steps, 20 stages, 10th order accurate;
         + [ ] Runge-Kutta schemes:
+            + [+] [Linear SSP (of any order)](http://fortran-foss-programmers.github.io/FOODIE/module/foodie_integrator_runge_kutta_lssp.html) schemes, see [16]:
+                + [x] generic s-stages of order (s-1)-th;
+                + [x] generic s-stages of order s-th;
             + [ ] [low-storage](http://fortran-foss-programmers.github.io/FOODIE/module/foodie_integrator_runge_kutta_low_storage.html) schemes, see [1, 2, 3]:
                 + [x] 1 stage, namely the forward explicit Euler scheme, 1st order accurate;
                 + [ ] 2 stages;
