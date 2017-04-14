@@ -76,6 +76,7 @@ use foodie_integrator_lmm_ssp_vss, only : integrator_lmm_ssp_vss
 use foodie_integrator_ms_runge_kutta_ssp, only : integrator_ms_runge_kutta_ssp
 use foodie_integrator_runge_kutta_emd, only : integrator_runge_kutta_emd
 use foodie_integrator_runge_kutta_low_storage, only : integrator_runge_kutta_ls
+use foodie_integrator_runge_kutta_lssp, only : integrator_runge_kutta_lssp
 use foodie_integrator_runge_kutta_ssp, only : integrator_runge_kutta_ssp
 use penf, only : I_P, R_P
 
@@ -97,19 +98,21 @@ public :: integrator_lmm_ssp_vss
 public :: integrator_ms_runge_kutta_ssp
 public :: integrator_runge_kutta_emd
 public :: integrator_runge_kutta_ls
+public :: integrator_runge_kutta_lssp
 public :: integrator_runge_kutta_ssp
 public :: is_available
 public :: is_class_available
 public :: is_scheme_available
 
 contains
-  function foodie_integrator(scheme, tolerance, nu, alpha) result(integrator)
+  function foodie_integrator(scheme, stages, tolerance, nu, alpha) result(integrator)
   !< Return a concrete instance of [[integrator_object]] given a scheme selection.
   !<
   !< This is the FOODIE integrators factory.
   !<
   !< @note If an error occurs the error status of [[integrator_object]] is updated.
   character(*), intent(in)                 :: scheme                      !< Selected integrator given.
+  integer(I_P), intent(in), optional       :: stages                      !< Stages of multi-stage methods.
   real(R_P),    intent(in), optional       :: tolerance                   !< Tolerance on the local truncation error.
   real(R_P),    intent(in), optional       :: nu                          !< Williams-Robert-Asselin filter coefficient.
   real(R_P),    intent(in), optional       :: alpha                       !< Robert-Asselin filter coefficient.
@@ -120,12 +123,13 @@ contains
   type(integrator_back_df)                 :: int_back_df                 !< Integrator back differentiation formula.
   type(integrator_euler_explicit)          :: int_euler_explicit          !< Integrator euler explicit.
   type(integrator_leapfrog)                :: int_leapfrog                !< Integrator leapfrog.
-  type(integrator_lmm_ssp)                 :: int_lmm_ssp                 !< Integrator lmm ssp.
-  type(integrator_lmm_ssp_vss)             :: int_lmm_ssp_vss             !< Integrator lmm ssp_vss.
+  type(integrator_lmm_ssp)                 :: int_lmm_ssp                 !< Integrator LMM SSP.
+  type(integrator_lmm_ssp_vss)             :: int_lmm_ssp_vss             !< Integrator LMM SSP VSS.
   type(integrator_ms_runge_kutta_ssp)      :: int_ms_runge_kutta_ssp      !< Integrator multistep Runge Kutta ssp.
   type(integrator_runge_kutta_emd)         :: int_runge_kutta_emd         !< Integrator Runge Kutta_embdedded.
   type(integrator_runge_kutta_ls)          :: int_runge_kutta_ls          !< Integrator Runge Kutta low storage.
-  type(integrator_runge_kutta_ssp)         :: int_runge_kutta_ssp         !< Integrator Runge Kutta ssp.
+  type(integrator_runge_kutta_lssp)        :: int_runge_kutta_lssp        !< Integrator linear Runge Kutta SSP.
+  type(integrator_runge_kutta_ssp)         :: int_runge_kutta_ssp         !< Integrator Runge Kutta SSP.
 
   if     (index(trim(adjustl(scheme)), trim(int_adams_bashforth_moulton%class_name())) > 0) then
     allocate(integrator_adams_bashforth_moulton :: integrator)
@@ -189,6 +193,12 @@ contains
     type is(integrator_runge_kutta_ls)
       call integrator%initialize(scheme=scheme)
     endselect
+  elseif (index(trim(adjustl(scheme)), trim(int_runge_kutta_lssp%class_name())) > 0) then
+    allocate(integrator_runge_kutta_lssp :: integrator)
+    select type(integrator)
+    type is(integrator_runge_kutta_lssp)
+      call integrator%initialize(scheme=scheme, stages=stages)
+    endselect
   elseif (index(trim(adjustl(scheme)), trim(int_runge_kutta_ssp%class_name())) > 0) then
     allocate(integrator_runge_kutta_ssp :: integrator)
     select type(integrator)
@@ -210,12 +220,13 @@ contains
   type(integrator_back_df)                 :: int_back_df                 !< Integrator back differentiation formula.
   type(integrator_euler_explicit)          :: int_euler_explicit          !< Integrator euler explicit.
   type(integrator_leapfrog)                :: int_leapfrog                !< Integrator leapfrog.
-  type(integrator_lmm_ssp)                 :: int_lmm_ssp                 !< Integrator lmm ssp.
-  type(integrator_lmm_ssp_vss)             :: int_lmm_ssp_vss             !< Integrator lmm ssp_vss.
+  type(integrator_lmm_ssp)                 :: int_lmm_ssp                 !< Integrator lmm SSP.
+  type(integrator_lmm_ssp_vss)             :: int_lmm_ssp_vss             !< Integrator lmm SSP VSS.
   type(integrator_ms_runge_kutta_ssp)      :: int_ms_runge_kutta_ssp      !< Integrator multistep Runge Kutta ssp.
-  type(integrator_runge_kutta_emd)         :: int_runge_kutta_emd         !< Integrator Runge Kutta_embdedded.
+  type(integrator_runge_kutta_emd)         :: int_runge_kutta_emd         !< Integrator Runge Kutta embdedded.
   type(integrator_runge_kutta_ls)          :: int_runge_kutta_ls          !< Integrator Runge Kutta low storage.
-  type(integrator_runge_kutta_ssp)         :: int_runge_kutta_ssp         !< Integrator Runge Kutta ssp.
+  type(integrator_runge_kutta_lssp)        :: int_runge_kutta_lssp        !< Integrator linear Runge Kutta SSP.
+  type(integrator_runge_kutta_ssp)         :: int_runge_kutta_ssp         !< Integrator Runge Kutta SSP.
 
   names = [       int_adams_bashforth         % class_name()]
   names = [names, int_adams_bashforth_moulton % class_name()]
@@ -228,6 +239,7 @@ contains
   names = [names, int_ms_runge_kutta_ssp      % class_name()]
   names = [names, int_runge_kutta_emd         % class_name()]
   names = [names, int_runge_kutta_ls          % class_name()]
+  names = [names, int_runge_kutta_lssp        % class_name()]
   names = [names, int_runge_kutta_ssp         % class_name()]
   endfunction foodie_integrator_class_names
 
@@ -244,12 +256,13 @@ contains
   type(integrator_back_df)                 :: int_back_df                 !< Integrator back differentiation formula.
   type(integrator_euler_explicit)          :: int_euler_explicit          !< Integrator euler explicit.
   type(integrator_leapfrog)                :: int_leapfrog                !< Integrator leapfrog.
-  type(integrator_lmm_ssp)                 :: int_lmm_ssp                 !< Integrator lmm ssp.
-  type(integrator_lmm_ssp_vss)             :: int_lmm_ssp_vss             !< Integrator lmm ssp_vss.
+  type(integrator_lmm_ssp)                 :: int_lmm_ssp                 !< Integrator lmm SSP.
+  type(integrator_lmm_ssp_vss)             :: int_lmm_ssp_vss             !< Integrator lmm SSP VSS.
   type(integrator_ms_runge_kutta_ssp)      :: int_ms_runge_kutta_ssp      !< Integrator multistep Runge Kutta ssp.
-  type(integrator_runge_kutta_emd)         :: int_runge_kutta_emd         !< Integrator Runge Kutta_embdedded.
+  type(integrator_runge_kutta_emd)         :: int_runge_kutta_emd         !< Integrator Runge Kutta embdedded.
   type(integrator_runge_kutta_ls)          :: int_runge_kutta_ls          !< Integrator Runge Kutta low storage.
-  type(integrator_runge_kutta_ssp)         :: int_runge_kutta_ssp         !< Integrator Runge Kutta ssp.
+  type(integrator_runge_kutta_lssp)        :: int_runge_kutta_lssp        !< Integrator linear Runge Kutta SSP.
+  type(integrator_runge_kutta_ssp)         :: int_runge_kutta_ssp         !< Integrator Runge Kutta SSP.
 
   if (present(class_name)) then
     if     (trim(int_adams_bashforth%class_name()) == trim(adjustl(class_name))) then
@@ -274,6 +287,8 @@ contains
       schemes = int_runge_kutta_emd%supported_schemes()
     elseif (trim(int_runge_kutta_ls%class_name()) == trim(adjustl(class_name))) then
       schemes = int_runge_kutta_ls%supported_schemes()
+    elseif (trim(int_runge_kutta_lssp%class_name()) == trim(adjustl(class_name))) then
+      schemes = int_runge_kutta_lssp%supported_schemes()
     elseif (trim(int_runge_kutta_ssp%class_name()) == trim(adjustl(class_name))) then
       schemes = int_runge_kutta_ssp%supported_schemes()
     endif
@@ -289,6 +304,7 @@ contains
     schemes = [schemes, int_ms_runge_kutta_ssp      % supported_schemes()]
     schemes = [schemes, int_runge_kutta_emd         % supported_schemes()]
     schemes = [schemes, int_runge_kutta_ls          % supported_schemes()]
+    schemes = [schemes, int_runge_kutta_lssp        % supported_schemes()]
     schemes = [schemes, int_runge_kutta_ssp         % supported_schemes()]
   endif
   endfunction foodie_integrator_schemes

@@ -75,6 +75,7 @@ type, extends(integrator_object) :: integrator_lmm_ssp_vss
     procedure, pass(self) :: update_previous !< Cyclic update previous time steps.
     ! private methods
     procedure, pass(self), private :: integrate_order_2 !< Integrate integrand field by 2nd order formula.
+    procedure, pass(self), private :: integrate_order_3 !< Integrate integrand field by 3rd order formula.
 endtype integrator_lmm_ssp_vss
 
 abstract interface
