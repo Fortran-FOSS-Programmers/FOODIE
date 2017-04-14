@@ -134,7 +134,7 @@
      <li><i class="fa fa-list-ol"></i>
        <a data-toggle="tooltip"
 	  data-placement="bottom" data-html="true"
-	  title="<p> 3.2% of total for derived types.</p>Including implementation: 184 statements,  2.5% of total for derived types.">16 statements</a>
+	  title="<p> 3.2% of total for derived types.</p>Including implementation: 201 statements,  2.6% of total for derived types.">17 statements</a>
      </li> 
      
      
@@ -227,6 +227,8 @@
       
       <a class="list-group-item" href="../type/integrator_lmm_ssp_vss.html#boundprocedure-integrate_order_2">integrate_order_2</a>
       
+      <a class="list-group-item" href="../type/integrator_lmm_ssp_vss.html#boundprocedure-integrate_order_3">integrate_order_3</a>
+      
       <a class="list-group-item" href="../type/integrator_lmm_ssp_vss.html#boundprocedure-is_supported%7E8">is_supported</a>
       
       <a class="list-group-item" href="../type/integrator_lmm_ssp_vss.html#boundprocedure-supported_schemes%7E8">supported_schemes</a>
@@ -294,6 +296,8 @@
       <a class="list-group-item" href="../type/integrator_runge_kutta_emd.html">integrator_runge_kutta_emd</a>
       
       <a class="list-group-item" href="../type/integrator_runge_kutta_ls.html">integrator_runge_kutta_ls</a>
+      
+      <a class="list-group-item" href="../type/integrator_runge_kutta_lssp.html">integrator_runge_kutta_lssp</a>
       
       <a class="list-group-item" href="../type/integrator_runge_kutta_ssp.html">integrator_runge_kutta_ssp</a>
       
@@ -469,6 +473,8 @@
       <a class="list-group-item" href="../type/integrator_lmm_ssp_vss.html#boundprocedure-integrate%7E8">integrate</a>
       
       <a class="list-group-item" href="../type/integrator_lmm_ssp_vss.html#boundprocedure-integrate_order_2">integrate_order_2</a>
+      
+      <a class="list-group-item" href="../type/integrator_lmm_ssp_vss.html#boundprocedure-integrate_order_3">integrate_order_3</a>
       
       <a class="list-group-item" href="../type/integrator_lmm_ssp_vss.html#boundprocedure-is_supported%7E8">is_supported</a>
       
@@ -1703,6 +1709,158 @@ private subroutine <a href='../proc/integrate_order_2.html'>integrate_order_2</a
     
 	   
 <div class="panel panel-default">
+  <div class="panel-heading codesum"><span class="anchor" id="boundprocedure-integrate_order_3"></span><h3>procedure, private, pass(self) :: <strong>integrate_order_3</strong>  
+    
+  </h3></div>
+  
+  <div class="panel-body">
+    
+
+
+    <p>Integrate integrand field by 3rd order formula.</p>
+  </div>
+  
+  <ul class="list-group">
+    
+      <li class="list-group-item">
+      
+         
+    
+    <h3>
+private subroutine <a href='../proc/integrate_order_3.html'>integrate_order_3</a>(self, U, previous, Dt, t, autoupdate)
+    
+    
+	 
+</h3>
+    
+
+
+
+
+
+
+
+<p>Integrate field with LMM-SSP-VSS 3rd order class scheme.</p>
+    
+    <h4>Arguments</h4>
+    
+      
+      
+<table class="table table-striped varlist">
+<thead><tr><th>Type</th>
+<th>Intent</th><th>Optional</th>
+<th>Attributes</th><th></th><th>Name</th><th></th></thead>
+
+
+
+<tbody>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>class(<a href='../type/integrator_lmm_ssp_vss.html'>integrator_lmm_ssp_vss</a>),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>self</strong></td><td><p>Integrator.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>class(<a href='../type/integrand.html'>integrand</a>),</td>
+  <td>intent(inout)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>U</strong></td><td><p>Field to be integrated.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>class(<a href='../type/integrand.html'>integrand</a>),</td>
+  <td>intent(inout)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>previous</strong>(1:)</td><td><p>Previous time steps solutions of integrand field.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>real(kind=R_P),</td>
+  <td>intent(inout)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>Dt</strong>(:)</td><td><p>Time steps.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>real(kind=R_P),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>t</strong>(:)</td><td><p>Times.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>logical,</td>
+  <td>intent(in),</td>
+  <td>optional</td>
+  
+  <td></td><td>::</td>
+  <td><strong>autoupdate</strong></td><td><p>Perform cyclic autoupdate of previous time steps.</p></td>
+  
+</tr>
+
+</tbody>
+</table>
+
+      
+    
+    
+
+      
+      </li>
+    
+  </ul>
+</div>
+
+    
+	   
+<div class="panel panel-default">
   <div class="panel-heading codesum"><span class="anchor" id="boundprocedure-is_supported%7E8"></span><h3>procedure, public, pass(self) :: <strong>is_supported</strong>  
     
   </h3></div>
@@ -2160,6 +2318,7 @@ private subroutine <a href='../proc/update_previous%7E5.html'>update_previous</a
     <span class="k">procedure</span><span class="p">,</span> <span class="k">pass</span><span class="p">(</span><span class="n">self</span><span class="p">)</span> <span class="kd">::</span> <span class="n">update_previous</span> <span class="c">!&lt; Cyclic update previous time steps.</span>
     <span class="c">! private methods</span>
     <span class="k">procedure</span><span class="p">,</span> <span class="k">pass</span><span class="p">(</span><span class="n">self</span><span class="p">),</span> <span class="k">private</span> <span class="kd">::</span> <span class="n">integrate_order_2</span> <span class="c">!&lt; Integrate integrand field by 2nd order formula.</span>
+    <span class="k">procedure</span><span class="p">,</span> <span class="k">pass</span><span class="p">(</span><span class="n">self</span><span class="p">),</span> <span class="k">private</span> <span class="kd">::</span> <span class="n">integrate_order_3</span> <span class="c">!&lt; Integrate integrand field by 3rd order formula.</span>
 <span class="n">endtype</span> <span class="n">integrator_lmm_ssp_vss</span>
 </pre></div>
 
@@ -2216,6 +2375,8 @@ private subroutine <a href='../proc/update_previous%7E5.html'>update_previous</a
       
       <a class="list-group-item" href="../type/integrator_runge_kutta_ls.html">integrator_runge_kutta_ls</a>
       
+      <a class="list-group-item" href="../type/integrator_runge_kutta_lssp.html">integrator_runge_kutta_lssp</a>
+      
       <a class="list-group-item" href="../type/integrator_runge_kutta_ssp.html">integrator_runge_kutta_ssp</a>
       
       <a class="list-group-item" href="../type/lorenz.html">lorenz</a>
@@ -2245,7 +2406,7 @@ private subroutine <a href='../proc/update_previous%7E5.html'>update_previous</a
           <p class="text-right">
             Documentation generated by 
             <a href="https://github.com/cmacmackin/ford">FORD</a>
-             on 2017-04-12 15:56  
+             on 2017-04-14 09:15  
           </p>
         </div>
         <div class="col-xs-12 col-md-4 col-md-pull-4"><p class="text-center"> FOODIE was developed by Fortran-FOSS-Programmers Group</p></div>

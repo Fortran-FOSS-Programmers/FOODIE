@@ -136,18 +136,18 @@
      <li><i class="fa fa-list-ol"></i>
        <a data-toggle="tooltip"
 	  data-placement="bottom" data-html="true"
-	  title=" 3.5% of total for abstract interfaces.">14 statements</a>
+	  title=" 2.4% of total for abstract interfaces.">10 statements</a>
      </li> 
      
      
-    <li><i class="fa fa-code"></i><a href="../src/oscillation.f90"> Source File</a></li>
+    <li><i class="fa fa-code"></i><a href="../src/foodie_integrator_runge_kutta_lssp.f90"> Source File</a></li>
      
   </ul>
   <ol class="breadcrumb in-well text-right">
   
-     <li><a href='../sourcefile/oscillation.f90.html'>oscillation.f90</a></li>
+     <li><a href='../sourcefile/foodie_integrator_runge_kutta_lssp.f90.html'>foodie_integrator_runge_kutta_lssp.f90</a></li>
   
-     <li><a href='../module/oscillation_test_t.html'>oscillation_test_t</a></li>
+     <li><a href='../module/foodie_integrator_runge_kutta_lssp.html'>foodie_integrator_runge_kutta_lssp</a></li>
   
      <li class="active">integrate_interface</li>
   </ol>
@@ -211,6 +211,8 @@
       
       <a class="list-group-item" href="../interface/integrate_interface%7E2.html">integrate_interface</a>
       
+      <a class="list-group-item" href="../interface/integrate_interface%7E3.html">integrate_interface</a>
+      
       <a class="list-group-item" href="../interface/is_supported_interface.html">is_supported_interface</a>
       
       <a class="list-group-item" href="../interface/local_error_operator.html">local_error_operator</a>
@@ -236,11 +238,11 @@
 	
     
     <h2>abstract interface</h2>
-    <p>Interface for integrate procedures.</p>
+    <p>Abstract interfaces of <a href="../type/integrator_runge_kutta_lssp.html">integrator_runge_kutta_lssp</a> methods.</p>
     
     
     <h2>
-private subroutine integrate_interface(scheme, frequency, final_time, solution, error, last_step, iterations, Dt, tolerance)
+private subroutine integrate_interface(self, U, stage, Dt, t)
     
     
 	 
@@ -269,12 +271,12 @@ private subroutine integrate_interface(scheme, frequency, final_time, solution, 
   
 <tr>
   
-  <td><span class="anchor" id="variable-scheme%7E3"></span>character(len=*),</td>
+  <td><span class="anchor" id="variable-self%7E7"></span>class(<a href='../type/integrator_runge_kutta_lssp.html'>integrator_runge_kutta_lssp</a>),</td>
   <td>intent(in)</td>
   <td></td>
   
   <td></td><td>::</td>
-  <td><strong>scheme</strong></td><td><p>Selected scheme.</p></td>
+  <td><strong>self</strong></td><td><p>Integrator.</p></td>
   
 </tr>
 
@@ -284,12 +286,12 @@ private subroutine integrate_interface(scheme, frequency, final_time, solution, 
   
 <tr>
   
-  <td><span class="anchor" id="variable-frequency%7E2"></span>real(kind=R_P),</td>
-  <td>intent(in)</td>
+  <td><span class="anchor" id="variable-u%7E10"></span>class(<a href='../type/integrand.html'>integrand</a>),</td>
+  <td>intent(inout)</td>
   <td></td>
   
   <td></td><td>::</td>
-  <td><strong>frequency</strong></td><td><p>Oscillation frequency.</p></td>
+  <td><strong>U</strong></td><td><p>Field to be integrated.</p></td>
   
 </tr>
 
@@ -299,72 +301,12 @@ private subroutine integrate_interface(scheme, frequency, final_time, solution, 
   
 <tr>
   
-  <td><span class="anchor" id="variable-final_time%7E2"></span>real(kind=R_P),</td>
-  <td>intent(in)</td>
+  <td><span class="anchor" id="variable-stage"></span>class(<a href='../type/integrand.html'>integrand</a>),</td>
+  <td>intent(inout)</td>
   <td></td>
   
   <td></td><td>::</td>
-  <td><strong>final_time</strong></td><td><p>Final integration time.</p></td>
-  
-</tr>
-
-  
-  
-  
-  
-<tr>
-  
-  <td><span class="anchor" id="variable-solution"></span>real(kind=R_P),</td>
-  <td>intent(out),</td>
-  <td></td>
-  
-  <td>allocatable</td><td>::</td>
-  <td><strong>solution</strong>(:,:)</td><td><p>Solution at each time step, X-Y.</p></td>
-  
-</tr>
-
-  
-  
-  
-  
-<tr>
-  
-  <td><span class="anchor" id="variable-error%7E4"></span>real(kind=R_P),</td>
-  <td>intent(out)</td>
-  <td></td>
-  
-  <td></td><td>::</td>
-  <td><strong>error</strong>(1:)</td><td><p>Error (norm L2) with respect the exact solution.</p></td>
-  
-</tr>
-
-  
-  
-  
-  
-<tr>
-  
-  <td><span class="anchor" id="variable-last_step"></span>integer(kind=I_P),</td>
-  <td>intent(out)</td>
-  <td></td>
-  
-  <td></td><td>::</td>
-  <td><strong>last_step</strong></td><td><p>Last time step computed.</p></td>
-  
-</tr>
-
-  
-  
-  
-  
-<tr>
-  
-  <td><span class="anchor" id="variable-iterations"></span>integer(kind=I_P),</td>
-  <td>intent(in),</td>
-  <td>optional</td>
-  
-  <td></td><td>::</td>
-  <td><strong>iterations</strong></td><td><p>Number of fixed point iterations.</p></td>
+  <td><strong>stage</strong>(1:)</td><td><p>Runge-Kutta stages [1:stages].</p></td>
   
 </tr>
 
@@ -375,11 +317,11 @@ private subroutine integrate_interface(scheme, frequency, final_time, solution, 
 <tr>
   
   <td><span class="anchor" id="variable-dt%7E3"></span>real(kind=R_P),</td>
-  <td>intent(in),</td>
-  <td>optional</td>
+  <td>intent(in)</td>
+  <td></td>
   
   <td></td><td>::</td>
-  <td><strong>Dt</strong></td><td><p>Time step.</p></td>
+  <td><strong>Dt</strong></td><td><p>Time steps.</p></td>
   
 </tr>
 
@@ -389,12 +331,12 @@ private subroutine integrate_interface(scheme, frequency, final_time, solution, 
   
 <tr>
   
-  <td><span class="anchor" id="variable-tolerance%7E3"></span>real(kind=R_P),</td>
-  <td>intent(in),</td>
-  <td>optional</td>
+  <td><span class="anchor" id="variable-t%7E12"></span>real(kind=R_P),</td>
+  <td>intent(in)</td>
+  <td></td>
   
   <td></td><td>::</td>
-  <td><strong>tolerance</strong></td><td><p>Local error tolerance.</p></td>
+  <td><strong>t</strong></td><td><p>Times.</p></td>
   
 </tr>
 
@@ -403,6 +345,9 @@ private subroutine integrate_interface(scheme, frequency, final_time, solution, 
 
     
     
+    
+    <h3>Description</h3>
+    <p>Integrate field with Linear SSP Runge-Kutta scheme.</p>
     
     <br>
 
@@ -431,6 +376,8 @@ private subroutine integrate_interface(scheme, frequency, final_time, solution, 
       <a class="list-group-item" href="../interface/integrate_interface.html">integrate_interface</a>
       
       <a class="list-group-item" href="../interface/integrate_interface%7E2.html">integrate_interface</a>
+      
+      <a class="list-group-item" href="../interface/integrate_interface%7E3.html">integrate_interface</a>
       
       <a class="list-group-item" href="../interface/is_supported_interface.html">is_supported_interface</a>
       
@@ -461,7 +408,7 @@ private subroutine integrate_interface(scheme, frequency, final_time, solution, 
           <p class="text-right">
             Documentation generated by 
             <a href="https://github.com/cmacmackin/ford">FORD</a>
-             on 2017-04-12 15:56  
+             on 2017-04-14 09:15  
           </p>
         </div>
         <div class="col-xs-12 col-md-4 col-md-pull-4"><p class="text-center"> FOODIE was developed by Fortran-FOSS-Programmers Group</p></div>

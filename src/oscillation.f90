@@ -19,6 +19,7 @@ use foodie, only : foodie_integrator,                  &
                    integrator_object,                  &
                    integrator_runge_kutta_emd,         &
                    integrator_runge_kutta_ls,          &
+                   integrator_runge_kutta_lssp,        &
                    integrator_runge_kutta_ssp,         &
                    is_available, is_class_available
 use oscillation_oscillator, only : oscillator
@@ -43,6 +44,7 @@ type :: oscillation_test
   real(R_P)                    :: frequency=0.0_R_P        !< Oscillation frequency.
   real(R_P)                    :: final_time=0.0_R_P       !< Final integration time.
   integer(I_P)                 :: implicit_iterations=0    !< Number of iterations (implicit solvers).
+  integer(I_P)                 :: stages=0                 !< Number of stages.
   character(99)                :: output_cli='unset'       !< Output files basename.
   character(99)                :: scheme='adams_bashforth' !< Scheme used.
   real(R_P),    allocatable    :: Dt(:)                    !< Time step(s) exercised.
@@ -59,7 +61,7 @@ endtype oscillation_test
 
 abstract interface
   !< Interface for integrate procedures.
-  subroutine integrate_interface(scheme, frequency, final_time, solution, error, last_step, iterations, Dt, tolerance)
+  subroutine integrate_interface(scheme, frequency, final_time, solution, error, last_step, iterations, Dt, tolerance, stages)
   import :: I_P, R_P
   character(*),           intent(in)           :: scheme        !< Selected scheme.
   real(R_P),              intent(in)           :: frequency     !< Oscillation frequency.
@@ -70,6 +72,7 @@ abstract interface
   integer(I_P),           intent(in), optional :: iterations    !< Number of fixed point iterations.
   real(R_P),              intent(in), optional :: Dt            !< Time step.
   real(R_P),              intent(in), optional :: tolerance     !< Local error tolerance.
+  integer(I_P),           intent(in), optional :: stages        !< Number of stages.
   endsubroutine integrate_interface
 endinterface
 
@@ -121,6 +124,7 @@ contains
       call cli%add(switch='--time_step', switch_ab='-Dt', nargs='+', help='time step', required=.false., def='100.d0', act='store')
       call cli%add(switch='--tolerance', switch_ab='-tol', nargs='+', help='error tolerance', required=.false., def='0.001d0', &
                    act='store')
+      call cli%add(switch='--stages', help='stages number', required=.false., def='2', act='store')
       call cli%add(switch='--t_final', switch_ab='-tf', help='final integration time', required=.false., def='1e6', act='store')
       call cli%add(switch='--save_results', switch_ab='-r', help='save results', required=.false., act='store_true', def='.false.')
       call cli%add(switch='--output', help='output files basename', required=.false., act='store', def='unset')
@@ -137,6 +141,7 @@ contains
     call self%cli%parse(error=self%error)
     call self%cli%get(switch='-s', val=self%scheme, error=self%error) ; if (self%error/=0) stop
     call self%cli%get(switch='--iterations', val=self%implicit_iterations, error=self%error) ; if (self%error/=0) stop
+    call self%cli%get(switch='--stages', val=self%stages, error=self%error) ; if (self%error/=0) stop
     call self%cli%get(switch='-f', val=self%frequency, error=self%error) ; if (self%error/=0) stop
     call self%cli%get_varying(switch='-Dt', val=self%Dt, error=self%error) ; if (self%error/=0) stop
     call self%cli%get_varying(switch='-tol', val=self%tolerance, error=self%error) ; if (self%error/=0) stop
@@ -237,6 +242,7 @@ contains
                      error=error(:, t),          &
                      last_step=last_step,        &
                      Dt=self%Dt(t),              &
+                     stages=self%stages,         &
                      iterations=self%implicit_iterations)
       if (allocated(solution)) then
         print "(A,I10,A,F10.3,A,F10.3,A,E10.3,A,E10.3)", "    steps: ", last_step,              &
@@ -266,9 +272,10 @@ contains
     type(integrator_leapfrog)                :: int_leapfrog                !< Leapfrog integrator.
     type(integrator_lmm_ssp)                 :: int_lmm_ssp                 !< LMM SSP integrator.
     type(integrator_lmm_ssp_vss)             :: int_lmm_ssp_vss             !< LMM SSP VSS integrator.
-    type(integrator_ms_runge_kutta_ssp)      :: int_ms_runge_kutta_ssp      !< Multistep Runge Kutta SSP integrator.
-    type(integrator_runge_kutta_ls)          :: int_runge_kutta_ls          !< Runge Kutta low storage integrator.
-    type(integrator_runge_kutta_ssp)         :: int_runge_kutta_ssp         !< Runge Kutta SSP integrator.
+    type(integrator_ms_runge_kutta_ssp)      :: int_ms_runge_kutta_ssp      !< Multistep Runge-Kutta SSP integrator.
+    type(integrator_runge_kutta_ls)          :: int_runge_kutta_ls          !< Runge-Kutta low storage integrator.
+    type(integrator_runge_kutta_lssp)        :: int_runge_kutta_lssp        !< Linear Runge-Kutta SSP integrator.
+    type(integrator_runge_kutta_ssp)         :: int_runge_kutta_ssp         !< Runge Kutta-SSP integrator.
 
     if     (index(trim(adjustl(scheme)), trim(int_adams_bashforth_moulton%class_name())) > 0) then
        integrate => integrate_adams_bashforth_moulton
@@ -290,6 +297,8 @@ contains
        integrate => integrate_ms_runge_kutta_ssp
     elseif (index(trim(adjustl(scheme)), trim(int_runge_kutta_emd%class_name())) > 0) then
        integrate => integrate_runge_kutta_emd
+    elseif (index(trim(adjustl(scheme)), trim(int_runge_kutta_lssp%class_name())) > 0) then
+       integrate => integrate_runge_kutta_lssp
     elseif (index(trim(adjustl(scheme)), trim(int_runge_kutta_ls%class_name())) > 0) then
        integrate => integrate_runge_kutta_ls
     elseif (index(trim(adjustl(scheme)), trim(int_runge_kutta_ssp%class_name())) > 0) then
@@ -309,7 +318,8 @@ contains
   endsubroutine test
 
   ! non type bound procedures
-  subroutine integrate_adams_bashforth(scheme, frequency, final_time, solution, error, last_step, iterations, Dt, tolerance)
+  subroutine integrate_adams_bashforth(scheme, frequency, final_time, solution, error, last_step, iterations, Dt, tolerance, &
+                                       stages)
   !< Integrate domain by means of the Adams-Bashforth scheme.
   character(*),           intent(in)           :: scheme        !< Selected scheme.
   real(R_P),              intent(in)           :: frequency     !< Oscillation frequency.
@@ -320,6 +330,7 @@ contains
   integer(I_P),           intent(in), optional :: iterations    !< Number of fixed point iterations.
   real(R_P),              intent(in), optional :: Dt            !< Time step.
   real(R_P),              intent(in), optional :: tolerance     !< Local error tolerance.
+  integer(I_P),           intent(in), optional :: stages        !< Number of stages.
   type(integrator_adams_bashforth)             :: integrator    !< The integrator.
   type(integrator_runge_kutta_ssp)             :: integrator_rk !< RK integrator for starting non self-starting integrators.
   type(oscillator)                             :: domain        !< Oscillation field.
@@ -362,7 +373,8 @@ contains
   error = error_L2(frequency=frequency, solution=solution(:, 0:last_step))
   endsubroutine integrate_adams_bashforth
 
-  subroutine integrate_adams_bashforth_moulton(scheme, frequency, final_time, solution, error, last_step, iterations, Dt, tolerance)
+  subroutine integrate_adams_bashforth_moulton(scheme, frequency, final_time, solution, error, last_step, iterations, Dt, &
+                                               tolerance, stages)
   !< Integrate domain by means of the Adams-Bashforth-Moulton scheme.
   character(*),           intent(in)           :: scheme        !< Selected scheme.
   real(R_P),              intent(in)           :: frequency     !< Oscillation frequency.
@@ -373,6 +385,7 @@ contains
   integer(I_P),           intent(in), optional :: iterations    !< Number of fixed point iterations.
   real(R_P),              intent(in), optional :: Dt            !< Time step.
   real(R_P),              intent(in), optional :: tolerance     !< Local error tolerance.
+  integer(I_P),           intent(in), optional :: stages        !< Number of stages.
   type(integrator_adams_bashforth_moulton)     :: integrator    !< The integrator.
   type(integrator_runge_kutta_ssp)             :: integrator_rk !< RK integrator for starting non self-starting integrators.
   type(oscillator)                             :: domain        !< Oscillation field.
@@ -415,7 +428,7 @@ contains
   error = error_L2(frequency=frequency, solution=solution(:, 0:last_step))
   endsubroutine integrate_adams_bashforth_moulton
 
-  subroutine integrate_adams_moulton(scheme, frequency, final_time, solution, error, last_step, iterations, Dt, tolerance)
+  subroutine integrate_adams_moulton(scheme, frequency, final_time, solution, error, last_step, iterations, Dt, tolerance, stages)
   !< Integrate domain by means of the Adams-Moulton scheme.
   character(*),           intent(in)           :: scheme        !< Selected scheme.
   real(R_P),              intent(in)           :: frequency     !< Oscillation frequency.
@@ -426,6 +439,7 @@ contains
   integer(I_P),           intent(in), optional :: iterations    !< Number of fixed point iterations.
   real(R_P),              intent(in), optional :: Dt            !< Time step.
   real(R_P),              intent(in), optional :: tolerance     !< Local error tolerance.
+  integer(I_P),           intent(in), optional :: stages        !< Number of stages.
   type(integrator_adams_moulton)               :: integrator    !< The integrator.
   type(integrator_runge_kutta_ssp)             :: integrator_rk !< RK integrator for starting non self-starting integrators.
   type(oscillator)                             :: domain        !< Oscillation field.
@@ -482,7 +496,7 @@ contains
   error = error_L2(frequency=frequency, solution=solution(:, 0:last_step))
   endsubroutine integrate_adams_moulton
 
-  subroutine integrate_back_df(scheme, frequency, final_time, solution, error, last_step, iterations, Dt, tolerance)
+  subroutine integrate_back_df(scheme, frequency, final_time, solution, error, last_step, iterations, Dt, tolerance, stages)
   !< Integrate domain by means of the back differentiation formula scheme.
   character(*),           intent(in)           :: scheme        !< Selected scheme.
   real(R_P),              intent(in)           :: frequency     !< Oscillation frequency.
@@ -493,6 +507,7 @@ contains
   integer(I_P),           intent(in), optional :: iterations    !< Number of fixed point iterations.
   real(R_P),              intent(in), optional :: Dt            !< Time step.
   real(R_P),              intent(in), optional :: tolerance     !< Local error tolerance.
+  integer(I_P),           intent(in), optional :: stages        !< Number of stages.
   type(integrator_back_df)                     :: integrator    !< The integrator.
   type(integrator_runge_kutta_ssp)             :: integrator_rk !< RK integrator for starting non self-starting integrators.
   type(oscillator)                             :: domain        !< Oscillation field.
@@ -543,7 +558,7 @@ contains
   error = error_L2(frequency=frequency, solution=solution(:, 0:last_step))
   endsubroutine integrate_back_df
 
-  subroutine integrate_euler_explicit(scheme, frequency, final_time, solution, error, last_step, iterations, Dt, tolerance)
+  subroutine integrate_euler_explicit(scheme, frequency, final_time, solution, error, last_step, iterations, Dt, tolerance, stages)
   !< Integrate domain by means of the Euler explicit scheme.
   character(*),           intent(in)           :: scheme        !< Selected scheme.
   real(R_P),              intent(in)           :: frequency     !< Oscillation frequency.
@@ -554,6 +569,7 @@ contains
   integer(I_P),           intent(in), optional :: iterations    !< Number of fixed point iterations.
   real(R_P),              intent(in), optional :: Dt            !< Time step.
   real(R_P),              intent(in), optional :: tolerance     !< Local error tolerance.
+  integer(I_P),           intent(in), optional :: stages        !< Number of stages.
   type(integrator_euler_explicit)              :: integrator    !< The integrator.
   type(oscillator)                             :: domain        !< Oscillation field.
   integer                                      :: step          !< Time steps counter.
@@ -579,7 +595,7 @@ contains
   error = error_L2(frequency=frequency, solution=solution(:, 0:last_step))
   endsubroutine integrate_euler_explicit
 
-  subroutine integrate_leapfrog(scheme, frequency, final_time, solution, error, last_step, iterations, Dt, tolerance)
+  subroutine integrate_leapfrog(scheme, frequency, final_time, solution, error, last_step, iterations, Dt, tolerance, stages)
   !< Integrate domain by means of the leapfrog scheme.
   character(*),           intent(in)           :: scheme        !< Selected scheme.
   real(R_P),              intent(in)           :: frequency     !< Oscillation frequency.
@@ -590,6 +606,7 @@ contains
   integer(I_P),           intent(in), optional :: iterations    !< Number of fixed point iterations.
   real(R_P),              intent(in), optional :: Dt            !< Time step.
   real(R_P),              intent(in), optional :: tolerance     !< Local error tolerance.
+  integer(I_P),           intent(in), optional :: stages        !< Number of stages.
   type(integrator_leapfrog)                    :: integrator    !< The integrator.
   type(integrator_runge_kutta_ssp)             :: integrator_rk !< RK integrator for starting non self-starting integrators.
   type(oscillator)                             :: domain        !< Oscillation field.
@@ -647,7 +664,7 @@ contains
   error = error_L2(frequency=frequency, solution=solution(:, 0:last_step))
   endsubroutine integrate_leapfrog
 
-  subroutine integrate_lmm_ssp(scheme, frequency, final_time, solution, error, last_step, iterations, Dt, tolerance)
+  subroutine integrate_lmm_ssp(scheme, frequency, final_time, solution, error, last_step, iterations, Dt, tolerance, stages)
   !< Integrate domain by means of the LLM SSP scheme.
   character(*),           intent(in)           :: scheme        !< Selected scheme.
   real(R_P),              intent(in)           :: frequency     !< Oscillation frequency.
@@ -658,6 +675,7 @@ contains
   integer(I_P),           intent(in), optional :: iterations    !< Number of fixed point iterations.
   real(R_P),              intent(in), optional :: Dt            !< Time step.
   real(R_P),              intent(in), optional :: tolerance     !< Local error tolerance.
+  integer(I_P),           intent(in), optional :: stages        !< Number of stages.
   type(integrator_lmm_ssp)                     :: integrator    !< The integrator.
   type(integrator_runge_kutta_ssp)             :: integrator_rk !< RK integrator for starting non self-starting integrators.
   type(oscillator)                             :: domain        !< Oscillation field.
@@ -700,7 +718,7 @@ contains
   error = error_L2(frequency=frequency, solution=solution(:, 0:last_step))
   endsubroutine integrate_lmm_ssp
 
-  subroutine integrate_lmm_ssp_vss(scheme, frequency, final_time, solution, error, last_step, iterations, Dt, tolerance)
+  subroutine integrate_lmm_ssp_vss(scheme, frequency, final_time, solution, error, last_step, iterations, Dt, tolerance, stages)
   !< Integrate domain by means of the LLM SSP variable step size scheme.
   character(*),           intent(in)           :: scheme        !< Selected scheme.
   real(R_P),              intent(in)           :: frequency     !< Oscillation frequency.
@@ -711,6 +729,7 @@ contains
   integer(I_P),           intent(in), optional :: iterations    !< Number of fixed point iterations.
   real(R_P),              intent(in), optional :: Dt            !< Time step.
   real(R_P),              intent(in), optional :: tolerance     !< Local error tolerance.
+  integer(I_P),           intent(in), optional :: stages        !< Number of stages.
   type(integrator_lmm_ssp_vss)                 :: integrator    !< The integrator.
   type(integrator_runge_kutta_ssp)             :: integrator_rk !< RK integrator for starting non self-starting integrators.
   type(oscillator)                             :: domain        !< Oscillation field.
@@ -755,7 +774,8 @@ contains
   error = error_L2(frequency=frequency, solution=solution(:, 0:last_step))
   endsubroutine integrate_lmm_ssp_vss
 
-  subroutine integrate_ms_runge_kutta_ssp(scheme, frequency, final_time, solution, error, last_step, iterations, Dt, tolerance)
+  subroutine integrate_ms_runge_kutta_ssp(scheme, frequency, final_time, solution, error, last_step, iterations, Dt, tolerance, &
+                                          stages)
   !< Integrate domain by means of the Multistep Runge-Kutta SSP scheme.
   character(*),           intent(in)           :: scheme        !< Selected scheme.
   real(R_P),              intent(in)           :: frequency     !< Oscillation frequency.
@@ -766,6 +786,7 @@ contains
   integer(I_P),           intent(in), optional :: iterations    !< Number of fixed point iterations.
   real(R_P),              intent(in), optional :: Dt            !< Time step.
   real(R_P),              intent(in), optional :: tolerance     !< Local error tolerance.
+  integer(I_P),           intent(in), optional :: stages        !< Number of stages.
   type(integrator_ms_runge_kutta_ssp)          :: integrator    !< The integrator.
   type(integrator_runge_kutta_ssp)             :: integrator_rk !< RK integrator for starting non self-starting integrators.
   type(oscillator)                             :: domain        !< Oscillation field.
@@ -811,7 +832,7 @@ contains
   error = error_L2(frequency=frequency, solution=solution(:, 0:last_step))
   endsubroutine integrate_ms_runge_kutta_ssp
 
-  subroutine integrate_runge_kutta_emd(scheme, frequency, final_time, solution, error, last_step, iterations, Dt, tolerance)
+  subroutine integrate_runge_kutta_emd(scheme, frequency, final_time, solution, error, last_step, iterations, Dt, tolerance, stages)
   !< Integrate domain by means of the Runge Kutta embedded scheme.
   character(*),           intent(in)           :: scheme        !< Selected scheme.
   real(R_P),              intent(in)           :: frequency     !< Oscillation frequency.
@@ -822,6 +843,7 @@ contains
   integer(I_P),           intent(in), optional :: iterations    !< Number of fixed point iterations.
   real(R_P),              intent(in), optional :: Dt            !< Time step.
   real(R_P),              intent(in), optional :: tolerance     !< Local error tolerance.
+  integer(I_P),           intent(in), optional :: stages        !< Number of stages.
   type(integrator_runge_kutta_emd)             :: integrator    !< The integrator.
   type(oscillator)                             :: domain        !< Oscillation field.
   type(oscillator), allocatable                :: rk_stage(:)   !< Runge-Kutta stages.
@@ -854,7 +876,7 @@ contains
   error = error_L2(frequency=frequency, solution=solution(:, 0:last_step))
   endsubroutine integrate_runge_kutta_emd
 
-  subroutine integrate_runge_kutta_ls(scheme, frequency, final_time, solution, error, last_step, iterations, Dt, tolerance)
+  subroutine integrate_runge_kutta_ls(scheme, frequency, final_time, solution, error, last_step, iterations, Dt, tolerance, stages)
   !< Integrate domain by means of the Runge Kutta low storage scheme.
   character(*),           intent(in)           :: scheme        !< Selected scheme.
   real(R_P),              intent(in)           :: frequency     !< Oscillation frequency.
@@ -865,6 +887,7 @@ contains
   integer(I_P),           intent(in), optional :: iterations    !< Number of fixed point iterations.
   real(R_P),              intent(in), optional :: Dt            !< Time step.
   real(R_P),              intent(in), optional :: tolerance     !< Local error tolerance.
+  integer(I_P),           intent(in), optional :: stages        !< Number of stages.
   type(integrator_runge_kutta_ls)              :: integrator    !< The integrator.
   type(oscillator)                             :: domain        !< Oscillation field.
   type(oscillator), allocatable                :: rk_stage(:)   !< Runge-Kutta stages.
@@ -894,7 +917,49 @@ contains
   error = error_L2(frequency=frequency, solution=solution(:, 0:last_step))
   endsubroutine integrate_runge_kutta_ls
 
-  subroutine integrate_runge_kutta_ssp(scheme, frequency, final_time, solution, error, last_step, iterations, Dt, tolerance)
+  subroutine integrate_runge_kutta_lssp(scheme, frequency, final_time, solution, error, last_step, iterations, Dt, tolerance, &
+                                        stages)
+  !< Integrate domain by means of the Linear Runge Kutta SSP scheme.
+  character(*),           intent(in)           :: scheme        !< Selected scheme.
+  real(R_P),              intent(in)           :: frequency     !< Oscillation frequency.
+  real(R_P),              intent(in)           :: final_time    !< Final integration time.
+  real(R_P), allocatable, intent(out)          :: solution(:,:) !< Solution at each time step, X-Y.
+  real(R_P),              intent(out)          :: error(1:)     !< Error (norm L2) with respect the exact solution.
+  integer(I_P),           intent(out)          :: last_step     !< Last time step computed.
+  integer(I_P),           intent(in), optional :: iterations    !< Number of fixed point iterations.
+  real(R_P),              intent(in), optional :: Dt            !< Time step.
+  real(R_P),              intent(in), optional :: tolerance     !< Local error tolerance.
+  integer(I_P),           intent(in), optional :: stages        !< Number of stages.
+  type(integrator_runge_kutta_lssp)            :: integrator    !< The integrator.
+  type(oscillator)                             :: domain        !< Oscillation field.
+  type(oscillator), allocatable                :: rk_stage(:)   !< Runge-Kutta stages.
+  integer                                      :: step          !< Time steps counter.
+
+  call domain%init(initial_state=initial_state, frequency=frequency)
+
+  if (allocated(solution)) deallocate(solution) ; allocate(solution(0:space_dimension, 0:int(final_time/Dt)))
+  solution = 0.0_R_P
+  solution(1:, 0) = domain%output()
+
+  call integrator%initialize(scheme=scheme, stages=stages)
+  if (allocated(rk_stage)) deallocate(rk_stage) ; allocate(rk_stage(1:integrator%stages))
+
+  step = 0
+  do while(solution(0, step) < final_time .and. step < ubound(solution, dim=2))
+    step = step + 1
+
+    call integrator%integrate(U=domain, stage=rk_stage, Dt=Dt, t=solution(0, step))
+
+    solution(0, step) = step * Dt
+
+    solution(1:, step) = domain%output()
+  enddo
+  last_step = step
+
+  error = error_L2(frequency=frequency, solution=solution(:, 0:last_step))
+  endsubroutine integrate_runge_kutta_lssp
+
+  subroutine integrate_runge_kutta_ssp(scheme, frequency, final_time, solution, error, last_step, iterations, Dt, tolerance, stages)
   !< Integrate domain by means of the Runge Kutta SSP scheme.
   character(*),           intent(in)           :: scheme        !< Selected scheme.
   real(R_P),              intent(in)           :: frequency     !< Oscillation frequency.
@@ -905,6 +970,7 @@ contains
   integer(I_P),           intent(in), optional :: iterations    !< Number of fixed point iterations.
   real(R_P),              intent(in), optional :: Dt            !< Time step.
   real(R_P),              intent(in), optional :: tolerance     !< Local error tolerance.
+  integer(I_P),           intent(in), optional :: stages        !< Number of stages.
   type(integrator_runge_kutta_ssp)             :: integrator    !< The integrator.
   type(oscillator)                             :: domain        !< Oscillation field.
   type(oscillator), allocatable                :: rk_stage(:)   !< Runge-Kutta stages.

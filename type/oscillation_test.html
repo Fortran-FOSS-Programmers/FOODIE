@@ -134,7 +134,7 @@
      <li><i class="fa fa-list-ol"></i>
        <a data-toggle="tooltip"
 	  data-placement="bottom" data-html="true"
-	  title="<p> 3.6% of total for derived types.</p>Including implementation: 208 statements,  2.8% of total for derived types.">18 statements</a>
+	  title="<p> 3.6% of total for derived types.</p>Including implementation: 215 statements,  2.8% of total for derived types.">19 statements</a>
      </li> 
      
      
@@ -192,6 +192,8 @@
       
       <a class="list-group-item" href="../type/oscillation_test.html#variable-scheme">scheme</a>
       
+      <a class="list-group-item" href="../type/oscillation_test.html#variable-stages%7E6">stages</a>
+      
       <a class="list-group-item" href="../type/oscillation_test.html#variable-tolerance%7E2">tolerance</a>
       
     </div>
@@ -221,7 +223,7 @@
       
       <a class="list-group-item" href="../type/oscillation_test.html#boundprocedure-execute">execute</a>
       
-      <a class="list-group-item" href="../type/oscillation_test.html#boundprocedure-initialize%7E12">initialize</a>
+      <a class="list-group-item" href="../type/oscillation_test.html#boundprocedure-initialize%7E13">initialize</a>
       
       <a class="list-group-item" href="../type/oscillation_test.html#boundprocedure-test">test</a>
       
@@ -284,6 +286,8 @@
       <a class="list-group-item" href="../type/integrator_runge_kutta_emd.html">integrator_runge_kutta_emd</a>
       
       <a class="list-group-item" href="../type/integrator_runge_kutta_ls.html">integrator_runge_kutta_ls</a>
+      
+      <a class="list-group-item" href="../type/integrator_runge_kutta_lssp.html">integrator_runge_kutta_lssp</a>
       
       <a class="list-group-item" href="../type/integrator_runge_kutta_ssp.html">integrator_runge_kutta_ssp</a>
       
@@ -424,6 +428,8 @@
       
       <a class="list-group-item" href="../type/oscillation_test.html#variable-scheme">scheme</a>
       
+      <a class="list-group-item" href="../type/oscillation_test.html#variable-stages%7E6">stages</a>
+      
       <a class="list-group-item" href="../type/oscillation_test.html#variable-tolerance%7E2">tolerance</a>
       
     </div>
@@ -453,7 +459,7 @@
       
       <a class="list-group-item" href="../type/oscillation_test.html#boundprocedure-execute">execute</a>
       
-      <a class="list-group-item" href="../type/oscillation_test.html#boundprocedure-initialize%7E12">initialize</a>
+      <a class="list-group-item" href="../type/oscillation_test.html#boundprocedure-initialize%7E13">initialize</a>
       
       <a class="list-group-item" href="../type/oscillation_test.html#boundprocedure-test">test</a>
       
@@ -633,6 +639,20 @@
   
 <tr>
   
+  <td><span class="anchor" id="variable-stages%7E6"></span>integer(kind=I_P),</td>
+  
+  <td>private</td>
+  <td></td><td>::</td>
+  <td><strong>stages</strong></td><td> =</td><td>0</td><td><p>Number of stages.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
   <td><span class="anchor" id="variable-tolerance%7E2"></span>real(kind=R_P),</td>
   
   <td>private,</td>
@@ -735,7 +755,7 @@ private subroutine <a href='../proc/execute.html'>execute</a>(self)
     
 	   
 <div class="panel panel-default">
-  <div class="panel-heading codesum"><span class="anchor" id="boundprocedure-initialize%7E12"></span><h3>procedure, private, pass(self) :: <strong>initialize</strong>  
+  <div class="panel-heading codesum"><span class="anchor" id="boundprocedure-initialize%7E13"></span><h3>procedure, private, pass(self) :: <strong>initialize</strong>  
     
   </h3></div>
   
@@ -753,7 +773,7 @@ private subroutine <a href='../proc/execute.html'>execute</a>(self)
          
     
     <h3>
-private subroutine <a href='../proc/initialize%7E12.html'>initialize</a>(self)
+private subroutine <a href='../proc/initialize%7E13.html'>initialize</a>(self)
     
     
 	 
@@ -920,6 +940,7 @@ private subroutine <a href='../proc/test.html'>test</a>(self, scheme)
   <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">)</span>                    <span class="kd">::</span> <span class="n">frequency</span><span class="o">=</span><span class="mf">0.0_R_P</span>        <span class="c">!&lt; Oscillation frequency.</span>
   <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">)</span>                    <span class="kd">::</span> <span class="n">final_time</span><span class="o">=</span><span class="mf">0.0_R_P</span>       <span class="c">!&lt; Final integration time.</span>
   <span class="kt">integer</span><span class="p">(</span><span class="n">I_P</span><span class="p">)</span>                 <span class="kd">::</span> <span class="n">implicit_iterations</span><span class="o">=</span><span class="mi">0</span>    <span class="c">!&lt; Number of iterations (implicit solvers).</span>
+  <span class="kt">integer</span><span class="p">(</span><span class="n">I_P</span><span class="p">)</span>                 <span class="kd">::</span> <span class="n">stages</span><span class="o">=</span><span class="mi">0</span>                 <span class="c">!&lt; Number of stages.</span>
   <span class="kt">character</span><span class="p">(</span><span class="mi">99</span><span class="p">)</span>                <span class="kd">::</span> <span class="n">output_cli</span><span class="o">=</span><span class="s1">&#39;unset&#39;</span>       <span class="c">!&lt; Output files basename.</span>
   <span class="kt">character</span><span class="p">(</span><span class="mi">99</span><span class="p">)</span>                <span class="kd">::</span> <span class="n">scheme</span><span class="o">=</span><span class="s1">&#39;adams_bashforth&#39;</span> <span class="c">!&lt; Scheme used.</span>
   <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">),</span>    <span class="k">allocatable</span>    <span class="kd">::</span> <span class="n">Dt</span><span class="p">(:)</span>                    <span class="c">!&lt; Time step(s) exercised.</span>
@@ -988,6 +1009,8 @@ private subroutine <a href='../proc/test.html'>test</a>(self, scheme)
       
       <a class="list-group-item" href="../type/integrator_runge_kutta_ls.html">integrator_runge_kutta_ls</a>
       
+      <a class="list-group-item" href="../type/integrator_runge_kutta_lssp.html">integrator_runge_kutta_lssp</a>
+      
       <a class="list-group-item" href="../type/integrator_runge_kutta_ssp.html">integrator_runge_kutta_ssp</a>
       
       <a class="list-group-item" href="../type/lorenz.html">lorenz</a>
@@ -1017,7 +1040,7 @@ private subroutine <a href='../proc/test.html'>test</a>(self, scheme)
           <p class="text-right">
             Documentation generated by 
             <a href="https://github.com/cmacmackin/ford">FORD</a>
-             on 2017-04-12 15:56  
+             on 2017-04-14 09:15  
           </p>
         </div>
         <div class="col-xs-12 col-md-4 col-md-pull-4"><p class="text-center"> FOODIE was developed by Fortran-FOSS-Programmers Group</p></div>
