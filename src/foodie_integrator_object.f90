@@ -22,7 +22,7 @@ type, abstract :: integrator_object
     procedure, pass(self) :: trigger_error    !< Trigger an error.
     ! deferred methods
     procedure(class_name_interface),        pass(self), deferred :: class_name           !< Return the class name of schemes.
-    procedure(description_interface),       pass(self), deferred :: description          !< Return pretty-printed object description.
+    procedure(description_interface),       pass(self), deferred :: description          !< Return pretty-printed obj. description.
     procedure(assignment_interface),        pass(lhs),  deferred :: integr_assign_integr !< Operator `=`.
     procedure(is_supported_interface),      pass(self), deferred :: is_supported         !< Return .true. if the integrator class
                                                                                          !< support the given scheme.
