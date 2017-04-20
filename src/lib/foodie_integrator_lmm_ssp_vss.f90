@@ -241,7 +241,6 @@ contains
   real(R_P),                     intent(in)    :: t(:)          !< Times.
   logical, optional,             intent(in)    :: autoupdate    !< Perform cyclic autoupdate of previous time steps.
   logical                                      :: autoupdate_   !< Perform cyclic autoupdate of previous time steps, dummy var.
-  integer(I_P)                                 :: s             !< Steps counter.
   real(R_P)                                    :: omega_        !< Omega coefficient.
   real(R_P)                                    :: omega_sq      !< Square of omega coefficient.
 
@@ -262,7 +261,6 @@ contains
   real(R_P),                     intent(in)    :: t(:)          !< Times.
   logical, optional,             intent(in)    :: autoupdate    !< Perform cyclic autoupdate of previous time steps.
   logical                                      :: autoupdate_   !< Perform cyclic autoupdate of previous time steps, dummy var.
-  integer(I_P)                                 :: s             !< Steps counter.
   real(R_P)                                    :: omega_        !< Omega coefficient.
 
   autoupdate_ = .true. ; if (present(autoupdate)) autoupdate_ = autoupdate
