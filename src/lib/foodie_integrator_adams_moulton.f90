@@ -352,7 +352,8 @@ contains
   autoupdate_ = .true. ; if (present(autoupdate)) autoupdate_ = autoupdate
   if (self%steps>0) then
     if (present(iterations)) then ! perform fixed point iterations
-      allocate(delta, source=previous(self%steps))
+      allocate(delta, mold=U)
+      delta = previous(self%steps)
       do s=0, self%steps - 1
         delta = delta + previous(s+1)%t(t=t(s+1)) * (Dt * self%b(s))
       enddo
