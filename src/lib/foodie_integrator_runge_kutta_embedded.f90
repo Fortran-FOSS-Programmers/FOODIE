@@ -679,8 +679,8 @@ contains
   integer(I_P)                                     :: s         !< First stages counter.
   integer(I_P)                                     :: ss        !< Second stages counter.
 
-  allocate(U1, source=U)
-  allocate(U2, source=U)
+  allocate(U1, mold=U) ; U1 = U
+  allocate(U2, mold=U) ; U2 = U
   error = 1e6
   do while(error>self%tolerance)
     ! compute stages

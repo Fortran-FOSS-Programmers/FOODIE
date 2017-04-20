@@ -224,7 +224,8 @@ contains
 
   autoupdate_ = .true. ; if (present(autoupdate)) autoupdate_ = autoupdate
   iterations_ = 1 ; if (present(iterations)) iterations_ = iterations
-  allocate(delta, source=previous(self%steps) * (-self%a(self%steps)))
+  allocate(delta, mold=U)
+  delta = previous(self%steps) * (-self%a(self%steps))
   do s=1, self%steps - 1
     delta = delta + previous(s) * (-self%a(s))
   enddo
