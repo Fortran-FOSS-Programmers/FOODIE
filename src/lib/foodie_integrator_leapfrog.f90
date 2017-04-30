@@ -36,8 +36,8 @@ module foodie_integrator_leapfrog
 !< [3] *The RAW filter: An improvement to the Robert–Asselin filter in semi-implicit integrations*, Williams, P.D., Monthly
 !< Weather Review, vol. 139(6), pages 1996--2007, June 2011.
 
-use foodie_adt_integrand, only : integrand
 use foodie_error_codes, only : ERROR_UNSUPPORTED_SCHEME
+use foodie_integrand_object, only : integrand_object
 use foodie_integrator_object, only : integrator_object
 use penf, only : I_P, R_P
 
@@ -162,12 +162,12 @@ contains
 
   subroutine integrate(self, U, previous, Dt, t, filter)
   !< Integrate field with leapfrog class scheme.
-  class(integrator_leapfrog), intent(in)    :: self          !< Integrator.
-  class(integrand),           intent(inout) :: U             !< Field to be integrated.
-  class(integrand),           intent(inout) :: previous(1:2) !< Previous time steps solutions of integrand field.
-  real(R_P),                  intent(in)    :: Dt            !< Time step.
-  real(R_P),                  intent(in)    :: t             !< Time.
-  class(integrand), optional, intent(inout) :: filter        !< Filter field displacement.
+  class(integrator_leapfrog),        intent(in)    :: self          !< Integrator.
+  class(integrand_object),           intent(inout) :: U             !< Field to be integrated.
+  class(integrand_object),           intent(inout) :: previous(1:2) !< Previous time steps solutions of integrand field.
+  real(R_P),                         intent(in)    :: Dt            !< Time step.
+  real(R_P),                         intent(in)    :: t             !< Time.
+  class(integrand_object), optional, intent(inout) :: filter        !< Filter field displacement.
 
   U = previous(1) + previous(2)%t(t=t) * (Dt * 2._R_P)
   if (present(filter)) then

@@ -100,8 +100,8 @@ module foodie_integrator_runge_kutta_ssp
 !< [2] *High Order Strong Stability Preserving Time Discretizations*, Gottlieb, S., Ketcheson, D. I., Shu, C.W., Journal of
 !< Scientific Computing, vol. 38, N. 3, 2009, pp. 251-289.
 
-use foodie_adt_integrand, only : integrand
 use foodie_error_codes, only : ERROR_UNSUPPORTED_SCHEME
+use foodie_integrand_object, only : integrand_object
 use foodie_integrator_object, only : integrator_object
 use penf, only : I_P, R_P
 
@@ -296,8 +296,8 @@ contains
   !<
   !< @note This method can be used **after** the integrator is created (i.e. the RK coefficients are initialized).
   class(integrator_runge_kutta_ssp), intent(in)    :: self      !< Integrator.
-  class(integrand),                  intent(inout) :: U         !< Field to be integrated.
-  class(integrand),                  intent(inout) :: stage(1:) !< Runge-Kutta stages [1:stages].
+  class(integrand_object),           intent(inout) :: U         !< Field to be integrated.
+  class(integrand_object),           intent(inout) :: stage(1:) !< Runge-Kutta stages [1:stages].
   real(R_P),                         intent(in)    :: Dt        !< Time step.
   real(R_P),                         intent(in)    :: t         !< Time.
   integer(I_P)                                     :: s         !< First stages counter.

@@ -3,14 +3,14 @@
 module oscillation_oscillator
 !< Define [[oscillator]], the Oscillation test field that is a concrete extension of the abstract integrand type.
 
-use foodie, only : integrand
+use foodie, only : integrand_object
 use penf, only : R_P, I_P
 
 implicit none
 private
 public :: oscillator
 
-type, extends(integrand) :: oscillator
+type, extends(integrand_object) :: oscillator
   !< Oscillator, the Oscillation equations field.
   !<
   !< It is a FOODIE integrand class concrete extension.
@@ -40,205 +40,219 @@ type, extends(integrand) :: oscillator
   !<[1] *Numerical Methods for Fluid Dynamics With Applications to Geophysics*, Dale R. Durran, Springer, 2010.
   !<
   !<#### State variables organization
-  !< State variables are organized as an array (rank 1) of reals of *dims* elements, in this case 2 elements.
+  !< State variables are organized as an array (rank 1) of reals of *n=2* elements.
   private
-  integer(I_P)                         :: dims=0   !< Space dimensions.
-  real(R_P)                            :: f=0._R_P !< Oscillation frequency (Hz).
-  real(R_P), dimension(:), allocatable :: U        !< Integrand (state) variables, [1:dims].
+  real(R_P) :: f=0._R_P                !< Oscillation frequency (Hz).
+  real(R_P) :: U(1:2)=[0._R_P, 0._R_P] !< Integrand (state) variables.
   contains
     ! auxiliary methods
     procedure, pass(self), public :: init   !< Init field.
     procedure, pass(self), public :: output !< Extract Oscillation field.
-    ! ADT integrand deferred methods
-    procedure, pass(self), public :: t => dOscillation_dt                                             !< Time derivative, residuals.
-    procedure, pass(lhs),  public :: local_error => oscillation_local_error                           !<||Oscillation-oscillation||.
-    procedure, pass(lhs),  public :: integrand_multiply_integrand => oscillation_multiply_oscillation !< Oscillation * oscillation.
-    procedure, pass(lhs),  public :: integrand_multiply_real => oscillation_multiply_real             !< Oscillation * real.
-    procedure, pass(rhs),  public :: real_multiply_integrand => real_multiply_oscillation             !< Real * Oscillation.
-    procedure, pass(lhs),  public :: add => add_oscillation                                           !< Oscillation + Oscillation.
-    procedure, pass(lhs),  public :: sub => sub_oscillation                                           !< Oscillation - Oscillation.
-    procedure, pass(lhs),  public :: assign_integrand => oscillation_assign_oscillation               !< Oscillation = Oscillation.
+    ! public deferred methods
+    procedure, pass(self), public :: t => doscillator_dt !< Time derivative, residuals.
+    ! operators
+    procedure, pass(lhs), public :: local_error !<`||oscillator - oscillator||` operator.
+    ! +
+    procedure, pass(lhs), public :: integrand_add_integrand !< `+` operator.
+    procedure, pass(lhs), public :: integrand_add_real      !< `+ real` operator.
+    procedure, pass(rhs), public :: real_add_integrand      !< `real +` operator.
+    ! *
+    procedure, pass(lhs), public :: integrand_multiply_integrand   !< `*` operator.
+    procedure, pass(lhs), public :: integrand_multiply_real        !< `* real` operator.
+    procedure, pass(rhs), public :: real_multiply_integrand        !< `real *` operator.
+    procedure, pass(lhs), public :: integrand_multiply_real_scalar !< `* real_scalar` operator.
+    procedure, pass(rhs), public :: real_scalar_multiply_integrand !< `real_scalar *` operator.
+    ! -
+    procedure, pass(lhs), public :: integrand_sub_integrand !< `-` operator.
+    procedure, pass(lhs), public :: integrand_sub_real      !< `- real` operator.
+    procedure, pass(rhs), public :: real_sub_integrand      !< `real -` operator.
+    ! =
+    procedure, pass(lhs), public :: assign_integrand !< `=` operator.
+    procedure, pass(lhs), public :: assign_real      !< `= real` operator.
 endtype oscillator
 
 contains
   ! auxiliary methods
   pure subroutine init(self, initial_state, frequency)
-  !< Construct an initialized Oscillation field.
-  class(oscillator),       intent(inout) :: self          !< Oscillation field.
-  real(R_P), dimension(:), intent(in)    :: initial_state !< Initial state of the Oscillation field vector.
-  real(R_P),               intent(in)    :: frequency     !< Frequency of oscillation.
+  !< Construct an initialized oscillator field.
+  class(oscillator), intent(inout) :: self               !< Oscillation field.
+  real(R_P),         intent(in)    :: initial_state(1:2) !< Initial state of the Oscillation field vector.
+  real(R_P),         intent(in)    :: frequency          !< Frequency of oscillation.
 
-  self%dims = size(initial_state)
+  self%n = 2
+  self%U = initial_state
   self%f = frequency
-  if (allocated(self%U)) deallocate(self%U) ; allocate(self%U(1:self%dims)) ; self%U = initial_state
   endsubroutine init
 
   pure function output(self) result(state)
-  !< Output the Oscillation field state.
-  class(oscillator), intent(in)        :: self  !< Oscillation field.
-  real(R_P), dimension(:), allocatable :: state !< Oscillation state vector.
+  !< Output the oscillator field state.
+  class(oscillator), intent(in) :: self       !< Oscillation field.
+  real(R_P)                     :: state(1:2) !< Oscillation state vector.
 
   state = self%U
   endfunction output
 
-  ! ADT integrand deferred methods
-#ifdef PURE
-  pure function dOscillation_dt(self, t) result(dState_dt)
-#else
-  function dOscillation_dt(self, t) result(dState_dt)
-#endif
-  !< Time derivative of Oscillation field.
-  class(oscillator), intent(in)           :: self      !< Oscillation field.
-  real(R_P),         intent(in), optional :: t         !< Time.
-  class(integrand),  allocatable          :: dState_dt !< Oscillation field time derivative.
+  ! deferred methods
+  pure function doscillator_dt(self, t) result(dState_dt)
+  !< Time derivative of oscillator field.
+  class(oscillator), intent(in)           :: self                !< Oscillation field.
+  real(R_P),         intent(in), optional :: t                   !< Time.
+  real(R_P)                               :: dState_dt(1:self%n) !< Oscillation field time derivative.
 
-  allocate(oscillator :: dState_dt)
-  select type(dState_dt)
-  class is(oscillator)
-    dState_dt = self
-    dState_dt%U(1) = -self%f * self%U(2)
-    dState_dt%U(2) =  self%f * self%U(1)
-  endselect
-  endfunction dOscillation_dt
+  dState_dt(1) = -self%f * self%U(2)
+  dState_dt(2) =  self%f * self%U(1)
+  endfunction doscillator_dt
 
-#ifdef PURE
-  pure function oscillation_local_error(lhs, rhs) result(error)
-#else
-  function oscillation_local_error(lhs, rhs) result(error)
-#endif
+  pure function local_error(lhs, rhs) result(error)
   !< Estimate local truncation error between 2 oscillation approximations.
   !<
   !< The estimation is done by norm L2 of U:
   !<
   !< $$ error = \sqrt{ \sum_i{ \frac{(lhs\%U_i - rhs\%U_i)^2}{lhs\%U_i^2} }} $$
-  class(oscillator), intent(in) :: lhs   !< Left hand side.
-  class(integrand),  intent(in) :: rhs   !< Right hand side.
-  real(R_P)                     :: error !< Error estimation.
-  integer(I_P)                  :: i     !< Space counter.
+  class(oscillator),       intent(in) :: lhs   !< Left hand side.
+  class(integrand_object), intent(in) :: rhs   !< Right hand side.
+  real(R_P)                           :: error !< Error estimation.
+  integer(I_P)                        :: i     !< Space counter.
 
   select type(rhs)
   class is(oscillator)
     error = 0._R_P
-    do i=1, lhs%dims
+    do i=1, lhs%n
       error = error + (lhs%U(i) - rhs%U(i)) ** 2 / lhs%U(i) ** 2
     enddo
     error = sqrt(error)
   endselect
-  endfunction oscillation_local_error
+  endfunction local_error
 
-#ifdef PURE
-  pure function oscillation_multiply_oscillation(lhs, rhs) result(opr)
-#else
-  function oscillation_multiply_oscillation(lhs, rhs) result(opr)
-#endif
-  !< Multiply a oscillation field by another one.
-  class(oscillator), intent(in) :: lhs !< Left hand side.
-  class(integrand),  intent(in) :: rhs !< Right hand side.
-  class(integrand), allocatable :: opr !< Operator result.
-
-  allocate(oscillator :: opr)
-  select type(opr)
-  class is(oscillator)
-    opr = lhs
-    select type(rhs)
-    class is(oscillator)
-      opr%U = lhs%U * rhs%U
-    endselect
-  endselect
-  endfunction oscillation_multiply_oscillation
-
-#ifdef PURE
-  pure function oscillation_multiply_real(lhs, rhs) result(opr)
-#else
-  function oscillation_multiply_real(lhs, rhs) result(opr)
-#endif
-  !< Multiply a Oscillation field by a real scalar.
-  class(oscillator), intent(in) :: lhs !< Left hand side.
-  real(R_P),         intent(in) :: rhs !< Right hand side.
-  class(integrand), allocatable :: opr !< Operator result.
-
-  allocate(oscillator :: opr)
-  select type(opr)
-  class is(oscillator)
-    opr = lhs
-    opr%U = lhs%U * rhs
-  endselect
-  endfunction oscillation_multiply_real
-
-#ifdef PURE
-  pure function real_multiply_oscillation(lhs, rhs) result(opr)
-#else
-  function real_multiply_oscillation(lhs, rhs) result(opr)
-#endif
-  !< Multiply a real scalar by a Oscillation field.
-  real(R_P),         intent(in) :: lhs !< Left hand side.
-  class(oscillator), intent(in) :: rhs !< Right hand side.
-  class(integrand), allocatable :: opr !< Operator result.
-
-  allocate(oscillator :: opr)
-  select type(opr)
-  class is(oscillator)
-    opr = rhs
-    opr%U = rhs%U * lhs
-  endselect
-  endfunction real_multiply_oscillation
-
-#ifdef PURE
-  pure function add_oscillation(lhs, rhs) result(opr)
-#else
-  function add_oscillation(lhs, rhs) result(opr)
-#endif
-  !< Add two Oscillation fields.
-  class(oscillator), intent(in) :: lhs !< Left hand side.
-  class(integrand),  intent(in) :: rhs !< Right hand side.
-  class(integrand), allocatable :: opr !< Operator result.
-
-  allocate(oscillator :: opr)
-  select type(opr)
-  class is(oscillator)
-    opr = lhs
-    select type(rhs)
-    class is(oscillator)
-      opr%U = lhs%U + rhs%U
-    endselect
-  endselect
-  endfunction add_Oscillation
-
-#ifdef PURE
-  pure function sub_oscillation(lhs, rhs) result(opr)
-#else
-  function sub_oscillation(lhs, rhs) result(opr)
-#endif
-  !< Subtract two Oscillation fields.
-  class(oscillator), intent(in) :: lhs !< Left hand side.
-  class(integrand),  intent(in) :: rhs !< Right hand side.
-  class(integrand), allocatable :: opr !< Operator result.
-
-  allocate(oscillator :: opr)
-  select type(opr)
-  class is(oscillator)
-    opr = lhs
-    select type(rhs)
-    class is(oscillator)
-      opr%U = lhs%U - rhs%U
-    endselect
-  endselect
-  endfunction sub_Oscillation
-
-#ifdef PURE
-  pure subroutine oscillation_assign_oscillation(lhs, rhs)
-#else
-  subroutine oscillation_assign_oscillation(lhs, rhs)
-#endif
-  !< Assign one Oscillation field to another.
-  class(oscillator), intent(inout) :: lhs !< Left hand side.
-  class(integrand),  intent(in)    :: rhs !< Right hand side.
+  ! +
+  pure function integrand_add_integrand(lhs, rhs) result(opr)
+  !< `+` operator.
+  class(oscillator),       intent(in) :: lhs          !< Left hand side.
+  class(integrand_object), intent(in) :: rhs          !< Right hand side.
+  real(R_P)                           :: opr(1:lhs%n) !< Operator result.
 
   select type(rhs)
   class is(oscillator)
-    lhs%dims = rhs%dims
-    lhs%f = rhs%f
-    if (allocated(rhs%U)) lhs%U = rhs%U
+    opr = lhs%U + rhs%U
   endselect
-  endsubroutine oscillation_assign_oscillation
+  endfunction integrand_add_integrand
+
+  pure function integrand_add_real(lhs, rhs) result(opr)
+  !< `+ real` operator.
+  class(oscillator), intent(in) :: lhs          !< Left hand side.
+  real(R_P),         intent(in) :: rhs(1:lhs%n) !< Right hand side.
+  real(R_P)                     :: opr(1:lhs%n) !< Operator result.
+
+  opr = lhs%U + rhs
+  endfunction integrand_add_real
+
+  pure function real_add_integrand(lhs, rhs) result(opr)
+  !< `real +` operator.
+  class(oscillator), intent(in) :: rhs          !< Left hand side.
+  real(R_P),         intent(in) :: lhs(1:rhs%n) !< Left hand side.
+  real(R_P)                     :: opr(1:rhs%n) !< Operator result.
+
+  opr = lhs + rhs%U
+  endfunction real_add_integrand
+
+  ! *
+  pure function integrand_multiply_integrand(lhs, rhs) result(opr)
+  !< `*` operator.
+  class(oscillator),       intent(in) :: lhs          !< Left hand side.
+  class(integrand_object), intent(in) :: rhs          !< Right hand side.
+  real(R_P)                           :: opr(1:lhs%n) !< Operator result.
+
+  select type(rhs)
+  class is(oscillator)
+    opr = lhs%U * rhs%U
+  endselect
+  endfunction integrand_multiply_integrand
+
+  pure function integrand_multiply_real(lhs, rhs) result(opr)
+  !< `* real_scalar` operator.
+  class(oscillator), intent(in) :: lhs          !< Left hand side.
+  real(R_P),         intent(in) :: rhs(1:lhs%n) !< Right hand side.
+  real(R_P)                     :: opr(1:lhs%n) !< Operator result.
+
+  opr = lhs%U * rhs
+  endfunction integrand_multiply_real
+
+  pure function real_multiply_integrand(lhs, rhs) result(opr)
+  !< `real_scalar *` operator.
+  class(oscillator), intent(in) :: rhs          !< Right hand side.
+  real(R_P),         intent(in) :: lhs(1:rhs%n) !< Left hand side.
+  real(R_P)                     :: opr(1:rhs%n) !< Operator result.
+
+  opr = lhs * rhs%U
+  endfunction real_multiply_integrand
+
+  pure function integrand_multiply_real_scalar(lhs, rhs) result(opr)
+  !< `* real_scalar` operator.
+  class(oscillator), intent(in) :: lhs          !< Left hand side.
+  real(R_P),         intent(in) :: rhs          !< Right hand side.
+  real(R_P)                     :: opr(1:lhs%n) !< Operator result.
+
+  opr = lhs%U * rhs
+  endfunction integrand_multiply_real_scalar
+
+  pure function real_scalar_multiply_integrand(lhs, rhs) result(opr)
+  !< `real_scalar *` operator.
+  real(R_P),         intent(in) :: lhs          !< Left hand side.
+  class(oscillator), intent(in) :: rhs          !< Right hand side.
+  real(R_P)                     :: opr(1:rhs%n) !< Operator result.
+
+  opr = lhs * rhs%U
+  endfunction real_scalar_multiply_integrand
+   ! -
+  pure function integrand_sub_integrand(lhs, rhs) result(opr)
+  !< `-` operator.
+  class(oscillator),       intent(in) :: lhs          !< Left hand side.
+  class(integrand_object), intent(in) :: rhs          !< Right hand side.
+  real(R_P)                           :: opr(1:lhs%n) !< Operator result.
+
+  select type(rhs)
+  class is(oscillator)
+    opr = lhs%U - rhs%U
+  endselect
+  endfunction integrand_sub_integrand
+
+  pure function integrand_sub_real(lhs, rhs) result(opr)
+  !< `- real` operator.
+  class(oscillator), intent(in) :: lhs          !< Left hand side.
+  real(R_P),         intent(in) :: rhs(1:lhs%n) !< Right hand side.
+  real(R_P)                     :: opr(1:lhs%n) !< Operator result.
+
+  opr = lhs%U - rhs
+  endfunction integrand_sub_real
+
+  pure function real_sub_integrand(lhs, rhs) result(opr)
+  !< `real -` operator.
+  class(oscillator), intent(in) :: rhs          !< Left hand side.
+  real(R_P),         intent(in) :: lhs(1:rhs%n) !< Left hand side.
+  real(R_P)                     :: opr(1:rhs%n) !< Operator result.
+
+  opr = lhs - rhs%U
+  endfunction real_sub_integrand
+
+  ! =
+  pure subroutine assign_integrand(lhs, rhs)
+  !< `=` operator.
+  class(oscillator),       intent(inout) :: lhs !< Left hand side.
+  class(integrand_object), intent(in)    :: rhs !< Right hand side.
+
+  select type(rhs)
+  class is(oscillator)
+    lhs%n = rhs%n
+    lhs%U = rhs%U
+    lhs%f = rhs%f
+  endselect
+  endsubroutine assign_integrand
+
+  pure subroutine assign_real(lhs, rhs)
+  !< `= real` operator.
+  class(oscillator), intent(inout) :: lhs          !< Left hand side.
+  real(R_P),         intent(in)    :: rhs(1:lhs%n) !< Right hand side.
+
+  lhs%U = rhs
+  endsubroutine assign_real
 endmodule oscillation_oscillator
