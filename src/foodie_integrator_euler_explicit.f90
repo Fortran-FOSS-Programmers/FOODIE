@@ -14,7 +14,7 @@ module foodie_integrator_euler_explicit
 !<
 !< @note The value of \(\Delta t\) must be provided, it not being computed by the integrator.
 
-use foodie_adt_integrand, only : integrand
+use foodie_integrand_object, only : integrand_object
 use foodie_integrator_object, only : integrator_object
 use penf, only : I_P, R_P
 
@@ -104,9 +104,9 @@ contains
 
   subroutine integrate(U, Dt, t)
   !< Integrate field with explicit Euler scheme, 1st order.
-  class(integrand),    intent(inout) :: U  !< Field to be integrated.
-  real(R_P),           intent(in)    :: Dt !< Time step.
-  real(R_P), optional, intent(in)    :: t  !< Time.
+  class(integrand_object), intent(inout) :: U  !< Field to be integrated.
+  real(R_P),               intent(in)    :: Dt !< Time step.
+  real(R_P), optional,     intent(in)    :: t  !< Time.
 
   U = U + U%t(t=t) * Dt
   endsubroutine integrate

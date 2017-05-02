@@ -37,8 +37,8 @@ module foodie_integrator_lmm_ssp_vss
 !< [1] *Strong Stability Preserving Explicit Linear Multistep Methods with Variable Step Size*, Y. Hadjmichael, D. Ketcheson,
 !< L. Loczi, A. Nemeth, 2016, SIAM, Vol. 54, N. 5, pp. 2799-2832.
 
-use foodie_adt_integrand, only : integrand
 use foodie_error_codes, only : ERROR_UNSUPPORTED_SCHEME
+use foodie_integrand_object, only : integrand_object
 use foodie_integrator_object, only : integrator_object
 use penf, only : I_P, R_P
 
@@ -82,10 +82,10 @@ abstract interface
   !< Abstract interfaces of [[integrator_lmm_ssp_vss]] methods.
   subroutine integrate_interface(self, U, previous, Dt, t, autoupdate)
   !< Integrate field with LMM-SSP class scheme.
-  import :: integrand, integrator_lmm_ssp_vss, R_P
+  import :: integrand_object, integrator_lmm_ssp_vss, R_P
   class(integrator_lmm_ssp_vss), intent(in)    :: self         !< Integrator.
-  class(integrand),              intent(inout) :: U            !< Field to be integrated.
-  class(integrand),              intent(inout) :: previous(1:) !< Previous time steps solutions of integrand field.
+  class(integrand_object),       intent(inout) :: U            !< Field to be integrated.
+  class(integrand_object),       intent(inout) :: previous(1:) !< Previous time steps solutions of integrand field.
   real(R_P),                     intent(inout) :: Dt(:)        !< Time steps.
   real(R_P),                     intent(in)    :: t(:)         !< Times.
   logical, optional,             intent(in)    :: autoupdate   !< Perform cyclic autoupdate of previous time steps.
@@ -207,8 +207,8 @@ contains
   subroutine integrate(self, U, previous, Dt, t, autoupdate)
   !< Integrate field with LMM-SSP class scheme.
   class(integrator_lmm_ssp_vss), intent(in)    :: self         !< Integrator.
-  class(integrand),              intent(inout) :: U            !< Field to be integrated.
-  class(integrand),              intent(inout) :: previous(1:) !< Previous time steps solutions of integrand field.
+  class(integrand_object),       intent(inout) :: U            !< Field to be integrated.
+  class(integrand_object),       intent(inout) :: previous(1:) !< Previous time steps solutions of integrand field.
   real(R_P),                     intent(inout) :: Dt(:)        !< Time steps.
   real(R_P),                     intent(in)    :: t(:)         !< Times.
   logical, optional,             intent(in)    :: autoupdate   !< Perform cyclic autoupdate of previous time steps.
@@ -219,8 +219,8 @@ contains
   subroutine update_previous(self, U, previous, Dt)
   !< Cyclic update previous time steps.
   class(integrator_lmm_ssp_vss), intent(in)    :: self         !< Integrator.
-  class(integrand),              intent(in)    :: U            !< Field to be integrated.
-  class(integrand),              intent(inout) :: previous(1:) !< Previous time steps solutions of integrand field.
+  class(integrand_object),       intent(in)    :: U            !< Field to be integrated.
+  class(integrand_object),       intent(inout) :: previous(1:) !< Previous time steps solutions of integrand field.
   real(R_P),                     intent(inout) :: Dt(:)        !< Time steps.
   integer(I_P)                                 :: s            !< Steps counter.
 
@@ -235,8 +235,8 @@ contains
   subroutine integrate_order_2(self, U, previous, Dt, t, autoupdate)
   !< Integrate field with LMM-SSP-VSS 2nd order class scheme.
   class(integrator_lmm_ssp_vss), intent(in)    :: self          !< Integrator.
-  class(integrand),              intent(inout) :: U             !< Field to be integrated.
-  class(integrand),              intent(inout) :: previous(1:)  !< Previous time steps solutions of integrand field.
+  class(integrand_object),       intent(inout) :: U             !< Field to be integrated.
+  class(integrand_object),       intent(inout) :: previous(1:)  !< Previous time steps solutions of integrand field.
   real(R_P),                     intent(inout) :: Dt(:)         !< Time steps.
   real(R_P),                     intent(in)    :: t(:)          !< Times.
   logical, optional,             intent(in)    :: autoupdate    !< Perform cyclic autoupdate of previous time steps.
@@ -255,8 +255,8 @@ contains
   subroutine integrate_order_3(self, U, previous, Dt, t, autoupdate)
   !< Integrate field with LMM-SSP-VSS 3rd order class scheme.
   class(integrator_lmm_ssp_vss), intent(in)    :: self          !< Integrator.
-  class(integrand),              intent(inout) :: U             !< Field to be integrated.
-  class(integrand),              intent(inout) :: previous(1:)  !< Previous time steps solutions of integrand field.
+  class(integrand_object),       intent(inout) :: U             !< Field to be integrated.
+  class(integrand_object),       intent(inout) :: previous(1:)  !< Previous time steps solutions of integrand field.
   real(R_P),                     intent(inout) :: Dt(:)         !< Time steps.
   real(R_P),                     intent(in)    :: t(:)          !< Times.
   logical, optional,             intent(in)    :: autoupdate    !< Perform cyclic autoupdate of previous time steps.

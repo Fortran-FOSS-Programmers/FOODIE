@@ -26,8 +26,8 @@ module foodie_integrator_lmm_ssp
 !< [1] *Strong Stability Preserving Runge-Kutta and Multistep Time Discretizations*, S. Gottlieb, D. Ketcheson, C.W. Shu,
 !< 2011, 978-981-4289-26-9, doi:10.1142/7498, World Scientific Publishing Co. Pte. Ltd.
 
-use foodie_adt_integrand, only : integrand
 use foodie_error_codes, only : ERROR_UNSUPPORTED_SCHEME
+use foodie_integrand_object, only : integrand_object
 use foodie_integrator_object, only : integrator_object
 use penf, only : I_P, R_P
 
@@ -203,8 +203,8 @@ contains
   subroutine integrate(self, U, previous, Dt, t, autoupdate)
   !< Integrate field with LMM-SSP class scheme.
   class(integrator_lmm_ssp), intent(in)    :: self         !< Integrator.
-  class(integrand),          intent(inout) :: U            !< Field to be integrated.
-  class(integrand),          intent(inout) :: previous(1:) !< Previous time steps solutions of integrand field.
+  class(integrand_object),   intent(inout) :: U            !< Field to be integrated.
+  class(integrand_object),   intent(inout) :: previous(1:) !< Previous time steps solutions of integrand field.
   real(R_P),                 intent(in)    :: Dt           !< Time steps.
   real(R_P),                 intent(in)    :: t(:)         !< Times.
   logical, optional,         intent(in)    :: autoupdate   !< Perform cyclic autoupdate of previous time steps.
@@ -223,8 +223,8 @@ contains
   subroutine update_previous(self, U, previous)
   !< Cyclic update previous time steps.
   class(integrator_lmm_ssp), intent(in)    :: self         !< Integrator.
-  class(integrand),          intent(in)    :: U            !< Field to be integrated.
-  class(integrand),          intent(inout) :: previous(1:) !< Previous time steps solutions of integrand field.
+  class(integrand_object),   intent(in)    :: U            !< Field to be integrated.
+  class(integrand_object),   intent(inout) :: previous(1:) !< Previous time steps solutions of integrand field.
   integer(I_P)                             :: s            !< Steps counter.
 
   do s=1, self%steps - 1

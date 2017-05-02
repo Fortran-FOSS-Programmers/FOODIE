@@ -221,9 +221,11 @@
       
       <a class="list-group-item" href="../proc/add_lorenz.html">add_lorenz</a>
       
-      <a class="list-group-item" href="../proc/add_oscillation.html">add_oscillation</a>
-      
       <a class="list-group-item" href="../proc/assign_abstract.html">assign_abstract</a>
+      
+      <a class="list-group-item" href="../proc/assign_integrand.html">assign_integrand</a>
+      
+      <a class="list-group-item" href="../proc/assign_real.html">assign_real</a>
       
       <a class="list-group-item" href="../proc/average_solution.html">average_solution</a>
       
@@ -383,7 +385,7 @@
       
       <a class="list-group-item" href="../proc/dlorenz_dt.html">dLorenz_dt</a>
       
-      <a class="list-group-item" href="../proc/doscillation_dt.html">dOscillation_dt</a>
+      <a class="list-group-item" href="../proc/doscillator_dt.html">doscillator_dt</a>
       
       <a class="list-group-item" href="../proc/dt_ratio.html">dt_ratio</a>
       
@@ -551,6 +553,20 @@
       
       <a class="list-group-item" href="../proc/integr_assign_integr%7E13.html">integr_assign_integr</a>
       
+      <a class="list-group-item" href="../proc/integrand_add_integrand.html">integrand_add_integrand</a>
+      
+      <a class="list-group-item" href="../proc/integrand_add_real.html">integrand_add_real</a>
+      
+      <a class="list-group-item" href="../proc/integrand_multiply_integrand.html">integrand_multiply_integrand</a>
+      
+      <a class="list-group-item" href="../proc/integrand_multiply_real.html">integrand_multiply_real</a>
+      
+      <a class="list-group-item" href="../proc/integrand_multiply_real_scalar.html">integrand_multiply_real_scalar</a>
+      
+      <a class="list-group-item" href="../proc/integrand_sub_integrand.html">integrand_sub_integrand</a>
+      
+      <a class="list-group-item" href="../proc/integrand_sub_real.html">integrand_sub_real</a>
+      
       <a class="list-group-item" href="../proc/integrate.html">integrate</a>
       
       <a class="list-group-item" href="../proc/integrate%7E2.html">integrate</a>
@@ -649,6 +665,8 @@
       
       <a class="list-group-item" href="../proc/is_supported%7E13.html">is_supported</a>
       
+      <a class="list-group-item" href="../proc/local_error.html">local_error</a>
+      
       <a class="list-group-item" href="../proc/lorenz_assign_lorenz.html">lorenz_assign_lorenz</a>
       
       <a class="list-group-item" href="../proc/lorenz_assign_real.html">lorenz_assign_real</a>
@@ -664,14 +682,6 @@
       <a class="list-group-item" href="../proc/observed_order.html">observed_order</a>
       
       <a class="list-group-item" href="../proc/omega.html">omega</a>
-      
-      <a class="list-group-item" href="../proc/oscillation_assign_oscillation.html">oscillation_assign_oscillation</a>
-      
-      <a class="list-group-item" href="../proc/oscillation_local_error.html">oscillation_local_error</a>
-      
-      <a class="list-group-item" href="../proc/oscillation_multiply_oscillation.html">oscillation_multiply_oscillation</a>
-      
-      <a class="list-group-item" href="../proc/oscillation_multiply_real.html">oscillation_multiply_real</a>
       
       <a class="list-group-item" href="../proc/output.html">output</a>
       
@@ -725,6 +735,8 @@
       
       <a class="list-group-item" href="../proc/r%7E5.html">r</a>
       
+      <a class="list-group-item" href="../proc/real_add_integrand.html">real_add_integrand</a>
+      
       <a class="list-group-item" href="../proc/real_multiply_burgers.html">real_multiply_burgers</a>
       
       <a class="list-group-item" href="../proc/real_multiply_euler.html">real_multiply_euler</a>
@@ -733,9 +745,13 @@
       
       <a class="list-group-item" href="../proc/real_multiply_euler%7E3.html">real_multiply_euler</a>
       
+      <a class="list-group-item" href="../proc/real_multiply_integrand.html">real_multiply_integrand</a>
+      
       <a class="list-group-item" href="../proc/real_multiply_lorenz.html">real_multiply_lorenz</a>
       
-      <a class="list-group-item" href="../proc/real_multiply_oscillation.html">real_multiply_oscillation</a>
+      <a class="list-group-item" href="../proc/real_scalar_multiply_integrand.html">real_scalar_multiply_integrand</a>
+      
+      <a class="list-group-item" href="../proc/real_sub_integrand.html">real_sub_integrand</a>
       
       <a class="list-group-item" href="../proc/reconstruct_interfaces_states.html">reconstruct_interfaces_states</a>
       
@@ -796,8 +812,6 @@
       <a class="list-group-item" href="../proc/sub_euler%7E3.html">sub_euler</a>
       
       <a class="list-group-item" href="../proc/sub_lorenz.html">sub_lorenz</a>
-      
-      <a class="list-group-item" href="../proc/sub_oscillation.html">sub_oscillation</a>
       
       <a class="list-group-item" href="../proc/supported_schemes.html">supported_schemes</a>
       
@@ -963,7 +977,7 @@ private function dEuler_dt(self, t) result(dState_dt)
     
     
     
-	 <h3>Return Value <small><span class="anchor" id="variable-dstate_dt%7E8"></span>class(<a href='../type/integrand.html'>integrand</a>),
+	 <h3>Return Value <small><span class="anchor" id="variable-dstate_dt%7E8"></span>class(integrand),
   allocatable</small></h3>
     <p>Euler field time derivative.</p>
     
@@ -1212,9 +1226,11 @@ private function dEuler_dt(self, t) result(dState_dt)
       
       <a class="list-group-item" href="../proc/add_lorenz.html">add_lorenz</a>
       
-      <a class="list-group-item" href="../proc/add_oscillation.html">add_oscillation</a>
-      
       <a class="list-group-item" href="../proc/assign_abstract.html">assign_abstract</a>
+      
+      <a class="list-group-item" href="../proc/assign_integrand.html">assign_integrand</a>
+      
+      <a class="list-group-item" href="../proc/assign_real.html">assign_real</a>
       
       <a class="list-group-item" href="../proc/average_solution.html">average_solution</a>
       
@@ -1374,7 +1390,7 @@ private function dEuler_dt(self, t) result(dState_dt)
       
       <a class="list-group-item" href="../proc/dlorenz_dt.html">dLorenz_dt</a>
       
-      <a class="list-group-item" href="../proc/doscillation_dt.html">dOscillation_dt</a>
+      <a class="list-group-item" href="../proc/doscillator_dt.html">doscillator_dt</a>
       
       <a class="list-group-item" href="../proc/dt_ratio.html">dt_ratio</a>
       
@@ -1542,6 +1558,20 @@ private function dEuler_dt(self, t) result(dState_dt)
       
       <a class="list-group-item" href="../proc/integr_assign_integr%7E13.html">integr_assign_integr</a>
       
+      <a class="list-group-item" href="../proc/integrand_add_integrand.html">integrand_add_integrand</a>
+      
+      <a class="list-group-item" href="../proc/integrand_add_real.html">integrand_add_real</a>
+      
+      <a class="list-group-item" href="../proc/integrand_multiply_integrand.html">integrand_multiply_integrand</a>
+      
+      <a class="list-group-item" href="../proc/integrand_multiply_real.html">integrand_multiply_real</a>
+      
+      <a class="list-group-item" href="../proc/integrand_multiply_real_scalar.html">integrand_multiply_real_scalar</a>
+      
+      <a class="list-group-item" href="../proc/integrand_sub_integrand.html">integrand_sub_integrand</a>
+      
+      <a class="list-group-item" href="../proc/integrand_sub_real.html">integrand_sub_real</a>
+      
       <a class="list-group-item" href="../proc/integrate.html">integrate</a>
       
       <a class="list-group-item" href="../proc/integrate%7E2.html">integrate</a>
@@ -1640,6 +1670,8 @@ private function dEuler_dt(self, t) result(dState_dt)
       
       <a class="list-group-item" href="../proc/is_supported%7E13.html">is_supported</a>
       
+      <a class="list-group-item" href="../proc/local_error.html">local_error</a>
+      
       <a class="list-group-item" href="../proc/lorenz_assign_lorenz.html">lorenz_assign_lorenz</a>
       
       <a class="list-group-item" href="../proc/lorenz_assign_real.html">lorenz_assign_real</a>
@@ -1655,14 +1687,6 @@ private function dEuler_dt(self, t) result(dState_dt)
       <a class="list-group-item" href="../proc/observed_order.html">observed_order</a>
       
       <a class="list-group-item" href="../proc/omega.html">omega</a>
-      
-      <a class="list-group-item" href="../proc/oscillation_assign_oscillation.html">oscillation_assign_oscillation</a>
-      
-      <a class="list-group-item" href="../proc/oscillation_local_error.html">oscillation_local_error</a>
-      
-      <a class="list-group-item" href="../proc/oscillation_multiply_oscillation.html">oscillation_multiply_oscillation</a>
-      
-      <a class="list-group-item" href="../proc/oscillation_multiply_real.html">oscillation_multiply_real</a>
       
       <a class="list-group-item" href="../proc/output.html">output</a>
       
@@ -1716,6 +1740,8 @@ private function dEuler_dt(self, t) result(dState_dt)
       
       <a class="list-group-item" href="../proc/r%7E5.html">r</a>
       
+      <a class="list-group-item" href="../proc/real_add_integrand.html">real_add_integrand</a>
+      
       <a class="list-group-item" href="../proc/real_multiply_burgers.html">real_multiply_burgers</a>
       
       <a class="list-group-item" href="../proc/real_multiply_euler.html">real_multiply_euler</a>
@@ -1724,9 +1750,13 @@ private function dEuler_dt(self, t) result(dState_dt)
       
       <a class="list-group-item" href="../proc/real_multiply_euler%7E3.html">real_multiply_euler</a>
       
+      <a class="list-group-item" href="../proc/real_multiply_integrand.html">real_multiply_integrand</a>
+      
       <a class="list-group-item" href="../proc/real_multiply_lorenz.html">real_multiply_lorenz</a>
       
-      <a class="list-group-item" href="../proc/real_multiply_oscillation.html">real_multiply_oscillation</a>
+      <a class="list-group-item" href="../proc/real_scalar_multiply_integrand.html">real_scalar_multiply_integrand</a>
+      
+      <a class="list-group-item" href="../proc/real_sub_integrand.html">real_sub_integrand</a>
       
       <a class="list-group-item" href="../proc/reconstruct_interfaces_states.html">reconstruct_interfaces_states</a>
       
@@ -1787,8 +1817,6 @@ private function dEuler_dt(self, t) result(dState_dt)
       <a class="list-group-item" href="../proc/sub_euler%7E3.html">sub_euler</a>
       
       <a class="list-group-item" href="../proc/sub_lorenz.html">sub_lorenz</a>
-      
-      <a class="list-group-item" href="../proc/sub_oscillation.html">sub_oscillation</a>
       
       <a class="list-group-item" href="../proc/supported_schemes.html">supported_schemes</a>
       
@@ -1895,7 +1923,7 @@ private function dEuler_dt(self, t) result(dState_dt)
           <p class="text-right">
             Documentation generated by 
             <a href="https://github.com/cmacmackin/ford">FORD</a>
-             on 2017-04-20 13:54  
+             on 2017-05-02 14:54  
           </p>
         </div>
         <div class="col-xs-12 col-md-4 col-md-pull-4"><p class="text-center"> FOODIE was developed by Fortran-FOSS-Programmers Group</p></div>
