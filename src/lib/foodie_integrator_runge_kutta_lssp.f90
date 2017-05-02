@@ -62,8 +62,8 @@ module foodie_integrator_runge_kutta_lssp
 !< [2] *Strong Stability Preserving Runge-Kutta and Multistep Time Discretizations*, S. Gottlieb, D. Ketcheson, C.W. Shu,
 !< 2011, 978-981-4289-26-9, doi:10.1142/7498, World Scientific Publishing Co. Pte. Ltd.
 
-use foodie_adt_integrand, only : integrand
 use foodie_error_codes, only : ERROR_UNSUPPORTED_SCHEME
+use foodie_integrand_object, only : integrand_object
 use foodie_integrator_object, only : integrator_object
 use penf, only : I_P, R_P
 
@@ -105,10 +105,10 @@ abstract interface
   !< Abstract interfaces of [[integrator_runge_kutta_lssp]] methods.
   subroutine integrate_interface(self, U, stage, Dt, t)
   !< Integrate field with Linear SSP Runge-Kutta scheme.
-  import :: integrand, integrator_runge_kutta_lssp, R_P
+  import :: integrand_object, integrator_runge_kutta_lssp, R_P
   class(integrator_runge_kutta_lssp), intent(in)    :: self      !< Integrator.
-  class(integrand),                   intent(inout) :: U         !< Field to be integrated.
-  class(integrand),                   intent(inout) :: stage(1:) !< Runge-Kutta stages [1:stages].
+  class(integrand_object),            intent(inout) :: U         !< Field to be integrated.
+  class(integrand_object),            intent(inout) :: stage(1:) !< Runge-Kutta stages [1:stages].
   real(R_P),                          intent(in)    :: Dt        !< Time steps.
   real(R_P),                          intent(in)    :: t         !< Times.
   endsubroutine integrate_interface
@@ -231,8 +231,8 @@ contains
   !<
   !< @note This method can be used **after** the integrator is created (i.e. the RK coefficients are initialized).
   class(integrator_runge_kutta_lssp), intent(in)    :: self      !< Integrator.
-  class(integrand),                   intent(inout) :: U         !< Field to be integrated.
-  class(integrand),                   intent(inout) :: stage(1:) !< Runge-Kutta stages [1:stages].
+  class(integrand_object),            intent(inout) :: U         !< Field to be integrated.
+  class(integrand_object),            intent(inout) :: stage(1:) !< Runge-Kutta stages [1:stages].
   real(R_P),                          intent(in)    :: Dt        !< Time step.
   real(R_P),                          intent(in)    :: t         !< Time.
 
@@ -289,8 +289,8 @@ contains
   !<
   !< @note This method can be used **after** the integrator is created (i.e. the RK coefficients are initialized).
   class(integrator_runge_kutta_lssp), intent(in)    :: self      !< Integrator.
-  class(integrand),                   intent(inout) :: U         !< Field to be integrated.
-  class(integrand),                   intent(inout) :: stage(1:) !< Runge-Kutta stages [1:stages].
+  class(integrand_object),            intent(inout) :: U         !< Field to be integrated.
+  class(integrand_object),            intent(inout) :: stage(1:) !< Runge-Kutta stages [1:stages].
   real(R_P),                          intent(in)    :: Dt        !< Time step.
   real(R_P),                          intent(in)    :: t         !< Time.
   integer(I_P)                                      :: s         !< First stages counter.
@@ -313,8 +313,8 @@ contains
   !<
   !< @note This method can be used **after** the integrator is created (i.e. the RK coefficients are initialized).
   class(integrator_runge_kutta_lssp), intent(in)    :: self      !< Integrator.
-  class(integrand),                   intent(inout) :: U         !< Field to be integrated.
-  class(integrand),                   intent(inout) :: stage(1:) !< Runge-Kutta stages [1:stages].
+  class(integrand_object),            intent(inout) :: U         !< Field to be integrated.
+  class(integrand_object),            intent(inout) :: stage(1:) !< Runge-Kutta stages [1:stages].
   real(R_P),                          intent(in)    :: Dt        !< Time step.
   real(R_P),                          intent(in)    :: t         !< Time.
   integer(I_P)                                      :: s         !< First stages counter.

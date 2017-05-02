@@ -147,8 +147,8 @@ module foodie_integrator_runge_kutta_low_storage
 !< [4] *Efficient low-storage Runge–Kutta schemes with optimized stability regions*, Jens Niegemann and Richard Diehl and Kurt
 !< Busch, Journal of Computational Physics, vol. 231, 2012, pp. 364--372.
 
-use foodie_adt_integrand, only : integrand
 use foodie_error_codes, only : ERROR_UNSUPPORTED_SCHEME
+use foodie_integrand_object, only : integrand_object
 use foodie_integrator_object, only : integrator_object
 use penf, only : I_P, I8P, R_P
 
@@ -404,8 +404,8 @@ contains
   !<
   !< @note This method can be used **after** the integrator is created (i.e. the RK coefficients are initialized).
   class(integrator_runge_kutta_ls), intent(in)    :: self      !< Integrator.
-  class(integrand),                 intent(inout) :: U         !< Field to be integrated.
-  class(integrand),                 intent(inout) :: stage(1:) !< Runge-Kutta registers.
+  class(integrand_object),          intent(inout) :: U         !< Field to be integrated.
+  class(integrand_object),          intent(inout) :: stage(1:) !< Runge-Kutta registers.
   real(R_P),                        intent(in)    :: Dt        !< Time step.
   real(R_P),                        intent(in)    :: t         !< Time.
   integer(I_P)                                    :: s         !< First stages counter.

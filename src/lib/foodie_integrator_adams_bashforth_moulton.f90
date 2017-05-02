@@ -76,8 +76,8 @@ module foodie_integrator_adams_bashforth_moulton
 !<#### Bibliography
 !<
 
-use foodie_adt_integrand, only : integrand
 use foodie_error_codes, only : ERROR_UNSUPPORTED_SCHEME
+use foodie_integrand_object, only : integrand_object
 use foodie_integrator_adams_bashforth, only : integrator_adams_bashforth
 use foodie_integrator_adams_moulton, only : integrator_adams_moulton
 use foodie_integrator_object, only : integrator_object
@@ -232,8 +232,8 @@ contains
   subroutine integrate(self, U, previous, Dt, t, iterations)
   !< Integrate field with Adams-Bashforth-Moulton class scheme.
   class(integrator_adams_bashforth_moulton), intent(in)           :: self         !< Integrator.
-  class(integrand),                          intent(inout)        :: U            !< Field to be integrated.
-  class(integrand),                          intent(inout)        :: previous(1:) !< Previous time steps solutions of integrand.
+  class(integrand_object),                   intent(inout)        :: U            !< Field to be integrated.
+  class(integrand_object),                   intent(inout)        :: previous(1:) !< Previous time steps solutions of integrand.
   real(R_P),                                 intent(in)           :: Dt           !< Time steps.
   real(R_P),                                 intent(in)           :: t(:)         !< Times.
   integer(I_P),                              intent(in), optional :: iterations   !< Fixed point iterations of AM scheme.

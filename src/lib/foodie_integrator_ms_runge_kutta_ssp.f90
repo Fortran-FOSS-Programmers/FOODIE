@@ -34,8 +34,8 @@ module foodie_integrator_ms_runge_kutta_ssp
 !< [1] *Explicit Strong Stability Preserving Multistep Runge-Kutta Methods*, C. Bresten, S. Gottlieb, Z. Grant, D. Higgs,
 !< D. Ketcheson, A. Németh, 2016, Mathematics of Computations,
 
-use foodie_adt_integrand, only : integrand
 use foodie_error_codes, only : ERROR_UNSUPPORTED_SCHEME
+use foodie_integrand_object, only : integrand_object
 use foodie_integrator_object, only : integrator_object
 use penf, only : I_P, R_P
 
@@ -310,9 +310,9 @@ contains
   subroutine integrate(self, U, previous, stage, Dt, t, autoupdate)
   !< Integrate field with LMM-SSP class scheme.
   class(integrator_ms_runge_kutta_ssp), intent(in)           :: self         !< Integrator.
-  class(integrand),                     intent(inout)        :: U            !< Field to be integrated.
-  class(integrand),                     intent(inout)        :: previous(1:) !< Previous time steps solutions of integrand.
-  class(integrand),                     intent(inout)        :: stage(1:)    !< Runge-Kutta stages [1:stages].
+  class(integrand_object),              intent(inout)        :: U            !< Field to be integrated.
+  class(integrand_object),              intent(inout)        :: previous(1:) !< Previous time steps solutions of integrand.
+  class(integrand_object),              intent(inout)        :: stage(1:)    !< Runge-Kutta stages [1:stages].
   real(R_P),                            intent(in)           :: Dt           !< Time steps.
   real(R_P),                            intent(in)           :: t(:)         !< Times.
   logical,                              intent(in), optional :: autoupdate   !< Perform cyclic autoupdate of previous steps.
@@ -353,8 +353,8 @@ contains
   subroutine update_previous(self, U, previous)
   !< Cyclic update previous time steps.
   class(integrator_ms_runge_kutta_ssp), intent(in)    :: self         !< Integrator.
-  class(integrand),                     intent(in)    :: U            !< Field to be integrated.
-  class(integrand),                     intent(inout) :: previous(1:) !< Previous time steps solutions of integrand field.
+  class(integrand_object),              intent(in)    :: U            !< Field to be integrated.
+  class(integrand_object),              intent(inout) :: previous(1:) !< Previous time steps solutions of integrand field.
   integer(I_P)                                        :: s            !< Steps counter.
 
   do s=1, self%steps - 1

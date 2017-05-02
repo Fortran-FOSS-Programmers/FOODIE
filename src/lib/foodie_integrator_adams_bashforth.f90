@@ -26,8 +26,8 @@ module foodie_integrator_adams_bashforth
 !<
 !< [2] *Linear multistep method*, [wikipedia article](https://en.wikipedia.org/wiki/Linear_multistep_method).
 
-use foodie_adt_integrand, only : integrand
 use foodie_error_codes, only : ERROR_UNSUPPORTED_SCHEME
+use foodie_integrand_object, only : integrand_object
 use foodie_integrator_object, only : integrator_object
 use penf, only : I_P, R_P
 
@@ -341,8 +341,8 @@ contains
   subroutine integrate(self, U, previous, Dt, t, autoupdate)
   !< Integrate field with Adams-Bashforth class scheme.
   class(integrator_adams_bashforth), intent(in)    :: self         !< Integrator.
-  class(integrand),                  intent(inout) :: U            !< Field to be integrated.
-  class(integrand),                  intent(inout) :: previous(1:) !< Previous time steps solutions of integrand field.
+  class(integrand_object),           intent(inout) :: U            !< Field to be integrated.
+  class(integrand_object),           intent(inout) :: previous(1:) !< Previous time steps solutions of integrand field.
   real(R_P),                         intent(in)    :: Dt           !< Time steps.
   real(R_P),                         intent(in)    :: t(:)         !< Times.
   logical, optional,                 intent(in)    :: autoupdate   !< Perform cyclic autoupdate of previous time steps.
@@ -359,8 +359,8 @@ contains
   subroutine update_previous(self, U, previous)
   !< Cyclic update previous time steps.
   class(integrator_adams_bashforth), intent(in)    :: self         !< Integrator.
-  class(integrand),                  intent(in)    :: U            !< Field to be integrated.
-  class(integrand),                  intent(inout) :: previous(1:) !< Previous time steps solutions of integrand field.
+  class(integrand_object),           intent(in)    :: U            !< Field to be integrated.
+  class(integrand_object),           intent(inout) :: previous(1:) !< Previous time steps solutions of integrand field.
   integer(I_P)                                     :: s            !< Steps counter.
 
   do s=1, self%steps - 1
