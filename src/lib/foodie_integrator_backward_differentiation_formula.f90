@@ -33,8 +33,8 @@ module foodie_integrator_backward_differentiation_formula
 !<#### Bibliography
 !<
 
-use foodie_adt_integrand, only : integrand
 use foodie_error_codes, only : ERROR_UNSUPPORTED_SCHEME
+use foodie_integrand_object, only : integrand_object
 use foodie_integrator_object, only : integrator_object
 use penf, only : I_P, R_P
 
@@ -211,15 +211,15 @@ contains
   subroutine integrate(self, U, previous, Dt, t, iterations, autoupdate)
   !< Integrate field with BDF class scheme.
   class(integrator_back_df),  intent(in)    :: self         !< Integrator.
-  class(integrand),           intent(inout) :: U            !< Field to be integrated.
-  class(integrand),           intent(inout) :: previous(1:) !< Previous time steps solutions of integrand field.
+  class(integrand_object),    intent(inout) :: U            !< Field to be integrated.
+  class(integrand_object),    intent(inout) :: previous(1:) !< Previous time steps solutions of integrand field.
   real(R_P),                  intent(in)    :: Dt           !< Time steps.
   real(R_P),                  intent(in)    :: t(:)         !< Times.
   integer(I_P), optional,     intent(in)    :: iterations   !< Fixed point iterations.
   logical,      optional,     intent(in)    :: autoupdate   !< Perform cyclic autoupdate of previous time steps.
   integer(I_P)                              :: iterations_  !< Fixed point iterations.
   logical                                   :: autoupdate_  !< Perform cyclic autoupdate of previous time steps, dummy var.
-  class(integrand), allocatable             :: delta        !< Delta RHS for fixed point iterations.
+  class(integrand_object), allocatable             :: delta        !< Delta RHS for fixed point iterations.
   integer(I_P)                              :: s            !< Steps counter.
 
   autoupdate_ = .true. ; if (present(autoupdate)) autoupdate_ = autoupdate
@@ -238,8 +238,8 @@ contains
   subroutine update_previous(self, U, previous)
   !< Cyclic update previous time steps.
   class(integrator_back_df), intent(in)    :: self         !< Integrator.
-  class(integrand),          intent(in)    :: U            !< Field to be integrated.
-  class(integrand),          intent(inout) :: previous(1:) !< Previous time steps solutions of integrand field.
+  class(integrand_object),   intent(in)    :: U            !< Field to be integrated.
+  class(integrand_object),   intent(inout) :: previous(1:) !< Previous time steps solutions of integrand field.
   integer(I_P)                             :: s            !< Steps counter.
 
   do s=1, self%steps - 1

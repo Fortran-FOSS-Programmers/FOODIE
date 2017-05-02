@@ -62,8 +62,8 @@ module foodie
 !<```
 
 use, intrinsic :: iso_fortran_env, only : stderr=>error_unit
-use foodie_adt_integrand, only : integrand
 use foodie_error_codes, only : ERROR_UNSUPPORTED_SCHEME
+use foodie_integrand_object, only : integrand_object
 use foodie_integrator_object, only : integrator_object
 use foodie_integrator_adams_bashforth, only : integrator_adams_bashforth
 use foodie_integrator_adams_bashforth_moulton, only : integrator_adams_bashforth_moulton
@@ -85,7 +85,7 @@ private
 public :: foodie_integrator
 public :: foodie_integrator_class_names
 public :: foodie_integrator_schemes
-public :: integrand
+public :: integrand_object
 public :: integrator_object
 public :: integrator_adams_bashforth
 public :: integrator_adams_bashforth_moulton

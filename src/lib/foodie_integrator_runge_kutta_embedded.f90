@@ -266,8 +266,8 @@ module foodie_integrator_runge_kutta_emd
 !< [4] *A tenth-order Runge-Kutta method with error estimate*, Feagin, T., Proceedings of the IAENG Conf. on Scientific
 !< Computing. 2007.
 
-use foodie_adt_integrand, only : integrand
 use foodie_error_codes, only : ERROR_UNSUPPORTED_SCHEME
+use foodie_integrand_object, only : integrand_object
 use foodie_integrator_object, only : integrator_object
 use penf, only : I_P, R_P
 
@@ -669,12 +669,12 @@ contains
   !<
   !< @note This method can be used **after** the integrator is created (i.e. the RK coefficients are initialized).
   class(integrator_runge_kutta_emd), intent(in)    :: self      !< Integrator.
-  class(integrand),                  intent(inout) :: U         !< Field to be integrated.
-  class(integrand),                  intent(inout) :: stage(1:) !< Runge-Kutta stages [1:stages].
+  class(integrand_object),           intent(inout) :: U         !< Field to be integrated.
+  class(integrand_object),           intent(inout) :: stage(1:) !< Runge-Kutta stages [1:stages].
   real(R_P),                         intent(inout) :: Dt        !< Time step.
   real(R_P),                         intent(in)    :: t         !< Time.
-  class(integrand), allocatable                    :: U1        !< First U evaluation.
-  class(integrand), allocatable                    :: U2        !< Second U evaluation.
+  class(integrand_object), allocatable             :: U1        !< First U evaluation.
+  class(integrand_object), allocatable             :: U2        !< Second U evaluation.
   real(R_P)                                        :: error     !< Local truncation error estimation.
   integer(I_P)                                     :: s         !< First stages counter.
   integer(I_P)                                     :: ss        !< Second stages counter.
