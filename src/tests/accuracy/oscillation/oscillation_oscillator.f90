@@ -79,7 +79,6 @@ contains
   real(R_P),         intent(in)    :: initial_state(1:2) !< Initial state of the Oscillation field vector.
   real(R_P),         intent(in)    :: frequency          !< Frequency of oscillation.
 
-  self%n = 2
   self%U = initial_state
   self%f = frequency
   endsubroutine init
@@ -95,12 +94,12 @@ contains
   ! deferred methods
   pure function doscillator_dt(self, t) result(dState_dt)
   !< Time derivative of oscillator field.
-  class(oscillator), intent(in)           :: self                !< Oscillation field.
-  real(R_P),         intent(in), optional :: t                   !< Time.
-  real(R_P)                               :: dState_dt(1:self%n) !< Oscillation field time derivative.
+  class(oscillator), intent(in)           :: self         !< Oscillation field.
+  real(R_P),         intent(in), optional :: t            !< Time.
+  real(R_P), allocatable                  :: dState_dt(:) !< Oscillation field time derivative.
 
-  dState_dt(1) = -self%f * self%U(2)
-  dState_dt(2) =  self%f * self%U(1)
+  dState_dt = [-self%f * self%U(2), &
+                self%f * self%U(1)]
   endfunction doscillator_dt
 
   pure function local_error(lhs, rhs) result(error)
@@ -117,7 +116,7 @@ contains
   select type(rhs)
   class is(oscillator)
     error = 0._R_P
-    do i=1, lhs%n
+    do i=1, size(lhs%U, dim=1)
       error = error + (lhs%U(i) - rhs%U(i)) ** 2 / lhs%U(i) ** 2
     enddo
     error = sqrt(error)
@@ -127,9 +126,9 @@ contains
   ! +
   pure function integrand_add_integrand(lhs, rhs) result(opr)
   !< `+` operator.
-  class(oscillator),       intent(in) :: lhs          !< Left hand side.
-  class(integrand_object), intent(in) :: rhs          !< Right hand side.
-  real(R_P)                           :: opr(1:lhs%n) !< Operator result.
+  class(oscillator),       intent(in) :: lhs    !< Left hand side.
+  class(integrand_object), intent(in) :: rhs    !< Right hand side.
+  real(R_P), allocatable              :: opr(:) !< Operator result.
 
   select type(rhs)
   class is(oscillator)
@@ -139,18 +138,18 @@ contains
 
   pure function integrand_add_real(lhs, rhs) result(opr)
   !< `+ real` operator.
-  class(oscillator), intent(in) :: lhs          !< Left hand side.
-  real(R_P),         intent(in) :: rhs(1:lhs%n) !< Right hand side.
-  real(R_P)                     :: opr(1:lhs%n) !< Operator result.
+  class(oscillator), intent(in) :: lhs     !< Left hand side.
+  real(R_P),         intent(in) :: rhs(1:) !< Right hand side.
+  real(R_P), allocatable        :: opr(:)  !< Operator result.
 
   opr = lhs%U + rhs
   endfunction integrand_add_real
 
   pure function real_add_integrand(lhs, rhs) result(opr)
   !< `real +` operator.
-  class(oscillator), intent(in) :: rhs          !< Left hand side.
-  real(R_P),         intent(in) :: lhs(1:rhs%n) !< Left hand side.
-  real(R_P)                     :: opr(1:rhs%n) !< Operator result.
+  real(R_P),         intent(in) :: lhs(1:) !< Left hand side.
+  class(oscillator), intent(in) :: rhs     !< Left hand side.
+  real(R_P), allocatable        :: opr(:)  !< Operator result.
 
   opr = lhs + rhs%U
   endfunction real_add_integrand
@@ -158,9 +157,9 @@ contains
   ! *
   pure function integrand_multiply_integrand(lhs, rhs) result(opr)
   !< `*` operator.
-  class(oscillator),       intent(in) :: lhs          !< Left hand side.
-  class(integrand_object), intent(in) :: rhs          !< Right hand side.
-  real(R_P)                           :: opr(1:lhs%n) !< Operator result.
+  class(oscillator),       intent(in) :: lhs    !< Left hand side.
+  class(integrand_object), intent(in) :: rhs    !< Right hand side.
+  real(R_P), allocatable              :: opr(:) !< Operator result.
 
   select type(rhs)
   class is(oscillator)
@@ -170,45 +169,46 @@ contains
 
   pure function integrand_multiply_real(lhs, rhs) result(opr)
   !< `* real_scalar` operator.
-  class(oscillator), intent(in) :: lhs          !< Left hand side.
-  real(R_P),         intent(in) :: rhs(1:lhs%n) !< Right hand side.
-  real(R_P)                     :: opr(1:lhs%n) !< Operator result.
+  class(oscillator), intent(in) :: lhs     !< Left hand side.
+  real(R_P),         intent(in) :: rhs(1:) !< Right hand side.
+  real(R_P), allocatable        :: opr(:)  !< Operator result.
 
   opr = lhs%U * rhs
   endfunction integrand_multiply_real
 
   pure function real_multiply_integrand(lhs, rhs) result(opr)
   !< `real_scalar *` operator.
-  class(oscillator), intent(in) :: rhs          !< Right hand side.
-  real(R_P),         intent(in) :: lhs(1:rhs%n) !< Left hand side.
-  real(R_P)                     :: opr(1:rhs%n) !< Operator result.
+  class(oscillator), intent(in) :: rhs     !< Right hand side.
+  real(R_P),         intent(in) :: lhs(1:) !< Left hand side.
+  real(R_P), allocatable        :: opr(:)  !< Operator result.
 
   opr = lhs * rhs%U
   endfunction real_multiply_integrand
 
   pure function integrand_multiply_real_scalar(lhs, rhs) result(opr)
   !< `* real_scalar` operator.
-  class(oscillator), intent(in) :: lhs          !< Left hand side.
-  real(R_P),         intent(in) :: rhs          !< Right hand side.
-  real(R_P)                     :: opr(1:lhs%n) !< Operator result.
+  class(oscillator), intent(in) :: lhs    !< Left hand side.
+  real(R_P),         intent(in) :: rhs    !< Right hand side.
+  real(R_P), allocatable        :: opr(:) !< Operator result.
 
   opr = lhs%U * rhs
   endfunction integrand_multiply_real_scalar
 
   pure function real_scalar_multiply_integrand(lhs, rhs) result(opr)
   !< `real_scalar *` operator.
-  real(R_P),         intent(in) :: lhs          !< Left hand side.
-  class(oscillator), intent(in) :: rhs          !< Right hand side.
-  real(R_P)                     :: opr(1:rhs%n) !< Operator result.
+  real(R_P),         intent(in) :: lhs    !< Left hand side.
+  class(oscillator), intent(in) :: rhs    !< Right hand side.
+  real(R_P), allocatable        :: opr(:) !< Operator result.
 
   opr = lhs * rhs%U
   endfunction real_scalar_multiply_integrand
+
    ! -
   pure function integrand_sub_integrand(lhs, rhs) result(opr)
   !< `-` operator.
-  class(oscillator),       intent(in) :: lhs          !< Left hand side.
-  class(integrand_object), intent(in) :: rhs          !< Right hand side.
-  real(R_P)                           :: opr(1:lhs%n) !< Operator result.
+  class(oscillator),       intent(in) :: lhs    !< Left hand side.
+  class(integrand_object), intent(in) :: rhs    !< Right hand side.
+  real(R_P), allocatable              :: opr(:) !< Operator result.
 
   select type(rhs)
   class is(oscillator)
@@ -218,18 +218,18 @@ contains
 
   pure function integrand_sub_real(lhs, rhs) result(opr)
   !< `- real` operator.
-  class(oscillator), intent(in) :: lhs          !< Left hand side.
-  real(R_P),         intent(in) :: rhs(1:lhs%n) !< Right hand side.
-  real(R_P)                     :: opr(1:lhs%n) !< Operator result.
+  class(oscillator), intent(in) :: lhs     !< Left hand side.
+  real(R_P),         intent(in) :: rhs(1:) !< Right hand side.
+  real(R_P), allocatable        :: opr(:)  !< Operator result.
 
   opr = lhs%U - rhs
   endfunction integrand_sub_real
 
   pure function real_sub_integrand(lhs, rhs) result(opr)
   !< `real -` operator.
-  class(oscillator), intent(in) :: rhs          !< Left hand side.
-  real(R_P),         intent(in) :: lhs(1:rhs%n) !< Left hand side.
-  real(R_P)                     :: opr(1:rhs%n) !< Operator result.
+  class(oscillator), intent(in) :: rhs     !< Left hand side.
+  real(R_P),         intent(in) :: lhs(1:) !< Left hand side.
+  real(R_P), allocatable        :: opr(:)  !< Operator result.
 
   opr = lhs - rhs%U
   endfunction real_sub_integrand
@@ -242,7 +242,6 @@ contains
 
   select type(rhs)
   class is(oscillator)
-    lhs%n = rhs%n
     lhs%U = rhs%U
     lhs%f = rhs%f
   endselect
@@ -250,8 +249,8 @@ contains
 
   pure subroutine assign_real(lhs, rhs)
   !< `= real` operator.
-  class(oscillator), intent(inout) :: lhs          !< Left hand side.
-  real(R_P),         intent(in)    :: rhs(1:lhs%n) !< Right hand side.
+  class(oscillator), intent(inout) :: lhs     !< Left hand side.
+  real(R_P),         intent(in)    :: rhs(1:) !< Right hand side.
 
   lhs%U = rhs
   endsubroutine assign_real

@@ -11,13 +11,10 @@ public :: integrand_object
 
 type, abstract :: integrand_object
   !< Abstract type for building FOODIE ODE integrators.
-  integer(I_P) :: n=0_I_P !< ODE *space* dimension.
 #ifdef CAF
   class(*), allocatable :: dummy_to_allow_extensions[:] !< Dummy member to allow concrete extensions with coarray members.
 #endif
   contains
-    ! public methods
-    procedure, pass(self), public :: set_dimension !< Set ODE *space* dimension.
     ! public deferred procedures that concrete integrand-field must implement
     procedure(time_derivative), pass(self), deferred, public :: t !< Time derivative, residuals.
     ! operators
@@ -60,9 +57,9 @@ abstract interface
   function time_derivative(self, t) result(dState_dt)
   !< Time derivative function of integrand class, i.e. the residuals function.
   import :: integrand_object, R_P
-  class(integrand_object), intent(in) :: self                !< Integrand field.
-  real(R_P),    optional,  intent(in) :: t                   !< Time.
-  real(R_P)                           :: dState_dt(1:self%n) !< Result of the time derivative function of integrand field.
+  class(integrand_object), intent(in) :: self         !< Integrand field.
+  real(R_P),    optional,  intent(in) :: t            !< Time.
+  real(R_P), allocatable              :: dState_dt(:) !< Result of the time derivative function of integrand field.
   endfunction time_derivative
 
   ! operators
@@ -77,41 +74,41 @@ abstract interface
   pure function integrand_op_real(lhs, rhs) result(operator_result)
   !< Asymmetric type operator `integrand.op.real`.
   import :: integrand_object, R_P
-  class(integrand_object), intent(in) :: lhs                      !< Left hand side.
-  real(R_P),               intent(in) :: rhs(1:lhs%n)             !< Right hand side.
-  real(R_P)                           :: operator_result(1:lhs%n) !< Operator result.
+  class(integrand_object), intent(in) :: lhs                !< Left hand side.
+  real(R_P),               intent(in) :: rhs(1:)            !< Right hand side.
+  real(R_P), allocatable              :: operator_result(:) !< Operator result.
   endfunction integrand_op_real
 
   pure function real_op_integrand(lhs, rhs) result(operator_result)
   !< Asymmetric type operator `real.op.integrand`.
   import :: integrand_object, R_P
-  class(integrand_object), intent(in) :: rhs                      !< Right hand side.
-  real(R_P),               intent(in) :: lhs(1:rhs%n)             !< Left hand side.
-  real(R_P)                           :: operator_result(1:rhs%n) !< Operator result.
+  class(integrand_object), intent(in) :: rhs                !< Right hand side.
+  real(R_P),               intent(in) :: lhs(1:)            !< Left hand side.
+  real(R_P), allocatable              :: operator_result(:) !< Operator result.
   endfunction real_op_integrand
 
   pure function integrand_op_real_scalar(lhs, rhs) result(operator_result)
   !< Asymmetric type operator `integrand.op.real`.
   import :: integrand_object, R_P
-  class(integrand_object), intent(in) :: lhs                      !< Left hand side.
-  real(R_P),               intent(in) :: rhs                      !< Right hand side.
-  real(R_P)                           :: operator_result(1:lhs%n) !< Operator result.
+  class(integrand_object), intent(in) :: lhs                !< Left hand side.
+  real(R_P),               intent(in) :: rhs                !< Right hand side.
+  real(R_P), allocatable              :: operator_result(:) !< Operator result.
   endfunction integrand_op_real_scalar
 
   pure function real_scalar_op_integrand(lhs, rhs) result(operator_result)
   !< Asymmetric type operator `real.op.integrand`.
   import :: integrand_object, R_P
-  real(R_P),               intent(in) :: lhs                      !< Left hand side.
-  class(integrand_object), intent(in) :: rhs                      !< Right hand side.
-  real(R_P)                           :: operator_result(1:rhs%n) !< Operator result.
+  real(R_P),               intent(in) :: lhs                !< Left hand side.
+  class(integrand_object), intent(in) :: rhs                !< Right hand side.
+  real(R_P), allocatable              :: operator_result(:) !< Operator result.
   endfunction real_scalar_op_integrand
 
   pure function symmetric_operator(lhs, rhs) result(operator_result)
   !< Symmetric type operator integrand.op.integrand.
   import :: integrand_object, R_P
-  class(integrand_object), intent(in) :: lhs                      !< Left hand side.
-  class(integrand_object), intent(in) :: rhs                      !< Right hand side.
-  real(R_P)                           :: operator_result(1:lhs%n) !< Operator result.
+  class(integrand_object), intent(in) :: lhs                !< Left hand side.
+  class(integrand_object), intent(in) :: rhs                !< Right hand side.
+  real(R_P), allocatable              :: operator_result(:) !< Operator result.
   endfunction symmetric_operator
 
   pure subroutine assignment_integrand(lhs, rhs)
@@ -124,17 +121,8 @@ abstract interface
   pure subroutine assignment_real(lhs, rhs)
   !< Symmetric assignment integrand = integrand.
   import :: integrand_object, R_P
-  class(integrand_object), intent(inout) :: lhs          !< Left hand side.
-  real(R_P),               intent(in)    :: rhs(1:lhs%n) !< Right hand side.
+  class(integrand_object), intent(inout) :: lhs     !< Left hand side.
+  real(R_P),               intent(in)    :: rhs(1:) !< Right hand side.
   endsubroutine assignment_real
 endinterface
-
-contains
-  pure subroutine set_dimension(self, n)
-  !< Set ODE *space* dimension.
-  class(integrand_object), intent(inout) :: self !< Ingetrand.
-  integer(I_P),            intent(in)    :: n    !< ODE *space* dimension.
-
-  self%n = n
-  endsubroutine set_dimension
 endmodule foodie_integrand_object
