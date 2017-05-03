@@ -307,13 +307,13 @@ contains
   do s=1, self%stages
     stage(s) = U
     do ss=1, s - 1
-      stage(s) = stage(s) + stage(ss) * (Dt * self%alph(s, ss))
+      stage(s) = stage(s) + (stage(ss) * (Dt * self%alph(s, ss)))
     enddo
     stage(s) = stage(s)%t(t=t + self%gamm(s) * Dt)
   enddo
   ! computing new time step
   do s=1, self%stages
-    U = U + stage(s) * (Dt * self%beta(s))
+    U = U + (stage(s) * (Dt * self%beta(s)))
   enddo
   endsubroutine integrate
 endmodule foodie_integrator_runge_kutta_ssp

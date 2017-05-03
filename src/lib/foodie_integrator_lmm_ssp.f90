@@ -214,8 +214,8 @@ contains
   autoupdate_ = .true. ; if (present(autoupdate)) autoupdate_ = autoupdate
   U = U * 0._R_P
   do s=1, self%steps
-    if (self%a(s) /= 0._R_P) U = U + previous(s) * self%a(s)
-    if (self%b(s) /= 0._R_P) U = U + previous(s)%t(t=t(s)) * (Dt * self%b(s))
+    if (self%a(s) /= 0._R_P) U = U + (previous(s) * self%a(s))
+    if (self%b(s) /= 0._R_P) U = U + (previous(s)%t(t=t(s)) * (Dt * self%b(s)))
   enddo
   if (autoupdate_) call self%update_previous(U=U, previous=previous)
   endsubroutine integrate
