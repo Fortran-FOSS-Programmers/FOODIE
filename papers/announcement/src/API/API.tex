@@ -2,55 +2,78 @@
 
 In this section we review the FOODIE API providing a detailed discussion of the implementation choices.
 
-As aforementioned, the programming language used is the Fortran 2008 standard, that is a minor revision of the previous Fortran 2003 standard. Such a new Fortran idioms provide (among other useful features) an almost complete support for OOP, in particular for ADT concept. Fortran 2003 has introduced the \emph{abstract derived type}: it is a derived type suitable to serve as \emph{contract} for concrete type-extensions that has not any actual implementations, rather it provides a well-defined set of type bound procedures interfaces, that in Fortran nomenclature are called \emph{deferred} procedures. Using such an abstract definition, we can implement algorithms operating on only this abstract type and on \emph{all its concrete extensions}. This is the key feature of FOODIE library: all the above described ODE solvers are implemented on the knowledge of \emph{only one abstract type}, allowing an implementation-style based on a very high-level syntax. In the meanwhile, client codes must implement their own IVPs extending only one simple abstract type.
+As aforementioned, the programming language used is the Fortran 2008 (or newer) standard, that is a minor revision of the previous Fortran 2003 standard. Such a new Fortran idioms provide (among other useful features) an almost complete support for OOP, in particular for Abstract Data Type (ADT) concept. Fortran 2003 has introduced the \emph{abstract derived type}: it is a derived type suitable to serve as \emph{contract} for concrete type-extensions that has not any actual implementations, rather it provides a well-defined set of methods (in Fortran jargon they are \emph{type bound procedures}) interfaces, that in Fortran nomenclature are called \emph{deferred} procedures. Using such an abstract definition, we can implement algorithms operating on only this abstract type \emph{and on all its concrete extensions}. This is the key feature of FOODIE library: all the above described ODEs solvers are implemented on the knowledge of \emph{only one abstract type}, allowing an implementation-style based on a very high-level syntax. In the meanwhile, client codes must implement their own IVPs extending only one simple abstract type with minimal requirements.
 
-In the subsection \ref{subsec:type_integrand} a review of the FOODIE main ADT, the \emph{integrand} type, is provided, while subsections \ref{subsec:solver_euler}, \ref{subsec:solver_tvd_rk}, \ref{subsec:solver_ls_rk}, \ref{subsec:solver_ab} and \ref{subsec:solver_leapfrog} cover the API of the currently implemented solvers.
+In the subsection \ref{subsec:type_integrand} a review of the FOODIE main ADT, the \emph{integrand\_object} type, is provided, while subsections \ref{subsec:solver_euler}, \ref{subsec:solver_tvd_rk}, \ref{subsec:solver_ls_rk}, \ref{subsec:solver_ab} and \ref{subsec:solver_leapfrog} cover the API of the currently implemented solvers.
 
-It is worth noting that all FOODIE public \emph{entities} (ADT and solvers) must be accessed by the FOODIE module, see listing \ref{list:main_module} for an example on how access to all public FOODIE entities.
+It is worth noting that all FOODIE public \emph{entities} (ADT and solvers) must be accessed by the FOODIE module, see listing \ref{list:main_module} for an example on how to access to all public FOODIE entities.
 
 \begin{lstlisting}[firstnumber=1,style=code,caption={usage example importing all public entities of FOODIE main module},label={list:main_module}]
-use foodie, only: integrand, &
-                  adams_bashforth_integrator, &
-                  adams_moulton_integrator, &
-                  adams_bashforth_moulton_integrator, &
-                  euler_explicit_integrator, &
-                  leapfrog_integrator, &
-                  ls_runge_kutta_integrator, &
-                  tvd_runge_kutta_integrator
+use foodie, only : integrand_object,                   &
+                   integrator_object,                  &
+                   integrator_adams_bashforth,         &
+                   integrator_adams_bashforth_moulton, &
+                   integrator_adams_moulton,           &
+                   integrator_back_df,                 &
+                   integrator_euler_explicit,          &
+                   integrator_leapfrog,                &
+                   integrator_lmm_ssp,                 &
+                   integrator_lmm_ssp_vss,             &
+                   integrator_ms_runge_kutta_ssp,      &
+                   integrator_runge_kutta_emd,         &
+                   integrator_runge_kutta_ls,          &
+                   integrator_runge_kutta_lssp,        &
+                   integrator_runge_kutta_ssp
 ! or simply
 use foodie
 \end{lstlisting}
 
-\subsection{The main FOODIE Abstract Data Type: the integrand type}\label{subsec:type_integrand}
+\subsection{Main FOODIE Abstract Data Type: the integrand type}\label{subsec:type_integrand}
 
-The implemented ACP is based on one main ADT, the \emph{integrand} type, the definition of which is shown in listing~\ref{list:type_integrand}.
+The implemented ACP is based on one main ADT, the \emph{integrand\_object} type, the definition of which is shown in listing~\ref{list:type_integrand}.
 
 \begin{lstlisting}[firstnumber=1,style=code,caption={integrand type definition},label={list:type_integrand}]
-type, abstract :: integrand
+type, abstract :: integrand_object
   !< Abstract type for building FOODIE ODE integrators.
   contains
     ! public deferred procedures that concrete integrand-field must implement
-    procedure(time_derivative),       pass(self), deferred, public:: t
+    procedure(time_derivative), pass(self), deferred :: t
     ! operators
-    procedure(symmetric_operator),   pass(lhs), deferred, public:: integrand_multiply_integrand
-    procedure(integrand_op_real),    pass(lhs), deferred, public:: integrand_multiply_real
-    procedure(real_op_integrand),    pass(rhs), deferred, public:: real_multiply_integrand
-    procedure(symmetric_operator),   pass(lhs), deferred, public:: add
-    procedure(symmetric_operator),   pass(lhs), deferred, public:: sub
-    procedure(assignment_integrand), pass(lhs), deferred, public:: assign_integrand
-    ! operators overloading
-    generic, public:: operator(+) => add
-    generic, public:: operator(-) => sub
-    generic, public:: operator(*) => integrand_multiply_integrand, &
-                                     real_multiply_integrand, &
-                                     integrand_multiply_real
-    generic, public:: assignment(=) => assign_integrand
-endtype integrand
+    procedure(local_error_operator), pass(lhs), deferred :: local_error
+    generic :: operator(.lterror.) => local_error ! Estimate local truncation error.
+    procedure(symmetric_operator), pass(lhs), deferred :: integrand_add_integrand
+    procedure(integrand_op_real),  pass(lhs), deferred :: integrand_add_real
+    procedure(real_op_integrand),  pass(rhs), deferred :: real_add_integrand
+    generic :: operator(+) => integrand_add_integrand, &
+                              integrand_add_real,      &
+                              real_add_integrand
+    procedure(symmetric_operator),       pass(lhs), deferred :: integrand_multiply_integrand
+    procedure(integrand_op_real),        pass(lhs), deferred :: integrand_multiply_real
+    procedure(real_op_integrand),        pass(rhs), deferred :: real_multiply_integrand
+    procedure(integrand_op_real_scalar), pass(lhs), deferred :: integrand_multiply_real_scalar
+    procedure(real_scalar_op_integrand), pass(rhs), deferred :: real_scalar_multiply_integrand
+    generic :: operator(*) => integrand_multiply_integrand,   &
+                              integrand_multiply_real,        &
+                              real_multiply_integrand,        &
+                              integrand_multiply_real_scalar, &
+                              real_scalar_multiply_integrand
+    procedure(symmetric_operator), pass(lhs), deferred :: integrand_sub_integrand
+    procedure(integrand_op_real),  pass(lhs), deferred :: integrand_sub_real
+    procedure(real_op_integrand),  pass(rhs), deferred :: real_sub_integrand
+    generic :: operator(-) => integrand_sub_integrand, &
+                              integrand_sub_real,      &
+                              real_sub_integrand
+    procedure(assignment_integrand), pass(lhs), deferred :: assign_integrand
+    procedure(assignment_real),      pass(lhs), deferred :: assign_real
+    generic :: assignment(=) => assign_integrand, assign_real
+endtype integrand_object
 \end{lstlisting}
 
-The \emph{integrand} type does not implement any actual integrand field, it being and abstract type. It only specifies which deferred procedures are necessary for implementing an actual concrete integrand type that can use a FOODIE solver.
+The \emph{integrand\_object} type does not implement any actual integrand field, it being and abstract type. It only specifies which deferred procedures are necessary for implementing an actual concrete integrand type that can use a FOODIE solver.
 
-As shown in listing \ref{list:type_integrand}, the number of the deferred type bound procedures that clients must implement into their own concrete extension of the \emph{integrand} ADT is very limited: essentially, there are 1 ODE-specific procedure plus some operators definition constituted by symmetric operators between 2 integrand objects, asymmetric operators between integrand and real numbers (and viceversa) and an assignment statement for the creation of new integrand objects. These procedures are analyzed in the following paragraphs.
+As shown in listing \ref{list:type_integrand}, the number of the deferred type bound procedures that clients must implement into their own concrete extension of the \emph{integrand} ADT is limited: essentially, there are 1 ODEs-specific procedure and some operators definition constituted by symmetric operators between 2 integrand objects, asymmetric operators between integrand and real numbers (and viceversa) and an assignment statement for the creation of new integrand objects. These procedures are analyzed in the following paragraphs.
+
+It is worth noting that for keeping the computational efficiency high a compromise has been done in the TBPs API design: in order to avoid excessive overhead due to polymorphic entities allocation\footnote{Polymorphic allocation (and deallocation) can be very complex to optimize and it could easily generate memory leaks.} and to allows \emph{pure}\footnote{A TBP can be defined \emph{pure} when it do not have \emph{side-effects}. Purity is important for enabling compiler optimizations (otherwise prevented), for allowing easy parallelization and for imposing a clear and easy-to-debug style to the programmer.} operators, all the math operators are designed to return a real array rather than an allocatable class of \emph{integrand\_object}. The \emph{integrand\_object} is then \emph{restored} by the assignment operator that updates an instance of \emph{integrand\_object} by the real array resulting from the math operators. This is a clear restriction to the ADT abstraction level: it imposes a \emph{pattern} to the programmer that could be avoided, but, in the meanwhile, it greatly improves FOODIE performance retaining a reasonable level of abstraction.
 
 \subsubsection{Time derivative procedure, the residuals function}
 
@@ -58,73 +81,97 @@ The abstract interface of the time derivative procedure \emph{t} is shown in lis
 
 \begin{lstlisting}[firstnumber=1,style=code,caption={time derivative procedure interface},label={list:time_derivative}]
 function time_derivative(self, t) result(dState_dt)
-import :: integrand, R_P, I_P
-class(integrand),       intent(IN) :: self      !< Integrand field.
-real(R_P),    optional, intent(IN) :: t         !< Time.
-class(integrand), allocatable      :: dState_dt !< Result of the time derivative function of integrand field.
+import :: integrand_object, R_P
+class(integrand_object), intent(in) :: self         ! Integrand field.
+real(R_P),    optional,  intent(in) :: t            ! Time.
+real(R_P), allocatable              :: dState_dt(:) ! Result of the time derivative function of integrand field.
 endfunction time_derivative
 \end{lstlisting}
 
-This procedure-function takes two arguments, the first passed as a \emph{type bounded} argument, while the latter is optional, and it returns an integrand object. The passed dummy argument, \emph{self}, is a polymorphic argument that could be any extensions of the \emph{integrand} ADT. The optional argument \emph{t} is the \emph{time} at which the residuals function must be computed: it can be omitted in the case the residuals function does not depend directly on time.
+This procedure-function takes two arguments, the first passed as a \emph{type bounded} argument, while the latter is optional, and it returns a real array of kind \emph{R\_P} (that is a parametric constant of FOODIE, it being customizable at compile-time). The passed dummy argument, \emph{self}, is a polymorphic argument that could be any extensions of the \emph{integrand\_object} ADT. The optional argument \emph{t} is the \emph{time} at which the residuals function must be computed: it can be omitted in the case the residuals function does not depend directly on time.
 
-Commonly, into the concrete implementation of this deferred abstract procedure clients embed the actual ODE equations being solved. As an example, for the Burgers equation, that is a Partial Differential Equations (PDE) system involving also a boundary value problem, this procedure embeds the spatial operator that convert the PDE to a system of algebraic ODE. As a consequence, the eventual concrete implementation of this procedure can be very complex and errors-prone. Nevertheless, the FOODIE solvers are implemented only on the above abstract interface, thus emancipating the solvers implementation from any concrete complexity.
-
-{\color{red} Add citations to Burgers, Adams-Bashfort, leapfrog references.}
+Commonly, into the concrete implementation of this deferred abstract procedure clients embed the actual ODEs system being solved. As an example, for the Burgers equation, that is a Partial Differential Equations (PDE) system involving also a boundary value problem, this procedure embeds the spatial operator that convert the PDE to a system of algebraic ODE. As a consequence, the eventual concrete implementation of this procedure can be of any level of complexity. Nevertheless, the FOODIE solvers are implemented only on the above abstract interface, thus emancipating the solvers implementation from any concrete complexity.
 
 \subsubsection{Symmetric operators procedures}
 
 The abstract interface of \emph{symmetric} procedures is shown in listing \ref{list:symmetric_operator}.
 
 \begin{lstlisting}[firstnumber=1,style=code,caption={symmetric operator procedure interface},label={list:symmetric_operator}]
-function symmetric_operator(lhs, rhs) result(operator_result)
-import :: integrand
-class(integrand), intent(IN)  :: lhs             !< Left hand side.
-class(integrand), intent(IN)  :: rhs             !< Right hand side.
-class(integrand), allocatable :: operator_result !< Operator result.
+pure function symmetric_operator(lhs, rhs) result(operator_result)
+import :: integrand_object, R_P
+class(integrand_object), intent(in) :: lhs                ! Left hand side.
+class(integrand_object), intent(in) :: rhs                ! Right hand side.
+real(R_P), allocatable              :: operator_result(:) ! Operator result.
 endfunction symmetric_operator
 \end{lstlisting}
 
-This interface defines a class of procedures operating on 2 \emph{integrand} objects, namely it is used for the definition of the operators \emph{multiplication}, \emph{summation} and \emph{subtraction} of integrand objects. These operators are used into the above described ODE solvers, for example see equations \ref{eq:solver-euler}, \ref{eq:RK}, \ref{eq:AB} or \ref{eq:leapfrog}. The implementation details of such a procedures class are strictly dependent on the concrete extension of the integrand type. From the FOODIE solvers point of view, we need to known only that first argument passed as bounded one, the left-hand-side of the operator, and the second argument, the right-hand-side of the operator, are two integrand object and the returned object is still an integrand one.
+This interface defines a class of procedures operating on 2 \emph{integrand\_object} arguments, namely it is used for the definition of the operators \emph{multiplication}, \emph{summation} and \emph{subtraction} of integrand objects. These operators are used into the above described ODE solvers, for example see equations \ref{eq:solver-euler}, \ref{eq:RK}, \ref{eq:AB} or \ref{eq:leapfrog}. The implementation details of such a procedures class are strictly dependent on the concrete extension of the integrand type.
 
 \subsubsection{Integrand/real and real/integrand operators procedures}
 
 The abstract interfaces of \emph{Integrand/real and real/integrand operators} procedures are shown in listing \ref{list:integrand_real_ops}.
 
 \begin{lstlisting}[firstnumber=1,style=code,caption={Integrand/real and real/integrand operators procedure interfaces},label={list:integrand_real_ops}]
-function integrand_op_real(lhs, rhs) result(operator_result)
-import :: integrand, R_P
-class(integrand), intent(IN)  :: lhs              !< Left hand side.
-real(R_P),        intent(IN)  :: rhs              !< Right hand side.
-class(integrand), allocatable :: operator_result  !< Operator result.
+pure function integrand_op_real(lhs, rhs) result(operator_result)
+import :: integrand_object, R_P
+class(integrand_object), intent(in) :: lhs                ! Left hand side.
+real(R_P),               intent(in) :: rhs(1:)            ! Right hand side.
+real(R_P), allocatable              :: operator_result(:) ! Operator result.
 endfunction integrand_op_real
 
-function real_op_integrand(lhs, rhs) result(operator_result)
-import :: integrand, R_P
-real(R_P),        intent(IN)  :: lhs             !< Left hand side.
-class(integrand), intent(IN)  :: rhs             !< Right hand side.
-class(integrand), allocatable :: operator_result !< Operator result.
+pure function real_op_integrand(lhs, rhs) result(operator_result)
+!< Asymmetric type operator `real.op.integrand`.
+import :: integrand_object, R_P
+class(integrand_object), intent(in) :: rhs                ! Right hand side.
+real(R_P),               intent(in) :: lhs(1:)            ! Left hand side.
+real(R_P), allocatable              :: operator_result(:) ! Operator result.
 endfunction real_op_integrand
+
+pure function integrand_op_real_scalar(lhs, rhs) result(operator_result)
+!< Asymmetric type operator `integrand.op.real`.
+import :: integrand_object, R_P
+class(integrand_object), intent(in) :: lhs                ! Left hand side.
+real(R_P),               intent(in) :: rhs                ! Right hand side.
+real(R_P), allocatable              :: operator_result(:) ! Operator result.
+endfunction integrand_op_real_scalar
+
+pure function real_scalar_op_integrand(lhs, rhs) result(operator_result)
+!< Asymmetric type operator `real.op.integrand`.
+import :: integrand_object, R_P
+real(R_P),               intent(in) :: lhs                ! Left hand side.
+class(integrand_object), intent(in) :: rhs                ! Right hand side.
+real(R_P), allocatable              :: operator_result(:) ! Operator result.
+endfunction real_scalar_op_integrand
 \end{lstlisting}
 
-These two interfaces are necessary in order to complete the \emph{algebra} operating on the integrand object class, allowing the multiplication of an integrand object for a real number, circumstance that happens in all solvers, see equations \ref{eq:solver-euler}, \ref{eq:RK}, \ref{eq:AB} or \ref{eq:leapfrog}. The implementation details of these procedures are strictly dependent on the concrete extension of the integrand type. From the FOODIE solvers point of view, we need to known only that first argument passed as bounded one, the left-hand-side of the operator, and the second argument, the right-hand-side of the operator, are an integrand object and real number of viceversa and the returned object is still an integrand one.
+These foure interfaces are necessary in order to complete the \emph{algebra} operating on the integrand object class, allowing the multiplication of an integrand object for a real number (scalar or array), circumstance that happens in all solvers, see equations \ref{eq:solver-euler}, \ref{eq:RK}, \ref{eq:AB} or \ref{eq:leapfrog}. The implementation details of these procedures are strictly dependent on the concrete extension of the integrand type.
 
 \subsubsection{Integrand assignment procedure}
 
-The abstract interface of \emph{integrand assignment} procedure is shown in listing \ref{list:integrand_assignment}.
+The abstract interfaces of \emph{integrand assignment} procedure is shown in listing \ref{list:integrand_assignment}.
 
 \begin{lstlisting}[firstnumber=1,style=code,caption={integrand assignment procedure interface},label={list:integrand_assignment}]
-subroutine assignment_integrand(lhs, rhs)
-import :: integrand
-class(integrand), intent(INOUT) :: lhs !< Left hand side.
-class(integrand), intent(IN)    :: rhs !< Right hand side.
+pure subroutine assignment_integrand(lhs, rhs)
+import :: integrand_object
+class(integrand_object), intent(inout) :: lhs ! Left hand side.
+class(integrand_object), intent(in)    :: rhs ! Right hand side.
 endsubroutine assignment_integrand
+
+pure subroutine assignment_real(lhs, rhs)
+!< Symmetric assignment integrand = integrand.
+import :: integrand_object, R_P
+class(integrand_object), intent(inout) :: lhs     ! Left hand side.
+real(R_P),               intent(in)    :: rhs(1:) ! Right hand side.
+endsubroutine assignment_real
 \end{lstlisting}
 
-The assignment statement is necessary in order to complete the \emph{algebra} operating on the integrand object class, allowing the assignment of an integrand object by another one, circumstance that happens in all solvers, see equations \ref{eq:solver-euler}, \ref{eq:RK}, \ref{eq:AB} or \ref{eq:leapfrog}. The implementation details of this assignment is strictly dependent on the concrete extension of the integrand type. From the FOODIE solvers point of view, we need to known only that first argument passed as bounded one, the left-hand-side of the assignment, and the second argument, the right-hand-side of the assignment, are two integrand objects.
+The assignment statement is necessary in order to complete the \emph{algebra} operating on the integrand object class, allowing the
+assignment of an integrand object by another one or the assignment of an integrand object and a real array (arising from the result
+of other operators), circumstance that happens in all solvers, see equations \ref{eq:solver-euler}, \ref{eq:RK}, \ref{eq:AB} or \ref{eq:leapfrog}. The implementation details of this assignment is strictly dependent on the concrete extension of the integrand type.
 
 \clearpage
 
-\subsection{The explicit forward Euler solver}\label{subsec:solver_euler}
+\subsection{Explicit forward Euler solver API}\label{subsec:solver_euler}
 
 The explicit forward Euler solver is exposed (by the FOODIE main module that must imported, see listing \ref{list:main_module}) as a single derived type (that is a standard convention for all FOODIE solvers) named \emph{euler\_explicit\_integrator}. It provides the type bound procedure (also referred as \emph{method}) \emph{integrate} for integrating in time an \emph{integrand} object, or any of its polymorphic concrete extensions. Consequently, for using such a solver it must be previously defined as an instance of the exposed FOODIE integrator type, see listing \ref{list:define_euler_solver}.
 
@@ -154,7 +201,170 @@ endsubroutine integrate
 \end{lstlisting}
 This method takes three arguments, the first argument is an integrand class, it being the integrand field that must integrated one-step-over in time, the second is the time step used and the third, that is optional, is the current time value that is passed to the residuals function for taking into account the cases where the time derivative explicitly depends on time. The time step is not automatically computed (for example inspecting the passed integrand field), thus its value must be externally computed and passed to the \emph{integrate} method.
 
-\subsection{The explicit TVD/SSP Runge-Kutta class of solvers}\label{subsec:solver_tvd_rk}
+\subsection{Explicit Adams-Bashforth class API}\label{subsec:solver_ab}
+
+The explicit Adams-Bashforth class of solvers is exposed as a single derived type named \emph{adams\_bashforth\_integrator}. This type provides three methods:
+
+\begin{itemize}
+  \item \emph{init}: initialize the integrator accordingly the possibilities offered by the class of solvers;
+  \item \emph{destroy}: destroy the integrator previously initialized, eventually freeing the allocated dynamic memory registers;
+  \item \emph{integrate}: integrate integrand field one-step-over in time;
+  \item \emph{update\_previous}: auto update (cyclically) previous time steps solutions.
+  \end{itemize}
+
+As common for FOODIE solvers, for using such a solver it must be previously defined as an instance of the exposed FOODIE integrator type, see listing \ref{list:define_ab_solver}.
+
+\begin{lstlisting}[firstnumber=1,style=code,caption={definition of an explicit Adams-Bashforth integrator},label={list:define_ab_solver}]
+use FOODIE, only: adams_bashforth_integrator
+type(adams_bashforth_integrator) :: integrator
+\end{lstlisting}
+
+Once an integrator of this type has been instantiated, it must be initialized before used, for example see listing \ref{list:init_ab_solver}.
+
+\begin{lstlisting}[firstnumber=1,style=code,caption={example of initialization of an explicit Adams-Bashforth integrator},label={list:init_ab_solver}]
+call integrator%init(steps=4)
+\end{lstlisting}
+
+In the listing \ref{list:init_ab_solver} a 4-steps solver has been initialized. As a matter of facts, from the equation \ref{eq:AB} a solver belonging to this class is completely defined once the number of time steps adopted has been chosen. The complete definition of the \emph{adams\_bashforth\_integrator} type is reported into listing \ref{list:ab_solver}. As shown, the linear coefficients are stored as allocatable arrays the values of which are initialized by the \emph{init} method.
+
+\begin{lstlisting}[firstnumber=1,style=code,caption={definition of \emph{adams\_bashforth\_integrator} type},label={list:ab_solver}]
+type :: adams_bashforth_integrator
+  private
+  integer(I_P)           :: steps=0 ! Number of time steps.
+  real(R_P), allocatable :: b(:)    ! \(b\) coefficients.
+  contains
+    procedure, pass(self), public :: destroy
+    procedure, pass(self), public :: init
+    procedure, pass(self), public :: integrate
+    procedure, pass(self), public :: update_previous
+    final                         :: finalize
+endtype adams_bashforth_integrator
+\end{lstlisting}
+
+After the solver has been initialized it can be used for integrating an integrand field, as shown in listing \ref{list:use_ab_solver}.
+
+\begin{lstlisting}[firstnumber=1,style=code,caption={example of usage of an Adams-Bashforth integrator},label={list:use_ab_solver}]
+real               :: times(1:4)
+type(my_integrand) :: my_field
+type(my_integrand) :: previous(1:4)
+call integrator%integrate(U=my_field, previous=previous, Dt=Dt, t=times)
+\end{lstlisting}
+where \emph{my\_integrand} is a concrete (valid) extension of \emph{integrand} ADT, \emph{times} are the time at each 4 steps considered for the current one-step-over integration and \emph{previous} are the memory registers where previous time steps solutions are saved.
+
+The complete implementation of the \emph{integrate} method of the explicit Adams-Bashforth class of solvers is reported in listing \ref{list:ab_integrate}.
+
+\begin{lstlisting}[firstnumber=1,style=code,caption={implementation of the \emph{integrate} method of explicit Adams-Bashforth class},label={list:ab_integrate}]
+subroutine integrate(self, U, previous, Dt, t, autoupdate)
+class(adams_bashforth_integrator), intent(IN)    :: self         ! Actual AB integrator.
+class(integrand),                  intent(INOUT) :: U            ! Field to be integrated.
+class(integrand),                  intent(INOUT) :: previous(1:) ! Previous time steps solutions.
+real(R_P),                         intent(IN)    :: Dt           ! Time steps.
+real(R_P),                         intent(IN)    :: t(:)         ! Times.
+logical, optional,                 intent(IN)    :: autoupdate   ! Autoupdate previous time steps.
+logical                                          :: autoupdate_  ! autoupdate previous time steps, dummy var.
+integer(I_P)                                     :: s            ! Steps counter.
+autoupdate_ = .true. ; if (present(autoupdate)) autoupdate_ = autoupdate
+do s=1, self%steps
+  U = U + previous(s)%t(t=t(s)) * (Dt * self%b(s))
+enddo
+if (autoupdate_) call self%update_previous(U=U, previous=previous)
+return
+endsubroutine integrate
+\end{lstlisting}
+
+This method takes five arguments, the first argument is passed as bounded argument and it is the solver itself, the second is of an integrand class, it being the integrand field that must integrated one-step-over in time, the third are the previous time steps solutions, the fourth is the time step used, the fifth is an array of the time values of the steps considered for the current one-step-over integration that are passed to the residuals function for taking into account the cases where the time derivative explicitly depends on time and the sixth is a logical flag for enabling/disabling the cyclic update of previous time steps solutions. The time step is not automatically computed (for example inspecting the passed integrand field), thus its value must be externally computed and passed to the \emph{integrate} method.
+
+It is worth noting that the method also performs the cyclic update of the previous time steps solutions memory registers. This can be disable passing \emph{autoupdate=.false.}: it is useful in the framework of predictor-corrector solvers.
+
+\subsection{Leapfrog solver}\label{subsec:solver_leapfrog}
+
+The explicit Leapfrog class of solvers is exposed as a single derived type named \emph{leapfrog\_integrator}. This type provides three methods:
+
+\begin{itemize}
+  \item \emph{init}: initialize the integrator accordingly the possibilities offered by the class of solvers;
+  \item \emph{integrate}: integrate integrand field one-step-over in time.
+  \end{itemize}
+
+As common for FOODIE solvers, for using such a solver it must be previously defined as an instance of the exposed FOODIE integrator type, see listing \ref{list:define_lf_solver}.
+
+\begin{lstlisting}[firstnumber=1,style=code,caption={definition of an explicit Leapfrog integrator},label={list:define_lf_solver}]
+use FOODIE, only: leapfrog_integrator
+type(leapfrog_integrator) :: integrator
+\end{lstlisting}
+
+Once an integrator of this type has been instantiated, it must be initialized before used, for example see listing \ref{list:init_lf_solver}.
+
+\begin{lstlisting}[firstnumber=1,style=code,caption={example of initialization of an explicit Leapfrog integrator},label={list:init_lf_solver}]
+! default coefficients nu=0.01, alpha=0.53
+call integrator%init()
+! custom coefficients
+call integrator%init(nu=0.015, alpha=0.6)
+\end{lstlisting}
+
+The complete definition of the \emph{leapfrog\_integrator} type is reported into listing \ref{list:lf_solver}. As shown, the filter coefficients are initialized to zero, suitable values are initialized by the \emph{init} method.
+
+\begin{lstlisting}[firstnumber=1,style=code,caption={definition of \emph{leapfrog\_integrator} type},label={list:lf_solver}]
+type :: leapfrog_integrator
+  private
+  real(R_P) :: nu=0.01_R_P    ! Robert-Asselin filter coefficient.
+  real(R_P) :: alpha=0.53_R_P ! Robert-Asselin-Williams filter coefficient.
+  contains
+    procedure, pass(self), public :: init
+    procedure, pass(self), public :: integrate
+endtype leapfrog_integrator
+\end{lstlisting}
+
+After the solver has been initialized it can be used for integrating an integrand field, as shown in listing \ref{list:use_lf_solver}.
+
+\begin{lstlisting}[firstnumber=1,style=code,caption={example of usage of a Leapfrog integrator},label={list:use_lf_solver}]
+real               :: times(1:2)
+type(my_integrand) :: filter_displacement
+type(my_integrand) :: my_field
+type(my_integrand) :: previous(1:2)
+call integrator%integrate(U=my_field, previous=previous, filter=filter_displacement, Dt=Dt, &
+                          t=times)
+\end{lstlisting}
+where \emph{my\_integrand} is a concrete (valid) extension of \emph{integrand} ADT, \emph{previous} are the memory registers where previous time steps solutions are saved, \emph{filter\_displacement} is the register necessary for computing the eventual displacement of the applied filter and \emph{times} are the time at each 2 steps considered for the current one-step-over integration.
+
+The complete implementation of the \emph{integrate} method of the explicit Leapfrog class of solvers is reported in listing \ref{list:lf_integrate}.
+
+\begin{lstlisting}[firstnumber=1,style=code,caption={implementation of the \emph{integrate} method of explicit Leapfrog class},label={list:lf_integrate}]
+subroutine integrate(self, U, previous, Dt, t, filter)
+class(leapfrog_integrator), intent(IN)    :: self          ! LF integrator.
+class(integrand),           intent(INOUT) :: U             ! Field to be integrated.
+class(integrand),           intent(INOUT) :: previous(1:2) ! Previous time steps solutions.
+real(R_P),                  intent(in)    :: Dt            ! Time step.
+real(R_P),                  intent(IN)    :: t             ! Time.
+class(integrand), optional, intent(INOUT) :: filter        ! Filter field displacement.
+U = previous(1) + previous(2)%t(t=t) * (Dt * 2._R_P)
+if (present(filter)) then
+  filter = (previous(1) - previous(2) * 2._R_P + U) * self%nu * 0.5_R_P
+  previous(2) = previous(2) + filter * self%alpha
+  U = U + filter * (self%alpha - 1._R_P)
+endif
+previous(1) = previous(2)
+previous(2) = U
+return
+endsubroutine integrate
+\end{lstlisting}
+
+This method takes six arguments, the first argument is passed as bounded argument and it is the solver itself, the second is of an integrand class, it being the integrand field that must integrated one-step-over in time, the third are the previous time steps solutions, the fourth is the optional filter-displacement-register, the fifth is the time step used and the sixth is an array of the time values of the steps considered for the current one-step-over integration that are passed to the residuals function for taking into account the cases where the time derivative explicitly depends on time. The time step is not automatically computed (for example inspecting the passed integrand field), thus its value must be externally computed and passed to the \emph{integrate} method. It is worth noting that if the filter displacement argument is not passed, the solver reverts back to the standard unfiltered Leapfrog method.
+
+It is worth noting that the method also performs the cyclic update of the previous time steps solutions memory registers. In particular, if the filter displacement argument is passed the method performs the RAW filtering.
+
+\subsection{Explicit SSP Linear Mutistep Methods class API}
+
+{\color{red}To be written.}
+
+\subsection{Explicit SSP Linear Mutistep Methods with variable step-size class API}
+
+{\color{red}To be written.}
+
+\subsection{Explicit SSP Linear Mutistep Methods Runge-Kutta class API}
+
+{\color{red}To be written.}
+
+\subsection{Explicit SSP Runge-Kutta class API}\label{subsec:solver_tvd_rk}
 
 The TVD/SSP Runge-Kutta class of solvers is exposed as a single derived type named \emph{tvd\_runge\_kutta\_integrator}. This type provides three methods:
 
@@ -234,7 +444,7 @@ This method takes five arguments, the first argument is passed as bounded argume
 
 It is worth noting that the stages memory registers, namely the array \emph{stage}, must be passed as argument because it is defined as a \emph{not-passed} polymorphic argument, thus we are not allowed to define it as an automatic array of the \emph{integrate} method.
 
-\subsection{The explicit low storage Runge-Kutta class of solvers}\label{subsec:solver_ls_rk}
+\subsection{Explicit low storage Runge-Kutta class API}\label{subsec:solver_ls_rk}
 
 The low storage variant of Runge-Kutta class of solvers is exposed as a single derived type named \emph{ls\_runge\_kutta\_integrator}. This type provides three methods:
 
@@ -310,82 +520,7 @@ This method takes five arguments, the first argument is passed as bounded argume
 
 It is worth noting that the stages memory registers, namely the array \emph{stage}, must be passed as argument because it is defined as a \emph{not-passed} polymorphic argument, thus we are not allowed to define it as an automatic array of the \emph{integrate} method.
 
-\subsection{The explicit Adams-Bashforth class of solvers}\label{subsec:solver_ab}
-
-The explicit Adams-Bashforth class of solvers is exposed as a single derived type named \emph{adams\_bashforth\_integrator}. This type provides three methods:
-
-\begin{itemize}
-  \item \emph{init}: initialize the integrator accordingly the possibilities offered by the class of solvers;
-  \item \emph{destroy}: destroy the integrator previously initialized, eventually freeing the allocated dynamic memory registers;
-  \item \emph{integrate}: integrate integrand field one-step-over in time;
-  \item \emph{update\_previous}: auto update (cyclically) previous time steps solutions.
-  \end{itemize}
-
-As common for FOODIE solvers, for using such a solver it must be previously defined as an instance of the exposed FOODIE integrator type, see listing \ref{list:define_ab_solver}.
-
-\begin{lstlisting}[firstnumber=1,style=code,caption={definition of an explicit Adams-Bashforth integrator},label={list:define_ab_solver}]
-use FOODIE, only: adams_bashforth_integrator
-type(adams_bashforth_integrator) :: integrator
-\end{lstlisting}
-
-Once an integrator of this type has been instantiated, it must be initialized before used, for example see listing \ref{list:init_ab_solver}.
-
-\begin{lstlisting}[firstnumber=1,style=code,caption={example of initialization of an explicit Adams-Bashforth integrator},label={list:init_ab_solver}]
-call integrator%init(steps=4)
-\end{lstlisting}
-
-In the listing \ref{list:init_ab_solver} a 4-steps solver has been initialized. As a matter of facts, from the equation \ref{eq:AB} a solver belonging to this class is completely defined once the number of time steps adopted has been chosen. The complete definition of the \emph{adams\_bashforth\_integrator} type is reported into listing \ref{list:ab_solver}. As shown, the linear coefficients are stored as allocatable arrays the values of which are initialized by the \emph{init} method.
-
-\begin{lstlisting}[firstnumber=1,style=code,caption={definition of \emph{adams\_bashforth\_integrator} type},label={list:ab_solver}]
-type :: adams_bashforth_integrator
-  private
-  integer(I_P)           :: steps=0 ! Number of time steps.
-  real(R_P), allocatable :: b(:)    ! \(b\) coefficients.
-  contains
-    procedure, pass(self), public :: destroy
-    procedure, pass(self), public :: init
-    procedure, pass(self), public :: integrate
-    procedure, pass(self), public :: update_previous
-    final                         :: finalize
-endtype adams_bashforth_integrator
-\end{lstlisting}
-
-After the solver has been initialized it can be used for integrating an integrand field, as shown in listing \ref{list:use_ab_solver}.
-
-\begin{lstlisting}[firstnumber=1,style=code,caption={example of usage of an Adams-Bashforth integrator},label={list:use_ab_solver}]
-real               :: times(1:4)
-type(my_integrand) :: my_field
-type(my_integrand) :: previous(1:4)
-call integrator%integrate(U=my_field, previous=previous, Dt=Dt, t=times)
-\end{lstlisting}
-where \emph{my\_integrand} is a concrete (valid) extension of \emph{integrand} ADT, \emph{times} are the time at each 4 steps considered for the current one-step-over integration and \emph{previous} are the memory registers where previous time steps solutions are saved.
-
-The complete implementation of the \emph{integrate} method of the explicit Adams-Bashforth class of solvers is reported in listing \ref{list:ab_integrate}.
-
-\begin{lstlisting}[firstnumber=1,style=code,caption={implementation of the \emph{integrate} method of explicit Adams-Bashforth class},label={list:ab_integrate}]
-subroutine integrate(self, U, previous, Dt, t, autoupdate)
-class(adams_bashforth_integrator), intent(IN)    :: self         ! Actual AB integrator.
-class(integrand),                  intent(INOUT) :: U            ! Field to be integrated.
-class(integrand),                  intent(INOUT) :: previous(1:) ! Previous time steps solutions.
-real(R_P),                         intent(IN)    :: Dt           ! Time steps.
-real(R_P),                         intent(IN)    :: t(:)         ! Times.
-logical, optional,                 intent(IN)    :: autoupdate   ! Autoupdate previous time steps.
-logical                                          :: autoupdate_  ! autoupdate previous time steps, dummy var.
-integer(I_P)                                     :: s            ! Steps counter.
-autoupdate_ = .true. ; if (present(autoupdate)) autoupdate_ = autoupdate
-do s=1, self%steps
-  U = U + previous(s)%t(t=t(s)) * (Dt * self%b(s))
-enddo
-if (autoupdate_) call self%update_previous(U=U, previous=previous)
-return
-endsubroutine integrate
-\end{lstlisting}
-
-This method takes five arguments, the first argument is passed as bounded argument and it is the solver itself, the second is of an integrand class, it being the integrand field that must integrated one-step-over in time, the third are the previous time steps solutions, the fourth is the time step used, the fifth is an array of the time values of the steps considered for the current one-step-over integration that are passed to the residuals function for taking into account the cases where the time derivative explicitly depends on time and the sixth is a logical flag for enabling/disabling the cyclic update of previous time steps solutions. The time step is not automatically computed (for example inspecting the passed integrand field), thus its value must be externally computed and passed to the \emph{integrate} method.
-
-It is worth noting that the method also performs the cyclic update of the previous time steps solutions memory registers. This can be disable passing \emph{autoupdate=.false.}: it is useful in the framework of predictor-corrector solvers.
-
-\subsection{The implicit Adams-Moulton class of solvers}\label{subsec:solver_am}
+\subsection{Implicit Adams-Moulton class API}\label{subsec:solver_am}
 
 The explicit Adams-Moulton class of solvers is exposed as a single derived type named \emph{adams\_moulton\_integrator}. This type provides three methods:
 
@@ -466,85 +601,9 @@ This method takes six arguments, the first argument is passed as bounded argumen
 
 It is worth noting that the method also performs the cyclic update of the previous time steps solutions memory registers. This can be disable passing \emph{autoupdate=.false.}: it is useful in the framework of predictor-corrector solvers.
 
-\subsection{The predictor-corrector Adams-Bashforth-Moulton class of solvers}\label{subsec:solver_abm}
+\subsection{Predictor-corrector Adams-Bashforth-Moulton class API}\label{subsec:solver_abm}
 
 {\color{red} To be written.}
-
-\subsection{The leapfrog solver}\label{subsec:solver_leapfrog}
-
-The explicit Leapfrog class of solvers is exposed as a single derived type named \emph{leapfrog\_integrator}. This type provides three methods:
-
-\begin{itemize}
-  \item \emph{init}: initialize the integrator accordingly the possibilities offered by the class of solvers;
-  \item \emph{integrate}: integrate integrand field one-step-over in time.
-  \end{itemize}
-
-As common for FOODIE solvers, for using such a solver it must be previously defined as an instance of the exposed FOODIE integrator type, see listing \ref{list:define_lf_solver}.
-
-\begin{lstlisting}[firstnumber=1,style=code,caption={definition of an explicit Leapfrog integrator},label={list:define_lf_solver}]
-use FOODIE, only: leapfrog_integrator
-type(leapfrog_integrator) :: integrator
-\end{lstlisting}
-
-Once an integrator of this type has been instantiated, it must be initialized before used, for example see listing \ref{list:init_lf_solver}.
-
-\begin{lstlisting}[firstnumber=1,style=code,caption={example of initialization of an explicit Leapfrog integrator},label={list:init_lf_solver}]
-! default coefficients nu=0.01, alpha=0.53
-call integrator%init()
-! custom coefficients
-call integrator%init(nu=0.015, alpha=0.6)
-\end{lstlisting}
-
-The complete definition of the \emph{leapfrog\_integrator} type is reported into listing \ref{list:lf_solver}. As shown, the filter coefficients are initialized to zero, suitable values are initialized by the \emph{init} method.
-
-\begin{lstlisting}[firstnumber=1,style=code,caption={definition of \emph{leapfrog\_integrator} type},label={list:lf_solver}]
-type :: leapfrog_integrator
-  private
-  real(R_P) :: nu=0.01_R_P    ! Robert-Asselin filter coefficient.
-  real(R_P) :: alpha=0.53_R_P ! Robert-Asselin-Williams filter coefficient.
-  contains
-    procedure, pass(self), public :: init
-    procedure, pass(self), public :: integrate
-endtype leapfrog_integrator
-\end{lstlisting}
-
-After the solver has been initialized it can be used for integrating an integrand field, as shown in listing \ref{list:use_lf_solver}.
-
-\begin{lstlisting}[firstnumber=1,style=code,caption={example of usage of a Leapfrog integrator},label={list:use_lf_solver}]
-real               :: times(1:2)
-type(my_integrand) :: filter_displacement
-type(my_integrand) :: my_field
-type(my_integrand) :: previous(1:2)
-call integrator%integrate(U=my_field, previous=previous, filter=filter_displacement, Dt=Dt, &
-                          t=times)
-\end{lstlisting}
-where \emph{my\_integrand} is a concrete (valid) extension of \emph{integrand} ADT, \emph{previous} are the memory registers where previous time steps solutions are saved, \emph{filter\_displacement} is the register necessary for computing the eventual displacement of the applied filter and \emph{times} are the time at each 2 steps considered for the current one-step-over integration.
-
-The complete implementation of the \emph{integrate} method of the explicit Leapfrog class of solvers is reported in listing \ref{list:lf_integrate}.
-
-\begin{lstlisting}[firstnumber=1,style=code,caption={implementation of the \emph{integrate} method of explicit Leapfrog class},label={list:lf_integrate}]
-subroutine integrate(self, U, previous, Dt, t, filter)
-class(leapfrog_integrator), intent(IN)    :: self          ! LF integrator.
-class(integrand),           intent(INOUT) :: U             ! Field to be integrated.
-class(integrand),           intent(INOUT) :: previous(1:2) ! Previous time steps solutions.
-real(R_P),                  intent(in)    :: Dt            ! Time step.
-real(R_P),                  intent(IN)    :: t             ! Time.
-class(integrand), optional, intent(INOUT) :: filter        ! Filter field displacement.
-U = previous(1) + previous(2)%t(t=t) * (Dt * 2._R_P)
-if (present(filter)) then
-  filter = (previous(1) - previous(2) * 2._R_P + U) * self%nu * 0.5_R_P
-  previous(2) = previous(2) + filter * self%alpha
-  U = U + filter * (self%alpha - 1._R_P)
-endif
-previous(1) = previous(2)
-previous(2) = U
-return
-endsubroutine integrate
-\end{lstlisting}
-
-This method takes six arguments, the first argument is passed as bounded argument and it is the solver itself, the second is of an integrand class, it being the integrand field that must integrated one-step-over in time, the third are the previous time steps solutions, the fourth is the optional filter-displacement-register, the fifth is the time step used and the sixth is an array of the time values of the steps considered for the current one-step-over integration that are passed to the residuals function for taking into account the cases where the time derivative explicitly depends on time. The time step is not automatically computed (for example inspecting the passed integrand field), thus its value must be externally computed and passed to the \emph{integrate} method. It is worth noting that if the filter displacement argument is not passed, the solver reverts back to the standard unfiltered Leapfrog method.
-
-It is worth noting that the method also performs the cyclic update of the previous time steps solutions memory registers. In particular, if the filter displacement argument is passed the method performs the RAW filtering.
 
 \subsection{General Remarks}\label{subsec:API-remarks}
 

@@ -4,87 +4,209 @@ In many (most) circumstances, the solution of equation \ref{eq:IVP} cannot be co
 
 A non comprehensive classification of the most widely used schemes could distinguish between \emph{multi-step} versus \emph{one-step} schemes and between \emph{explicit} versus \emph{implicit} schemes.
 
-Essentially, the multi-step schemes have been developed to obtain an accurate approximation of the subsequent numerical steps using the informations contained into the previously computed steps, thus this approach relates the next step approximation to a set of the previously computed steps. On the contrary, a one-step scheme evolves the solution toward the next step using only the information coming from the current time approximation. In the framework of one-step schemes family an equivalent accurate approximation can be obtained by means of a multi-stage approach as the one due to Runge-Kutta. The current version of FOODIE provides schemes belonging to both these families.
+Essentially, the multi-step schemes have been developed to obtain an accurate approximation of the subsequent numerical steps using the informations contained into the previously computed steps, thus this approach relates the next step approximation to a set of the previously computed steps. On the contrary, a one-step scheme evolves the solution toward the next step using only the information coming from the current time approximation. In the framework of one-step schemes family an equivalent accurate approximation can be obtained by means of a multi-stage approach as the one due to Runge and Kutta. FOODIE provides schemes belonging to both these families.
 
-The other ODE solvers classification concerns with explicit or implicit nature of the schemes employed. Briefly, an explicit scheme computes the next step approximation using the previously computed steps at most to the current time, whereas an implicit scheme uses also the next step approximation (that is the unknown), thus it requires extra computations. The implicit approach is of practical use for \emph{stiff} systems where the usage of explicit schemes could require an extremely small time step to evolve in a \emph{stable} way the solution. Mixing together explicit and implicit schemes it is possible to build a family of \emph{predictor-corrector} methods: using an explicit scheme to predict a guess for the next step approximation it is possible to use an implicit method for correcting this guess. Currently, FOODIE provides explicit solvers and predictor-correct ones.
+The other ODE solvers classification concerns with explicit or implicit nature of the schemes employed. Briefly, an explicit scheme computes the next step approximation using the previously computed steps at most to the current time, whereas an implicit scheme uses also the next step approximation (that is the unknown), thus it requires extra computations. The implicit approach is of practical use for \emph{stiff} systems where the usage of explicit schemes could require an extremely small time step to evolve in a \emph{stable} way the solution. Mixing together explicit and implicit schemes it is possible to build families of \emph{predictor-corrector} methods: using an explicit scheme to predict a guess for the next step approximation it is possible to use an implicit method for correcting this guess. FOODIE provides explicit, implicit and predictor-correct solvers.
 
 FOODIE currently implements the following ODE schemes:
 
 \begin{itemize}
-  \item one-step schemes:
-    \begin{itemize}
-      \item explicit forward Euler scheme, it being $1^{st}$ order accurate;
-      \item explicit Runge-Kutta schemes:
-        \begin{itemize}
-          \item TVD/SSP Runge-Kutta schemes:
-            \begin{itemize}
-              \item 2-stages, it being $2^{nd}$ order accurate;
-              \item 3-stages, it being $3^{rd}$ order accurate;
-              \item 5-stages, it being $4^{th}$ order accurate;
-              \end{itemize}
-          \item low storage Runge-Kutta schemes:
-            \begin{itemize}
-              \item 5-stages 2N registers schemes, it being $4^{th}$ order accurate;
-              \item 6-stages 2N registers schemes, it being $4^{th}$ order accurate;
-              \item 7-stages 2N registers schemes, it being $4^{th}$ order accurate;
-              \item 12-stages 2N registers schemes, it being $4^{th}$ order accurate;
-              \item 13-stages 2N registers schemes, it being $4^{th}$ order accurate;
-              \item 14-stages 2N registers schemes, it being $4^{th}$ order accurate;
-              \end{itemize}
-          \end{itemize}
+   \item explicit schemes:
+   \begin{itemize}
+      \item forward Euler: $1^{st}$ order of accurate;
+      \item Adams-Bashforth: multi-step from $1^{st}$ to $16^{th}$ order of accuracy;
+      \item Leapfrog:
+      \begin{itemize}
+         \item unfiltered leapfrog, $2^{nd}$ order accurate, mostly unstable;
+         \item Robert-Asselin filtered leapfrog, $1^{st}$ order accurate;
+         \item Robert-Asselin-Williams filtered leapfrog, $3^{rd}$ order accurate;
       \end{itemize}
-  \item multi-step schemes:
-    \begin{itemize}
-      \item explicit Adams-Bashforth schemes:
-        \begin{itemize}
-          \item 2-steps, it being $2^{nd}$ order accurate;
-          \item 3-steps, it being $3^{rd}$ order accurate;
-          \item 4-steps, it being $4^{th}$ order accurate;
-          \end{itemize}
-      \item implicit Adams-Moulton schemes:
-        \begin{itemize}
-          \item 1-step, it being $2^{nd}$ order accurate;
-          \item 2-steps, it being $3^{rd}$ order accurate;
-          \item 3-steps, it being $4^{th}$ order accurate;
-          \end{itemize}
-      \item predictor-corrector Adams-Bashforth-Moulton schemes:
-        \begin{itemize}
-          \item 1-step, it being $2^{nd}$ order accurate;
-          \item 2-steps, it being $3^{rd}$ order accurate;
-          \item 3-steps, it being $4^{th}$ order accurate;
-          \end{itemize}
-      \item explicit Leapfrog schemes\footnote{Leapfrog method is a 2-steps solver being, in general $2^{nd}$ order accurate, but mostly \emph{unstable}. It is well suited for periodic/oscillatory problems, thus the error is generally categorized accordingly to the phase and amplitude errors: the unfiltered scheme provides a $2^{nd}$ order error on phase approximation while the amplitude error is null. However, the unfiltered scheme is mostly unstable, thus many filters have been devised. In general, the filters retain the accuracy on the phase error, while affect the amplitude one.}:
-        \begin{itemize}
-          \item 2-steps unfiltered, it being $2^{nd}$ order accurate, but mostly \emph{unstable};
-          \item 2-steps Robert-Asselin filtered, it being $1^{st}$ order accurate (on \emph{amplitude error});
-          \item 2-steps Robert-Asselin-Williams filtered, it being $3^{rd}$ order accurate (on \emph{amplitude error});
-          \end{itemize}
+      \item Strong Stability Preserving (SSP) Linear Multistep Methods:
+      \begin{itemize}
+         \item 3 steps, $2^{nd}$ order accurate;
+         \item 4 steps, $3^{rd}$ order accurate;
+         \item 5 steps, $3^{rd}$ order accurate;
       \end{itemize}
-  \end{itemize}
+      \item Strong Stability Preserving (SSP) Linear Multistep Methods with variable step-size:
+      \begin{itemize}
+         \item from 2 to 3 steps with $2^{nd}$ order of accuracy;
+         \item from 3 to 5 steps with $3^{rd}$ order of accuracy;
+      \end{itemize}
+      \item Strong Stability Preserving (SSP) Linear Multistep Runge-Kutta Methods:
+      \begin{itemize}
+         \item 2 steps, 2 stages, $3^{rd}$ order accurate;
+         \item 3 steps, 2 stages, $3^{rd}$ order accurate;
+         \item 4 steps, 5 stages, $8^{th}$ order accurate;
+      \end{itemize}
+      \item Runge-Kutta schemes:
+      \begin{itemize}
+         \item Linear Strong Stability Preserving (SSP) RK of any order:
+         \begin{itemize}
+            \item generic s-stages of order $(s-1)^{th}$;
+            \item generic s-stages of order $s^{th}$;
+         \end{itemize}
+         \item Strong Stability Preserving (SSP) Low Storage RK:
+         \begin{itemize}
+            \item 5, 6, 7, 12-14 stages, $4^{th}$ order accurate, 2 registers;
+         \end{itemize}
+         \item Strong Stability Preserving (SSP) RK:
+         \begin{itemize}
+            \item 2 stages, $2^{nd}$ order accurate;
+            \item 3 stages, $3^{rd}$ order accurate;
+            \item 5 stages, $4^{th}$ order accurate;
+         \end{itemize}
+         \item embedded (adaptive) RK:
+         \begin{itemize}
+            \item Heun-Euler, 2 stages, $2^{nd}$ order accurate;
+            \item Runge-Kutta-Cash-Karp, 6 stages, $5^{th}$ order accurate;
+            \item Prince-Dormand, 7 stages, $4^{th}$ order accurate;
+            \item Calvo, 9 stages, $6^{th}$ order accurate;
+            \item Feagin, 17 stages, $10^{th}$ order accurate;
+         \end{itemize}
+      \end{itemize}
+   \end{itemize}
+   \item implicit schemes:
+   \begin{itemize}
+      \item Adams-Moulton: multi-step from $1^{st}$ to $16^{th}$ order of accuracy;
+      \item Backward Differentiation Formula: multi-step from $2^{nd}$ to $6^{th}$ order of accuracy;
+   \end{itemize}
+   \item predictor-corrector schemes:
+   \begin{itemize}
+      \item Adams-Bashforth-Moulton: multi-step from $1^{st}$ to $16^{th}$ order of accuracy;
+   \end{itemize}
+\end{itemize}
 
 {\color{red} Add citations to all solvers reference papers.}
 
-\subsection{The explicit forward Euler scheme}
+In the subsequent sections each of the above mentioned scheme is briefly described.
+
+It is worth noting that for multi-step methods like Adams-Bashforth, Adams-Moulton, Linear Multistep Methods, etc... classes the solvers are not \emph{self-starting}: the values of $U\left(t^{1}\right)$, $U\left(t^{2}\right)$, \dots, $U\left(t^{N_s-1}\right)$ must be provided, $N_s$ being the number of previous steps used. To this aim, a lower order multi-step scheme or an equivalent order one-step multi-stage scheme can be used.
+
+\subsection{Explicit forward Euler scheme}
 
 The explicit forward Euler scheme for ODE integration is probably the simplest solver ever devised. Considering the system \ref{eq:IVP}, the solution (approximation) of the state vector $U$ at the time $t^{n+1}=t^n+\Delta t$ assuming to known the solution at time $t^n$ is:
 
 \begin{equation}
-  U\left(t^{n+1}\right) = U\left(t^n\right) +\Delta t \cdot R\left[t^n, U\left(t^n\right)\right]
+  U\left(t^{n+1}\right) = U\left(t^n\right) +\Delta t \cdot R\left(t^n, U\left(t^n\right)\right)
 \label{eq:solver-euler}
 \end{equation}
 where the solution at the new time step is computed by means of only the current time solution, thus this is an explicit scheme. The solution is an approximation of $1^{st}$ order, the local truncation error being $O(Dt^2)$. As well known, this scheme has an absolute (linear) stability locus equals to $|1+\Delta t \lambda|\le 1$ where $\lambda$ contains the eigenvalues of the linear (or linearized) Jacobian matrix of the system.
 
-This scheme is Total Variation Diminishing (TVD), thus satisfies the maximum principle (or the equivalent positivity preserving property).
+This scheme is Total Variation Diminishing (TVD), thus satisfies the maximum principle or the equivalent positivity preserving property. In different fields this property is also indicated as Strong Stability Preserving.
 
 {\color{red} Add citations.}
 
-\subsection{The explicit TVD/SSP Runge-Kutta class of schemes}
+\subsection{Explicit Adams-Bashforth class}
+
+Adams-Bashforth methods belong to the more general (linear) explicit multi-step family of schemes. This kind of schemes has been designed to achieve a more accurate solution than the $1^{st}$ Euler scheme using the information coming from the solutions already computed at previous time steps. Typically only one new residuals function $R$ evaluation is required at each time step, whereas Runge-Kutta schemes require many of them.
+
+In general, the Adams-Bashforth schemes provided by FOODIE library are written by means of the following algorithm (for only explicit schemes):
+
+\begin{equation}
+U\left(t^{n+N_s}\right) = U\left(t^{n+N_s-1}\right) +\Delta t \sum_{s=1}^{n+N_s}{ b_s \cdot R\left[t^{n+s-1}, U\left(t^{n+s-1}\right)\right]}
+\label{eq:AB}
+\end{equation}
+where $N_s$ is the number of time steps considered and $b_s$ are the linear coefficients selected.
+
+Currently FOODIE provides schemes having $2^{nd}$ to $16^{th}$ formal order of accuracy. The $b_s$ coefficients are reported in table \ref{tab:AB-coeff}.
+
+It is worth noting that FODDIE also provides a one-step AB solver that reverts back to the explicit forward Euler scheme: it can be used, for example, into a Recursive Order Reduction (ROR) framework that automatically checks some properties of the solution and, in case, reduces the order of the Runge-Kutta solver until those properties are obtained.
+
+{\color{red} Add citations.}
+
+\subsection{Leapfrog solver}
+
+\emph{Leapfrog} scheme belongs to the multi-step family, it being formally a centered second order approximation in time. The leapfrog method (in its original formulation) is mostly unstable, however it is well suited for periodic-oscillatory problems providing a null error on the amplitude value and a formal second order error on the phase one, under the satisfaction of the time-step size stable limit. Commonly, the leapfrog methods are said to provide a $2 \Delta t$ computational mode that can generate unphysical, unstable solutions. As consequence, the original leapfrog scheme is generally \emph{filtered} in order to suppress these computational modes.
+
+The unfiltered leapfrog scheme provided by FOODIE is:
+\begin{equation}
+  U\left(t^{n+2}\right) = U\left(t^{n}\right) + 2\Delta t \cdot R\left[t^{n+1}, U\left(t^{n+1}\right)\right]
+\label{eq:leapfrog}
+\end{equation}
+
+FOODIE provides, in a \emph{seamless} API, also filtered leapfrog schemes. A widely used filter is due to Robert and Asselin, that suppress the computational modes at the cost of accuracy reduction resulting into a $1^{st}$ order error in amplitude value. A more accurate filter, able to provide a $3^{rd}$ order error on amplitude, is a modification of the Robert-Asselin filter due to Williams known as Robert-Asselin-Williams (RAW) filter, that filters the approximation of $U\left(t^{n+1}\right)$ and $U\left(t^{n+2}\right)$ by the following scalar coefficient:
+
+\begin{equation}
+  \begin{matrix}
+    U\left(t^{n+1}\right) = U\left(t^{n+1}\right) + \Delta * \alpha     \\
+    U\left(t^{n+2}\right) = U\left(t^{n+2}\right) + \Delta * (\alpha-1) \\
+    where \\
+    \Delta = \frac{\nu}{2}(U^{n} - 2 U^{n+1} + U^{n+2})
+  \end{matrix}
+\label{eq:leapfrog-RAW}
+\end{equation}
+
+The filter coefficients should be taken as $\nu \in (0,1]$ and $\alpha \in (0.5,1]$. If $\alpha=0.5$ the filters of time $t^{n+1}$ and $t^{n+2}$ have the same amplitude and opposite sign thus allowing to the optimal $3^{rd}$ order error on amplitude. The default values of the FOODIE provided scheme are $\nu=0.01$ $\alpha=0.53$, but they can be customized at runtime.
+
+{\color{red} Add citations.}
+
+\subsection{Explicit SSP Linear Mutistep Methods class}
+
+Explicit SSP Linear Mutistep Methods belong to multi-step schemes like the Adams-Bashforth ones, but they ensure the Strong Stability Preserving property.
+
+The algorithm implemented into FOODIE is:
+
+\begin{equation}
+U^{n+N_s} = \sum_{s=1}^{N_s}{\left[a_s U^{n+s-1} + \Delta t b_s \cdot R(t^{n+s-1}, U^{n+s-1}) \right]}
+\label{eq:lmm-ssp}
+\end{equation}
+where $N_s$ is the number of time steps considered and $a_s, \quad b_s$ are the linear coefficients selected.
+
+Currently FOODIE provides schemes having $2^{nd}$ to $3^{th}$ formal order of accuracy. The $a_s , \quad b_s$ coefficients are reported in table \ref{tab:lmm-ssp-coeff}.
+
+{\color{red} Add citations.}
+
+\subsection{Explicit SSP Linear Mutistep Methods with variable step-size class}
+
+Explicit SSP Linear Mutistep Methods with variable step-size belong to multi-step schemes like the Adams-Bashforth ones, but they ensure the Strong Stability Preserving property and they allow the time step-size to vary, as it happens for multi-stage scheme.
+
+Currently FOODIE provides schemes having $2^{nd}$ to $3^{th}$ formal order of accuracy. The $2^{nd}$ order algorithm implemented into FOODIE is:
+
+\begin{equation}
+U^{n+N_s} = \frac{1}{\Omega_{N_s-1}^2} U^n + \frac{\Omega_{N_s-1}^2 - 1}{\Omega_{N_s-1}^2} U^{n+N_s-1} + \frac{\Omega_{N_s-1} + 1}{\Omega_{N_s-1}} \Delta t^{n+N_s} R(U^{n+N_s-1})
+\label{eq:lmm-ssp-vss-2}
+\end{equation}
+while the $3^{rd}$ order algorithm is:
+\begin{equation}
+U^{n+N_s} = \frac{3 \Omega_{N_s-1} + 2}{\Omega_{N_s-1}^3} U^n +
+\frac{(\Omega_{N_s-1} + 1)^2(\Omega_{N_s-1} - 2)}{\Omega_{N_s-1}^3} U^{n+N_s-1} +
+\frac{\Omega_{N_s-1} + 1}{\Omega_{N_s-1}^2} \Delta t^{n+N_s} R(U^n) +
+\frac{(\Omega_{N_s-1} + 1)^2}{\Omega_{N_s-1}^2} \Delta t^{n+N_s} R(U^{n+N_s-1})
+\label{eq:lmm-ssp-vss-3}
+\end{equation}
+
+The coefficients are computed by recursive formula:
+
+$$ \Omega_s = \sum_{i=1}^s { \omega_i }\quad 1 \leq s \leq N_s $$
+$$ \omega_i = \frac{\Delta t^{n + s}}{\Delta t^{n + N_s}} $$
+where $N_s$ is the number of time steps considered.
+
+{\color{red} Add citations.}
+
+\subsection{Explicit SSP Linear Mutistep Methods Runge-Kutta class}
+
+Because SSP Runge-Kutta has an order barrier, see \cite{ketch}, namely they can be at most of $4^{th}$ order accurate, multi-step/multi-stage schemes have been devised. Such a class of schemes represent a good compromise between memory efficiency and accuracy. The schemes are not self-starting, being a multi-step class, but the same multi-step nature allows to overcome the order barrier of SSP multi-stage schemes.
+
+The algorithm implemented into FOODIE is:
+\begin{equation}
+\begin{matrix}
+y_1^n = u^n \\
+y_i^n = \sum_{l=1}^{k} d_{il} u^{n-k+l} + \Delta{t}\sum_{l=1}^{k-1} \hat{a}_{il} F(u^{n-k+l}) + \Delta{t}\sum_{j=1}^{i-1} a_{ij} F(y_j^n) \; \; \; \;  2 \leq i \leq N_s \\
+   u^{n+1} = \sum_{l=1}^{k} \theta_l u^{n-k+l} + \Delta{t}\sum_{l=1}^{k-1} \hat{b}_{l} F(u^{n-k+l}) + \Delta{t}\sum_{j=1}^{N_s} b_j F(y_j^n).
+\end{matrix}
+\label{eq:ms-rk-ssp}
+\end{equation}
+where $N_s$ is the number of time steps considered.
+
+{\color{red} Add citations.}
+
+\subsection{Explicit SSP Runge-Kutta class}
 
 Runge-Kutta methods belong to the more general multi-stage family of schemes. This kind of schemes has been designed to achieve a more accurate solution than the $1^{st}$ Euler scheme, but without increasing the number of time steps used, as it is done with the multi-step schemes. Essentially, the high order of accuracy is obtained by means of \emph{intermediate values} (the stages) of the solution and its derivative are generated and used within a single time step. This commonly implies the allocation of some auxiliary memory registers for storing the intermediate stages.
 
 Notably, the multi-stage schemes class has the attractive property to be \emph{self-starting}: the high order accurate solution can be obtained directly from the previous one, without the necessity to compute \emph{before} a certain number of previous steps, as it happens for the multi-step schemes. Moreover, one-step multi-stage methods are suitable for adaptively-varying time-step size (that is also possible for multi-step schemes, but at a cost of more complexity) and for discontinuous solutions, namely discontinued solutions happening at a certain time $t*$ (that in a multi-step framework can involve an overall accuracy degradation).
 
-In general, the TVD/SSP Runge-Kutta schemes provided by FOODIE library are written by means of the following algorithm:
+In general, the SSP Runge-Kutta schemes provided by FOODIE library are written by means of the following algorithm:
 \begin{equation}
   U^{n+1} = U^{n} + \Delta t \cdot\sum\limits_{s=1}^{N_{s}}{\beta_s K_s}
 \label{eq:RK}
@@ -112,51 +234,15 @@ It is worth noting that the equations \ref{eq:RK} and \ref{eq:RK-stage} contain 
 
 The equations \ref{eq:RK} and \ref{eq:RK-stage} show that Runge-Kutta methods do not require any additional differentiations of the ODE system for achieving high order accuracy, rather they require additional evaluations of the residuals function $R$.
 
-The nature of the scheme and the properties of the solutions obtained depend on the number of stages and on the value of the coefficients selected. Currently, FOODIE provides 3 Runge-Kutta schemes having TVD or Strong Stability Preserving (SSP) propriety (thus they being suitable for ODE systems involving rapidly changing non linear dynamics) the Butcher's coefficients of which are reported in tables \ref{tab:RK-TVD-butcher-2}, \ref{tab:RK-SSP-butcher-3}, \ref{tab:RK-SSP-butcher-5}.
+The nature of the scheme and the properties of the solutions obtained depend on the number of stages and on the value of the coefficients selected. Currently, FOODIE provides many Runge-Kutta schemes having Strong Stability Preserving propriety (thus they being suitable for ODE systems involving rapidly changing non linear dynamics) the Butcher's coefficients of which are reported in tables \ref{tab:RK-TVD-butcher-2}, \ref{tab:RK-SSP-butcher-3}, \ref{tab:RK-SSP-butcher-5}.
 
-\begin{table}[!ht]
-  \centering
-  \caption{Butcher's table of 2 stages, $2^{nd}$ order, Runge-Kutta TVD scheme\label{tab:RK-TVD-butcher-2}}
-  \resizebox{0.15\textwidth}{!}{%
-  \begin{tabular}{c|cc}
-   1 & 1 & 0       \\
-   \hline
-       & 1/2 & 1/2   \\
-  \end{tabular}}
-\end{table}
+The absolute stability locus depends on the coefficients selected, however, as a general principle, we can assume that greater is the stages number and wider is the stability locus on equal accuracy orders. Currently, FOODIE provides $2^{nd}$ to $4^{th}$ order accurate schemes. As demonstrated in \cite{ketch}, SSP RK are at most $4^{th}$ order accurate, namely the SSP property introduces an order barrier for single step methods. To increase the order it is necessary to adopt multi-step schemes: the hybrid multi-step RK schemes are devised to this aim.
 
-\begin{table}[!ht]
-  \centering
-  \caption{Butcher's table of 3 stages, $3^{rd}$ order, Runge-Kutta SSP scheme\label{tab:RK-SSP-butcher-3}}
-  \resizebox{0.20\textwidth}{!}{%
-  \begin{tabular}{c|ccc}
-   1   & 1   &     &      \\
-   1/2 & 1/4 & 1/4 &      \\
-   \hline
-       & 1/6 & 1/6 & 2/3  \\
-  \end{tabular}}
-\end{table}
-
-\begin{table}[!ht]
-  \centering
-  \caption{Butcher's table of 5 stages, $4^{th}$ order accurate, Runge-Kutta SSP scheme\label{tab:RK-SSP-butcher-5}}
-  \resizebox{0.99\textwidth}{!}{%
-  \begin{tabular}{c|ccccc}
-   0.39175222700392 & 0.39175222700392 &                  &                  &                  &                  \\
-   0.58607968896779 & 0.21766909633821 & 0.36841059262959 &                  &                  &                  \\
-   0.47454236302687 & 0.08269208670950 & 0.13995850206999 & 0.25189177424738 &                  &                  \\
-   0.93501063100924 & 0.06796628370320 & 0.11503469844438 & 0.20703489864929 & 0.54497475021237 &                  \\
-   \hline
-                    & 0.14681187618661 & 0.24848290924556 & 0.10425883036650 & 0.27443890091960 & 0.22600748319395 \\
-  \end{tabular}}
-\end{table}
-The absolute stability locus depends on the coefficients selected, however, as a general principle, we can assume that greater is the stages number and wider is the stability locus on equal accuracy orders.
-
-It is worth noting that FODDiE also provides a one-stage TVD Runge-Kutta solver that reverts back to the explicit forward Euler scheme: it can be used, for example, into a Recursive Order Reduction (ROR) framework that automatically checks some properties of the solution and, in case, reduces the order of the Runge-Kutta solver until those properties are obtained.
+Similarly to the Adams-Bashforth class, the Runge-Kutta class also provides a fail-safe one-stage solver reverting back to the explicit forward Euler solver, that is useful for ROR-like frameworks.
 
 {\color{red} Add citations.}
 
-\subsection{The explicit low storage Runge-Kutta class of schemes}
+\subsection{Explicit low storage Runge-Kutta class}
 
 As aforementioned, standard Runge-Kutta schemes have the drawback to require $N_S$ auxiliary memory registers to store the necessary stages data. In order to make an efficient use of the available limited computer memory, the class of low storage Runge-Kutta scheme was devised. Essentially, the standard Runge-Kutta class (under some specific conditions) can be reformulated allowing a more efficient memory management. Currently FOODIE provides a class of \emph{2N registers} storage Runge-Kutta schemes, meaning that the storage of all stages requires only 2 registers of memory with a \emph{word} length $N$ (namely the length of the state vector) in contrast to the standard formulation where $N_s$ registers of the same length $N$ are required. This is a dramatic improvement of memory efficiency especially for schemes using a high number of stages ($N_s \ge 4$) where the memory necessary is an half with respect the original formulation. Unfortunately, not all standard Runge-Kutta schemes can be reformulated as a low storage one.
 
@@ -175,162 +261,13 @@ Following the Williamson's approach the standard coefficients are reformulated t
 \label{eq:RK-ls}
 \end{equation}
 
-Currently FOODIE provides 5/6/7/12/13/14 stages, all $4^{th}$ order, 2N registers explicit schemes, the coefficients of which are listed in table \ref{tab:RK-ls}.
+Currently FOODIE provides 5, 6, 7, 12, 13 and 14 stages, all $4^{th}$ order, 2N registers explicit schemes, the coefficients of which are listed in table \ref{tab:RK-ls}.
 
-\begin{table}[!ht]
-  \centering
-  \caption{Williamson's table of low storage Runge-Kutta schemes\label{tab:RK-ls}}
-  \begin{subtable}[b]{0.45\textwidth}
-    \centering
-    \caption{5 stages, $4^{th}$ order\label{tab:RK-ls-5}}
-    \resizebox{1.00\textwidth}{!}{%
-    \begin{tabular}{cccc}
-      Stage & $A$                                    & $B$                                    & $C$                                   \\
-      \hline
-      1     & $ 0                                  $ & $\frac{1432997174477}{9575080441755 }$ & $ 0                                 $ \\
-      2     & $-\frac{567301805773 }{1357537059087}$ & $\frac{5161836677717}{13612068292357}$ & $\frac{1432997174477}{9575080441755}$ \\
-      3     & $-\frac{2404267990393}{2016746695238}$ & $\frac{1720146321549}{2090206949498 }$ & $\frac{2526269341429}{6820363962896}$ \\
-      4     & $-\frac{3550918686646}{2091501179385}$ & $\frac{3134564353537}{4481467310338 }$ & $\frac{2006345519317}{3224310063776}$ \\
-      5     & $-\frac{1275806237668}{842570457699 }$ & $\frac{2277821191437}{14882151754819}$ & $\frac{2802321613138}{2924317926251}$ \\
-    \end{tabular}}
-  \end{subtable}\quad%
-  \begin{subtable}[b]{0.45\textwidth}
-    \centering
-    \caption{6 stages, $4^{th}$ order\label{tab:RK-ls-6}}
-    \resizebox{1.00\textwidth}{!}{%
-    \begin{tabular}{cccc}
-      Stage & $A$               & $B$              & $C$              \\
-      \hline
-      1     & $ 0             $ & $0.122000000000$ & $0             $ \\
-      2     & $-0.691750960670$ & $0.477263056358$ & $0.122000000000$ \\
-      3     & $-1.727127405211$ & $0.381941220320$ & $0.269115878630$ \\
-      4     & $-0.694890150986$ & $0.447757195744$ & $0.447717183551$ \\
-      5     & $-1.039942756197$ & $0.498614246822$ & $0.749979795490$ \\
-      6     & $-1.531977447611$ & $0.186648570846$ & $0.898555413085$ \\
-    \end{tabular}}
-  \end{subtable}\\
-  \begin{subtable}[b]{0.45\textwidth}
-    \centering
-    \caption{7 stages, $4^{th}$ order\label{tab:RK-ls-7}}
-    \resizebox{1.00\textwidth}{!}{%
-    \begin{tabular}{cccc}
-      Stage & $A$               & $B$              & $C$              \\
-      \hline
-      1     & $ 0.000000000000$ & $0.117322146869$ & $0.000000000000$ \\
-      2     & $-0.647900745934$ & $0.503270262127$ & $0.117322146869$ \\
-      3     & $-2.704760863204$ & $0.233663281658$ & $0.294523230758$ \\
-      4     & $-0.460080550118$ & $0.283419634625$ & $0.305658622131$ \\
-      5     & $-0.500581787785$ & $0.540367414023$ & $0.582864148403$ \\
-      6     & $-1.906532255913$ & $0.371499414620$ & $0.858664273599$ \\
-      7     & $-1.450000000000$ & $0.136670099385$ & $0.868664273599$ \\
-    \end{tabular}}
-  \end{subtable}\quad%
-  \begin{subtable}[b]{0.45\textwidth}
-    \centering
-    \caption{12 stages, $4^{th}$ order\label{tab:RK-ls-12}}
-    \resizebox{1.00\textwidth}{!}{%
-    \begin{tabular}{cccc}
-      Stage & $A$                   & $B$                  & $C$                  \\
-      \hline
-      1     & $ 0.0000000000000000$ & $0.0650008435125904$ & $0.0000000000000000$ \\
-      2     & $-0.0923311242368072$ & $0.0161459902249842$ & $0.0650008435125904$ \\
-      3     & $-0.9441056581158819$ & $0.5758627178358159$ & $0.0796560563081853$ \\
-      4     & $-4.3271273247576394$ & $0.1649758848361671$ & $0.1620416710085376$ \\
-      5     & $-2.1557771329026072$ & $0.3934619494248182$ & $0.2248877362907778$ \\
-      6     & $-0.9770727190189062$ & $0.0443509641602719$ & $0.2952293985641261$ \\
-      7     & $-0.7581835342571139$ & $0.2074504268408778$ & $0.3318332506149405$ \\
-      8     & $-1.7977525470825499$ & $0.6914247433015102$ & $0.4094724050198658$ \\
-      9     & $-2.6915667972700770$ & $0.3766646883450449$ & $0.6356954475753369$ \\
-      10    & $-4.6466798960268143$ & $0.0757190350155483$ & $0.6806551557645497$ \\
-      11    & $-0.1539613783825189$ & $0.2027862031054088$ & $0.7143773712418350$ \\
-      12    & $-0.5943293901830616$ & $0.2167029365631842$ & $0.9032588871651854$ \\
-    \end{tabular}}
-  \end{subtable}\\
-  \begin{subtable}[b]{0.45\textwidth}
-    \centering
-    \caption{13 stages, $4^{th}$ order\label{tab:RK-ls-13}}
-    \resizebox{1.00\textwidth}{!}{%
-    \begin{tabular}{cccc}
-      Stage & $A$                   & $B$                  & $C$                  \\
-      \hline
-      1     & $ 0.0000000000000000$ & $0.0271990297818803$ & $0.0000000000000000$ \\
-      2     & $-0.6160178650170565$ & $0.1772488819905108$ & $0.0271990297818803$ \\
-      3     & $-0.4449487060774118$ & $0.0378528418949694$ & $0.0952594339119365$ \\
-      4     & $-1.0952033345276178$ & $0.6086431830142991$ & $0.1266450286591127$ \\
-      5     & $-1.2256030785959187$ & $0.2154313974316100$ & $0.1825883045699772$ \\
-      6     & $-0.2740182222332805$ & $0.2066152563885843$ & $0.3737511439063931$ \\
-      7     & $-0.0411952089052647$ & $0.0415864076069797$ & $0.5301279418422206$ \\
-      8     & $-0.1797084899153560$ & $0.0219891884310925$ & $0.5704177433952291$ \\
-      9     & $-1.1771530652064288$ & $0.9893081222650993$ & $0.5885784947099155$ \\
-      10    & $-0.4078831463120878$ & $0.0063199019859826$ & $0.6160769826246714$ \\
-      11    & $-0.8295636426191777$ & $0.3749640721105318$ & $0.6223252334314046$ \\
-      12    & $-4.7895970584252288$ & $1.6080235151003195$ & $0.6897593128753419$ \\
-      13    & $-0.6606671432964504$ & $0.0961209123818189$ & $0.9126827615920843$ \\
-    \end{tabular}}
-  \end{subtable}\quad%
-  \begin{subtable}[b]{0.45\textwidth}
-    \centering
-    \caption{14 stages, $4^{th}$ order\label{tab:RK-ls-14}}
-    \resizebox{1.00\textwidth}{!}{%
-    \begin{tabular}{cccc}
-      Stage & $A$                   & $B$                  & $C$                  \\
-      \hline
-      1     & $ 0.0000000000000000$ & $0.0367762454319673$ & $0.0000000000000000$ \\
-      2     & $-0.7188012108672410$ & $0.3136296607553959$ & $0.0367762454319673$ \\
-      3     & $-0.7785331173421570$ & $0.1531848691869027$ & $0.1249685262725025$ \\
-      4     & $-0.0053282796654044$ & $0.0030097086818182$ & $0.2446177702277698$ \\
-      5     & $-0.8552979934029281$ & $0.3326293790646110$ & $0.2476149531070420$ \\
-      6     & $-3.9564138245774565$ & $0.2440251405350864$ & $0.2969311120382472$ \\
-      7     & $-1.5780575380587385$ & $0.3718879239592277$ & $0.3978149645802642$ \\
-      8     & $-2.0837094552574054$ & $0.6204126221582444$ & $0.5270854589440328$ \\
-      9     & $-0.7483334182761610$ & $0.1524043173028741$ & $0.6981269994175695$ \\
-      10    & $-0.7032861106563359$ & $0.0760894927419266$ & $0.8190890835352128$ \\
-      11    & $ 0.0013917096117681$ & $0.0077604214040978$ & $0.8527059887098624$ \\
-      12    & $-0.0932075369637460$ & $0.0024647284755382$ & $0.8604711817462826$ \\
-      13    & $-0.9514200470875948$ & $0.0780348340049386$ & $0.8627060376969976$ \\
-      14    & $-7.1151571693922548$ & $5.5059777270269628$ & $0.8734213127600976$ \\
-    \end{tabular}}
-  \end{subtable}\\
-\end{table}
-
-Similarly to the TVD/SSP Runge-Kutta class, the low storage class also provides a fail-safe one-stage solver reverting back to the explicit forward Euler solver, that is useful for ROR-like frameworks.
+Similarly to the SSP Runge-Kutta class, the low storage class also provides a fail-safe one-stage solver reverting back to the explicit forward Euler solver, that is useful for ROR-like frameworks.
 
 {\color{red} Add citations.}
 
-\subsection{The explicit Adams-Bashforth class of schemes}
-
-Adams-Bashforth methods belong to the more general (linear) explicit multi-step family of schemes. This kind of schemes has been designed to achieve a more accurate solution than the $1^{st}$ Euler scheme using the information coming from the solutions already computed at previous time steps. Typically only one new residuals function $R$ evaluation is required at each time step, whereas Runge-Kutta schemes require many of them.
-
-In general, the Adams-Bashforth schemes provided by FOODIE library are written by means of the following algorithm (for only explicit schemes):
-
-\begin{equation}
-U\left(t^{n+N_s}\right) = U\left(t^{n+N_s-1}\right) +\Delta t \sum_{s=1}^{n+N_s}{ b_s \cdot R\left[t^{n+s-1}, U\left(t^{n+s-1}\right)\right]}
-\label{eq:AB}
-\end{equation}
-where $N_s$ is the number of time steps considered and $b_s$ are the linear coefficients selected.
-
-Currently FOODIE provides 2, 3, and 4 steps schemes having $2^{nd}$, $3^{rd}$ and $4^{th}$ formal order of accuracy, respectively. The $b_s$ coefficients are reported in table \ref{tab:AB-coeff}.
-
-\begin{table}[!ht]
-  \centering
-  \caption{Explicit Adams-Bashforth coefficients\label{tab:AB-coeff}}
-  \resizebox{0.30\textwidth}{!}{%
-  \begin{tabular}{c|cccc}
-    $N_s$ & $b_1$           & $b_2$            & $b_3$            & $b_4$           \\
-    \hline
-    2     & $-\frac{1}{2}$  & $\frac{3}{2}$    &       /          &       /         \\
-    3     & $\frac{5}{12}$  & $-\frac{16}{12}$ & $\frac{23}{12}$  &       /         \\
-    4     & $-\frac{9}{24}$ & $\frac{37}{24}$  & $-\frac{59}{24}$ & $\frac{55}{24}$ \\
-  \end{tabular}}
-\end{table}
-
-Similarly to the Runge-Kutta classes, the Adams-Bashforth class also provides a fail-safe one-step solver reverting back to the explicit forward Euler solver, that is useful for ROR-like frameworks.
-
-It is worth noting that for $N_s>1$ the Adams-Bashforth class of solvers is not \emph{self-starting}: the values of $U\left(t^{1}\right)$, $U\left(t^{2}\right)$, \dots, $U\left(t^{N_s-1}\right)$ must be provided. To this aim, a lower order multi-step scheme or an equivalent order one-step multi-stage scheme can be used.
-
-{\color{red} Add citations.}
-
-\subsection{The implicit Adams-Moulton class of schemes}
+\subsection{Implicit Adams-Moulton class}
 
 Adams-Moulton methods belong to the more general (linear) implicit multi-step family of schemes. This kind of schemes has been designed to achieve a more accurate solution than the $1^{st}$ Euler scheme using the information coming from the solutions already computed at previous time steps. Typically only one new residuals function $R$ evaluation is required at each time step, whereas Runge-Kutta schemes require many of them.
 
@@ -342,28 +279,13 @@ In general, the Adams-Moulton schemes provided by FOODIE library are written by 
 \end{equation}
 where $N_s$ is the number of time steps considered and $b_s$ are the linear coefficients selected.
 
-Currently FOODIE provides 1, 2, and 3 steps schemes having $2^{nd}$, $3^{rd}$ and $4^{th}$ formal order of accuracy, respectively. The $b_s$ coefficients are reported in table \ref{tab:AM-coeff}.
-
-\begin{table}[!ht]
-  \centering
-  \caption{Implicit Adams-Moulton coefficients\label{tab:AM-coeff}}
-  \resizebox{0.30\textwidth}{!}{%
-  \begin{tabular}{c|cccc}
-    $N_s$ & $b_0$           & $b_1$           & $b_2$           & $b_3$          \\
-    \hline
-    1     & $\frac{1}{2}$   & $\frac{1}{2}$   &       /         &       /        \\
-    2     & $-\frac{1}{12}$ & $\frac{8}{12}$  & $\frac{5}{12}$  &       /        \\
-    3     & $\frac{1}{24}$  & $-\frac{5}{24}$ & $\frac{19}{24}$ & $\frac{9}{24}$ \\
-  \end{tabular}}
-\end{table}
+Currently FOODIE provides schemes having $2^{nd}$ to $16^{th}$ formal order of accuracy. The $b_s$ coefficients are reported in table \ref{tab:AM-coeff}.
 
 Similarly to the Runge-Kutta and Adams-Bashforth classes, the Adams-Moulton class also provides a fail-safe zero-step solver reverting back to the implicit backward Euler solver, that is useful for ROR-like frameworks.
 
-It is worth noting that for $N_s>1$ the Adams-Moulton class of solvers is not \emph{self-starting}: the values of $U\left(t^{1}\right)$, $U\left(t^{2}\right)$, \dots, $U\left(t^{N_s-1}\right)$ must be provided. To this aim, a lower order multi-step scheme or an equivalent order one-step multi-stage scheme can be used.
-
 {\color{red} Add citations.}
 
-\subsection{The predictor-corrector Adams-Bashforth-Moulton class of schemes}
+\subsection{Predictor-corrector Adams-Bashforth-Moulton class}
 
 Adams-Bashforth-Moulton methods belong to the more general (linear) predictor-corrector multi-step family of schemes. This kind of schemes has been designed to achieve a more accurate solution than the $1^{st}$ Euler scheme using the information coming from the solutions already computed at previous time steps. Typically only one new residuals function $R$ evaluation is required at each time step, whereas Runge-Kutta schemes require many of them.
 
@@ -378,33 +300,6 @@ In general, the Adams-Bashforth-Moulton schemes provided by FOODIE library are w
 \end{equation}
 where $N_s^{p,c}$ is the number of time steps considered for the Adams-Bashforth predictor/Adams-Moulton corrector (respectively) and $b_s^{p,c}$ are the corresponding linear coefficients selected. Essentially, the Adams-Bashforth prediction $U\left(t^{n+N_s^p}\right)_p$ is corrected by means of the Adams-Moulton correction resulting in $U\left(t^{n+N_s^c}\right)_c$. In order to preserve the formal order of accuracy the relation $N_s^p=N_s^c+1$ always holds.
 
-Currently FOODIE provides $N_s^c=1, 2, 3 \rightarrow N_s^c=2, 3, 4$ steps schemes having $2^{nd}$, $3^{rd}$ and $4^{th}$ formal order of accuracy, respectively. The $b_s^{p,c}$ coefficients are those reported in tables \ref{tab:AB-coeff} and \ref{tab:AM-coeff}.
+Currently FOODIE provides schemes having $2^{nd}$ to $16^{th}$ formal order of accuracy. The $b_s^{p,c}$ coefficients are those reported in tables \ref{tab:AB-coeff} and \ref{tab:AM-coeff}.
 
 {\color{red} Add citations.}
-
-\subsection{The leapfrog solver}
-
-The \emph{leapfrog} scheme belongs to the multi-step family, it being formally a centered second order approximation in time. The leapfrog method (in its original formulation) is mostly unstable, however it is well suited for periodic-oscillatory problems providing a null error on the amplitude value and a formal second order error on the phase one, under the satisfaction of the time-step size stable limit. Commonly, the leapfrog methods are said to provide a $2 \Delta t$ computational mode that can generate unphysical, unstable solutions. As consequence, the original leapfrog scheme is generally \emph{filtered} in order to suppress these computational modes.
-
-The unfiltered leapfrog scheme provided by FOODIE is:
-\begin{equation}
-  U\left(t^{n+2}\right) = U\left(t^{n}\right) + 2\Delta t \cdot R\left[t^{n+1}, U\left(t^{n+1}\right)\right]
-\label{eq:leapfrog}
-\end{equation}
-
-FOODIE provides, in a \emph{seamless} API, also filtered leapfrog schemes. A widely used filter is due to Robert and Asselin, that suppress the computational modes at the cost of accuracy reduction resulting into a $1^{st}$ order error in amplitude value. A more accurate filter, able to provide a $3^{rd}$ order error on amplitude, is a modification of the Robert-Asselin filter due to Williams known as Robert-Asselin-Williams (RAW) filter, that filters the approximation of $U\left(t^{n+1}\right)$ and $U\left(t^{n+2}\right)$ by the following scalar coefficient:
-
-\begin{equation}
-  \begin{matrix}
-    U\left(t^{n+1}\right) = U\left(t^{n+1}\right) + \Delta * \alpha     \\
-    U\left(t^{n+2}\right) = U\left(t^{n+2}\right) + \Delta * (\alpha-1) \\
-    where \\
-    \Delta = \frac{\nu}{2}(U^{n} - 2 U^{n+1} + U^{n+2})
-  \end{matrix}
-\label{eq:leapfrog-RAW}
-\end{equation}
-
-The filter coefficients should be taken as $\nu \in (0,1]$ and $\alpha \in (0.5,1]$. If $\alpha=0.5$ the filters of time $t^{n+1}$ and $t^{n+2}$ have the same amplitude and opposite sign thus allowing to the optimal $3^{rd}$ order error on amplitude. The default values of the FOODIE provided scheme are $\nu=0.01$ $\alpha=0.53$, but they can be customized at runtime.
-
-{\color{red} Add citations.}
-

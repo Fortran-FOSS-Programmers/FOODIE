@@ -1,7 +1,7 @@
 \section{Introduction}\label{sec:introduction}
 \subsection{Background}
 
-Initial Value Problem (IVP, or Cauchy problem) constitutes a class of mathematical models of paramount relevance, it being applied to the modelling of a wide range of problems. Briefly, an IVP is an Ordinary Differential Equations system (ODE) coupled with specified initial values of the unknown state variables, the solution of which are searched at a given time after the initial time considered.
+Initial Value Problem (IVP, or Cauchy problem) constitutes a class of mathematical models of paramount relevance, it being applied to the modelling of a wide range of problems. An IVP is an Ordinary Differential Equation (ODE, or system of equations, ODEs) coupled with specified initial values of the unknown state variables, the solution of which are searched at a given time after the initial time considered.
 
 The prototype of IVP can be expressed as:
 \begin{equation}
@@ -32,27 +32,25 @@ FOODIE library is designed for solving the generalized IVP \ref{eq:IVP}, it bein
 
 \subsection{Motivations and Aims}
 
-FOODIE library must:
+FOODIE development arises from the following specifications:
 
 \begin{itemize}
   \item be written in modern Fortran (standard 2008 or newer);
-  \item be written by means of Object Oriented Programming (OOP) paradigm;
+  \item be abstract, thus it is written by means of Object Oriented Programming (OOP) paradigm;
   \item be well documented;
   \item be Tests Driven Developed (TDD);
   \item be collaboratively developed;
   \item be free.
 \end{itemize}
 
-FOODIE, meaning Fortran Object oriented Ordinary Differential Equations integration library, has been developed with the aim to satisfy the above specifications. The present paper is its first comprehensive presentation.
+Fortran (Formula Translator) programming language is the \emph{de facto} standard into computer science field: it strongly facilitates the effective and efficient translation of (even complex) mathematical and numerical models into an operative software without compromise on computations speed and accuracy. Moreover, its simple syntax is suitable for scientific researchers that are interested (and skilled) in the physical aspects of the numerical computations rather than in the information technology aspects. Consequently, we develop FOODIE using Fortran language: FOODIE is written by research scientists for research scientists.
 
-The Fortran (Formula Translator) programming language is the \emph{de facto} standard into computer science field: it strongly facilitates the effective and efficient translation of (even complex) mathematical and numerical models into an operative software without compromise on computations speed and accuracy. Moreover, its simple syntax is suitable for scientific researchers that are interested (and skilled) in the physical aspects of the numerical computations rather than computer technicians. Consequently, we develop FOODIE using Fortran language: FOODIE is written by research scientists for research scientists.
-
-One key-point of the FOODIE development is the \emph{problem generalization}: the problem solved must be the IVP \ref{eq:IVP} rather than any of its actual definitions. Consequently, we must rely on a \emph{generic} implementation of the solvers. To this aim, OOP is very useful: it allows to express IVP \ref{eq:IVP} in a very concise and clear formulation that is really generic. In particular, our implementation is based on \emph{Abstract Calculus Pattern} (ACP) concept.
+One key-point of the FOODIE development is the \emph{problem abstraction}: the problem solved must be the IVP \ref{eq:IVP} rather than any of its real, concrete applications, e.g. the Lorentz system. Consequently, we must rely on a \emph{generic} implementation of the solvers. To this aim, OOP is very useful: it allows to express IVP \ref{eq:IVP} in a very concise and clear formulation that is really generic. In particular, our implementation is based on the \emph{Abstract Calculus Pattern} (ACP) concept.
 
 \paragraph{The Abstract Calculus Pattern}
 The abstract calculus pattern provides a simple solution for the connection between the very high-level expression of IVP \ref{eq:IVP} and the eventual concrete (low-level) implementation of the ODE problem being solved. ACP essentially constitutes a \emph{contract} based on an Abstract Data Type (ADT): we specify an ADT supporting a certain set of mathematical operators (differential and integral ones) and implement FOODIE solvers only on the basis of this ADT. FOODIE clients must formulate the ODE problem under integration defining their own concrete extensions of our ADT (implementing all the deferred operators). Such an approach defines the abstract calculus pattern: FOODIE solvers are aware of only the ADT, while FOODIE clients extend the ADT for defining the concrete ODE problem.
 
-Is is worth noting that this ACP emancipates the solvers implementations from any low-level problem-dependent details: the ODE solvers developed with this pattern are extremely concise, clear, maintainable and less errors-prone with respect a low-level (non abstract) pattern. Moreover, the FOODIE clients can use solvers being extremely robust: as a matter of facts, FOODIE solvers are expressed in a formulation very close to the mathematical one and are tested on an extremely varying family of problems. As shown in the following, such a great flexibility does not compromise the computational efficiency.
+Is is worth noting that this ACP emancipates the solvers implementations from any low-level problem-dependent details: the ODE solvers developed with this pattern are extremely concise, clear, maintainable and less errors-prone with respect a low-level (non abstract) pattern. Moreover, the FOODIE clients can use solvers being extremely robust: as a matter of facts, FOODIE solvers are expressed in a formulation very close to the mathematical one and are tested on an extremely varying family of problems. As shown in the following, such a great flexibility does not compromise the computational efficiency: ACP introduces an overhead that is, however, very contained.
 
 The present paper is organized as following: in section \ref{sec:MNmodels} a brief description of the mathematical and numerical methods currently implemented into FOODIE is presented; in section \ref{sec:API} a detailed discussion on the implementation specifications is provided by means of an analytical code-listings review; in section \ref{sec:Tests} a verification analysis on the results of FOODIE applications is presented; section \ref{sec:parallel} provides an analysis of FOODIE performances under parallel frameworks scenario like the OpenMP and MPI paradigms; finally, in section \ref{sec:conclusions} concluding remarks and perspectives are depicted.
 
