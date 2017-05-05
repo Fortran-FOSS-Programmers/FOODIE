@@ -414,8 +414,8 @@ contains
   stage(1) = U
   stage(2) = U * 0._R_P
   do s=1, self%stages
-    stage(2) = (stage(2) * self%A(s)) + (stage(1)%t(t=t + self%C(s) * Dt) * Dt)
-    stage(1) = stage(1) + (stage(2) * self%B(s))
+    stage(2) = stage(2) * self%A(s) + stage(1)%t(t=t + self%C(s) * Dt) * Dt
+    stage(1) = stage(1) + stage(2) * self%B(s)
   enddo
   U = stage(1)
   endsubroutine integrate

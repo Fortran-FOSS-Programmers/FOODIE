@@ -351,7 +351,7 @@ contains
 
   autoupdate_ = .true. ; if (present(autoupdate)) autoupdate_ = autoupdate
   do s=1, self%steps
-    U = U + (previous(s)%t(t=t(s)) * (Dt * self%b(s)))
+    U = U + previous(s)%t(t=t(s)) * (Dt * self%b(s))
   enddo
   if (autoupdate_) call self%update_previous(U=U, previous=previous)
   endsubroutine integrate

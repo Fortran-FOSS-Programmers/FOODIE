@@ -169,11 +169,11 @@ contains
   real(R_P),                         intent(in)    :: t             !< Time.
   class(integrand_object), optional, intent(inout) :: filter        !< Filter field displacement.
 
-  U = previous(1) + (previous(2)%t(t=t) * (Dt * 2._R_P))
+  U = previous(1) + previous(2)%t(t=t) * (Dt * 2._R_P)
   if (present(filter)) then
-    filter = (previous(1) - (previous(2) * 2._R_P) + U) * self%nu * 0.5_R_P
-    previous(2) = previous(2) + (filter * self%alpha)
-    U = U + (filter * (self%alpha - 1._R_P))
+    filter = (previous(1) - previous(2) * 2._R_P + U) * self%nu * 0.5_R_P
+    previous(2) = previous(2) + filter * self%alpha
+    U = U + filter * (self%alpha - 1._R_P)
   endif
   previous(1) = previous(2)
   previous(2) = U

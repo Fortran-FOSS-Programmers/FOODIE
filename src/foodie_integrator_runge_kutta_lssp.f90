@@ -298,13 +298,13 @@ contains
   ! computing stages
   stage(1) = U
   do s=2, self%stages
-    stage(s) = stage(s-1) + (stage(s-1)%t(t=t) * (Dt * 0.5_R_P))
+    stage(s) = stage(s-1) + stage(s-1)%t(t=t) * (Dt * 0.5_R_P)
   enddo
-  stage(self%stages) = stage(self%stages) + (stage(self%stages)%t(t=t) * (Dt * 0.5_R_P))
+  stage(self%stages) = stage(self%stages) + stage(self%stages)%t(t=t) * (Dt * 0.5_R_P)
   ! computing new time step
   U = U * 0._R_P
   do s=1, self%stages
-    U = U + (stage(s) * self%alpha(s))
+    U = U + stage(s) * self%alpha(s)
   enddo
   endsubroutine integrate_order_s_1
 
@@ -322,13 +322,13 @@ contains
   ! computing stages
   stage(1) = U
   do s=2, self%stages
-    stage(s) = stage(s-1) + (stage(s-1)%t(t=t) * Dt)
+    stage(s) = stage(s-1) + stage(s-1)%t(t=t) * Dt
   enddo
-  stage(self%stages) = stage(self%stages) + (stage(self%stages)%t(t=t) * Dt)
+  stage(self%stages) = stage(self%stages) + stage(self%stages)%t(t=t) * Dt
   ! computing new time step
   U = U * 0._R_P
   do s=1, self%stages
-    U = U + (stage(s) * self%alpha(s))
+    U = U + stage(s) * self%alpha(s)
   enddo
   endsubroutine integrate_order_s
 endmodule foodie_integrator_runge_kutta_lssp

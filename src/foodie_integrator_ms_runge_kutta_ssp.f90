@@ -327,25 +327,25 @@ contains
   do k=2, self%stages
     stage(k) = U * 0._R_P
     do s=1, self%steps
-      if (self%D(k, s) /= 0._R_P) stage(k) = stage(k) + (previous(s) * self%D(k, s))
+      if (self%D(k, s) /= 0._R_P) stage(k) = stage(k) + previous(s) * self%D(k, s)
     enddo
     do s=1, self%steps - 1
-      if (self%Ahat(k, s) /= 0._R_P) stage(k) = stage(k) + (previous(s)%t(t=t(s)) * (Dt * self%Ahat(k, s)))
+      if (self%Ahat(k, s) /= 0._R_P) stage(k) = stage(k) + previous(s)%t(t=t(s)) * (Dt * self%Ahat(k, s))
     enddo
     do kk=1, k - 1
-      if (self%A(k, kk) /= 0._R_P) stage(k) = stage(k) + (stage(kk)%t(t=t(self%steps)) * (Dt * self%A(k, kk)))
+      if (self%A(k, kk) /= 0._R_P) stage(k) = stage(k) + stage(kk)%t(t=t(self%steps)) * (Dt * self%A(k, kk))
     enddo
   enddo
   ! computing new time step
   U = U * 0._R_P
   do s=1, self%steps
-    if (self%T(s) /= 0._R_P) U = U + (previous(s) * self%T(s))
+    if (self%T(s) /= 0._R_P) U = U + previous(s) * self%T(s)
   enddo
   do s=1, self%steps - 1
-    if (self%Bhat(s) /= 0._R_P) U = U + (previous(s)%t(t=t(s)) * (Dt * self%Bhat(s)))
+    if (self%Bhat(s) /= 0._R_P) U = U + previous(s)%t(t=t(s)) * (Dt * self%Bhat(s))
   enddo
   do k=1, self%stages
-    if (self%B(k) /= 0._R_P) U = U + (stage(k)%t(t=t(self%steps)) * (Dt * self%B(k)))
+    if (self%B(k) /= 0._R_P) U = U + stage(k)%t(t=t(self%steps)) * (Dt * self%B(k))
   enddo
   if (autoupdate_) call self%update_previous(U=U, previous=previous)
   endsubroutine integrate
