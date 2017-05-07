@@ -115,6 +115,8 @@ character(len=99), parameter :: supported_schemes_(1:4)=[trim(class_name_)//'_st
                                                          trim(class_name_)//'_stages_3_order_3', &
                                                          trim(class_name_)//'_stages_5_order_4'] !< List of supported schemes.
 
+logical, parameter :: has_fast_mode_=.false. !< Flag to check if integrator provides *fast mode* integrate.
+
 type, extends(integrator_object) :: integrator_runge_kutta_ssp
   !< FOODIE integrator: provide an explicit class of SSP Runge-Kutta schemes, from 1st to 4th order accurate.
   !<
@@ -128,6 +130,7 @@ type, extends(integrator_object) :: integrator_runge_kutta_ssp
     ! deferred methods
     procedure, pass(self) :: class_name           !< Return the class name of schemes.
     procedure, pass(self) :: description          !< Return pretty-printed object description.
+    procedure, pass(self) :: has_fast_mode        !< Return .true. if the integrator class has *fast mode* integrate.
     procedure, pass(lhs)  :: integr_assign_integr !< Operator `=`.
     procedure, pass(self) :: is_supported         !< Return .true. if the integrator class support the given scheme.
     procedure, pass(self) :: supported_schemes    !< Return the list of supported schemes.
@@ -165,6 +168,14 @@ contains
   enddo
   desc = desc//prefix_//'    + '//supported_schemes_(ubound(supported_schemes_, dim=1))
   endfunction description
+
+  elemental function has_fast_mode(self)
+  !< Return .true. if the integrator class has *fast mode* integrate.
+  class(integrator_runge_kutta_ssp), intent(in) :: self          !< Integrator.
+  logical                                       :: has_fast_mode !< Inquire result.
+
+  has_fast_mode = has_fast_mode_
+  endfunction has_fast_mode
 
   pure subroutine integr_assign_integr(lhs, rhs)
   !< Operator `=`.

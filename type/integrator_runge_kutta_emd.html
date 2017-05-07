@@ -134,7 +134,7 @@
      <li><i class="fa fa-list-ol"></i>
        <a data-toggle="tooltip"
 	  data-placement="bottom" data-html="true"
-	  title="<p> 3.4% of total for derived types.</p>Including implementation: 564 statements,  7.7% of total for derived types.">19 statements</a>
+	  title="<p> 3.5% of total for derived types.</p>Including implementation: 570 statements,  7.7% of total for derived types.">20 statements</a>
      </li> 
      
      
@@ -226,6 +226,8 @@
       <a class="list-group-item" href="../type/integrator_runge_kutta_emd.html#boundprocedure-destroy%7E10">destroy</a>
       
       <a class="list-group-item" href="../type/integrator_runge_kutta_emd.html#boundprocedure-destroy_abstract">destroy_abstract</a>
+      
+      <a class="list-group-item" href="../type/integrator_runge_kutta_emd.html#boundprocedure-has_fast_mode%7E11">has_fast_mode</a>
       
       <a class="list-group-item" href="../type/integrator_runge_kutta_emd.html#boundprocedure-initialize%7E9">initialize</a>
       
@@ -476,6 +478,8 @@
       <a class="list-group-item" href="../type/integrator_runge_kutta_emd.html#boundprocedure-destroy%7E10">destroy</a>
       
       <a class="list-group-item" href="../type/integrator_runge_kutta_emd.html#boundprocedure-destroy_abstract">destroy_abstract</a>
+      
+      <a class="list-group-item" href="../type/integrator_runge_kutta_emd.html#boundprocedure-has_fast_mode%7E11">has_fast_mode</a>
       
       <a class="list-group-item" href="../type/integrator_runge_kutta_emd.html#boundprocedure-initialize%7E9">initialize</a>
       
@@ -1258,6 +1262,92 @@ private elemental subroutine <a href='../proc/destroy_abstract.html'>destroy_abs
 
       
     
+    
+
+      
+      </li>
+    
+  </ul>
+</div>
+
+    
+	   
+<div class="panel panel-default">
+  <div class="panel-heading codesum"><span class="anchor" id="boundprocedure-has_fast_mode%7E11"></span><h3>procedure, public, pass(self) :: <strong>has_fast_mode</strong>  
+    
+  </h3></div>
+  
+  <div class="panel-body">
+    
+
+
+    <p>Return .true. if the integrator class has <em>fast mode</em> integrate.</p>
+  </div>
+  
+  <ul class="list-group">
+    
+      <li class="list-group-item">
+      
+         
+    
+    <h3>
+private elemental function <a href='../proc/has_fast_mode%7E10.html'>has_fast_mode</a>(self)
+    
+    
+	 
+</h3>
+    
+
+
+
+
+
+
+
+<p>Return .true. if the integrator class has <em>fast mode</em> integrate.</p>
+    
+    <h4>Arguments</h4>
+    
+      
+      
+<table class="table table-striped varlist">
+<thead><tr><th>Type</th>
+<th>Intent</th><th>Optional</th>
+<th>Attributes</th><th></th><th>Name</th><th></th></thead>
+
+
+
+<tbody>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>class(<a href='../type/integrator_runge_kutta_emd.html'>integrator_runge_kutta_emd</a>),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>self</strong></td><td><p>Integrator.</p></td>
+  
+</tr>
+
+</tbody>
+</table>
+
+      
+    
+    
+
+  
+  
+  
+  
+     <h4>Return Value <small>logical
+  </small></h4>
+  <p>Inquire result.</p>
     
 
       
@@ -2055,6 +2145,7 @@ private subroutine <a href='../proc/trigger_error.html'>trigger_error</a>(self, 
     <span class="c">! deferred methods</span>
     <span class="k">procedure</span><span class="p">,</span> <span class="k">pass</span><span class="p">(</span><span class="n">self</span><span class="p">)</span> <span class="kd">::</span> <span class="n">class_name</span>           <span class="c">!&lt; Return the class name of schemes.</span>
     <span class="k">procedure</span><span class="p">,</span> <span class="k">pass</span><span class="p">(</span><span class="n">self</span><span class="p">)</span> <span class="kd">::</span> <span class="n">description</span>          <span class="c">!&lt; Return pretty-printed object description.</span>
+    <span class="k">procedure</span><span class="p">,</span> <span class="k">pass</span><span class="p">(</span><span class="n">self</span><span class="p">)</span> <span class="kd">::</span> <span class="n">has_fast_mode</span>        <span class="c">!&lt; Return .true. if the integrator class has *fast mode* integrate.</span>
     <span class="k">procedure</span><span class="p">,</span> <span class="k">pass</span><span class="p">(</span><span class="n">lhs</span><span class="p">)</span>  <span class="kd">::</span> <span class="n">integr_assign_integr</span> <span class="c">!&lt; Operator `=`.</span>
     <span class="k">procedure</span><span class="p">,</span> <span class="k">pass</span><span class="p">(</span><span class="n">self</span><span class="p">)</span> <span class="kd">::</span> <span class="n">is_supported</span>         <span class="c">!&lt; Return .true. if the integrator class support the given scheme.</span>
     <span class="k">procedure</span><span class="p">,</span> <span class="k">pass</span><span class="p">(</span><span class="n">self</span><span class="p">)</span> <span class="kd">::</span> <span class="n">supported_schemes</span>    <span class="c">!&lt; Return the list of supported schemes.</span>
@@ -2151,7 +2242,7 @@ private subroutine <a href='../proc/trigger_error.html'>trigger_error</a>(self, 
           <p class="text-right">
             Documentation generated by 
             <a href="https://github.com/cmacmackin/ford">FORD</a>
-             on 2017-05-07 09:59  
+             on 2017-05-07 13:06  
           </p>
         </div>
         <div class="col-xs-12 col-md-4 col-md-pull-4"><p class="text-center"> FOODIE was developed by Fortran-FOSS-Programmers Group</p></div>

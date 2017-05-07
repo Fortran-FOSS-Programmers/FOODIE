@@ -25,6 +25,8 @@ public :: integrator_euler_explicit
 character(len=99), parameter :: class_name_='euler_explicit'                !< Name of the class of schemes.
 character(len=99), parameter :: supported_schemes_(1:1)=[trim(class_name_)] !< List of supported schemes.
 
+logical, parameter :: has_fast_mode_=.false. !< Flag to check if integrator provides *fast mode* integrate.
+
 type, extends(integrator_object) :: integrator_euler_explicit
   !< FOODIE integrator: provide explicit Euler scheme, it being 1st order accurate.
   !<
@@ -33,6 +35,7 @@ type, extends(integrator_object) :: integrator_euler_explicit
     ! deferred methods
     procedure, pass(self) :: class_name           !< Return the class name of schemes.
     procedure, pass(self) :: description          !< Return pretty-printed object description.
+    procedure, pass(self) :: has_fast_mode        !< Return .true. if the integrator class has *fast mode* integrate.
     procedure, pass(lhs)  :: integr_assign_integr !< Operator `=`.
     procedure, pass(self) :: is_supported         !< Return .true. if the integrator class support the given scheme.
     procedure, pass(self) :: supported_schemes    !< Return the list of supported schemes.
@@ -60,6 +63,14 @@ contains
   prefix_ = '' ; if (present(prefix)) prefix_ = prefix
   desc = prefix_//'Euler, Explicit (1 step/stage) 1st order scheme'
   endfunction description
+
+  elemental function has_fast_mode(self)
+  !< Return .true. if the integrator class has *fast mode* integrate.
+  class(integrator_euler_explicit), intent(in) :: self          !< Integrator.
+  logical                                      :: has_fast_mode !< Inquire result.
+
+  has_fast_mode = has_fast_mode_
+  endfunction has_fast_mode
 
   pure subroutine integr_assign_integr(lhs, rhs)
   !< Operator `=`.
