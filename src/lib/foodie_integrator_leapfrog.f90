@@ -49,6 +49,8 @@ character(len=99), parameter :: class_name_='leapfrog'                          
 character(len=99), parameter :: supported_schemes_(1:2)=[trim(class_name_)//'    ', &
                                                          trim(class_name_)//'_raw'] !< List of supported schemes.
 
+logical, parameter :: has_fast_mode_=.false. !< Flag to check if integrator provides *fast mode* integrate.
+
 type, extends(integrator_object) :: integrator_leapfrog
   !< FOODIE integrator: provide an explicit class of leapfrog multi-step schemes, 2nd order accurate.
   !<
@@ -62,6 +64,7 @@ type, extends(integrator_object) :: integrator_leapfrog
     ! deferred methods
     procedure, pass(self) :: class_name           !< Return the class name of schemes.
     procedure, pass(self) :: description          !< Return pretty-printed object description.
+    procedure, pass(self) :: has_fast_mode        !< Return .true. if the integrator class has *fast mode* integrate.
     procedure, pass(lhs)  :: integr_assign_integr !< Operator `=`.
     procedure, pass(self) :: is_supported         !< Return .true. if the integrator class support the given scheme.
     procedure, pass(self) :: supported_schemes    !< Return the list of supported schemes.
@@ -91,6 +94,14 @@ contains
   prefix_ = '' ; if (present(prefix)) prefix_ = prefix
   desc = desc//prefix_//'Explicit leapfrog multi-step 2nd order scheme'
   endfunction description
+
+  elemental function has_fast_mode(self)
+  !< Return .true. if the integrator class has *fast mode* integrate.
+  class(integrator_leapfrog), intent(in) :: self          !< Integrator.
+  logical                                :: has_fast_mode !< Inquire result.
+
+  has_fast_mode = has_fast_mode_
+  endfunction has_fast_mode
 
   pure subroutine integr_assign_integr(lhs, rhs)
   !< Operator `=`.
