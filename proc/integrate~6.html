@@ -555,17 +555,33 @@
       
       <a class="list-group-item" href="../proc/integrand_add_integrand.html">integrand_add_integrand</a>
       
+      <a class="list-group-item" href="../proc/integrand_add_integrand_fast.html">integrand_add_integrand_fast</a>
+      
+      <a class="list-group-item" href="../proc/integrand_add_integrand_fast%7E2.html">integrand_add_integrand_fast</a>
+      
       <a class="list-group-item" href="../proc/integrand_add_real.html">integrand_add_real</a>
       
       <a class="list-group-item" href="../proc/integrand_multiply_integrand.html">integrand_multiply_integrand</a>
+      
+      <a class="list-group-item" href="../proc/integrand_multiply_integrand_fast.html">integrand_multiply_integrand_fast</a>
+      
+      <a class="list-group-item" href="../proc/integrand_multiply_integrand_fast%7E2.html">integrand_multiply_integrand_fast</a>
       
       <a class="list-group-item" href="../proc/integrand_multiply_real.html">integrand_multiply_real</a>
       
       <a class="list-group-item" href="../proc/integrand_multiply_real_scalar.html">integrand_multiply_real_scalar</a>
       
+      <a class="list-group-item" href="../proc/integrand_multiply_real_scalar_fast.html">integrand_multiply_real_scalar_fast</a>
+      
+      <a class="list-group-item" href="../proc/integrand_multiply_real_scalar_fast%7E2.html">integrand_multiply_real_scalar_fast</a>
+      
       <a class="list-group-item" href="../proc/integrand_sub_integrand.html">integrand_sub_integrand</a>
       
       <a class="list-group-item" href="../proc/integrand_sub_real.html">integrand_sub_real</a>
+      
+      <a class="list-group-item" href="../proc/integrand_subtract_integrand_fast.html">integrand_subtract_integrand_fast</a>
+      
+      <a class="list-group-item" href="../proc/integrand_subtract_integrand_fast%7E2.html">integrand_subtract_integrand_fast</a>
       
       <a class="list-group-item" href="../proc/integrate.html">integrate</a>
       
@@ -595,6 +611,8 @@
       
       <a class="list-group-item" href="../proc/integrate_adams_bashforth.html">integrate_adams_bashforth</a>
       
+      <a class="list-group-item" href="../proc/integrate_adams_bashforth_fast.html">integrate_adams_bashforth_fast</a>
+      
       <a class="list-group-item" href="../proc/integrate_adams_bashforth_moulton.html">integrate_adams_bashforth_moulton</a>
       
       <a class="list-group-item" href="../proc/integrate_adams_moulton.html">integrate_adams_moulton</a>
@@ -602,6 +620,8 @@
       <a class="list-group-item" href="../proc/integrate_back_df.html">integrate_back_df</a>
       
       <a class="list-group-item" href="../proc/integrate_euler_explicit.html">integrate_euler_explicit</a>
+      
+      <a class="list-group-item" href="../proc/integrate_fast.html">integrate_fast</a>
       
       <a class="list-group-item" href="../proc/integrate_leapfrog.html">integrate_leapfrog</a>
       
@@ -847,6 +867,10 @@
       
       <a class="list-group-item" href="../proc/synchronize%7E4.html">synchronize</a>
       
+      <a class="list-group-item" href="../proc/t_fast.html">t_fast</a>
+      
+      <a class="list-group-item" href="../proc/t_fast%7E2.html">t_fast</a>
+      
       <a class="list-group-item" href="../proc/test.html">test</a>
       
       <a class="list-group-item" href="../proc/test_ab.html">test_ab</a>
@@ -943,7 +967,7 @@ private subroutine integrate(self, U, previous, Dt, t, filter)
   
 <tr>
   
-  <td><span class="anchor" id="variable-self%7E51"></span>class(<a href='../type/integrator_leapfrog.html'>integrator_leapfrog</a>),</td>
+  <td><span class="anchor" id="variable-self%7E53"></span>class(<a href='../type/integrator_leapfrog.html'>integrator_leapfrog</a>),</td>
   <td>intent(in)</td>
   <td></td>
   
@@ -958,7 +982,7 @@ private subroutine integrate(self, U, previous, Dt, t, filter)
   
 <tr>
   
-  <td><span class="anchor" id="variable-u%7E19"></span>class(<a href='../type/integrand_object.html'>integrand_object</a>),</td>
+  <td><span class="anchor" id="variable-u%7E20"></span>class(<a href='../type/integrand_object.html'>integrand_object</a>),</td>
   <td>intent(inout)</td>
   <td></td>
   
@@ -973,7 +997,7 @@ private subroutine integrate(self, U, previous, Dt, t, filter)
   
 <tr>
   
-  <td><span class="anchor" id="variable-previous%7E12"></span>class(<a href='../type/integrand_object.html'>integrand_object</a>),</td>
+  <td><span class="anchor" id="variable-previous%7E13"></span>class(<a href='../type/integrand_object.html'>integrand_object</a>),</td>
   <td>intent(inout)</td>
   <td></td>
   
@@ -988,7 +1012,7 @@ private subroutine integrate(self, U, previous, Dt, t, filter)
   
 <tr>
   
-  <td><span class="anchor" id="variable-dt%7E10"></span>real(kind=R_P),</td>
+  <td><span class="anchor" id="variable-dt%7E11"></span>real(kind=R_P),</td>
   <td>intent(in)</td>
   <td></td>
   
@@ -1003,7 +1027,7 @@ private subroutine integrate(self, U, previous, Dt, t, filter)
   
 <tr>
   
-  <td><span class="anchor" id="variable-t%7E18"></span>real(kind=R_P),</td>
+  <td><span class="anchor" id="variable-t%7E20"></span>real(kind=R_P),</td>
   <td>intent(in)</td>
   <td></td>
   
@@ -1098,11 +1122,11 @@ private subroutine integrate(self, U, previous, Dt, t, filter)
   <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">),</span>                         <span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span>    <span class="kd">::</span> <span class="n">t</span>             <span class="c">!&lt; Time.</span>
   <span class="k">class</span><span class="p">(</span><span class="n">integrand_object</span><span class="p">),</span> <span class="k">optional</span><span class="p">,</span> <span class="k">intent</span><span class="p">(</span><span class="n">inout</span><span class="p">)</span> <span class="kd">::</span> <span class="n">filter</span>        <span class="c">!&lt; Filter field displacement.</span>
 
-  <span class="n">U</span> <span class="o">=</span> <span class="n">previous</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">+</span> <span class="n">previous</span><span class="p">(</span><span class="mi">2</span><span class="p">)%</span><span class="n">t</span><span class="p">(</span><span class="n">t</span><span class="o">=</span><span class="n">t</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="n">Dt</span> <span class="o">*</span> <span class="mf">2._R_P</span><span class="p">)</span>
+  <span class="n">U</span> <span class="o">=</span> <span class="n">previous</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">+</span> <span class="p">(</span><span class="n">previous</span><span class="p">(</span><span class="mi">2</span><span class="p">)%</span><span class="n">t</span><span class="p">(</span><span class="n">t</span><span class="o">=</span><span class="n">t</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="n">Dt</span> <span class="o">*</span> <span class="mf">2._R_P</span><span class="p">))</span>
   <span class="k">if</span> <span class="p">(</span><span class="nb">present</span><span class="p">(</span><span class="n">filter</span><span class="p">))</span> <span class="k">then</span>
-<span class="k">    </span><span class="n">filter</span> <span class="o">=</span> <span class="p">(</span><span class="n">previous</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">-</span> <span class="n">previous</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span> <span class="o">*</span> <span class="mf">2._R_P</span> <span class="o">+</span> <span class="n">U</span><span class="p">)</span> <span class="o">*</span> <span class="n">self</span><span class="p">%</span><span class="n">nu</span> <span class="o">*</span> <span class="mf">0.5_R_P</span>
-    <span class="n">previous</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span> <span class="o">=</span> <span class="n">previous</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span> <span class="o">+</span> <span class="n">filter</span> <span class="o">*</span> <span class="n">self</span><span class="p">%</span><span class="n">alpha</span>
-    <span class="n">U</span> <span class="o">=</span> <span class="n">U</span> <span class="o">+</span> <span class="n">filter</span> <span class="o">*</span> <span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">alpha</span> <span class="o">-</span> <span class="mf">1._R_P</span><span class="p">)</span>
+<span class="k">    </span><span class="n">filter</span> <span class="o">=</span> <span class="p">(</span><span class="n">previous</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">-</span> <span class="p">(</span><span class="n">previous</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span> <span class="o">*</span> <span class="mf">2._R_P</span><span class="p">)</span> <span class="o">+</span> <span class="n">U</span><span class="p">)</span> <span class="o">*</span> <span class="n">self</span><span class="p">%</span><span class="n">nu</span> <span class="o">*</span> <span class="mf">0.5_R_P</span>
+    <span class="n">previous</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span> <span class="o">=</span> <span class="n">previous</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span> <span class="o">+</span> <span class="p">(</span><span class="n">filter</span> <span class="o">*</span> <span class="n">self</span><span class="p">%</span><span class="n">alpha</span><span class="p">)</span>
+    <span class="n">U</span> <span class="o">=</span> <span class="n">U</span> <span class="o">+</span> <span class="p">(</span><span class="n">filter</span> <span class="o">*</span> <span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">alpha</span> <span class="o">-</span> <span class="mf">1._R_P</span><span class="p">))</span>
   <span class="n">endif</span>
   <span class="n">previous</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">=</span> <span class="n">previous</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
   <span class="n">previous</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span> <span class="o">=</span> <span class="n">U</span>
@@ -1479,17 +1503,33 @@ private subroutine integrate(self, U, previous, Dt, t, filter)
       
       <a class="list-group-item" href="../proc/integrand_add_integrand.html">integrand_add_integrand</a>
       
+      <a class="list-group-item" href="../proc/integrand_add_integrand_fast.html">integrand_add_integrand_fast</a>
+      
+      <a class="list-group-item" href="../proc/integrand_add_integrand_fast%7E2.html">integrand_add_integrand_fast</a>
+      
       <a class="list-group-item" href="../proc/integrand_add_real.html">integrand_add_real</a>
       
       <a class="list-group-item" href="../proc/integrand_multiply_integrand.html">integrand_multiply_integrand</a>
+      
+      <a class="list-group-item" href="../proc/integrand_multiply_integrand_fast.html">integrand_multiply_integrand_fast</a>
+      
+      <a class="list-group-item" href="../proc/integrand_multiply_integrand_fast%7E2.html">integrand_multiply_integrand_fast</a>
       
       <a class="list-group-item" href="../proc/integrand_multiply_real.html">integrand_multiply_real</a>
       
       <a class="list-group-item" href="../proc/integrand_multiply_real_scalar.html">integrand_multiply_real_scalar</a>
       
+      <a class="list-group-item" href="../proc/integrand_multiply_real_scalar_fast.html">integrand_multiply_real_scalar_fast</a>
+      
+      <a class="list-group-item" href="../proc/integrand_multiply_real_scalar_fast%7E2.html">integrand_multiply_real_scalar_fast</a>
+      
       <a class="list-group-item" href="../proc/integrand_sub_integrand.html">integrand_sub_integrand</a>
       
       <a class="list-group-item" href="../proc/integrand_sub_real.html">integrand_sub_real</a>
+      
+      <a class="list-group-item" href="../proc/integrand_subtract_integrand_fast.html">integrand_subtract_integrand_fast</a>
+      
+      <a class="list-group-item" href="../proc/integrand_subtract_integrand_fast%7E2.html">integrand_subtract_integrand_fast</a>
       
       <a class="list-group-item" href="../proc/integrate.html">integrate</a>
       
@@ -1519,6 +1559,8 @@ private subroutine integrate(self, U, previous, Dt, t, filter)
       
       <a class="list-group-item" href="../proc/integrate_adams_bashforth.html">integrate_adams_bashforth</a>
       
+      <a class="list-group-item" href="../proc/integrate_adams_bashforth_fast.html">integrate_adams_bashforth_fast</a>
+      
       <a class="list-group-item" href="../proc/integrate_adams_bashforth_moulton.html">integrate_adams_bashforth_moulton</a>
       
       <a class="list-group-item" href="../proc/integrate_adams_moulton.html">integrate_adams_moulton</a>
@@ -1526,6 +1568,8 @@ private subroutine integrate(self, U, previous, Dt, t, filter)
       <a class="list-group-item" href="../proc/integrate_back_df.html">integrate_back_df</a>
       
       <a class="list-group-item" href="../proc/integrate_euler_explicit.html">integrate_euler_explicit</a>
+      
+      <a class="list-group-item" href="../proc/integrate_fast.html">integrate_fast</a>
       
       <a class="list-group-item" href="../proc/integrate_leapfrog.html">integrate_leapfrog</a>
       
@@ -1771,6 +1815,10 @@ private subroutine integrate(self, U, previous, Dt, t, filter)
       
       <a class="list-group-item" href="../proc/synchronize%7E4.html">synchronize</a>
       
+      <a class="list-group-item" href="../proc/t_fast.html">t_fast</a>
+      
+      <a class="list-group-item" href="../proc/t_fast%7E2.html">t_fast</a>
+      
       <a class="list-group-item" href="../proc/test.html">test</a>
       
       <a class="list-group-item" href="../proc/test_ab.html">test_ab</a>
@@ -1842,7 +1890,7 @@ private subroutine integrate(self, U, previous, Dt, t, filter)
           <p class="text-right">
             Documentation generated by 
             <a href="https://github.com/cmacmackin/ford">FORD</a>
-             on 2017-05-05 17:10  
+             on 2017-05-07 09:59  
           </p>
         </div>
         <div class="col-xs-12 col-md-4 col-md-pull-4"><p class="text-center"> FOODIE was developed by Fortran-FOSS-Programmers Group</p></div>

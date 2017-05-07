@@ -687,7 +687,7 @@ contains
     do s=1, self%stages
       stage(s) = U
       do ss=1, s - 1
-        stage(s) = stage(s) + stage(ss) * (Dt * self%alph(s, ss))
+        stage(s) = stage(s) + (stage(ss) * (Dt * self%alph(s, ss)))
       enddo
       stage(s) = stage(s)%t(t=t + self%gamm(s) * Dt)
     enddo
@@ -695,8 +695,8 @@ contains
     U1 = U
     U2 = U
     do s=1, self%stages
-      U1 = U1 +  stage(s) * (Dt * self%beta(s, 1))
-      U2 = U2 +  stage(s) * (Dt * self%beta(s, 2))
+      U1 = U1 + (stage(s) * (Dt * self%beta(s, 1)))
+      U2 = U2 + (stage(s) * (Dt * self%beta(s, 2)))
     enddo
     error = U2.lterror.U1
     call self%new_Dt(error=error, Dt=Dt)

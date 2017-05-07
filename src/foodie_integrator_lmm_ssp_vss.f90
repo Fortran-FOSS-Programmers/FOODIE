@@ -245,10 +245,10 @@ contains
   real(R_P)                                    :: omega_sq      !< Square of omega coefficient.
 
   autoupdate_ = .true. ; if (present(autoupdate)) autoupdate_ = autoupdate
-  omega_= omega(Dt=Dt, s=self%steps-1)
+  omega_ = omega(Dt=Dt, s=self%steps-1)
   omega_sq = omega_ * omega_
-  U = previous(1) * (1._R_P / omega_sq) + previous(self%steps) * ((omega_sq - 1._R_P) / omega_sq) + &
-      previous(self%steps)%t(t=t(self%steps)) * (Dt(self%steps) * (omega_ + 1._R_P) / omega_)
+  U = (previous(1) * (1._R_P / omega_sq)) + (previous(self%steps) * ((omega_sq - 1._R_P) / omega_sq)) + &
+      (previous(self%steps)%t(t=t(self%steps)) * (Dt(self%steps) * (omega_ + 1._R_P) / omega_))
   if (autoupdate_) call self%update_previous(U=U, previous=previous, Dt=Dt)
   endsubroutine integrate_order_2
 
@@ -265,10 +265,10 @@ contains
 
   autoupdate_ = .true. ; if (present(autoupdate)) autoupdate_ = autoupdate
   omega_= omega(Dt=Dt, s=self%steps-1)
-  U = previous(1) * ((3._R_P * omega_ + 2._R_P) / omega_ ** 3 ) +                           &
-      previous(self%steps) * (((omega_ + 1._R_P) ** 2) * (omega_ - 2._R_P) / omega_ ** 3) + &
-      previous(1)%t(t=t(1)) * (Dt(self%steps) * (omega_ + 1._R_P) / omega_ ** 2) +          &
-      previous(self%steps)%t(t=t(self%steps)) * (Dt(self%steps) * (omega_ + 1._R_P) ** 2 / omega_ ** 2)
+  U = (previous(1) * ((3._R_P * omega_ + 2._R_P) / omega_ ** 3 )) +                           &
+      (previous(self%steps) * (((omega_ + 1._R_P) ** 2) * (omega_ - 2._R_P) / omega_ ** 3)) + &
+      (previous(1)%t(t=t(1)) * (Dt(self%steps) * (omega_ + 1._R_P) / omega_ ** 2)) +          &
+      (previous(self%steps)%t(t=t(self%steps)) * (Dt(self%steps) * (omega_ + 1._R_P) ** 2 / omega_ ** 2))
   if (autoupdate_) call self%update_previous(U=U, previous=previous, Dt=Dt)
   endsubroutine integrate_order_3
 

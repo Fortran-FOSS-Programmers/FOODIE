@@ -108,6 +108,6 @@ contains
   real(R_P),               intent(in)    :: Dt !< Time step.
   real(R_P), optional,     intent(in)    :: t  !< Time.
 
-  U = U + U%t(t=t) * Dt
+  U = U + (U%t(t=t) * Dt)
   endsubroutine integrate
 endmodule foodie_integrator_euler_explicit

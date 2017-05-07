@@ -355,20 +355,20 @@ contains
       allocate(delta, mold=U)
       delta = previous(self%steps)
       do s=0, self%steps - 1
-        delta = delta + previous(s+1)%t(t=t(s+1)) * (Dt * self%b(s))
+        delta = delta + (previous(s+1)%t(t=t(s+1)) * (Dt * self%b(s)))
       enddo
       do s=1, iterations
-        U = delta + U%t(t=t(self%steps) + Dt) * (Dt * self%b(self%steps))
+        U = delta + (U%t(t=t(self%steps) + Dt) * (Dt * self%b(self%steps)))
       enddo
     else
-      U = previous(self%steps) + U%t(t=t(self%steps) + Dt) * (Dt * self%b(self%steps))
+      U = previous(self%steps) + (U%t(t=t(self%steps) + Dt) * (Dt * self%b(self%steps)))
       do s=0, self%steps - 1
-        U = U + previous(s+1)%t(t=t(s+1)) * (Dt * self%b(s))
+        U = U + (previous(s+1)%t(t=t(s+1)) * (Dt * self%b(s)))
       enddo
     endif
     if (autoupdate_) call self%update_previous(U=U, previous=previous)
   else
-    U = U + U%t(t=t(1)) * (Dt * self%b(0))
+    U = U + (U%t(t=t(1)) * (Dt * self%b(0)))
   endif
   endsubroutine integrate
 

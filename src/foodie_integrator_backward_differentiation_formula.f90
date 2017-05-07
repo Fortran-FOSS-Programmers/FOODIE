@@ -227,10 +227,10 @@ contains
   allocate(delta, mold=U)
   delta = previous(self%steps) * (-self%a(self%steps))
   do s=1, self%steps - 1
-    delta = delta + previous(s) * (-self%a(s))
+    delta = delta + (previous(s) * (-self%a(s)))
   enddo
   do s=1, iterations
-    U = delta + U%t(t=t(self%steps) + Dt) * (Dt * self%b)
+    U = delta + (U%t(t=t(self%steps) + Dt) * (Dt * self%b))
   enddo
   if (autoupdate_) call self%update_previous(U=U, previous=previous)
   endsubroutine integrate
