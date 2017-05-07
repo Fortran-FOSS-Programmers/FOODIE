@@ -71,6 +71,7 @@ type, extends(integrator_object) :: integrator_adams_bashforth
     procedure, pass(self) :: destroy         !< Destroy the integrator.
     procedure, pass(self) :: initialize      !< Initialize (create) the integrator.
     procedure, pass(self) :: integrate       !< Integrate integrand field.
+    procedure, pass(self) :: integrate_fast  !< Integrate integrand field, fast mode.
     procedure, pass(self) :: update_previous !< Cyclic update previous time steps.
 endtype integrator_adams_bashforth
 
@@ -355,6 +356,28 @@ contains
   enddo
   if (autoupdate_) call self%update_previous(U=U, previous=previous)
   endsubroutine integrate
+
+  subroutine integrate_fast(self, U, previous, buffer, Dt, t, autoupdate)
+  !< Integrate field with Adams-Bashforth class scheme.
+  class(integrator_adams_bashforth), intent(in)    :: self         !< Integrator.
+  class(integrand_object),           intent(inout) :: U            !< Field to be integrated.
+  class(integrand_object),           intent(inout) :: previous(1:) !< Previous time steps solutions of integrand field.
+  class(integrand_object),           intent(inout) :: buffer       !< Temporary buffer for doing fast operation.
+  real(R_P),                         intent(in)    :: Dt           !< Time steps.
+  real(R_P),                         intent(in)    :: t(:)         !< Times.
+  logical, optional,                 intent(in)    :: autoupdate   !< Perform cyclic autoupdate of previous time steps.
+  logical                                          :: autoupdate_  !< Perform cyclic autoupdate of previous time steps, dummy var.
+  integer(I_P)                                     :: s            !< Steps counter.
+
+  autoupdate_ = .true. ; if (present(autoupdate)) autoupdate_ = autoupdate
+  do s=1, self%steps
+    buffer = previous(s)
+    call buffer%t_fast(t=t(s))
+    call buffer%multiply_fast(lhs=buffer, rhs=Dt * self%b(s))
+    call U%add_fast(lhs=U, rhs=buffer)
+  enddo
+  if (autoupdate_) call self%update_previous(U=U, previous=previous)
+  endsubroutine integrate_fast
 
   subroutine update_previous(self, U, previous)
   !< Cyclic update previous time steps.

@@ -51,6 +51,7 @@ type :: oscillation_test
   real(R_P),    allocatable    :: tolerance(:)             !< Tolerance(s) exercised on local truncation error.
   logical                      :: errors_analysis=.false.  !< Flag for activating errors analysis.
   logical                      :: results=.false.          !< Flag for activating results saving.
+  logical                      :: is_fast=.false.          !< Flag for activating fast schemes.
   contains
     ! public methods
     procedure, pass(self) :: execute !< Execute selected test(s).
@@ -119,6 +120,7 @@ contains
                     examples    = ["oscillation --scheme euler_explicit --save_results  ",    &
                                    "oscillation --scheme all -r                         "])
       call cli%add(switch='--scheme', switch_ab='-s', help='integrator scheme used', required=.false., def='all', act='store')
+      call cli%add(switch='--fast', help='activate fast solvers', required=.false., act='store_true', def='.false.')
       call cli%add(switch='--iterations', help='number of iterations for implicit schemes', required=.false., act='store', def='5')
       call cli%add(switch='--frequency', switch_ab='-f', help='oscillation frequency', required=.false., def='1e-4', act='store')
       call cli%add(switch='--time_step', switch_ab='-Dt', nargs='+', help='time step', required=.false., def='100.d0', act='store')
@@ -140,6 +142,7 @@ contains
 
     call self%cli%parse(error=self%error)
     call self%cli%get(switch='-s', val=self%scheme, error=self%error) ; if (self%error/=0) stop
+    call self%cli%get(switch='--fast', val=self%is_fast, error=self%error) ; if (self%error/=0) stop
     call self%cli%get(switch='--iterations', val=self%implicit_iterations, error=self%error) ; if (self%error/=0) stop
     call self%cli%get(switch='--stages', val=self%stages, error=self%error) ; if (self%error/=0) stop
     call self%cli%get(switch='-f', val=self%frequency, error=self%error) ; if (self%error/=0) stop
@@ -277,39 +280,78 @@ contains
     type(integrator_runge_kutta_lssp)        :: int_runge_kutta_lssp        !< Linear Runge-Kutta SSP integrator.
     type(integrator_runge_kutta_ssp)         :: int_runge_kutta_ssp         !< Runge Kutta-SSP integrator.
 
-    if     (index(trim(adjustl(scheme)), trim(int_adams_bashforth_moulton%class_name())) > 0) then
-       integrate => integrate_adams_bashforth_moulton
-    elseif (index(trim(adjustl(scheme)), trim(int_adams_bashforth%class_name())) > 0) then
-       integrate => integrate_adams_bashforth
-    elseif (index(trim(adjustl(scheme)), trim(int_adams_moulton%class_name())) > 0) then
-       integrate => integrate_adams_moulton
-    elseif (index(trim(adjustl(scheme)), trim(int_back_df%class_name())) > 0) then
-       integrate => integrate_back_df
-    elseif (index(trim(adjustl(scheme)), trim(int_euler_explicit%class_name())) > 0) then
-       integrate => integrate_euler_explicit
-    elseif (index(trim(adjustl(scheme)), trim(int_leapfrog%class_name())) > 0) then
-       integrate => integrate_leapfrog
-    elseif (index(trim(adjustl(scheme)), trim(int_lmm_ssp_vss%class_name())) > 0) then
-       integrate => integrate_lmm_ssp_vss
-    elseif (index(trim(adjustl(scheme)), trim(int_lmm_ssp%class_name())) > 0) then
-       integrate => integrate_lmm_ssp
-    elseif (index(trim(adjustl(scheme)), trim(int_ms_runge_kutta_ssp%class_name())) > 0) then
-       integrate => integrate_ms_runge_kutta_ssp
-    elseif (index(trim(adjustl(scheme)), trim(int_runge_kutta_emd%class_name())) > 0) then
-       integrate => integrate_runge_kutta_emd
-    elseif (index(trim(adjustl(scheme)), trim(int_runge_kutta_lssp%class_name())) > 0) then
-       integrate => integrate_runge_kutta_lssp
-    elseif (index(trim(adjustl(scheme)), trim(int_runge_kutta_ls%class_name())) > 0) then
-       integrate => integrate_runge_kutta_ls
-    elseif (index(trim(adjustl(scheme)), trim(int_runge_kutta_ssp%class_name())) > 0) then
-       integrate => integrate_runge_kutta_ssp
-    endif
-    if (index(trim(adjustl(scheme)), trim(int_runge_kutta_emd%class_name())) > 0) then
-      if (allocated(error)) deallocate(error) ; allocate(error(1:space_dimension, 1:size(self%tolerance)))
-      if (allocated(Dt_mean)) deallocate(Dt_mean) ; allocate(Dt_mean(1:size(error, dim=2)))
+    if (self%is_fast) then
+      if     (index(trim(adjustl(scheme)), trim(int_adams_bashforth_moulton%class_name())) > 0) then
+         integrate => integrate_adams_bashforth_moulton
+      elseif (index(trim(adjustl(scheme)), trim(int_adams_bashforth%class_name())) > 0) then
+         integrate => integrate_adams_bashforth_fast
+      elseif (index(trim(adjustl(scheme)), trim(int_adams_bashforth%class_name())) > 0) then
+         integrate => integrate_adams_bashforth
+      elseif (index(trim(adjustl(scheme)), trim(int_adams_moulton%class_name())) > 0) then
+         integrate => integrate_adams_moulton
+      elseif (index(trim(adjustl(scheme)), trim(int_back_df%class_name())) > 0) then
+         integrate => integrate_back_df
+      elseif (index(trim(adjustl(scheme)), trim(int_euler_explicit%class_name())) > 0) then
+         integrate => integrate_euler_explicit
+      elseif (index(trim(adjustl(scheme)), trim(int_leapfrog%class_name())) > 0) then
+         integrate => integrate_leapfrog
+      elseif (index(trim(adjustl(scheme)), trim(int_lmm_ssp_vss%class_name())) > 0) then
+         integrate => integrate_lmm_ssp_vss
+      elseif (index(trim(adjustl(scheme)), trim(int_lmm_ssp%class_name())) > 0) then
+         integrate => integrate_lmm_ssp
+      elseif (index(trim(adjustl(scheme)), trim(int_ms_runge_kutta_ssp%class_name())) > 0) then
+         integrate => integrate_ms_runge_kutta_ssp
+      elseif (index(trim(adjustl(scheme)), trim(int_runge_kutta_emd%class_name())) > 0) then
+         integrate => integrate_runge_kutta_emd
+      elseif (index(trim(adjustl(scheme)), trim(int_runge_kutta_lssp%class_name())) > 0) then
+         integrate => integrate_runge_kutta_lssp
+      elseif (index(trim(adjustl(scheme)), trim(int_runge_kutta_ls%class_name())) > 0) then
+         integrate => integrate_runge_kutta_ls
+      elseif (index(trim(adjustl(scheme)), trim(int_runge_kutta_ssp%class_name())) > 0) then
+         integrate => integrate_runge_kutta_ssp
+      endif
+      if (index(trim(adjustl(scheme)), trim(int_runge_kutta_emd%class_name())) > 0) then
+        if (allocated(error)) deallocate(error) ; allocate(error(1:space_dimension, 1:size(self%tolerance)))
+        if (allocated(Dt_mean)) deallocate(Dt_mean) ; allocate(Dt_mean(1:size(error, dim=2)))
+      else
+        if (allocated(error)) deallocate(error) ; allocate(error(1:space_dimension, 1:size(self%Dt)))
+      endif
     else
-      if (allocated(error)) deallocate(error) ; allocate(error(1:space_dimension, 1:size(self%Dt)))
+      if     (index(trim(adjustl(scheme)), trim(int_adams_bashforth_moulton%class_name())) > 0) then
+         integrate => integrate_adams_bashforth_moulton
+      elseif (index(trim(adjustl(scheme)), trim(int_adams_bashforth%class_name())) > 0) then
+         integrate => integrate_adams_bashforth
+      elseif (index(trim(adjustl(scheme)), trim(int_adams_moulton%class_name())) > 0) then
+         integrate => integrate_adams_moulton
+      elseif (index(trim(adjustl(scheme)), trim(int_back_df%class_name())) > 0) then
+         integrate => integrate_back_df
+      elseif (index(trim(adjustl(scheme)), trim(int_euler_explicit%class_name())) > 0) then
+         integrate => integrate_euler_explicit
+      elseif (index(trim(adjustl(scheme)), trim(int_leapfrog%class_name())) > 0) then
+         integrate => integrate_leapfrog
+      elseif (index(trim(adjustl(scheme)), trim(int_lmm_ssp_vss%class_name())) > 0) then
+         integrate => integrate_lmm_ssp_vss
+      elseif (index(trim(adjustl(scheme)), trim(int_lmm_ssp%class_name())) > 0) then
+         integrate => integrate_lmm_ssp
+      elseif (index(trim(adjustl(scheme)), trim(int_ms_runge_kutta_ssp%class_name())) > 0) then
+         integrate => integrate_ms_runge_kutta_ssp
+      elseif (index(trim(adjustl(scheme)), trim(int_runge_kutta_emd%class_name())) > 0) then
+         integrate => integrate_runge_kutta_emd
+      elseif (index(trim(adjustl(scheme)), trim(int_runge_kutta_lssp%class_name())) > 0) then
+         integrate => integrate_runge_kutta_lssp
+      elseif (index(trim(adjustl(scheme)), trim(int_runge_kutta_ls%class_name())) > 0) then
+         integrate => integrate_runge_kutta_ls
+      elseif (index(trim(adjustl(scheme)), trim(int_runge_kutta_ssp%class_name())) > 0) then
+         integrate => integrate_runge_kutta_ssp
+      endif
+      if (index(trim(adjustl(scheme)), trim(int_runge_kutta_emd%class_name())) > 0) then
+        if (allocated(error)) deallocate(error) ; allocate(error(1:space_dimension, 1:size(self%tolerance)))
+        if (allocated(Dt_mean)) deallocate(Dt_mean) ; allocate(Dt_mean(1:size(error, dim=2)))
+      else
+        if (allocated(error)) deallocate(error) ; allocate(error(1:space_dimension, 1:size(self%Dt)))
+      endif
     endif
+
     error = 0.0_R_P
     if (self%errors_analysis) then
       if (allocated(order)) deallocate(order) ; allocate(order(1:space_dimension, 1:size(error, dim=2)-1))
@@ -372,6 +414,63 @@ contains
 
   error = error_L2(frequency=frequency, solution=solution(:, 0:last_step))
   endsubroutine integrate_adams_bashforth
+
+  subroutine integrate_adams_bashforth_fast(scheme, frequency, final_time, solution, error, last_step, iterations, Dt, tolerance, &
+                                       stages)
+  !< Integrate domain by means of the Adams-Bashforth scheme.
+  character(*),           intent(in)           :: scheme        !< Selected scheme.
+  real(R_P),              intent(in)           :: frequency     !< Oscillation frequency.
+  real(R_P),              intent(in)           :: final_time    !< Final integration time.
+  real(R_P), allocatable, intent(out)          :: solution(:,:) !< Solution at each time step, X-Y.
+  real(R_P),              intent(out)          :: error(1:)     !< Error (norm L2) with respect the exact solution.
+  integer(I_P),           intent(out)          :: last_step     !< Last time step computed.
+  integer(I_P),           intent(in), optional :: iterations    !< Number of fixed point iterations.
+  real(R_P),              intent(in), optional :: Dt            !< Time step.
+  real(R_P),              intent(in), optional :: tolerance     !< Local error tolerance.
+  integer(I_P),           intent(in), optional :: stages        !< Number of stages.
+  type(integrator_adams_bashforth)             :: integrator    !< The integrator.
+  type(integrator_runge_kutta_ssp)             :: integrator_rk !< RK integrator for starting non self-starting integrators.
+  type(oscillator)                             :: domain        !< Oscillation field.
+  type(oscillator), allocatable                :: rk_stage(:)   !< Runge-Kutta stages.
+  type(oscillator), allocatable                :: previous(:)   !< Previous time steps solutions.
+  type(oscillator)                             :: buffer        !< Buffer oscillation field.
+  integer                                      :: step          !< Time steps counter.
+
+  call domain%init(initial_state=initial_state, frequency=frequency)
+
+  if (allocated(solution)) deallocate(solution) ; allocate(solution(0:space_dimension, 0:int(final_time/Dt)))
+  solution = 0.0_R_P
+  solution(1:, 0) = domain%output()
+
+  call integrator%initialize(scheme=scheme)
+  if (allocated(previous)) deallocate(previous) ; allocate(previous(1:integrator%steps))
+
+  call integrator_rk%initialize(scheme='runge_kutta_ssp_stages_5_order_4')
+  if (allocated(rk_stage)) deallocate(rk_stage) ; allocate(rk_stage(1:integrator_rk%stages))
+
+  step = 0
+  do while(solution(0, step) < final_time .and. step < ubound(solution, dim=2))
+    step = step + 1
+
+    if (integrator%steps >= step) then
+      call integrator_rk%integrate(U=domain, stage=rk_stage, Dt=Dt, t=solution(0, step))
+      previous(step) = domain
+    else
+      call integrator%integrate_fast(U=domain,          &
+                                     previous=previous, &
+                                     buffer=buffer,     &
+                                     Dt=Dt,             &
+                                     t=solution(0, step-integrator%steps:step-1))
+    endif
+
+    solution(0, step) = step * Dt
+
+    solution(1:, step) = domain%output()
+  enddo
+  last_step = step
+
+  error = error_L2(frequency=frequency, solution=solution(:, 0:last_step))
+  endsubroutine integrate_adams_bashforth_fast
 
   subroutine integrate_adams_bashforth_moulton(scheme, frequency, final_time, solution, error, last_step, iterations, Dt, &
                                                tolerance, stages)
