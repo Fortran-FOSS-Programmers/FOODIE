@@ -134,7 +134,7 @@
      <li><i class="fa fa-list-ol"></i>
        <a data-toggle="tooltip"
 	  data-placement="bottom" data-html="true"
-	  title="<p> 3.2% of total for derived types.</p>Including implementation: 205 statements,  2.8% of total for derived types.">18 statements</a>
+	  title="<p> 3.8% of total for derived types.</p>Including implementation: 264 statements,  3.5% of total for derived types.">22 statements</a>
      </li> 
      
      
@@ -177,6 +177,8 @@
       <a class="list-group-item" href="../type/integrator_lmm_ssp_vss.html#variable-error_message">error_message</a>
       
       <a class="list-group-item" href="../type/integrator_lmm_ssp_vss.html#variable-integrate_">integrate_</a>
+      
+      <a class="list-group-item" href="../type/integrator_lmm_ssp_vss.html#variable-integrate_fast_">integrate_fast_</a>
       
       <a class="list-group-item" href="../type/integrator_lmm_ssp_vss.html#variable-steps%7E7">steps</a>
       
@@ -227,9 +229,15 @@
       
       <a class="list-group-item" href="../type/integrator_lmm_ssp_vss.html#boundprocedure-integrate%7E8">integrate</a>
       
+      <a class="list-group-item" href="../type/integrator_lmm_ssp_vss.html#boundprocedure-integrate_fast%7E2">integrate_fast</a>
+      
       <a class="list-group-item" href="../type/integrator_lmm_ssp_vss.html#boundprocedure-integrate_order_2">integrate_order_2</a>
       
+      <a class="list-group-item" href="../type/integrator_lmm_ssp_vss.html#boundprocedure-integrate_order_2_fast">integrate_order_2_fast</a>
+      
       <a class="list-group-item" href="../type/integrator_lmm_ssp_vss.html#boundprocedure-integrate_order_3">integrate_order_3</a>
+      
+      <a class="list-group-item" href="../type/integrator_lmm_ssp_vss.html#boundprocedure-integrate_order_3_fast">integrate_order_3_fast</a>
       
       <a class="list-group-item" href="../type/integrator_lmm_ssp_vss.html#boundprocedure-is_supported%7E8">is_supported</a>
       
@@ -427,6 +435,8 @@
       
       <a class="list-group-item" href="../type/integrator_lmm_ssp_vss.html#variable-integrate_">integrate_</a>
       
+      <a class="list-group-item" href="../type/integrator_lmm_ssp_vss.html#variable-integrate_fast_">integrate_fast_</a>
+      
       <a class="list-group-item" href="../type/integrator_lmm_ssp_vss.html#variable-steps%7E7">steps</a>
       
     </div>
@@ -476,9 +486,15 @@
       
       <a class="list-group-item" href="../type/integrator_lmm_ssp_vss.html#boundprocedure-integrate%7E8">integrate</a>
       
+      <a class="list-group-item" href="../type/integrator_lmm_ssp_vss.html#boundprocedure-integrate_fast%7E2">integrate_fast</a>
+      
       <a class="list-group-item" href="../type/integrator_lmm_ssp_vss.html#boundprocedure-integrate_order_2">integrate_order_2</a>
       
+      <a class="list-group-item" href="../type/integrator_lmm_ssp_vss.html#boundprocedure-integrate_order_2_fast">integrate_order_2_fast</a>
+      
       <a class="list-group-item" href="../type/integrator_lmm_ssp_vss.html#boundprocedure-integrate_order_3">integrate_order_3</a>
+      
+      <a class="list-group-item" href="../type/integrator_lmm_ssp_vss.html#boundprocedure-integrate_order_3_fast">integrate_order_3_fast</a>
       
       <a class="list-group-item" href="../type/integrator_lmm_ssp_vss.html#boundprocedure-is_supported%7E8">is_supported</a>
       
@@ -557,6 +573,20 @@
   <td>private,</td>
   <td>pointer</td><td>::</td>
   <td><strong>integrate_</strong></td><td>=> </td><td>integrate_order_2</td><td><p>Integrate integrand field.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-integrate_fast_"></span>procedure(<a href='../interface/integrate_fast_interface.html'>integrate_fast_interface</a>),</td>
+  
+  <td>private,</td>
+  <td>pointer</td><td>::</td>
+  <td><strong>integrate_fast_</strong></td><td>=> </td><td>integrate_order_2_fast</td><td><p>Integrate integrand field, fast.</p></td>
   
 </tr>
 
@@ -1647,6 +1677,173 @@ private subroutine <a href='../proc/integrate%7E8.html'>integrate</a>(self, U, p
     
 	   
 <div class="panel panel-default">
+  <div class="panel-heading codesum"><span class="anchor" id="boundprocedure-integrate_fast%7E2"></span><h3>procedure, public, pass(self) :: <strong>integrate_fast</strong>  
+    
+  </h3></div>
+  
+  <div class="panel-body">
+    
+
+
+    <p>Integrate integrand field, fast mode.</p>
+  </div>
+  
+  <ul class="list-group">
+    
+      <li class="list-group-item">
+      
+         
+    
+    <h3>
+private subroutine <a href='../proc/integrate_fast%7E2.html'>integrate_fast</a>(self, U, previous, buffer, Dt, t, autoupdate)
+    
+    
+	 
+</h3>
+    
+
+
+
+
+
+
+
+<p>Integrate field with LMM-SSP class scheme.</p>
+    
+    <h4>Arguments</h4>
+    
+      
+      
+<table class="table table-striped varlist">
+<thead><tr><th>Type</th>
+<th>Intent</th><th>Optional</th>
+<th>Attributes</th><th></th><th>Name</th><th></th></thead>
+
+
+
+<tbody>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>class(<a href='../type/integrator_lmm_ssp_vss.html'>integrator_lmm_ssp_vss</a>),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>self</strong></td><td><p>Integrator.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>class(<a href='../type/integrand_object.html'>integrand_object</a>),</td>
+  <td>intent(inout)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>U</strong></td><td><p>Field to be integrated.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>class(<a href='../type/integrand_object.html'>integrand_object</a>),</td>
+  <td>intent(inout)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>previous</strong>(1:)</td><td><p>Previous time steps solutions of integrand field.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>class(<a href='../type/integrand_object.html'>integrand_object</a>),</td>
+  <td>intent(inout)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>buffer</strong></td><td><p>Temporary buffer for doing fast operation.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>real(kind=R_P),</td>
+  <td>intent(inout)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>Dt</strong>(:)</td><td><p>Time steps.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>real(kind=R_P),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>t</strong>(:)</td><td><p>Times.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>logical,</td>
+  <td>intent(in),</td>
+  <td>optional</td>
+  
+  <td></td><td>::</td>
+  <td><strong>autoupdate</strong></td><td><p>Perform cyclic autoupdate of previous time steps.</p></td>
+  
+</tr>
+
+</tbody>
+</table>
+
+      
+    
+    
+
+      
+      </li>
+    
+  </ul>
+</div>
+
+    
+	   
+<div class="panel panel-default">
   <div class="panel-heading codesum"><span class="anchor" id="boundprocedure-integrate_order_2"></span><h3>procedure, private, pass(self) :: <strong>integrate_order_2</strong>  
     
   </h3></div>
@@ -1799,6 +1996,173 @@ private subroutine <a href='../proc/integrate_order_2.html'>integrate_order_2</a
     
 	   
 <div class="panel panel-default">
+  <div class="panel-heading codesum"><span class="anchor" id="boundprocedure-integrate_order_2_fast"></span><h3>procedure, private, pass(self) :: <strong>integrate_order_2_fast</strong>  
+    
+  </h3></div>
+  
+  <div class="panel-body">
+    
+
+
+    <p>Integrate integrand field by 2nd order formula, fast mode.</p>
+  </div>
+  
+  <ul class="list-group">
+    
+      <li class="list-group-item">
+      
+         
+    
+    <h3>
+private subroutine <a href='../proc/integrate_order_2_fast.html'>integrate_order_2_fast</a>(self, U, previous, buffer, Dt, t, autoupdate)
+    
+    
+	 
+</h3>
+    
+
+
+
+
+
+
+
+<p>Integrate field with LMM-SSP-VSS 2nd order class scheme.</p>
+    
+    <h4>Arguments</h4>
+    
+      
+      
+<table class="table table-striped varlist">
+<thead><tr><th>Type</th>
+<th>Intent</th><th>Optional</th>
+<th>Attributes</th><th></th><th>Name</th><th></th></thead>
+
+
+
+<tbody>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>class(<a href='../type/integrator_lmm_ssp_vss.html'>integrator_lmm_ssp_vss</a>),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>self</strong></td><td><p>Integrator.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>class(<a href='../type/integrand_object.html'>integrand_object</a>),</td>
+  <td>intent(inout)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>U</strong></td><td><p>Field to be integrated.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>class(<a href='../type/integrand_object.html'>integrand_object</a>),</td>
+  <td>intent(inout)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>previous</strong>(1:)</td><td><p>Previous time steps solutions of integrand field.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>class(<a href='../type/integrand_object.html'>integrand_object</a>),</td>
+  <td>intent(inout)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>buffer</strong></td><td><p>Temporary buffer for doing fast operation.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>real(kind=R_P),</td>
+  <td>intent(inout)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>Dt</strong>(:)</td><td><p>Time steps.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>real(kind=R_P),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>t</strong>(:)</td><td><p>Times.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>logical,</td>
+  <td>intent(in),</td>
+  <td>optional</td>
+  
+  <td></td><td>::</td>
+  <td><strong>autoupdate</strong></td><td><p>Perform cyclic autoupdate of previous time steps.</p></td>
+  
+</tr>
+
+</tbody>
+</table>
+
+      
+    
+    
+
+      
+      </li>
+    
+  </ul>
+</div>
+
+    
+	   
+<div class="panel panel-default">
   <div class="panel-heading codesum"><span class="anchor" id="boundprocedure-integrate_order_3"></span><h3>procedure, private, pass(self) :: <strong>integrate_order_3</strong>  
     
   </h3></div>
@@ -1887,6 +2251,173 @@ private subroutine <a href='../proc/integrate_order_3.html'>integrate_order_3</a
   
   <td></td><td>::</td>
   <td><strong>previous</strong>(1:)</td><td><p>Previous time steps solutions of integrand field.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>real(kind=R_P),</td>
+  <td>intent(inout)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>Dt</strong>(:)</td><td><p>Time steps.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>real(kind=R_P),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>t</strong>(:)</td><td><p>Times.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>logical,</td>
+  <td>intent(in),</td>
+  <td>optional</td>
+  
+  <td></td><td>::</td>
+  <td><strong>autoupdate</strong></td><td><p>Perform cyclic autoupdate of previous time steps.</p></td>
+  
+</tr>
+
+</tbody>
+</table>
+
+      
+    
+    
+
+      
+      </li>
+    
+  </ul>
+</div>
+
+    
+	   
+<div class="panel panel-default">
+  <div class="panel-heading codesum"><span class="anchor" id="boundprocedure-integrate_order_3_fast"></span><h3>procedure, private, pass(self) :: <strong>integrate_order_3_fast</strong>  
+    
+  </h3></div>
+  
+  <div class="panel-body">
+    
+
+
+    <p>Integrate integrand field by 3rd order formula, fast mode.</p>
+  </div>
+  
+  <ul class="list-group">
+    
+      <li class="list-group-item">
+      
+         
+    
+    <h3>
+private subroutine <a href='../proc/integrate_order_3_fast.html'>integrate_order_3_fast</a>(self, U, previous, buffer, Dt, t, autoupdate)
+    
+    
+	 
+</h3>
+    
+
+
+
+
+
+
+
+<p>Integrate field with LMM-SSP-VSS 3rd order class scheme, fast mode.</p>
+    
+    <h4>Arguments</h4>
+    
+      
+      
+<table class="table table-striped varlist">
+<thead><tr><th>Type</th>
+<th>Intent</th><th>Optional</th>
+<th>Attributes</th><th></th><th>Name</th><th></th></thead>
+
+
+
+<tbody>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>class(<a href='../type/integrator_lmm_ssp_vss.html'>integrator_lmm_ssp_vss</a>),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>self</strong></td><td><p>Integrator.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>class(<a href='../type/integrand_object.html'>integrand_object</a>),</td>
+  <td>intent(inout)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>U</strong></td><td><p>Field to be integrated.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>class(<a href='../type/integrand_object.html'>integrand_object</a>),</td>
+  <td>intent(inout)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>previous</strong>(1:)</td><td><p>Previous time steps solutions of integrand field.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>class(<a href='../type/integrand_object.html'>integrand_object</a>),</td>
+  <td>intent(inout)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>buffer</strong></td><td><p>Temporary buffer for doing fast operation.</p></td>
   
 </tr>
 
@@ -2392,8 +2923,9 @@ private subroutine <a href='../proc/update_previous%7E5.html'>update_previous</a
   <span class="c">!&lt;</span>
   <span class="c">!&lt; @note The integrator must be created or initialized before used.</span>
   <span class="k">private</span>
-<span class="k">  </span><span class="kt">integer</span><span class="p">(</span><span class="n">I_P</span><span class="p">),</span> <span class="k">public</span>                    <span class="kd">::</span> <span class="n">steps</span><span class="o">=</span><span class="mi">0</span>                         <span class="c">!&lt; Number of time steps.</span>
-  <span class="k">procedure</span><span class="p">(</span><span class="n">integrate_interface</span><span class="p">),</span> <span class="k">pointer</span> <span class="kd">::</span> <span class="n">integrate_</span> <span class="o">=&gt;</span> <span class="n">integrate_order_2</span> <span class="c">!&lt; Integrate integrand field.</span>
+<span class="k">  </span><span class="kt">integer</span><span class="p">(</span><span class="n">I_P</span><span class="p">),</span> <span class="k">public</span>                         <span class="kd">::</span> <span class="n">steps</span><span class="o">=</span><span class="mi">0</span>                                   <span class="c">!&lt; Number of time steps.</span>
+  <span class="k">procedure</span><span class="p">(</span><span class="n">integrate_interface</span><span class="p">),</span>      <span class="k">pointer</span> <span class="kd">::</span> <span class="n">integrate_</span> <span class="o">=&gt;</span> <span class="n">integrate_order_2</span>           <span class="c">!&lt; Integrate integrand field.</span>
+  <span class="k">procedure</span><span class="p">(</span><span class="n">integrate_fast_interface</span><span class="p">),</span> <span class="k">pointer</span> <span class="kd">::</span> <span class="n">integrate_fast_</span> <span class="o">=&gt;</span> <span class="n">integrate_order_2_fast</span> <span class="c">!&lt; Integrate integrand field, fast.</span>
   <span class="k">contains</span>
     <span class="c">! deferred methods</span>
     <span class="k">procedure</span><span class="p">,</span> <span class="k">pass</span><span class="p">(</span><span class="n">self</span><span class="p">)</span> <span class="kd">::</span> <span class="n">class_name</span>           <span class="c">!&lt; Return the class name of schemes.</span>
@@ -2406,10 +2938,13 @@ private subroutine <a href='../proc/update_previous%7E5.html'>update_previous</a
     <span class="k">procedure</span><span class="p">,</span> <span class="k">pass</span><span class="p">(</span><span class="n">self</span><span class="p">)</span> <span class="kd">::</span> <span class="n">destroy</span>         <span class="c">!&lt; Destroy the integrator.</span>
     <span class="k">procedure</span><span class="p">,</span> <span class="k">pass</span><span class="p">(</span><span class="n">self</span><span class="p">)</span> <span class="kd">::</span> <span class="n">initialize</span>      <span class="c">!&lt; Initialize (create) the integrator.</span>
     <span class="k">procedure</span><span class="p">,</span> <span class="k">pass</span><span class="p">(</span><span class="n">self</span><span class="p">)</span> <span class="kd">::</span> <span class="n">integrate</span>       <span class="c">!&lt; Integrate integrand field.</span>
+    <span class="k">procedure</span><span class="p">,</span> <span class="k">pass</span><span class="p">(</span><span class="n">self</span><span class="p">)</span> <span class="kd">::</span> <span class="n">integrate_fast</span>  <span class="c">!&lt; Integrate integrand field, fast mode.</span>
     <span class="k">procedure</span><span class="p">,</span> <span class="k">pass</span><span class="p">(</span><span class="n">self</span><span class="p">)</span> <span class="kd">::</span> <span class="n">update_previous</span> <span class="c">!&lt; Cyclic update previous time steps.</span>
     <span class="c">! private methods</span>
-    <span class="k">procedure</span><span class="p">,</span> <span class="k">pass</span><span class="p">(</span><span class="n">self</span><span class="p">),</span> <span class="k">private</span> <span class="kd">::</span> <span class="n">integrate_order_2</span> <span class="c">!&lt; Integrate integrand field by 2nd order formula.</span>
-    <span class="k">procedure</span><span class="p">,</span> <span class="k">pass</span><span class="p">(</span><span class="n">self</span><span class="p">),</span> <span class="k">private</span> <span class="kd">::</span> <span class="n">integrate_order_3</span> <span class="c">!&lt; Integrate integrand field by 3rd order formula.</span>
+    <span class="k">procedure</span><span class="p">,</span> <span class="k">pass</span><span class="p">(</span><span class="n">self</span><span class="p">),</span> <span class="k">private</span> <span class="kd">::</span> <span class="n">integrate_order_2</span>      <span class="c">!&lt; Integrate integrand field by 2nd order formula.</span>
+    <span class="k">procedure</span><span class="p">,</span> <span class="k">pass</span><span class="p">(</span><span class="n">self</span><span class="p">),</span> <span class="k">private</span> <span class="kd">::</span> <span class="n">integrate_order_3</span>      <span class="c">!&lt; Integrate integrand field by 3rd order formula.</span>
+    <span class="k">procedure</span><span class="p">,</span> <span class="k">pass</span><span class="p">(</span><span class="n">self</span><span class="p">),</span> <span class="k">private</span> <span class="kd">::</span> <span class="n">integrate_order_2_fast</span> <span class="c">!&lt; Integrate integrand field by 2nd order formula, fast mode.</span>
+    <span class="k">procedure</span><span class="p">,</span> <span class="k">pass</span><span class="p">(</span><span class="n">self</span><span class="p">),</span> <span class="k">private</span> <span class="kd">::</span> <span class="n">integrate_order_3_fast</span> <span class="c">!&lt; Integrate integrand field by 3rd order formula, fast mode.</span>
 <span class="n">endtype</span> <span class="n">integrator_lmm_ssp_vss</span>
 </pre></div>
 
@@ -2497,7 +3032,7 @@ private subroutine <a href='../proc/update_previous%7E5.html'>update_previous</a
           <p class="text-right">
             Documentation generated by 
             <a href="https://github.com/cmacmackin/ford">FORD</a>
-             on 2017-05-07 13:06  
+             on 2017-05-08 17:15  
           </p>
         </div>
         <div class="col-xs-12 col-md-4 col-md-pull-4"><p class="text-center"> FOODIE was developed by Fortran-FOSS-Programmers Group</p></div>

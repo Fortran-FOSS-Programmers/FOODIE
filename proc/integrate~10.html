@@ -241,6 +241,8 @@
       
       <a class="list-group-item" href="../proc/check_error.html">check_error</a>
       
+      <a class="list-group-item" href="../proc/check_scheme_has_fast_mode.html">check_scheme_has_fast_mode</a>
+      
       <a class="list-group-item" href="../proc/class_name.html">class_name</a>
       
       <a class="list-group-item" href="../proc/class_name%7E2.html">class_name</a>
@@ -649,21 +651,45 @@
       
       <a class="list-group-item" href="../proc/integrate_fast.html">integrate_fast</a>
       
+      <a class="list-group-item" href="../proc/integrate_fast%7E2.html">integrate_fast</a>
+      
+      <a class="list-group-item" href="../proc/integrate_fast%7E3.html">integrate_fast</a>
+      
+      <a class="list-group-item" href="../proc/integrate_fast%7E4.html">integrate_fast</a>
+      
+      <a class="list-group-item" href="../proc/integrate_fast%7E5.html">integrate_fast</a>
+      
+      <a class="list-group-item" href="../proc/integrate_fast%7E6.html">integrate_fast</a>
+      
+      <a class="list-group-item" href="../proc/integrate_fast%7E7.html">integrate_fast</a>
+      
       <a class="list-group-item" href="../proc/integrate_leapfrog.html">integrate_leapfrog</a>
       
       <a class="list-group-item" href="../proc/integrate_lmm_ssp.html">integrate_lmm_ssp</a>
       
       <a class="list-group-item" href="../proc/integrate_lmm_ssp_vss.html">integrate_lmm_ssp_vss</a>
       
+      <a class="list-group-item" href="../proc/integrate_lmm_ssp_vss_fast.html">integrate_lmm_ssp_vss_fast</a>
+      
       <a class="list-group-item" href="../proc/integrate_ms_runge_kutta_ssp.html">integrate_ms_runge_kutta_ssp</a>
+      
+      <a class="list-group-item" href="../proc/integrate_ms_runge_kutta_ssp_fast.html">integrate_ms_runge_kutta_ssp_fast</a>
       
       <a class="list-group-item" href="../proc/integrate_order_2.html">integrate_order_2</a>
       
+      <a class="list-group-item" href="../proc/integrate_order_2_fast.html">integrate_order_2_fast</a>
+      
       <a class="list-group-item" href="../proc/integrate_order_3.html">integrate_order_3</a>
+      
+      <a class="list-group-item" href="../proc/integrate_order_3_fast.html">integrate_order_3_fast</a>
       
       <a class="list-group-item" href="../proc/integrate_order_s.html">integrate_order_s</a>
       
       <a class="list-group-item" href="../proc/integrate_order_s_1.html">integrate_order_s_1</a>
+      
+      <a class="list-group-item" href="../proc/integrate_order_s_1_fast.html">integrate_order_s_1_fast</a>
+      
+      <a class="list-group-item" href="../proc/integrate_order_s_fast.html">integrate_order_s_fast</a>
       
       <a class="list-group-item" href="../proc/integrate_rk.html">integrate_rk</a>
       
@@ -671,11 +697,19 @@
       
       <a class="list-group-item" href="../proc/integrate_runge_kutta_emd.html">integrate_runge_kutta_emd</a>
       
+      <a class="list-group-item" href="../proc/integrate_runge_kutta_emd_fast.html">integrate_runge_kutta_emd_fast</a>
+      
       <a class="list-group-item" href="../proc/integrate_runge_kutta_ls.html">integrate_runge_kutta_ls</a>
+      
+      <a class="list-group-item" href="../proc/integrate_runge_kutta_ls_fast.html">integrate_runge_kutta_ls_fast</a>
       
       <a class="list-group-item" href="../proc/integrate_runge_kutta_lssp.html">integrate_runge_kutta_lssp</a>
       
+      <a class="list-group-item" href="../proc/integrate_runge_kutta_lssp_fast.html">integrate_runge_kutta_lssp_fast</a>
+      
       <a class="list-group-item" href="../proc/integrate_runge_kutta_ssp.html">integrate_runge_kutta_ssp</a>
+      
+      <a class="list-group-item" href="../proc/integrate_runge_kutta_ssp_fast.html">integrate_runge_kutta_ssp_fast</a>
       
       <a class="list-group-item" href="../proc/is_admissible.html">is_admissible</a>
       
@@ -974,7 +1008,6 @@ private subroutine integrate(self, U, stage, Dt, t)
     
     <p>Integrate field with explicit embedded Runge-Kutta scheme.</p>
 <p>The time steps is adaptively resized using the local truncation error estimation by means of the embedded pairs of RK schemes.</p>
-<p></p><div class="alert alert-info" role="alert"><h4>Note</h4><p>This method can be used <strong>after</strong> the integrator is created (i.e. the RK coefficients are initialized).</p></div>
     
 
     <h3>Arguments</h3>
@@ -995,7 +1028,7 @@ private subroutine integrate(self, U, stage, Dt, t)
   
 <tr>
   
-  <td><span class="anchor" id="variable-self%7E100"></span>class(<a href='../type/integrator_runge_kutta_emd.html'>integrator_runge_kutta_emd</a>),</td>
+  <td><span class="anchor" id="variable-self%7E106"></span>class(<a href='../type/integrator_runge_kutta_emd.html'>integrator_runge_kutta_emd</a>),</td>
   <td>intent(in)</td>
   <td></td>
   
@@ -1010,7 +1043,7 @@ private subroutine integrate(self, U, stage, Dt, t)
   
 <tr>
   
-  <td><span class="anchor" id="variable-u%7E29"></span>class(<a href='../type/integrand_object.html'>integrand_object</a>),</td>
+  <td><span class="anchor" id="variable-u%7E35"></span>class(<a href='../type/integrand_object.html'>integrand_object</a>),</td>
   <td>intent(inout)</td>
   <td></td>
   
@@ -1025,7 +1058,7 @@ private subroutine integrate(self, U, stage, Dt, t)
   
 <tr>
   
-  <td><span class="anchor" id="variable-stage%7E3"></span>class(<a href='../type/integrand_object.html'>integrand_object</a>),</td>
+  <td><span class="anchor" id="variable-stage%7E5"></span>class(<a href='../type/integrand_object.html'>integrand_object</a>),</td>
   <td>intent(inout)</td>
   <td></td>
   
@@ -1040,7 +1073,7 @@ private subroutine integrate(self, U, stage, Dt, t)
   
 <tr>
   
-  <td><span class="anchor" id="variable-dt%7E20"></span>real(kind=R_P),</td>
+  <td><span class="anchor" id="variable-dt%7E26"></span>real(kind=R_P),</td>
   <td>intent(inout)</td>
   <td></td>
   
@@ -1055,7 +1088,7 @@ private subroutine integrate(self, U, stage, Dt, t)
   
 <tr>
   
-  <td><span class="anchor" id="variable-t%7E26"></span>real(kind=R_P),</td>
+  <td><span class="anchor" id="variable-t%7E32"></span>real(kind=R_P),</td>
   <td>intent(in)</td>
   <td></td>
   
@@ -1130,8 +1163,6 @@ private subroutine integrate(self, U, stage, Dt, t)
   <span class="c">!&lt; Integrate field with explicit embedded Runge-Kutta scheme.</span>
   <span class="c">!&lt;</span>
   <span class="c">!&lt; The time steps is adaptively resized using the local truncation error estimation by means of the embedded pairs of RK schemes.</span>
-  <span class="c">!&lt;</span>
-  <span class="c">!&lt; @note This method can be used **after** the integrator is created (i.e. the RK coefficients are initialized).</span>
   <span class="k">class</span><span class="p">(</span><span class="n">integrator_runge_kutta_emd</span><span class="p">),</span> <span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span>    <span class="kd">::</span> <span class="n">self</span>      <span class="c">!&lt; Integrator.</span>
   <span class="k">class</span><span class="p">(</span><span class="n">integrand_object</span><span class="p">),</span>           <span class="k">intent</span><span class="p">(</span><span class="n">inout</span><span class="p">)</span> <span class="kd">::</span> <span class="n">U</span>         <span class="c">!&lt; Field to be integrated.</span>
   <span class="k">class</span><span class="p">(</span><span class="n">integrand_object</span><span class="p">),</span>           <span class="k">intent</span><span class="p">(</span><span class="n">inout</span><span class="p">)</span> <span class="kd">::</span> <span class="n">stage</span><span class="p">(</span><span class="mi">1</span><span class="p">:)</span> <span class="c">!&lt; Runge-Kutta stages [1:stages].</span>
@@ -1224,6 +1255,8 @@ private subroutine integrate(self, U, stage, Dt, t)
       <a class="list-group-item" href="../proc/burgers_multiply_real.html">burgers_multiply_real</a>
       
       <a class="list-group-item" href="../proc/check_error.html">check_error</a>
+      
+      <a class="list-group-item" href="../proc/check_scheme_has_fast_mode.html">check_scheme_has_fast_mode</a>
       
       <a class="list-group-item" href="../proc/class_name.html">class_name</a>
       
@@ -1633,21 +1666,45 @@ private subroutine integrate(self, U, stage, Dt, t)
       
       <a class="list-group-item" href="../proc/integrate_fast.html">integrate_fast</a>
       
+      <a class="list-group-item" href="../proc/integrate_fast%7E2.html">integrate_fast</a>
+      
+      <a class="list-group-item" href="../proc/integrate_fast%7E3.html">integrate_fast</a>
+      
+      <a class="list-group-item" href="../proc/integrate_fast%7E4.html">integrate_fast</a>
+      
+      <a class="list-group-item" href="../proc/integrate_fast%7E5.html">integrate_fast</a>
+      
+      <a class="list-group-item" href="../proc/integrate_fast%7E6.html">integrate_fast</a>
+      
+      <a class="list-group-item" href="../proc/integrate_fast%7E7.html">integrate_fast</a>
+      
       <a class="list-group-item" href="../proc/integrate_leapfrog.html">integrate_leapfrog</a>
       
       <a class="list-group-item" href="../proc/integrate_lmm_ssp.html">integrate_lmm_ssp</a>
       
       <a class="list-group-item" href="../proc/integrate_lmm_ssp_vss.html">integrate_lmm_ssp_vss</a>
       
+      <a class="list-group-item" href="../proc/integrate_lmm_ssp_vss_fast.html">integrate_lmm_ssp_vss_fast</a>
+      
       <a class="list-group-item" href="../proc/integrate_ms_runge_kutta_ssp.html">integrate_ms_runge_kutta_ssp</a>
+      
+      <a class="list-group-item" href="../proc/integrate_ms_runge_kutta_ssp_fast.html">integrate_ms_runge_kutta_ssp_fast</a>
       
       <a class="list-group-item" href="../proc/integrate_order_2.html">integrate_order_2</a>
       
+      <a class="list-group-item" href="../proc/integrate_order_2_fast.html">integrate_order_2_fast</a>
+      
       <a class="list-group-item" href="../proc/integrate_order_3.html">integrate_order_3</a>
+      
+      <a class="list-group-item" href="../proc/integrate_order_3_fast.html">integrate_order_3_fast</a>
       
       <a class="list-group-item" href="../proc/integrate_order_s.html">integrate_order_s</a>
       
       <a class="list-group-item" href="../proc/integrate_order_s_1.html">integrate_order_s_1</a>
+      
+      <a class="list-group-item" href="../proc/integrate_order_s_1_fast.html">integrate_order_s_1_fast</a>
+      
+      <a class="list-group-item" href="../proc/integrate_order_s_fast.html">integrate_order_s_fast</a>
       
       <a class="list-group-item" href="../proc/integrate_rk.html">integrate_rk</a>
       
@@ -1655,11 +1712,19 @@ private subroutine integrate(self, U, stage, Dt, t)
       
       <a class="list-group-item" href="../proc/integrate_runge_kutta_emd.html">integrate_runge_kutta_emd</a>
       
+      <a class="list-group-item" href="../proc/integrate_runge_kutta_emd_fast.html">integrate_runge_kutta_emd_fast</a>
+      
       <a class="list-group-item" href="../proc/integrate_runge_kutta_ls.html">integrate_runge_kutta_ls</a>
+      
+      <a class="list-group-item" href="../proc/integrate_runge_kutta_ls_fast.html">integrate_runge_kutta_ls_fast</a>
       
       <a class="list-group-item" href="../proc/integrate_runge_kutta_lssp.html">integrate_runge_kutta_lssp</a>
       
+      <a class="list-group-item" href="../proc/integrate_runge_kutta_lssp_fast.html">integrate_runge_kutta_lssp_fast</a>
+      
       <a class="list-group-item" href="../proc/integrate_runge_kutta_ssp.html">integrate_runge_kutta_ssp</a>
+      
+      <a class="list-group-item" href="../proc/integrate_runge_kutta_ssp_fast.html">integrate_runge_kutta_ssp_fast</a>
       
       <a class="list-group-item" href="../proc/is_admissible.html">is_admissible</a>
       
@@ -1952,7 +2017,7 @@ private subroutine integrate(self, U, stage, Dt, t)
           <p class="text-right">
             Documentation generated by 
             <a href="https://github.com/cmacmackin/ford">FORD</a>
-             on 2017-05-07 13:06  
+             on 2017-05-08 17:15  
           </p>
         </div>
         <div class="col-xs-12 col-md-4 col-md-pull-4"><p class="text-center"> FOODIE was developed by Fortran-FOSS-Programmers Group</p></div>

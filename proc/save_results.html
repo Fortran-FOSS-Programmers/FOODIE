@@ -134,7 +134,7 @@
      <li><i class="fa fa-list-ol"></i>
        <a data-toggle="tooltip"
 	  data-placement="bottom" data-html="true"
-	  title=" 0.5% of total for procedures.">40 statements</a>
+	  title=" 0.4% of total for procedures.">40 statements</a>
      </li> 
      
      
@@ -240,6 +240,8 @@
       <a class="list-group-item" href="../proc/burgers_multiply_real.html">burgers_multiply_real</a>
       
       <a class="list-group-item" href="../proc/check_error.html">check_error</a>
+      
+      <a class="list-group-item" href="../proc/check_scheme_has_fast_mode.html">check_scheme_has_fast_mode</a>
       
       <a class="list-group-item" href="../proc/class_name.html">class_name</a>
       
@@ -649,21 +651,45 @@
       
       <a class="list-group-item" href="../proc/integrate_fast.html">integrate_fast</a>
       
+      <a class="list-group-item" href="../proc/integrate_fast%7E2.html">integrate_fast</a>
+      
+      <a class="list-group-item" href="../proc/integrate_fast%7E3.html">integrate_fast</a>
+      
+      <a class="list-group-item" href="../proc/integrate_fast%7E4.html">integrate_fast</a>
+      
+      <a class="list-group-item" href="../proc/integrate_fast%7E5.html">integrate_fast</a>
+      
+      <a class="list-group-item" href="../proc/integrate_fast%7E6.html">integrate_fast</a>
+      
+      <a class="list-group-item" href="../proc/integrate_fast%7E7.html">integrate_fast</a>
+      
       <a class="list-group-item" href="../proc/integrate_leapfrog.html">integrate_leapfrog</a>
       
       <a class="list-group-item" href="../proc/integrate_lmm_ssp.html">integrate_lmm_ssp</a>
       
       <a class="list-group-item" href="../proc/integrate_lmm_ssp_vss.html">integrate_lmm_ssp_vss</a>
       
+      <a class="list-group-item" href="../proc/integrate_lmm_ssp_vss_fast.html">integrate_lmm_ssp_vss_fast</a>
+      
       <a class="list-group-item" href="../proc/integrate_ms_runge_kutta_ssp.html">integrate_ms_runge_kutta_ssp</a>
+      
+      <a class="list-group-item" href="../proc/integrate_ms_runge_kutta_ssp_fast.html">integrate_ms_runge_kutta_ssp_fast</a>
       
       <a class="list-group-item" href="../proc/integrate_order_2.html">integrate_order_2</a>
       
+      <a class="list-group-item" href="../proc/integrate_order_2_fast.html">integrate_order_2_fast</a>
+      
       <a class="list-group-item" href="../proc/integrate_order_3.html">integrate_order_3</a>
+      
+      <a class="list-group-item" href="../proc/integrate_order_3_fast.html">integrate_order_3_fast</a>
       
       <a class="list-group-item" href="../proc/integrate_order_s.html">integrate_order_s</a>
       
       <a class="list-group-item" href="../proc/integrate_order_s_1.html">integrate_order_s_1</a>
+      
+      <a class="list-group-item" href="../proc/integrate_order_s_1_fast.html">integrate_order_s_1_fast</a>
+      
+      <a class="list-group-item" href="../proc/integrate_order_s_fast.html">integrate_order_s_fast</a>
       
       <a class="list-group-item" href="../proc/integrate_rk.html">integrate_rk</a>
       
@@ -671,11 +697,19 @@
       
       <a class="list-group-item" href="../proc/integrate_runge_kutta_emd.html">integrate_runge_kutta_emd</a>
       
+      <a class="list-group-item" href="../proc/integrate_runge_kutta_emd_fast.html">integrate_runge_kutta_emd_fast</a>
+      
       <a class="list-group-item" href="../proc/integrate_runge_kutta_ls.html">integrate_runge_kutta_ls</a>
+      
+      <a class="list-group-item" href="../proc/integrate_runge_kutta_ls_fast.html">integrate_runge_kutta_ls_fast</a>
       
       <a class="list-group-item" href="../proc/integrate_runge_kutta_lssp.html">integrate_runge_kutta_lssp</a>
       
+      <a class="list-group-item" href="../proc/integrate_runge_kutta_lssp_fast.html">integrate_runge_kutta_lssp_fast</a>
+      
       <a class="list-group-item" href="../proc/integrate_runge_kutta_ssp.html">integrate_runge_kutta_ssp</a>
+      
+      <a class="list-group-item" href="../proc/integrate_runge_kutta_ssp_fast.html">integrate_runge_kutta_ssp_fast</a>
       
       <a class="list-group-item" href="../proc/is_admissible.html">is_admissible</a>
       
@@ -1023,7 +1057,7 @@ private subroutine save_results(results, output_cli, scheme, frequency, solution
   
 <tr>
   
-  <td><span class="anchor" id="variable-scheme%7E48"></span>character(len=*),</td>
+  <td><span class="anchor" id="variable-scheme%7E55"></span>character(len=*),</td>
   <td>intent(in)</td>
   <td></td>
   
@@ -1038,7 +1072,7 @@ private subroutine save_results(results, output_cli, scheme, frequency, solution
   
 <tr>
   
-  <td><span class="anchor" id="variable-frequency%7E19"></span>real(kind=R_P),</td>
+  <td><span class="anchor" id="variable-frequency%7E25"></span>real(kind=R_P),</td>
   <td>intent(in)</td>
   <td></td>
   
@@ -1053,7 +1087,7 @@ private subroutine save_results(results, output_cli, scheme, frequency, solution
   
 <tr>
   
-  <td><span class="anchor" id="variable-solution%7E17"></span>real(kind=R_P),</td>
+  <td><span class="anchor" id="variable-solution%7E23"></span>real(kind=R_P),</td>
   <td>intent(in)</td>
   <td></td>
   
@@ -1086,27 +1120,27 @@ private subroutine save_results(results, output_cli, scheme, frequency, solution
 <polygon fill="none" stroke="black" points="73,-48 1,-48 1,-22 73,-22 73,-48"/>
 <text text-anchor="middle" x="37" y="-32.55" font-family="Helvetica,sans-Serif" font-size="10.50">save_results</text>
 </g>
+<!-- strz -->
+<g id="node2" class="node"><title>strz</title>
+<polygon fill="#777777" stroke="#777777" points="186,-70 132,-70 132,-44 186,-44 186,-70"/>
+<text text-anchor="middle" x="159" y="-54.55" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">strz</text>
+</g>
+<!-- proc~save_results&#45;&gt;strz -->
+<g id="edge2" class="edge"><title>proc~save_results&#45;&gt;strz</title>
+<path fill="none" stroke="#000000" d="M73.604,-41.6007C88.7732,-44.3362 106.352,-47.5061 121.604,-50.2564"/>
+<polygon fill="#000000" stroke="#000000" points="121.27,-53.7526 131.732,-52.0829 122.512,-46.8637 121.27,-53.7526"/>
+</g>
 <!-- proc~exact_solution_xy -->
-<g id="node2" class="node"><title>proc~exact_solution_xy</title>
+<g id="node3" class="node"><title>proc~exact_solution_xy</title>
 <a xlink:href="../proc/exact_solution_xy.html" xlink:title="exact_solution_xy">
-<polygon fill="#d94e8f" stroke="#d94e8f" points="207,-70 111,-70 111,-44 207,-44 207,-70"/>
-<text text-anchor="middle" x="159" y="-54.55" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">exact_solution_xy</text>
+<polygon fill="#d94e8f" stroke="#d94e8f" points="207,-26 111,-26 111,-1.24345e-14 207,-3.55271e-15 207,-26"/>
+<text text-anchor="middle" x="159" y="-10.55" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">exact_solution_xy</text>
 </a>
 </g>
 <!-- proc~save_results&#45;&gt;proc~exact_solution_xy -->
-<g id="edge2" class="edge"><title>proc~save_results&#45;&gt;proc~exact_solution_xy</title>
-<path fill="none" stroke="#000000" d="M73.604,-41.6007C81.9673,-43.1089 91.063,-44.7491 100.097,-46.3782"/>
-<polygon fill="#000000" stroke="#000000" points="99.7666,-49.8749 110.229,-48.2052 101.009,-42.986 99.7666,-49.8749"/>
-</g>
-<!-- strz -->
-<g id="node3" class="node"><title>strz</title>
-<polygon fill="#777777" stroke="#777777" points="186,-26 132,-26 132,-1.24345e-14 186,-3.55271e-15 186,-26"/>
-<text text-anchor="middle" x="159" y="-10.55" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">strz</text>
-</g>
-<!-- proc~save_results&#45;&gt;strz -->
-<g id="edge4" class="edge"><title>proc~save_results&#45;&gt;strz</title>
-<path fill="none" stroke="#000000" d="M73.604,-28.3993C88.7732,-25.6638 106.352,-22.4939 121.604,-19.7436"/>
-<polygon fill="#000000" stroke="#000000" points="122.512,-23.1363 131.732,-17.9171 121.27,-16.2474 122.512,-23.1363"/>
+<g id="edge4" class="edge"><title>proc~save_results&#45;&gt;proc~exact_solution_xy</title>
+<path fill="none" stroke="#000000" d="M73.604,-28.3993C81.9673,-26.8911 91.063,-25.2509 100.097,-23.6218"/>
+<polygon fill="#000000" stroke="#000000" points="101.009,-27.014 110.229,-21.7948 99.7666,-20.1251 101.009,-27.014"/>
 </g>
 </g>
 </svg>
@@ -1437,6 +1471,8 @@ private subroutine save_results(results, output_cli, scheme, frequency, solution
       <a class="list-group-item" href="../proc/burgers_multiply_real.html">burgers_multiply_real</a>
       
       <a class="list-group-item" href="../proc/check_error.html">check_error</a>
+      
+      <a class="list-group-item" href="../proc/check_scheme_has_fast_mode.html">check_scheme_has_fast_mode</a>
       
       <a class="list-group-item" href="../proc/class_name.html">class_name</a>
       
@@ -1846,21 +1882,45 @@ private subroutine save_results(results, output_cli, scheme, frequency, solution
       
       <a class="list-group-item" href="../proc/integrate_fast.html">integrate_fast</a>
       
+      <a class="list-group-item" href="../proc/integrate_fast%7E2.html">integrate_fast</a>
+      
+      <a class="list-group-item" href="../proc/integrate_fast%7E3.html">integrate_fast</a>
+      
+      <a class="list-group-item" href="../proc/integrate_fast%7E4.html">integrate_fast</a>
+      
+      <a class="list-group-item" href="../proc/integrate_fast%7E5.html">integrate_fast</a>
+      
+      <a class="list-group-item" href="../proc/integrate_fast%7E6.html">integrate_fast</a>
+      
+      <a class="list-group-item" href="../proc/integrate_fast%7E7.html">integrate_fast</a>
+      
       <a class="list-group-item" href="../proc/integrate_leapfrog.html">integrate_leapfrog</a>
       
       <a class="list-group-item" href="../proc/integrate_lmm_ssp.html">integrate_lmm_ssp</a>
       
       <a class="list-group-item" href="../proc/integrate_lmm_ssp_vss.html">integrate_lmm_ssp_vss</a>
       
+      <a class="list-group-item" href="../proc/integrate_lmm_ssp_vss_fast.html">integrate_lmm_ssp_vss_fast</a>
+      
       <a class="list-group-item" href="../proc/integrate_ms_runge_kutta_ssp.html">integrate_ms_runge_kutta_ssp</a>
+      
+      <a class="list-group-item" href="../proc/integrate_ms_runge_kutta_ssp_fast.html">integrate_ms_runge_kutta_ssp_fast</a>
       
       <a class="list-group-item" href="../proc/integrate_order_2.html">integrate_order_2</a>
       
+      <a class="list-group-item" href="../proc/integrate_order_2_fast.html">integrate_order_2_fast</a>
+      
       <a class="list-group-item" href="../proc/integrate_order_3.html">integrate_order_3</a>
+      
+      <a class="list-group-item" href="../proc/integrate_order_3_fast.html">integrate_order_3_fast</a>
       
       <a class="list-group-item" href="../proc/integrate_order_s.html">integrate_order_s</a>
       
       <a class="list-group-item" href="../proc/integrate_order_s_1.html">integrate_order_s_1</a>
+      
+      <a class="list-group-item" href="../proc/integrate_order_s_1_fast.html">integrate_order_s_1_fast</a>
+      
+      <a class="list-group-item" href="../proc/integrate_order_s_fast.html">integrate_order_s_fast</a>
       
       <a class="list-group-item" href="../proc/integrate_rk.html">integrate_rk</a>
       
@@ -1868,11 +1928,19 @@ private subroutine save_results(results, output_cli, scheme, frequency, solution
       
       <a class="list-group-item" href="../proc/integrate_runge_kutta_emd.html">integrate_runge_kutta_emd</a>
       
+      <a class="list-group-item" href="../proc/integrate_runge_kutta_emd_fast.html">integrate_runge_kutta_emd_fast</a>
+      
       <a class="list-group-item" href="../proc/integrate_runge_kutta_ls.html">integrate_runge_kutta_ls</a>
+      
+      <a class="list-group-item" href="../proc/integrate_runge_kutta_ls_fast.html">integrate_runge_kutta_ls_fast</a>
       
       <a class="list-group-item" href="../proc/integrate_runge_kutta_lssp.html">integrate_runge_kutta_lssp</a>
       
+      <a class="list-group-item" href="../proc/integrate_runge_kutta_lssp_fast.html">integrate_runge_kutta_lssp_fast</a>
+      
       <a class="list-group-item" href="../proc/integrate_runge_kutta_ssp.html">integrate_runge_kutta_ssp</a>
+      
+      <a class="list-group-item" href="../proc/integrate_runge_kutta_ssp_fast.html">integrate_runge_kutta_ssp_fast</a>
       
       <a class="list-group-item" href="../proc/is_admissible.html">is_admissible</a>
       
@@ -2165,7 +2233,7 @@ private subroutine save_results(results, output_cli, scheme, frequency, solution
           <p class="text-right">
             Documentation generated by 
             <a href="https://github.com/cmacmackin/ford">FORD</a>
-             on 2017-05-07 13:06  
+             on 2017-05-08 17:15  
           </p>
         </div>
         <div class="col-xs-12 col-md-4 col-md-pull-4"><p class="text-center"> FOODIE was developed by Fortran-FOSS-Programmers Group</p></div>

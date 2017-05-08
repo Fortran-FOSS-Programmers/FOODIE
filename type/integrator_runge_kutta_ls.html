@@ -134,7 +134,7 @@
      <li><i class="fa fa-list-ol"></i>
        <a data-toggle="tooltip"
 	  data-placement="bottom" data-html="true"
-	  title="<p> 3.2% of total for derived types.</p>Including implementation: 390 statements,  5.3% of total for derived types.">18 statements</a>
+	  title="<p> 3.3% of total for derived types.</p>Including implementation: 412 statements,  5.4% of total for derived types.">19 statements</a>
      </li> 
      
      
@@ -230,6 +230,8 @@
       <a class="list-group-item" href="../type/integrator_runge_kutta_ls.html#boundprocedure-integr_assign_integr%7E12">integr_assign_integr</a>
       
       <a class="list-group-item" href="../type/integrator_runge_kutta_ls.html#boundprocedure-integrate%7E11">integrate</a>
+      
+      <a class="list-group-item" href="../type/integrator_runge_kutta_ls.html#boundprocedure-integrate_fast%7E5">integrate_fast</a>
       
       <a class="list-group-item" href="../type/integrator_runge_kutta_ls.html#boundprocedure-is_supported%7E12">is_supported</a>
       
@@ -478,6 +480,8 @@
       <a class="list-group-item" href="../type/integrator_runge_kutta_ls.html#boundprocedure-integr_assign_integr%7E12">integr_assign_integr</a>
       
       <a class="list-group-item" href="../type/integrator_runge_kutta_ls.html#boundprocedure-integrate%7E11">integrate</a>
+      
+      <a class="list-group-item" href="../type/integrator_runge_kutta_ls.html#boundprocedure-integrate_fast%7E5">integrate_fast</a>
       
       <a class="list-group-item" href="../type/integrator_runge_kutta_ls.html#boundprocedure-is_supported%7E12">is_supported</a>
       
@@ -1659,6 +1663,158 @@ private subroutine <a href='../proc/integrate%7E11.html'>integrate</a>(self, U, 
     
 	   
 <div class="panel panel-default">
+  <div class="panel-heading codesum"><span class="anchor" id="boundprocedure-integrate_fast%7E5"></span><h3>procedure, public, pass(self) :: <strong>integrate_fast</strong>  
+    
+  </h3></div>
+  
+  <div class="panel-body">
+    
+
+
+    <p>Integrate integrand field, fast mode.</p>
+  </div>
+  
+  <ul class="list-group">
+    
+      <li class="list-group-item">
+      
+         
+    
+    <h3>
+private subroutine <a href='../proc/integrate_fast%7E5.html'>integrate_fast</a>(self, U, stage, buffer, Dt, t)
+    
+    
+	 
+</h3>
+    
+
+
+
+
+
+
+
+<p>Integrate field with explicit low storage Runge-Kutta scheme, fast mode.</p>
+    
+    <h4>Arguments</h4>
+    
+      
+      
+<table class="table table-striped varlist">
+<thead><tr><th>Type</th>
+<th>Intent</th><th>Optional</th>
+<th>Attributes</th><th></th><th>Name</th><th></th></thead>
+
+
+
+<tbody>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>class(<a href='../type/integrator_runge_kutta_ls.html'>integrator_runge_kutta_ls</a>),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>self</strong></td><td><p>Integrator.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>class(<a href='../type/integrand_object.html'>integrand_object</a>),</td>
+  <td>intent(inout)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>U</strong></td><td><p>Field to be integrated.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>class(<a href='../type/integrand_object.html'>integrand_object</a>),</td>
+  <td>intent(inout)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>stage</strong>(1:)</td><td><p>Runge-Kutta registers.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>class(<a href='../type/integrand_object.html'>integrand_object</a>),</td>
+  <td>intent(inout)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>buffer</strong></td><td><p>Temporary buffer for doing fast operation.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>real(kind=R_P),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>Dt</strong></td><td><p>Time step.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>real(kind=R_P),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>t</strong></td><td><p>Time.</p></td>
+  
+</tr>
+
+</tbody>
+</table>
+
+      
+    
+    
+
+      
+      </li>
+    
+  </ul>
+</div>
+
+    
+	   
+<div class="panel panel-default">
   <div class="panel-heading codesum"><span class="anchor" id="boundprocedure-is_supported%7E12"></span><h3>procedure, public, pass(self) :: <strong>is_supported</strong>  
     
   </h3></div>
@@ -2050,6 +2206,7 @@ private subroutine <a href='../proc/trigger_error.html'>trigger_error</a>(self, 
     <span class="k">procedure</span><span class="p">,</span> <span class="k">pass</span><span class="p">(</span><span class="n">self</span><span class="p">)</span> <span class="kd">::</span> <span class="n">destroy</span>          <span class="c">!&lt; Destroy the integrator.</span>
     <span class="k">procedure</span><span class="p">,</span> <span class="k">pass</span><span class="p">(</span><span class="n">self</span><span class="p">)</span> <span class="kd">::</span> <span class="n">initialize</span>       <span class="c">!&lt; Initialize (create) the integrator.</span>
     <span class="k">procedure</span><span class="p">,</span> <span class="k">pass</span><span class="p">(</span><span class="n">self</span><span class="p">)</span> <span class="kd">::</span> <span class="n">integrate</span>        <span class="c">!&lt; Integrate integrand field.</span>
+    <span class="k">procedure</span><span class="p">,</span> <span class="k">pass</span><span class="p">(</span><span class="n">self</span><span class="p">)</span> <span class="kd">::</span> <span class="n">integrate_fast</span>   <span class="c">!&lt; Integrate integrand field, fast mode.</span>
     <span class="k">procedure</span><span class="p">,</span> <span class="k">nopass</span>     <span class="kd">::</span> <span class="n">registers_number</span> <span class="c">!&lt; Return the number of registers used.</span>
 <span class="n">endtype</span> <span class="n">integrator_runge_kutta_ls</span>
 </pre></div>
@@ -2138,7 +2295,7 @@ private subroutine <a href='../proc/trigger_error.html'>trigger_error</a>(self, 
           <p class="text-right">
             Documentation generated by 
             <a href="https://github.com/cmacmackin/ford">FORD</a>
-             on 2017-05-07 13:06  
+             on 2017-05-08 17:15  
           </p>
         </div>
         <div class="col-xs-12 col-md-4 col-md-pull-4"><p class="text-center"> FOODIE was developed by Fortran-FOSS-Programmers Group</p></div>
