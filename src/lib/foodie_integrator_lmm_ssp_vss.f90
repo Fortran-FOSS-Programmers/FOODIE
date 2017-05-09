@@ -357,11 +357,18 @@ contains
 
   autoupdate_ = .true. ; if (present(autoupdate)) autoupdate_ = autoupdate
   omega_= omega(Dt=Dt, s=self%steps-1)
-  ! @TODO to be completed
-  U = (previous(1) * ((3._R_P * omega_ + 2._R_P) / omega_ ** 3 )) +                           &
-      (previous(self%steps) * (((omega_ + 1._R_P) ** 2) * (omega_ - 2._R_P) / omega_ ** 3)) + &
-      (previous(1)%t(t=t(1)) * (Dt(self%steps) * (omega_ + 1._R_P) / omega_ ** 2)) +          &
-      (previous(self%steps)%t(t=t(self%steps)) * (Dt(self%steps) * (omega_ + 1._R_P) ** 2 / omega_ ** 2))
+
+  call U%multiply_fast(lhs=previous(1), rhs=(3._R_P * omega_ + 2._R_P) / (omega_ ** 3))
+  call buffer%multiply_fast(lhs=previous(self%steps), rhs=(((omega_ + 1._R_P) ** 2) * (omega_ - 2._R_P) / (omega_ ** 3)))
+  call U%add_fast(lhs=U, rhs=buffer)
+  buffer = previous(1)
+  call buffer%t_fast(t=t(1))
+  call buffer%multiply_fast(lhs=buffer, rhs=Dt(self%steps) * (omega_ + 1._R_P) / (omega_ ** 2))
+  call U%add_fast(lhs=U, rhs=buffer)
+  buffer = previous(self%steps)
+  call buffer%t_fast(t=t(self%steps))
+  call buffer%multiply_fast(lhs=buffer, rhs=(Dt(self%steps) * (omega_ + 1._R_P) ** 2 / (omega_ ** 2)))
+  call U%add_fast(lhs=U, rhs=buffer)
   if (autoupdate_) call self%update_previous(U=U, previous=previous, Dt=Dt)
   endsubroutine integrate_order_3_fast
 

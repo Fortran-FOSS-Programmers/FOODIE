@@ -49,7 +49,7 @@ character(len=99), parameter :: class_name_='leapfrog'                          
 character(len=99), parameter :: supported_schemes_(1:2)=[trim(class_name_)//'    ', &
                                                          trim(class_name_)//'_raw'] !< List of supported schemes.
 
-logical, parameter :: has_fast_mode_=.false. !< Flag to check if integrator provides *fast mode* integrate.
+logical, parameter :: has_fast_mode_=.true. !< Flag to check if integrator provides *fast mode* integrate.
 
 type, extends(integrator_object) :: integrator_leapfrog
   !< FOODIE integrator: provide an explicit class of leapfrog multi-step schemes, 2nd order accurate.
@@ -69,9 +69,10 @@ type, extends(integrator_object) :: integrator_leapfrog
     procedure, pass(self) :: is_supported         !< Return .true. if the integrator class support the given scheme.
     procedure, pass(self) :: supported_schemes    !< Return the list of supported schemes.
     ! public methods
-    procedure, pass(self) :: destroy    !< Destroy the integrator.
-    procedure, pass(self) :: initialize !< Initialize (create) the integrator.
-    procedure, pass(self) :: integrate  !< Integrate integrand field.
+    procedure, pass(self) :: destroy        !< Destroy the integrator.
+    procedure, pass(self) :: initialize     !< Initialize (create) the integrator.
+    procedure, pass(self) :: integrate      !< Integrate integrand field.
+    procedure, pass(self) :: integrate_fast !< Integrate integrand field, fast mode.
 endtype integrator_leapfrog
 
 contains
@@ -189,4 +190,34 @@ contains
   previous(1) = previous(2)
   previous(2) = U
   endsubroutine integrate
+
+  subroutine integrate_fast(self, U, previous, buffer, Dt, t, filter)
+  !< Integrate field with leapfrog class scheme, fast mode.
+  class(integrator_leapfrog),        intent(in)    :: self          !< Integrator.
+  class(integrand_object),           intent(inout) :: U             !< Field to be integrated.
+  class(integrand_object),           intent(inout) :: previous(1:2) !< Previous time steps solutions of integrand field.
+  class(integrand_object),           intent(inout) :: buffer        !< Temporary buffer for doing fast operation.
+  real(R_P),                         intent(in)    :: Dt            !< Time step.
+  real(R_P),                         intent(in)    :: t             !< Time.
+  class(integrand_object), optional, intent(inout) :: filter        !< Filter field displacement.
+
+  buffer = previous(2)
+  call buffer%t_fast(t=t)
+  call buffer%multiply_fast(lhs=buffer, rhs=Dt * 2._R_P)
+  call U%add_fast(lhs=previous(1), rhs=buffer)
+  if (present(filter)) then
+    call buffer%multiply_fast(lhs=previous(2), rhs=2._R_P)
+    call buffer%subtract_fast(lhs=previous(1), rhs=buffer)
+    call buffer%add_fast(lhs=buffer, rhs=U)
+    call filter%multiply_fast(lhs=buffer, rhs=self%nu * 0.5_R_P)
+
+    call buffer%multiply_fast(lhs=filter, rhs=self%alpha)
+    call previous(2)%add_fast(lhs=previous(2), rhs=buffer)
+
+    call buffer%multiply_fast(lhs=filter, rhs=self%alpha - 1._R_P)
+    call U%add_fast(lhs=U, rhs=buffer)
+  endif
+  previous(1) = previous(2)
+  previous(2) = U
+  endsubroutine integrate_fast
 endmodule foodie_integrator_leapfrog

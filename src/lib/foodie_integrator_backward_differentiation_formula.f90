@@ -50,7 +50,7 @@ character(len=99), parameter :: supported_schemes_(1:6)=[trim(class_name_)//'_1'
                                                          trim(class_name_)//'_5', &
                                                          trim(class_name_)//'_6'] !< List of supported schemes.
 
-logical, parameter :: has_fast_mode_=.false. !< Flag to check if integrator provides *fast mode* integrate.
+logical, parameter :: has_fast_mode_=.true. !< Flag to check if integrator provides *fast mode* integrate.
 
 type, extends(integrator_object) :: integrator_back_df
   !< FOODIE integrator: provide an implicit class of Backward-Differentiation-Formula multi-step schemes, from 1st to 6th order
@@ -73,6 +73,7 @@ type, extends(integrator_object) :: integrator_back_df
     procedure, pass(self) :: destroy         !< Destroy the integrator.
     procedure, pass(self) :: initialize      !< Initialize (create) the integrator.
     procedure, pass(self) :: integrate       !< Integrate integrand field.
+    procedure, pass(self) :: integrate_fast  !< Integrate integrand field, fast mode.
     procedure, pass(self) :: update_previous !< Cyclic update previous time steps.
 endtype integrator_back_df
 
@@ -245,6 +246,38 @@ contains
   enddo
   if (autoupdate_) call self%update_previous(U=U, previous=previous)
   endsubroutine integrate
+
+  subroutine integrate_fast(self, U, previous, buffer, Dt, t, iterations, autoupdate)
+  !< Integrate field with BDF class scheme.
+  class(integrator_back_df),  intent(in)    :: self         !< Integrator.
+  class(integrand_object),    intent(inout) :: U            !< Field to be integrated.
+  class(integrand_object),    intent(inout) :: previous(1:) !< Previous time steps solutions of integrand field.
+  class(integrand_object),    intent(inout) :: buffer       !< Temporary buffer for doing fast operation.
+  real(R_P),                  intent(in)    :: Dt           !< Time steps.
+  real(R_P),                  intent(in)    :: t(:)         !< Times.
+  integer(I_P), optional,     intent(in)    :: iterations   !< Fixed point iterations.
+  logical,      optional,     intent(in)    :: autoupdate   !< Perform cyclic autoupdate of previous time steps.
+  integer(I_P)                              :: iterations_  !< Fixed point iterations.
+  logical                                   :: autoupdate_  !< Perform cyclic autoupdate of previous time steps, dummy var.
+  class(integrand_object), allocatable      :: delta        !< Delta RHS for fixed point iterations.
+  integer(I_P)                              :: s            !< Steps counter.
+
+  autoupdate_ = .true. ; if (present(autoupdate)) autoupdate_ = autoupdate
+  iterations_ = 1 ; if (present(iterations)) iterations_ = iterations
+  allocate(delta, mold=U)
+  call delta%multiply_fast(lhs=previous(self%steps), rhs=-self%a(self%steps))
+  do s=1, self%steps - 1
+    call buffer%multiply_fast(lhs=previous(s), rhs=-self%a(s))
+    call delta%add_fast(lhs=delta, rhs=buffer)
+  enddo
+  do s=1, iterations
+    buffer = U
+    call buffer%t_fast(t=t(self%steps) + Dt)
+    call buffer%multiply_fast(lhs=buffer, rhs=Dt * self%b)
+    call U%add_fast(lhs=delta, rhs=buffer)
+  enddo
+  if (autoupdate_) call self%update_previous(U=U, previous=previous)
+  endsubroutine integrate_fast
 
   subroutine update_previous(self, U, previous)
   !< Cyclic update previous time steps.

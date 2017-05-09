@@ -40,7 +40,7 @@ character(len=99), parameter :: supported_schemes_(1:3)=[trim(class_name_)//'_st
                                                          trim(class_name_)//'_steps_4_order_3', &
                                                          trim(class_name_)//'_steps_5_order_3'] !< List of supported schemes.
 
-logical, parameter :: has_fast_mode_=.false. !< Flag to check if integrator provides *fast mode* integrate.
+logical, parameter :: has_fast_mode_=.true. !< Flag to check if integrator provides *fast mode* integrate.
 
 type, extends(integrator_object) :: integrator_lmm_ssp
   !< FOODIE integrator: provide an explicit class of Linear Multi-step Methods (LLM) with Strong Stability Preserving property,
@@ -63,6 +63,7 @@ type, extends(integrator_object) :: integrator_lmm_ssp
     procedure, pass(self) :: destroy         !< Destroy the integrator.
     procedure, pass(self) :: initialize      !< Initialize (create) the integrator.
     procedure, pass(self) :: integrate       !< Integrate integrand field.
+    procedure, pass(self) :: integrate_fast  !< Integrate integrand field, fast mode.
     procedure, pass(self) :: update_previous !< Cyclic update previous time steps.
 endtype integrator_lmm_ssp
 
@@ -230,6 +231,35 @@ contains
   enddo
   if (autoupdate_) call self%update_previous(U=U, previous=previous)
   endsubroutine integrate
+
+  subroutine integrate_fast(self, U, previous, buffer, Dt, t, autoupdate)
+  !< Integrate field with LMM-SSP class scheme, fast mode.
+  class(integrator_lmm_ssp), intent(in)    :: self         !< Integrator.
+  class(integrand_object),   intent(inout) :: U            !< Field to be integrated.
+  class(integrand_object),   intent(inout) :: previous(1:) !< Previous time steps solutions of integrand field.
+  class(integrand_object),   intent(inout) :: buffer       !< Temporary buffer for doing fast operation.
+  real(R_P),                 intent(in)    :: Dt           !< Time steps.
+  real(R_P),                 intent(in)    :: t(:)         !< Times.
+  logical, optional,         intent(in)    :: autoupdate   !< Perform cyclic autoupdate of previous time steps.
+  logical                                  :: autoupdate_  !< Perform cyclic autoupdate of previous time steps, dummy var.
+  integer(I_P)                             :: s            !< Steps counter.
+
+  autoupdate_ = .true. ; if (present(autoupdate)) autoupdate_ = autoupdate
+  call U%multiply_fast(lhs=U, rhs=0._R_P)
+  do s=1, self%steps
+    if (self%a(s) /= 0._R_P) then
+       call buffer%multiply_fast(lhs=previous(s), rhs=self%a(s))
+       call U%add_fast(lhs=U, rhs=buffer)
+    endif
+    if (self%b(s) /= 0._R_P) then
+       buffer = previous(s)
+       call buffer%t_fast(t=t(s))
+       call buffer%multiply_fast(lhs=buffer, rhs=self%b(s))
+       call U%add_fast(lhs=U, rhs=buffer)
+    endif
+  enddo
+  if (autoupdate_) call self%update_previous(U=U, previous=previous)
+  endsubroutine integrate_fast
 
   subroutine update_previous(self, U, previous)
   !< Cyclic update previous time steps.

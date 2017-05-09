@@ -25,7 +25,7 @@ public :: integrator_euler_explicit
 character(len=99), parameter :: class_name_='euler_explicit'                !< Name of the class of schemes.
 character(len=99), parameter :: supported_schemes_(1:1)=[trim(class_name_)] !< List of supported schemes.
 
-logical, parameter :: has_fast_mode_=.false. !< Flag to check if integrator provides *fast mode* integrate.
+logical, parameter :: has_fast_mode_=.true. !< Flag to check if integrator provides *fast mode* integrate.
 
 type, extends(integrator_object) :: integrator_euler_explicit
   !< FOODIE integrator: provide explicit Euler scheme, it being 1st order accurate.
@@ -40,8 +40,9 @@ type, extends(integrator_object) :: integrator_euler_explicit
     procedure, pass(self) :: is_supported         !< Return .true. if the integrator class support the given scheme.
     procedure, pass(self) :: supported_schemes    !< Return the list of supported schemes.
     ! public methods
-    procedure, pass(self) :: destroy   !< Destroy the integrator.
-    procedure, nopass     :: integrate !< Integrate integrand field.
+    procedure, pass(self) :: destroy        !< Destroy the integrator.
+    procedure, nopass     :: integrate      !< Integrate integrand field.
+    procedure, nopass     :: integrate_fast !< Integrate integrand field, fast mode.
 endtype integrator_euler_explicit
 contains
   ! deferred methods
@@ -121,4 +122,17 @@ contains
 
   U = U + (U%t(t=t) * Dt)
   endsubroutine integrate
+
+  subroutine integrate_fast(U, buffer, Dt, t)
+  !< Integrate field with explicit Euler scheme, 1st order, fast mode.
+  class(integrand_object), intent(inout) :: U      !< Field to be integrated.
+  class(integrand_object), intent(inout) :: buffer !< Temporary buffer for doing fast operation.
+  real(R_P),               intent(in)    :: Dt     !< Time step.
+  real(R_P), optional,     intent(in)    :: t      !< Time.
+
+  buffer = U
+  call buffer%t_fast(t=t)
+  call buffer%multiply_fast(lhs=buffer, rhs=Dt)
+  call U%add_fast(lhs=U, rhs=buffer)
+  endsubroutine integrate_fast
 endmodule foodie_integrator_euler_explicit
