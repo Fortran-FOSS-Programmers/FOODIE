@@ -105,14 +105,16 @@ character(len=99), parameter :: supported_schemes_(1:16)=[trim(class_name_)//'_1
                                                           trim(class_name_)//'_15', &
                                                           trim(class_name_)//'_16'] !< List of supported schemes.
 
-logical, parameter :: has_fast_mode_=.true. !< Flag to check if integrator provides *fast mode* integrate.
+logical, parameter :: has_fast_mode_=.true.  !< Flag to check if integrator provides *fast mode* integrate.
+logical, parameter :: is_multistage_=.false. !< Flag to check if integrator is multistage.
+logical, parameter :: is_multistep_=.true.   !< Flag to check if integrator is multistep.
 
 type, extends(integrator_object) :: integrator_adams_bashforth_moulton
   !< FOODIE integrator: provide an explicit class of Adams-Bashforth-Moulton multi-step schemes, from 1st to 4rd order accurate.
   !<
   !< @note The integrator must be created or initialized (predictor and corrector schemes selection) before used.
   private
-  integer(I_P), public             :: steps=0   !< Number of time steps.
+  integer(I_P)                     :: steps=0   !< Number of time steps.
   type(integrator_adams_bashforth) :: predictor !< Predictor solver.
   type(integrator_adams_moulton)   :: corrector !< Corrector solver.
   contains
@@ -121,7 +123,11 @@ type, extends(integrator_object) :: integrator_adams_bashforth_moulton
     procedure, pass(self) :: description          !< Return pretty-printed object description.
     procedure, pass(self) :: has_fast_mode        !< Return .true. if the integrator class has *fast mode* integrate.
     procedure, pass(lhs)  :: integr_assign_integr !< Operator `=`.
+    procedure, pass(self) :: is_multistage        !< Return .true. for multistage integrator.
+    procedure, pass(self) :: is_multistep         !< Return .true. for multistep integrator.
     procedure, pass(self) :: is_supported         !< Return .true. if the integrator class support the given scheme.
+    procedure, pass(self) :: stages_number        !< Return number of stages used.
+    procedure, pass(self) :: steps_number         !< Return number of steps used.
     procedure, pass(self) :: supported_schemes    !< Return the list of supported schemes.
     ! public methods
     procedure, pass(self) :: destroy        !< Destroy the integrator.
@@ -182,6 +188,22 @@ contains
   endselect
   endsubroutine integr_assign_integr
 
+  elemental function is_multistage(self)
+  !< Return .true. for multistage integrator.
+  class(integrator_adams_bashforth_moulton), intent(in) :: self          !< Integrator.
+  logical                                               :: is_multistage !< Inquire result.
+
+  is_multistage = is_multistage_
+  endfunction is_multistage
+
+  elemental function is_multistep(self)
+  !< Return .true. for multistage integrator.
+  class(integrator_adams_bashforth_moulton), intent(in) :: self         !< Integrator.
+  logical                                               :: is_multistep !< Inquire result.
+
+  is_multistep = is_multistep_
+  endfunction is_multistep
+
   elemental function is_supported(self, scheme)
   !< Return .true. if the integrator class support the given scheme.
   class(integrator_adams_bashforth_moulton), intent(in) :: self         !< Integrator.
@@ -197,6 +219,22 @@ contains
     endif
   enddo
   endfunction is_supported
+
+  elemental function stages_number(self)
+  !< Return number of stages used.
+  class(integrator_adams_bashforth_moulton), intent(in) :: self          !< Integrator.
+  integer(I_P)                                          :: stages_number !< Number of stages used.
+
+  stages_number = 0
+  endfunction stages_number
+
+  elemental function steps_number(self)
+  !< Return number of steps used.
+  class(integrator_adams_bashforth_moulton), intent(in) :: self         !< Integrator.
+  integer(I_P)                                          :: steps_number !< Number of steps used.
+
+  steps_number = self%steps
+  endfunction steps_number
 
   pure function supported_schemes(self) result(schemes)
   !< Return the list of supported schemes.
@@ -233,7 +271,7 @@ contains
     schemes_am = self%corrector%supported_schemes()
     call self%predictor%initialize(scheme=schemes_ab(scheme_number_))
     call self%corrector%initialize(scheme=schemes_am(scheme_number_))
-    self%steps = self%predictor%steps
+    self%steps = self%predictor%steps_number()
   else
     call self%trigger_error(error=ERROR_UNSUPPORTED_SCHEME,                                   &
                             error_message='"'//trim(adjustl(scheme))//'" unsupported scheme', &

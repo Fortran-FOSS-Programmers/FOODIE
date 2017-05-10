@@ -76,13 +76,15 @@ character(len=99), parameter :: supported_schemes_(1:2)=[trim(class_name_)//'_st
                                                          trim(class_name_)//'_stages_s_order_s  '] !< List of supported schemes.
 
 logical, parameter :: has_fast_mode_=.true. !< Flag to check if integrator provides *fast mode* integrate.
+logical, parameter :: is_multistage_=.true. !< Flag to check if integrator is multistage.
+logical, parameter :: is_multistep_=.false. !< Flag to check if integrator is multistep.
 
 type, extends(integrator_object) :: integrator_runge_kutta_lssp
   !< FOODIE integrator: provide an explicit class of Linear SSP Runge-Kutta schemes, from 1st to s-th order accurate.
   !<
   !< @note The integrator must be created or initialized (initialize the RK coefficients) before used.
   private
-  integer(I_P), public                         :: stages=0                                    !< Number of stages.
+  integer(I_P)                                 :: stages=0                                    !< Number of stages.
   real(R_P), allocatable                       :: alpha(:)                                    !< \(\alpha\) coefficients.
   procedure(integrate_interface),      pointer :: integrate_ => integrate_order_s_1           !< Integrate integrand field.
   procedure(integrate_fast_interface), pointer :: integrate_fast_ => integrate_order_s_1_fast !< Integrate integrand field, fast.
@@ -92,7 +94,11 @@ type, extends(integrator_object) :: integrator_runge_kutta_lssp
     procedure, pass(self) :: description          !< Return pretty-printed object description.
     procedure, pass(self) :: has_fast_mode        !< Return .true. if the integrator class has *fast mode* integrate.
     procedure, pass(lhs)  :: integr_assign_integr !< Operator `=`.
+    procedure, pass(self) :: is_multistage        !< Return .true. for multistage integrator.
+    procedure, pass(self) :: is_multistep         !< Return .true. for multistep integrator.
     procedure, pass(self) :: is_supported         !< Return .true. if the integrator class support the given scheme.
+    procedure, pass(self) :: stages_number        !< Return number of stages used.
+    procedure, pass(self) :: steps_number         !< Return number of steps used.
     procedure, pass(self) :: supported_schemes    !< Return the list of supported schemes.
     ! public methods
     procedure, pass(self) :: destroy        !< Destroy the integrator.
@@ -180,6 +186,22 @@ contains
   endselect
   endsubroutine integr_assign_integr
 
+  elemental function is_multistage(self)
+  !< Return .true. for multistage integrator.
+  class(integrator_runge_kutta_lssp), intent(in) :: self          !< Integrator.
+  logical                                        :: is_multistage !< Inquire result.
+
+  is_multistage = is_multistage_
+  endfunction is_multistage
+
+  elemental function is_multistep(self)
+  !< Return .true. for multistage integrator.
+  class(integrator_runge_kutta_lssp), intent(in) :: self         !< Integrator.
+  logical                                        :: is_multistep !< Inquire result.
+
+  is_multistep = is_multistep_
+  endfunction is_multistep
+
   elemental function is_supported(self, scheme)
   !< Return .true. if the integrator class support the given scheme.
   class(integrator_runge_kutta_lssp), intent(in) :: self         !< Integrator.
@@ -195,6 +217,22 @@ contains
     endif
   enddo
   endfunction is_supported
+
+  elemental function stages_number(self)
+  !< Return number of stages used.
+  class(integrator_runge_kutta_lssp), intent(in) :: self          !< Integrator.
+  integer(I_P)                                   :: stages_number !< Number of stages used.
+
+  stages_number = self%stages
+  endfunction stages_number
+
+  elemental function steps_number(self)
+  !< Return number of steps used.
+  class(integrator_runge_kutta_lssp), intent(in) :: self         !< Integrator.
+  integer(I_P)                                   :: steps_number !< Number of steps used.
+
+  steps_number = 0
+  endfunction steps_number
 
   pure function supported_schemes(self) result(schemes)
   !< Return the list of supported schemes.

@@ -82,8 +82,8 @@ use penf, only : I_P, R_P
 
 implicit none
 private
-public :: foodie_integrator
 public :: foodie_integrator_class_names
+public :: foodie_integrator_factory
 public :: foodie_integrator_schemes
 public :: integrand_object
 public :: integrator_object
@@ -105,31 +105,63 @@ public :: is_class_available
 public :: is_scheme_available
 
 contains
-  function foodie_integrator(scheme, stages, tolerance, nu, alpha) result(integrator)
-  !< Return a concrete instance of [[integrator_object]] given a scheme selection.
-  !<
-  !< This is the FOODIE integrators factory.
-  !<
-  !< @note If an error occurs the error status of [[integrator_object]] is updated.
-  character(*), intent(in)                 :: scheme                      !< Selected integrator given.
-  integer(I_P), intent(in), optional       :: stages                      !< Stages of multi-stage methods.
-  real(R_P),    intent(in), optional       :: tolerance                   !< Tolerance on the local truncation error.
-  real(R_P),    intent(in), optional       :: nu                          !< Williams-Robert-Asselin filter coefficient.
-  real(R_P),    intent(in), optional       :: alpha                       !< Robert-Asselin filter coefficient.
-  class(integrator_object), allocatable    :: integrator                  !< The FOODIE integrator.
+  pure function foodie_integrator_class_names() result(names)
+  !< Return the list of available intergrator class of schemes names.
+  character(len=99), allocatable           :: names(:)                    !< Available integrator class names.
   type(integrator_adams_bashforth)         :: int_adams_bashforth         !< Integrator Adams Bashforth.
   type(integrator_adams_bashforth_moulton) :: int_adams_bashforth_moulton !< Integrator Adams Bashforth Moulton.
   type(integrator_adams_moulton)           :: int_adams_moulton           !< Integrator Adams Moulton.
   type(integrator_back_df)                 :: int_back_df                 !< Integrator back differentiation formula.
   type(integrator_euler_explicit)          :: int_euler_explicit          !< Integrator euler explicit.
   type(integrator_leapfrog)                :: int_leapfrog                !< Integrator leapfrog.
-  type(integrator_lmm_ssp)                 :: int_lmm_ssp                 !< Integrator LMM SSP.
-  type(integrator_lmm_ssp_vss)             :: int_lmm_ssp_vss             !< Integrator LMM SSP VSS.
+  type(integrator_lmm_ssp)                 :: int_lmm_ssp                 !< Integrator lmm SSP.
+  type(integrator_lmm_ssp_vss)             :: int_lmm_ssp_vss             !< Integrator lmm SSP VSS.
   type(integrator_ms_runge_kutta_ssp)      :: int_ms_runge_kutta_ssp      !< Integrator multistep Runge Kutta ssp.
-  type(integrator_runge_kutta_emd)         :: int_runge_kutta_emd         !< Integrator Runge Kutta_embdedded.
+  type(integrator_runge_kutta_emd)         :: int_runge_kutta_emd         !< Integrator Runge Kutta embdedded.
   type(integrator_runge_kutta_ls)          :: int_runge_kutta_ls          !< Integrator Runge Kutta low storage.
   type(integrator_runge_kutta_lssp)        :: int_runge_kutta_lssp        !< Integrator linear Runge Kutta SSP.
   type(integrator_runge_kutta_ssp)         :: int_runge_kutta_ssp         !< Integrator Runge Kutta SSP.
+
+  names = [       int_adams_bashforth         % class_name()]
+  names = [names, int_adams_bashforth_moulton % class_name()]
+  names = [names, int_adams_moulton           % class_name()]
+  names = [names, int_back_df                 % class_name()]
+  names = [names, int_euler_explicit          % class_name()]
+  names = [names, int_leapfrog                % class_name()]
+  names = [names, int_lmm_ssp                 % class_name()]
+  names = [names, int_lmm_ssp_vss             % class_name()]
+  names = [names, int_ms_runge_kutta_ssp      % class_name()]
+  names = [names, int_runge_kutta_emd         % class_name()]
+  names = [names, int_runge_kutta_ls          % class_name()]
+  names = [names, int_runge_kutta_lssp        % class_name()]
+  names = [names, int_runge_kutta_ssp         % class_name()]
+  endfunction foodie_integrator_class_names
+
+  subroutine foodie_integrator_factory(scheme, integrator, stages, tolerance, nu, alpha)
+  !< Return a concrete instance of [[integrator_object]] given a scheme selection.
+  !<
+  !< This is the FOODIE integrators factory.
+  !<
+  !< @note If an error occurs the error status of [[integrator_object]] is updated.
+  character(*),                          intent(in)  :: scheme                      !< Selected integrator given.
+  class(integrator_object), allocatable, intent(out) :: integrator                  !< The FOODIE integrator.
+  integer(I_P), optional,                intent(in)  :: stages                      !< Stages of multi-stage methods.
+  real(R_P),    optional,                intent(in)  :: tolerance                   !< Tolerance on the local truncation error.
+  real(R_P),    optional,                intent(in)  :: nu                          !< Williams-Robert-Asselin filter coefficient.
+  real(R_P),    optional,                intent(in)  :: alpha                       !< Robert-Asselin filter coefficient.
+  type(integrator_adams_bashforth)                   :: int_adams_bashforth         !< Integrator Adams Bashforth.
+  type(integrator_adams_bashforth_moulton)           :: int_adams_bashforth_moulton !< Integrator Adams Bashforth Moulton.
+  type(integrator_adams_moulton)                     :: int_adams_moulton           !< Integrator Adams Moulton.
+  type(integrator_back_df)                           :: int_back_df                 !< Integrator back differentiation formula.
+  type(integrator_euler_explicit)                    :: int_euler_explicit          !< Integrator euler explicit.
+  type(integrator_leapfrog)                          :: int_leapfrog                !< Integrator leapfrog.
+  type(integrator_lmm_ssp)                           :: int_lmm_ssp                 !< Integrator LMM SSP.
+  type(integrator_lmm_ssp_vss)                       :: int_lmm_ssp_vss             !< Integrator LMM SSP VSS.
+  type(integrator_ms_runge_kutta_ssp)                :: int_ms_runge_kutta_ssp      !< Integrator multistep Runge Kutta ssp.
+  type(integrator_runge_kutta_emd)                   :: int_runge_kutta_emd         !< Integrator Runge Kutta_embdedded.
+  type(integrator_runge_kutta_ls)                    :: int_runge_kutta_ls          !< Integrator Runge Kutta low storage.
+  type(integrator_runge_kutta_lssp)                  :: int_runge_kutta_lssp        !< Integrator linear Runge Kutta SSP.
+  type(integrator_runge_kutta_ssp)                   :: int_runge_kutta_ssp         !< Integrator Runge Kutta SSP.
 
   if     (index(trim(adjustl(scheme)), trim(int_adams_bashforth_moulton%class_name())) > 0) then
     allocate(integrator_adams_bashforth_moulton :: integrator)
@@ -209,39 +241,7 @@ contains
     write(stderr, '(A)')'error: "'//trim(adjustl(scheme))//'" scheme is unknown!'
     stop
   endif
-  endfunction foodie_integrator
-
-  pure function foodie_integrator_class_names() result(names)
-  !< Return the list of available intergrator class of schemes names.
-  character(len=99), allocatable           :: names(:)                    !< Available integrator class names.
-  type(integrator_adams_bashforth)         :: int_adams_bashforth         !< Integrator Adams Bashforth.
-  type(integrator_adams_bashforth_moulton) :: int_adams_bashforth_moulton !< Integrator Adams Bashforth Moulton.
-  type(integrator_adams_moulton)           :: int_adams_moulton           !< Integrator Adams Moulton.
-  type(integrator_back_df)                 :: int_back_df                 !< Integrator back differentiation formula.
-  type(integrator_euler_explicit)          :: int_euler_explicit          !< Integrator euler explicit.
-  type(integrator_leapfrog)                :: int_leapfrog                !< Integrator leapfrog.
-  type(integrator_lmm_ssp)                 :: int_lmm_ssp                 !< Integrator lmm SSP.
-  type(integrator_lmm_ssp_vss)             :: int_lmm_ssp_vss             !< Integrator lmm SSP VSS.
-  type(integrator_ms_runge_kutta_ssp)      :: int_ms_runge_kutta_ssp      !< Integrator multistep Runge Kutta ssp.
-  type(integrator_runge_kutta_emd)         :: int_runge_kutta_emd         !< Integrator Runge Kutta embdedded.
-  type(integrator_runge_kutta_ls)          :: int_runge_kutta_ls          !< Integrator Runge Kutta low storage.
-  type(integrator_runge_kutta_lssp)        :: int_runge_kutta_lssp        !< Integrator linear Runge Kutta SSP.
-  type(integrator_runge_kutta_ssp)         :: int_runge_kutta_ssp         !< Integrator Runge Kutta SSP.
-
-  names = [       int_adams_bashforth         % class_name()]
-  names = [names, int_adams_bashforth_moulton % class_name()]
-  names = [names, int_adams_moulton           % class_name()]
-  names = [names, int_back_df                 % class_name()]
-  names = [names, int_euler_explicit          % class_name()]
-  names = [names, int_leapfrog                % class_name()]
-  names = [names, int_lmm_ssp                 % class_name()]
-  names = [names, int_lmm_ssp_vss             % class_name()]
-  names = [names, int_ms_runge_kutta_ssp      % class_name()]
-  names = [names, int_runge_kutta_emd         % class_name()]
-  names = [names, int_runge_kutta_ls          % class_name()]
-  names = [names, int_runge_kutta_lssp        % class_name()]
-  names = [names, int_runge_kutta_ssp         % class_name()]
-  endfunction foodie_integrator_class_names
+  endsubroutine foodie_integrator_factory
 
   pure function foodie_integrator_schemes(class_name) result(schemes)
   !< Return the list of all available intergrator schemes, or only the schemes belonging to the given class name.

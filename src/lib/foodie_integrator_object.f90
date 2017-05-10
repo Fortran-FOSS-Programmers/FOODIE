@@ -26,8 +26,12 @@ type, abstract :: integrator_object
     procedure(has_fast_mode_interface),     pass(self), deferred :: has_fast_mode        !< Return .true. if the integrator class
                                                                                          !< has *fast mode* integrate.
     procedure(assignment_interface),        pass(lhs),  deferred :: integr_assign_integr !< Operator `=`.
+    procedure(is_multistagestep_interface), pass(self), deferred :: is_multistage        !< Return .true. for multistage integrator.
+    procedure(is_multistagestep_interface), pass(self), deferred :: is_multistep         !< Return .true. for multistep integrator.
     procedure(is_supported_interface),      pass(self), deferred :: is_supported         !< Return .true. if the integrator class
                                                                                          !< support the given scheme.
+    procedure(stagesteps_number_interface), pass(self), deferred :: stages_number        !< Return number of stages used.
+    procedure(stagesteps_number_interface), pass(self), deferred :: steps_number         !< Return number of steps used.
     procedure(supported_schemes_interface), pass(self), deferred :: supported_schemes    !< Return the list of supported schemes.
     ! operators
     generic :: assignment(=) => integr_assign_integr !< Overload `=`.
@@ -64,6 +68,13 @@ abstract interface
   logical                              :: has_fast_mode !< Inquire result.
   endfunction has_fast_mode_interface
 
+  elemental function is_multistagestep_interface(self) result(is_multistagestep)
+  !< Return .true. for multistage or multistep integrator.
+  import :: integrator_object
+  class(integrator_object), intent(in) :: self              !< Integrator.
+  logical                              :: is_multistagestep !< Inquire result.
+  endfunction is_multistagestep_interface
+
   elemental function is_supported_interface(self, scheme) result(is_supported)
   !< Return .true. if the integrator class support the given scheme.
   import :: integrator_object
@@ -71,6 +82,13 @@ abstract interface
   character(*),             intent(in) :: scheme       !< Queried scheme.
   logical                              :: is_supported !< Inquire result.
   endfunction is_supported_interface
+
+  elemental function stagesteps_number_interface(self) result(stagesteps_number)
+  !< Return number of stages/steps used.
+  import :: integrator_object, I_P
+  class(integrator_object), intent(in) :: self              !< Integrator.
+  integer(I_P)                         :: stagesteps_number !< Inquire result.
+  endfunction stagesteps_number_interface
 
   pure function supported_schemes_interface(self) result(schemes)
   !< Return the list of supported schemes.
