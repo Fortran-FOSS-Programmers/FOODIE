@@ -105,6 +105,8 @@ character(len=99), parameter :: supported_schemes_(1:16)=[trim(class_name_)//'_1
                                                           trim(class_name_)//'_15', &
                                                           trim(class_name_)//'_16'] !< List of supported schemes.
 
+logical, parameter :: has_fast_mode_=.true. !< Flag to check if integrator provides *fast mode* integrate.
+
 type, extends(integrator_object) :: integrator_adams_bashforth_moulton
   !< FOODIE integrator: provide an explicit class of Adams-Bashforth-Moulton multi-step schemes, from 1st to 4rd order accurate.
   !<
@@ -117,14 +119,16 @@ type, extends(integrator_object) :: integrator_adams_bashforth_moulton
     ! deferred methods
     procedure, pass(self) :: class_name           !< Return the class name of schemes.
     procedure, pass(self) :: description          !< Return pretty-printed object description.
+    procedure, pass(self) :: has_fast_mode        !< Return .true. if the integrator class has *fast mode* integrate.
     procedure, pass(lhs)  :: integr_assign_integr !< Operator `=`.
     procedure, pass(self) :: is_supported         !< Return .true. if the integrator class support the given scheme.
     procedure, pass(self) :: supported_schemes    !< Return the list of supported schemes.
     ! public methods
-    procedure, pass(self) :: destroy       !< Destroy the integrator.
-    procedure, pass(self) :: initialize    !< Initialize (create) the integrator.
-    procedure, pass(self) :: integrate     !< Integrate integrand field.
-    procedure, pass(self) :: scheme_number !< Return the scheme number in the list of supported schemes.
+    procedure, pass(self) :: destroy        !< Destroy the integrator.
+    procedure, pass(self) :: initialize     !< Initialize (create) the integrator.
+    procedure, pass(self) :: integrate      !< Integrate integrand field.
+    procedure, pass(self) :: integrate_fast !< Integrate integrand field.
+    procedure, pass(self) :: scheme_number  !< Return the scheme number in the list of supported schemes.
 endtype integrator_adams_bashforth_moulton
 
 contains
@@ -155,6 +159,14 @@ contains
   enddo
   desc = desc//prefix_//'    + '//supported_schemes_(ubound(supported_schemes_, dim=1))
   endfunction description
+
+  elemental function has_fast_mode(self)
+  !< Return .true. if the integrator class has *fast mode* integrate.
+  class(integrator_adams_bashforth_moulton), intent(in) :: self          !< Integrator.
+  logical                                               :: has_fast_mode !< Inquire result.
+
+  has_fast_mode = has_fast_mode_
+  endfunction has_fast_mode
 
   pure subroutine integr_assign_integr(lhs, rhs)
   !< Operator `=`.
@@ -242,6 +254,22 @@ contains
   call self%corrector%integrate(U=U, previous=previous(2:), Dt=Dt, t=t, iterations=iterations, autoupdate=.false.)
   call self%predictor%update_previous(U=U, previous=previous)
   endsubroutine integrate
+
+  subroutine integrate_fast(self, U, previous, buffer, Dt, t, iterations)
+  !< Integrate field with Adams-Bashforth-Moulton class scheme, fast mode.
+  class(integrator_adams_bashforth_moulton), intent(in)           :: self         !< Integrator.
+  class(integrand_object),                   intent(inout)        :: U            !< Field to be integrated.
+  class(integrand_object),                   intent(inout)        :: previous(1:) !< Previous time steps solutions of integrand.
+  class(integrand_object),                   intent(inout)        :: buffer       !< Temporary buffer for doing fast operation.
+  real(R_P),                                 intent(in)           :: Dt           !< Time steps.
+  real(R_P),                                 intent(in)           :: t(:)         !< Times.
+  integer(I_P),                              intent(in), optional :: iterations   !< Fixed point iterations of AM scheme.
+
+  call self%predictor%integrate_fast(U=U, previous=previous, buffer=buffer, Dt=Dt, t=t, autoupdate=.false.)
+  call self%corrector%integrate_fast(U=U, previous=previous(2:), buffer=buffer, Dt=Dt, t=t, iterations=iterations, &
+                                     autoupdate=.false.)
+  call self%predictor%update_previous(U=U, previous=previous)
+  endsubroutine integrate_fast
 
   elemental function scheme_number(self, scheme)
   !< Return the scheme number in the list of supported schemes.

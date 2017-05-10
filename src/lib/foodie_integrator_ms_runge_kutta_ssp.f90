@@ -49,6 +49,8 @@ character(len=99), parameter :: supported_schemes_(1:3)=[trim(class_name_)//'_st
                                                          trim(class_name_)//'_steps_4_stages_5_order_8'] !< List of supported
                                                                                                          !< schemes.
 
+logical, parameter :: has_fast_mode_=.true. !< Flag to check if integrator provides *fast mode* integrate.
+
 type, extends(integrator_object) :: integrator_ms_runge_kutta_ssp
   !< FOODIE integrator: provide an explicit class of Multi-step Runge-Kutta Methods with Strong Stability Preserving property,
   !< from 3rd to 8th order accurate.
@@ -67,6 +69,7 @@ type, extends(integrator_object) :: integrator_ms_runge_kutta_ssp
     ! deferred methods
     procedure, pass(self) :: class_name           !< Return the class name of schemes.
     procedure, pass(self) :: description          !< Return pretty-printed object description.
+    procedure, pass(self) :: has_fast_mode        !< Return .true. if the integrator class has *fast mode* integrate.
     procedure, pass(lhs)  :: integr_assign_integr !< Operator `=`.
     procedure, pass(self) :: is_supported         !< Return .true. if the integrator class support the given scheme.
     procedure, pass(self) :: supported_schemes    !< Return the list of supported schemes.
@@ -74,6 +77,7 @@ type, extends(integrator_object) :: integrator_ms_runge_kutta_ssp
     procedure, pass(self) :: destroy         !< Destroy the integrator.
     procedure, pass(self) :: initialize      !< Initialize (create) the integrator.
     procedure, pass(self) :: integrate       !< Integrate integrand field.
+    procedure, pass(self) :: integrate_fast  !< Integrate integrand field, fast mode.
     procedure, pass(self) :: update_previous !< Cyclic update previous time steps.
 endtype integrator_ms_runge_kutta_ssp
 
@@ -105,6 +109,14 @@ contains
   enddo
   desc = desc//prefix_//'    + '//supported_schemes_(ubound(supported_schemes_, dim=1))
   endfunction description
+
+  elemental function has_fast_mode(self)
+  !< Return .true. if the integrator class has *fast mode* integrate.
+  class(integrator_ms_runge_kutta_ssp), intent(in) :: self          !< Integrator.
+  logical                                          :: has_fast_mode !< Inquire result.
+
+  has_fast_mode = has_fast_mode_
+  endfunction has_fast_mode
 
   pure subroutine integr_assign_integr(lhs, rhs)
   !< Operator `=`.
@@ -327,28 +339,99 @@ contains
   do k=2, self%stages
     stage(k) = U * 0._R_P
     do s=1, self%steps
-      if (self%D(k, s) /= 0._R_P) stage(k) = stage(k) + previous(s) * self%D(k, s)
+      if (self%D(k, s) /= 0._R_P) stage(k) = stage(k) + (previous(s) * self%D(k, s))
     enddo
     do s=1, self%steps - 1
-      if (self%Ahat(k, s) /= 0._R_P) stage(k) = stage(k) + previous(s)%t(t=t(s)) * (Dt * self%Ahat(k, s))
+      if (self%Ahat(k, s) /= 0._R_P) stage(k) = stage(k) + (previous(s)%t(t=t(s)) * (Dt * self%Ahat(k, s)))
     enddo
     do kk=1, k - 1
-      if (self%A(k, kk) /= 0._R_P) stage(k) = stage(k) + stage(kk)%t(t=t(self%steps)) * (Dt * self%A(k, kk))
+      if (self%A(k, kk) /= 0._R_P) stage(k) = stage(k) + (stage(kk)%t(t=t(self%steps)) * (Dt * self%A(k, kk)))
     enddo
   enddo
   ! computing new time step
   U = U * 0._R_P
   do s=1, self%steps
-    if (self%T(s) /= 0._R_P) U = U + previous(s) * self%T(s)
+    if (self%T(s) /= 0._R_P) U = U + (previous(s) * self%T(s))
   enddo
   do s=1, self%steps - 1
-    if (self%Bhat(s) /= 0._R_P) U = U + previous(s)%t(t=t(s)) * (Dt * self%Bhat(s))
+    if (self%Bhat(s) /= 0._R_P) U = U + (previous(s)%t(t=t(s)) * (Dt * self%Bhat(s)))
   enddo
   do k=1, self%stages
-    if (self%B(k) /= 0._R_P) U = U + stage(k)%t(t=t(self%steps)) * (Dt * self%B(k))
+    if (self%B(k) /= 0._R_P) U = U + (stage(k)%t(t=t(self%steps)) * (Dt * self%B(k)))
   enddo
   if (autoupdate_) call self%update_previous(U=U, previous=previous)
   endsubroutine integrate
+
+  subroutine integrate_fast(self, U, previous, stage, buffer, Dt, t, autoupdate)
+  !< Integrate field with LMM-SSP class scheme, fast mode.
+  class(integrator_ms_runge_kutta_ssp), intent(in)           :: self         !< Integrator.
+  class(integrand_object),              intent(inout)        :: U            !< Field to be integrated.
+  class(integrand_object),              intent(inout)        :: previous(1:) !< Previous time steps solutions of integrand.
+  class(integrand_object),              intent(inout)        :: stage(1:)    !< Runge-Kutta stages [1:stages].
+  class(integrand_object),              intent(inout)        :: buffer       !< Temporary buffer for doing fast operation.
+  real(R_P),                            intent(in)           :: Dt           !< Time steps.
+  real(R_P),                            intent(in)           :: t(:)         !< Times.
+  logical,                              intent(in), optional :: autoupdate   !< Perform cyclic autoupdate of previous steps.
+  logical                                                    :: autoupdate_  !< Perform cyclic autoupdate of previous steps,
+                                                                             !< local variable.
+  integer(I_P)                                               :: k, kk        !< Stages counters.
+  integer(I_P)                                               :: s            !< Steps counter.
+
+  autoupdate_ = .true. ; if (present(autoupdate)) autoupdate_ = autoupdate
+  ! computing stages
+  stage(1) = U
+  do k=2, self%stages
+    call stage(k)%multiply_fast(lhs=U, rhs=0._R_P)
+    do s=1, self%steps
+      if (self%D(k, s) /= 0._R_P) then
+         call buffer%multiply_fast(lhs=previous(s), rhs=self%D(k, s))
+         call stage(k)%add_fast(lhs=stage(k), rhs=buffer)
+      endif
+    enddo
+    do s=1, self%steps - 1
+      if (self%Ahat(k, s) /= 0._R_P) then
+         buffer = previous(s)
+         call buffer%t_fast(t=t(s))
+         call buffer%multiply_fast(lhs=buffer, rhs=Dt * self%Ahat(k, s))
+         call stage(k)%add_fast(lhs=stage(k), rhs=buffer)
+      endif
+    enddo
+    do kk=1, k - 1
+      if (self%A(k, kk) /= 0._R_P) then
+         buffer = stage(kk)
+         call buffer%t_fast(t=t(self%steps))
+         call buffer%multiply_fast(lhs=buffer, rhs=Dt * self%A(k, kk))
+         call stage(k)%add_fast(lhs=stage(k), rhs=buffer)
+      endif
+    enddo
+  enddo
+  ! computing new time step
+  U = U * 0._R_P
+  do s=1, self%steps
+    if (self%T(s) /= 0._R_P) then
+      call buffer%multiply_fast(lhs=previous(s), rhs=self%T(s))
+      call U%add_fast(lhs=U, rhs=buffer)
+    endif
+  enddo
+  do s=1, self%steps - 1
+    if (self%Bhat(s) /= 0._R_P) then
+       buffer = previous(s)
+       call buffer%t_fast(t=t(s))
+       call buffer%multiply_fast(lhs=buffer, rhs=Dt * self%Bhat(s))
+       call U%add_fast(lhs=U, rhs=buffer)
+    endif
+  enddo
+  do k=1, self%stages
+    if (self%B(k) /= 0._R_P) U = U + (stage(k)%t(t=t(self%steps)) * (Dt * self%B(k)))
+    if (self%B(k) /= 0._R_P) then
+       buffer = stage(k)
+       call buffer%t_fast(t=t(self%steps))
+       call buffer%multiply_fast(lhs=buffer, rhs=Dt * self%B(k))
+       call U%add_fast(lhs=U, rhs=buffer)
+    endif
+  enddo
+  if (autoupdate_) call self%update_previous(U=U, previous=previous)
+  endsubroutine integrate_fast
 
   subroutine update_previous(self, U, previous)
   !< Cyclic update previous time steps.

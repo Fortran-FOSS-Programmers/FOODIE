@@ -23,6 +23,8 @@ type, abstract :: integrator_object
     ! deferred methods
     procedure(class_name_interface),        pass(self), deferred :: class_name           !< Return the class name of schemes.
     procedure(description_interface),       pass(self), deferred :: description          !< Return pretty-printed obj. description.
+    procedure(has_fast_mode_interface),     pass(self), deferred :: has_fast_mode        !< Return .true. if the integrator class
+                                                                                         !< has *fast mode* integrate.
     procedure(assignment_interface),        pass(lhs),  deferred :: integr_assign_integr !< Operator `=`.
     procedure(is_supported_interface),      pass(self), deferred :: is_supported         !< Return .true. if the integrator class
                                                                                          !< support the given scheme.
@@ -54,6 +56,13 @@ abstract interface
   class(integrator_object), intent(inout) :: lhs !< Left hand side.
   class(integrator_object), intent(in)    :: rhs !< Right hand side.
   endsubroutine assignment_interface
+
+  elemental function has_fast_mode_interface(self) result(has_fast_mode)
+  !< Return .true. if the integrator class has *fast mode* integrate.
+  import :: integrator_object
+  class(integrator_object), intent(in) :: self          !< Integrator.
+  logical                              :: has_fast_mode !< Inquire result.
+  endfunction has_fast_mode_interface
 
   elemental function is_supported_interface(self, scheme) result(is_supported)
   !< Return .true. if the integrator class support the given scheme.

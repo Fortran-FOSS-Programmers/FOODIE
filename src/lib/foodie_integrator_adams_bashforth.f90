@@ -53,6 +53,8 @@ character(len=99), parameter :: supported_schemes_(1:16)=[trim(class_name_)//'_1
                                                           trim(class_name_)//'_15', &
                                                           trim(class_name_)//'_16'] !< List of supported schemes.
 
+logical, parameter :: has_fast_mode_=.true. !< Flag to check if integrator provides *fast mode* integrate.
+
 type, extends(integrator_object) :: integrator_adams_bashforth
   !< FOODIE integrator: provide an explicit class of Adams-Bashforth multi-step schemes, from 1st to 16th order accurate.
   !<
@@ -64,6 +66,7 @@ type, extends(integrator_object) :: integrator_adams_bashforth
     ! deferred methods
     procedure, pass(self) :: class_name           !< Return the class name of schemes.
     procedure, pass(self) :: description          !< Return pretty-printed object description.
+    procedure, pass(self) :: has_fast_mode        !< Return .true. if the integrator class has *fast mode* integrate.
     procedure, pass(lhs)  :: integr_assign_integr !< Operator `=`.
     procedure, pass(self) :: is_supported         !< Return .true. if the integrator class support the given scheme.
     procedure, pass(self) :: supported_schemes    !< Return the list of supported schemes.
@@ -71,6 +74,7 @@ type, extends(integrator_object) :: integrator_adams_bashforth
     procedure, pass(self) :: destroy         !< Destroy the integrator.
     procedure, pass(self) :: initialize      !< Initialize (create) the integrator.
     procedure, pass(self) :: integrate       !< Integrate integrand field.
+    procedure, pass(self) :: integrate_fast  !< Integrate integrand field, fast mode.
     procedure, pass(self) :: update_previous !< Cyclic update previous time steps.
 endtype integrator_adams_bashforth
 
@@ -102,6 +106,14 @@ contains
   enddo
   desc = desc//prefix_//'    + '//supported_schemes_(ubound(supported_schemes_, dim=1))
   endfunction description
+
+  elemental function has_fast_mode(self)
+  !< Return .true. if the integrator class has *fast mode* integrate.
+  class(integrator_adams_bashforth), intent(in) :: self          !< Integrator.
+  logical                                       :: has_fast_mode !< Inquire result.
+
+  has_fast_mode = has_fast_mode_
+  endfunction has_fast_mode
 
   pure subroutine integr_assign_integr(lhs, rhs)
   !< Operator `=`.
@@ -351,10 +363,32 @@ contains
 
   autoupdate_ = .true. ; if (present(autoupdate)) autoupdate_ = autoupdate
   do s=1, self%steps
-    U = U + previous(s)%t(t=t(s)) * (Dt * self%b(s))
+    U = U + (previous(s)%t(t=t(s)) * (Dt * self%b(s)))
   enddo
   if (autoupdate_) call self%update_previous(U=U, previous=previous)
   endsubroutine integrate
+
+  subroutine integrate_fast(self, U, previous, buffer, Dt, t, autoupdate)
+  !< Integrate field with Adams-Bashforth class scheme.
+  class(integrator_adams_bashforth), intent(in)    :: self         !< Integrator.
+  class(integrand_object),           intent(inout) :: U            !< Field to be integrated.
+  class(integrand_object),           intent(inout) :: previous(1:) !< Previous time steps solutions of integrand field.
+  class(integrand_object),           intent(inout) :: buffer       !< Temporary buffer for doing fast operation.
+  real(R_P),                         intent(in)    :: Dt           !< Time steps.
+  real(R_P),                         intent(in)    :: t(:)         !< Times.
+  logical, optional,                 intent(in)    :: autoupdate   !< Perform cyclic autoupdate of previous time steps.
+  logical                                          :: autoupdate_  !< Perform cyclic autoupdate of previous time steps, dummy var.
+  integer(I_P)                                     :: s            !< Steps counter.
+
+  autoupdate_ = .true. ; if (present(autoupdate)) autoupdate_ = autoupdate
+  do s=1, self%steps
+    buffer = previous(s)
+    call buffer%t_fast(t=t(s))
+    call buffer%multiply_fast(lhs=buffer, rhs=Dt * self%b(s))
+    call U%add_fast(lhs=U, rhs=buffer)
+  enddo
+  if (autoupdate_) call self%update_previous(U=U, previous=previous)
+  endsubroutine integrate_fast
 
   subroutine update_previous(self, U, previous)
   !< Cyclic update previous time steps.

@@ -281,6 +281,8 @@ character(len=99), parameter :: supported_schemes_(1:4)=[trim(class_name_)//'_st
                                                          trim(class_name_)//'_stages_9_order_6  ', &
                                                          trim(class_name_)//'_stages_17_order_10'] !< List of supported schemes.
 
+logical, parameter :: has_fast_mode_=.true. !< Flag to check if integrator provides *fast mode* integrate.
+
 type, extends(integrator_object) :: integrator_runge_kutta_emd
   !< FOODIE integrator: provide an explicit class of embedded Runge-Kutta schemes, from 2nd to 10th order accurate.
   !<
@@ -296,13 +298,15 @@ type, extends(integrator_object) :: integrator_runge_kutta_emd
     ! deferred methods
     procedure, pass(self) :: class_name           !< Return the class name of schemes.
     procedure, pass(self) :: description          !< Return pretty-printed object description.
+    procedure, pass(self) :: has_fast_mode        !< Return .true. if the integrator class has *fast mode* integrate.
     procedure, pass(lhs)  :: integr_assign_integr !< Operator `=`.
     procedure, pass(self) :: is_supported         !< Return .true. if the integrator class support the given scheme.
     procedure, pass(self) :: supported_schemes    !< Return the list of supported schemes.
     ! public methods
-    procedure, pass(self) :: destroy    !< Destroy the integrator.
-    procedure, pass(self) :: initialize !< Initialize (create) the integrator.
-    procedure, pass(self) :: integrate  !< Integrate integrand field.
+    procedure, pass(self) :: destroy        !< Destroy the integrator.
+    procedure, pass(self) :: initialize     !< Initialize (create) the integrator.
+    procedure, pass(self) :: integrate      !< Integrate integrand field.
+    procedure, pass(self) :: integrate_fast !< Integrate integrand field, fast mode.
     ! private methods
     procedure, pass(self), private :: new_Dt !< Compute new estimation of the time step Dt.
 endtype integrator_runge_kutta_emd
@@ -334,6 +338,14 @@ contains
   enddo
   desc = desc//prefix_//'    + '//supported_schemes_(ubound(supported_schemes_, dim=1))
   endfunction description
+
+  elemental function has_fast_mode(self)
+  !< Return .true. if the integrator class has *fast mode* integrate.
+  class(integrator_runge_kutta_emd), intent(in) :: self          !< Integrator.
+  logical                                       :: has_fast_mode !< Inquire result.
+
+  has_fast_mode = has_fast_mode_
+  endfunction has_fast_mode
 
   pure subroutine integr_assign_integr(lhs, rhs)
   !< Operator `=`.
@@ -666,8 +678,6 @@ contains
   !< Integrate field with explicit embedded Runge-Kutta scheme.
   !<
   !< The time steps is adaptively resized using the local truncation error estimation by means of the embedded pairs of RK schemes.
-  !<
-  !< @note This method can be used **after** the integrator is created (i.e. the RK coefficients are initialized).
   class(integrator_runge_kutta_emd), intent(in)    :: self      !< Integrator.
   class(integrand_object),           intent(inout) :: U         !< Field to be integrated.
   class(integrand_object),           intent(inout) :: stage(1:) !< Runge-Kutta stages [1:stages].
@@ -687,7 +697,7 @@ contains
     do s=1, self%stages
       stage(s) = U
       do ss=1, s - 1
-        stage(s) = stage(s) + stage(ss) * (Dt * self%alph(s, ss))
+        stage(s) = stage(s) + (stage(ss) * (Dt * self%alph(s, ss)))
       enddo
       stage(s) = stage(s)%t(t=t + self%gamm(s) * Dt)
     enddo
@@ -695,14 +705,58 @@ contains
     U1 = U
     U2 = U
     do s=1, self%stages
-      U1 = U1 +  stage(s) * (Dt * self%beta(s, 1))
-      U2 = U2 +  stage(s) * (Dt * self%beta(s, 2))
+      U1 = U1 + (stage(s) * (Dt * self%beta(s, 1)))
+      U2 = U2 + (stage(s) * (Dt * self%beta(s, 2)))
     enddo
     error = U2.lterror.U1
     call self%new_Dt(error=error, Dt=Dt)
   enddo
   U = U1
   endsubroutine integrate
+
+  subroutine integrate_fast(self, U, stage, buffer, Dt, t)
+  !< Integrate field with explicit embedded Runge-Kutta scheme, fast mode.
+  !<
+  !< The time steps is adaptively resized using the local truncation error estimation by means of the embedded pairs of RK schemes.
+  class(integrator_runge_kutta_emd), intent(in)    :: self      !< Integrator.
+  class(integrand_object),           intent(inout) :: U         !< Field to be integrated.
+  class(integrand_object),           intent(inout) :: stage(1:) !< Runge-Kutta stages [1:stages].
+  class(integrand_object),           intent(inout) :: buffer    !< Temporary buffer for doing fast operation.
+  real(R_P),                         intent(inout) :: Dt        !< Time step.
+  real(R_P),                         intent(in)    :: t         !< Time.
+  class(integrand_object), allocatable             :: U1        !< First U evaluation.
+  class(integrand_object), allocatable             :: U2        !< Second U evaluation.
+  real(R_P)                                        :: error     !< Local truncation error estimation.
+  integer(I_P)                                     :: s         !< First stages counter.
+  integer(I_P)                                     :: ss        !< Second stages counter.
+
+  allocate(U1, mold=U) ; U1 = U
+  allocate(U2, mold=U) ; U2 = U
+  error = 1e6
+  do while(error>self%tolerance)
+    ! compute stages
+    do s=1, self%stages
+      stage(s) = U
+      do ss=1, s - 1
+        call buffer%multiply_fast(lhs=stage(ss), rhs=Dt * self%alph(s, ss))
+        call stage(s)%add_fast(lhs=stage(s), rhs=buffer)
+      enddo
+      call stage(s)%t_fast(t=t + self%gamm(s) * Dt)
+    enddo
+    ! compute new time step
+    U1 = U
+    U2 = U
+    do s=1, self%stages
+      call buffer%multiply_fast(lhs=stage(s), rhs=Dt * self%beta(s, 1))
+      call U1%add_fast(lhs=U1, rhs=buffer)
+      call buffer%multiply_fast(lhs=stage(s), rhs=Dt * self%beta(s, 2))
+      call U2%add_fast(lhs=U2, rhs=buffer)
+    enddo
+    error = U2.lterror.U1
+    call self%new_Dt(error=error, Dt=Dt)
+  enddo
+  U = U1
+  endsubroutine integrate_fast
 
   ! private methods
   elemental subroutine new_Dt(self, error, Dt)

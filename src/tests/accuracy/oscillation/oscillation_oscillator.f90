@@ -69,6 +69,12 @@ type, extends(integrand_object) :: oscillator
     ! =
     procedure, pass(lhs), public :: assign_integrand !< `=` operator.
     procedure, pass(lhs), public :: assign_real      !< `= real` operator.
+    ! override fast operators
+    procedure, pass(self), public :: t_fast                              !< Time derivative, residuals, fast mode.
+    procedure, pass(opr),  public :: integrand_add_integrand_fast        !< `+` fast operator.
+    procedure, pass(opr),  public :: integrand_multiply_integrand_fast   !< `*` fast operator.
+    procedure, pass(opr),  public :: integrand_multiply_real_scalar_fast !< `* real_scalar` fast operator.
+    procedure, pass(opr),  public :: integrand_subtract_integrand_fast   !< `-` fast operator.
 endtype oscillator
 
 contains
@@ -254,4 +260,79 @@ contains
 
   lhs%U = rhs
   endsubroutine assign_real
+
+  ! fast operators
+  ! time derivative
+  subroutine t_fast(self, t)
+  !< Time derivative function of integrand class, i.e. the residuals function. Fast mode acting directly on self.
+  !<
+  !< @note This procedure must be overridden, it does not implement anything.
+  class(oscillator), intent(inout)        :: self   !< Oscillation field.
+  real(R_P),         intent(in), optional :: t      !< Time.
+  real(R_P)                               :: buffer !< Temporary buffer.
+
+  buffer = self%U(1)
+  self%U(1) = - self%f * self%U(2)
+  self%U(2) =   self%f * buffer
+  endsubroutine t_fast
+
+  ! +
+  pure subroutine integrand_add_integrand_fast(opr, lhs, rhs)
+  !< `+` fast operator.
+  class(oscillator),       intent(inout) :: opr !< Operator result.
+  class(integrand_object), intent(in)    :: lhs !< Left hand side.
+  class(integrand_object), intent(in)    :: rhs !< Right hand side.
+
+  select type(lhs)
+  class is(oscillator)
+    select type(rhs)
+    class is(oscillator)
+      opr%U = lhs%U + rhs%U
+    endselect
+  endselect
+  endsubroutine integrand_add_integrand_fast
+
+  ! *
+  pure subroutine integrand_multiply_integrand_fast(opr, lhs, rhs)
+  !< `*` fast operator.
+  class(oscillator),       intent(inout) :: opr !< Operator result.
+  class(integrand_object), intent(in)    :: lhs !< Left hand side.
+  class(integrand_object), intent(in)    :: rhs !< Right hand side.
+
+  select type(lhs)
+  class is(oscillator)
+    select type(rhs)
+    class is(oscillator)
+      opr%U = lhs%U * rhs%U
+    endselect
+  endselect
+  endsubroutine integrand_multiply_integrand_fast
+
+  pure subroutine integrand_multiply_real_scalar_fast(opr, lhs, rhs)
+  !< `* real_scalar` fast operator.
+  class(oscillator),       intent(inout) :: opr !< Operator result.
+  class(integrand_object), intent(in)    :: lhs !< Left hand side.
+  real(R_P),               intent(in)    :: rhs !< Right hand side.
+
+  select type(lhs)
+  class is(oscillator)
+    opr%U = lhs%U * rhs
+  endselect
+  endsubroutine integrand_multiply_real_scalar_fast
+
+  ! -
+  pure subroutine integrand_subtract_integrand_fast(opr, lhs, rhs)
+  !< `-` fast operator.
+  class(oscillator),       intent(inout) :: opr !< Operator result.
+  class(integrand_object), intent(in)    :: lhs !< Left hand side.
+  class(integrand_object), intent(in)    :: rhs !< Right hand side.
+
+  select type(lhs)
+  class is(oscillator)
+    select type(rhs)
+    class is(oscillator)
+      opr%U = lhs%U - rhs%U
+    endselect
+  endselect
+  endsubroutine integrand_subtract_integrand_fast
 endmodule oscillation_oscillator
