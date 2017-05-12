@@ -219,17 +219,17 @@ contains
     type is(integrator_runge_kutta_emd)
       call integrator%initialize(scheme=scheme, tolerance=tolerance)
     endselect
-  elseif (index(trim(adjustl(scheme)), trim(int_runge_kutta_ls%class_name())) > 0) then
-    allocate(integrator_runge_kutta_ls :: integrator)
-    select type(integrator)
-    type is(integrator_runge_kutta_ls)
-      call integrator%initialize(scheme=scheme)
-    endselect
   elseif (index(trim(adjustl(scheme)), trim(int_runge_kutta_lssp%class_name())) > 0) then
     allocate(integrator_runge_kutta_lssp :: integrator)
     select type(integrator)
     type is(integrator_runge_kutta_lssp)
       call integrator%initialize(scheme=scheme, stages=stages)
+    endselect
+  elseif (index(trim(adjustl(scheme)), trim(int_runge_kutta_ls%class_name())) > 0) then
+    allocate(integrator_runge_kutta_ls :: integrator)
+    select type(integrator)
+    type is(integrator_runge_kutta_ls)
+      call integrator%initialize(scheme=scheme)
     endselect
   elseif (index(trim(adjustl(scheme)), trim(int_runge_kutta_ssp%class_name())) > 0) then
     allocate(integrator_runge_kutta_ssp :: integrator)
