@@ -464,6 +464,80 @@ contains
    endsubroutine reconstruct_interfaces
 endmodule foodie_test_integrand_ladvection
 
+   subroutine save_results(results, output, scheme, frequency, U0, save_exact_solution, solution)
+   !< Save results (and plots).
+   logical,      intent(in)      :: results             !< Flag for activating results saving.
+   character(*), intent(in)      :: output              !< Output files basename coming from CLI.
+   character(*), intent(in)      :: scheme              !< Selected scheme: must be defined into *solvers*.
+   real(R_P),    intent(in)      :: frequency           !< Oscillation frequency.
+   real(R_P),    intent(in)      :: U0(1:)              !< Initial state.
+   logical,      intent(in)      :: save_exact_solution !< Flag for saving exact solution.
+   real(R_P),    intent(in)      :: solution(0:,0:)     !< Solution at each time step.
+   character(len=:), allocatable :: title               !< Output files title.
+   character(len=:), allocatable :: basename            !< Output files basename.
+   integer(I_P)                  :: rawfile             !< Raw file unit for saving results.
+   type(integrand_ladvection)    :: oscillator          !< Oscillation field.
+   integer(I_P)                  :: s                   !< Counter.
+
+   basename = trim(adjustl(output))//'-'//trim(strz(ubound(solution, dim=2), 10))//'-time_steps-'//trim(adjustl(scheme))
+   title = 'oscillation equations integration, solver='//trim(adjustl(scheme))
+   if (results) then
+     open(newunit=rawfile, file=basename//'.dat')
+     write(rawfile, '(A)')'TITLE="'//title//'"'
+     write(rawfile, '(A)')'VARIABLES="t" "x" "y" "amplitude" "phase"'
+     write(rawfile, '(A)')'ZONE T="'//trim(adjustl(scheme))//'"'
+     do s=0, ubound(solution, dim=2)
+       write(rawfile, '(5('//FR_P//',1X))')solution(:, s), amplitude_phase(solution(1:2, s))
+     enddo
+     close(rawfile)
+   endif
+   if (save_exact_solution) then
+      call oscillator%initialize(U0=U0, frequency=frequency)
+      basename = trim(adjustl(output))//'-'//trim(strz(ubound(solution, dim=2), 10))//'-time_steps-exact_solution'
+      title = 'linear constant coefficients equation integration, solver=exact solution'
+      open(newunit=rawfile, file=basename//'.dat')
+      write(rawfile, '(A)')'TITLE="'//title//'"'
+      write(rawfile, '(A)')'VARIABLES="t" "u"'
+      write(rawfile, '(A)')'ZONE T="exact solution"'
+      do s=0, ubound(solution, dim=2)
+         write(rawfile, '(5('//FR_P//',1X))')solution(0, s), oscillator%exact_solution(t=solution(0, s)), &
+                                             amplitude_phase(oscillator%exact_solution(t=solution(0, s)))
+      enddo
+      close(rawfile)
+   endif
+   contains
+      function amplitude_phase(sol) result(ap)
+      !< Compute amplitude and phase of the solution provided in X-Y domain.
+      real(R_P), intent(in) :: sol(1:) !< Solution in X-Y domain.
+      real(R_P)             :: ap(1:2) !< Amplitude and phase solution.
+
+      ap(1) = sqrt(sol(1)**2 + sol(2)**2)
+      ap(2) = atan(-sol(1) / sol(2))
+      endfunction amplitude_phase
+   endsubroutine save_results
+
+   subroutine square_wave_initial_state(initial_state, BC_L, BC_R, Dx)
+   real(R_P),    intent(inout) :: initial_state(1:)               !< Initial state of primitive variables.
+   character(*), intent(inout) :: BC_L                            !< Left boundary condition.
+   character(*), intent(inout) :: BC_R                            !< Rigth boundary condition.
+   real(R_P),    intent(in)    :: Dx                              !< Space step.
+   real(R_P)                   :: x(1:size(initial_state, dim=1)) !< Cell center x-abscissa values.
+   integer(I_P)                :: i                               !< Space counter.
+
+   BC_L = 'PER'
+   BC_R = 'PER'
+   do i=1, size(x, dim=1)
+      x(i) = Dx * i - 0.5_R_P * Dx
+      if     (x(i) < 0.25_R_P) then
+         initial_state(i) = 0._R_P
+      elseif (0.25_R_P <= x(i) .and. x(i) < 0.75_R_P) then
+         initial_state(i) = 1._R_P
+      else
+         initial_state(i) = 0._R_P
+      endif
+   enddo
+   endsubroutine square_wave_initial_state
+
 program wenoof_test_linear_advection
 !< Define [[integrand_ladvection]], the 1D linear advection PDE test field that is a concrete extension of the
 !< abstract integrand type.
