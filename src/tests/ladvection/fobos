@@ -1,0 +1,127 @@
+[modes]
+modes = gnu gnu-debug gnu-coverage
+        intel intel-debug
+        errors-analysis
+        gnu-pure gnu-debug-pure gnu-coverage-pure
+        intel-pure intel-debug-pure
+
+[common-variables]
+$CSTATIC_GNU = -cpp -c -frealloc-lhs
+$CSTATIC_INT = -cpp -c -assume realloc_lhs
+$DEBUG_GNU   = -Og -g3 -Warray-bounds -Wcharacter-truncation -Wline-truncation -Wimplicit-interface -Wimplicit-procedure -Wunderflow -Wuninitialized -fcheck=all -fmodule-private -ffree-line-length-132 -fimplicit-none -fbacktrace -fdump-core -finit-real=nan -std=f2008 -fall-intrinsics
+$DEBUG_INT   = -O0 -debug all -check all -warn all -extend-source 132 -traceback -gen-interfaces -fp-stack-check -fstack-protector-all -ftrapuv -no-ftz -std08
+$OPTIMIZE    = -O2
+$EXDIRS      = src/tests/parallel/ src/tests/regression/
+               PENF/src/tests/
+               FACE/src/tests/ FACE/src/third_party/
+               FLAP/src/tests/ FLAP/src/third_party/
+               WenOOF/src/tests/ WenOOF/src/third_party/
+
+# main modes
+[gnu]
+help     = Build test in release mode with GNU gfortran
+compiler = gnu
+cflags   = $CSTATIC_GNU $OPTIMIZE
+lflags   = $OPTIMIZE
+template = template-common
+
+[gnu-debug]
+help     = Build test in debug mode with GNU gfortran
+compiler = gnu
+cflags   = $CSTATIC_GNU $DEBUG_GNU
+lflags   = $DEBUG_GNU
+template = template-common
+
+[gnu-coverage]
+help     = Build test in release coverage mode with GNU gfortran
+compiler = gnu
+cflags   = $CSTATIC_GNU $DEBUG_GNU
+lflags   = $DEBUG_GNU
+coverage = True
+template = template-common
+
+[intel]
+help     = Build test in release mode with Intel Fortran
+compiler = intel
+cflags   = $CSTATIC_INT $OPTIMIZE
+lflags   = $OPTIMIZE
+template = template-common
+
+[intel-debug]
+help     = Build test in debug mode with Intel Fortran
+compiler = intel
+cflags   = $CSTATIC_INT $DEBUG_INT
+lflags   = $DEBUG_INT
+template = template-common
+
+[errors-analysis]
+help            = Build test in release mode (for errors analysis) with GNU gfortran
+compiler        = gnu
+cflags          = $CSTATIC_GNU $OPTIMIZE
+lflags          = $OPTIMIZE
+cflags_heritage = True
+target          = src/tests/ladvection/foodie_test_ladvection.f90
+exclude_dirs    = $EXDIRS
+mod_dir         = mod
+obj_dir         = obj
+src             = src/
+colors          = True
+quiet           = False
+log             = True
+jobs            = 10
+
+# pure modes for testing FOODIE ADT with "pure" procedures
+[gnu-pure]
+help     = Build test in release mode with GNU gfortran
+compiler = gnu
+cflags   = $CSTATIC_GNU $OPTIMIZE
+lflags   = $OPTIMIZE
+preproc  = -DPURE
+template = template-common
+
+[gnu-debug-pure]
+help     = Build test in debug mode with GNU gfortran
+compiler = gnu
+cflags   = $CSTATIC_GNU $DEBUG_GNU
+lflags   = $DEBUG_GNU
+preproc  = -DPURE
+template = template-common
+
+[gnu-coverage-pure]
+help     = Build test in release coverage mode with GNU gfortran
+compiler = gnu
+cflags   = $CSTATIC_GNU $OPTIMIZE
+lflags   = $OPTIMIZE
+preproc  = -DPURE
+coverage = True
+template = template-common
+
+[intel-pure]
+help     = Build test in release mode with Intel Fortran
+compiler = intel
+cflags   = $CSTATIC_INT $OPTIMIZE
+lflags   = $OPTIMIZE
+preproc  = -DPURE
+template = template-common
+
+[intel-debug-pure]
+help     = Build test in debug mode with Intel Fortran
+compiler = intel
+cflags   = $CSTATIC_INT $DEBUG_INT
+lflags   = $DEBUG_INT
+preproc  = -DPURE
+template = template-common
+
+# templates
+[template-common]
+cflags_heritage = True
+build_dir       = build/tests/oscillation/
+mod_dir         = mod
+obj_dir         = obj
+src             = src/
+target          = src/tests/ladvection/foodie_test_ladvection.f90
+exclude_dirs    = $EXDIRS
+colors          = True
+quiet           = False
+log             = True
+jobs            = 10

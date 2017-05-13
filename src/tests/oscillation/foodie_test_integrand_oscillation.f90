@@ -47,8 +47,8 @@ type, extends(integrand_object) :: integrand_oscillation
   real(R_P) :: U0(1:2)=[0._R_P, 0._R_P] !< Initial state.
   contains
      ! auxiliary methods
-     procedure, pass(self), public :: initialize     !< Initialize integrand.
      procedure, pass(self), public :: exact_solution !< Return exact solution.
+     procedure, pass(self), public :: initialize     !< Initialize integrand.
      procedure, pass(self), public :: output         !< Extract integrand state field.
      ! public deferred methods
      procedure, pass(self), public :: integrand_dimension !< Return integrand dimension.
@@ -82,6 +82,16 @@ endtype integrand_oscillation
 
 contains
    ! auxiliary methods
+   pure function exact_solution(self, t) result(exact)
+   !< Return exact solution.
+   class(integrand_oscillation), intent(in) :: self       !< Integrand.
+   real(R_P),                    intent(in) :: t          !< Time.
+   real(R_P)                                :: exact(1:2) !< Exact solution.
+
+   exact(1) = self%U0(1) * cos(self%f * t) - self%U0(2) * sin(self%f * t)
+   exact(2) = self%U0(1) * sin(self%f * t) + self%U0(2) * cos(self%f * t)
+   endfunction exact_solution
+
    pure subroutine initialize(self, U0, frequency)
    !< Initialize integrand.
    class(integrand_oscillation), intent(inout) :: self      !< Integrand.
@@ -92,16 +102,6 @@ contains
    self%f = frequency
    self%U0 = U0
    endsubroutine initialize
-
-   pure function exact_solution(self, t) result(exact)
-   !< Return exact solution.
-   class(integrand_oscillation), intent(in) :: self       !< Integrand.
-   real(R_P),                    intent(in) :: t          !< Time.
-   real(R_P)                                :: exact(1:2) !< Exact solution.
-
-   exact(1) = self%U0(1) * cos(self%f * t) - self%U0(2) * sin(self%f * t)
-   exact(2) = self%U0(1) * sin(self%f * t) + self%U0(2) * cos(self%f * t)
-   endfunction exact_solution
 
    pure function output(self) result(state)
    !< Extract integrand state field.
@@ -115,7 +115,7 @@ contains
    pure function integrand_dimension(self)
    !< return integrand dimension.
    class(integrand_oscillation), intent(in) :: self                !< integrand.
-   integer(i_p)                             :: integrand_dimension !< integrand dimension.
+   integer(I_P)                             :: integrand_dimension !< integrand dimension.
 
    integrand_dimension = size(self%U, dim=1)
    endfunction integrand_dimension

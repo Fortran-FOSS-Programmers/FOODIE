@@ -6,7 +6,7 @@ module foodie_test_integrand_lcce
 !< abstract integrand type.
 
 use foodie, only : integrand_object
-use penf, only : R_P, I_P
+use penf, only : I_P, R_P
 
 implicit none
 private
@@ -47,8 +47,8 @@ type, extends(integrand_object) :: integrand_lcce
    real(R_P) :: U0=0._R_P !< Integrand initial state.
    contains
       ! auxiliary methods
-      procedure, pass(self), public :: initialize     !< Initialize integrand.
       procedure, pass(self), public :: exact_solution !< Return exact solution.
+      procedure, pass(self), public :: initialize     !< Initialize integrand.
       procedure, pass(self), public :: output         !< Extract integrand state field.
       ! public deferred methods
       procedure, pass(self), public :: integrand_dimension !< Return integrand dimension.
@@ -82,18 +82,6 @@ endtype integrand_lcce
 
 contains
    ! auxiliary methods
-   pure subroutine initialize(self, a, b, U0)
-   !< Initialize integrand.
-   class(integrand_lcce), intent(inout) :: self !< Integrand.
-   real(R_P),             intent(in)    :: a, b !< Equation coefficients.
-   real(R_P),             intent(in)    :: U0   !< Initial state of the integrand.
-
-   self%a = a
-   self%b = b
-   self%U = U0
-   self%U0 = U0
-   endsubroutine initialize
-
    pure function exact_solution(self, t, t0) result(exact)
    !< Return exact solution.
    class(integrand_lcce), intent(in)           :: self  !< Integrand.
@@ -105,6 +93,18 @@ contains
    t0_ = 0._R_P ; if (present(t0)) t0_ = t0
    exact = (self%U0 + self%b / self%a) * exp(self%a * (t - t0_)) - self%b / self%a
    endfunction exact_solution
+
+   pure subroutine initialize(self, a, b, U0)
+   !< Initialize integrand.
+   class(integrand_lcce), intent(inout) :: self !< Integrand.
+   real(R_P),             intent(in)    :: a, b !< Equation coefficients.
+   real(R_P),             intent(in)    :: U0   !< Initial state of the integrand.
+
+   self%a = a
+   self%b = b
+   self%U = U0
+   self%U0 = U0
+   endsubroutine initialize
 
    pure function output(self) result(state)
    !< Extract integrand state field.
@@ -118,7 +118,7 @@ contains
    pure function integrand_dimension(self)
    !< return integrand dimension.
    class(integrand_lcce), intent(in) :: self                !< integrand.
-   integer(i_p)                      :: integrand_dimension !< integrand dimension.
+   integer(I_P)                      :: integrand_dimension !< integrand dimension.
 
    integrand_dimension = 1
    endfunction integrand_dimension
