@@ -77,6 +77,7 @@ use foodie_integrator_ms_runge_kutta_ssp, only : integrator_ms_runge_kutta_ssp
 use foodie_integrator_runge_kutta_emd, only : integrator_runge_kutta_emd
 use foodie_integrator_runge_kutta_low_storage, only : integrator_runge_kutta_ls
 use foodie_integrator_runge_kutta_lssp, only : integrator_runge_kutta_lssp
+use foodie_integrator_runge_kutta_object, only : integrator_runge_kutta_object
 use foodie_integrator_runge_kutta_ssp, only : integrator_runge_kutta_ssp
 use penf, only : I_P, R_P
 
@@ -99,6 +100,7 @@ public :: integrator_ms_runge_kutta_ssp
 public :: integrator_runge_kutta_emd
 public :: integrator_runge_kutta_ls
 public :: integrator_runge_kutta_lssp
+public :: integrator_runge_kutta_object
 public :: integrator_runge_kutta_ssp
 public :: is_available
 public :: is_class_available

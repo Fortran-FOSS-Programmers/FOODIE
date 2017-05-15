@@ -22,6 +22,7 @@ use foodie, only : foodie_integrator_class_names,      &
                    integrator_runge_kutta_emd,         &
                    integrator_runge_kutta_ls,          &
                    integrator_runge_kutta_lssp,        &
+                   integrator_runge_kutta_object,      &
                    integrator_runge_kutta_ssp,         &
                    is_available, is_class_available
 use foodie_test_integrand_ladvection, only : integrand_ladvection
@@ -241,6 +242,26 @@ contains
       if (save_results) call integrand%export_tecplot(file_name=output_file_name, t=time(0))
    endselect
    select type(integrator)
+   class is(integrator_runge_kutta_object)
+      do
+         step = step + 1
+         select type(integrand)
+         type is(integrand_ladvection)
+            Dt(step_offset) = integrand%dt(final_step=final_step, final_time=final_time, t=time(step_offset))
+         endselect
+         if (is_fast) then
+            call integrator%integrate_fast(U=integrand, stage=stage, buffer=buffer, Dt=Dt(step_offset), t=time(step_offset))
+         else
+            call integrator%integrate(U=integrand, stage=stage, Dt=Dt(step_offset), t=time(step_offset))
+         endif
+         call update_previous_times
+         select type(integrand)
+         type is(integrand_ladvection)
+            if (save_results.and.mod(step, save_frequency)==0) call integrand%export_tecplot(t=time(step_offset))
+         endselect
+         if ((time(step_offset) == final_time).or.(step == final_step)) exit
+      enddo
+
    type is(integrator_adams_bashforth)
       do
          step = step + 1
@@ -499,56 +520,6 @@ contains
          if ((time(step) == final_time).or.(step == final_step)) exit
       enddo
 
-   type is(integrator_runge_kutta_ls)
-      if (allocated(stage)) deallocate(stage) ; allocate(stage(1:integrator%registers_number()), mold=integrand_0)
-      do
-         step = step + 1
-         ! Dt(step) = integrand%dt(final_step=final_step, final_time=final_time, t=time(step))
-         if (is_fast) then
-            call integrator%integrate_fast(U=integrand, stage=stage, buffer=buffer, Dt=Dt(step), t=time(step))
-         else
-            call integrator%integrate(U=integrand, stage=stage, Dt=Dt(step), t=time(step))
-         endif
-         time(step) = time(step-1) + Dt(step)
-         ! if (save_results.and.mod(step, save_frequency)==0) call integrand%export_tecplot(t=time(step))
-         if ((time(step) == final_time).or.(step == final_step)) exit
-      enddo
-
-   type is(integrator_runge_kutta_lssp)
-      do
-         step = step + 1
-         ! Dt(step_offset) = integrand%dt(final_step=final_step, final_time=final_time, t=time(step_offset))
-         if (is_fast) then
-            call integrator%integrate_fast(U=integrand, stage=stage, buffer=buffer, Dt=Dt(step_offset), t=time(step_offset))
-         else
-            call integrator%integrate(U=integrand, stage=stage, Dt=Dt(step_offset), t=time(step_offset))
-         endif
-         call update_previous_times
-         ! if (save_results.and.mod(step, save_frequency)==0) call integrand%export_tecplot(t=time(step_offset))
-         if ((time(step_offset) == final_time).or.(step == final_step)) exit
-      enddo
-
-   type is(integrator_runge_kutta_ssp)
-      do
-         step = step + 1
-         ! Dt(step_offset) = integrand%dt(final_step=final_step, final_time=final_time, t=time(step_offset))
-         select type(integrand)
-         type is(integrand_ladvection)
-            Dt(step_offset) = integrand%dt(final_step=final_step, final_time=final_time, t=time(step_offset))
-         endselect
-         if (is_fast) then
-            call integrator%integrate_fast(U=integrand, stage=stage, buffer=buffer, Dt=Dt(step_offset), t=time(step_offset))
-         else
-            call integrator%integrate(U=integrand, stage=stage, Dt=Dt(step_offset), t=time(step_offset))
-         endif
-         call update_previous_times
-         ! if (save_results.and.mod(step, save_frequency)==0) call integrand%export_tecplot(t=time(step_offset))
-         select type(integrand)
-         type is(integrand_ladvection)
-            if (save_results.and.mod(step, save_frequency)==0) call integrand%export_tecplot(t=time(step_offset))
-         endselect
-         if ((time(step_offset) == final_time).or.(step == final_step)) exit
-      enddo
    endselect
 
    select type(integrand)
