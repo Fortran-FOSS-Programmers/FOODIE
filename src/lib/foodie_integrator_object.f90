@@ -1,7 +1,7 @@
-!< Define the abstract type *integrator* of FOODIE ODE integrators.
+!< Define the abstract type [[integrator_object]] of FOODIE ODE integrators.
 
 module foodie_integrator_object
-!< Define the abstract type *integrator* of FOODIE ODE integrators.
+!< Define the abstract type [[integrator_object]] of FOODIE ODE integrators.
 
 use, intrinsic :: iso_fortran_env, only : stderr=>error_unit
 use penf, only : I_P

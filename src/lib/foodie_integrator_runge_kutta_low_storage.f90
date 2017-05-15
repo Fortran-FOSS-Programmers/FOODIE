@@ -150,6 +150,7 @@ module foodie_integrator_runge_kutta_low_storage
 use foodie_error_codes, only : ERROR_UNSUPPORTED_SCHEME
 use foodie_integrand_object, only : integrand_object
 use foodie_integrator_object, only : integrator_object
+use foodie_integrator_runge_kutta_object, only : integrator_runge_kutta_object
 use penf, only : I_P, I8P, R_P
 
 implicit none
@@ -168,10 +169,8 @@ character(len=99), parameter :: supported_schemes_(1:7)=[trim(class_name_)//'_st
 integer(I_P), parameter :: registers=2 !< Registers used (2N schemes).
 
 logical, parameter :: has_fast_mode_=.true. !< Flag to check if integrator provides *fast mode* integrate.
-logical, parameter :: is_multistage_=.true. !< Flag to check if integrator is multistage.
-logical, parameter :: is_multistep_=.false. !< Flag to check if integrator is multistep.
 
-type, extends(integrator_object) :: integrator_runge_kutta_ls
+type, extends(integrator_runge_kutta_object) :: integrator_runge_kutta_ls
   !< FOODIE integrator: provide an explicit class of low storage Runge-Kutta schemes, from 1st to 4th order accurate.
   !<
   !< @note The integrator must be created or initialized (initialize the RK coefficients) before used.
@@ -186,8 +185,6 @@ type, extends(integrator_object) :: integrator_runge_kutta_ls
     procedure, pass(self) :: description          !< Return pretty-printed object description.
     procedure, pass(self) :: has_fast_mode        !< Return .true. if the integrator class has *fast mode* integrate.
     procedure, pass(lhs)  :: integr_assign_integr !< Operator `=`.
-    procedure, pass(self) :: is_multistage        !< Return .true. for multistage integrator.
-    procedure, pass(self) :: is_multistep         !< Return .true. for multistep integrator.
     procedure, pass(self) :: is_supported         !< Return .true. if the integrator class support the given scheme.
     procedure, pass(self) :: stages_number        !< Return number of stages used.
     procedure, pass(self) :: steps_number         !< Return number of steps used.
@@ -251,22 +248,6 @@ contains
     if (allocated(rhs%C)) lhs%C      = rhs%C
   endselect
   endsubroutine integr_assign_integr
-
-  elemental function is_multistage(self)
-  !< Return .true. for multistage integrator.
-  class(integrator_runge_kutta_ls), intent(in) :: self          !< Integrator.
-  logical                                      :: is_multistage !< Inquire result.
-
-  is_multistage = is_multistage_
-  endfunction is_multistage
-
-  elemental function is_multistep(self)
-  !< Return .true. for multistage integrator.
-  class(integrator_runge_kutta_ls), intent(in) :: self         !< Integrator.
-  logical                                      :: is_multistep !< Inquire result.
-
-  is_multistep = is_multistep_
-  endfunction is_multistep
 
   elemental function is_supported(self, scheme)
   !< Return .true. if the integrator class support the given scheme.
