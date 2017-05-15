@@ -37,19 +37,19 @@ type :: ladvection_test
    !<
    !< Test has only 1 public method `execute`: it executes test(s) accordingly to cli options.
    private
-   type(command_line_interface) :: cli                    !< Command line interface handler.
-   integer(I_P)                 :: error=0                !< Error handler.
-   character(99)                :: scheme=''              !< Scheme used.
-   logical                      :: is_fast=.false.        !< Flag for activating fast schemes.
-   integer(I_P)                 :: implicit_iterations=0  !< Number of iterations (implicit solvers).
-   integer(I_P)                 :: stages=0               !< Number of stages.
-   integer(I_P)                 :: final_step=0           !< Maximum number of time steps.
-   real(R_P)                    :: final_time=0._R_P      !< Final integration time.
-   logical                      :: save_results=.false.   !< Flag for activating results saving.
-   integer(I_P)                 :: save_frequency=0       !< Output save frequency.
-   character(99)                :: output=''              !< Output files basename.
-   logical                      :: verbose=.false.        !< Flag for activating verbose output.
-   type(integrand_ladvection)   :: integrand_0            !< Initial conditions.
+   type(command_line_interface) :: cli                   !< Command line interface handler.
+   integer(I_P)                 :: error=0               !< Error handler.
+   character(99)                :: scheme=''             !< Scheme used.
+   logical                      :: is_fast=.false.       !< Flag for activating fast schemes.
+   integer(I_P)                 :: implicit_iterations=0 !< Number of iterations (implicit solvers).
+   integer(I_P)                 :: stages=0              !< Number of stages.
+   integer(I_P)                 :: final_step=0          !< Maximum number of time steps.
+   real(R_P)                    :: final_time=0._R_P     !< Final integration time.
+   logical                      :: save_results=.false.  !< Flag for activating results saving.
+   integer(I_P)                 :: save_frequency=0      !< Output save frequency.
+   character(99)                :: output=''             !< Output files basename.
+   logical                      :: verbose=.false.       !< Flag for activating verbose output.
+   type(integrand_ladvection)   :: integrand_0           !< Initial conditions.
    contains
       ! public methods
       procedure, pass(self) :: execute !< Execute selected test(s).
@@ -256,27 +256,24 @@ contains
    type is(integrator_adams_bashforth_moulton)
       do
          step = step + 1
-         Dt(step) = integrand%dt(final_step=final_step, final_time=final_time, t=time(step))
          if (integrator%steps_number() >= step) then
+            Dt(step) = integrand%dt(final_step=final_step, final_time=final_time, t=time(step))
             call integrator_start%integrate(U=integrand, stage=stage_start, Dt=Dt(step), t=time(step))
             previous(step) = integrand
+            time(step) = time(step-1) + Dt(step)
+            if (save_results.and.mod(step, save_frequency)==0) call integrand%export_tecplot(t=time(step))
+            if ((time(step) == final_time).or.(step == final_step)) exit
          else
+            Dt(step_offset) = integrand%dt(final_step=final_step, final_time=final_time, t=time(step_offset))
             if (is_fast) then
-               call integrator%integrate_fast(U=integrand,       &
-                                              previous=previous, &
-                                              buffer=buffer,     &
-                                              Dt=Dt(step),       &
-                                              t=time(step-integrator%steps_number():step-1))
+               call integrator%integrate_fast(U=integrand, previous=previous, buffer=buffer, Dt=Dt(step_offset), t=time)
             else
-               call integrator%integrate(U=integrand,       &
-                                         previous=previous, &
-                                         Dt=Dt(step),       &
-                                         t=time(step-integrator%steps_number():step-1))
+               call integrator%integrate(U=integrand, previous=previous, Dt=Dt(step_offset), t=time)
             endif
+            call update_previous_times
+            if (save_results.and.mod(step, save_frequency)==0) call integrand%export_tecplot(t=time(step_offset))
+            if ((time(step_offset) == final_time).or.(step == final_step)) exit
          endif
-         time(step) = time(step-1) + Dt(step)
-         if (save_results.and.mod(step, save_frequency)==0) call integrand%export_tecplot(t=time(step))
-         if ((time(step) == final_time).or.(step == final_step)) exit
       enddo
 
    type is(integrator_adams_moulton)
@@ -366,29 +363,34 @@ contains
    type is(integrator_leapfrog)
       do
          step = step + 1
-         Dt(step) = integrand%dt(final_step=final_step, final_time=final_time, t=time(step))
          if (integrator%steps_number() >= step) then
+            Dt(step) = integrand%dt(final_step=final_step, final_time=final_time, t=time(step))
             call integrator_start%integrate(U=integrand, stage=stage_start, Dt=Dt(step), t=time(step))
             previous(step) = integrand
+            time(step) = time(step-1) + Dt(step)
+            if (save_results.and.mod(step, save_frequency)==0) call integrand%export_tecplot(t=time(step))
+            if ((time(step) == final_time).or.(step == final_step)) exit
          else
+            Dt(step_offset) = integrand%dt(final_step=final_step, final_time=final_time, t=time(step_offset))
             if (index(scheme, 'raw') > 0 ) then
                if (is_fast) then
-                 call integrator%integrate_fast(U=integrand, previous=previous, buffer=buffer, Dt=Dt(step), &
-                                                t=time(step), filter=filter)
+                 call integrator%integrate_fast(U=integrand, previous=previous, buffer=buffer, Dt=Dt(step_offset), &
+                                                t=time(step_offset), filter=filter)
                else
-                 call integrator%integrate(U=integrand, previous=previous, Dt=Dt(step), t=time(step), filter=filter)
+                 call integrator%integrate(U=integrand, previous=previous, Dt=Dt(step_offset), t=time(step_offset), filter=filter)
                endif
             else
                if (is_fast) then
-                 call integrator%integrate_fast(U=integrand, previous=previous, buffer=buffer, Dt=Dt(step), t=time(step))
+                 call integrator%integrate_fast(U=integrand, previous=previous, buffer=buffer, Dt=Dt(step_offset), &
+                                                t=time(step_offset))
                else
-                 call integrator%integrate(U=integrand, previous=previous, Dt=Dt(step), t=time(step))
+                 call integrator%integrate(U=integrand, previous=previous, Dt=Dt(step_offset), t=time(step_offset))
                endif
             endif
+            call update_previous_times
+            if (save_results.and.mod(step, save_frequency)==0) call integrand%export_tecplot(t=time(step_offset))
+            if ((time(step_offset) == final_time).or.(step == final_step)) exit
          endif
-         time(step) = time(step-1) + Dt(step)
-         if (save_results.and.mod(step, save_frequency)==0) call integrand%export_tecplot(t=time(step))
-         if ((time(step) == final_time).or.(step == final_step)) exit
       enddo
 
    type is(integrator_lmm_ssp)
