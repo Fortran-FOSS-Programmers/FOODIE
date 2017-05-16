@@ -64,8 +64,8 @@ module foodie_integrator_runge_kutta_lssp
 
 use foodie_error_codes, only : ERROR_UNSUPPORTED_SCHEME
 use foodie_integrand_object, only : integrand_object
+use foodie_integrator_multistage_explicit_object, only : integrator_multistage_explicit_object
 use foodie_integrator_object, only : integrator_object
-use foodie_integrator_runge_kutta_object, only : integrator_runge_kutta_object
 use penf, only : I_P, R_P
 
 implicit none
@@ -78,12 +78,11 @@ character(len=99), parameter :: supported_schemes_(1:2)=[trim(class_name_)//'_st
 
 logical, parameter :: has_fast_mode_=.true. !< Flag to check if integrator provides *fast mode* integrate.
 
-type, extends(integrator_runge_kutta_object) :: integrator_runge_kutta_lssp
+type, extends(integrator_multistage_explicit_object) :: integrator_runge_kutta_lssp
   !< FOODIE integrator: provide an explicit class of Linear SSP Runge-Kutta schemes, from 1st to s-th order accurate.
   !<
   !< @note The integrator must be created or initialized (initialize the RK coefficients) before used.
   private
-  integer(I_P)                                 :: stages=0                                    !< Number of stages.
   real(R_P), allocatable                       :: alpha(:)                                    !< \(\alpha\) coefficients.
   procedure(integrate_interface),      pointer :: integrate_ => integrate_order_s_1           !< Integrate integrand field.
   procedure(integrate_fast_interface), pointer :: integrate_fast_ => integrate_order_s_1_fast !< Integrate integrand field, fast.
@@ -93,15 +92,13 @@ type, extends(integrator_runge_kutta_object) :: integrator_runge_kutta_lssp
     procedure, pass(self) :: description          !< Return pretty-printed object description.
     procedure, pass(self) :: has_fast_mode        !< Return .true. if the integrator class has *fast mode* integrate.
     procedure, pass(lhs)  :: integr_assign_integr !< Operator `=`.
+    procedure, pass(self) :: integrate            !< Integrate integrand field.
+    procedure, pass(self) :: integrate_fast       !< Integrate integrand field, fast mode.
     procedure, pass(self) :: is_supported         !< Return .true. if the integrator class support the given scheme.
-    procedure, pass(self) :: stages_number        !< Return number of stages used.
-    procedure, pass(self) :: steps_number         !< Return number of steps used.
     procedure, pass(self) :: supported_schemes    !< Return the list of supported schemes.
     ! public methods
     procedure, pass(self) :: destroy        !< Destroy the integrator.
     procedure, pass(self) :: initialize     !< Initialize (create) the integrator.
-    procedure, pass(self) :: integrate      !< Integrate integrand field.
-    procedure, pass(self) :: integrate_fast !< Integrate integrand field, fast mode.
     ! private methods
     procedure, pass(self), private :: initialize_order_s_1 !< Integrate integrator for (s-1)-th order formula.
     procedure, pass(self), private :: initialize_order_s   !< Integrate integrator for s-th order formula.
@@ -183,6 +180,35 @@ contains
   endselect
   endsubroutine integr_assign_integr
 
+  subroutine integrate(self, U, stage, Dt, t, new_Dt)
+  !< Integrate integrand field by Linear SSP Runge-Kutta methods.
+  !<
+  !< @note This method can be used **after** the integrator is created (i.e. the RK coefficients are initialized).
+  class(integrator_runge_kutta_lssp), intent(in)    :: self      !< Integrator.
+  class(integrand_object),            intent(inout) :: U         !< Field to be integrated.
+  class(integrand_object),            intent(inout) :: stage(1:) !< Runge-Kutta stages [1:stages].
+  real(R_P),                          intent(in)    :: Dt        !< Time step.
+  real(R_P),                          intent(in)    :: t         !< Time.
+  real(R_P), optional,                intent(out)   :: new_Dt    !< New adapted time step.
+
+  call self%integrate_(U=U, stage=stage, Dt=Dt, t=t)
+  if (present(new_Dt)) new_Dt = Dt
+  endsubroutine integrate
+
+  subroutine integrate_fast(self, U, stage, buffer, Dt, t, new_Dt)
+  !< Integrate integrand field by Linear SSP Runge-Kutta methods.
+  class(integrator_runge_kutta_lssp), intent(in)    :: self      !< Integrator.
+  class(integrand_object),            intent(inout) :: U         !< Field to be integrated.
+  class(integrand_object),            intent(inout) :: stage(1:) !< Runge-Kutta stages [1:stages].
+  class(integrand_object),            intent(inout) :: buffer    !< Temporary buffer for doing fast operation.
+  real(R_P),                          intent(in)    :: Dt        !< Time step.
+  real(R_P),                          intent(in)    :: t         !< Time.
+  real(R_P), optional,                intent(out)   :: new_Dt    !< New adapted time step.
+
+  call self%integrate_fast_(U=U, stage=stage, buffer=buffer, Dt=Dt, t=t)
+  if (present(new_Dt)) new_Dt = Dt
+  endsubroutine integrate_fast
+
   elemental function is_supported(self, scheme)
   !< Return .true. if the integrator class support the given scheme.
   class(integrator_runge_kutta_lssp), intent(in) :: self         !< Integrator.
@@ -199,22 +225,6 @@ contains
   enddo
   endfunction is_supported
 
-  elemental function stages_number(self)
-  !< Return number of stages used.
-  class(integrator_runge_kutta_lssp), intent(in) :: self          !< Integrator.
-  integer(I_P)                                   :: stages_number !< Number of stages used.
-
-  stages_number = self%stages
-  endfunction stages_number
-
-  elemental function steps_number(self)
-  !< Return number of steps used.
-  class(integrator_runge_kutta_lssp), intent(in) :: self         !< Integrator.
-  integer(I_P)                                   :: steps_number !< Number of steps used.
-
-  steps_number = 0
-  endfunction steps_number
-
   pure function supported_schemes(self) result(schemes)
   !< Return the list of supported schemes.
   class(integrator_runge_kutta_lssp), intent(in) :: self       !< Integrator.
@@ -229,8 +239,7 @@ contains
   !< Destroy the integrator.
   class(integrator_runge_kutta_lssp), intent(inout) :: self !< Integrator.
 
-  call self%destroy_abstract
-  self%stages = 0
+  call self%destroy_multistage
   if (allocated(self%alpha)) deallocate(self%alpha)
   self%integrate_ => integrate_order_s_1
   endsubroutine destroy
@@ -270,31 +279,6 @@ contains
                             is_severe=stop_on_fail)
   endif
   endsubroutine initialize
-
-  subroutine integrate(self, U, stage, Dt, t)
-  !< Integrate integrand field by Linear SSP Runge-Kutta methods.
-  !<
-  !< @note This method can be used **after** the integrator is created (i.e. the RK coefficients are initialized).
-  class(integrator_runge_kutta_lssp), intent(in)    :: self      !< Integrator.
-  class(integrand_object),            intent(inout) :: U         !< Field to be integrated.
-  class(integrand_object),            intent(inout) :: stage(1:) !< Runge-Kutta stages [1:stages].
-  real(R_P),                          intent(in)    :: Dt        !< Time step.
-  real(R_P),                          intent(in)    :: t         !< Time.
-
-  call self%integrate_(U=U, stage=stage, Dt=Dt, t=t)
-  endsubroutine integrate
-
-  subroutine integrate_fast(self, U, stage, buffer, Dt, t)
-  !< Integrate integrand field by Linear SSP Runge-Kutta methods.
-  class(integrator_runge_kutta_lssp), intent(in)    :: self      !< Integrator.
-  class(integrand_object),            intent(inout) :: U         !< Field to be integrated.
-  class(integrand_object),            intent(inout) :: stage(1:) !< Runge-Kutta stages [1:stages].
-  class(integrand_object),            intent(inout) :: buffer    !< Temporary buffer for doing fast operation.
-  real(R_P),                          intent(in)    :: Dt        !< Time step.
-  real(R_P),                          intent(in)    :: t         !< Time.
-
-  call self%integrate_fast_(U=U, stage=stage, buffer=buffer, Dt=Dt, t=t)
-  endsubroutine integrate_fast
 
   ! private methods
   elemental subroutine initialize_order_s_1(self)

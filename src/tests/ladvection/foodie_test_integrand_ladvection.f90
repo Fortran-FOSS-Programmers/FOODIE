@@ -281,7 +281,7 @@ contains
    class is (integrand_ladvection)
       error = 0._R_P
       do i=1, lhs%Ni
-         error = error + (lhs%u(i) - rhs%u(i)) ** 2 / lhs%u(i) ** 2
+         error = error + (lhs%u(i) - rhs%u(i)) ** 2
       enddo
       error = sqrt(error)
    endselect

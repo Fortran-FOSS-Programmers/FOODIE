@@ -268,6 +268,7 @@ module foodie_integrator_runge_kutta_emd
 
 use foodie_error_codes, only : ERROR_UNSUPPORTED_SCHEME
 use foodie_integrand_object, only : integrand_object
+use foodie_integrator_multistage_explicit_object, only : integrator_multistage_explicit_object
 use foodie_integrator_object, only : integrator_object
 use penf, only : I_P, R_P
 
@@ -285,14 +286,13 @@ logical, parameter :: has_fast_mode_=.true. !< Flag to check if integrator provi
 logical, parameter :: is_multistage_=.true. !< Flag to check if integrator is multistage.
 logical, parameter :: is_multistep_=.false. !< Flag to check if integrator is multistep.
 
-type, extends(integrator_object) :: integrator_runge_kutta_emd
+type, extends(integrator_multistage_explicit_object) :: integrator_runge_kutta_emd
   !< FOODIE integrator: provide an explicit class of embedded Runge-Kutta schemes, from 2nd to 10th order accurate.
   !<
   !< @note The integrator must be created or initialized (initialize the RK coefficients) before used.
   private
   real(R_P)              :: tolerance=0._R_P !< Tolerance on the local truncation error.
   real(R_P)              :: pp1_inv=0._R_P   !< \(1/(p+1)\) where p is the accuracy order of the lower accurate scheme of the pair.
-  integer(I_P)           :: stages=0         !< Number of stages.
   real(R_P), allocatable :: alph(:,:)        !< \(\alpha\) Butcher's coefficients.
   real(R_P), allocatable :: beta(:,:)        !< \(\beta\) Butcher's coefficients.
   real(R_P), allocatable :: gamm(:)          !< \(\gamma\) Butcher's coefficients.
@@ -302,17 +302,13 @@ type, extends(integrator_object) :: integrator_runge_kutta_emd
     procedure, pass(self) :: description          !< Return pretty-printed object description.
     procedure, pass(self) :: has_fast_mode        !< Return .true. if the integrator class has *fast mode* integrate.
     procedure, pass(lhs)  :: integr_assign_integr !< Operator `=`.
-    procedure, pass(self) :: is_multistage        !< Return .true. for multistage integrator.
-    procedure, pass(self) :: is_multistep         !< Return .true. for multistep integrator.
+    procedure, pass(self) :: integrate            !< Integrate integrand field.
+    procedure, pass(self) :: integrate_fast       !< Integrate integrand field, fast mode.
     procedure, pass(self) :: is_supported         !< Return .true. if the integrator class support the given scheme.
-    procedure, pass(self) :: stages_number        !< Return number of stages used.
-    procedure, pass(self) :: steps_number         !< Return number of steps used.
     procedure, pass(self) :: supported_schemes    !< Return the list of supported schemes.
     ! public methods
-    procedure, pass(self) :: destroy        !< Destroy the integrator.
-    procedure, pass(self) :: initialize     !< Initialize (create) the integrator.
-    procedure, pass(self) :: integrate      !< Integrate integrand field.
-    procedure, pass(self) :: integrate_fast !< Integrate integrand field, fast mode.
+    procedure, pass(self) :: destroy    !< Destroy the integrator.
+    procedure, pass(self) :: initialize !< Initialize (create) the integrator.
     ! private methods
     procedure, pass(self), private :: new_Dt !< Compute new estimation of the time step Dt.
 endtype integrator_runge_kutta_emd
@@ -370,21 +366,97 @@ contains
   endselect
   endsubroutine integr_assign_integr
 
-  elemental function is_multistage(self)
-  !< Return .true. for multistage integrator.
-  class(integrator_runge_kutta_emd), intent(in) :: self          !< Integrator.
-  logical                                       :: is_multistage !< Inquire result.
+  subroutine integrate(self, U, stage, Dt, t, new_Dt)
+  !< Integrate field with explicit embedded Runge-Kutta scheme.
+  !<
+  !< The time steps is adaptively resized using the local truncation error estimation by means of the embedded pairs of RK schemes.
+  class(integrator_runge_kutta_emd), intent(in)    :: self      !< Integrator.
+  class(integrand_object),           intent(inout) :: U         !< Field to be integrated.
+  class(integrand_object),           intent(inout) :: stage(1:) !< Runge-Kutta stages [1:stages].
+  real(R_P),                         intent(in)    :: Dt        !< Time step.
+  real(R_P),                         intent(in)    :: t         !< Time.
+  real(R_P), optional,               intent(out)   :: new_Dt    !< New adapted time step.
+  real(R_P)                                        :: Dt_       !< Time step, local variable.
+  class(integrand_object), allocatable             :: U1        !< First U evaluation.
+  class(integrand_object), allocatable             :: U2        !< Second U evaluation.
+  real(R_P)                                        :: error     !< Local truncation error estimation.
+  integer(I_P)                                     :: s         !< First stages counter.
+  integer(I_P)                                     :: ss        !< Second stages counter.
 
-  is_multistage = is_multistage_
-  endfunction is_multistage
+  Dt_ = Dt
+  allocate(U1, mold=U) ; U1 = U
+  allocate(U2, mold=U) ; U2 = U
+  do
+    ! compute stages
+    do s=1, self%stages
+      stage(s) = U
+      do ss=1, s - 1
+        stage(s) = stage(s) + (stage(ss) * (Dt_ * self%alph(s, ss)))
+      enddo
+      stage(s) = stage(s)%t(t=t + self%gamm(s) * Dt_)
+    enddo
+    ! compute new time step
+    U1 = U
+    U2 = U
+    do s=1, self%stages
+      U1 = U1 + (stage(s) * (Dt_ * self%beta(s, 1)))
+      U2 = U2 + (stage(s) * (Dt_ * self%beta(s, 2)))
+    enddo
+    error = U2.lterror.U1
+    if (error <= self%tolerance) exit
+    call self%new_Dt(error=error, Dt=Dt_)
+  enddo
+  U = U1
+  if (present(new_Dt)) new_Dt = Dt_
+  endsubroutine integrate
 
-  elemental function is_multistep(self)
-  !< Return .true. for multistage integrator.
-  class(integrator_runge_kutta_emd), intent(in) :: self         !< Integrator.
-  logical                                       :: is_multistep !< Inquire result.
+  subroutine integrate_fast(self, U, stage, buffer, Dt, t, new_Dt)
+  !< Integrate field with explicit embedded Runge-Kutta scheme, fast mode.
+  !<
+  !< The time steps is adaptively resized using the local truncation error estimation by means of the embedded pairs of RK schemes.
+  class(integrator_runge_kutta_emd), intent(in)    :: self      !< Integrator.
+  class(integrand_object),           intent(inout) :: U         !< Field to be integrated.
+  class(integrand_object),           intent(inout) :: stage(1:) !< Runge-Kutta stages [1:stages].
+  class(integrand_object),           intent(inout) :: buffer    !< Temporary buffer for doing fast operation.
+  real(R_P),                         intent(in)    :: Dt        !< Time step.
+  real(R_P),                         intent(in)    :: t         !< Time.
+  real(R_P), optional,               intent(out)   :: new_Dt    !< New adapted time step.
+  real(R_P)                                        :: Dt_       !< Time step, local variable.
+  class(integrand_object), allocatable             :: U1        !< First U evaluation.
+  class(integrand_object), allocatable             :: U2        !< Second U evaluation.
+  real(R_P)                                        :: error     !< Local truncation error estimation.
+  integer(I_P)                                     :: s         !< First stages counter.
+  integer(I_P)                                     :: ss        !< Second stages counter.
 
-  is_multistep = is_multistep_
-  endfunction is_multistep
+  Dt_ = Dt
+  allocate(U1, mold=U) ; U1 = U
+  allocate(U2, mold=U) ; U2 = U
+  do
+    ! compute stages
+    do s=1, self%stages
+      stage(s) = U
+      do ss=1, s - 1
+        call buffer%multiply_fast(lhs=stage(ss), rhs=Dt_ * self%alph(s, ss))
+        call stage(s)%add_fast(lhs=stage(s), rhs=buffer)
+      enddo
+      call stage(s)%t_fast(t=t + self%gamm(s) * Dt_)
+    enddo
+    ! compute new time step
+    U1 = U
+    U2 = U
+    do s=1, self%stages
+      call buffer%multiply_fast(lhs=stage(s), rhs=Dt_ * self%beta(s, 1))
+      call U1%add_fast(lhs=U1, rhs=buffer)
+      call buffer%multiply_fast(lhs=stage(s), rhs=Dt_ * self%beta(s, 2))
+      call U2%add_fast(lhs=U2, rhs=buffer)
+    enddo
+    error = U2.lterror.U1
+    if (error <= self%tolerance) exit
+    call self%new_Dt(error=error, Dt=Dt_)
+  enddo
+  U = U1
+  if (present(new_Dt)) new_Dt = Dt_
+  endsubroutine integrate_fast
 
   elemental function is_supported(self, scheme)
   !< Return .true. if the integrator class support the given scheme.
@@ -402,22 +474,6 @@ contains
   enddo
   endfunction is_supported
 
-  elemental function stages_number(self)
-  !< Return number of stages used.
-  class(integrator_runge_kutta_emd), intent(in) :: self          !< Integrator.
-  integer(I_P)                                  :: stages_number !< Number of stages used.
-
-  stages_number = self%stages
-  endfunction stages_number
-
-  elemental function steps_number(self)
-  !< Return number of steps used.
-  class(integrator_runge_kutta_emd), intent(in) :: self         !< Integrator.
-  integer(I_P)                                  :: steps_number !< Number of steps used.
-
-  steps_number = 0
-  endfunction steps_number
-
   pure function supported_schemes(self) result(schemes)
   !< Return the list of supported schemes.
   class(integrator_runge_kutta_emd), intent(in) :: self       !< Integrator.
@@ -432,10 +488,9 @@ contains
   !< Destroy the integrator.
   class(integrator_runge_kutta_emd), intent(inout) :: self !< Integrator.
 
-  call self%destroy_abstract
+  call self%destroy_multistage
   self%tolerance = 0._R_P
   self%pp1_inv = 0._R_P
-  self%stages = 0
   if (allocated(self%alph)) deallocate(self%alph)
   if (allocated(self%beta)) deallocate(self%beta)
   if (allocated(self%gamm)) deallocate(self%gamm)
@@ -711,90 +766,6 @@ contains
                             is_severe=stop_on_fail)
   endif
   endsubroutine initialize
-
-  subroutine integrate(self, U, stage, Dt, t)
-  !< Integrate field with explicit embedded Runge-Kutta scheme.
-  !<
-  !< The time steps is adaptively resized using the local truncation error estimation by means of the embedded pairs of RK schemes.
-  class(integrator_runge_kutta_emd), intent(in)    :: self      !< Integrator.
-  class(integrand_object),           intent(inout) :: U         !< Field to be integrated.
-  class(integrand_object),           intent(inout) :: stage(1:) !< Runge-Kutta stages [1:stages].
-  real(R_P),                         intent(inout) :: Dt        !< Time step.
-  real(R_P),                         intent(in)    :: t         !< Time.
-  class(integrand_object), allocatable             :: U1        !< First U evaluation.
-  class(integrand_object), allocatable             :: U2        !< Second U evaluation.
-  real(R_P)                                        :: error     !< Local truncation error estimation.
-  integer(I_P)                                     :: s         !< First stages counter.
-  integer(I_P)                                     :: ss        !< Second stages counter.
-
-  allocate(U1, mold=U) ; U1 = U
-  allocate(U2, mold=U) ; U2 = U
-  error = 1e6
-  do while(error>self%tolerance)
-    ! compute stages
-    do s=1, self%stages
-      stage(s) = U
-      do ss=1, s - 1
-        stage(s) = stage(s) + (stage(ss) * (Dt * self%alph(s, ss)))
-      enddo
-      stage(s) = stage(s)%t(t=t + self%gamm(s) * Dt)
-    enddo
-    ! compute new time step
-    U1 = U
-    U2 = U
-    do s=1, self%stages
-      U1 = U1 + (stage(s) * (Dt * self%beta(s, 1)))
-      U2 = U2 + (stage(s) * (Dt * self%beta(s, 2)))
-    enddo
-    error = U2.lterror.U1
-    call self%new_Dt(error=error, Dt=Dt)
-  enddo
-  U = U1
-  endsubroutine integrate
-
-  subroutine integrate_fast(self, U, stage, buffer, Dt, t)
-  !< Integrate field with explicit embedded Runge-Kutta scheme, fast mode.
-  !<
-  !< The time steps is adaptively resized using the local truncation error estimation by means of the embedded pairs of RK schemes.
-  class(integrator_runge_kutta_emd), intent(in)    :: self      !< Integrator.
-  class(integrand_object),           intent(inout) :: U         !< Field to be integrated.
-  class(integrand_object),           intent(inout) :: stage(1:) !< Runge-Kutta stages [1:stages].
-  class(integrand_object),           intent(inout) :: buffer    !< Temporary buffer for doing fast operation.
-  real(R_P),                         intent(inout) :: Dt        !< Time step.
-  real(R_P),                         intent(in)    :: t         !< Time.
-  class(integrand_object), allocatable             :: U1        !< First U evaluation.
-  class(integrand_object), allocatable             :: U2        !< Second U evaluation.
-  real(R_P)                                        :: error     !< Local truncation error estimation.
-  integer(I_P)                                     :: s         !< First stages counter.
-  integer(I_P)                                     :: ss        !< Second stages counter.
-
-  allocate(U1, mold=U) ; U1 = U
-  allocate(U2, mold=U) ; U2 = U
-  error = 1e6
-  do while(error>self%tolerance)
-    ! compute stages
-    do s=1, self%stages
-      stage(s) = U
-      do ss=1, s - 1
-        call buffer%multiply_fast(lhs=stage(ss), rhs=Dt * self%alph(s, ss))
-        call stage(s)%add_fast(lhs=stage(s), rhs=buffer)
-      enddo
-      call stage(s)%t_fast(t=t + self%gamm(s) * Dt)
-    enddo
-    ! compute new time step
-    U1 = U
-    U2 = U
-    do s=1, self%stages
-      call buffer%multiply_fast(lhs=stage(s), rhs=Dt * self%beta(s, 1))
-      call U1%add_fast(lhs=U1, rhs=buffer)
-      call buffer%multiply_fast(lhs=stage(s), rhs=Dt * self%beta(s, 2))
-      call U2%add_fast(lhs=U2, rhs=buffer)
-    enddo
-    error = U2.lterror.U1
-    call self%new_Dt(error=error, Dt=Dt)
-  enddo
-  U = U1
-  endsubroutine integrate_fast
 
   ! private methods
   elemental subroutine new_Dt(self, error, Dt)

@@ -5,25 +5,27 @@ module foodie_test_ladvection_test
 
 use, intrinsic :: iso_fortran_env, only : stderr=>error_unit
 use flap, only : command_line_interface
-use foodie, only : foodie_integrator_class_names,      &
-                   foodie_integrator_factory,          &
-                   foodie_integrator_schemes,          &
-                   integrand_object,                   &
-                   integrator_adams_bashforth,         &
-                   integrator_adams_bashforth_moulton, &
-                   integrator_adams_moulton,           &
-                   integrator_back_df,                 &
-                   integrator_euler_explicit,          &
-                   integrator_leapfrog,                &
-                   integrator_lmm_ssp,                 &
-                   integrator_lmm_ssp_vss,             &
-                   integrator_ms_runge_kutta_ssp,      &
-                   integrator_object,                  &
-                   integrator_runge_kutta_emd,         &
-                   integrator_runge_kutta_ls,          &
-                   integrator_runge_kutta_lssp,        &
-                   integrator_runge_kutta_object,      &
-                   integrator_runge_kutta_ssp,         &
+use foodie, only : foodie_integrator_class_names,         &
+                   foodie_integrator_factory,             &
+                   foodie_integrator_schemes,             &
+                   integrand_object,                      &
+                   integrator_adams_bashforth,            &
+                   integrator_adams_bashforth_moulton,    &
+                   integrator_adams_moulton,              &
+                   integrator_back_df,                    &
+                   integrator_euler_explicit,             &
+                   integrator_leapfrog,                   &
+                   integrator_lmm_ssp,                    &
+                   integrator_lmm_ssp_vss,                &
+                   integrator_ms_runge_kutta_ssp,         &
+                   integrator_multistage_explicit_object, &
+                   integrator_multistep_explicit_object,  &
+                   integrator_multistep_implicit_object,  &
+                   integrator_object,                     &
+                   integrator_runge_kutta_emd,            &
+                   integrator_runge_kutta_ls,             &
+                   integrator_runge_kutta_lssp,           &
+                   integrator_runge_kutta_ssp,            &
                    is_available, is_class_available
 use foodie_test_integrand_ladvection, only : integrand_ladvection
 use penf, only : I_P, R_P, FR_P, str, strz
@@ -200,28 +202,28 @@ contains
    real(R_P), allocatable                :: time(:)          !< Time.
    real(R_P), allocatable                :: Dt(:)            !< Time steps.
    real(R_P)                             :: Dt_a             !< Autoadptive time step.
-   integer                               :: step             !< Time steps counter.
-   integer                               :: step_offset      !< Time steps counter offset for slicing previous data array.
+   integer(I_P)                          :: step             !< Time steps counter.
+   integer(I_P)                          :: step_offset      !< Time steps counter offset for slicing previous data array.
    character(len=:), allocatable         :: output_file_name !< File name of output results file.
+   integer(I_P)                          :: s                !< Counter.
 
-   allocate(integrand, mold=integrand_0)
-   allocate(buffer, mold=integrand_0)
-   allocate(filter, mold=integrand_0)
-
-   integrand = integrand_0
-
-   select type(integrand)
-   type is(integrand_ladvection)
-      output_file_name = trim(adjustl(output_base_name))//'-'//trim(adjustl(scheme))//'-'//trim(strz(integrand%Ni, 10))//'.dat'
-   endselect
+   allocate(integrand, mold=integrand_0) ; integrand = integrand_0
+   allocate(buffer, mold=integrand_0)    ; buffer    = integrand_0
+   allocate(filter, mold=integrand_0)    ; filter    = integrand_0
 
    call foodie_integrator_factory(scheme=scheme, integrator=integrator, stages=stages, tolerance=1e2_R_P)
    if (is_fast) call check_scheme_has_fast_mode(scheme=trim(adjustl(scheme)), integrator=integrator)
 
    if (integrator%is_multistep()) then
       allocate(previous(1:integrator%steps_number()), mold=integrand_0)
+      do s=1, integrator%steps_number()
+         previous(s) = integrand_0
+      enddo
       call integrator_start%initialize(scheme='runge_kutta_ssp_stages_5_order_4')
       allocate(stage_start(1:integrator_start%stages_number()), mold=integrand_0)
+      do s=1, integrator_start%stages_number()
+         stage_start(s) = integrand_0
+      enddo
       if (integrator%steps_number()==0) then
          step_offset = 1                         ! for 0 step-(a convention)-solver offset is 1
       else
@@ -230,165 +232,98 @@ contains
    else
       step_offset = 1 ! for 0 step-(a convention)-solver offset is 1
    endif
-   if (integrator%is_multistage()) allocate(stage(1:integrator%stages_number()), mold=integrand_0)
+   if (integrator%is_multistage()) then
+      allocate(stage(1:integrator%stages_number()), mold=integrand_0)
+      do s=1, integrator%stages_number()
+         stage(s) = integrand_0
+      enddo
+   endif
    allocate(time(0:step_offset))
    allocate(Dt(1:step_offset))
 
    step = 0
    time = 0._R_P
-   Dt = 0._R_P
    select type(integrand)
    type is(integrand_ladvection)
+      Dt = integrand%dt(final_step=final_step, final_time=final_time, t=0._R_P)
+   endselect
+   select type(integrand)
+   type is(integrand_ladvection)
+      output_file_name = trim(adjustl(output_base_name))//'-'//trim(adjustl(scheme))//'-'//trim(strz(integrand%Ni, 10))//'.dat'
       if (save_results) call integrand%export_tecplot(file_name=output_file_name, t=time(0))
    endselect
+
    select type(integrator)
-   class is(integrator_runge_kutta_object)
+   class is(integrator_multistage_explicit_object)
       do
          step = step + 1
-         select type(integrand)
-         type is(integrand_ladvection)
-            Dt(step_offset) = integrand%dt(final_step=final_step, final_time=final_time, t=time(step_offset))
-         endselect
          if (is_fast) then
             call integrator%integrate_fast(U=integrand, stage=stage, buffer=buffer, Dt=Dt(step_offset), t=time(step_offset))
          else
             call integrator%integrate(U=integrand, stage=stage, Dt=Dt(step_offset), t=time(step_offset))
          endif
          call update_previous_times
-         select type(integrand)
-         type is(integrand_ladvection)
-            if (save_results.and.mod(step, save_frequency)==0) call integrand%export_tecplot(t=time(step_offset))
-         endselect
-         if ((time(step_offset) == final_time).or.(step == final_step)) exit
+         if ((time(step_offset) >= final_time).or.(step == final_step)) exit
       enddo
 
-   type is(integrator_adams_bashforth)
+   class is(integrator_multistep_explicit_object)
       do
          step = step + 1
          if (integrator%steps_number() >= step) then
-            ! Dt(step) = integrand%dt(final_step=final_step, final_time=final_time, t=time(step))
             call integrator_start%integrate(U=integrand, stage=stage_start, Dt=Dt(step), t=time(step))
             previous(step) = integrand
             time(step) = time(step-1) + Dt(step)
-            ! if (save_results.and.mod(step, save_frequency)==0) call integrand%export_tecplot(t=time(step))
-            if ((time(step) == final_time).or.(step == final_step)) exit
          else
-            ! Dt(step_offset) = integrand%dt(final_step=final_step, final_time=final_time, t=time(step_offset))
             if (is_fast) then
                call integrator%integrate_fast(U=integrand, previous=previous, buffer=buffer, Dt=Dt(step_offset), t=time)
             else
                call integrator%integrate(U=integrand, previous=previous, Dt=Dt(step_offset), t=time)
             endif
             call update_previous_times
-            ! if (save_results.and.mod(step, save_frequency)==0) call integrand%export_tecplot(t=time(step_offset))
-            if ((time(step_offset) == final_time).or.(step == final_step)) exit
          endif
+         if ((time(step_offset) >= final_time).or.(step == final_step)) exit
       enddo
 
-   type is(integrator_adams_bashforth_moulton)
+   class is(integrator_multistep_implicit_object)
+      select type(integrator)
+      type is(integrator_adams_moulton)
+         if (allocated(previous)) deallocate(previous) ; allocate(previous(1:integrator%steps_number()+1), mold=integrand_0)
+      endselect
       do
          step = step + 1
          if (integrator%steps_number() >= step) then
-            ! Dt(step) = integrand%dt(final_step=final_step, final_time=final_time, t=time(step))
             call integrator_start%integrate(U=integrand, stage=stage_start, Dt=Dt(step), t=time(step))
             previous(step) = integrand
             time(step) = time(step-1) + Dt(step)
-            ! if (save_results.and.mod(step, save_frequency)==0) call integrand%export_tecplot(t=time(step))
-            if ((time(step) == final_time).or.(step == final_step)) exit
-         else
-            ! Dt(step_offset) = integrand%dt(final_step=final_step, final_time=final_time, t=time(step_offset))
-            if (is_fast) then
-               call integrator%integrate_fast(U=integrand, previous=previous, buffer=buffer, Dt=Dt(step_offset), t=time)
-            else
-               call integrator%integrate(U=integrand, previous=previous, Dt=Dt(step_offset), t=time)
-            endif
-            call update_previous_times
-            ! if (save_results.and.mod(step, save_frequency)==0) call integrand%export_tecplot(t=time(step_offset))
-            if ((time(step_offset) == final_time).or.(step == final_step)) exit
-         endif
-      enddo
-
-   type is(integrator_adams_moulton)
-      if (allocated(previous)) deallocate(previous) ; allocate(previous(1:integrator%steps_number()+1), mold=integrand_0)
-      do
-         step = step + 1
-         ! Dt(step) = integrand%dt(final_step=final_step, final_time=final_time, t=time(step))
-         if (integrator%steps_number() >= step) then
-            call integrator_start%integrate(U=integrand, stage=stage_start, Dt=Dt(step), t=time(step))
-            previous(step) = integrand
          else
             if (is_fast) then
                if (iterations>1) then
-                  call integrator%integrate_fast(U=integrand,                     &
-                                                 previous=previous,               &
-                                                 buffer=buffer,                   &
-                                                 Dt=Dt(step),                     &
-                                                 t=time(step-step_offset:step-1), &
+                  call integrator%integrate_fast(U=integrand, previous=previous, buffer=buffer, Dt=Dt(step), t=time, &
                                                  iterations=iterations)
                else
-                  call integrator%integrate_fast(U=integrand,       &
-                                                 previous=previous, &
-                                                 buffer=buffer,     &
-                                                 Dt=Dt(step),       &
-                                                 t=time(step-step_offset:step-1))
+                  call integrator%integrate_fast(U=integrand, previous=previous, buffer=buffer, Dt=Dt(step), t=time)
                endif
             else
                if (iterations>1) then
-                  call integrator%integrate(U=integrand,                     &
-                                            previous=previous,               &
-                                            Dt=Dt(step),                     &
-                                            t=time(step-step_offset:step-1), &
-                                            iterations=iterations)
+                  call integrator%integrate(U=integrand, previous=previous, Dt=Dt(step_offset), t=time, iterations=iterations)
                else
-                  call integrator%integrate(U=integrand,       &
-                                            previous=previous, &
-                                            Dt=Dt(step),       &
-                                            t=time(step-step_offset:step-1))
+                  call integrator%integrate(U=integrand, previous=previous, Dt=Dt(step_offset), t=time)
                endif
             endif
+            call update_previous_times
          endif
-         time(step) = time(step-1) + Dt(step)
-         ! if (save_results.and.mod(step, save_frequency)==0) call integrand%export_tecplot(t=time(step))
-         if ((time(step) == final_time).or.(step == final_step)) exit
-      enddo
-
-   type is(integrator_back_df)
-      do
-         step = step + 1
-         ! Dt(step) = integrand%dt(final_step=final_step, final_time=final_time, t=time(step))
-         if (integrator%steps_number() >= step) then
-            call integrator_start%integrate(U=integrand, stage=stage_start, Dt=Dt(step), t=time(step))
-            previous(step) = integrand
-         else
-            if (is_fast) then
-               call integrator%integrate_fast(U=integrand,       &
-                                              previous=previous, &
-                                              buffer=buffer,     &
-                                              Dt=Dt(step),       &
-                                              t=time(step-integrator%steps_number():step-1))
-            else
-               call integrator%integrate(U=integrand,       &
-                                         previous=previous, &
-                                         Dt=Dt(step),       &
-                                         t=time(step-integrator%steps_number():step-1))
-            endif
-         endif
-         time(step) = time(step-1) + Dt(step)
-         ! if (save_results.and.mod(step, save_frequency)==0) call integrand%export_tecplot(t=time(step))
-         if ((time(step) == final_time).or.(step == final_step)) exit
+         if ((time(step_offset) >= final_time).or.(step == final_step)) exit
       enddo
 
    type is(integrator_euler_explicit)
       do
          step = step + 1
-         ! Dt(step_offset) = integrand%dt(final_step=final_step, final_time=final_time, t=time(step_offset))
          if (is_fast) then
             call integrator%integrate_fast(U=integrand, buffer=buffer, Dt=Dt(step_offset), t=time(step_offset))
          else
             call integrator%integrate(U=integrand, Dt=Dt(step_offset), t=time(step_offset))
          endif
          call update_previous_times
-         ! if (save_results.and.mod(step, save_frequency)==0) call integrand%export_tecplot(t=time(step_offset))
          if ((time(step_offset) == final_time).or.(step == final_step)) exit
       enddo
 
@@ -396,14 +331,10 @@ contains
       do
          step = step + 1
          if (integrator%steps_number() >= step) then
-            ! Dt(step) = integrand%dt(final_step=final_step, final_time=final_time, t=time(step))
             call integrator_start%integrate(U=integrand, stage=stage_start, Dt=Dt(step), t=time(step))
             previous(step) = integrand
             time(step) = time(step-1) + Dt(step)
-            ! if (save_results.and.mod(step, save_frequency)==0) call integrand%export_tecplot(t=time(step))
-            if ((time(step) == final_time).or.(step == final_step)) exit
          else
-            ! Dt(step_offset) = integrand%dt(final_step=final_step, final_time=final_time, t=time(step_offset))
             if (index(scheme, 'raw') > 0 ) then
                if (is_fast) then
                  call integrator%integrate_fast(U=integrand, previous=previous, buffer=buffer, Dt=Dt(step_offset), &
@@ -420,110 +351,50 @@ contains
                endif
             endif
             call update_previous_times
-            ! if (save_results.and.mod(step, save_frequency)==0) call integrand%export_tecplot(t=time(step_offset))
-            if ((time(step_offset) == final_time).or.(step == final_step)) exit
          endif
-      enddo
-
-   type is(integrator_lmm_ssp)
-      do
-         step = step + 1
-         ! Dt(step) = integrand%dt(final_step=final_step, final_time=final_time, t=time(step))
-         if (integrator%steps_number() >= step) then
-            call integrator_start%integrate(U=integrand, stage=stage_start, Dt=Dt(step), t=time(step))
-            previous(step) = integrand
-         else
-            if (is_fast) then
-               call integrator%integrate_fast(U=integrand,       &
-                                              previous=previous, &
-                                              buffer=buffer,     &
-                                              Dt=Dt(step),       &
-                                              t=time(step-integrator%steps_number():step-1))
-            else
-               call integrator%integrate(U=integrand,       &
-                                         previous=previous, &
-                                         Dt=Dt(step),       &
-                                         t=time(step-integrator%steps_number():step-1))
-            endif
-         endif
-         time(step) = time(step-1) + Dt(step)
-         ! if (save_results.and.mod(step, save_frequency)==0) call integrand%export_tecplot(t=time(step))
-         if ((time(step) == final_time).or.(step == final_step)) exit
+         if ((time(step_offset) == final_time).or.(step == final_step)) exit
       enddo
 
    type is(integrator_lmm_ssp_vss)
       do
          step = step + 1
-         ! Dt(step) = integrand%dt(final_step=final_step, final_time=final_time, t=time(step))
          if (integrator%steps_number() >= step) then
             call integrator_start%integrate(U=integrand, stage=stage_start, Dt=Dt(step), t=time(step))
             previous(step) = integrand
+            time(step) = time(step-1) + Dt(step)
          else
             if (is_fast) then
-               call integrator%integrate_fast(U=integrand,                                  &
-                                              previous=previous,                            &
-                                              buffer=buffer,                                &
-                                              Dt=Dt(step-integrator%steps_number():step-1), &
-                                              t=time(step-integrator%steps_number():step-1))
+               call integrator%integrate_fast(U=integrand, previous=previous, buffer=buffer, Dt=Dt, t=time)
             else
-               call integrator%integrate(U=integrand,                                  &
-                                         previous=previous,                            &
-                                         Dt=Dt(step-integrator%steps_number():step-1), &
-                                         t=time(step-integrator%steps_number():step-1))
+               call integrator%integrate(U=integrand, previous=previous, Dt=Dt, t=time)
             endif
+            call update_previous_times
          endif
-         time(step) = time(step-1) + Dt(step)
-         ! if (save_results.and.mod(step, save_frequency)==0) call integrand%export_tecplot(t=time(step))
          if ((time(step) == final_time).or.(step == final_step)) exit
       enddo
 
    type is(integrator_ms_runge_kutta_ssp)
       do
          step = step + 1
-         ! Dt(step) = integrand%dt(final_step=final_step, final_time=final_time, t=time(step))
          if (integrator%steps_number() >= step) then
             call integrator_start%integrate(U=integrand, stage=stage_start, Dt=Dt(step), t=time(step))
             previous(step) = integrand
+            time(step) = time(step-1) + Dt(step)
          else
             if (is_fast) then
-               call integrator%integrate_fast(U=integrand,       &
-                                              previous=previous, &
-                                              stage=stage,       &
-                                              buffer=buffer,     &
-                                              Dt=Dt(step),       &
-                                              t=time(step-integrator%steps_number():step-1))
+               call integrator%integrate_fast(U=integrand, previous=previous, stage=stage, buffer=buffer, Dt=Dt(step_offset),t=time)
             else
-               call integrator%integrate(U=integrand,       &
-                                         previous=previous, &
-                                         stage=stage,       &
-                                         Dt=Dt(step),       &
-                                         t=time(step-integrator%steps_number():step-1))
+               call integrator%integrate(U=integrand, previous=previous, stage=stage, Dt=Dt(step_offset), t=time)
             endif
+            call update_previous_times
          endif
-         time(step) = time(step-1) + Dt(step)
-         ! if (save_results.and.mod(step, save_frequency)==0) call integrand%export_tecplot(t=time(step))
          if ((time(step) == final_time).or.(step == final_step)) exit
       enddo
-
-   type is(integrator_runge_kutta_emd)
-      do
-         step = step + 1
-         ! Dt(step) = integrand%dt(final_step=final_step, final_time=final_time, t=time(step))
-         Dt_a = Dt(step)
-         if (is_fast) then
-            call integrator%integrate_fast(U=integrand, stage=stage, buffer=buffer, Dt=Dt_a, t=time(step))
-         else
-            call integrator%integrate(U=integrand, stage=stage, Dt=Dt_a, t=time(step))
-         endif
-         time(step) = time(step-1) + Dt(step)
-         ! if (save_results.and.mod(step, save_frequency)==0) call integrand%export_tecplot(t=time(step))
-         if ((time(step) == final_time).or.(step == final_step)) exit
-      enddo
-
    endselect
 
    select type(integrand)
    type is(integrand_ladvection)
+      if (save_results) call integrand%export_tecplot(t=time(step_offset))
       if (save_results) call integrand%export_tecplot(close_file=.true.)
    endselect
    contains

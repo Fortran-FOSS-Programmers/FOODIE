@@ -74,20 +74,31 @@ use foodie_integrator_leapfrog, only : integrator_leapfrog
 use foodie_integrator_lmm_ssp, only : integrator_lmm_ssp
 use foodie_integrator_lmm_ssp_vss, only : integrator_lmm_ssp_vss
 use foodie_integrator_ms_runge_kutta_ssp, only : integrator_ms_runge_kutta_ssp
+use foodie_integrator_multistage_explicit_object, only : integrator_multistage_explicit_object
+use foodie_integrator_multistep_explicit_object, only : integrator_multistep_explicit_object
+use foodie_integrator_multistep_implicit_object, only : integrator_multistep_implicit_object
 use foodie_integrator_runge_kutta_emd, only : integrator_runge_kutta_emd
 use foodie_integrator_runge_kutta_low_storage, only : integrator_runge_kutta_ls
 use foodie_integrator_runge_kutta_lssp, only : integrator_runge_kutta_lssp
-use foodie_integrator_runge_kutta_object, only : integrator_runge_kutta_object
 use foodie_integrator_runge_kutta_ssp, only : integrator_runge_kutta_ssp
 use penf, only : I_P, R_P
 
 implicit none
 private
+! helper procedures
 public :: foodie_integrator_class_names
 public :: foodie_integrator_factory
 public :: foodie_integrator_schemes
+public :: is_available
+public :: is_class_available
+public :: is_scheme_available
+! abstract objects
 public :: integrand_object
 public :: integrator_object
+public :: integrator_multistage_explicit_object
+public :: integrator_multistep_explicit_object
+public :: integrator_multistep_implicit_object
+! concrete objects
 public :: integrator_adams_bashforth
 public :: integrator_adams_bashforth_moulton
 public :: integrator_adams_moulton
@@ -100,11 +111,7 @@ public :: integrator_ms_runge_kutta_ssp
 public :: integrator_runge_kutta_emd
 public :: integrator_runge_kutta_ls
 public :: integrator_runge_kutta_lssp
-public :: integrator_runge_kutta_object
 public :: integrator_runge_kutta_ssp
-public :: is_available
-public :: is_class_available
-public :: is_scheme_available
 
 contains
   pure function foodie_integrator_class_names() result(names)

@@ -29,6 +29,7 @@ module foodie_integrator_adams_moulton
 
 use foodie_error_codes, only : ERROR_UNSUPPORTED_SCHEME
 use foodie_integrand_object, only : integrand_object
+use foodie_integrator_multistep_implicit_object, only : integrator_multistep_implicit_object
 use foodie_integrator_object, only : integrator_object
 use penf, only : I_P, R_P
 
@@ -55,34 +56,26 @@ character(len=99), parameter :: supported_schemes_(1:16)=[trim(class_name_)//'_0
                                                           trim(class_name_)//'_15'] !< List of supported schemes.
 
 logical, parameter :: has_fast_mode_=.true.  !< Flag to check if integrator provides *fast mode* integrate.
-logical, parameter :: is_multistage_=.false. !< Flag to check if integrator is multistage.
-logical, parameter :: is_multistep_=.true.   !< Flag to check if integrator is multistep.
 
-type, extends(integrator_object) :: integrator_adams_moulton
+type, extends(integrator_multistep_implicit_object) :: integrator_adams_moulton
   !< FOODIE integrator: provide an explicit class of Adams-Moulton multi-step schemes, from 1st to 16th order accurate.
   !<
   !< @note The integrator must be created or initialized (initialize the *b* coefficients) before used.
   private
-  integer(I_P)           :: steps=-1 !< Number of time steps.
-  real(R_P), allocatable :: b(:)     !< \(b\) coefficients.
+  real(R_P), allocatable :: b(:) !< \(b\) coefficients.
   contains
     ! deferred methods
     procedure, pass(self) :: class_name           !< Return the class name of schemes.
     procedure, pass(self) :: description          !< Return pretty-printed object description.
     procedure, pass(lhs)  :: integr_assign_integr !< Operator `=`.
     procedure, pass(self) :: has_fast_mode        !< Return .true. if the integrator class has *fast mode* integrate.
-    procedure, pass(self) :: is_multistage        !< Return .true. for multistage integrator.
-    procedure, pass(self) :: is_multistep         !< Return .true. for multistep integrator.
+    procedure, pass(self) :: integrate            !< Integrate integrand field.
+    procedure, pass(self) :: integrate_fast       !< Integrate integrand field, fast mode.
     procedure, pass(self) :: is_supported         !< Return .true. if the integrator class support the given scheme.
-    procedure, pass(self) :: stages_number        !< Return number of stages used.
-    procedure, pass(self) :: steps_number         !< Return number of steps used.
     procedure, pass(self) :: supported_schemes    !< Return the list of supported schemes.
     ! public methods
-    procedure, pass(self) :: destroy         !< Destroy the integrator.
-    procedure, pass(self) :: initialize      !< Initialize (create) the integrator.
-    procedure, pass(self) :: integrate       !< Integrate integrand field.
-    procedure, pass(self) :: integrate_fast  !< Integrate integrand field, fast mode.
-    procedure, pass(self) :: update_previous !< Cyclic update previous time steps.
+    procedure, pass(self) :: destroy    !< Destroy the integrator.
+    procedure, pass(self) :: initialize !< Initialize (create) the integrator.
 endtype integrator_adams_moulton
 
 contains
@@ -135,21 +128,93 @@ contains
   endselect
   endsubroutine integr_assign_integr
 
-  elemental function is_multistage(self)
-  !< Return .true. for multistage integrator.
-  class(integrator_adams_moulton), intent(in) :: self          !< Integrator.
-  logical                                     :: is_multistage !< Inquire result.
+  subroutine integrate(self, U, previous, Dt, t, iterations, autoupdate)
+  !< Integrate field with Adams-Moulton class scheme.
+  class(integrator_adams_moulton), intent(in)           :: self         !< Integrator.
+  class(integrand_object),         intent(inout)        :: U            !< Field to be integrated.
+  class(integrand_object),         intent(inout)        :: previous(1:) !< Previous time steps solutions of integrand field.
+  real(R_P),                       intent(in)           :: Dt           !< Time steps.
+  real(R_P),                       intent(in)           :: t(:)         !< Times.
+  integer(I_P),                    intent(in), optional :: iterations   !< Fixed point iterations.
+  logical,                         intent(in), optional :: autoupdate   !< Cyclic autoupdate of previous time steps flag.
+  logical                                               :: autoupdate_  !< Cyclic autoupdate of previous time steps flag, dummy var.
+  class(integrand_object), allocatable                  :: delta        !< Delta RHS for fixed point iterations.
+  integer(I_P)                                          :: s            !< Steps counter.
 
-  is_multistage = is_multistage_
-  endfunction is_multistage
+  autoupdate_ = .true. ; if (present(autoupdate)) autoupdate_ = autoupdate
+  if (self%steps>0) then
+    if (present(iterations)) then ! perform fixed point iterations
+      allocate(delta, mold=U)
+      delta = previous(self%steps)
+      do s=0, self%steps - 1
+        delta = delta + (previous(s+1)%t(t=t(s+1)) * (Dt * self%b(s)))
+      enddo
+      do s=1, iterations
+        U = delta + (U%t(t=t(self%steps) + Dt) * (Dt * self%b(self%steps)))
+      enddo
+    else
+      U = previous(self%steps) + (U%t(t=t(self%steps) + Dt) * (Dt * self%b(self%steps)))
+      do s=0, self%steps - 1
+        U = U + (previous(s+1)%t(t=t(s+1)) * (Dt * self%b(s)))
+      enddo
+    endif
+    if (autoupdate_) call self%update_previous(U=U, previous=previous)
+  else
+    U = U + (U%t(t=t(1)) * (Dt * self%b(0)))
+  endif
+  endsubroutine integrate
 
-  elemental function is_multistep(self)
-  !< Return .true. for multistage integrator.
-  class(integrator_adams_moulton), intent(in) :: self         !< Integrator.
-  logical                                     :: is_multistep !< Inquire result.
+  subroutine integrate_fast(self, U, previous, buffer, Dt, t, iterations, autoupdate)
+  !< Integrate field with Adams-Moulton class scheme, fast mode.
+  class(integrator_adams_moulton), intent(in)           :: self         !< Integrator.
+  class(integrand_object),         intent(inout)        :: U            !< Field to be integrated.
+  class(integrand_object),         intent(inout)        :: previous(1:) !< Previous time steps solutions of integrand field.
+  class(integrand_object),         intent(inout)        :: buffer       !< Temporary buffer for doing fast operation.
+  real(R_P),                       intent(in)           :: Dt           !< Time steps.
+  real(R_P),                       intent(in)           :: t(:)         !< Times.
+  integer(I_P),                    intent(in), optional :: iterations   !< Fixed point iterations.
+  logical,                         intent(in), optional :: autoupdate   !< Cyclic autoupdate of previous time steps flag.
+  logical                                               :: autoupdate_  !< Cyclic autoupdate of previous time steps flag, dummy var.
+  class(integrand_object), allocatable                  :: delta        !< Delta RHS for fixed point iterations.
+  integer(I_P)                                          :: s            !< Steps counter.
 
-  is_multistep = is_multistep_
-  endfunction is_multistep
+  autoupdate_ = .true. ; if (present(autoupdate)) autoupdate_ = autoupdate
+  if (self%steps>0) then
+    if (present(iterations)) then ! perform fixed point iterations
+      allocate(delta, mold=U)
+      delta = previous(self%steps)
+      do s=0, self%steps - 1
+        buffer = previous(s+1)
+        call buffer%t_fast(t=t(s+1))
+        call buffer%multiply_fast(lhs=buffer, rhs=Dt * self%b(s))
+        call delta%add_fast(lhs=delta, rhs=buffer)
+      enddo
+      do s=1, iterations
+        buffer = U
+        call buffer%t_fast(t=t(self%steps) + Dt)
+        call buffer%multiply_fast(lhs=buffer, rhs=Dt * self%b(self%steps))
+        call U%add_fast(lhs=delta, rhs=buffer)
+      enddo
+    else
+      buffer = U
+      call buffer%t_fast(t=t(self%steps) + Dt)
+      call buffer%multiply_fast(lhs=buffer, rhs=Dt * self%b(self%steps))
+      call U%add_fast(lhs=previous(self%steps), rhs=buffer)
+      do s=0, self%steps - 1
+        buffer = previous(s+1)
+        call buffer%t_fast(t=t(s+1))
+        call buffer%multiply_fast(lhs=buffer, rhs=Dt * self%b(s))
+        call U%add_fast(lhs=U, rhs=buffer)
+      enddo
+    endif
+    if (autoupdate_) call self%update_previous(U=U, previous=previous)
+  else
+    buffer = U
+    call buffer%t_fast(t=t(1))
+    call buffer%multiply_fast(lhs=buffer, rhs=Dt * self%b(0))
+    call U%add_fast(lhs=U, rhs=buffer)
+  endif
+  endsubroutine integrate_fast
 
   elemental function is_supported(self, scheme)
   !< Return .true. if the integrator class support the given scheme.
@@ -167,22 +232,6 @@ contains
   enddo
   endfunction is_supported
 
-  elemental function stages_number(self)
-  !< Return number of stages used.
-  class(integrator_adams_moulton), intent(in) :: self          !< Integrator.
-  integer(I_P)                                :: stages_number !< Number of stages used.
-
-  stages_number = 0
-  endfunction stages_number
-
-  elemental function steps_number(self)
-  !< Return number of steps used.
-  class(integrator_adams_moulton), intent(in) :: self         !< Integrator.
-  integer(I_P)                                :: steps_number !< Number of steps used.
-
-  steps_number = self%steps
-  endfunction steps_number
-
   pure function supported_schemes(self) result(schemes)
   !< Return the list of supported schemes.
   class(integrator_adams_moulton), intent(in) :: self       !< Integrator.
@@ -197,8 +246,7 @@ contains
   !< Destroy the integrator.
   class(integrator_adams_moulton), intent(INOUT) :: self !< Integrator.
 
-  call self%destroy_abstract
-  self%steps = -1
+  call self%destroy_multistep
   if (allocated(self%b)) deallocate(self%b)
   endsubroutine destroy
 
@@ -385,107 +433,4 @@ contains
                             is_severe=.true.)
   endif
   endsubroutine initialize
-
-  subroutine integrate(self, U, previous, Dt, t, iterations, autoupdate)
-  !< Integrate field with Adams-Moulton class scheme.
-  class(integrator_adams_moulton), intent(in)           :: self         !< Integrator.
-  class(integrand_object),         intent(inout)        :: U            !< Field to be integrated.
-  class(integrand_object),         intent(inout)        :: previous(1:) !< Previous time steps solutions of integrand field.
-  real(R_P),                       intent(in)           :: Dt           !< Time steps.
-  real(R_P),                       intent(in)           :: t(:)         !< Times.
-  integer(I_P),                    intent(in), optional :: iterations   !< Fixed point iterations.
-  logical,                         intent(in), optional :: autoupdate   !< Cyclic autoupdate of previous time steps flag.
-  logical                                               :: autoupdate_  !< Cyclic autoupdate of previous time steps flag, dummy var.
-  class(integrand_object), allocatable                  :: delta        !< Delta RHS for fixed point iterations.
-  integer(I_P)                                          :: s            !< Steps counter.
-
-  autoupdate_ = .true. ; if (present(autoupdate)) autoupdate_ = autoupdate
-  if (self%steps>0) then
-    if (present(iterations)) then ! perform fixed point iterations
-      allocate(delta, mold=U)
-      delta = previous(self%steps)
-      do s=0, self%steps - 1
-        delta = delta + (previous(s+1)%t(t=t(s+1)) * (Dt * self%b(s)))
-      enddo
-      do s=1, iterations
-        U = delta + (U%t(t=t(self%steps) + Dt) * (Dt * self%b(self%steps)))
-      enddo
-    else
-      U = previous(self%steps) + (U%t(t=t(self%steps) + Dt) * (Dt * self%b(self%steps)))
-      do s=0, self%steps - 1
-        U = U + (previous(s+1)%t(t=t(s+1)) * (Dt * self%b(s)))
-      enddo
-    endif
-    if (autoupdate_) call self%update_previous(U=U, previous=previous)
-  else
-    U = U + (U%t(t=t(1)) * (Dt * self%b(0)))
-  endif
-  endsubroutine integrate
-
-  subroutine integrate_fast(self, U, previous, buffer, Dt, t, iterations, autoupdate)
-  !< Integrate field with Adams-Moulton class scheme, fast mode.
-  class(integrator_adams_moulton), intent(in)           :: self         !< Integrator.
-  class(integrand_object),         intent(inout)        :: U            !< Field to be integrated.
-  class(integrand_object),         intent(inout)        :: previous(1:) !< Previous time steps solutions of integrand field.
-  class(integrand_object),         intent(inout)        :: buffer       !< Temporary buffer for doing fast operation.
-  real(R_P),                       intent(in)           :: Dt           !< Time steps.
-  real(R_P),                       intent(in)           :: t(:)         !< Times.
-  integer(I_P),                    intent(in), optional :: iterations   !< Fixed point iterations.
-  logical,                         intent(in), optional :: autoupdate   !< Cyclic autoupdate of previous time steps flag.
-  logical                                               :: autoupdate_  !< Cyclic autoupdate of previous time steps flag, dummy var.
-  class(integrand_object), allocatable                  :: delta        !< Delta RHS for fixed point iterations.
-  integer(I_P)                                          :: s            !< Steps counter.
-
-  autoupdate_ = .true. ; if (present(autoupdate)) autoupdate_ = autoupdate
-  if (self%steps>0) then
-    if (present(iterations)) then ! perform fixed point iterations
-      allocate(delta, mold=U)
-      delta = previous(self%steps)
-      do s=0, self%steps - 1
-        buffer = previous(s+1)
-        call buffer%t_fast(t=t(s+1))
-        call buffer%multiply_fast(lhs=buffer, rhs=Dt * self%b(s))
-        call delta%add_fast(lhs=delta, rhs=buffer)
-      enddo
-      do s=1, iterations
-        buffer = U
-        call buffer%t_fast(t=t(self%steps) + Dt)
-        call buffer%multiply_fast(lhs=buffer, rhs=Dt * self%b(self%steps))
-        call U%add_fast(lhs=delta, rhs=buffer)
-      enddo
-    else
-      buffer = U
-      call buffer%t_fast(t=t(self%steps) + Dt)
-      call buffer%multiply_fast(lhs=buffer, rhs=Dt * self%b(self%steps))
-      call U%add_fast(lhs=previous(self%steps), rhs=buffer)
-      do s=0, self%steps - 1
-        buffer = previous(s+1)
-        call buffer%t_fast(t=t(s+1))
-        call buffer%multiply_fast(lhs=buffer, rhs=Dt * self%b(s))
-        call U%add_fast(lhs=U, rhs=buffer)
-      enddo
-    endif
-    if (autoupdate_) call self%update_previous(U=U, previous=previous)
-  else
-    buffer = U
-    call buffer%t_fast(t=t(1))
-    call buffer%multiply_fast(lhs=buffer, rhs=Dt * self%b(0))
-    call U%add_fast(lhs=U, rhs=buffer)
-  endif
-  endsubroutine integrate_fast
-
-  subroutine update_previous(self, U, previous)
-  !< Cyclic update previous time steps.
-  class(integrator_adams_moulton), intent(in)    :: self         !< Integrator.
-  class(integrand_object),         intent(in)    :: U            !< Field to be integrated.
-  class(integrand_object),         intent(inout) :: previous(1:) !< Previous time steps solutions of integrand field.
-  integer(I_P)                                   :: s            !< Steps counter.
-
-  if (self%steps>0) then
-    do s=0, self%steps - 2
-      previous(s + 1) = previous(s + 2)
-    enddo
-    previous(self%steps) = U
-  endif
-  endsubroutine update_previous
 endmodule foodie_integrator_adams_moulton
