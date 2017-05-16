@@ -28,6 +28,7 @@ use foodie, only : foodie_integrator_class_names,         &
                    integrator_runge_kutta_ssp,            &
                    is_available, is_class_available
 use foodie_test_integrand_ladvection, only : integrand_ladvection
+use foodie_test_integrand_oscillation, only : integrand_oscillation
 use penf, only : I_P, R_P, FR_P, str, strz
 
 implicit none
@@ -54,6 +55,7 @@ type :: test_object
    character(99)                        :: output=''             !< Output files basename.
    logical                              :: verbose=.false.       !< Flag for activating verbose output.
    type(integrand_ladvection)           :: ladvection_0          !< Initial conditions for linear advection test.
+   type(integrand_oscillation)          :: oscillation_0         !< Initial conditions for oscillation test.
    class(integrand_object), allocatable :: integrand_0           !< Initial conditions.
    contains
       ! public methods
@@ -120,7 +122,7 @@ contains
                        examples    = ["foodie_tester --scheme euler_explicit --save_results  ", &
                                       "foodie_tester --scheme all -r                         "])
          call cli%add(switch='--test', switch_ab='-t', help='test executed', required=.false., def='linear_advection', &
-                      act='store', choices='linear_advection')
+                      act='store', choices='linear_advection,oscillation')
          call cli%add(switch='--scheme', switch_ab='-s', help='integrator scheme used', required=.false., def='all', act='store')
          call cli%add(switch='--fast', help='activate fast solvers', required=.false., act='store_true', def='.false.')
          call cli%add(switch='--iterations', help='iterations number for implicit schemes', required=.false., act='store', def='5')
@@ -132,6 +134,7 @@ contains
          call cli%add(switch='--verbose', help='Verbose output', required=.false., act='store_true', def='.false.')
       endassociate
       call self%ladvection_0%set_cli(cli=self%cli)
+      call self%oscillation_0%set_cli(cli=self%cli)
       endsubroutine set_cli
 
       subroutine parse_cli()
@@ -153,11 +156,15 @@ contains
       call self%cli%get(switch='--output', val=self%output, error=self%error) ; if (self%error/=0) stop
       call self%cli%get(switch='--verbose', val=self%verbose, error=self%error) ; if (self%error/=0) stop
       call self%ladvection_0%parse_cli(cli=self%cli)
+      call self%oscillation_0%parse_cli(cli=self%cli)
 
       select case(trim(adjustl(self%test)))
       case('linear_advection')
          allocate(integrand_ladvection :: self%integrand_0)
          self%integrand_0 = self%ladvection_0
+      case('oscillation')
+         allocate(integrand_oscillation :: self%integrand_0)
+         self%integrand_0 = self%oscillation_0
       endselect
 
       if (self%final_time > 0._R_P) self%final_step = 0
@@ -258,6 +265,9 @@ contains
    select type(integrand)
    type is(integrand_ladvection)
       Dt = integrand%dt(final_step=final_step, final_time=final_time, t=0._R_P)
+      if (save_results) call integrand%export_tecplot(file_name=output_file_name, t=time(0), scheme=scheme)
+   type is(integrand_oscillation)
+      Dt = integrand%dt
       if (save_results) call integrand%export_tecplot(file_name=output_file_name, t=time(0), scheme=scheme)
    endselect
 
@@ -402,6 +412,9 @@ contains
 
    select type(integrand)
    type is(integrand_ladvection)
+      if (save_results) call integrand%export_tecplot(t=time(step_offset), scheme=scheme)
+      if (save_results) call integrand%export_tecplot(close_file=.true.)
+   type is(integrand_oscillation)
       if (save_results) call integrand%export_tecplot(t=time(step_offset), scheme=scheme)
       if (save_results) call integrand%export_tecplot(close_file=.true.)
    endselect

@@ -52,8 +52,6 @@ type, extends(integrand_object) :: integrand_ladvection
    real(R_P)                               :: length=0._R_P   !< Domain length.
    real(R_P)                               :: Dx=0._R_P       !< Space step.
    real(R_P)                               :: a=0._R_P        !< Advection coefficient.
-   character(3)                            :: BC_L=''         !< Left boundary condition type.
-   character(3)                            :: BC_R=''         !< Right boundary condition type.
    real(R_P), allocatable                  :: u(:)            !< Integrand (state) variable.
    class(interpolator_object), allocatable :: interpolator    !< WENO interpolator.
    contains
@@ -415,8 +413,6 @@ contains
       lhs%Ng         = rhs%Ng
       lhs%Dx         = rhs%Dx
       lhs%a          = rhs%a
-      lhs%BC_L       = rhs%BC_L
-      lhs%BC_R       = rhs%BC_R
       if (allocated(rhs%u)) then
          lhs%u = rhs%u
       else
@@ -447,35 +443,13 @@ contains
    real(R_P),                   intent(inout) :: u(1-self%Ng:) !< Conservative variables.
    integer(I_P)                               :: i             !< Space counter.
 
-   select case(trim(adjustl(self%BC_L)))
-      case('TRA') ! trasmissive (non reflective) BC
-         do i=1-self%Ng, 0
-            u(i) = u(-i+1)
-         enddo
-      case('REF') ! reflective BC
-         do i=1-self%Ng, 0
-            u(i) = - u(-i+1)
-         enddo
-      case('PER') ! periodic BC
-         do i=1-self%Ng, 0
-            u(i) = u(self%Ni+i)
-         enddo
-   endselect
+   do i=1-self%Ng, 0
+      u(i) = u(self%Ni+i)
+   enddo
 
-   select case(trim(adjustl(self%BC_R)))
-      case('TRA') ! trasmissive (non reflective) BC
-         do i=self%Ni+1, self%Ni+self%Ng
-            u(i) = u(self%Ni-(i-self%Ni-1))
-         enddo
-      case('REF') ! reflective BC
-         do i=self%Ni+1, self%Ni+self%Ng
-            u(i) = - u(self%Ni-(i-self%Ni-1))
-         enddo
-      case('PER') ! periodic BC
-         do i=self%Ni+1, self%Ni+self%Ng
-            u(i) = u(i-self%Ni)
-         enddo
-   endselect
+   do i=self%Ni+1, self%Ni+self%Ng
+      u(i) = u(i-self%Ni)
+   enddo
    endsubroutine impose_boundary_conditions
 
    subroutine reconstruct_interfaces(self, conservative, r_conservative)
@@ -517,8 +491,6 @@ contains
    real(R_P)                                  :: x(1:self%ni) !< Cell center x-abscissa values.
    integer(I_P)                               :: i            !< Space counter.
 
-   self%BC_L = 'PER'
-   self%BC_R = 'PER'
    if (allocated(self%u)) deallocate(self%u) ; allocate(self%u(1-self%Ng:self%Ni+self%Ng))
    do i=1, self%Ni
       x(i) = self%Dx * i - 0.5_R_P * self%Dx
