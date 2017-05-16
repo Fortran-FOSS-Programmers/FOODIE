@@ -1,7 +1,7 @@
-!< Test FOODIE with the integration of 1D linear advection PDE.
+!< Tester factory of FOODIE integrators.
 
-module foodie_test_ladvection_test
-!< Oscillation test handler definition.
+module foodie_test_object
+!< Definition of [[test_object]] for FOODIE tester factory.
 
 use, intrinsic :: iso_fortran_env, only : stderr=>error_unit
 use flap, only : command_line_interface
@@ -32,42 +32,44 @@ use penf, only : I_P, R_P, FR_P, str, strz
 
 implicit none
 private
-public :: ladvection_test
+public :: test_object
 
-type :: ladvection_test
-   !< Class to handle 1D linear advection test(s).
+type :: test_object
+   !< Generic FOODIE test object.
    !<
    !< Test is driven by the Command Line Interface (CLI) options.
    !<
    !< Test has only 1 public method `execute`: it executes test(s) accordingly to cli options.
    private
-   type(command_line_interface) :: cli                   !< Command line interface handler.
-   integer(I_P)                 :: error=0               !< Error handler.
-   character(99)                :: scheme=''             !< Scheme used.
-   logical                      :: is_fast=.false.       !< Flag for activating fast schemes.
-   integer(I_P)                 :: implicit_iterations=0 !< Number of iterations (implicit solvers).
-   integer(I_P)                 :: stages=0              !< Number of stages.
-   integer(I_P)                 :: final_step=0          !< Maximum number of time steps.
-   real(R_P)                    :: final_time=0._R_P     !< Final integration time.
-   logical                      :: save_results=.false.  !< Flag for activating results saving.
-   integer(I_P)                 :: save_frequency=0      !< Output save frequency.
-   character(99)                :: output=''             !< Output files basename.
-   logical                      :: verbose=.false.       !< Flag for activating verbose output.
-   type(integrand_ladvection)   :: integrand_0           !< Initial conditions.
+   type(command_line_interface)         :: cli                   !< Command line interface handler.
+   integer(I_P)                         :: error=0               !< Error handler.
+   character(99)                        :: test=''               !< Test executed.
+   character(99)                        :: scheme=''             !< Scheme used.
+   logical                              :: is_fast=.false.       !< Flag for activating fast schemes.
+   integer(I_P)                         :: implicit_iterations=0 !< Number of iterations (implicit solvers).
+   integer(I_P)                         :: stages=0              !< Number of stages.
+   integer(I_P)                         :: final_step=0          !< Maximum number of time steps.
+   real(R_P)                            :: final_time=0._R_P     !< Final integration time.
+   logical                              :: save_results=.false.  !< Flag for activating results saving.
+   character(99)                        :: output=''             !< Output files basename.
+   logical                              :: verbose=.false.       !< Flag for activating verbose output.
+   type(integrand_ladvection)           :: ladvection_0          !< Initial conditions for linear advection test.
+   class(integrand_object), allocatable :: integrand_0           !< Initial conditions.
    contains
       ! public methods
       procedure, pass(self) :: execute !< Execute selected test(s).
       ! private methods
       procedure, pass(self), private :: initialize !< Initialize test: set Command Line Interface, parse it and check its validity.
-endtype ladvection_test
+endtype test_object
 
 contains
    ! public methods
    subroutine execute(self)
    !< Execute test(s).
-   class(ladvection_test), intent(inout) :: self                  !< Test.
-   character(99), allocatable            :: integrator_schemes(:) !< Name of FOODIE integrator schemes.
-   integer(I_P)                          :: s                     !< Counter.
+   class(test_object), intent(inout) :: self                  !< Test.
+   character(99), allocatable        :: integrator_schemes(:) !< Name of FOODIE integrator schemes.
+   character(len=:), allocatable     :: output_file_name      !< File name of output results file.
+   integer(I_P)                      :: s                     !< Counter.
 
    call self%initialize
    if (trim(adjustl(self%scheme))/='all') then
@@ -80,6 +82,13 @@ contains
       integrator_schemes = foodie_integrator_schemes()
    endif
    do s=1, size(integrator_schemes, dim=1)
+      select type(integrand=>self%integrand_0)
+      type is(integrand_ladvection)
+         output_file_name = trim(adjustl(self%output))//'-'//&
+                            trim(adjustl(self%test))//'-'//&
+                            trim(adjustl(integrator_schemes(s)))//'-'//&
+                            trim(strz(integrand%Ni, 10))//'.dat'
+      endselect
       call integrate(scheme=trim(integrator_schemes(s)),  &
                      integrand_0=self%integrand_0,        &
                      final_step=self%final_step,          &
@@ -88,15 +97,14 @@ contains
                      stages=self%stages,                  &
                      is_fast=self%is_fast,                &
                      save_results=self%save_results,      &
-                     save_frequency=self%save_frequency,  &
-                     output_base_name=self%output)
+                     output_file_name=output_file_name)
    enddo
    endsubroutine execute
 
    ! private methods
    subroutine initialize(self)
    !< Initialize test: set Command Line Interface, parse it and check its validity.
-   class(ladvection_test), intent(inout) :: self !< Test.
+   class(test_object), intent(inout) :: self !< Test.
 
    call set_cli
    call parse_cli
@@ -105,12 +113,14 @@ contains
       !< Set Command Line Interface.
 
       associate(cli => self%cli)
-         call cli%init(progname    = 'foodie_test_ladvection',                                           &
-                       authors     = 'Fortran-FOSS-Programmers',                                         &
-                       license     = 'GNU GPLv3',                                                        &
-                       description = 'Test FOODIE library on 1D linear advection PDE integration',       &
-                       examples    = ["foodie_test_ladvection --scheme euler_explicit --save_results  ", &
-                                      "foodie_test_ladvection --scheme all -r                         "])
+         call cli%init(progname    = 'foodie_tester',                                           &
+                       authors     = 'Fortran-FOSS-Programmers',                                &
+                       license     = 'GNU GPLv3',                                               &
+                       description = 'Tester factory of FOODIE integrators',                    &
+                       examples    = ["foodie_tester --scheme euler_explicit --save_results  ", &
+                                      "foodie_tester --scheme all -r                         "])
+         call cli%add(switch='--test', switch_ab='-t', help='test executed', required=.false., def='linear_advection', &
+                      act='store', choices='linear_advection')
          call cli%add(switch='--scheme', switch_ab='-s', help='integrator scheme used', required=.false., def='all', act='store')
          call cli%add(switch='--fast', help='activate fast solvers', required=.false., act='store_true', def='.false.')
          call cli%add(switch='--iterations', help='iterations number for implicit schemes', required=.false., act='store', def='5')
@@ -118,11 +128,10 @@ contains
          call cli%add(switch='--final_step', switch_ab='-fs', help='integration steps', required=.false., act='store', def='100')
          call cli%add(switch='--final_time', switch_ab='-ft', help='integration time', required=.false., def='0', act='store')
          call cli%add(switch='--save_results', switch_ab='-r',help='save result', required=.false., act='store_true', def='.false.')
-         call cli%add(switch='--save_frequency', help='output save frequency', required=.false., act='store', def='1')
-         call cli%add(switch='--output', help='output file basename', required=.false., act='store', def='foodie_test_ladvection')
+         call cli%add(switch='--output', help='output file basename', required=.false., act='store', def='foodie_test')
          call cli%add(switch='--verbose', help='Verbose output', required=.false., act='store_true', def='.false.')
       endassociate
-      call self%integrand_0%set_cli(cli=self%cli)
+      call self%ladvection_0%set_cli(cli=self%cli)
       endsubroutine set_cli
 
       subroutine parse_cli()
@@ -133,6 +142,7 @@ contains
       integer(I_P)               :: i                         !< Counter.
 
       call self%cli%parse(error=self%error)
+      call self%cli%get(switch='-t', val=self%test, error=self%error) ; if (self%error/=0) stop
       call self%cli%get(switch='-s', val=self%scheme, error=self%error) ; if (self%error/=0) stop
       call self%cli%get(switch='--fast', val=self%is_fast, error=self%error) ; if (self%error/=0) stop
       call self%cli%get(switch='--iterations', val=self%implicit_iterations, error=self%error) ; if (self%error/=0) stop
@@ -140,10 +150,15 @@ contains
       call self%cli%get(switch='-fs', val=self%final_step, error=self%error) ; if (self%error/=0) stop
       call self%cli%get(switch='-ft', val=self%final_time, error=self%error) ; if (self%error/=0) stop
       call self%cli%get(switch='-r', val=self%save_results, error=self%error) ; if (self%error/=0) stop
-      call self%cli%get(switch='--save_frequency', val=self%save_frequency, error=self%error) ; if (self%error/=0) stop
       call self%cli%get(switch='--output', val=self%output, error=self%error) ; if (self%error/=0) stop
       call self%cli%get(switch='--verbose', val=self%verbose, error=self%error) ; if (self%error/=0) stop
-      call self%integrand_0%parse_cli(cli=self%cli)
+      call self%ladvection_0%parse_cli(cli=self%cli)
+
+      select case(trim(adjustl(self%test)))
+      case('linear_advection')
+         allocate(integrand_ladvection :: self%integrand_0)
+         self%integrand_0 = self%ladvection_0
+      endselect
 
       if (self%final_time > 0._R_P) self%final_step = 0
 
@@ -178,8 +193,7 @@ contains
    endif
    endsubroutine check_scheme_has_fast_mode
 
-   subroutine integrate(scheme, integrand_0, final_step, final_time, iterations, stages, is_fast, &
-                        save_results, save_frequency, output_base_name)
+   subroutine integrate(scheme, integrand_0, final_step, final_time, iterations, stages, is_fast, save_results, output_file_name)
    !< Integrate integrand by means of the given scheme.
    character(*),            intent(in)   :: scheme           !< Selected scheme.
    class(integrand_object), intent(in)   :: integrand_0      !< Initial conditions.
@@ -189,8 +203,7 @@ contains
    integer(I_P),            intent(in)   :: stages           !< Number of stages.
    logical,                 intent(in)   :: is_fast          !< Activate fast mode integration.
    logical,                 intent(in)   :: save_results     !< Save results.
-   integer(I_P),            intent(in)   :: save_frequency   !< Save frequency as steps multiple.
-   character(*),            intent(in)   :: output_base_name !< Base name of output results file.
+   character(*),            intent(in)   :: output_file_name !< File name of output results file.
    class(integrator_object), allocatable :: integrator       !< The integrator.
    type(integrator_runge_kutta_ssp)      :: integrator_start !< The (auto) start integrator.
    class(integrand_object), allocatable  :: integrand        !< Integrand.
@@ -204,7 +217,6 @@ contains
    real(R_P)                             :: Dt_a             !< Autoadptive time step.
    integer(I_P)                          :: step             !< Time steps counter.
    integer(I_P)                          :: step_offset      !< Time steps counter offset for slicing previous data array.
-   character(len=:), allocatable         :: output_file_name !< File name of output results file.
    integer(I_P)                          :: s                !< Counter.
 
    allocate(integrand, mold=integrand_0) ; integrand = integrand_0
@@ -246,11 +258,7 @@ contains
    select type(integrand)
    type is(integrand_ladvection)
       Dt = integrand%dt(final_step=final_step, final_time=final_time, t=0._R_P)
-   endselect
-   select type(integrand)
-   type is(integrand_ladvection)
-      output_file_name = trim(adjustl(output_base_name))//'-'//trim(adjustl(scheme))//'-'//trim(strz(integrand%Ni, 10))//'.dat'
-      if (save_results) call integrand%export_tecplot(file_name=output_file_name, t=time(0))
+      if (save_results) call integrand%export_tecplot(file_name=output_file_name, t=time(0), scheme=scheme)
    endselect
 
    select type(integrator)
@@ -394,7 +402,7 @@ contains
 
    select type(integrand)
    type is(integrand_ladvection)
-      if (save_results) call integrand%export_tecplot(t=time(step_offset))
+      if (save_results) call integrand%export_tecplot(t=time(step_offset), scheme=scheme)
       if (save_results) call integrand%export_tecplot(close_file=.true.)
    endselect
    contains
@@ -414,15 +422,15 @@ contains
       time(step_offset-1) = temporary
       endsubroutine update_previous_times
    endsubroutine integrate
-endmodule foodie_test_ladvection_test
+endmodule foodie_test_object
 
-program foodie_test_ladvection
-!< Test FOODIE with the integration of 1D linear advection PDE.
+program foodie_tester
+!< Tester factory of FOODIE integrators.
 
-use foodie_test_ladvection_test, only : ladvection_test
+use foodie_test_object, only : test_object
 
 implicit none
-type(ladvection_test) :: test !< Linear advection test.
+type(test_object) :: test !< FOODIE test.
 
 call test%execute
-endprogram foodie_test_ladvection
+endprogram foodie_tester

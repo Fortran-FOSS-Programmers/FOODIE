@@ -134,11 +134,12 @@ contains
 
    endfunction exact_solution
 
-   subroutine export_tecplot(self, file_name, t, close_file)
+   subroutine export_tecplot(self, file_name, t, scheme, close_file)
    !< Export integrand to Tecplot file.
    class(integrand_ladvection), intent(in)           :: self            !< Advection field.
    character(*),                intent(in), optional :: file_name       !< File name.
    real(R_P),                   intent(in), optional :: t               !< Time.
+   character(*),                intent(in), optional :: scheme          !< Scheme used to integrate integrand.
    logical,                     intent(in), optional :: close_file      !< Flag for closing file.
    logical, save                                     :: is_open=.false. !< Flag for checking if file is open.
    integer(I_P), save                                :: file_unit       !< File unit.
@@ -156,8 +157,8 @@ contains
          is_open = .true.
          write(unit=file_unit, fmt='(A)') 'VARIABLES="x" "u"'
       endif
-      if (present(t) .and. is_open) then
-         write(unit=file_unit, fmt='(A)') 'ZONE T="'//str(t)//'"'
+      if (present(t) .and. present(scheme) .and. is_open) then
+         write(unit=file_unit, fmt='(A)') 'ZONE T="'//str(t)//' '//trim(adjustl(scheme))//'"'
          do i=1, self%Ni
             write(unit=file_unit, fmt='(2('//FR_P//',1X))') self%Dx * i - 0.5_R_P * self%Dx, self%u(i)
          enddo
