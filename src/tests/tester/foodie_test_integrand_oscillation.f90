@@ -5,7 +5,7 @@ module foodie_test_integrand_oscillation
 
 use flap, only : command_line_interface
 use foodie, only : integrand_object
-use penf, only : R_P, I_P, str
+use penf, only : FR_P, R_P, I_P, str
 
 implicit none
 private
@@ -43,18 +43,18 @@ type, extends(integrand_object) :: integrand_oscillation
    !<#### State variables organization
    !< State variables are organized as an array (rank 1) of reals of *n=2* elements.
    private
-   real(R_P), public :: Dt=0._R_P                !< Time step.
-   real(R_P)         :: f=0._R_P                 !< Oscillation frequency (Hz).
-   real(R_P)         :: U(1:2)=[0._R_P, 0._R_P]  !< Integrand (state) variables.
-   real(R_P)         :: U0(1:2)=[0._R_P, 0._R_P] !< Initial state.
+   real(R_P) :: f=0._R_P                 !< Oscillation frequency (Hz).
+   real(R_P) :: U0(1:2)=[0._R_P, 0._R_P] !< Initial state.
+   real(R_P) :: U(1:2)=[0._R_P, 0._R_P]  !< Integrand (state) variables.
    contains
       ! auxiliary methods
-      procedure, pass(self), public :: exact_solution !< Return exact solution.
-      procedure, pass(self), public :: export_tecplot !< Export integrand to Tecplot file.
-      procedure, pass(self), public :: initialize     !< Initialize integrand.
-      procedure, pass(self), public :: output         !< Extract integrand state field.
-      procedure, pass(self), public :: parse_cli      !< Initialize from command line interface.
-      procedure, nopass,     public :: set_cli        !< Set command line interface.
+      procedure, pass(self), public :: amplitude_phase !< Return amplitude and phase of the oscillation.
+      procedure, pass(self), public :: exact_solution  !< Return exact solution.
+      procedure, pass(self), public :: export_tecplot  !< Export integrand to Tecplot file.
+      procedure, pass(self), public :: initialize      !< Initialize integrand.
+      procedure, pass(self), public :: output          !< Extract integrand state field.
+      procedure, pass(self), public :: parse_cli       !< Initialize from command line interface.
+      procedure, nopass,     public :: set_cli         !< Set command line interface.
       ! public deferred methods
       procedure, pass(self), public :: integrand_dimension !< Return integrand dimension.
       procedure, pass(self), public :: t => dU_dt          !< Time derivative, residuals.
@@ -87,6 +87,15 @@ endtype integrand_oscillation
 
 contains
    ! auxiliary methods
+   function amplitude_phase(self) result(ap)
+   !< Compute amplitude and phase of the oscillation.
+   class(integrand_oscillation), intent(in) :: self    !< Advection field.
+   real(R_P)                                :: ap(1:2) !< Amplitude and phase.
+
+   ap(1) = sqrt(self%U(1)**2 + self%U(2)**2)
+   ap(2) = atan(-self%U(1) / self%U(2))
+   endfunction amplitude_phase
+
    pure function exact_solution(self, t) result(exact)
    !< Return exact solution.
    class(integrand_oscillation), intent(in) :: self       !< Integrand.
@@ -118,13 +127,13 @@ contains
          if (is_open) close(unit=file_unit)
          open(newunit=file_unit, file=trim(adjustl(file_name)))
          is_open = .true.
-         ! write(unit=file_unit, fmt='(A)') 'VARIABLES="x" "u"'
+         write(unit=file_unit, fmt='(A)') 'VARIABLES="t" "x" "y" "amplitude" "phase"'
       endif
       if (present(t) .and. present(scheme) .and. is_open) then
-         write(unit=file_unit, fmt='(A)') 'ZONE T="'//str(t)//' '//trim(adjustl(scheme))//'"'
-         ! do i=1, self%Ni
-            ! write(unit=file_unit, fmt='(2('//FR_P//',1X))') self%Dx * i - 0.5_R_P * self%Dx, self%u(i)
-         ! enddo
+         write(unit=file_unit, fmt='(A)') 'ZONE T="'//trim(adjustl(scheme))//'"'
+         write(unit=file_unit, fmt='(5('//FR_P//',1X))') t, self%U, self%amplitude_phase()
+      elseif (present(t) .and. is_open) then
+         write(unit=file_unit, fmt='(5('//FR_P//',1X))') t, self%U, self%amplitude_phase()
       endif
    endif
    endsubroutine export_tecplot
@@ -154,30 +163,17 @@ contains
    type(command_line_interface), intent(inout) :: cli           !< Command line interface handler.
    character(99)                               :: initial_state !< Initial state.
 
-   ! call cli%get(switch='--cfl', val=self%CFL, error=cli%error) ; if (cli%error/=0) stop
-   ! call cli%get(switch='--w-scheme', val=self%w_scheme, error=cli%error) ; if (cli%error/=0) stop
-   ! call cli%get(switch='--weno-order', val=self%weno_order, error=cli%error) ; if (cli%error/=0) stop
-   ! call cli%get(switch='--weno-eps', val=self%weno_eps, error=cli%error) ; if (cli%error/=0) stop
-   ! call cli%get(switch='-a', val=self%a, error=cli%error) ; if (cli%error/=0) stop
-   ! call cli%get(switch='--length', val=self%length, error=cli%error) ; if (cli%error/=0) stop
-   ! call cli%get(switch='--Ni', val=self%Ni, error=cli%error) ; if (cli%error/=0) stop
-   ! call cli%get(switch='-is', val=initial_state, error=cli%error) ; if (cli%error/=0) stop
+   call cli%get(switch='-f', val=self%f, error=cli%error) ; if (cli%error/=0) stop
+   call cli%get(switch='-U0', val=self%U0, error=cli%error) ; if (cli%error/=0) stop
+   self%U = self%U0
    endsubroutine parse_cli
 
    subroutine set_cli(cli)
    !< Set command line interface.
    type(command_line_interface), intent(inout) :: cli !< Command line interface handler.
 
-   ! call cli%add(switch='--w-scheme', help='WENO scheme', required=.false., act='store', def='reconstructor-JS', &
-   !   choices='reconstructor-JS,reconstructor-M-JS,reconstructor-M-Z,reconstructor-Z')
-   ! call cli%add(switch='--weno-order', help='WENO order', required=.false., act='store', def='1')
-   ! call cli%add(switch='--weno-eps', help='WENO epsilon parameter', required=.false., act='store', def='0.000001')
-   ! call cli%add(switch='--cfl', help='CFL value', required=.false., act='store', def='0.8')
-   ! call cli%add(switch='-a', help='advection coefficient', required=.false., act='store', def='1.0')
-   ! call cli%add(switch='--length', help='domain lenth', required=.false., act='store', def='1.0')
-   ! call cli%add(switch='--Ni', help='number finite volumes used', required=.false., act='store', def='100')
-   ! call cli%add(switch='--initial_state', switch_ab='-is', help='initial state', required=.false., act='store', &
-   !              def='square_wave', choices='square_wave')
+   call cli%add(switch='--frequency', switch_ab='-f', help='frequency', required=.false., def='1e-4', act='store')
+   call cli%add(switch='--U0', switch_ab='-U0', nargs='2', help='initial state', required=.false., def='0.0 1.0', act='store')
    endsubroutine set_cli
 
    ! deferred methods
@@ -339,10 +335,9 @@ contains
 
    select type(rhs)
    class is(integrand_oscillation)
-      lhs%U = rhs%U
       lhs%f = rhs%f
       lhs%U0 = rhs%U0
-      lhs%Dt = rhs%Dt
+      lhs%U = rhs%U
    endselect
    endsubroutine assign_integrand
 

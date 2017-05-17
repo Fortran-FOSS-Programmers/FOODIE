@@ -107,17 +107,16 @@ contains
    self = fresh
    endsubroutine destroy
 
-   pure function compute_dt(self, final_step, final_time, t) result(Dt)
+   pure function compute_dt(self, final_time, t) result(Dt)
    !< Compute the current time step by means of CFL condition.
-   class(integrand_ladvection), intent(in) :: self       !< Advection field.
-   integer(I_P),                intent(in) :: final_step !< Maximun number of time steps.
-   real(R_P),                   intent(in) :: final_time !< Maximum integration time.
-   real(R_P),                   intent(in) :: t          !< Time.
-   real(R_P)                               :: Dt         !< Time step.
+   class(integrand_ladvection), intent(in)           :: self       !< Advection field.
+   real(R_P),                   intent(in)           :: final_time !< Maximum integration time.
+   real(R_P),                   intent(in), optional :: t          !< Time.
+   real(R_P)                                         :: Dt         !< Time step.
 
    associate(a=>self%a, Ni=>self%Ni, Dx=>self%Dx, CFL=>self%CFL)
       Dt = Dx * CFL / abs(a)
-      if (final_step <= 0 .and. final_time > 0._R_P) then
+      if (present(t)) then
          if ((t + Dt) > final_time) Dt = final_time - t
       endif
    endassociate
