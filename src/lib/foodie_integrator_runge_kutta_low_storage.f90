@@ -246,51 +246,52 @@ contains
   endselect
   endsubroutine integr_assign_integr
 
-  subroutine integrate(self, U, stage, Dt, t, new_Dt)
+  subroutine integrate(self, U, Dt, t, new_Dt)
   !< Integrate field with explicit low storage Runge-Kutta scheme.
-  class(integrator_runge_kutta_ls), intent(in)    :: self      !< Integrator.
-  class(integrand_object),          intent(inout) :: U         !< Field to be integrated.
-  class(integrand_object),          intent(inout) :: stage(1:) !< Runge-Kutta registers.
-  real(R_P),                        intent(in)    :: Dt        !< Time step.
-  real(R_P),                        intent(in)    :: t         !< Time.
-  real(R_P), optional,              intent(out)   :: new_Dt    !< New adapted time step.
-  integer(I_P)                                    :: s         !< First stages counter.
+  class(integrator_runge_kutta_ls), intent(inout)         :: self   !< Integrator.
+  class(integrand_object),          intent(inout)         :: U      !< Field to be integrated.
+  real(R_P),                        intent(in)            :: Dt     !< Time step.
+  real(R_P),                        intent(in)            :: t      !< Time.
+  real(R_P),                        intent(out), optional :: new_Dt !< New adapted time step.
+  integer(I_P)                                            :: s      !< First stages counter.
 
-  ! computing stages
-  stage(1) = U
-  stage(2) = U * 0._R_P
-  do s=1, self%stages
-    stage(2) = (stage(2) * self%A(s)) + (stage(1)%t(t=t + self%C(s) * Dt) * Dt)
-    stage(1) = stage(1) + (stage(2) * self%B(s))
-  enddo
-  U = stage(1)
+  associate(stage=>self%stage)
+     ! computing stages
+     stage(1) = U
+     stage(2) = U * 0._R_P
+     do s=1, self%stages
+       stage(2) = (stage(2) * self%A(s)) + (stage(1)%t(t=t + self%C(s) * Dt) * Dt)
+       stage(1) = stage(1) + (stage(2) * self%B(s))
+     enddo
+     U = stage(1)
+  endassociate
   if (present(new_Dt)) new_Dt = Dt
   endsubroutine integrate
 
-  subroutine integrate_fast(self, U, stage, buffer, Dt, t, new_Dt)
+  subroutine integrate_fast(self, U, Dt, t, new_Dt)
   !< Integrate field with explicit low storage Runge-Kutta scheme, fast mode.
-  class(integrator_runge_kutta_ls), intent(in)    :: self      !< Integrator.
-  class(integrand_object),          intent(inout) :: U         !< Field to be integrated.
-  class(integrand_object),          intent(inout) :: stage(1:) !< Runge-Kutta registers.
-  class(integrand_object),          intent(inout) :: buffer    !< Temporary buffer for doing fast operation.
-  real(R_P),                        intent(in)    :: Dt        !< Time step.
-  real(R_P),                        intent(in)    :: t         !< Time.
-  real(R_P), optional,              intent(out)   :: new_Dt    !< New adapted time step.
-  integer(I_P)                                    :: s         !< First stages counter.
+  class(integrator_runge_kutta_ls), intent(in)    :: self   !< Integrator.
+  class(integrand_object),          intent(inout) :: U      !< Field to be integrated.
+  real(R_P),                        intent(in)    :: Dt     !< Time step.
+  real(R_P),                        intent(in)    :: t      !< Time.
+  real(R_P), optional,              intent(out)   :: new_Dt !< New adapted time step.
+  integer(I_P)                                    :: s      !< First stages counter.
 
-  ! computing stages
-  stage(1) = U
-  call stage(2)%multiply_fast(lhs=U, rhs=0._R_P)
-  do s=1, self%stages
-    buffer = stage(1)
-    call buffer%t_fast(t=t + self%C(s) * Dt)
-    call buffer%multiply_fast(lhs=buffer, rhs=Dt)
-    call stage(2)%multiply_fast(lhs=stage(2), rhs=self%A(s))
-    call stage(2)%add_fast(lhs=stage(2), rhs=buffer)
-    call buffer%multiply_fast(lhs=stage(2), rhs=self%B(s))
-    call stage(1)%add_fast(lhs=stage(1), rhs=buffer)
-  enddo
-  U = stage(1)
+  associate(stage=>self%stage)
+     ! computing stages
+     stage(1) = U
+     call stage(2)%multiply_fast(lhs=U, rhs=0._R_P)
+     do s=1, self%stages
+       buffer = stage(1)
+       call buffer%t_fast(t=t + self%C(s) * Dt)
+       call buffer%multiply_fast(lhs=buffer, rhs=Dt)
+       call stage(2)%multiply_fast(lhs=stage(2), rhs=self%A(s))
+       call stage(2)%add_fast(lhs=stage(2), rhs=buffer)
+       call buffer%multiply_fast(lhs=stage(2), rhs=self%B(s))
+       call stage(1)%add_fast(lhs=stage(1), rhs=buffer)
+     enddo
+     U = stage(1)
+  endassociate
   if (present(new_Dt)) new_Dt = Dt
   endsubroutine integrate_fast
 
@@ -452,6 +453,9 @@ contains
       self%A(13) = -0.9514200470875948_R_P ; self%B(13) = 0.0780348340049386_R_P ; self%C(13) = 0.8627060376969976_R_P
       self%A(14) = -7.1151571693922548_R_P ; self%B(14) = 5.5059777270269628_R_P ; self%C(14) = 0.8734213127600976_R_P
     endselect
+    self%registers = 2
+    ! allocate(self%stage(1:self%register), mold=integrand)
+    ! allocate(self%buffer, mold=integrand)
   else
     call self%trigger_error(error=ERROR_UNSUPPORTED_SCHEME,                                   &
                             error_message='"'//trim(adjustl(scheme))//'" unsupported scheme', &

@@ -14,7 +14,10 @@ public :: integrator_multistage_explicit_object
 
 type, extends(integrator_object), abstract :: integrator_multistage_explicit_object
    !< Abstract type of FOODIE ODE integrators of the multistage family.
-   integer(I_P) :: stages=0 !< Number of stages.
+   integer(I_P)                         :: registers !< Number of registers used for stages.
+   integer(I_P)                         :: stages    !< Number of stages.
+   class(integrand_object), allocatable :: stage(:)  !< Stages.
+   class(integrand_object), allocatable :: buffer    !< Buffer used for fast integration.
    contains
       ! deferred methods
       procedure(integrate_interface),      pass(self), deferred :: integrate      !< Integrate integrand field.
@@ -30,27 +33,24 @@ endtype integrator_multistage_explicit_object
 
 abstract interface
   !< Abstract interfaces of deferred methods of [[integrator_object]].
-  subroutine integrate_interface(self, U, stage, Dt, t, new_Dt)
+  subroutine integrate_interface(self, U, Dt, t, new_Dt)
   !< Integrate integrand field.
   import :: integrand_object, integrator_multistage_explicit_object, R_P
-  class(integrator_multistage_explicit_object), intent(in)    :: self      !< Integrator.
-  class(integrand_object),                      intent(inout) :: U         !< Integrand.
-  class(integrand_object),                      intent(inout) :: stage(1:) !< Runge-Kutta stages.
-  real(R_P),                                    intent(in)    :: Dt        !< Time step.
-  real(R_P),                                    intent(in)    :: t         !< Time.
-  real(R_P), optional,                          intent(out)   :: new_Dt    !< New adapted time step.
+  class(integrator_multistage_explicit_object), intent(inout)         :: self   !< Integrator.
+  class(integrand_object),                      intent(inout)         :: U      !< Integrand.
+  real(R_P),                                    intent(in)            :: Dt     !< Time step.
+  real(R_P),                                    intent(in)            :: t      !< Time.
+  real(R_P),                                    intent(out), optional :: new_Dt !< New adapted time step.
   endsubroutine integrate_interface
 
-  subroutine integrate_fast_interface(self, U, stage, buffer, Dt, t, new_Dt)
+  subroutine integrate_fast_interface(self, U, Dt, t, new_Dt)
   !< Integrate integrand field, fast mode.
   import :: integrand_object, integrator_multistage_explicit_object, R_P
-  class(integrator_multistage_explicit_object), intent(in)    :: self      !< Integrator.
-  class(integrand_object),                      intent(inout) :: U         !< Field to be integrated.
-  class(integrand_object),                      intent(inout) :: stage(1:) !< Runge-Kutta stages.
-  class(integrand_object),                      intent(inout) :: buffer    !< Temporary buffer for doing fast operation.
-  real(R_P),                                    intent(in)    :: Dt        !< Time step.
-  real(R_P),                                    intent(in)    :: t         !< Time.
-  real(R_P), optional,                          intent(out)   :: new_Dt    !< New adapted time step.
+  class(integrator_multistage_explicit_object), intent(inout)         :: self   !< Integrator.
+  class(integrand_object),                      intent(inout)         :: U      !< Field to be integrated.
+  real(R_P),                                    intent(in)            :: Dt     !< Time step.
+  real(R_P),                                    intent(in)            :: t      !< Time.
+  real(R_P),                                    intent(out), optional :: new_Dt !< New adapted time step.
   endsubroutine integrate_fast_interface
 endinterface
 
@@ -94,6 +94,9 @@ contains
    class(integrator_multistage_explicit_object), intent(inout) :: self !< Integrator.
 
    call self%destroy_abstract
+   self%registers = 0
    self%stages = 0
+   if (allocated(self%stage)) deallocate(self%stage)
+   if (allocated(self%buffer)) deallocate(self%buffer)
    endsubroutine destroy_multistage
 endmodule foodie_integrator_multistage_explicit_object

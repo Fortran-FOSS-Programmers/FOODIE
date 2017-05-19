@@ -108,25 +108,22 @@ endtype integrator_runge_kutta_lssp
 
 abstract interface
   !< Abstract interfaces of [[integrator_runge_kutta_lssp]] methods.
-  subroutine integrate_interface(self, U, stage, Dt, t)
+  subroutine integrate_interface(self, U, Dt, t)
   !< Integrate field with Linear SSP Runge-Kutta scheme.
   import :: integrand_object, integrator_runge_kutta_lssp, R_P
-  class(integrator_runge_kutta_lssp), intent(in)    :: self      !< Integrator.
+  class(integrator_runge_kutta_lssp), intent(inout) :: self      !< Integrator.
   class(integrand_object),            intent(inout) :: U         !< Field to be integrated.
-  class(integrand_object),            intent(inout) :: stage(1:) !< Runge-Kutta stages [1:stages].
   real(R_P),                          intent(in)    :: Dt        !< Time steps.
   real(R_P),                          intent(in)    :: t         !< Times.
   endsubroutine integrate_interface
 
-  subroutine integrate_fast_interface(self, U, stage, buffer, Dt, t)
+  subroutine integrate_fast_interface(self, U, Dt, t)
   !< Integrate field with Linear SSP Runge-Kutta scheme, fast mode.
   import :: integrand_object, integrator_runge_kutta_lssp, R_P
-  class(integrator_runge_kutta_lssp), intent(in)    :: self      !< Integrator.
-  class(integrand_object),            intent(inout) :: U         !< Field to be integrated.
-  class(integrand_object),            intent(inout) :: stage(1:) !< Runge-Kutta stages [1:stages].
-  class(integrand_object),            intent(inout) :: buffer    !< Temporary buffer for doing fast operation.
-  real(R_P),                          intent(in)    :: Dt        !< Time steps.
-  real(R_P),                          intent(in)    :: t         !< Times.
+  class(integrator_runge_kutta_lssp), intent(inout) :: self !< Integrator.
+  class(integrand_object),            intent(inout) :: U    !< Field to be integrated.
+  real(R_P),                          intent(in)    :: Dt   !< Time steps.
+  real(R_P),                          intent(in)    :: t    !< Times.
   endsubroutine integrate_fast_interface
 endinterface
 
@@ -180,32 +177,29 @@ contains
   endselect
   endsubroutine integr_assign_integr
 
-  subroutine integrate(self, U, stage, Dt, t, new_Dt)
+  subroutine integrate(self, U, Dt, t, new_Dt)
   !< Integrate integrand field by Linear SSP Runge-Kutta methods.
   !<
   !< @note This method can be used **after** the integrator is created (i.e. the RK coefficients are initialized).
-  class(integrator_runge_kutta_lssp), intent(in)    :: self      !< Integrator.
-  class(integrand_object),            intent(inout) :: U         !< Field to be integrated.
-  class(integrand_object),            intent(inout) :: stage(1:) !< Runge-Kutta stages [1:stages].
-  real(R_P),                          intent(in)    :: Dt        !< Time step.
-  real(R_P),                          intent(in)    :: t         !< Time.
-  real(R_P), optional,                intent(out)   :: new_Dt    !< New adapted time step.
+  class(integrator_runge_kutta_lssp), intent(inout)         :: self   !< Integrator.
+  class(integrand_object),            intent(inout)         :: U      !< Field to be integrated.
+  real(R_P),                          intent(in)            :: Dt     !< Time step.
+  real(R_P),                          intent(in)            :: t      !< Time.
+  real(R_P),                          intent(out), optional :: new_Dt !< New adapted time step.
 
-  call self%integrate_(U=U, stage=stage, Dt=Dt, t=t)
+  call self%integrate_(U=U, Dt=Dt, t=t)
   if (present(new_Dt)) new_Dt = Dt
   endsubroutine integrate
 
-  subroutine integrate_fast(self, U, stage, buffer, Dt, t, new_Dt)
+  subroutine integrate_fast(self, U, Dt, t, new_Dt)
   !< Integrate integrand field by Linear SSP Runge-Kutta methods.
-  class(integrator_runge_kutta_lssp), intent(in)    :: self      !< Integrator.
-  class(integrand_object),            intent(inout) :: U         !< Field to be integrated.
-  class(integrand_object),            intent(inout) :: stage(1:) !< Runge-Kutta stages [1:stages].
-  class(integrand_object),            intent(inout) :: buffer    !< Temporary buffer for doing fast operation.
-  real(R_P),                          intent(in)    :: Dt        !< Time step.
-  real(R_P),                          intent(in)    :: t         !< Time.
-  real(R_P), optional,                intent(out)   :: new_Dt    !< New adapted time step.
+  class(integrator_runge_kutta_lssp), intent(in)            :: self   !< Integrator.
+  class(integrand_object),            intent(inout)         :: U      !< Field to be integrated.
+  real(R_P),                          intent(in)            :: Dt     !< Time step.
+  real(R_P),                          intent(in)            :: t      !< Time.
+  real(R_P),                          intent(out), optional :: new_Dt !< New adapted time step.
 
-  call self%integrate_fast_(U=U, stage=stage, buffer=buffer, Dt=Dt, t=t)
+  call self%integrate_fast_(U=U, Dt=Dt, t=t)
   if (present(new_Dt)) new_Dt = Dt
   endsubroutine integrate_fast
 
@@ -325,107 +319,109 @@ contains
 
   endsubroutine initialize_order_s
 
-  subroutine integrate_order_s_1(self, U, stage, Dt, t)
+  subroutine integrate_order_s_1(self, U, Dt, t)
   !< Integrate integrand field by (s-1)-th order formula.
-  class(integrator_runge_kutta_lssp), intent(in)    :: self      !< Integrator.
-  class(integrand_object),            intent(inout) :: U         !< Field to be integrated.
-  class(integrand_object),            intent(inout) :: stage(1:) !< Runge-Kutta stages [1:stages].
-  real(R_P),                          intent(in)    :: Dt        !< Time step.
-  real(R_P),                          intent(in)    :: t         !< Time.
-  integer(I_P)                                      :: s         !< First stages counter.
+  class(integrator_runge_kutta_lssp), intent(inout) :: self !< Integrator.
+  class(integrand_object),            intent(inout) :: U    !< Field to be integrated.
+  real(R_P),                          intent(in)    :: Dt   !< Time step.
+  real(R_P),                          intent(in)    :: t    !< Time.
+  integer(I_P)                                      :: s    !< First stages counter.
 
-  ! computing stages
-  stage(1) = U
-  do s=2, self%stages
-    stage(s) = stage(s-1) + (stage(s-1)%t(t=t) * (Dt * 0.5_R_P))
-  enddo
-  stage(self%stages) = stage(self%stages) + (stage(self%stages)%t(t=t) * (Dt * 0.5_R_P))
-  ! computing new time step
-  U = U * 0._R_P
-  do s=1, self%stages
-    U = U + (stage(s) * self%alpha(s))
-  enddo
+  associate(stage=>self%stage)
+     ! computing stages
+     stage(1) = U
+     do s=2, self%stages
+        stage(s) = stage(s-1) + (stage(s-1)%t(t=t) * (Dt * 0.5_R_P))
+     enddo
+     stage(self%stages) = stage(self%stages) + (stage(self%stages)%t(t=t) * (Dt * 0.5_R_P))
+     ! computing new time step
+     U = U * 0._R_P
+     do s=1, self%stages
+        U = U + (stage(s) * self%alpha(s))
+     enddo
+  endassociate
   endsubroutine integrate_order_s_1
 
-  subroutine integrate_order_s(self, U, stage, Dt, t)
+  subroutine integrate_order_s(self, U, Dt, t)
   !< Integrate integrand field by s-th order formula.
-  class(integrator_runge_kutta_lssp), intent(in)    :: self      !< Integrator.
-  class(integrand_object),            intent(inout) :: U         !< Field to be integrated.
-  class(integrand_object),            intent(inout) :: stage(1:) !< Runge-Kutta stages [1:stages].
-  real(R_P),                          intent(in)    :: Dt        !< Time step.
-  real(R_P),                          intent(in)    :: t         !< Time.
-  integer(I_P)                                      :: s         !< First stages counter.
+  class(integrator_runge_kutta_lssp), intent(inout) :: self !< Integrator.
+  class(integrand_object),            intent(inout) :: U    !< Field to be integrated.
+  real(R_P),                          intent(in)    :: Dt   !< Time step.
+  real(R_P),                          intent(in)    :: t    !< Time.
+  integer(I_P)                                      :: s    !< First stages counter.
 
-  ! computing stages
-  stage(1) = U
-  do s=2, self%stages
-    stage(s) = stage(s-1) + (stage(s-1)%t(t=t) * Dt)
-  enddo
-  stage(self%stages) = stage(self%stages) + (stage(self%stages)%t(t=t) * Dt)
-  ! computing new time step
-  U = U * 0._R_P
-  do s=1, self%stages
-    U = U + (stage(s) * self%alpha(s))
-  enddo
+  associate(stage=>self%stage)
+     ! computing stages
+     stage(1) = U
+     do s=2, self%stages
+       stage(s) = stage(s-1) + (stage(s-1)%t(t=t) * Dt)
+     enddo
+     stage(self%stages) = stage(self%stages) + (stage(self%stages)%t(t=t) * Dt)
+     ! computing new time step
+     U = U * 0._R_P
+     do s=1, self%stages
+       U = U + (stage(s) * self%alpha(s))
+     enddo
+  endassociate
   endsubroutine integrate_order_s
 
-  subroutine integrate_order_s_1_fast(self, U, stage, buffer, Dt, t)
+  subroutine integrate_order_s_1_fast(self, U, Dt, t)
   !< Integrate integrand field by (s-1)-th order formula.
-  class(integrator_runge_kutta_lssp), intent(in)    :: self      !< Integrator.
-  class(integrand_object),            intent(inout) :: U         !< Field to be integrated.
-  class(integrand_object),            intent(inout) :: stage(1:) !< Runge-Kutta stages [1:stages].
-  class(integrand_object),            intent(inout) :: buffer    !< Temporary buffer for doing fast operation.
-  real(R_P),                          intent(in)    :: Dt        !< Time step.
-  real(R_P),                          intent(in)    :: t         !< Time.
-  integer(I_P)                                      :: s         !< First stages counter.
+  class(integrator_runge_kutta_lssp), intent(inout) :: self !< Integrator.
+  class(integrand_object),            intent(inout) :: U    !< Field to be integrated.
+  real(R_P),                          intent(in)    :: Dt   !< Time step.
+  real(R_P),                          intent(in)    :: t    !< Time.
+  integer(I_P)                                      :: s    !< First stages counter.
 
-  ! computing stages
-  stage(1) = U
-  do s=2, self%stages
-    buffer = stage(s-1)
-    call buffer%t_fast(t=t)
-    call buffer%multiply_fast(lhs=buffer, rhs=Dt * 0.5_R_P)
-    call stage(s)%add_fast(lhs=stage(s-1), rhs=buffer)
-  enddo
-  buffer = stage(self%stages)
-  call buffer%t_fast(t=t)
-  call buffer%multiply_fast(lhs=buffer, rhs=Dt * 0.5_R_P)
-  call stage(self%stages)%add_fast(lhs=stage(self%stages), rhs=buffer)
-  ! computing new time step
-  call U%multiply_fast(lhs=U, rhs=0._R_P)
-  do s=1, self%stages
-    call buffer%multiply_fast(lhs=stage(s), rhs=self%alpha(s))
-    call U%add_fast(lhs=U, rhs=buffer)
-  enddo
+  associate(stage=>self%stage, buffer=>self%buffer)
+     ! computing stages
+     stage(1) = U
+     do s=2, self%stages
+       buffer = stage(s-1)
+       call buffer%t_fast(t=t)
+       call buffer%multiply_fast(lhs=buffer, rhs=Dt * 0.5_R_P)
+       call stage(s)%add_fast(lhs=stage(s-1), rhs=buffer)
+     enddo
+     buffer = stage(self%stages)
+     call buffer%t_fast(t=t)
+     call buffer%multiply_fast(lhs=buffer, rhs=Dt * 0.5_R_P)
+     call stage(self%stages)%add_fast(lhs=stage(self%stages), rhs=buffer)
+     ! computing new time step
+     call U%multiply_fast(lhs=U, rhs=0._R_P)
+     do s=1, self%stages
+       call buffer%multiply_fast(lhs=stage(s), rhs=self%alpha(s))
+       call U%add_fast(lhs=U, rhs=buffer)
+     enddo
+  endassociate
   endsubroutine integrate_order_s_1_fast
 
   subroutine integrate_order_s_fast(self, U, stage, buffer, Dt, t)
   !< Integrate integrand field by s-th order formula, fast mode.
-  class(integrator_runge_kutta_lssp), intent(in)    :: self      !< Integrator.
-  class(integrand_object),            intent(inout) :: U         !< Field to be integrated.
-  class(integrand_object),            intent(inout) :: stage(1:) !< Runge-Kutta stages [1:stages].
-  class(integrand_object),            intent(inout) :: buffer    !< Temporary buffer for doing fast operation.
-  real(R_P),                          intent(in)    :: Dt        !< Time step.
-  real(R_P),                          intent(in)    :: t         !< Time.
-  integer(I_P)                                      :: s         !< First stages counter.
+  class(integrator_runge_kutta_lssp), intent(inout) :: self !< Integrator.
+  class(integrand_object),            intent(inout) :: U    !< Field to be integrated.
+  real(R_P),                          intent(in)    :: Dt   !< Time step.
+  real(R_P),                          intent(in)    :: t    !< Time.
+  integer(I_P)                                      :: s    !< First stages counter.
 
-  ! computing stages
-  stage(1) = U
-  do s=2, self%stages
-    buffer = stage(s-1)
-    call buffer%t_fast(t=t)
-    call buffer%multiply_fast(lhs=buffer, rhs=Dt)
-    call stage(s)%add_fast(lhs=stage(s-1), rhs=buffer)
-  enddo
-  buffer = stage(self%stages)
-  call buffer%t_fast(t=t)
-  call buffer%multiply_fast(lhs=buffer, rhs=Dt)
-  call stage(self%stages)%add_fast(lhs=stage(self%stages), rhs=buffer)
-  ! computing new time step
-  call U%multiply_fast(lhs=U, rhs=0._R_P)
-  do s=1, self%stages
-    call buffer%multiply_fast(lhs=stage(s), rhs=self%alpha(s))
-    call U%add_fast(lhs=U, rhs=buffer)
-  enddo
+  associate(stage=>self%stage, buffer=>self%buffer)
+     ! computing stages
+     stage(1) = U
+     do s=2, self%stages
+       buffer = stage(s-1)
+       call buffer%t_fast(t=t)
+       call buffer%multiply_fast(lhs=buffer, rhs=Dt)
+       call stage(s)%add_fast(lhs=stage(s-1), rhs=buffer)
+     enddo
+     buffer = stage(self%stages)
+     call buffer%t_fast(t=t)
+     call buffer%multiply_fast(lhs=buffer, rhs=Dt)
+     call stage(self%stages)%add_fast(lhs=stage(self%stages), rhs=buffer)
+     ! computing new time step
+     call U%multiply_fast(lhs=U, rhs=0._R_P)
+     do s=1, self%stages
+       call buffer%multiply_fast(lhs=stage(s), rhs=self%alpha(s))
+       call U%add_fast(lhs=U, rhs=buffer)
+     enddo
+  endassociate
   endsubroutine integrate_order_s_fast
 endmodule foodie_integrator_runge_kutta_lssp
