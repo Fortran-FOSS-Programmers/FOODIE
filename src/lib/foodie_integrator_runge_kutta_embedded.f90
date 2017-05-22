@@ -287,35 +287,35 @@ logical, parameter :: is_multistage_=.true. !< Flag to check if integrator is mu
 logical, parameter :: is_multistep_=.false. !< Flag to check if integrator is multistep.
 
 type, extends(integrator_multistage_explicit_object) :: integrator_runge_kutta_emd
-  !< FOODIE integrator: provide an explicit class of embedded Runge-Kutta schemes, from 2nd to 10th order accurate.
-  !<
-  !< @note The integrator must be created or initialized (initialize the RK coefficients) before used.
-  private
-  real(R_P)                            :: tolerance !< Tolerance on the local truncation error.
-  real(R_P)                            :: pp1_inv   !< \(1/(p+1)\) where p is the accuracy order of the lower accurate scheme.
-  real(R_P), allocatable               :: alph(:,:) !< \(\alpha\) Butcher's coefficients.
-  real(R_P), allocatable               :: beta(:,:) !< \(\beta\) Butcher's coefficients.
-  real(R_P), allocatable               :: gamm(:)   !< \(\gamma\) Butcher's coefficients.
-  class(integrand_object), allocatable :: U1        !< First U evaluation.
-  class(integrand_object), allocatable :: U2        !< Second U evaluation.
-  contains
-    ! deferred methods
-    procedure, pass(self) :: class_name           !< Return the class name of schemes.
-    procedure, pass(self) :: description          !< Return pretty-printed object description.
-    procedure, pass(self) :: has_fast_mode        !< Return .true. if the integrator class has *fast mode* integrate.
-    procedure, pass(lhs)  :: integr_assign_integr !< Operator `=`.
-    procedure, pass(self) :: integrate            !< Integrate integrand field.
-    procedure, pass(self) :: integrate_fast       !< Integrate integrand field, fast mode.
-    procedure, pass(self) :: is_supported         !< Return .true. if the integrator class support the given scheme.
-    procedure, pass(self) :: supported_schemes    !< Return the list of supported schemes.
-    ! public methods
-    procedure, pass(self) :: destroy    !< Destroy the integrator.
-    procedure, pass(self) :: initialize !< Initialize (create) the integrator.
-    ! private methods
-    procedure, pass(self), private :: new_Dt !< Compute new estimation of the time step Dt.
+   !< FOODIE integrator: provide an explicit class of embedded Runge-Kutta schemes, from 2nd to 10th order accurate.
+   !<
+   !< @note The integrator must be created or initialized (initialize the RK coefficients) before used.
+   private
+   real(R_P)                            :: tolerance !< Tolerance on the local truncation error.
+   real(R_P)                            :: pp1_inv   !< \(1/(p+1)\) where p is the accuracy order of the lower accurate scheme.
+   real(R_P), allocatable               :: alph(:,:) !< \(\alpha\) Butcher's coefficients.
+   real(R_P), allocatable               :: beta(:,:) !< \(\beta\) Butcher's coefficients.
+   real(R_P), allocatable               :: gamm(:)   !< \(\gamma\) Butcher's coefficients.
+   class(integrand_object), allocatable :: U1        !< First U evaluation.
+   class(integrand_object), allocatable :: U2        !< Second U evaluation.
+   contains
+      ! deferred methods
+      procedure, pass(self) :: class_name           !< Return the class name of schemes.
+      procedure, pass(self) :: description          !< Return pretty-printed object description.
+      procedure, pass(self) :: has_fast_mode        !< Return .true. if the integrator class has *fast mode* integrate.
+      procedure, pass(lhs)  :: integr_assign_integr !< Operator `=`.
+      procedure, pass(self) :: integrate            !< Integrate integrand field.
+      procedure, pass(self) :: integrate_fast       !< Integrate integrand field, fast mode.
+      procedure, pass(self) :: is_supported         !< Return .true. if the integrator class support the given scheme.
+      procedure, pass(self) :: supported_schemes    !< Return the list of supported schemes.
+      ! public methods
+      procedure, pass(self) :: destroy    !< Destroy the integrator.
+      procedure, pass(self) :: initialize !< Initialize (create) the integrator.
+      ! private methods
+      procedure, pass(self), private :: new_Dt !< Compute new estimation of the time step Dt.
 endtype integrator_runge_kutta_emd
 contains
-  ! deferred methods
+   ! deferred methods
   pure function class_name(self)
   !< Return the class name of schemes.
   class(integrator_runge_kutta_emd), intent(in) :: self       !< Integrator.
@@ -382,30 +382,28 @@ contains
   integer(I_P)                                             :: s      !< First stages counter.
   integer(I_P)                                             :: ss     !< Second stages counter.
 
-  associate(stage=>self%stage, U1=>self%U1, U2=>self%U2)
-     Dt_ = Dt
-     do
-       ! compute stages
-       do s=1, self%stages
-         stage(s) = U
-         do ss=1, s - 1
-           stage(s) = stage(s) + (stage(ss) * (Dt_ * self%alph(s, ss)))
-         enddo
-         stage(s) = stage(s)%t(t=t + self%gamm(s) * Dt_)
-       enddo
-       ! compute new time step
-       U1 = U
-       U2 = U
-       do s=1, self%stages
-         U1 = U1 + (stage(s) * (Dt_ * self%beta(s, 1)))
-         U2 = U2 + (stage(s) * (Dt_ * self%beta(s, 2)))
-       enddo
-       error = U2.lterror.U1
-       if (error <= self%tolerance) exit
-       call self%new_Dt(error=error, Dt=Dt_)
+  Dt_ = Dt
+  do
+     ! compute stages
+     do s=1, self%stages
+        self%stage(s) = U
+        do ss=1, s - 1
+           self%stage(s) = self%stage(s) + (self%stage(ss) * (Dt_ * self%alph(s, ss)))
+        enddo
+        self%stage(s) = self%stage(s)%t(t=t + self%gamm(s) * Dt_)
      enddo
-     U = U1
-  endassociate
+     ! compute new time step
+     self%U1 = U
+     self%U2 = U
+     do s=1, self%stages
+        self%U1 = self%U1 + (self%stage(s) * (Dt_ * self%beta(s, 1)))
+        self%U2 = self%U2 + (self%stage(s) * (Dt_ * self%beta(s, 2)))
+     enddo
+     error = self%U2.lterror.self%U1
+     if (error <= self%tolerance) exit
+     call self%new_Dt(error=error, Dt=Dt_)
+  enddo
+  U = self%U1
   if (present(new_Dt)) new_Dt = Dt_
   endsubroutine integrate
 
@@ -423,33 +421,31 @@ contains
   integer(I_P)                                             :: s      !< First stages counter.
   integer(I_P)                                             :: ss     !< Second stages counter.
 
-  associate(stage=>self%stage, U1=>self%U1, U2=>self%U2)
-     Dt_ = Dt
-     do
-       ! compute stages
-       do s=1, self%stages
-         stage(s) = U
-         do ss=1, s - 1
-           call buffer%multiply_fast(lhs=stage(ss), rhs=Dt_ * self%alph(s, ss))
-           call stage(s)%add_fast(lhs=stage(s), rhs=buffer)
-         enddo
-         call stage(s)%t_fast(t=t + self%gamm(s) * Dt_)
-       enddo
-       ! compute new time step
-       U1 = U
-       U2 = U
-       do s=1, self%stages
-         call buffer%multiply_fast(lhs=stage(s), rhs=Dt_ * self%beta(s, 1))
-         call U1%add_fast(lhs=U1, rhs=buffer)
-         call buffer%multiply_fast(lhs=stage(s), rhs=Dt_ * self%beta(s, 2))
-         call U2%add_fast(lhs=U2, rhs=buffer)
-       enddo
-       error = U2.lterror.U1
-       if (error <= self%tolerance) exit
-       call self%new_Dt(error=error, Dt=Dt_)
+  Dt_ = Dt
+  do
+     ! compute stages
+     do s=1, self%stages
+        self%stage(s) = U
+        do ss=1, s - 1
+           call self%buffer%multiply_fast(lhs=self%stage(ss), rhs=Dt_ * self%alph(s, ss))
+           call self%stage(s)%add_fast(lhs=self%stage(s), rhs=self%buffer)
+        enddo
+        call self%stage(s)%t_fast(t=t + self%gamm(s) * Dt_)
      enddo
-     U = U1
-  endassociate
+     ! compute new time step
+     self%U1 = U
+     self%U2 = U
+     do s=1, self%stages
+        call self%buffer%multiply_fast(lhs=self%stage(s), rhs=Dt_ * self%beta(s, 1))
+        call self%U1%add_fast(lhs=self%U1, rhs=self%buffer)
+        call self%buffer%multiply_fast(lhs=self%stage(s), rhs=Dt_ * self%beta(s, 2))
+        call self%U2%add_fast(lhs=self%U2, rhs=self%buffer)
+     enddo
+     error = self%U2.lterror.self%U1
+     if (error <= self%tolerance) exit
+     call self%new_Dt(error=error, Dt=Dt_)
+  enddo
+  U = self%U1
   if (present(new_Dt)) new_Dt = Dt_
   endsubroutine integrate_fast
 

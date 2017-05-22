@@ -193,7 +193,7 @@ contains
 
   subroutine integrate_fast(self, U, Dt, t, new_Dt)
   !< Integrate integrand field by Linear SSP Runge-Kutta methods.
-  class(integrator_runge_kutta_lssp), intent(in)            :: self   !< Integrator.
+  class(integrator_runge_kutta_lssp), intent(inout)         :: self   !< Integrator.
   class(integrand_object),            intent(inout)         :: U      !< Field to be integrated.
   real(R_P),                          intent(in)            :: Dt     !< Time step.
   real(R_P),                          intent(in)            :: t      !< Time.
@@ -316,7 +316,6 @@ contains
       enddo
     enddo
   endassociate
-
   endsubroutine initialize_order_s
 
   subroutine integrate_order_s_1(self, U, Dt, t)
@@ -327,19 +326,17 @@ contains
   real(R_P),                          intent(in)    :: t    !< Time.
   integer(I_P)                                      :: s    !< First stages counter.
 
-  associate(stage=>self%stage)
-     ! computing stages
-     stage(1) = U
-     do s=2, self%stages
-        stage(s) = stage(s-1) + (stage(s-1)%t(t=t) * (Dt * 0.5_R_P))
-     enddo
-     stage(self%stages) = stage(self%stages) + (stage(self%stages)%t(t=t) * (Dt * 0.5_R_P))
-     ! computing new time step
-     U = U * 0._R_P
-     do s=1, self%stages
-        U = U + (stage(s) * self%alpha(s))
-     enddo
-  endassociate
+  ! computing stages
+  self%stage(1) = U
+  do s=2, self%stages
+     self%stage(s) = self%stage(s-1) + (self%stage(s-1)%t(t=t) * (Dt * 0.5_R_P))
+  enddo
+  self%stage(self%stages) = self%stage(self%stages) + (self%stage(self%stages)%t(t=t) * (Dt * 0.5_R_P))
+  ! computing new time step
+  U = U * 0._R_P
+  do s=1, self%stages
+     U = U + (self%stage(s) * self%alpha(s))
+  enddo
   endsubroutine integrate_order_s_1
 
   subroutine integrate_order_s(self, U, Dt, t)
@@ -350,19 +347,17 @@ contains
   real(R_P),                          intent(in)    :: t    !< Time.
   integer(I_P)                                      :: s    !< First stages counter.
 
-  associate(stage=>self%stage)
-     ! computing stages
-     stage(1) = U
-     do s=2, self%stages
-       stage(s) = stage(s-1) + (stage(s-1)%t(t=t) * Dt)
-     enddo
-     stage(self%stages) = stage(self%stages) + (stage(self%stages)%t(t=t) * Dt)
-     ! computing new time step
-     U = U * 0._R_P
-     do s=1, self%stages
-       U = U + (stage(s) * self%alpha(s))
-     enddo
-  endassociate
+  ! computing stages
+  self%stage(1) = U
+  do s=2, self%stages
+     self%stage(s) = self%stage(s-1) + (self%stage(s-1)%t(t=t) * Dt)
+  enddo
+  self%stage(self%stages) = self%stage(self%stages) + (self%stage(self%stages)%t(t=t) * Dt)
+  ! computing new time step
+  U = U * 0._R_P
+  do s=1, self%stages
+     U = U + (self%stage(s) * self%alpha(s))
+  enddo
   endsubroutine integrate_order_s
 
   subroutine integrate_order_s_1_fast(self, U, Dt, t)
@@ -373,29 +368,27 @@ contains
   real(R_P),                          intent(in)    :: t    !< Time.
   integer(I_P)                                      :: s    !< First stages counter.
 
-  associate(stage=>self%stage, buffer=>self%buffer)
-     ! computing stages
-     stage(1) = U
-     do s=2, self%stages
-       buffer = stage(s-1)
-       call buffer%t_fast(t=t)
-       call buffer%multiply_fast(lhs=buffer, rhs=Dt * 0.5_R_P)
-       call stage(s)%add_fast(lhs=stage(s-1), rhs=buffer)
-     enddo
-     buffer = stage(self%stages)
-     call buffer%t_fast(t=t)
-     call buffer%multiply_fast(lhs=buffer, rhs=Dt * 0.5_R_P)
-     call stage(self%stages)%add_fast(lhs=stage(self%stages), rhs=buffer)
-     ! computing new time step
-     call U%multiply_fast(lhs=U, rhs=0._R_P)
-     do s=1, self%stages
-       call buffer%multiply_fast(lhs=stage(s), rhs=self%alpha(s))
-       call U%add_fast(lhs=U, rhs=buffer)
-     enddo
-  endassociate
+  ! computing stages
+  self%stage(1) = U
+  do s=2, self%stages
+     self%buffer = self%stage(s-1)
+     call self%buffer%t_fast(t=t)
+     call self%buffer%multiply_fast(lhs=self%buffer, rhs=Dt * 0.5_R_P)
+     call self%stage(s)%add_fast(lhs=self%stage(s-1), rhs=self%buffer)
+  enddo
+  self%buffer = self%stage(self%stages)
+  call self%buffer%t_fast(t=t)
+  call self%buffer%multiply_fast(lhs=self%buffer, rhs=Dt * 0.5_R_P)
+  call self%stage(self%stages)%add_fast(lhs=self%stage(self%stages), rhs=self%buffer)
+  ! computing new time step
+  call U%multiply_fast(lhs=U, rhs=0._R_P)
+  do s=1, self%stages
+     call self%buffer%multiply_fast(lhs=self%stage(s), rhs=self%alpha(s))
+     call U%add_fast(lhs=U, rhs=self%buffer)
+  enddo
   endsubroutine integrate_order_s_1_fast
 
-  subroutine integrate_order_s_fast(self, U, stage, buffer, Dt, t)
+  subroutine integrate_order_s_fast(self, U, Dt, t)
   !< Integrate integrand field by s-th order formula, fast mode.
   class(integrator_runge_kutta_lssp), intent(inout) :: self !< Integrator.
   class(integrand_object),            intent(inout) :: U    !< Field to be integrated.
@@ -403,25 +396,23 @@ contains
   real(R_P),                          intent(in)    :: t    !< Time.
   integer(I_P)                                      :: s    !< First stages counter.
 
-  associate(stage=>self%stage, buffer=>self%buffer)
-     ! computing stages
-     stage(1) = U
-     do s=2, self%stages
-       buffer = stage(s-1)
-       call buffer%t_fast(t=t)
-       call buffer%multiply_fast(lhs=buffer, rhs=Dt)
-       call stage(s)%add_fast(lhs=stage(s-1), rhs=buffer)
-     enddo
-     buffer = stage(self%stages)
-     call buffer%t_fast(t=t)
-     call buffer%multiply_fast(lhs=buffer, rhs=Dt)
-     call stage(self%stages)%add_fast(lhs=stage(self%stages), rhs=buffer)
-     ! computing new time step
-     call U%multiply_fast(lhs=U, rhs=0._R_P)
-     do s=1, self%stages
-       call buffer%multiply_fast(lhs=stage(s), rhs=self%alpha(s))
-       call U%add_fast(lhs=U, rhs=buffer)
-     enddo
-  endassociate
+  ! computing stages
+  self%stage(1) = U
+  do s=2, self%stages
+     self%buffer = self%stage(s-1)
+     call self%buffer%t_fast(t=t)
+     call self%buffer%multiply_fast(lhs=self%buffer, rhs=Dt)
+     call self%stage(s)%add_fast(lhs=self%stage(s-1), rhs=self%buffer)
+  enddo
+  self%buffer = self%stage(self%stages)
+  call self%buffer%t_fast(t=t)
+  call self%buffer%multiply_fast(lhs=self%buffer, rhs=Dt)
+  call self%stage(self%stages)%add_fast(lhs=self%stage(self%stages), rhs=self%buffer)
+  ! computing new time step
+  call U%multiply_fast(lhs=U, rhs=0._R_P)
+  do s=1, self%stages
+     call self%buffer%multiply_fast(lhs=self%stage(s), rhs=self%alpha(s))
+     call U%add_fast(lhs=U, rhs=self%buffer)
+  enddo
   endsubroutine integrate_order_s_fast
 endmodule foodie_integrator_runge_kutta_lssp

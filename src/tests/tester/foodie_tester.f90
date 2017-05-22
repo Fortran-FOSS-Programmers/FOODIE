@@ -258,7 +258,6 @@ contains
    class(integrand_object), allocatable  :: integrand        !< Integrand.
    class(integrand_object), allocatable  :: previous(:)      !< Previous time steps solutions.
    class(integrand_object), allocatable  :: stage(:)         !< Runge-Kutta stages.
-   class(integrand_object), allocatable  :: stage_start(:)   !< Runge-Kutta (autor) start stages.
    class(integrand_object), allocatable  :: buffer           !< Buffer oscillation field.
    class(integrand_object), allocatable  :: filter           !< Filter displacement.
    real(R_P), allocatable                :: time(:)          !< Time.
@@ -279,11 +278,7 @@ contains
       do s=1, integrator%steps_number()
          previous(s) = integrand_0
       enddo
-      call integrator_start%initialize(scheme='runge_kutta_ssp_stages_5_order_4')
-      allocate(stage_start(1:integrator_start%stages_number()), mold=integrand_0)
-      do s=1, integrator_start%stages_number()
-         stage_start(s) = integrand_0
-      enddo
+      call integrator_start%initialize(scheme='runge_kutta_ssp_stages_5_order_4', U=integrand_0)
       if (integrator%steps_number()==0) then
          step_offset = 1                         ! for 0 step-(a convention)-solver offset is 1
       else
@@ -314,9 +309,9 @@ contains
       do
          step = step + 1
          if (is_fast) then
-            call integrator%integrate_fast(U=integrand, stage=stage, buffer=buffer, Dt=Dt, t=time(step_offset))
+            call integrator%integrate_fast(U=integrand, Dt=Dt, t=time(step_offset))
          else
-            call integrator%integrate(U=integrand, stage=stage, Dt=Dt, t=time(step_offset))
+            call integrator%integrate(U=integrand, Dt=Dt, t=time(step_offset))
          endif
          call update_previous_times
          if ((time(step_offset) >= final_time)) exit
@@ -327,7 +322,7 @@ contains
       do
          step = step + 1
          if (integrator%steps_number() >= step) then
-            call integrator_start%integrate(U=integrand, stage=stage_start, Dt=Dt, t=time(step))
+            call integrator_start%integrate(U=integrand, Dt=Dt, t=time(step))
             previous(step) = integrand
             time(step) = time(step-1) + Dt
          else
@@ -350,7 +345,7 @@ contains
       do
          step = step + 1
          if (integrator%steps_number() >= step) then
-            call integrator_start%integrate(U=integrand, stage=stage_start, Dt=Dt, t=time(step))
+            call integrator_start%integrate(U=integrand, Dt=Dt, t=time(step))
             previous(step) = integrand
             time(step) = time(step-1) + Dt
          else
@@ -391,7 +386,7 @@ contains
       do
          step = step + 1
          if (integrator%steps_number() >= step) then
-            call integrator_start%integrate(U=integrand, stage=stage_start, Dt=Dt, t=time(step))
+            call integrator_start%integrate(U=integrand, Dt=Dt, t=time(step))
             previous(step) = integrand
             time(step) = time(step-1) + Dt
          else
@@ -421,7 +416,7 @@ contains
       do
          step = step + 1
          if (integrator%steps_number() >= step) then
-            call integrator_start%integrate(U=integrand, stage=stage_start, Dt=Dt, t=time(step))
+            call integrator_start%integrate(U=integrand, Dt=Dt, t=time(step))
             previous(step) = integrand
             time(step) = time(step-1) + Dt
          else
@@ -440,7 +435,7 @@ contains
       do
          step = step + 1
          if (integrator%steps_number() >= step) then
-            call integrator_start%integrate(U=integrand, stage=stage_start, Dt=Dt, t=time(step))
+            call integrator_start%integrate(U=integrand, Dt=Dt, t=time(step))
             previous(step) = integrand
             time(step) = time(step-1) + Dt
          else

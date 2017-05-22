@@ -28,30 +28,40 @@ type, extends(integrator_object), abstract :: integrator_multistage_explicit_obj
       procedure, pass(self) :: stages_number !< Return number of stages used.
       procedure, pass(self) :: steps_number  !< Return number of steps used.
       ! public methods
-      procedure, pass(self) :: destroy_multistage !< Destroy the integrator.
+      procedure, pass(self) :: allocate_integrand_members !< Allocate integrand members.
+      procedure, pass(self) :: destroy_multistage         !< Destroy the integrator.
 endtype integrator_multistage_explicit_object
 
 abstract interface
-  !< Abstract interfaces of deferred methods of [[integrator_object]].
-  subroutine integrate_interface(self, U, Dt, t, new_Dt)
-  !< Integrate integrand field.
-  import :: integrand_object, integrator_multistage_explicit_object, R_P
-  class(integrator_multistage_explicit_object), intent(inout)         :: self   !< Integrator.
-  class(integrand_object),                      intent(inout)         :: U      !< Integrand.
-  real(R_P),                                    intent(in)            :: Dt     !< Time step.
-  real(R_P),                                    intent(in)            :: t      !< Time.
-  real(R_P),                                    intent(out), optional :: new_Dt !< New adapted time step.
-  endsubroutine integrate_interface
+   !< Abstract interfaces of deferred methods of [[integrator_multistage_explicit_object]].
+   pure subroutine allocate_integrands_interface(self, U)
+   !< Allocate members of interpolator being of [[integrand_object]] class.
+   !<
+   !< @note It is assumed that the integrator has been properly initialized before calling this method.
+   import :: integrand_object, integrator_multistage_explicit_object
+   class(integrator_multistage_explicit_object), intent(inout) :: self !< Integrator.
+   class(integrand_object),                      intent(in)    :: U    !< Integrand.
+   endsubroutine allocate_integrands_interface
 
-  subroutine integrate_fast_interface(self, U, Dt, t, new_Dt)
-  !< Integrate integrand field, fast mode.
-  import :: integrand_object, integrator_multistage_explicit_object, R_P
-  class(integrator_multistage_explicit_object), intent(inout)         :: self   !< Integrator.
-  class(integrand_object),                      intent(inout)         :: U      !< Field to be integrated.
-  real(R_P),                                    intent(in)            :: Dt     !< Time step.
-  real(R_P),                                    intent(in)            :: t      !< Time.
-  real(R_P),                                    intent(out), optional :: new_Dt !< New adapted time step.
-  endsubroutine integrate_fast_interface
+   subroutine integrate_interface(self, U, Dt, t, new_Dt)
+   !< Integrate integrand field.
+   import :: integrand_object, integrator_multistage_explicit_object, R_P
+   class(integrator_multistage_explicit_object), intent(inout)         :: self   !< Integrator.
+   class(integrand_object),                      intent(inout)         :: U      !< Integrand.
+   real(R_P),                                    intent(in)            :: Dt     !< Time step.
+   real(R_P),                                    intent(in)            :: t      !< Time.
+   real(R_P),                                    intent(out), optional :: new_Dt !< New adapted time step.
+   endsubroutine integrate_interface
+
+   subroutine integrate_fast_interface(self, U, Dt, t, new_Dt)
+   !< Integrate integrand field, fast mode.
+   import :: integrand_object, integrator_multistage_explicit_object, R_P
+   class(integrator_multistage_explicit_object), intent(inout)         :: self   !< Integrator.
+   class(integrand_object),                      intent(inout)         :: U      !< Field to be integrated.
+   real(R_P),                                    intent(in)            :: Dt     !< Time step.
+   real(R_P),                                    intent(in)            :: t      !< Time.
+   real(R_P),                                    intent(out), optional :: new_Dt !< New adapted time step.
+   endsubroutine integrate_fast_interface
 endinterface
 
 contains
@@ -89,6 +99,28 @@ contains
    endfunction steps_number
 
    ! public methods
+   pure subroutine allocate_integrand_members(self, U)
+   !< Allocate members of interpolator being of [[integrand_object]] class.
+   !<
+   !< @note It is assumed that the integrator has been properly initialized before calling this method.
+   class(integrator_multistage_explicit_object), intent(inout) :: self !< Integrator.
+   class(integrand_object),                      intent(in)    :: U    !< Integrand.
+   integer(I_P)                                                :: s    !< Counter.
+
+   if (self%is_multistage() .and. self%registers > 0) then
+      if (allocated(self%stage)) deallocate(self%stage)
+      allocate(self%stage(1:self%registers), mold=U)
+      do s=1, self%registers
+         self%stage(s) = U
+      enddo
+   endif
+   if (self%has_fast_mode()) then
+      if (allocated(self%buffer)) deallocate(self%buffer)
+      allocate(self%buffer, mold=U)
+      self%buffer = U
+   endif
+   endsubroutine allocate_integrand_members
+
    elemental subroutine destroy_multistage(self)
    !< Destroy the integrator.
    class(integrator_multistage_explicit_object), intent(inout) :: self !< Integrator.

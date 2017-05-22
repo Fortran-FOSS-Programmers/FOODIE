@@ -142,7 +142,7 @@ type, extends(integrator_multistage_explicit_object) :: integrator_runge_kutta_s
 endtype integrator_runge_kutta_ssp
 
 contains
-  ! deferred methods
+   ! deferred methods
   pure function class_name(self)
   !< Return the class name of schemes.
   class(integrator_runge_kutta_ssp), intent(in) :: self       !< Integrator.
@@ -193,11 +193,10 @@ contains
   endselect
   endsubroutine integr_assign_integr
 
-  subroutine integrate(self, U, stage, Dt, t, new_Dt)
+  subroutine integrate(self, U, Dt, t, new_Dt)
   !< Integrate field with explicit SSP Runge-Kutta scheme.
-  class(integrator_runge_kutta_ssp), intent(in)    :: self      !< Integrator.
+  class(integrator_runge_kutta_ssp), intent(inout) :: self      !< Integrator.
   class(integrand_object),           intent(inout) :: U         !< Field to be integrated.
-  class(integrand_object),           intent(inout) :: stage(1:) !< Runge-Kutta stages [1:stages].
   real(R_P),                         intent(in)    :: Dt        !< Time step.
   real(R_P),                         intent(in)    :: t         !< Time.
   real(R_P), optional,               intent(out)   :: new_Dt    !< New adapted time step.
@@ -206,45 +205,43 @@ contains
 
   ! computing stages
   do s=1, self%stages
-    stage(s) = U
-    do ss=1, s - 1
-      stage(s) = stage(s) + (stage(ss) * (Dt * self%alph(s, ss)))
-    enddo
-    stage(s) = stage(s)%t(t=t + self%gamm(s) * Dt)
+     self%stage(s) = U
+     do ss=1, s - 1
+        self%stage(s) = self%stage(s) + (self%stage(ss) * (Dt * self%alph(s, ss)))
+     enddo
+     self%stage(s) = self%stage(s)%t(t=t + self%gamm(s) * Dt)
   enddo
   ! computing new time step
   do s=1, self%stages
-    U = U + (stage(s) * (Dt * self%beta(s)))
+     U = U + (self%stage(s) * (Dt * self%beta(s)))
   enddo
   if (present(new_Dt)) new_Dt = Dt
   endsubroutine integrate
 
-  subroutine integrate_fast(self, U, stage, buffer, Dt, t, new_Dt)
+  subroutine integrate_fast(self, U, Dt, t, new_Dt)
   !< Integrate field with explicit SSP Runge-Kutta scheme.
-  class(integrator_runge_kutta_ssp), intent(in)    :: self      !< Integrator.
-  class(integrand_object),           intent(inout) :: U         !< Field to be integrated.
-  class(integrand_object),           intent(inout) :: stage(1:) !< Runge-Kutta stages [1:stages].
-  class(integrand_object),           intent(inout) :: buffer    !< Temporary buffer for doing fast operation.
-  real(R_P),                         intent(in)    :: Dt        !< Time step.
-  real(R_P),                         intent(in)    :: t         !< Time.
-  real(R_P), optional,               intent(out)   :: new_Dt    !< New adapted time step.
-  integer(I_P)                                     :: s         !< First stages counter.
-  integer(I_P)                                     :: ss        !< Second stages counter.
+  class(integrator_runge_kutta_ssp), intent(inout) :: self   !< Integrator.
+  class(integrand_object),           intent(inout) :: U      !< Field to be integrated.
+  real(R_P),                         intent(in)    :: Dt     !< Time step.
+  real(R_P),                         intent(in)    :: t      !< Time.
+  real(R_P), optional,               intent(out)   :: new_Dt !< New adapted time step.
+  integer(I_P)                                     :: s      !< First stages counter.
+  integer(I_P)                                     :: ss     !< Second stages counter.
 
   ! computing stages
-  buffer = U
+  self%buffer = U
   do s=1, self%stages
-    stage(s) = U
-    do ss=1, s - 1
-      call buffer%multiply_fast(lhs=stage(ss), rhs=Dt * self%alph(s, ss))
-      call stage(s)%add_fast(lhs=stage(s), rhs=buffer)
-    enddo
-    call stage(s)%t_fast(t=t + self%gamm(s) * Dt)
+     self%stage(s) = U
+     do ss=1, s - 1
+        call self%buffer%multiply_fast(lhs=self%stage(ss), rhs=Dt * self%alph(s, ss))
+        call self%stage(s)%add_fast(lhs=self%stage(s), rhs=self%buffer)
+     enddo
+     call self%stage(s)%t_fast(t=t + self%gamm(s) * Dt)
   enddo
   ! computing new time step
   do s=1, self%stages
-    call buffer%multiply_fast(lhs=stage(s), rhs=Dt * self%beta(s))
-    call U%add_fast(lhs=U, rhs=buffer)
+     call self%buffer%multiply_fast(lhs=self%stage(s), rhs=Dt * self%beta(s))
+     call U%add_fast(lhs=U, rhs=self%buffer)
   enddo
   if (present(new_Dt)) new_Dt = Dt
   endsubroutine integrate_fast
@@ -285,10 +282,11 @@ contains
   if (allocated(self%gamm)) deallocate(self%gamm)
   endsubroutine destroy
 
-  subroutine initialize(self, scheme, stop_on_fail)
+  subroutine initialize(self, scheme, U, stop_on_fail)
   !< Create the actual RK integrator: initialize the Butcher' table coefficients.
   class(integrator_runge_kutta_ssp), intent(inout)        :: self         !< Integrator.
   character(*),                      intent(in)           :: scheme       !< Selected scheme.
+  class(integrand_object),           intent(in), optional :: U            !< Integrand molding prototype.
   logical,                           intent(in), optional :: stop_on_fail !< Stop execution if initialization fail.
 
   if (self%is_supported(scheme=scheme)) then
@@ -351,6 +349,8 @@ contains
       self%gamm(4) = 0.47454236302687_R_P
       self%gamm(5) = 0.93501063100924_R_P
     endselect
+    self%registers = self%stages
+    if (present(U)) call self%allocate_integrand_members(U=U)
   else
     call self%trigger_error(error=ERROR_UNSUPPORTED_SCHEME,                                   &
                             error_message='"'//trim(adjustl(scheme))//'" unsupported scheme', &

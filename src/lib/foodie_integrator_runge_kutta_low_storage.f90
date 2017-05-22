@@ -195,7 +195,7 @@ type, extends(integrator_multistage_explicit_object) :: integrator_runge_kutta_l
 endtype integrator_runge_kutta_ls
 
 contains
-  ! deferred methods
+   ! deferred methods
   pure function class_name(self)
   !< Return the class name of schemes.
   class(integrator_runge_kutta_ls), intent(in) :: self       !< Integrator.
@@ -255,43 +255,39 @@ contains
   real(R_P),                        intent(out), optional :: new_Dt !< New adapted time step.
   integer(I_P)                                            :: s      !< First stages counter.
 
-  associate(stage=>self%stage)
-     ! computing stages
-     stage(1) = U
-     stage(2) = U * 0._R_P
-     do s=1, self%stages
-       stage(2) = (stage(2) * self%A(s)) + (stage(1)%t(t=t + self%C(s) * Dt) * Dt)
-       stage(1) = stage(1) + (stage(2) * self%B(s))
-     enddo
-     U = stage(1)
-  endassociate
+  ! computing stages
+  self%stage(1) = U
+  self%stage(2) = U * 0._R_P
+  do s=1, self%stages
+     self%stage(2) = (self%stage(2) * self%A(s)) + (self%stage(1)%t(t=t + self%C(s) * Dt) * Dt)
+     self%stage(1) = self%stage(1) + (self%stage(2) * self%B(s))
+  enddo
+  U = self%stage(1)
   if (present(new_Dt)) new_Dt = Dt
   endsubroutine integrate
 
   subroutine integrate_fast(self, U, Dt, t, new_Dt)
   !< Integrate field with explicit low storage Runge-Kutta scheme, fast mode.
-  class(integrator_runge_kutta_ls), intent(in)    :: self   !< Integrator.
-  class(integrand_object),          intent(inout) :: U      !< Field to be integrated.
-  real(R_P),                        intent(in)    :: Dt     !< Time step.
-  real(R_P),                        intent(in)    :: t      !< Time.
-  real(R_P), optional,              intent(out)   :: new_Dt !< New adapted time step.
-  integer(I_P)                                    :: s      !< First stages counter.
+  class(integrator_runge_kutta_ls), intent(inout)         :: self   !< Integrator.
+  class(integrand_object),          intent(inout)         :: U      !< Field to be integrated.
+  real(R_P),                        intent(in)            :: Dt     !< Time step.
+  real(R_P),                        intent(in)            :: t      !< Time.
+  real(R_P),                        intent(out), optional :: new_Dt !< New adapted time step.
+  integer(I_P)                                            :: s      !< First stages counter.
 
-  associate(stage=>self%stage)
-     ! computing stages
-     stage(1) = U
-     call stage(2)%multiply_fast(lhs=U, rhs=0._R_P)
-     do s=1, self%stages
-       buffer = stage(1)
-       call buffer%t_fast(t=t + self%C(s) * Dt)
-       call buffer%multiply_fast(lhs=buffer, rhs=Dt)
-       call stage(2)%multiply_fast(lhs=stage(2), rhs=self%A(s))
-       call stage(2)%add_fast(lhs=stage(2), rhs=buffer)
-       call buffer%multiply_fast(lhs=stage(2), rhs=self%B(s))
-       call stage(1)%add_fast(lhs=stage(1), rhs=buffer)
-     enddo
-     U = stage(1)
-  endassociate
+  ! computing stages
+  self%stage(1) = U
+  call self%stage(2)%multiply_fast(lhs=U, rhs=0._R_P)
+  do s=1, self%stages
+     self%buffer = self%stage(1)
+     call self%buffer%t_fast(t=t + self%C(s) * Dt)
+     call self%buffer%multiply_fast(lhs=self%buffer, rhs=Dt)
+     call self%stage(2)%multiply_fast(lhs=self%stage(2), rhs=self%A(s))
+     call self%stage(2)%add_fast(lhs=self%stage(2), rhs=self%buffer)
+     call self%buffer%multiply_fast(lhs=self%stage(2), rhs=self%B(s))
+     call self%stage(1)%add_fast(lhs=self%stage(1), rhs=self%buffer)
+  enddo
+  U = self%stage(1)
   if (present(new_Dt)) new_Dt = Dt
   endsubroutine integrate_fast
 
