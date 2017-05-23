@@ -128,91 +128,88 @@ contains
   endselect
   endsubroutine integr_assign_integr
 
-  subroutine integrate(self, U, previous, Dt, t, iterations, autoupdate)
+  subroutine integrate(self, U, Dt, t, iterations, autoupdate)
   !< Integrate field with Adams-Moulton class scheme.
-  class(integrator_adams_moulton), intent(in)           :: self         !< Integrator.
-  class(integrand_object),         intent(inout)        :: U            !< Field to be integrated.
-  class(integrand_object),         intent(inout)        :: previous(1:) !< Previous time steps solutions of integrand field.
-  real(R_P),                       intent(in)           :: Dt           !< Time steps.
-  real(R_P),                       intent(in)           :: t(:)         !< Times.
-  integer(I_P),                    intent(in), optional :: iterations   !< Fixed point iterations.
-  logical,                         intent(in), optional :: autoupdate   !< Cyclic autoupdate of previous time steps flag.
-  logical                                               :: autoupdate_  !< Cyclic autoupdate of previous time steps flag, dummy var.
-  class(integrand_object), allocatable                  :: delta        !< Delta RHS for fixed point iterations.
-  integer(I_P)                                          :: s            !< Steps counter.
+  class(integrator_adams_moulton), intent(inout)        :: self        !< Integrator.
+  class(integrand_object),         intent(inout)        :: U           !< Field to be integrated.
+  real(R_P),                       intent(in)           :: Dt          !< Time steps.
+  real(R_P),                       intent(in)           :: t(:)        !< Times.
+  integer(I_P),                    intent(in), optional :: iterations  !< Fixed point iterations.
+  logical,                         intent(in), optional :: autoupdate  !< Cyclic autoupdate of previous time steps flag.
+  logical                                               :: autoupdate_ !< Cyclic autoupdate of previous time steps flag, dummy var.
+  class(integrand_object), allocatable                  :: delta       !< Delta RHS for fixed point iterations.
+  integer(I_P)                                          :: s           !< Steps counter.
 
   autoupdate_ = .true. ; if (present(autoupdate)) autoupdate_ = autoupdate
   if (self%steps>0) then
     if (present(iterations)) then ! perform fixed point iterations
       allocate(delta, mold=U)
-      delta = previous(self%steps)
+      delta = self%previous(self%steps)
       do s=0, self%steps - 1
-        delta = delta + (previous(s+1)%t(t=t(s+1)) * (Dt * self%b(s)))
+        delta = delta + (self%previous(s+1)%t(t=t(s+1)) * (Dt * self%b(s)))
       enddo
       do s=1, iterations
         U = delta + (U%t(t=t(self%steps) + Dt) * (Dt * self%b(self%steps)))
       enddo
     else
-      U = previous(self%steps) + (U%t(t=t(self%steps) + Dt) * (Dt * self%b(self%steps)))
+      U = self%previous(self%steps) + (U%t(t=t(self%steps) + Dt) * (Dt * self%b(self%steps)))
       do s=0, self%steps - 1
-        U = U + (previous(s+1)%t(t=t(s+1)) * (Dt * self%b(s)))
+        U = U + (self%previous(s+1)%t(t=t(s+1)) * (Dt * self%b(s)))
       enddo
     endif
-    if (autoupdate_) call self%update_previous(U=U, previous=previous)
+    if (autoupdate_) call self%update_previous(U=U, previous=self%previous)
   else
     U = U + (U%t(t=t(1)) * (Dt * self%b(0)))
   endif
   endsubroutine integrate
 
-  subroutine integrate_fast(self, U, previous, buffer, Dt, t, iterations, autoupdate)
+  subroutine integrate_fast(self, U, Dt, t, iterations, autoupdate)
   !< Integrate field with Adams-Moulton class scheme, fast mode.
-  class(integrator_adams_moulton), intent(in)           :: self         !< Integrator.
-  class(integrand_object),         intent(inout)        :: U            !< Field to be integrated.
-  class(integrand_object),         intent(inout)        :: previous(1:) !< Previous time steps solutions of integrand field.
-  class(integrand_object),         intent(inout)        :: buffer       !< Temporary buffer for doing fast operation.
-  real(R_P),                       intent(in)           :: Dt           !< Time steps.
-  real(R_P),                       intent(in)           :: t(:)         !< Times.
-  integer(I_P),                    intent(in), optional :: iterations   !< Fixed point iterations.
-  logical,                         intent(in), optional :: autoupdate   !< Cyclic autoupdate of previous time steps flag.
-  logical                                               :: autoupdate_  !< Cyclic autoupdate of previous time steps flag, dummy var.
-  class(integrand_object), allocatable                  :: delta        !< Delta RHS for fixed point iterations.
-  integer(I_P)                                          :: s            !< Steps counter.
+  class(integrator_adams_moulton), intent(inout)        :: self        !< Integrator.
+  class(integrand_object),         intent(inout)        :: U           !< Field to be integrated.
+  real(R_P),                       intent(in)           :: Dt          !< Time steps.
+  real(R_P),                       intent(in)           :: t(:)        !< Times.
+  integer(I_P),                    intent(in), optional :: iterations  !< Fixed point iterations.
+  logical,                         intent(in), optional :: autoupdate  !< Cyclic autoupdate of previous time steps flag.
+  logical                                               :: autoupdate_ !< Cyclic autoupdate of previous time steps flag, dummy var.
+  class(integrand_object), allocatable                  :: delta       !< Delta RHS for fixed point iterations.
+  integer(I_P)                                          :: s           !< Steps counter.
 
   autoupdate_ = .true. ; if (present(autoupdate)) autoupdate_ = autoupdate
   if (self%steps>0) then
     if (present(iterations)) then ! perform fixed point iterations
       allocate(delta, mold=U)
-      delta = previous(self%steps)
+      delta = self%previous(self%steps)
       do s=0, self%steps - 1
-        buffer = previous(s+1)
-        call buffer%t_fast(t=t(s+1))
-        call buffer%multiply_fast(lhs=buffer, rhs=Dt * self%b(s))
-        call delta%add_fast(lhs=delta, rhs=buffer)
+        self%buffer = self%previous(s+1)
+        call self%buffer%t_fast(t=t(s+1))
+        call self%buffer%multiply_fast(lhs=self%buffer, rhs=Dt * self%b(s))
+        call delta%add_fast(lhs=delta, rhs=self%buffer)
       enddo
       do s=1, iterations
-        buffer = U
-        call buffer%t_fast(t=t(self%steps) + Dt)
-        call buffer%multiply_fast(lhs=buffer, rhs=Dt * self%b(self%steps))
-        call U%add_fast(lhs=delta, rhs=buffer)
+        self%buffer = U
+        call self%buffer%t_fast(t=t(self%steps) + Dt)
+        call self%buffer%multiply_fast(lhs=self%buffer, rhs=Dt * self%b(self%steps))
+        call U%add_fast(lhs=delta, rhs=self%buffer)
       enddo
     else
-      buffer = U
-      call buffer%t_fast(t=t(self%steps) + Dt)
-      call buffer%multiply_fast(lhs=buffer, rhs=Dt * self%b(self%steps))
-      call U%add_fast(lhs=previous(self%steps), rhs=buffer)
+      self%buffer = U
+      call self%buffer%t_fast(t=t(self%steps) + Dt)
+      call self%buffer%multiply_fast(lhs=self%buffer, rhs=Dt * self%b(self%steps))
+      call U%add_fast(lhs=self%previous(self%steps), rhs=self%buffer)
       do s=0, self%steps - 1
-        buffer = previous(s+1)
-        call buffer%t_fast(t=t(s+1))
-        call buffer%multiply_fast(lhs=buffer, rhs=Dt * self%b(s))
-        call U%add_fast(lhs=U, rhs=buffer)
+        self%buffer = self%previous(s+1)
+        call self%buffer%t_fast(t=t(s+1))
+        call self%buffer%multiply_fast(lhs=self%buffer, rhs=Dt * self%b(s))
+        call U%add_fast(lhs=U, rhs=self%buffer)
       enddo
     endif
-    if (autoupdate_) call self%update_previous(U=U, previous=previous)
+    if (autoupdate_) call self%update_previous(U=U, previous=self%previous)
   else
-    buffer = U
-    call buffer%t_fast(t=t(1))
-    call buffer%multiply_fast(lhs=buffer, rhs=Dt * self%b(0))
-    call U%add_fast(lhs=U, rhs=buffer)
+    self%buffer = U
+    call self%buffer%t_fast(t=t(1))
+    call self%buffer%multiply_fast(lhs=self%buffer, rhs=Dt * self%b(0))
+    call U%add_fast(lhs=U, rhs=self%buffer)
   endif
   endsubroutine integrate_fast
 

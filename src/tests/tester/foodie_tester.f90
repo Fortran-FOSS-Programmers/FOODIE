@@ -270,7 +270,7 @@ contains
    allocate(buffer, mold=integrand_0)    ; buffer    = integrand_0
    allocate(filter, mold=integrand_0)    ; filter    = integrand_0
 
-   call foodie_integrator_factory(scheme=scheme, integrator=integrator, stages=stages, tolerance=1e2_R_P)
+   call foodie_integrator_factory(scheme=scheme, integrator=integrator, stages=stages, tolerance=1e2_R_P, U=integrand_0)
    if (is_fast) call check_scheme_has_fast_mode(scheme=trim(adjustl(scheme)), integrator=integrator)
 
    if (integrator%is_multistep()) then

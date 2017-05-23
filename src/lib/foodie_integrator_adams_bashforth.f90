@@ -127,44 +127,41 @@ contains
    endselect
    endsubroutine integr_assign_integr
 
-   subroutine integrate(self, U, previous, Dt, t, autoupdate)
+   subroutine integrate(self, U, Dt, t, autoupdate)
    !< Integrate field with Adams-Bashforth class scheme.
-   class(integrator_adams_bashforth), intent(in)    :: self         !< Integrator.
-   class(integrand_object),           intent(inout) :: U            !< Field to be integrated.
-   class(integrand_object),           intent(inout) :: previous(1:) !< Previous time steps solutions of integrand field.
-   real(R_P),                         intent(in)    :: Dt           !< Time steps.
-   real(R_P),                         intent(in)    :: t(:)         !< Times.
-   logical, optional,                 intent(in)    :: autoupdate   !< Perform cyclic autoupdate of previous time steps.
-   logical                                          :: autoupdate_  !< Perform cyclic autoupdate of previous time steps, dummy var.
-   integer(I_P)                                     :: s            !< Steps counter.
+   class(integrator_adams_bashforth), intent(inout) :: self        !< Integrator.
+   class(integrand_object),           intent(inout) :: U           !< Field to be integrated.
+   real(R_P),                         intent(in)    :: Dt          !< Time steps.
+   real(R_P),                         intent(in)    :: t(:)        !< Times.
+   logical, optional,                 intent(in)    :: autoupdate  !< Perform cyclic autoupdate of previous time steps.
+   logical                                          :: autoupdate_ !< Perform cyclic autoupdate of previous time steps, dummy var.
+   integer(I_P)                                     :: s           !< Steps counter.
 
    autoupdate_ = .true. ; if (present(autoupdate)) autoupdate_ = autoupdate
    do s=1, self%steps
-     U = U + (previous(s)%t(t=t(s)) * (Dt * self%b(s)))
+     U = U + (self%previous(s)%t(t=t(s)) * (Dt * self%b(s)))
    enddo
-   if (autoupdate_) call self%update_previous(U=U, previous=previous)
+   if (autoupdate_) call self%update_previous(U=U, previous=self%previous)
    endsubroutine integrate
 
-   subroutine integrate_fast(self, U, previous, buffer, Dt, t, autoupdate)
+   subroutine integrate_fast(self, U, Dt, t, autoupdate)
    !< Integrate field with Adams-Bashforth class scheme.
-   class(integrator_adams_bashforth), intent(in)    :: self         !< Integrator.
-   class(integrand_object),           intent(inout) :: U            !< Field to be integrated.
-   class(integrand_object),           intent(inout) :: previous(1:) !< Previous time steps solutions of integrand field.
-   class(integrand_object),           intent(inout) :: buffer       !< Temporary buffer for doing fast operation.
-   real(R_P),                         intent(in)    :: Dt           !< Time steps.
-   real(R_P),                         intent(in)    :: t(:)         !< Times.
-   logical, optional,                 intent(in)    :: autoupdate   !< Perform cyclic autoupdate of previous time steps.
-   logical                                          :: autoupdate_  !< Perform cyclic autoupdate of previous time steps, dummy var.
-   integer(I_P)                                     :: s            !< Steps counter.
+   class(integrator_adams_bashforth), intent(inout) :: self        !< Integrator.
+   class(integrand_object),           intent(inout) :: U           !< Field to be integrated.
+   real(R_P),                         intent(in)    :: Dt          !< Time steps.
+   real(R_P),                         intent(in)    :: t(:)        !< Times.
+   logical, optional,                 intent(in)    :: autoupdate  !< Perform cyclic autoupdate of previous time steps.
+   logical                                          :: autoupdate_ !< Perform cyclic autoupdate of previous time steps, dummy var.
+   integer(I_P)                                     :: s           !< Steps counter.
 
    autoupdate_ = .true. ; if (present(autoupdate)) autoupdate_ = autoupdate
    do s=1, self%steps
-     buffer = previous(s)
-     call buffer%t_fast(t=t(s))
-     call buffer%multiply_fast(lhs=buffer, rhs=Dt * self%b(s))
-     call U%add_fast(lhs=U, rhs=buffer)
+     self%buffer = self%previous(s)
+     call self%buffer%t_fast(t=t(s))
+     call self%buffer%multiply_fast(lhs=self%buffer, rhs=Dt * self%b(s))
+     call U%add_fast(lhs=U, rhs=self%buffer)
    enddo
-   if (autoupdate_) call self%update_previous(U=U, previous=previous)
+   if (autoupdate_) call self%update_previous(U=U, previous=self%previous)
    endsubroutine integrate_fast
 
    elemental function is_supported(self, scheme)
@@ -201,13 +198,15 @@ contains
    if (allocated(self%b)) deallocate(self%b)
    endsubroutine destroy
 
-   subroutine initialize(self, scheme)
+   subroutine initialize(self, scheme, U, stop_on_fail)
    !< Create the actual Adams-Bashforth integrator: initialize the *b* coefficients.
    !<
    !< @note If the integrator is initialized with a bad (unsupported) number of required time steps the initialization fails and
    !< the integrator error status is updated consistently for external-provided errors handling.
-   class(integrator_adams_bashforth), intent(inout) :: self   !< Integrator.
-   character(*),                      intent(in)    :: scheme !< Selected scheme.
+   class(integrator_adams_bashforth), intent(inout)        :: self         !< Integrator.
+   character(*),                      intent(in)           :: scheme       !< Selected scheme.
+   class(integrand_object),           intent(in), optional :: U            !< Integrand molding prototype.
+   logical,                           intent(in), optional :: stop_on_fail !< Stop execution if initialization fail.
 
    if (self%is_supported(scheme=scheme)) then
      call self%destroy
@@ -381,10 +380,12 @@ contains
        self%b(15) = -2161567671248849.0_R_P/62768369664000.0_R_P
        self%b(16) = 362555126427073.0_R_P/62768369664000.0_R_P
      endselect
+     self%registers = self%steps
+     if (present(U)) call self%allocate_integrand_members(U=U)
    else
      call self%trigger_error(error=ERROR_UNSUPPORTED_SCHEME,                                   &
                              error_message='"'//trim(adjustl(scheme))//'" unsupported scheme', &
-                             is_severe=.true.)
+                             is_severe=stop_on_fail)
    endif
    endsubroutine initialize
 endmodule foodie_integrator_adams_bashforth

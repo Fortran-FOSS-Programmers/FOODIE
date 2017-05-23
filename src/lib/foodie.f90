@@ -146,7 +146,7 @@ contains
   names = [names, int_runge_kutta_ssp         % class_name()]
   endfunction foodie_integrator_class_names
 
-  subroutine foodie_integrator_factory(scheme, integrator, stages, tolerance, nu, alpha)
+  subroutine foodie_integrator_factory(scheme, integrator, stages, tolerance, nu, alpha, U)
   !< Return a concrete instance of [[integrator_object]] given a scheme selection.
   !<
   !< This is the FOODIE integrators factory.
@@ -154,10 +154,11 @@ contains
   !< @note If an error occurs the error status of [[integrator_object]] is updated.
   character(*),                          intent(in)  :: scheme                      !< Selected integrator given.
   class(integrator_object), allocatable, intent(out) :: integrator                  !< The FOODIE integrator.
-  integer(I_P), optional,                intent(in)  :: stages                      !< Stages of multi-stage methods.
-  real(R_P),    optional,                intent(in)  :: tolerance                   !< Tolerance on the local truncation error.
-  real(R_P),    optional,                intent(in)  :: nu                          !< Williams-Robert-Asselin filter coefficient.
-  real(R_P),    optional,                intent(in)  :: alpha                       !< Robert-Asselin filter coefficient.
+  integer(I_P),            optional,     intent(in)  :: stages                      !< Stages of multi-stage methods.
+  real(R_P),               optional,     intent(in)  :: tolerance                   !< Tolerance on the local truncation error.
+  real(R_P),               optional,     intent(in)  :: nu                          !< Williams-Robert-Asselin filter coefficient.
+  real(R_P),               optional,     intent(in)  :: alpha                       !< Robert-Asselin filter coefficient.
+  class(integrand_object), optional,     intent(in)  :: U                           !< Integrand molding prototype.
   type(integrator_adams_bashforth)                   :: int_adams_bashforth         !< Integrator Adams Bashforth.
   type(integrator_adams_bashforth_moulton)           :: int_adams_bashforth_moulton !< Integrator Adams Bashforth Moulton.
   type(integrator_adams_moulton)                     :: int_adams_moulton           !< Integrator Adams Moulton.
@@ -182,7 +183,7 @@ contains
     allocate(integrator_adams_bashforth :: integrator)
     select type(integrator)
     type is(integrator_adams_bashforth)
-      call integrator%initialize(scheme=scheme)
+      call integrator%initialize(scheme=scheme, U=U)
     endselect
   elseif (index(trim(adjustl(scheme)), trim(int_adams_moulton%class_name())) > 0) then
     allocate(integrator_adams_moulton :: integrator)
@@ -244,7 +245,7 @@ contains
     allocate(integrator_runge_kutta_ssp :: integrator)
     select type(integrator)
     type is(integrator_runge_kutta_ssp)
-      call integrator%initialize(scheme=scheme)
+      call integrator%initialize(scheme=scheme, U=U)
     endselect
   else
     write(stderr, '(A)')'error: "'//trim(adjustl(scheme))//'" scheme is unknown!'
