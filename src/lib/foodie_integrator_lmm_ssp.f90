@@ -59,6 +59,8 @@ type, extends(integrator_multistep_explicit_object) :: integrator_lmm_ssp
     procedure, pass(lhs)  :: integr_assign_integr !< Operator `=`.
     procedure, pass(self) :: integrate            !< Integrate integrand field.
     procedure, pass(self) :: integrate_fast       !< Integrate integrand field, fast mode.
+    procedure, pass(self) :: integrate_ub         !< Integrate integrand field, unbuffered.
+    procedure, pass(self) :: integrate_ub_fast    !< Integrate integrand field, fast mode, unbuffered.
     procedure, pass(self) :: is_supported         !< Return .true. if the integrator class support the given scheme.
     procedure, pass(self) :: supported_schemes    !< Return the list of supported schemes.
     ! public methods
@@ -119,25 +121,21 @@ contains
 
   subroutine integrate(self, U, Dt, t, autoupdate)
   !< Integrate field with LMM-SSP class scheme.
+   !<
+   !< @note This method uses integrand previous-steps-buffer stored inside integrator.
   class(integrator_lmm_ssp), intent(inout) :: self        !< Integrator.
   class(integrand_object),   intent(inout) :: U           !< Field to be integrated.
   real(R_P),                 intent(in)    :: Dt          !< Time steps.
   real(R_P),                 intent(in)    :: t(:)        !< Times.
   logical, optional,         intent(in)    :: autoupdate  !< Perform cyclic autoupdate of previous time steps.
-  logical                                  :: autoupdate_ !< Perform cyclic autoupdate of previous time steps, dummy var.
-  integer(I_P)                             :: s           !< Steps counter.
 
-  autoupdate_ = .true. ; if (present(autoupdate)) autoupdate_ = autoupdate
-  U = U * 0._R_P
-  do s=1, self%steps
-    if (self%a(s) /= 0._R_P) U = U + (self%previous(s) * self%a(s))
-    if (self%b(s) /= 0._R_P) U = U + (self%previous(s)%t(t=t(s)) * (Dt * self%b(s)))
-  enddo
-  if (autoupdate_) call self%update_previous(U=U, previous=self%previous)
+  call self%integrate_ub(U=U, previous=self%previous, Dt=Dt, t=t, autoupdate=autoupdate)
   endsubroutine integrate
 
   subroutine integrate_fast(self, U, Dt, t, autoupdate)
   !< Integrate field with LMM-SSP class scheme, fast mode.
+   !<
+   !< @note This method uses integrand previous-steps-buffer stored inside integrator.
   class(integrator_lmm_ssp), intent(inout) :: self        !< Integrator.
   class(integrand_object),   intent(inout) :: U           !< Field to be integrated.
   real(R_P),                 intent(in)    :: Dt          !< Time steps.
@@ -145,23 +143,57 @@ contains
   logical, optional,         intent(in)    :: autoupdate  !< Perform cyclic autoupdate of previous time steps.
   logical                                  :: autoupdate_ !< Perform cyclic autoupdate of previous time steps, dummy var.
   integer(I_P)                             :: s           !< Steps counter.
+
+  call self%integrate_ub_fast(U=U, previous=self%previous, Dt=Dt, t=t, autoupdate=autoupdate)
+  endsubroutine integrate_fast
+
+  subroutine integrate_ub(self, U, previous, Dt, t, autoupdate)
+  !< Integrate field with LMM-SSP class scheme, unbuffered.
+  class(integrator_lmm_ssp), intent(in)    :: self         !< Integrator.
+  class(integrand_object),   intent(inout) :: U            !< Field to be integrated.
+  class(integrand_object),   intent(inout) :: previous(1:) !< Integrand.
+  real(R_P),                 intent(in)    :: Dt           !< Time steps.
+  real(R_P),                 intent(in)    :: t(:)         !< Times.
+  logical, optional,         intent(in)    :: autoupdate   !< Perform cyclic autoupdate of previous time steps.
+  logical                                  :: autoupdate_  !< Perform cyclic autoupdate of previous time steps, dummy var.
+  integer(I_P)                             :: s            !< Steps counter.
+
+  autoupdate_ = .true. ; if (present(autoupdate)) autoupdate_ = autoupdate
+  U = U * 0._R_P
+  do s=1, self%steps
+    if (self%a(s) /= 0._R_P) U = U + (previous(s) * self%a(s))
+    if (self%b(s) /= 0._R_P) U = U + (previous(s)%t(t=t(s)) * (Dt * self%b(s)))
+  enddo
+  if (autoupdate_) call self%update_previous(U=U, previous=previous)
+  endsubroutine integrate_ub
+
+  subroutine integrate_ub_fast(self, U, previous, Dt, t, autoupdate)
+  !< Integrate field with LMM-SSP class scheme, unbuffered, fast mode.
+  class(integrator_lmm_ssp), intent(inout) :: self         !< Integrator.
+  class(integrand_object),   intent(inout) :: U            !< Field to be integrated.
+  class(integrand_object),   intent(inout) :: previous(1:) !< Integrand.
+  real(R_P),                 intent(in)    :: Dt           !< Time steps.
+  real(R_P),                 intent(in)    :: t(:)         !< Times.
+  logical, optional,         intent(in)    :: autoupdate   !< Perform cyclic autoupdate of previous time steps.
+  logical                                  :: autoupdate_  !< Perform cyclic autoupdate of previous time steps, dummy var.
+  integer(I_P)                             :: s            !< Steps counter.
 
   autoupdate_ = .true. ; if (present(autoupdate)) autoupdate_ = autoupdate
   call U%multiply_fast(lhs=U, rhs=0._R_P)
   do s=1, self%steps
     if (self%a(s) /= 0._R_P) then
-       call self%buffer%multiply_fast(lhs=self%previous(s), rhs=self%a(s))
+       call self%buffer%multiply_fast(lhs=previous(s), rhs=self%a(s))
        call U%add_fast(lhs=U, rhs=self%buffer)
     endif
     if (self%b(s) /= 0._R_P) then
-       self%buffer = self%previous(s)
+       self%buffer = previous(s)
        call self%buffer%t_fast(t=t(s))
        call self%buffer%multiply_fast(lhs=self%buffer, rhs=self%b(s))
        call U%add_fast(lhs=U, rhs=self%buffer)
     endif
   enddo
-  if (autoupdate_) call self%update_previous(U=U, previous=self%previous)
-  endsubroutine integrate_fast
+  if (autoupdate_) call self%update_previous(U=U, previous=previous)
+  endsubroutine integrate_ub_fast
 
   elemental function is_supported(self, scheme)
   !< Return .true. if the integrator class support the given scheme.
@@ -198,13 +230,15 @@ contains
   if (allocated(self%b)) deallocate(self%b)
   endsubroutine destroy
 
-  subroutine initialize(self, scheme)
+  subroutine initialize(self, scheme, U, stop_on_fail)
   !< Create the actual LMM-SSP integrator: initialize the *a,b* coefficients.
   !<
   !< @note If the integrator is initialized with a bad (unsupported) number of required time steps the initialization fails and
   !< the integrator error status is updated consistently for external-provided errors handling.
-  class(integrator_lmm_ssp), intent(inout) :: self   !< Integrator.
-  character(*),              intent(in)    :: scheme !< Selected scheme.
+  class(integrator_lmm_ssp), intent(inout)        :: self         !< Integrator.
+  character(*),              intent(in)           :: scheme       !< Selected scheme.
+  class(integrand_object),   intent(in), optional :: U            !< Integrand molding prototype.
+  logical,                   intent(in), optional :: stop_on_fail !< Stop execution if initialization fail.
 
   if (self%is_supported(scheme=scheme)) then
     call self%destroy
@@ -249,10 +283,12 @@ contains
       self%b(4) = 0._R_P
       self%b(5) = 25._R_P/16._R_P
     endselect
+    self%registers = self%steps
+    if (present(U)) call self%allocate_integrand_members(U=U)
   else
     call self%trigger_error(error=ERROR_UNSUPPORTED_SCHEME,                                   &
                             error_message='"'//trim(adjustl(scheme))//'" unsupported scheme', &
-                            is_severe=.true.)
+                            is_severe=stop_on_fail)
   endif
   endsubroutine initialize
 endmodule foodie_integrator_lmm_ssp

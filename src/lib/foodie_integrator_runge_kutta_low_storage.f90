@@ -327,10 +327,11 @@ contains
   if (allocated(self%C)) deallocate(self%C)
   endsubroutine destroy
 
-  subroutine initialize(self, scheme, stop_on_fail)
+  subroutine initialize(self, scheme, U, stop_on_fail)
   !< Create the actual RK integrator: initialize the Butcher' low storage table coefficients.
   class(integrator_runge_kutta_ls), intent(inout)        :: self         !< Integrator.
   character(*),                     intent(in)           :: scheme       !< Selected scheme.
+  class(integrand_object),          intent(in), optional :: U            !< Integrand molding prototype.
   logical,                          intent(in), optional :: stop_on_fail !< Stop execution if initialization fail.
 
   if (self%is_supported(scheme=scheme)) then
@@ -450,8 +451,8 @@ contains
       self%A(14) = -7.1151571693922548_R_P ; self%B(14) = 5.5059777270269628_R_P ; self%C(14) = 0.8734213127600976_R_P
     endselect
     self%registers = 2
-    ! allocate(self%stage(1:self%register), mold=integrand)
-    ! allocate(self%buffer, mold=integrand)
+    self%registers = self%stages
+    if (present(U)) call self%allocate_integrand_members(U=U)
   else
     call self%trigger_error(error=ERROR_UNSUPPORTED_SCHEME,                                   &
                             error_message='"'//trim(adjustl(scheme))//'" unsupported scheme', &

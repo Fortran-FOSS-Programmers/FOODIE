@@ -177,7 +177,7 @@ contains
     allocate(integrator_adams_bashforth_moulton :: integrator)
     select type(integrator)
     type is(integrator_adams_bashforth_moulton)
-      call integrator%initialize(scheme=scheme)
+      call integrator%initialize(scheme=scheme, U=U)
     endselect
   elseif (index(trim(adjustl(scheme)), trim(int_adams_bashforth%class_name())) > 0) then
     allocate(integrator_adams_bashforth :: integrator)
@@ -189,13 +189,13 @@ contains
     allocate(integrator_adams_moulton :: integrator)
     select type(integrator)
     type is(integrator_adams_moulton)
-      call integrator%initialize(scheme=scheme)
+      call integrator%initialize(scheme=scheme, U=U)
     endselect
   elseif (index(trim(adjustl(scheme)), trim(int_back_df%class_name())) > 0) then
     allocate(integrator_back_df :: integrator)
     select type(integrator)
     type is(integrator_back_df)
-      call integrator%initialize(scheme=scheme)
+      call integrator%initialize(scheme=scheme, U=U)
     endselect
   elseif (index(trim(adjustl(scheme)), trim(int_euler_explicit%class_name())) > 0) then
     allocate(integrator_euler_explicit :: integrator)
@@ -215,7 +215,7 @@ contains
     allocate(integrator_lmm_ssp :: integrator)
     select type(integrator)
     type is(integrator_lmm_ssp)
-      call integrator%initialize(scheme=scheme)
+      call integrator%initialize(scheme=scheme, U=U)
     endselect
   elseif (index(trim(adjustl(scheme)), trim(int_ms_runge_kutta_ssp%class_name())) > 0) then
     allocate(integrator_ms_runge_kutta_ssp :: integrator)
@@ -227,19 +227,19 @@ contains
     allocate(integrator_runge_kutta_emd :: integrator)
     select type(integrator)
     type is(integrator_runge_kutta_emd)
-      call integrator%initialize(scheme=scheme, tolerance=tolerance)
+      call integrator%initialize(scheme=scheme, tolerance=tolerance, U=U)
     endselect
   elseif (index(trim(adjustl(scheme)), trim(int_runge_kutta_lssp%class_name())) > 0) then
     allocate(integrator_runge_kutta_lssp :: integrator)
     select type(integrator)
     type is(integrator_runge_kutta_lssp)
-      call integrator%initialize(scheme=scheme, stages=stages)
+      call integrator%initialize(scheme=scheme, stages=stages, U=U)
     endselect
   elseif (index(trim(adjustl(scheme)), trim(int_runge_kutta_ls%class_name())) > 0) then
     allocate(integrator_runge_kutta_ls :: integrator)
     select type(integrator)
     type is(integrator_runge_kutta_ls)
-      call integrator%initialize(scheme=scheme)
+      call integrator%initialize(scheme=scheme, U=U)
     endselect
   elseif (index(trim(adjustl(scheme)), trim(int_runge_kutta_ssp%class_name())) > 0) then
     allocate(integrator_runge_kutta_ssp :: integrator)

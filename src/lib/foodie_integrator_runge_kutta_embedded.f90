@@ -311,6 +311,8 @@ type, extends(integrator_multistage_explicit_object) :: integrator_runge_kutta_e
       ! public methods
       procedure, pass(self) :: destroy    !< Destroy the integrator.
       procedure, pass(self) :: initialize !< Initialize (create) the integrator.
+      ! overridden public methods
+      procedure, pass(self) :: allocate_integrand_members !< Allocate integrand members.
       ! private methods
       procedure, pass(self), private :: new_Dt !< Compute new estimation of the time step Dt.
 endtype integrator_runge_kutta_emd
@@ -487,10 +489,11 @@ contains
   if (allocated(self%gamm)) deallocate(self%gamm)
   endsubroutine destroy
 
-  subroutine initialize(self, scheme, tolerance, stop_on_fail)
+  subroutine initialize(self, scheme, U, tolerance, stop_on_fail)
   !< Create the actual RK integrator: initialize the Butcher' table coefficients.
   class(integrator_runge_kutta_emd), intent(inout)        :: self         !< Integrator.
   character(*),                      intent(in)           :: scheme       !< Selected scheme.
+  class(integrand_object),           intent(in), optional :: U            !< Integrand molding prototype.
   real(R_P),                         intent(in), optional :: tolerance    !< Tolerance on the local truncation error (default 0.01).
   logical,                           intent(in), optional :: stop_on_fail !< Stop execution if initialization fail.
 
@@ -752,14 +755,42 @@ contains
       self%gamm(17) = 1._R_P
     endselect
     self%registers = self%stages
-    ! allocate(self%stage(1:self%register), mold=integrand)
-    ! allocate(self%buffer, mold=integrand)
+    if (present(U)) call self%allocate_integrand_members(U=U)
   else
     call self%trigger_error(error=ERROR_UNSUPPORTED_SCHEME,                                   &
                             error_message='"'//trim(adjustl(scheme))//'" unsupported scheme', &
                             is_severe=stop_on_fail)
   endif
   endsubroutine initialize
+
+   ! overridden public methods
+   pure subroutine allocate_integrand_members(self, U)
+   !< Allocate members of interpolator being of [[integrand_object]] class.
+   !<
+   !< @note It is assumed that the integrator has been properly initialized before calling this method.
+   class(integrator_runge_kutta_emd), intent(inout) :: self !< Integrator.
+   class(integrand_object),           intent(in)    :: U    !< Integrand.
+   integer(I_P)                                     :: s    !< Counter.
+
+   if (self%is_multistage() .and. self%registers > 0) then
+      if (allocated(self%stage)) deallocate(self%stage)
+      allocate(self%stage(1:self%registers), mold=U)
+      do s=1, self%registers
+         self%stage(s) = U
+      enddo
+   endif
+   if (self%has_fast_mode()) then
+      if (allocated(self%buffer)) deallocate(self%buffer)
+      allocate(self%buffer, mold=U)
+      self%buffer = U
+   endif
+   if (allocated(self%U1)) deallocate(self%U1)
+   allocate(self%U1, mold=U)
+   self%U1 = U
+   if (allocated(self%U2)) deallocate(self%U2)
+   allocate(self%U2, mold=U)
+   self%U2 = U
+   endsubroutine allocate_integrand_members
 
   ! private methods
   elemental subroutine new_Dt(self, error, Dt)

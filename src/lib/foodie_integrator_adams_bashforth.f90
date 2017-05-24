@@ -70,6 +70,8 @@ type, extends(integrator_multistep_explicit_object) :: integrator_adams_bashfort
       procedure, pass(lhs)  :: integr_assign_integr !< Operator `=`.
       procedure, pass(self) :: integrate            !< Integrate integrand field.
       procedure, pass(self) :: integrate_fast       !< Integrate integrand field, fast mode.
+      procedure, pass(self) :: integrate_ub         !< Integrate integrand field, unbuffered.
+      procedure, pass(self) :: integrate_ub_fast    !< Integrate integrand field, fast mode, unbuffered.
       procedure, pass(self) :: is_supported         !< Return .true. if the integrator class support the given scheme.
       procedure, pass(self) :: supported_schemes    !< Return the list of supported schemes.
       ! public methods
@@ -129,40 +131,68 @@ contains
 
    subroutine integrate(self, U, Dt, t, autoupdate)
    !< Integrate field with Adams-Bashforth class scheme.
+   !<
+   !< @note This method uses integrand previous-steps-buffer stored inside integrator.
    class(integrator_adams_bashforth), intent(inout) :: self        !< Integrator.
    class(integrand_object),           intent(inout) :: U           !< Field to be integrated.
    real(R_P),                         intent(in)    :: Dt          !< Time steps.
    real(R_P),                         intent(in)    :: t(:)        !< Times.
    logical, optional,                 intent(in)    :: autoupdate  !< Perform cyclic autoupdate of previous time steps.
-   logical                                          :: autoupdate_ !< Perform cyclic autoupdate of previous time steps, dummy var.
-   integer(I_P)                                     :: s           !< Steps counter.
 
-   autoupdate_ = .true. ; if (present(autoupdate)) autoupdate_ = autoupdate
-   do s=1, self%steps
-     U = U + (self%previous(s)%t(t=t(s)) * (Dt * self%b(s)))
-   enddo
-   if (autoupdate_) call self%update_previous(U=U, previous=self%previous)
+   call self%integrate_ub(U=U, previous=self%previous, Dt=Dt, t=t, autoupdate=autoupdate)
    endsubroutine integrate
 
    subroutine integrate_fast(self, U, Dt, t, autoupdate)
-   !< Integrate field with Adams-Bashforth class scheme.
+   !< Integrate field with Adams-Bashforth class scheme, fast mode.
+   !<
+   !< @note This method uses integrand previous-steps-buffer stored inside integrator.
    class(integrator_adams_bashforth), intent(inout) :: self        !< Integrator.
    class(integrand_object),           intent(inout) :: U           !< Field to be integrated.
    real(R_P),                         intent(in)    :: Dt          !< Time steps.
    real(R_P),                         intent(in)    :: t(:)        !< Times.
    logical, optional,                 intent(in)    :: autoupdate  !< Perform cyclic autoupdate of previous time steps.
-   logical                                          :: autoupdate_ !< Perform cyclic autoupdate of previous time steps, dummy var.
-   integer(I_P)                                     :: s           !< Steps counter.
+
+   call self%integrate_ub_fast(U=U, previous=self%previous, Dt=Dt, t=t, autoupdate=autoupdate)
+   endsubroutine integrate_fast
+
+   subroutine integrate_ub(self, U, previous, Dt, t, autoupdate)
+   !< Integrate field with Adams-Bashforth class scheme, unbuffered.
+   class(integrator_adams_bashforth), intent(in)    :: self         !< Integrator.
+   class(integrand_object),           intent(inout) :: U            !< Field to be integrated.
+   class(integrand_object),           intent(inout) :: previous(1:) !< Integrand.
+   real(R_P),                         intent(in)    :: Dt           !< Time steps.
+   real(R_P),                         intent(in)    :: t(:)         !< Times.
+   logical, optional,                 intent(in)    :: autoupdate   !< Perform cyclic autoupdate of previous time steps.
+   logical                                          :: autoupdate_  !< Perform cyclic autoupdate of previous time steps, dummy var.
+   integer(I_P)                                     :: s            !< Steps counter.
 
    autoupdate_ = .true. ; if (present(autoupdate)) autoupdate_ = autoupdate
    do s=1, self%steps
-     self%buffer = self%previous(s)
+     U = U + (previous(s)%t(t=t(s)) * (Dt * self%b(s)))
+   enddo
+   if (autoupdate_) call self%update_previous(U=U, previous=previous)
+   endsubroutine integrate_ub
+
+   subroutine integrate_ub_fast(self, U, previous, Dt, t, autoupdate)
+   !< Integrate field with Adams-Bashforth class scheme, unbuffered, fast mode.
+   class(integrator_adams_bashforth), intent(inout) :: self         !< Integrator.
+   class(integrand_object),           intent(inout) :: U            !< Field to be integrated.
+   class(integrand_object),           intent(inout) :: previous(1:) !< Integrand.
+   real(R_P),                         intent(in)    :: Dt           !< Time steps.
+   real(R_P),                         intent(in)    :: t(:)         !< Times.
+   logical, optional,                 intent(in)    :: autoupdate   !< Perform cyclic autoupdate of previous time steps.
+   logical                                          :: autoupdate_  !< Perform cyclic autoupdate of previous time steps, dummy var.
+   integer(I_P)                                     :: s            !< Steps counter.
+
+   autoupdate_ = .true. ; if (present(autoupdate)) autoupdate_ = autoupdate
+   do s=1, self%steps
+     self%buffer = previous(s)
      call self%buffer%t_fast(t=t(s))
      call self%buffer%multiply_fast(lhs=self%buffer, rhs=Dt * self%b(s))
      call U%add_fast(lhs=U, rhs=self%buffer)
    enddo
-   if (autoupdate_) call self%update_previous(U=U, previous=self%previous)
-   endsubroutine integrate_fast
+   if (autoupdate_) call self%update_previous(U=U, previous=previous)
+   endsubroutine integrate_ub_fast
 
    elemental function is_supported(self, scheme)
    !< Return .true. if the integrator class support the given scheme.

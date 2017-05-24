@@ -238,10 +238,11 @@ contains
   self%integrate_ => integrate_order_s_1
   endsubroutine destroy
 
-  subroutine initialize(self, scheme, stages, stop_on_fail)
+  subroutine initialize(self, scheme, U, stages, stop_on_fail)
   !< Create the actual RK integrator: initialize the Butcher' table coefficients.
   class(integrator_runge_kutta_lssp), intent(inout)        :: self         !< Integrator.
   character(*),                       intent(in)           :: scheme       !< Selected scheme.
+  class(integrand_object),            intent(in), optional :: U            !< Integrand molding prototype.
   integer(I_P),                       intent(in), optional :: stages       !< Stages number.
   logical,                            intent(in), optional :: stop_on_fail !< Stop execution if initialization fail.
 
@@ -267,6 +268,8 @@ contains
       allocate(self%alpha(1:self%stages)) ; self%alpha = 0._R_P
       call self%initialize_order_s
     endselect
+    self%registers = self%stages
+    if (present(U)) call self%allocate_integrand_members(U=U)
   else
     call self%trigger_error(error=ERROR_UNSUPPORTED_SCHEME,                                   &
                             error_message='"'//trim(adjustl(scheme))//'" unsupported scheme', &
