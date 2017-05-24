@@ -57,7 +57,10 @@ type, extends(integrator_multistep_implicit_object) :: integrator_back_df
   !< FOODIE integrator: provide an implicit class of Backward-Differentiation-Formula multi-step schemes, from 1st to 6th order
   !< accurate.
   !<
-  !< @note The integrator must be created or initialized (initialize the *alpha* and *beta* coefficients) before used.
+  !< @note The integrator must be created or initialized (initialize the *a* and *b* coefficients) before used.
+  !<
+  !< @note The time steps `Dt(1:steps)` passed to the integrate methods must be identical: this integrator supports only
+  !< fixed time steps.
   private
   real(R_P), allocatable :: a(:)      !< \(\alpha\) coefficients.
   real(R_P)              :: b=0.0_R_P !< \(\beta\) coefficient.
@@ -133,12 +136,12 @@ contains
   !< Integrate field with BDF class scheme.
   !<
   !< @note This method uses integrand previous-steps-buffer stored inside integrator.
-  class(integrator_back_df),  intent(inout) :: self        !< Integrator.
-  class(integrand_object),    intent(inout) :: U           !< Field to be integrated.
-  real(R_P),                  intent(in)    :: Dt          !< Time steps.
-  real(R_P),                  intent(in)    :: t(:)        !< Times.
-  integer(I_P), optional,     intent(in)    :: iterations  !< Fixed point iterations.
-  logical,      optional,     intent(in)    :: autoupdate  !< Perform cyclic autoupdate of previous time steps.
+  class(integrator_back_df),  intent(inout) :: self       !< Integrator.
+  class(integrand_object),    intent(inout) :: U          !< Field to be integrated.
+  real(R_P),                  intent(in)    :: Dt(1:)     !< Time steps.
+  real(R_P),                  intent(in)    :: t(1:)      !< Times.
+  integer(I_P), optional,     intent(in)    :: iterations !< Fixed point iterations.
+  logical,      optional,     intent(in)    :: autoupdate !< Perform cyclic autoupdate of previous time steps.
 
   call self%integrate_ub(U=U, previous=self%previous, Dt=Dt, t=t, iterations=iterations, autoupdate=autoupdate)
   endsubroutine integrate
@@ -147,23 +150,23 @@ contains
   !< Integrate field with BDF class scheme.
   !<
   !< @note This method uses integrand previous-steps-buffer stored inside integrator.
-  class(integrator_back_df),  intent(inout) :: self         !< Integrator.
-  class(integrand_object),    intent(inout) :: U            !< Field to be integrated.
-  real(R_P),                  intent(in)    :: Dt           !< Time steps.
-  real(R_P),                  intent(in)    :: t(:)         !< Times.
-  integer(I_P), optional,     intent(in)    :: iterations   !< Fixed point iterations.
-  logical,      optional,     intent(in)    :: autoupdate   !< Perform cyclic autoupdate of previous time steps.
+  class(integrator_back_df),  intent(inout) :: self       !< Integrator.
+  class(integrand_object),    intent(inout) :: U          !< Field to be integrated.
+  real(R_P),                  intent(in)    :: Dt(1:)     !< Time steps.
+  real(R_P),                  intent(in)    :: t(1:)      !< Times.
+  integer(I_P), optional,     intent(in)    :: iterations !< Fixed point iterations.
+  logical,      optional,     intent(in)    :: autoupdate !< Perform cyclic autoupdate of previous time steps.
 
   call self%integrate_ub_fast(U=U, previous=self%previous, Dt=Dt, t=t, iterations=iterations, autoupdate=autoupdate)
   endsubroutine integrate_fast
 
   subroutine integrate_ub(self, U, previous, Dt, t, iterations, autoupdate)
   !< Integrate field with BDF class scheme.
-  class(integrator_back_df),  intent(in)    :: self         !< Integrator.
+  class(integrator_back_df),  intent(inout) :: self         !< Integrator.
   class(integrand_object),    intent(inout) :: U            !< Field to be integrated.
   class(integrand_object),    intent(inout) :: previous(1:) !< Integrand.
-  real(R_P),                  intent(in)    :: Dt           !< Time steps.
-  real(R_P),                  intent(in)    :: t(:)         !< Times.
+  real(R_P),                  intent(in)    :: Dt(1:)       !< Time steps.
+  real(R_P),                  intent(in)    :: t(1:)        !< Times.
   integer(I_P), optional,     intent(in)    :: iterations   !< Fixed point iterations.
   logical,      optional,     intent(in)    :: autoupdate   !< Perform cyclic autoupdate of previous time steps.
   integer(I_P)                              :: iterations_  !< Fixed point iterations.
@@ -179,7 +182,7 @@ contains
     delta = delta + (previous(s) * (-self%a(s)))
   enddo
   do s=1, iterations_
-    U = delta + (U%t(t=t(self%steps) + Dt) * (Dt * self%b))
+    U = delta + (U%t(t=t(self%steps) + Dt(self%steps)) * (Dt(self%steps) * self%b))
   enddo
   if (autoupdate_) call self%update_previous(U=U, previous=previous, is_like_explicit=.true.)
   endsubroutine integrate_ub
@@ -189,8 +192,8 @@ contains
   class(integrator_back_df),  intent(inout) :: self         !< Integrator.
   class(integrand_object),    intent(inout) :: U            !< Field to be integrated.
   class(integrand_object),    intent(inout) :: previous(1:) !< Integrand.
-  real(R_P),                  intent(in)    :: Dt           !< Time steps.
-  real(R_P),                  intent(in)    :: t(:)         !< Times.
+  real(R_P),                  intent(in)    :: Dt(1:)       !< Time steps.
+  real(R_P),                  intent(in)    :: t(1:)        !< Times.
   integer(I_P), optional,     intent(in)    :: iterations   !< Fixed point iterations.
   logical,      optional,     intent(in)    :: autoupdate   !< Perform cyclic autoupdate of previous time steps.
   integer(I_P)                              :: iterations_  !< Fixed point iterations.
@@ -208,8 +211,8 @@ contains
   enddo
   do s=1, iterations
     self%buffer = U
-    call self%buffer%t_fast(t=t(self%steps) + Dt)
-    call self%buffer%multiply_fast(lhs=self%buffer, rhs=Dt * self%b)
+    call self%buffer%t_fast(t=t(self%steps) + Dt(self%steps))
+    call self%buffer%multiply_fast(lhs=self%buffer, rhs=Dt(self%steps) * self%b)
     call U%add_fast(lhs=delta, rhs=self%buffer)
   enddo
   if (autoupdate_) call self%update_previous(U=U, previous=previous, is_like_explicit=.true.)

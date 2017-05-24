@@ -32,6 +32,7 @@ type, extends(integrator_object), abstract :: integrator_multistep_explicit_obje
       procedure, pass(self) :: steps_number  !< Return number of steps used.
       ! public methods
       procedure, pass(self) :: allocate_integrand_members !< Allocate integrand members.
+      procedure, pass(lhs)  :: assign_multistep           !< Assign members of [[integrator_multistep_explicit_object]] and parents.
       procedure, pass(self) :: destroy_multistep          !< Destroy the integrator.
       procedure, pass(self) :: update_previous            !< Cyclic update previous time steps.
 endtype integrator_multistep_explicit_object
@@ -45,8 +46,8 @@ abstract interface
    import :: integrand_object, integrator_multistep_explicit_object, R_P
    class(integrator_multistep_explicit_object), intent(inout) :: self       !< Integrator.
    class(integrand_object),                     intent(inout) :: U          !< Integrand.
-   real(R_P),                                   intent(in)    :: Dt         !< Time steps.
-   real(R_P),                                   intent(in)    :: t(:)       !< Times.
+   real(R_P),                                   intent(in)    :: Dt(1:)     !< Time steps.
+   real(R_P),                                   intent(in)    :: t(1:)      !< Times.
    logical, optional,                           intent(in)    :: autoupdate !< Perform cyclic autoupdate of previous time steps.
    endsubroutine integrate_interface
 
@@ -57,19 +58,19 @@ abstract interface
    import :: integrand_object, integrator_multistep_explicit_object, R_P
    class(integrator_multistep_explicit_object), intent(inout) :: self       !< Integrator.
    class(integrand_object),                     intent(inout) :: U          !< Field to be integrated.
-   real(R_P),                                   intent(in)    :: Dt         !< Time steps.
-   real(R_P),                                   intent(in)    :: t(:)       !< Times.
+   real(R_P),                                   intent(in)    :: Dt(1:)     !< Time steps.
+   real(R_P),                                   intent(in)    :: t(1:)      !< Times.
    logical, optional,                           intent(in)    :: autoupdate !< Perform cyclic autoupdate of previous time steps.
    endsubroutine integrate_fast_interface
 
    subroutine integrate_ub_interface(self, U, previous, Dt, t, autoupdate)
    !< Integrate integrand field, unbuffered.
    import :: integrand_object, integrator_multistep_explicit_object, R_P
-   class(integrator_multistep_explicit_object), intent(in)    :: self         !< Integrator.
+   class(integrator_multistep_explicit_object), intent(inout) :: self         !< Integrator.
    class(integrand_object),                     intent(inout) :: U            !< Integrand.
    class(integrand_object),                     intent(inout) :: previous(1:) !< Integrand.
-   real(R_P),                                   intent(in)    :: Dt           !< Time steps.
-   real(R_P),                                   intent(in)    :: t(:)         !< Times.
+   real(R_P),                                   intent(in)    :: Dt(1:)       !< Time steps.
+   real(R_P),                                   intent(in)    :: t(1:)        !< Times.
    logical, optional,                           intent(in)    :: autoupdate   !< Perform cyclic autoupdate of previous time steps.
    endsubroutine integrate_ub_interface
 
@@ -79,8 +80,8 @@ abstract interface
    class(integrator_multistep_explicit_object), intent(inout) :: self         !< Integrator.
    class(integrand_object),                     intent(inout) :: U            !< Field to be integrated.
    class(integrand_object),                     intent(inout) :: previous(1:) !< Integrand.
-   real(R_P),                                   intent(in)    :: Dt           !< Time steps.
-   real(R_P),                                   intent(in)    :: t(:)         !< Times.
+   real(R_P),                                   intent(in)    :: Dt(1:)       !< Time steps.
+   real(R_P),                                   intent(in)    :: t(1:)        !< Times.
    logical, optional,                           intent(in)    :: autoupdate   !< Perform cyclic autoupdate of previous time steps.
    endsubroutine integrate_ub_fast_interface
 endinterface
@@ -142,6 +143,32 @@ contains
    endif
    endsubroutine allocate_integrand_members
 
+   pure subroutine assign_multistep(lhs, rhs)
+   !< Assign members of [[integrator_multistep_explicit_object]] and parents.
+   class(integrator_multistep_explicit_object), intent(inout) :: lhs !< Left hand side.
+   class(integrator_object),                    intent(in)    :: rhs !< Right hand side.
+   integer(I_P)                                               :: s   !< Counter.
+
+   call lhs%assign_abstract(rhs=rhs)
+   select type(rhs)
+   class is (integrator_multistep_explicit_object)
+     lhs%registers = rhs%registers
+     lhs%steps = rhs%steps
+     if (allocated(lhs%previous)) deallocate(lhs%previous)
+     if (allocated(rhs%previous)) then
+        allocate(lhs%previous(1:lhs%registers), mold=rhs%previous)
+        do s=1, lhs%registers
+           lhs%previous(s) = rhs%previous(s)
+        enddo
+     endif
+     if (allocated(lhs%buffer)) deallocate(lhs%buffer)
+     if (allocated(rhs%buffer)) then
+        allocate(lhs%buffer, mold=rhs%buffer)
+        lhs%buffer = rhs%buffer
+     endif
+   endselect
+   endsubroutine assign_multistep
+
    elemental subroutine destroy_multistep(self)
    !< Destroy the integrator.
    class(integrator_multistep_explicit_object), intent(inout) :: self !< Integrator.
@@ -162,6 +189,7 @@ contains
 
    do s=1, self%steps - 1
      previous(s) = previous(s + 1)
+     ! Dt(s) = Dt(s + 1)
    enddo
    previous(self%steps) = U
    endsubroutine update_previous

@@ -112,6 +112,9 @@ type, extends(integrator_multistep_implicit_object) :: integrator_adams_bashfort
   !< FOODIE integrator: provide an explicit class of Adams-Bashforth-Moulton multi-step schemes, from 1st to 4rd order accurate.
   !<
   !< @note The integrator must be created or initialized (predictor and corrector schemes selection) before used.
+  !<
+  !< @note The time steps `Dt(1:steps)` passed to the integrate methods must be identical: this integrator supports only
+  !< fixed time steps.
   private
   type(integrator_adams_bashforth) :: predictor !< Predictor solver.
   type(integrator_adams_moulton)   :: corrector !< Corrector solver.
@@ -190,8 +193,8 @@ contains
   !< @note This method uses integrand previous-steps-buffer stored inside integrator.
   class(integrator_adams_bashforth_moulton), intent(inout)        :: self        !< Integrator.
   class(integrand_object),                   intent(inout)        :: U           !< Field to be integrated.
-  real(R_P),                                 intent(in)           :: Dt          !< Time steps.
-  real(R_P),                                 intent(in)           :: t(:)        !< Times.
+  real(R_P),                                 intent(in)           :: Dt(1:)      !< Time steps.
+  real(R_P),                                 intent(in)           :: t(1:)       !< Times.
   integer(I_P),                              intent(in), optional :: iterations  !< Fixed point iterations of AM scheme.
   logical,                                   intent(in), optional :: autoupdate  !< Cyclic autoupdate of previous time steps flag.
 
@@ -204,8 +207,8 @@ contains
   !< @note This method uses integrand previous-steps-buffer stored inside integrator.
   class(integrator_adams_bashforth_moulton), intent(inout)        :: self        !< Integrator.
   class(integrand_object),                   intent(inout)        :: U           !< Field to be integrated.
-  real(R_P),                                 intent(in)           :: Dt          !< Time steps.
-  real(R_P),                                 intent(in)           :: t(:)        !< Times.
+  real(R_P),                                 intent(in)           :: Dt(1:)      !< Time steps.
+  real(R_P),                                 intent(in)           :: t(1:)       !< Times.
   integer(I_P),                              intent(in), optional :: iterations  !< Fixed point iterations of AM scheme.
   logical,                                   intent(in), optional :: autoupdate  !< Cyclic autoupdate of previous time steps flag.
 
@@ -214,11 +217,11 @@ contains
 
   subroutine integrate_ub(self, U, previous, Dt, t, iterations, autoupdate)
   !< Integrate field with Adams-Bashforth-Moulton class scheme, unbuffered.
-  class(integrator_adams_bashforth_moulton), intent(in)           :: self         !< Integrator.
+  class(integrator_adams_bashforth_moulton), intent(inout)        :: self         !< Integrator.
   class(integrand_object),                   intent(inout)        :: U            !< Field to be integrated.
   class(integrand_object),                   intent(inout)        :: previous(1:) !< Integrand.
-  real(R_P),                                 intent(in)           :: Dt           !< Time steps.
-  real(R_P),                                 intent(in)           :: t(:)         !< Times.
+  real(R_P),                                 intent(in)           :: Dt(1:)       !< Time steps.
+  real(R_P),                                 intent(in)           :: t(1:)        !< Times.
   integer(I_P),                              intent(in), optional :: iterations   !< Fixed point iterations of AM scheme.
   logical,                                   intent(in), optional :: autoupdate   !< Cyclic autoupdate of previous time steps flag.
   logical                                                         :: autoupdate_  !< Cyclic autoupdate of previous time steps flag,
@@ -235,8 +238,8 @@ contains
   class(integrator_adams_bashforth_moulton), intent(inout)        :: self         !< Integrator.
   class(integrand_object),                   intent(inout)        :: U            !< Field to be integrated.
   class(integrand_object),                   intent(inout)        :: previous(1:) !< Integrand.
-  real(R_P),                                 intent(in)           :: Dt           !< Time steps.
-  real(R_P),                                 intent(in)           :: t(:)         !< Times.
+  real(R_P),                                 intent(in)           :: Dt(1:)       !< Time steps.
+  real(R_P),                                 intent(in)           :: t(1:)        !< Times.
   integer(I_P),                              intent(in), optional :: iterations   !< Fixed point iterations of AM scheme.
   logical,                                   intent(in), optional :: autoupdate   !< Cyclic autoupdate of previous time steps flag.
   logical                                                         :: autoupdate_  !< Cyclic autoupdate of previous time steps flag,

@@ -256,12 +256,10 @@ contains
    class(integrator_object), allocatable :: integrator       !< The integrator.
    type(integrator_runge_kutta_ssp)      :: integrator_start !< The (auto) start integrator.
    class(integrand_object), allocatable  :: integrand        !< Integrand.
-   ! class(integrand_object), allocatable  :: filter           !< Filter displacement.
    real(R_P), allocatable                :: time(:)          !< Time.
    real(R_P), allocatable                :: Dts(:)           !< Time steps.
    integer(I_P)                          :: step             !< Time steps counter.
    integer(I_P)                          :: step_offset      !< Time steps counter offset for slicing previous data array.
-   integer(I_P)                          :: s                !< Counter.
 
    allocate(integrand, mold=integrand_0) ; integrand = integrand_0
 
@@ -275,6 +273,7 @@ contains
       else
          step_offset = integrator%steps_number() ! for >0 step-solver offset is steps
       endif
+      allocate(Dts(1:step_offset))
    else
       step_offset = 1 ! for 0 step-(a convention)-solver offset is 1
    endif
@@ -312,9 +311,9 @@ contains
             time(step) = time(step-1) + Dt
          else
             if (is_fast) then
-               call integrator%integrate_fast(U=integrand, Dt=Dt, t=time)
+               call integrator%integrate_fast(U=integrand, Dt=Dts, t=time)
             else
-               call integrator%integrate(U=integrand, Dt=Dt, t=time)
+               call integrator%integrate(U=integrand, Dt=Dts, t=time)
             endif
             call update_previous_times
          endif
@@ -332,15 +331,15 @@ contains
          else
             if (is_fast) then
                if (iterations>1) then
-                  call integrator%integrate_fast(U=integrand, Dt=Dt, t=time, iterations=iterations)
+                  call integrator%integrate_fast(U=integrand, Dt=Dts, t=time, iterations=iterations)
                else
-                  call integrator%integrate_fast(U=integrand, Dt=Dt, t=time)
+                  call integrator%integrate_fast(U=integrand, Dt=Dts, t=time)
                endif
             else
                if (iterations>1) then
-                  call integrator%integrate(U=integrand, Dt=Dt, t=time, iterations=iterations)
+                  call integrator%integrate(U=integrand, Dt=Dts, t=time, iterations=iterations)
                else
-                  call integrator%integrate(U=integrand, Dt=Dt, t=time)
+                  call integrator%integrate(U=integrand, Dt=Dts, t=time)
                endif
             endif
             call update_previous_times
@@ -348,68 +347,6 @@ contains
          if ((time(step_offset) >= final_time)) exit
          call integrand_export_tecplot
       enddo
-
-   ! type is(integrator_euler_explicit)
-   !    do
-   !       step = step + 1
-   !       if (is_fast) then
-   !          call integrator%integrate_fast(U=integrand, buffer=buffer, Dt=Dt, t=time(step_offset))
-   !       else
-   !          call integrator%integrate(U=integrand, Dt=Dt, t=time(step_offset))
-   !       endif
-   !       call update_previous_times
-   !       if ((time(step_offset) >= final_time)) exit
-   !       call integrand_export_tecplot
-   !    enddo
-
-   ! type is(integrator_leapfrog)
-   !    do
-   !       step = step + 1
-   !       if (integrator%steps_number() >= step) then
-   !          call integrator_start%integrate(U=integrand, Dt=Dt, t=time(step))
-   !          previous(step) = integrand
-   !          time(step) = time(step-1) + Dt
-   !       else
-   !          if (index(scheme, 'raw') > 0 ) then
-   !             if (is_fast) then
-   !               call integrator%integrate_fast(U=integrand, previous=previous, buffer=buffer, Dt=Dt, t=time(step_offset), &
-   !                                              filter=filter)
-   !             else
-   !               call integrator%integrate(U=integrand, previous=previous, Dt=Dt, t=time(step_offset), filter=filter)
-   !             endif
-   !          else
-   !             if (is_fast) then
-   !               call integrator%integrate_fast(U=integrand, previous=previous, buffer=buffer, Dt=Dt, t=time(step_offset))
-   !             else
-   !               call integrator%integrate(U=integrand, previous=previous, Dt=Dt, t=time(step_offset))
-   !             endif
-   !          endif
-   !          call update_previous_times
-   !       endif
-   !       if ((time(step_offset) >= final_time)) exit
-   !       call integrand_export_tecplot
-   !    enddo
-
-   ! type is(integrator_lmm_ssp_vss)
-   !    allocate(Dts(1:step_offset))
-   !    Dts = Dt
-   !    do
-   !       step = step + 1
-   !       if (integrator%steps_number() >= step) then
-   !          call integrator_start%integrate(U=integrand, Dt=Dt, t=time(step))
-   !          previous(step) = integrand
-   !          time(step) = time(step-1) + Dt
-   !       else
-   !          if (is_fast) then
-   !             call integrator%integrate_fast(U=integrand, previous=previous, buffer=buffer, Dt=Dts, t=time)
-   !          else
-   !             call integrator%integrate(U=integrand, previous=previous, Dt=Dts, t=time)
-   !          endif
-   !          call update_previous_times
-   !       endif
-   !       if ((time(step) >= final_time)) exit
-   !       call integrand_export_tecplot
-   !    enddo
 
    ! type is(integrator_ms_runge_kutta_ssp)
    !    do

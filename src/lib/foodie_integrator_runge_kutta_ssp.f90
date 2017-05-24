@@ -137,8 +137,8 @@ type, extends(integrator_multistage_explicit_object) :: integrator_runge_kutta_s
     procedure, pass(self) :: is_supported         !< Return .true. if the integrator class support the given scheme.
     procedure, pass(self) :: supported_schemes    !< Return the list of supported schemes.
     ! public methods
-    procedure, pass(self) :: destroy        !< Destroy the integrator.
-    procedure, pass(self) :: initialize     !< Initialize (create) the integrator.
+    procedure, pass(self) :: destroy    !< Destroy the integrator.
+    procedure, pass(self) :: initialize !< Initialize (create) the integrator.
 endtype integrator_runge_kutta_ssp
 
 contains

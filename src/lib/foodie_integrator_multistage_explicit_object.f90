@@ -29,20 +29,12 @@ type, extends(integrator_object), abstract :: integrator_multistage_explicit_obj
       procedure, pass(self) :: steps_number  !< Return number of steps used.
       ! public methods
       procedure, pass(self) :: allocate_integrand_members !< Allocate integrand members.
+      procedure, pass(lhs)  :: assign_multistage          !< Assign members of [[integrator_multistage_explicit_object]] and parents.
       procedure, pass(self) :: destroy_multistage         !< Destroy the integrator.
 endtype integrator_multistage_explicit_object
 
 abstract interface
    !< Abstract interfaces of deferred methods of [[integrator_multistage_explicit_object]].
-   pure subroutine allocate_integrands_interface(self, U)
-   !< Allocate members of interpolator being of [[integrand_object]] class.
-   !<
-   !< @note It is assumed that the integrator has been properly initialized before calling this method.
-   import :: integrand_object, integrator_multistage_explicit_object
-   class(integrator_multistage_explicit_object), intent(inout) :: self !< Integrator.
-   class(integrand_object),                      intent(in)    :: U    !< Integrand.
-   endsubroutine allocate_integrands_interface
-
    subroutine integrate_interface(self, U, Dt, t, new_Dt)
    !< Integrate integrand field.
    import :: integrand_object, integrator_multistage_explicit_object, R_P
@@ -120,6 +112,32 @@ contains
       self%buffer = U
    endif
    endsubroutine allocate_integrand_members
+
+   pure subroutine assign_multistage(lhs, rhs)
+   !< Assign members of [[integrator_multistage_explicit_object]] and parents.
+   class(integrator_multistage_explicit_object), intent(inout) :: lhs !< Left hand side.
+   class(integrator_object),                     intent(in)    :: rhs !< Right hand side.
+   integer(I_P)                                                :: s   !< Counter.
+
+   call lhs%assign_abstract(rhs=rhs)
+   select type(rhs)
+   class is (integrator_multistage_explicit_object)
+     lhs%registers = rhs%registers
+     lhs%stages = rhs%stages
+     if (allocated(lhs%stage)) deallocate(lhs%stage)
+     if (allocated(rhs%stage)) then
+        allocate(lhs%stage(1:lhs%registers), mold=rhs%stage)
+        do s=1, lhs%registers
+           lhs%stage(s) = rhs%stage(s)
+        enddo
+     endif
+     if (allocated(lhs%buffer)) deallocate(lhs%buffer)
+     if (allocated(rhs%buffer)) then
+        allocate(lhs%buffer, mold=rhs%buffer)
+        lhs%buffer = rhs%buffer
+     endif
+   endselect
+   endsubroutine assign_multistage
 
    elemental subroutine destroy_multistage(self)
    !< Destroy the integrator.

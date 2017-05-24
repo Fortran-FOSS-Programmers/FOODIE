@@ -45,8 +45,8 @@ abstract interface
    import :: integrand_object, integrator_multistep_implicit_object, I_P, R_P
    class(integrator_multistep_implicit_object), intent(inout) :: self       !< Integrator.
    class(integrand_object),                     intent(inout) :: U          !< Integrand.
-   real(R_P),                                   intent(in)    :: Dt         !< Time steps.
-   real(R_P),                                   intent(in)    :: t(:)       !< Times.
+   real(R_P),                                   intent(in)    :: Dt(1:)     !< Time steps.
+   real(R_P),                                   intent(in)    :: t(1:)      !< Times.
    integer(I_P), optional,                      intent(in)    :: iterations !< Fixed point iterations.
    logical,      optional,                      intent(in)    :: autoupdate !< Perform cyclic autoupdate of previous time steps.
    endsubroutine integrate_interface
@@ -58,8 +58,8 @@ abstract interface
    import :: integrand_object, integrator_multistep_implicit_object, I_P, R_P
    class(integrator_multistep_implicit_object), intent(inout) :: self       !< Integrator.
    class(integrand_object),                     intent(inout) :: U          !< Field to be integrated.
-   real(R_P),                                   intent(in)    :: Dt         !< Time steps.
-   real(R_P),                                   intent(in)    :: t(:)       !< Times.
+   real(R_P),                                   intent(in)    :: Dt(1:)     !< Time steps.
+   real(R_P),                                   intent(in)    :: t(1:)      !< Times.
    integer(I_P), optional,                      intent(in)    :: iterations !< Fixed point iterations.
    logical, optional,                           intent(in)    :: autoupdate !< Perform cyclic autoupdate of previous time steps.
    endsubroutine integrate_fast_interface
@@ -67,11 +67,11 @@ abstract interface
    subroutine integrate_ub_interface(self, U, previous, Dt, t, iterations, autoupdate)
    !< Integrate integrand field, unbuffered.
    import :: integrand_object, integrator_multistep_implicit_object, I_P, R_P
-   class(integrator_multistep_implicit_object), intent(in)    :: self         !< Integrator.
+   class(integrator_multistep_implicit_object), intent(inout) :: self         !< Integrator.
    class(integrand_object),                     intent(inout) :: U            !< Integrand.
    class(integrand_object),                     intent(inout) :: previous(1:) !< Integrand.
-   real(R_P),                                   intent(in)    :: Dt           !< Time steps.
-   real(R_P),                                   intent(in)    :: t(:)         !< Times.
+   real(R_P),                                   intent(in)    :: Dt(1:)       !< Time steps.
+   real(R_P),                                   intent(in)    :: t(1:)        !< Times.
    integer(I_P), optional,                      intent(in)    :: iterations   !< Fixed point iterations.
    logical, optional,                           intent(in)    :: autoupdate   !< Perform cyclic autoupdate of previous time steps.
    endsubroutine integrate_ub_interface
@@ -82,8 +82,8 @@ abstract interface
    class(integrator_multistep_implicit_object), intent(inout) :: self         !< Integrator.
    class(integrand_object),                     intent(inout) :: U            !< Field to be integrated.
    class(integrand_object),                     intent(inout) :: previous(1:) !< Integrand.
-   real(R_P),                                   intent(in)    :: Dt           !< Time steps.
-   real(R_P),                                   intent(in)    :: t(:)         !< Times.
+   real(R_P),                                   intent(in)    :: Dt(1:)       !< Time steps.
+   real(R_P),                                   intent(in)    :: t(1:)        !< Times.
    integer(I_P), optional,                      intent(in)    :: iterations   !< Fixed point iterations.
    logical, optional,                           intent(in)    :: autoupdate   !< Perform cyclic autoupdate of previous time steps.
    endsubroutine integrate_ub_fast_interface

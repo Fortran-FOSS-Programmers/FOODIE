@@ -199,17 +199,21 @@ contains
     endselect
   elseif (index(trim(adjustl(scheme)), trim(int_euler_explicit%class_name())) > 0) then
     allocate(integrator_euler_explicit :: integrator)
+    select type(integrator)
+    type is(integrator_euler_explicit)
+      call integrator%initialize(scheme=scheme, U=U)
+    endselect
   elseif (index(trim(adjustl(scheme)), trim(int_leapfrog%class_name())) > 0) then
     allocate(integrator_leapfrog :: integrator)
     select type(integrator)
     type is(integrator_leapfrog)
-      call integrator%initialize(scheme=scheme, nu=nu, alpha=alpha)
+      call integrator%initialize(scheme=scheme, nu=nu, alpha=alpha, U=U)
     endselect
   elseif (index(trim(adjustl(scheme)), trim(int_lmm_ssp_vss%class_name())) > 0) then
     allocate(integrator_lmm_ssp_vss :: integrator)
     select type(integrator)
     type is(integrator_lmm_ssp_vss)
-      call integrator%initialize(scheme=scheme)
+      call integrator%initialize(scheme=scheme, U=U)
     endselect
   elseif (index(trim(adjustl(scheme)), trim(int_lmm_ssp%class_name())) > 0) then
     allocate(integrator_lmm_ssp :: integrator)
