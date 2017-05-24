@@ -274,6 +274,7 @@ contains
          step_offset = integrator%steps_number() ! for >0 step-solver offset is steps
       endif
       allocate(Dts(1:step_offset))
+      Dts = Dt
    else
       step_offset = 1 ! for 0 step-(a convention)-solver offset is 1
    endif
