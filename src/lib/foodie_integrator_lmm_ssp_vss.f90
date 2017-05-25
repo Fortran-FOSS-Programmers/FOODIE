@@ -88,29 +88,25 @@ endtype integrator_lmm_ssp_vss
 
 abstract interface
   !< Abstract interfaces of [[integrator_lmm_ssp_vss]] methods.
-  subroutine integrate_interface(self, U, previous, Dt, t, autoupdate)
+  subroutine integrate_interface(self, U, previous, Dt, t)
   !< Integrate field with LMM-SSP class scheme.
   import :: integrand_object, integrator_lmm_ssp_vss, R_P
   class(integrator_lmm_ssp_vss), intent(inout) :: self         !< Integrator.
   class(integrand_object),       intent(inout) :: U            !< Field to be integrated.
   class(integrand_object),       intent(inout) :: previous(1:) !< Previous time steps solutions of integrand field.
-  ! real(R_P),                     intent(inout) :: Dt(1:)       !< Time steps.
-  real(R_P),                     intent(in)    :: Dt(1:)       !< Time steps.
-  real(R_P),                     intent(in)    :: t(1:)        !< Times.
-  logical, optional,             intent(in)    :: autoupdate   !< Perform cyclic autoupdate of previous time steps.
+  real(R_P),                     intent(in)    :: Dt           !< Time step.
+  real(R_P),                     intent(in)    :: t            !< Time.
   endsubroutine integrate_interface
 
-  subroutine integrate_fast_interface(self, U, previous, buffer, Dt, t, autoupdate)
+  subroutine integrate_fast_interface(self, U, previous, buffer, Dt, t)
   !< Integrate field with LMM-SSP class scheme.
   import :: integrand_object, integrator_lmm_ssp_vss, R_P
   class(integrator_lmm_ssp_vss), intent(inout) :: self         !< Integrator.
   class(integrand_object),       intent(inout) :: U            !< Field to be integrated.
   class(integrand_object),       intent(inout) :: previous(1:) !< Previous time steps solutions of integrand field.
   class(integrand_object),       intent(inout) :: buffer       !< Temporary buffer for doing fast operation.
-  ! real(R_P),                     intent(inout) :: Dt(1:)       !< Time steps.
-  real(R_P),                     intent(in)    :: Dt(1:)       !< Time steps.
-  real(R_P),                     intent(in)    :: t(1:)        !< Times.
-  logical, optional,             intent(in)    :: autoupdate   !< Perform cyclic autoupdate of previous time steps.
+  real(R_P),                     intent(in)    :: Dt           !< Time step.
+  real(R_P),                     intent(in)    :: t            !< Time.
   endsubroutine integrate_fast_interface
 endinterface
 
@@ -163,54 +159,46 @@ contains
   endselect
   endsubroutine integr_assign_integr
 
-  subroutine integrate(self, U, Dt, t, autoupdate)
+  subroutine integrate(self, U, Dt, t)
   !< Integrate field with LMM-SSP class scheme.
-  class(integrator_lmm_ssp_vss), intent(inout) :: self       !< Integrator.
-  class(integrand_object),       intent(inout) :: U          !< Field to be integrated.
-  ! real(R_P),                     intent(inout) :: Dt(1:)     !< Time steps.
-  real(R_P),                     intent(in)    :: Dt(1:)     !< Time steps.
-  real(R_P),                     intent(in)    :: t(1:)      !< Times.
-  logical, optional,             intent(in)    :: autoupdate !< Perform cyclic autoupdate of previous time steps.
+  class(integrator_lmm_ssp_vss), intent(inout) :: self !< Integrator.
+  class(integrand_object),       intent(inout) :: U    !< Field to be integrated.
+  real(R_P),                     intent(in)    :: Dt   !< Time step.
+  real(R_P),                     intent(in)    :: t    !< Time.
 
-  call self%integrate_(U=U, previous=self%previous, Dt=Dt, t=t, autoupdate=autoupdate)
+  call self%integrate_(U=U, previous=self%previous, Dt=Dt, t=t)
   endsubroutine integrate
 
-  subroutine integrate_fast(self, U, Dt, t, autoupdate)
+  subroutine integrate_fast(self, U, Dt, t)
   !< Integrate field with LMM-SSP class scheme, fast mode.
-  class(integrator_lmm_ssp_vss), intent(inout) :: self       !< Integrator.
-  class(integrand_object),       intent(inout) :: U          !< Field to be integrated.
-  ! real(R_P),                     intent(inout) :: Dt(1:)     !< Time steps.
-  real(R_P),                     intent(in)    :: Dt(1:)     !< Time steps.
-  real(R_P),                     intent(in)    :: t(1:)      !< Times.
-  logical, optional,             intent(in)    :: autoupdate !< Perform cyclic autoupdate of previous time steps.
+  class(integrator_lmm_ssp_vss), intent(inout) :: self !< Integrator.
+  class(integrand_object),       intent(inout) :: U    !< Field to be integrated.
+  real(R_P),                     intent(in)    :: Dt   !< Time step.
+  real(R_P),                     intent(in)    :: t    !< Time.
 
-  call self%integrate_fast_(U=U, previous=self%previous, buffer=self%buffer, Dt=Dt, t=t, autoupdate=autoupdate)
+  call self%integrate_fast_(U=U, previous=self%previous, buffer=self%buffer, Dt=Dt, t=t)
   endsubroutine integrate_fast
 
-  subroutine integrate_ub(self, U, previous, Dt, t, autoupdate)
+  subroutine integrate_ub(self, U, previous, Dt, t)
   !< Integrate field with LMM-SSP class scheme, unbuffered.
   class(integrator_lmm_ssp_vss), intent(inout) :: self         !< Integrator.
   class(integrand_object),       intent(inout) :: U            !< Field to be integrated.
   class(integrand_object),       intent(inout) :: previous(1:) !< Previous time steps solutions of integrand field.
-  ! real(R_P),                     intent(inout) :: Dt(1:)       !< Time steps.
-  real(R_P),                     intent(in)    :: Dt(1:)       !< Time steps.
-  real(R_P),                     intent(in)    :: t(1:)        !< Times.
-  logical, optional,             intent(in)    :: autoupdate   !< Perform cyclic autoupdate of previous time steps.
+  real(R_P),                     intent(in)    :: Dt           !< Time step.
+  real(R_P),                     intent(in)    :: t            !< Time.
 
-  call self%integrate_(U=U, previous=previous, Dt=Dt, t=t, autoupdate=autoupdate)
+  call self%integrate_(U=U, previous=previous, Dt=Dt, t=t)
   endsubroutine integrate_ub
 
-  subroutine integrate_ub_fast(self, U, previous, Dt, t, autoupdate)
+  subroutine integrate_ub_fast(self, U, previous, Dt, t)
   !< Integrate field with LMM-SSP class scheme, unbuffered, fast mode.
   class(integrator_lmm_ssp_vss), intent(inout) :: self         !< Integrator.
   class(integrand_object),       intent(inout) :: U            !< Field to be integrated.
   class(integrand_object),       intent(inout) :: previous(1:) !< Previous time steps solutions of integrand field.
-  ! real(R_P),                     intent(inout) :: Dt(1:)       !< Time steps.
-  real(R_P),                     intent(in)    :: Dt(1:)       !< Time steps.
-  real(R_P),                     intent(in)    :: t(1:)        !< Times.
-  logical, optional,             intent(in)    :: autoupdate   !< Perform cyclic autoupdate of previous time steps.
+  real(R_P),                     intent(in)    :: Dt           !< Time step.
+  real(R_P),                     intent(in)    :: t            !< Time.
 
-  call self%integrate_fast_(U=U, previous=previous, buffer=self%buffer, Dt=Dt, t=t, autoupdate=autoupdate)
+  call self%integrate_fast_(U=U, previous=previous, buffer=self%buffer, Dt=Dt, t=t)
   endsubroutine integrate_ub_fast
 
   elemental function is_supported(self, scheme)
@@ -247,13 +235,14 @@ contains
   self%integrate_ => integrate_order_2
   endsubroutine destroy
 
-  subroutine initialize(self, scheme, U, stop_on_fail)
+  subroutine initialize(self, scheme, autoupdate, U, stop_on_fail)
   !< Create the actual LMM-SSP-VSS integrator.
   !<
   !< @note If the integrator is initialized with a bad (unsupported) number of required time steps the initialization fails and
   !< the integrator error status is updated consistently for external-provided errors handling.
   class(integrator_lmm_ssp_vss), intent(inout)        :: self         !< Integrator.
   character(*),                  intent(in)           :: scheme       !< Selected scheme.
+  logical,                       intent(in), optional :: autoupdate   !< Enable cyclic autoupdate of previous time steps.
   class(integrand_object),       intent(in), optional :: U            !< Integrand molding prototype.
   logical,                       intent(in), optional :: stop_on_fail !< Stop execution if initialization fail.
 
@@ -281,6 +270,7 @@ contains
       self%integrate_ => integrate_order_3
       self%integrate_fast_ => integrate_order_3_fast
     endselect
+    self%autoupdate = .true. ; if (present(autoupdate)) self%autoupdate = autoupdate
     self%registers = self%steps
     if (present(U)) call self%allocate_integrand_members(U=U)
   else
@@ -291,107 +281,87 @@ contains
   endsubroutine initialize
 
   ! private methods
-  subroutine integrate_order_2(self, U, previous, Dt, t, autoupdate)
+  subroutine integrate_order_2(self, U, previous, Dt, t)
   !< Integrate field with LMM-SSP-VSS 2nd order class scheme.
   class(integrator_lmm_ssp_vss), intent(inout) :: self         !< Integrator.
   class(integrand_object),       intent(inout) :: U            !< Field to be integrated.
   class(integrand_object),       intent(inout) :: previous(1:) !< Previous time steps solutions of integrand field.
-  ! real(R_P),                     intent(inout) :: Dt(1:)       !< Time steps.
-  real(R_P),                     intent(in)    :: Dt(1:)       !< Time steps.
-  real(R_P),                     intent(in)    :: t(1:)        !< Times.
-  logical, optional,             intent(in)    :: autoupdate   !< Perform cyclic autoupdate of previous time steps.
-  logical                                      :: autoupdate_  !< Perform cyclic autoupdate of previous time steps, dummy var.
+  real(R_P),                     intent(in)    :: Dt           !< Time step.
+  real(R_P),                     intent(in)    :: t            !< Time.
   real(R_P)                                    :: omega_       !< Omega coefficient.
   real(R_P)                                    :: omega_sq     !< Square of omega coefficient.
 
-  autoupdate_ = .true. ; if (present(autoupdate)) autoupdate_ = autoupdate
-  omega_ = omega(Dt=Dt, s=self%steps-1)
+  omega_ = omega(Dt=self%Dt, s=self%steps-1)
   omega_sq = omega_ * omega_
   U = (previous(1) * (1._R_P / omega_sq)) + (previous(self%steps) * ((omega_sq - 1._R_P) / omega_sq)) + &
-      (previous(self%steps)%t(t=t(self%steps)) * (Dt(self%steps) * (omega_ + 1._R_P) / omega_))
-  ! if (autoupdate_) call self%update_previous(U=U, previous=previous, Dt=Dt)
-  if (autoupdate_) call self%update_previous(U=U, previous=previous)
+      (previous(self%steps)%t(t=self%t(self%steps)) * (self%Dt(self%steps) * (omega_ + 1._R_P) / omega_))
+  if (self%autoupdate) call self%update_previous(U=U, previous=previous, Dt=Dt, t=t, previous_Dt=self%Dt, previous_t=self%t)
   endsubroutine integrate_order_2
 
-  subroutine integrate_order_3(self, U, previous, Dt, t, autoupdate)
+  subroutine integrate_order_3(self, U, previous, Dt, t)
   !< Integrate field with LMM-SSP-VSS 3rd order class scheme.
   class(integrator_lmm_ssp_vss), intent(inout) :: self         !< Integrator.
   class(integrand_object),       intent(inout) :: U            !< Field to be integrated.
   class(integrand_object),       intent(inout) :: previous(1:) !< Previous time steps solutions of integrand field.
-  ! real(R_P),                     intent(inout) :: Dt(1:)       !< Time steps.
-  real(R_P),                     intent(in)    :: Dt(1:)       !< Time steps.
-  real(R_P),                     intent(in)    :: t(1:)        !< Times.
-  logical, optional,             intent(in)    :: autoupdate   !< Perform cyclic autoupdate of previous time steps.
-  logical                                      :: autoupdate_  !< Perform cyclic autoupdate of previous time steps, dummy var.
+  real(R_P),                     intent(in)    :: Dt           !< Time step.
+  real(R_P),                     intent(in)    :: t            !< Time.
   real(R_P)                                    :: omega_       !< Omega coefficient.
 
-  autoupdate_ = .true. ; if (present(autoupdate)) autoupdate_ = autoupdate
-  omega_= omega(Dt=Dt, s=self%steps-1)
+  omega_= omega(Dt=self%Dt, s=self%steps-1)
   U = (previous(1) * ((3._R_P * omega_ + 2._R_P) / omega_ ** 3 )) +                           &
       (previous(self%steps) * (((omega_ + 1._R_P) ** 2) * (omega_ - 2._R_P) / omega_ ** 3)) + &
-      (previous(1)%t(t=t(1)) * (Dt(self%steps) * (omega_ + 1._R_P) / omega_ ** 2)) +          &
-      (previous(self%steps)%t(t=t(self%steps)) * (Dt(self%steps) * (omega_ + 1._R_P) ** 2 / omega_ ** 2))
-  ! if (autoupdate_) call self%update_previous(U=U, previous=previous, Dt=Dt)
-  if (autoupdate_) call self%update_previous(U=U, previous=previous)
+      (previous(1)%t(t=self%t(1)) * (self%Dt(self%steps) * (omega_ + 1._R_P) / omega_ ** 2)) +          &
+      (previous(self%steps)%t(t=self%t(self%steps)) * (self%Dt(self%steps) * (omega_ + 1._R_P) ** 2 / omega_ ** 2))
+  if (self%autoupdate) call self%update_previous(U=U, previous=previous, Dt=Dt, t=t, previous_Dt=self%Dt, previous_t=self%t)
   endsubroutine integrate_order_3
 
-  subroutine integrate_order_2_fast(self, U, previous, buffer, Dt, t, autoupdate)
+  subroutine integrate_order_2_fast(self, U, previous, buffer, Dt, t)
   !< Integrate field with LMM-SSP-VSS 2nd order class scheme.
   class(integrator_lmm_ssp_vss), intent(inout) :: self         !< Integrator.
   class(integrand_object),       intent(inout) :: U            !< Field to be integrated.
   class(integrand_object),       intent(inout) :: previous(1:) !< Previous time steps solutions of integrand field.
   class(integrand_object),       intent(inout) :: buffer       !< Temporary buffer for doing fast operation.
-  ! real(R_P),                     intent(inout) :: Dt(1:)       !< Time steps.
-  real(R_P),                     intent(in)    :: Dt(1:)       !< Time steps.
-  real(R_P),                     intent(in)    :: t(1:)        !< Times.
-  logical, optional,             intent(in)    :: autoupdate   !< Perform cyclic autoupdate of previous time steps.
-  logical                                      :: autoupdate_  !< Perform cyclic autoupdate of previous time steps, dummy var.
+  real(R_P),                     intent(in)    :: Dt           !< Time step.
+  real(R_P),                     intent(in)    :: t            !< Time.
   real(R_P)                                    :: omega_       !< Omega coefficient.
   real(R_P)                                    :: omega_sq     !< Square of omega coefficient.
 
-  autoupdate_ = .true. ; if (present(autoupdate)) autoupdate_ = autoupdate
-  omega_ = omega(Dt=Dt, s=self%steps-1)
+  omega_ = omega(Dt=self%Dt, s=self%steps-1)
   omega_sq = omega_ * omega_
   call U%multiply_fast(lhs=previous(1), rhs=1._R_P / omega_sq)
   call buffer%multiply_fast(lhs=previous(self%steps), rhs=(omega_sq - 1._R_P) / omega_sq)
   call U%add_fast(lhs=U, rhs=buffer)
   buffer = previous(self%steps)
-  call buffer%t_fast(t=t(self%steps))
-  call buffer%multiply_fast(lhs=buffer, rhs=Dt(self%steps) * (omega_ + 1._R_P) / omega_)
+  call buffer%t_fast(t=self%t(self%steps))
+  call buffer%multiply_fast(lhs=buffer, rhs=self%Dt(self%steps) * (omega_ + 1._R_P) / omega_)
   call U%add_fast(lhs=U, rhs=buffer)
-  ! if (autoupdate_) call self%update_previous(U=U, previous=previous, Dt=Dt)
-  if (autoupdate_) call self%update_previous(U=U, previous=previous)
+  if (self%autoupdate) call self%update_previous(U=U, previous=previous, Dt=Dt, t=t, previous_Dt=self%Dt, previous_t=self%t)
   endsubroutine integrate_order_2_fast
 
-  subroutine integrate_order_3_fast(self, U, previous, buffer, Dt, t, autoupdate)
+  subroutine integrate_order_3_fast(self, U, previous, buffer, Dt, t)
   !< Integrate field with LMM-SSP-VSS 3rd order class scheme, fast mode.
   class(integrator_lmm_ssp_vss), intent(inout) :: self         !< Integrator.
   class(integrand_object),       intent(inout) :: U            !< Field to be integrated.
   class(integrand_object),       intent(inout) :: previous(1:) !< Previous time steps solutions of integrand field.
   class(integrand_object),       intent(inout) :: buffer       !< Temporary buffer for doing fast operation.
-  ! real(R_P),                     intent(inout) :: Dt(1:)       !< Time steps.
-  real(R_P),                     intent(in)    :: Dt(1:)       !< Time steps.
-  real(R_P),                     intent(in)    :: t(1:)        !< Times.
-  logical, optional,             intent(in)    :: autoupdate   !< Perform cyclic autoupdate of previous time steps.
-  logical                                      :: autoupdate_  !< Perform cyclic autoupdate of previous time steps, dummy var.
+  real(R_P),                     intent(in)    :: Dt           !< Time step.
+  real(R_P),                     intent(in)    :: t            !< Time.
   real(R_P)                                    :: omega_       !< Omega coefficient.
 
-  autoupdate_ = .true. ; if (present(autoupdate)) autoupdate_ = autoupdate
-  omega_= omega(Dt=Dt, s=self%steps-1)
+  omega_= omega(Dt=self%Dt, s=self%steps-1)
 
   call U%multiply_fast(lhs=previous(1), rhs=(3._R_P * omega_ + 2._R_P) / (omega_ ** 3))
   call buffer%multiply_fast(lhs=previous(self%steps), rhs=(((omega_ + 1._R_P) ** 2) * (omega_ - 2._R_P) / (omega_ ** 3)))
   call U%add_fast(lhs=U, rhs=buffer)
   buffer = previous(1)
-  call buffer%t_fast(t=t(1))
-  call buffer%multiply_fast(lhs=buffer, rhs=Dt(self%steps) * (omega_ + 1._R_P) / (omega_ ** 2))
+  call buffer%t_fast(t=self%t(1))
+  call buffer%multiply_fast(lhs=buffer, rhs=self%Dt(self%steps) * (omega_ + 1._R_P) / (omega_ ** 2))
   call U%add_fast(lhs=U, rhs=buffer)
   buffer = previous(self%steps)
-  call buffer%t_fast(t=t(self%steps))
-  call buffer%multiply_fast(lhs=buffer, rhs=(Dt(self%steps) * (omega_ + 1._R_P) ** 2 / (omega_ ** 2)))
+  call buffer%t_fast(t=self%t(self%steps))
+  call buffer%multiply_fast(lhs=buffer, rhs=(self%Dt(self%steps) * (omega_ + 1._R_P) ** 2 / (omega_ ** 2)))
   call U%add_fast(lhs=U, rhs=buffer)
-  ! if (autoupdate_) call self%update_previous(U=U, previous=previous, Dt=Dt)
-  if (autoupdate_) call self%update_previous(U=U, previous=previous)
+  if (self%autoupdate) call self%update_previous(U=U, previous=previous, Dt=Dt, t=t, previous_Dt=self%Dt, previous_t=self%t)
   endsubroutine integrate_order_3_fast
 
   ! private non TBP

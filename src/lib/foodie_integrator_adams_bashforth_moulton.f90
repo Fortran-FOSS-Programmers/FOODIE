@@ -178,7 +178,7 @@ contains
   class(integrator_adams_bashforth_moulton), intent(inout) :: lhs !< Left hand side.
   class(integrator_object),                  intent(in)    :: rhs !< Right hand side.
 
-  call lhs%assign_abstract(rhs=rhs)
+  call lhs%assign_multistep(rhs=rhs)
   select type(rhs)
   class is (integrator_adams_bashforth_moulton)
     lhs%steps     = rhs%steps
@@ -187,68 +187,62 @@ contains
   endselect
   endsubroutine integr_assign_integr
 
-  subroutine integrate(self, U, Dt, t, iterations, autoupdate)
+  subroutine integrate(self, U, Dt, t)
   !< Integrate field with Adams-Bashforth-Moulton class scheme.
   !<
   !< @note This method uses integrand previous-steps-buffer stored inside integrator.
-  class(integrator_adams_bashforth_moulton), intent(inout)        :: self        !< Integrator.
-  class(integrand_object),                   intent(inout)        :: U           !< Field to be integrated.
-  real(R_P),                                 intent(in)           :: Dt(1:)      !< Time steps.
-  real(R_P),                                 intent(in)           :: t(1:)       !< Times.
-  integer(I_P),                              intent(in), optional :: iterations  !< Fixed point iterations of AM scheme.
-  logical,                                   intent(in), optional :: autoupdate  !< Cyclic autoupdate of previous time steps flag.
+  class(integrator_adams_bashforth_moulton), intent(inout) :: self !< Integrator.
+  class(integrand_object),                   intent(inout) :: U    !< Field to be integrated.
+  real(R_P),                                 intent(in)    :: Dt   !< Time steps.
+  real(R_P),                                 intent(in)    :: t    !< Times.
 
-  call self%integrate_ub(U=U, previous=self%previous, Dt=Dt, t=t, iterations=iterations, autoupdate=autoupdate)
+  call self%integrate_ub(U=U, previous=self%previous, Dt=Dt, t=t)
   endsubroutine integrate
 
-  subroutine integrate_fast(self, U, Dt, t, iterations, autoupdate)
+  subroutine integrate_fast(self, U, Dt, t)
   !< Integrate field with Adams-Bashforth-Moulton class scheme, fast mode.
   !<
   !< @note This method uses integrand previous-steps-buffer stored inside integrator.
-  class(integrator_adams_bashforth_moulton), intent(inout)        :: self        !< Integrator.
-  class(integrand_object),                   intent(inout)        :: U           !< Field to be integrated.
-  real(R_P),                                 intent(in)           :: Dt(1:)      !< Time steps.
-  real(R_P),                                 intent(in)           :: t(1:)       !< Times.
-  integer(I_P),                              intent(in), optional :: iterations  !< Fixed point iterations of AM scheme.
-  logical,                                   intent(in), optional :: autoupdate  !< Cyclic autoupdate of previous time steps flag.
+  class(integrator_adams_bashforth_moulton), intent(inout) :: self !< Integrator.
+  class(integrand_object),                   intent(inout) :: U    !< Field to be integrated.
+  real(R_P),                                 intent(in)    :: Dt   !< Time steps.
+  real(R_P),                                 intent(in)    :: t    !< Times.
 
-  call self%integrate_ub_fast(U=U, previous=self%previous, Dt=Dt, t=t, iterations=iterations, autoupdate=autoupdate)
+  call self%integrate_ub_fast(U=U, previous=self%previous, Dt=Dt, t=t)
   endsubroutine integrate_fast
 
-  subroutine integrate_ub(self, U, previous, Dt, t, iterations, autoupdate)
+  subroutine integrate_ub(self, U, previous, Dt, t)
   !< Integrate field with Adams-Bashforth-Moulton class scheme, unbuffered.
-  class(integrator_adams_bashforth_moulton), intent(inout)        :: self         !< Integrator.
-  class(integrand_object),                   intent(inout)        :: U            !< Field to be integrated.
-  class(integrand_object),                   intent(inout)        :: previous(1:) !< Integrand.
-  real(R_P),                                 intent(in)           :: Dt(1:)       !< Time steps.
-  real(R_P),                                 intent(in)           :: t(1:)        !< Times.
-  integer(I_P),                              intent(in), optional :: iterations   !< Fixed point iterations of AM scheme.
-  logical,                                   intent(in), optional :: autoupdate   !< Cyclic autoupdate of previous time steps flag.
-  logical                                                         :: autoupdate_  !< Cyclic autoupdate of previous time steps flag,
-                                                                                  !< local variable.
+  class(integrator_adams_bashforth_moulton), intent(inout) :: self         !< Integrator.
+  class(integrand_object),                   intent(inout) :: U            !< Field to be integrated.
+  class(integrand_object),                   intent(inout) :: previous(1:) !< Integrand.
+  real(R_P),                                 intent(in)    :: Dt           !< Time steps.
+  real(R_P),                                 intent(in)    :: t            !< Times.
 
-  autoupdate_ = .true. ; if (present(autoupdate)) autoupdate_ = autoupdate
-  call self%predictor%integrate_ub(U=U, previous=previous, Dt=Dt, t=t, autoupdate=.false.)
-  call self%corrector%integrate_ub(U=U, previous=previous(2:), Dt=Dt, t=t, iterations=iterations, autoupdate=.false.)
-  if (autoupdate_) call self%predictor%update_previous(U=U, previous=previous)
+  self%predictor%t = self%t(1:self%steps)
+  self%predictor%Dt = self%Dt(1:self%steps)
+  self%corrector%t = self%t(1:self%steps)
+  self%corrector%Dt = self%Dt(1:self%steps)
+  call self%predictor%integrate_ub(U=U, previous=previous, Dt=Dt, t=t)
+  call self%corrector%integrate_ub(U=U, previous=previous(2:), Dt=Dt, t=t)
+  if (self%autoupdate) call self%update_previous(U=U, previous=previous(1:self%steps), Dt=Dt, t=t, previous_t=self%t(1:self%steps))
   endsubroutine integrate_ub
 
-  subroutine integrate_ub_fast(self, U, previous, Dt, t, iterations, autoupdate)
+  subroutine integrate_ub_fast(self, U, previous, Dt, t)
   !< Integrate field with Adams-Bashforth-Moulton class scheme, unbuffered, fast mode.
-  class(integrator_adams_bashforth_moulton), intent(inout)        :: self         !< Integrator.
-  class(integrand_object),                   intent(inout)        :: U            !< Field to be integrated.
-  class(integrand_object),                   intent(inout)        :: previous(1:) !< Integrand.
-  real(R_P),                                 intent(in)           :: Dt(1:)       !< Time steps.
-  real(R_P),                                 intent(in)           :: t(1:)        !< Times.
-  integer(I_P),                              intent(in), optional :: iterations   !< Fixed point iterations of AM scheme.
-  logical,                                   intent(in), optional :: autoupdate   !< Cyclic autoupdate of previous time steps flag.
-  logical                                                         :: autoupdate_  !< Cyclic autoupdate of previous time steps flag,
-                                                                                  !< local variable.
+  class(integrator_adams_bashforth_moulton), intent(inout) :: self         !< Integrator.
+  class(integrand_object),                   intent(inout) :: U            !< Field to be integrated.
+  class(integrand_object),                   intent(inout) :: previous(1:) !< Integrand.
+  real(R_P),                                 intent(in)    :: Dt           !< Time steps.
+  real(R_P),                                 intent(in)    :: t            !< Times.
 
-  autoupdate_ = .true. ; if (present(autoupdate)) autoupdate_ = autoupdate
-  call self%predictor%integrate_ub_fast(U=U, previous=previous, Dt=Dt, t=t, autoupdate=.false.)
-  call self%corrector%integrate_ub_fast(U=U, previous=previous(2:), Dt=Dt, t=t, iterations=iterations, autoupdate=.false.)
-  if (autoupdate_) call self%predictor%update_previous(U=U, previous=previous)
+  self%predictor%t = self%t
+  self%predictor%Dt = self%Dt
+  self%corrector%t = self%t
+  self%corrector%Dt = self%Dt
+  call self%predictor%integrate_ub_fast(U=U, previous=previous, Dt=Dt, t=t)
+  call self%corrector%integrate_ub_fast(U=U, previous=previous(2:), Dt=Dt, t=t)
+  if (self%autoupdate) call self%update_previous(U=U, previous=previous(1:self%steps), Dt=Dt, t=t, previous_t=self%t(1:self%steps))
   endsubroutine integrate_ub_fast
 
   elemental function is_supported(self, scheme)
@@ -286,10 +280,12 @@ contains
   call self%corrector%destroy
   endsubroutine destroy
 
-  subroutine initialize(self, scheme, U, stop_on_fail)
+  subroutine initialize(self, scheme, iterations, autoupdate, U, stop_on_fail)
   !< Create the actual Adams-Bashforth-Moulton integrator: initialize the *b* coefficients.
   class(integrator_adams_bashforth_moulton), intent(inout)        :: self           !< Integrator.
   character(*),                              intent(in)           :: scheme         !< Selected scheme.
+  integer(I_P),                              intent(in), optional :: iterations     !< Implicit iterations.
+  logical,                                   intent(in), optional :: autoupdate     !< Enable cyclic autoupdate of previous time steps.
   class(integrand_object),                   intent(in), optional :: U              !< Integrand molding prototype.
   logical,                                   intent(in), optional :: stop_on_fail   !< Stop execution if initialization fail.
   character(len=99), allocatable                                  :: schemes_ab(:)  !< Adams-Bashforth schemes.
@@ -301,8 +297,10 @@ contains
     scheme_number_ = self%scheme_number(scheme=scheme)
     schemes_ab = self%predictor%supported_schemes()
     schemes_am = self%corrector%supported_schemes()
-    call self%predictor%initialize(scheme=schemes_ab(scheme_number_))
-    call self%corrector%initialize(scheme=schemes_am(scheme_number_))
+    self%autoupdate = .true. ; if (present(autoupdate)) self%autoupdate = autoupdate
+    self%iterations = 1 ; if (present(iterations)) self%iterations = iterations
+    call self%predictor%initialize(scheme=schemes_ab(scheme_number_), autoupdate=.false.)
+    call self%corrector%initialize(scheme=schemes_am(scheme_number_), iterations=self%iterations, autoupdate=.false.)
     self%steps = self%predictor%steps_number()
     self%registers = self%steps + 1
     if (present(U)) call self%allocate_integrand_members(U=U)

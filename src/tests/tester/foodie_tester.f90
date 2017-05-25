@@ -263,7 +263,8 @@ contains
 
    allocate(integrand, mold=integrand_0) ; integrand = integrand_0
 
-   call foodie_integrator_factory(scheme=scheme, integrator=integrator, stages=stages, tolerance=1e2_R_P, U=integrand_0)
+   call foodie_integrator_factory(scheme=scheme, integrator=integrator, stages=stages, &
+                                  tolerance=1e2_R_P, iterations=iterations, autoupdate=.true., U=integrand_0)
    if (is_fast) call check_scheme_has_fast_mode(scheme=trim(adjustl(scheme)), integrator=integrator)
 
    if (integrator%is_multistep()) then
@@ -310,11 +311,13 @@ contains
             call integrator_start%integrate(U=integrand, Dt=Dt, t=time(step))
             integrator%previous(step) = integrand
             time(step) = time(step-1) + Dt
+            integrator%Dt(step) = Dt
+            integrator%t(step) = time(step)
          else
             if (is_fast) then
-               call integrator%integrate_fast(U=integrand, Dt=Dts, t=time)
+               call integrator%integrate_fast(U=integrand, Dt=Dt, t=time(step_offset))
             else
-               call integrator%integrate(U=integrand, Dt=Dts, t=time)
+               call integrator%integrate(U=integrand, Dt=Dt, t=time(step_offset))
             endif
             call update_previous_times
          endif
@@ -329,19 +332,13 @@ contains
             call integrator_start%integrate(U=integrand, Dt=Dt, t=time(step))
             integrator%previous(step) = integrand
             time(step) = time(step-1) + Dt
+            integrator%Dt(step) = Dt
+            integrator%t(step) = time(step)
          else
             if (is_fast) then
-               if (iterations>1) then
-                  call integrator%integrate_fast(U=integrand, Dt=Dts, t=time, iterations=iterations)
-               else
-                  call integrator%integrate_fast(U=integrand, Dt=Dts, t=time)
-               endif
+               call integrator%integrate_fast(U=integrand, Dt=Dt, t=time(step_offset))
             else
-               if (iterations>1) then
-                  call integrator%integrate(U=integrand, Dt=Dts, t=time, iterations=iterations)
-               else
-                  call integrator%integrate(U=integrand, Dt=Dts, t=time)
-               endif
+               call integrator%integrate(U=integrand, Dt=Dt, t=time(step_offset))
             endif
             call update_previous_times
          endif

@@ -123,7 +123,7 @@ contains
   class(integrator_back_df), intent(inout) :: lhs !< Left hand side.
   class(integrator_object),  intent(in)    :: rhs !< Right hand side.
 
-  call lhs%assign_abstract(rhs=rhs)
+  call lhs%assign_multistep(rhs=rhs)
   select type(rhs)
   class is (integrator_back_df)
                           lhs%steps = rhs%steps
@@ -132,90 +132,74 @@ contains
   endselect
   endsubroutine integr_assign_integr
 
-  subroutine integrate(self, U, Dt, t, iterations, autoupdate)
+  subroutine integrate(self, U, Dt, t)
   !< Integrate field with BDF class scheme.
   !<
   !< @note This method uses integrand previous-steps-buffer stored inside integrator.
-  class(integrator_back_df),  intent(inout) :: self       !< Integrator.
-  class(integrand_object),    intent(inout) :: U          !< Field to be integrated.
-  real(R_P),                  intent(in)    :: Dt(1:)     !< Time steps.
-  real(R_P),                  intent(in)    :: t(1:)      !< Times.
-  integer(I_P), optional,     intent(in)    :: iterations !< Fixed point iterations.
-  logical,      optional,     intent(in)    :: autoupdate !< Perform cyclic autoupdate of previous time steps.
+  class(integrator_back_df),  intent(inout) :: self !< Integrator.
+  class(integrand_object),    intent(inout) :: U    !< Field to be integrated.
+  real(R_P),                  intent(in)    :: Dt   !< Time step.
+  real(R_P),                  intent(in)    :: t    !< Time.
 
-  call self%integrate_ub(U=U, previous=self%previous, Dt=Dt, t=t, iterations=iterations, autoupdate=autoupdate)
+  call self%integrate_ub(U=U, previous=self%previous, Dt=Dt, t=t)
   endsubroutine integrate
 
-  subroutine integrate_fast(self, U, Dt, t, iterations, autoupdate)
+  subroutine integrate_fast(self, U, Dt, t)
   !< Integrate field with BDF class scheme.
   !<
   !< @note This method uses integrand previous-steps-buffer stored inside integrator.
-  class(integrator_back_df),  intent(inout) :: self       !< Integrator.
-  class(integrand_object),    intent(inout) :: U          !< Field to be integrated.
-  real(R_P),                  intent(in)    :: Dt(1:)     !< Time steps.
-  real(R_P),                  intent(in)    :: t(1:)      !< Times.
-  integer(I_P), optional,     intent(in)    :: iterations !< Fixed point iterations.
-  logical,      optional,     intent(in)    :: autoupdate !< Perform cyclic autoupdate of previous time steps.
+  class(integrator_back_df),  intent(inout) :: self !< Integrator.
+  class(integrand_object),    intent(inout) :: U    !< Field to be integrated.
+  real(R_P),                  intent(in)    :: Dt   !< Time step.
+  real(R_P),                  intent(in)    :: t    !< Time.
 
-  call self%integrate_ub_fast(U=U, previous=self%previous, Dt=Dt, t=t, iterations=iterations, autoupdate=autoupdate)
+  call self%integrate_ub_fast(U=U, previous=self%previous, Dt=Dt, t=t)
   endsubroutine integrate_fast
 
-  subroutine integrate_ub(self, U, previous, Dt, t, iterations, autoupdate)
+  subroutine integrate_ub(self, U, previous, Dt, t)
   !< Integrate field with BDF class scheme.
   class(integrator_back_df),  intent(inout) :: self         !< Integrator.
   class(integrand_object),    intent(inout) :: U            !< Field to be integrated.
   class(integrand_object),    intent(inout) :: previous(1:) !< Integrand.
-  real(R_P),                  intent(in)    :: Dt(1:)       !< Time steps.
-  real(R_P),                  intent(in)    :: t(1:)        !< Times.
-  integer(I_P), optional,     intent(in)    :: iterations   !< Fixed point iterations.
-  logical,      optional,     intent(in)    :: autoupdate   !< Perform cyclic autoupdate of previous time steps.
-  integer(I_P)                              :: iterations_  !< Fixed point iterations.
-  logical                                   :: autoupdate_  !< Perform cyclic autoupdate of previous time steps, dummy var.
+  real(R_P),                  intent(in)    :: Dt           !< Time step.
+  real(R_P),                  intent(in)    :: t            !< Time.
   class(integrand_object), allocatable      :: delta        !< Delta RHS for fixed point iterations.
   integer(I_P)                              :: s            !< Steps counter.
 
-  autoupdate_ = .true. ; if (present(autoupdate)) autoupdate_ = autoupdate
-  iterations_ = 1 ; if (present(iterations)) iterations_ = iterations
   allocate(delta, mold=U)
   delta = previous(self%steps) * (-self%a(self%steps))
   do s=1, self%steps - 1
     delta = delta + (previous(s) * (-self%a(s)))
   enddo
-  do s=1, iterations_
-    U = delta + (U%t(t=t(self%steps) + Dt(self%steps)) * (Dt(self%steps) * self%b))
+  do s=1, self%iterations
+    U = delta + (U%t(t=self%t(self%steps) + Dt) * (Dt * self%b))
   enddo
-  if (autoupdate_) call self%update_previous(U=U, previous=previous, is_like_explicit=.true.)
+  if (self%autoupdate) call self%update_previous(U=U, previous=previous, Dt=Dt, t=t, previous_t=self%t)
   endsubroutine integrate_ub
 
-  subroutine integrate_ub_fast(self, U, previous, Dt, t, iterations, autoupdate)
+  subroutine integrate_ub_fast(self, U, previous, Dt, t)
   !< Integrate field with BDF class scheme.
   class(integrator_back_df),  intent(inout) :: self         !< Integrator.
   class(integrand_object),    intent(inout) :: U            !< Field to be integrated.
   class(integrand_object),    intent(inout) :: previous(1:) !< Integrand.
-  real(R_P),                  intent(in)    :: Dt(1:)       !< Time steps.
-  real(R_P),                  intent(in)    :: t(1:)        !< Times.
-  integer(I_P), optional,     intent(in)    :: iterations   !< Fixed point iterations.
-  logical,      optional,     intent(in)    :: autoupdate   !< Perform cyclic autoupdate of previous time steps.
-  integer(I_P)                              :: iterations_  !< Fixed point iterations.
-  logical                                   :: autoupdate_  !< Perform cyclic autoupdate of previous time steps, dummy var.
+  real(R_P),                  intent(in)    :: Dt           !< Time steps.
+  real(R_P),                  intent(in)    :: t            !< Times.
   class(integrand_object), allocatable      :: delta        !< Delta RHS for fixed point iterations.
   integer(I_P)                              :: s            !< Steps counter.
 
-  autoupdate_ = .true. ; if (present(autoupdate)) autoupdate_ = autoupdate
-  iterations_ = 1 ; if (present(iterations)) iterations_ = iterations
   allocate(delta, mold=U)
   call delta%multiply_fast(lhs=previous(self%steps), rhs=-self%a(self%steps))
   do s=1, self%steps - 1
     call self%buffer%multiply_fast(lhs=previous(s), rhs=-self%a(s))
     call delta%add_fast(lhs=delta, rhs=self%buffer)
   enddo
-  do s=1, iterations
+  do s=1, self%iterations
     self%buffer = U
-    call self%buffer%t_fast(t=t(self%steps) + Dt(self%steps))
-    call self%buffer%multiply_fast(lhs=self%buffer, rhs=Dt(self%steps) * self%b)
+    call self%buffer%t_fast(t=self%t(self%steps) + Dt)
+    call self%buffer%multiply_fast(lhs=self%buffer, rhs=Dt * self%b)
     call U%add_fast(lhs=delta, rhs=self%buffer)
   enddo
-  if (autoupdate_) call self%update_previous(U=U, previous=previous, is_like_explicit=.true.)
+  if (self%autoupdate) call self%update_previous(U=U, previous=previous, Dt=Dt, t=t, previous_t=self%t)
   endsubroutine integrate_ub_fast
 
   elemental function is_supported(self, scheme)
@@ -253,10 +237,12 @@ contains
   self%b = 0.0_R_P
   endsubroutine destroy
 
-  subroutine initialize(self, scheme, U, stop_on_fail)
+  subroutine initialize(self, scheme, iterations, autoupdate, U, stop_on_fail)
   !< Create the actual BDF integrator: initialize the *alpha* and *beta* coefficients.
   class(integrator_back_df), intent(inout)        :: self         !< Integrator.
   character(*),              intent(in)           :: scheme       !< Selected scheme.
+  integer(I_P),              intent(in), optional :: iterations   !< Implicit iterations.
+  logical,                   intent(in), optional :: autoupdate   !< Enable cyclic autoupdate of previous time steps.
   class(integrand_object),   intent(in), optional :: U            !< Integrand molding prototype.
   logical,                   intent(in), optional :: stop_on_fail !< Stop execution if initialization fail.
 
@@ -304,6 +290,8 @@ contains
       self%b = 60.0_R_P/147.0_R_P
     case default
     endselect
+    self%autoupdate = .true. ; if (present(autoupdate)) self%autoupdate = autoupdate
+    self%iterations = 1 ; if (present(iterations)) self%iterations = iterations
     self%registers = self%steps
     if (present(U)) call self%allocate_integrand_members(U=U)
   else

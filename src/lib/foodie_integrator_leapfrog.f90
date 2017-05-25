@@ -131,66 +131,58 @@ contains
   endselect
   endsubroutine integr_assign_integr
 
-  subroutine integrate(self, U, Dt, t, autoupdate)
+  subroutine integrate(self, U, Dt, t)
   !< Integrate field with leapfrog class scheme.
   !<
   !< @note This method uses integrand previous-steps-buffer stored inside integrator.
-  class(integrator_leapfrog), intent(inout) :: self       !< Integrator.
-  class(integrand_object),    intent(inout) :: U          !< Field to be integrated.
-  real(R_P),                  intent(in)    :: Dt(1:)     !< Time step.
-  real(R_P),                  intent(in)    :: t(1:)      !< Time.
-  logical, optional,          intent(in)    :: autoupdate !< Perform cyclic autoupdate of previous time steps.
+  class(integrator_leapfrog), intent(inout) :: self !< Integrator.
+  class(integrand_object),    intent(inout) :: U    !< Field to be integrated.
+  real(R_P),                  intent(in)    :: Dt   !< Time step.
+  real(R_P),                  intent(in)    :: t    !< Time.
 
-  call self%integrate_ub(U=U, previous=self%previous, Dt=Dt, t=t, autoupdate=autoupdate)
+  call self%integrate_ub(U=U, previous=self%previous, Dt=Dt, t=t)
   endsubroutine integrate
 
-  subroutine integrate_fast(self, U, Dt, t, autoupdate)
+  subroutine integrate_fast(self, U, Dt, t)
   !< Integrate field with leapfrog class scheme, fast mode.
    !<
    !< @note This method uses integrand previous-steps-buffer stored inside integrator.
-  class(integrator_leapfrog), intent(inout) :: self       !< Integrator.
-  class(integrand_object),    intent(inout) :: U          !< Field to be integrated.
-  real(R_P),                  intent(in)    :: Dt(1:)     !< Time step.
-  real(R_P),                  intent(in)    :: t(1:)      !< Time.
-  logical, optional,          intent(in)    :: autoupdate !< Perform cyclic autoupdate of previous time steps.
+  class(integrator_leapfrog), intent(inout) :: self !< Integrator.
+  class(integrand_object),    intent(inout) :: U    !< Field to be integrated.
+  real(R_P),                  intent(in)    :: Dt   !< Time step.
+  real(R_P),                  intent(in)    :: t    !< Time.
 
-  call self%integrate_ub_fast(U=U, previous=self%previous, Dt=Dt, t=t, autoupdate=autoupdate)
+  call self%integrate_ub_fast(U=U, previous=self%previous, Dt=Dt, t=t)
   endsubroutine integrate_fast
 
-  subroutine integrate_ub(self, U, previous, Dt, t, autoupdate)
+  subroutine integrate_ub(self, U, previous, Dt, t)
   !< Integrate field with leapfrog class scheme, unbuffered.
   class(integrator_leapfrog), intent(inout) :: self         !< Integrator.
   class(integrand_object),    intent(inout) :: U            !< Field to be integrated.
   class(integrand_object),    intent(inout) :: previous(1:) !< Previous time steps solutions of integrand field.
-  real(R_P),                  intent(in)    :: Dt(1:)       !< Time step.
-  real(R_P),                  intent(in)    :: t(1:)        !< Time.
-  logical, optional,          intent(in)    :: autoupdate   !< Perform cyclic autoupdate of previous time steps.
-  logical                                   :: autoupdate_  !< Perform cyclic autoupdate of previous time steps, local variable.
+  real(R_P),                  intent(in)    :: Dt           !< Time step.
+  real(R_P),                  intent(in)    :: t            !< Time.
 
-  autoupdate_ = .true. ; if (present(autoupdate)) autoupdate_ = autoupdate
-  U = previous(1) + (previous(2)%t(t=t(2)) * (Dt(2) * 2._R_P))
+  U = previous(1) + (previous(2)%t(t=t) * (Dt * 2._R_P))
   if (self%is_filtered) then
     self%filter = (previous(1) - (previous(2) * 2._R_P) + U) * self%nu * 0.5_R_P
     previous(2) = previous(2) + (self%filter * self%alpha)
     U = U + (self%filter * (self%alpha - 1._R_P))
   endif
-  if (autoupdate_) call self%update_previous(U=U, previous=previous)
+  if (self%autoupdate) call self%update_previous(U=U, previous=previous)
   endsubroutine integrate_ub
 
-  subroutine integrate_ub_fast(self, U, previous, Dt, t, autoupdate)
+  subroutine integrate_ub_fast(self, U, previous, Dt, t)
   !< Integrate field with leapfrog class scheme, unbuffered, fast mode.
   class(integrator_leapfrog), intent(inout) :: self         !< Integrator.
   class(integrand_object),    intent(inout) :: U            !< Field to be integrated.
   class(integrand_object),    intent(inout) :: previous(1:) !< Previous time steps solutions of integrand field.
-  real(R_P),                  intent(in)    :: Dt(1:)       !< Time step.
-  real(R_P),                  intent(in)    :: t(1:)        !< Time.
-  logical, optional,          intent(in)    :: autoupdate   !< Perform cyclic autoupdate of previous time steps.
-  logical                                   :: autoupdate_  !< Perform cyclic autoupdate of previous time steps, local variable.
+  real(R_P),                  intent(in)    :: Dt           !< Time step.
+  real(R_P),                  intent(in)    :: t            !< Time.
 
-  autoupdate_ = .true. ; if (present(autoupdate)) autoupdate_ = autoupdate
   self%buffer = previous(2)
-  call self%buffer%t_fast(t=t(2))
-  call self%buffer%multiply_fast(lhs=self%buffer, rhs=Dt(2) * 2._R_P)
+  call self%buffer%t_fast(t=t)
+  call self%buffer%multiply_fast(lhs=self%buffer, rhs=Dt * 2._R_P)
   call U%add_fast(lhs=previous(1), rhs=self%buffer)
   if (self%is_filtered) then
     call self%buffer%multiply_fast(lhs=previous(2), rhs=2._R_P)
@@ -204,7 +196,7 @@ contains
     call self%buffer%multiply_fast(lhs=self%filter, rhs=self%alpha - 1._R_P)
     call U%add_fast(lhs=U, rhs=self%buffer)
   endif
-  if (autoupdate_) call self%update_previous(U=U, previous=previous)
+  if (self%autoupdate) call self%update_previous(U=U, previous=previous)
   endsubroutine integrate_ub_fast
 
   elemental function is_supported(self, scheme)
@@ -244,12 +236,13 @@ contains
   if (allocated(self%filter)) deallocate(self%filter)
   endsubroutine destroy
 
-  subroutine initialize(self, scheme, nu, alpha, U, stop_on_fail)
+  subroutine initialize(self, scheme, nu, alpha, autoupdate, U, stop_on_fail)
   !< Create the actual leapfrog integrator: initialize the filter coefficient.
   class(integrator_leapfrog), intent(inout)        :: self         !< Integrator.
   character(*),               intent(in)           :: scheme       !< Selected scheme.
   real(R_P),                  intent(in), optional :: nu           !< Williams-Robert-Asselin filter coefficient.
   real(R_P),                  intent(in), optional :: alpha        !< Robert-Asselin filter coefficient.
+  logical,                    intent(in), optional :: autoupdate   !< Enable cyclic autoupdate of previous time steps.
   class(integrand_object),    intent(in), optional :: U            !< Integrand molding prototype.
   logical,                    intent(in), optional :: stop_on_fail !< Stop execution if initialization fail.
 
@@ -261,6 +254,7 @@ contains
        self%alpha = 0.53_R_P ; if (present(alpha)) self%alpha = alpha
        self%is_filtered = .true.
     endselect
+    self%autoupdate = .true. ; if (present(autoupdate)) self%autoupdate = autoupdate
     self%steps = 2
     self%registers = self%steps
     if (present(U)) call self%allocate_integrand_members(U=U)
@@ -281,6 +275,10 @@ contains
    integer(I_P)                              :: s    !< Counter.
 
    if (self%is_multistep() .and. self%registers > 0) then
+      if (allocated(self%Dt)) deallocate(self%Dt)
+      allocate(self%Dt(1:self%registers)) ; self%Dt = 0._R_P
+      if (allocated(self%t)) deallocate(self%t)
+      allocate(self%t(1:self%registers)) ; self%t = 0._R_P
       if (allocated(self%previous)) deallocate(self%previous)
       allocate(self%previous(1:self%registers), mold=U)
       do s=1, self%registers
