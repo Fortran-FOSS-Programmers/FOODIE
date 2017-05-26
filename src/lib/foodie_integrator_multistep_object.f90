@@ -14,7 +14,7 @@ public :: integrator_multistep_object
 
 type, extends(integrator_object), abstract :: integrator_multistep_object
    !< Abstract type of FOODIE ODE integrators of the multistep-implicit family.
-   integer(I_P)                         :: registers   !< Number of registers used for stages.
+   integer(I_P)                         :: registers   !< Number of registers used for steps.
    integer(I_P)                         :: steps       !< Number of time steps.
    logical                              :: autoupdate  !< Perform cyclic autoupdate of previous time steps buffers.
    integer(I_P)                         :: iterations  !< Implicit iterations.

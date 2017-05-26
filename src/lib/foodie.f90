@@ -75,6 +75,7 @@ use foodie_integrator_lmm_ssp, only : integrator_lmm_ssp
 use foodie_integrator_lmm_ssp_vss, only : integrator_lmm_ssp_vss
 use foodie_integrator_ms_runge_kutta_ssp, only : integrator_ms_runge_kutta_ssp
 use foodie_integrator_multistage_object, only : integrator_multistage_object
+use foodie_integrator_multistage_multistep_object, only : integrator_multistage_multistep_object
 use foodie_integrator_multistep_object, only : integrator_multistep_object
 use foodie_integrator_runge_kutta_emd, only : integrator_runge_kutta_emd
 use foodie_integrator_runge_kutta_low_storage, only : integrator_runge_kutta_ls
@@ -95,6 +96,7 @@ public :: is_scheme_available
 public :: integrand_object
 public :: integrator_object
 public :: integrator_multistage_object
+public :: integrator_multistage_multistep_object
 public :: integrator_multistep_object
 ! concrete objects
 public :: integrator_adams_bashforth
@@ -225,7 +227,7 @@ contains
     allocate(integrator_ms_runge_kutta_ssp :: integrator)
     select type(integrator)
     type is(integrator_ms_runge_kutta_ssp)
-      call integrator%initialize(scheme=scheme)
+      call integrator%initialize(scheme=scheme, iterations=iterations, autoupdate=autoupdate, U=U)
     endselect
   elseif (index(trim(adjustl(scheme)), trim(int_runge_kutta_emd%class_name())) > 0) then
     allocate(integrator_runge_kutta_emd :: integrator)

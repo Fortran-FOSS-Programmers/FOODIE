@@ -195,18 +195,18 @@ contains
 
   do s=1, self%steps
      self%predictor%previous(s) = self%previous(s)
+     self%predictor%t(s) = self%t(s)
+     self%predictor%Dt(s) = self%Dt(s)
   enddo
-  self%predictor%t(:) = self%t(1:self%steps)
-  self%predictor%Dt(:) = self%Dt(1:self%steps)
   do s=1, self%steps - 1
-     self%corrector%previous(s) = self%previous(s+1)
+     self%corrector%previous(s) = self%predictor%previous(s+1)
+     self%corrector%t(s) = self%predictor%t(s+1)
+     self%corrector%Dt(s) = self%predictor%Dt(s+1)
   enddo
-  self%corrector%t(:) = self%t(2:self%steps)
-  self%corrector%Dt(:) = self%Dt(2:self%steps)
   call self%predictor%integrate(U=U, Dt=Dt, t=t)
   call self%corrector%integrate(U=U, Dt=Dt, t=t)
   if (self%autoupdate) &
-     call self%update_previous(U=U, previous=self%previous(1:self%steps), Dt=Dt, t=t, previous_t=self%t(1:self%steps))
+     call self%update_previous(U=U, previous=self%previous, Dt=Dt, t=t, previous_t=self%t)
   endsubroutine integrate
 
   subroutine integrate_fast(self, U, Dt, t)
@@ -290,7 +290,7 @@ contains
     call self%predictor%initialize(scheme=schemes_ab(scheme_number_), U=U, autoupdate=.false.)
     call self%corrector%initialize(scheme=schemes_am(scheme_number_), U=U, iterations=self%iterations, autoupdate=.false.)
     self%steps = self%predictor%steps_number()
-    self%registers = self%steps + 1
+    self%registers = self%steps
     if (present(U)) call self%allocate_integrand_members(U=U)
   else
     call self%trigger_error(error=ERROR_UNSUPPORTED_SCHEME,                                   &

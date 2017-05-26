@@ -5,26 +5,27 @@ module foodie_test_object
 
 use, intrinsic :: iso_fortran_env, only : stderr=>error_unit
 use flap, only : command_line_interface
-use foodie, only : foodie_integrator_class_names,      &
-                   foodie_integrator_factory,          &
-                   foodie_integrator_schemes,          &
-                   integrand_object,                   &
-                   integrator_adams_bashforth,         &
-                   integrator_adams_bashforth_moulton, &
-                   integrator_adams_moulton,           &
-                   integrator_back_df,                 &
-                   integrator_euler_explicit,          &
-                   integrator_leapfrog,                &
-                   integrator_lmm_ssp,                 &
-                   integrator_lmm_ssp_vss,             &
-                   integrator_ms_runge_kutta_ssp,      &
-                   integrator_multistage_object,       &
-                   integrator_multistep_object,        &
-                   integrator_object,                  &
-                   integrator_runge_kutta_emd,         &
-                   integrator_runge_kutta_ls,          &
-                   integrator_runge_kutta_lssp,        &
-                   integrator_runge_kutta_ssp,         &
+use foodie, only : foodie_integrator_class_names,          &
+                   foodie_integrator_factory,              &
+                   foodie_integrator_schemes,              &
+                   integrand_object,                       &
+                   integrator_adams_bashforth,             &
+                   integrator_adams_bashforth_moulton,     &
+                   integrator_adams_moulton,               &
+                   integrator_back_df,                     &
+                   integrator_euler_explicit,              &
+                   integrator_leapfrog,                    &
+                   integrator_lmm_ssp,                     &
+                   integrator_lmm_ssp_vss,                 &
+                   integrator_ms_runge_kutta_ssp,          &
+                   integrator_multistage_object,           &
+                   integrator_multistage_multistep_object, &
+                   integrator_multistep_object,            &
+                   integrator_object,                      &
+                   integrator_runge_kutta_emd,             &
+                   integrator_runge_kutta_ls,              &
+                   integrator_runge_kutta_lssp,            &
+                   integrator_runge_kutta_ssp,             &
                    is_available, is_class_available
 use foodie_test_integrand_ladvection, only : integrand_ladvection
 use foodie_test_integrand_oscillation, only : integrand_oscillation
@@ -132,14 +133,14 @@ contains
                        description = 'Tester factory of FOODIE integrators',                    &
                        examples    = ["foodie_tester --scheme euler_explicit --save_results  ", &
                                       "foodie_tester --scheme all -r                         "])
-         call cli%add(switch='--test', switch_ab='-t', help='test executed', required=.false., def='linear_advection', &
+         call cli%add(switch='--test', switch_ab='-t', help='test executed', required=.false., def='oscillation', &
                       act='store', choices='linear_advection,oscillation')
          call cli%add(switch='--scheme', switch_ab='-s', help='integrator scheme used', required=.false., def='all', act='store')
          call cli%add(switch='--time_step', switch_ab='-Dt', nargs='+', help='time step', required=.false., def='1e2', act='store')
          call cli%add(switch='--fast', help='activate fast solvers', required=.false., act='store_true', def='.false.')
          call cli%add(switch='--iterations', help='iterations number for implicit schemes', required=.false., act='store', def='5')
          call cli%add(switch='--stages', help='stages number', required=.false., def='2', act='store')
-         call cli%add(switch='--final_time', switch_ab='-ft', help='integration time', required=.false., def='1', act='store')
+         call cli%add(switch='--final_time', switch_ab='-ft', help='integration time', required=.false., def='1e6', act='store')
          call cli%add(switch='--save_results', switch_ab='-r',help='save result', required=.false., act='store_true', def='.false.')
          call cli%add(switch='--output', help='output file basename', required=.false., act='store', def='foodie_test')
          call cli%add(switch='--save_frequency', help='save frequency', required=.false., act='store', def='1')
@@ -306,24 +307,26 @@ contains
          call integrand_export_tecplot
       enddo
 
-   ! type is(integrator_ms_runge_kutta_ssp)
-   !    do
-   !       step = step + 1
-   !       if (integrator%steps_number() >= step) then
-   !          call integrator_start%integrate(U=integrand, Dt=Dt, t=time)
-   !          previous(step) = integrand
-   !          time = time + Dt
-   !       else
-   !          if (is_fast) then
-   !             call integrator%integrate_fast(U=integrand, previous=previous, stage=stage, buffer=buffer, Dt=Dt,t=time)
-   !          else
-   !             call integrator%integrate(U=integrand, previous=previous, stage=stage, Dt=Dt, t=time)
-   !          endif
-   !          time = time + Dt
-   !       endif
-   !       if ((time >= final_time)) exit
-   !       call integrand_export_tecplot
-   !    enddo
+   class is(integrator_multistage_multistep_object)
+      do
+         step = step + 1
+         if (integrator%steps_number() >= step) then
+            call integrator_start%integrate(U=integrand, Dt=Dt, t=time)
+            integrator%previous(step) = integrand
+            time = time + Dt
+            integrator%Dt(step) = Dt
+            integrator%t(step) = time
+         else
+            if (is_fast) then
+               call integrator%integrate_fast(U=integrand, Dt=Dt,t=time)
+            else
+               call integrator%integrate(U=integrand, Dt=Dt, t=time)
+            endif
+            time = time + Dt
+         endif
+         if ((time >= final_time)) exit
+         call integrand_export_tecplot
+      enddo
    endselect
 
    select type(integrand)

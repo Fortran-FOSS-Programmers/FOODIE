@@ -36,6 +36,7 @@ module foodie_integrator_ms_runge_kutta_ssp
 
 use foodie_error_codes, only : ERROR_UNSUPPORTED_SCHEME
 use foodie_integrand_object, only : integrand_object
+use foodie_integrator_multistage_multistep_object, only : integrator_multistage_multistep_object
 use foodie_integrator_object, only : integrator_object
 use penf, only : I_P, R_P
 
@@ -50,41 +51,32 @@ character(len=99), parameter :: supported_schemes_(1:3)=[trim(class_name_)//'_st
                                                                                                          !< schemes.
 
 logical, parameter :: has_fast_mode_=.true. !< Flag to check if integrator provides *fast mode* integrate.
-logical, parameter :: is_multistage_=.true. !< Flag to check if integrator is multistage.
-logical, parameter :: is_multistep_=.true.  !< Flag to check if integrator is multistep.
 
-type, extends(integrator_object) :: integrator_ms_runge_kutta_ssp
+type, extends(integrator_multistage_multistep_object) :: integrator_ms_runge_kutta_ssp
   !< FOODIE integrator: provide an explicit class of Multi-step Runge-Kutta Methods with Strong Stability Preserving property,
   !< from 3rd to 8th order accurate.
   !<
   !< @note The integrator must be created or initialized (initialize the *A,Ahat,B,Bhat,D,T* coefficients) before used.
   private
-  integer(I_P)           :: steps=0   !< Number of time steps.
-  integer(I_P)           :: stages=0  !< Number of stages.
   real(R_P), allocatable :: A(:,:)    !< *A* coefficients.
   real(R_P), allocatable :: Ahat(:,:) !< *Ahat* coefficients.
   real(R_P), allocatable :: B(:)      !< *B* coefficients.
   real(R_P), allocatable :: Bhat(:)   !< *Bhat* coefficients.
   real(R_P), allocatable :: D(:,:)    !< *D* coefficients.
-  real(R_P), allocatable :: T(:)      !< *T* coefficients.
+  real(R_P), allocatable :: Q(:)      !< *T* coefficients.
   contains
     ! deferred methods
     procedure, pass(self) :: class_name           !< Return the class name of schemes.
     procedure, pass(self) :: description          !< Return pretty-printed object description.
     procedure, pass(self) :: has_fast_mode        !< Return .true. if the integrator class has *fast mode* integrate.
     procedure, pass(lhs)  :: integr_assign_integr !< Operator `=`.
-    procedure, pass(self) :: is_multistage        !< Return .true. for multistage integrator.
-    procedure, pass(self) :: is_multistep         !< Return .true. for multistep integrator.
+    procedure, pass(self) :: integrate            !< Integrate integrand field.
+    procedure, pass(self) :: integrate_fast       !< Integrate integrand field, fast mode.
     procedure, pass(self) :: is_supported         !< Return .true. if the integrator class support the given scheme.
-    procedure, pass(self) :: stages_number        !< Return number of stages used.
-    procedure, pass(self) :: steps_number         !< Return number of steps used.
     procedure, pass(self) :: supported_schemes    !< Return the list of supported schemes.
     ! public methods
-    procedure, pass(self) :: destroy         !< Destroy the integrator.
-    procedure, pass(self) :: initialize      !< Initialize (create) the integrator.
-    procedure, pass(self) :: integrate       !< Integrate integrand field.
-    procedure, pass(self) :: integrate_fast  !< Integrate integrand field, fast mode.
-    procedure, pass(self) :: update_previous !< Cyclic update previous time steps.
+    procedure, pass(self) :: destroy    !< Destroy the integrator.
+    procedure, pass(self) :: initialize !< Initialize (create) the integrator.
 endtype integrator_ms_runge_kutta_ssp
 
 contains
@@ -129,35 +121,118 @@ contains
   class(integrator_ms_runge_kutta_ssp), intent(inout) :: lhs !< Left hand side.
   class(integrator_object),             intent(in)    :: rhs !< Right hand side.
 
-  call lhs%assign_abstract(rhs=rhs)
+  call lhs%assign_multistage_multistep(rhs=rhs)
   select type(rhs)
   class is (integrator_ms_runge_kutta_ssp)
-                             lhs%steps  = rhs%steps
-                             lhs%stages = rhs%stages
-    if (allocated(rhs%A   )) lhs%A      = rhs%A
-    if (allocated(rhs%Ahat)) lhs%Ahat   = rhs%Ahat
-    if (allocated(rhs%B   )) lhs%B      = rhs%B
-    if (allocated(rhs%Bhat)) lhs%Bhat   = rhs%Bhat
-    if (allocated(rhs%D   )) lhs%D      = rhs%D
-    if (allocated(rhs%T   )) lhs%T      = rhs%T
+    if (allocated(rhs%A   )) lhs%A    = rhs%A
+    if (allocated(rhs%Ahat)) lhs%Ahat = rhs%Ahat
+    if (allocated(rhs%B   )) lhs%B    = rhs%B
+    if (allocated(rhs%Bhat)) lhs%Bhat = rhs%Bhat
+    if (allocated(rhs%D   )) lhs%D    = rhs%D
+    if (allocated(rhs%Q   )) lhs%Q    = rhs%Q
   endselect
   endsubroutine integr_assign_integr
 
-  elemental function is_multistage(self)
-  !< Return .true. for multistage integrator.
-  class(integrator_ms_runge_kutta_ssp), intent(in) :: self          !< Integrator.
-  logical                                          :: is_multistage !< Inquire result.
+  subroutine integrate(self, U, Dt, t)
+  !< Integrate field with LMM-SSP class scheme.
+  class(integrator_ms_runge_kutta_ssp), intent(inout) :: self  !< Integrator.
+  class(integrand_object),              intent(inout) :: U     !< Field to be integrated.
+  real(R_P),                            intent(in)    :: Dt    !< Time step.
+  real(R_P),                            intent(in)    :: t     !< Time.
+  integer(I_P)                                        :: k, kk !< Stages counters.
+  integer(I_P)                                        :: s     !< Steps counter.
 
-  is_multistage = is_multistage_
-  endfunction is_multistage
+  ! computing stages
+  self%stage(1) = U
+  do k=2, self%stages
+    self%stage(k) = U * 0._R_P
+    do s=1, self%steps
+      if (self%D(k, s) /= 0._R_P) self%stage(k) = self%stage(k) + (self%previous(s) * self%D(k, s))
+    enddo
+    do s=1, self%steps - 1
+      if (self%Ahat(k, s) /= 0._R_P) self%stage(k) = self%stage(k) + (self%previous(s)%t(t=self%t(s)) * (Dt * self%Ahat(k, s)))
+    enddo
+    do kk=1, k - 1
+      if (self%A(k, kk) /= 0._R_P) self%stage(k) = self%stage(k) + (self%stage(kk)%t(t=t) * (Dt * self%A(k, kk)))
+    enddo
+  enddo
+  ! computing new time step
+  U = U * 0._R_P
+  do s=1, self%steps
+    if (self%Q(s) /= 0._R_P) U = U + (self%previous(s) * self%Q(s))
+  enddo
+  do s=1, self%steps - 1
+    if (self%Bhat(s) /= 0._R_P) U = U + (self%previous(s)%t(t=self%t(s)) * (Dt * self%Bhat(s)))
+  enddo
+  do k=1, self%stages
+    if (self%B(k) /= 0._R_P) U = U + (self%stage(k)%t(t=t) * (Dt * self%B(k)))
+  enddo
+  if (self%autoupdate) call self%update_previous(U=U, previous=self%previous, Dt=Dt, t=t, previous_t=self%t)
+  endsubroutine integrate
 
-  elemental function is_multistep(self)
-  !< Return .true. for multistage integrator.
-  class(integrator_ms_runge_kutta_ssp), intent(in) :: self         !< Integrator.
-  logical                                          :: is_multistep !< Inquire result.
+  subroutine integrate_fast(self, U, Dt, t)
+  !< Integrate field with LMM-SSP class scheme, fast mode.
+  class(integrator_ms_runge_kutta_ssp), intent(inout) :: self  !< Integrator.
+  class(integrand_object),              intent(inout) :: U     !< Field to be integrated.
+  real(R_P),                            intent(in)    :: Dt    !< Time step.
+  real(R_P),                            intent(in)    :: t     !< Time.
+  integer(I_P)                                        :: k, kk !< Stages counters.
+  integer(I_P)                                        :: s     !< Steps counter.
 
-  is_multistep = is_multistep_
-  endfunction is_multistep
+  ! computing stages
+  self%stage(1) = U
+  do k=2, self%stages
+    call self%stage(k)%multiply_fast(lhs=U, rhs=0._R_P)
+    do s=1, self%steps
+      if (self%D(k, s) /= 0._R_P) then
+         call self%buffer%multiply_fast(lhs=self%previous(s), rhs=self%D(k, s))
+         call self%stage(k)%add_fast(lhs=self%stage(k), rhs=self%buffer)
+      endif
+    enddo
+    do s=1, self%steps - 1
+      if (self%Ahat(k, s) /= 0._R_P) then
+         self%buffer = self%previous(s)
+         call self%buffer%t_fast(t=self%t(s))
+         call self%buffer%multiply_fast(lhs=self%buffer, rhs=Dt * self%Ahat(k, s))
+         call self%stage(k)%add_fast(lhs=self%stage(k), rhs=self%buffer)
+      endif
+    enddo
+    do kk=1, k - 1
+      if (self%A(k, kk) /= 0._R_P) then
+         self%buffer = self%stage(kk)
+         call self%buffer%t_fast(t=t)
+         call self%buffer%multiply_fast(lhs=self%buffer, rhs=Dt * self%A(k, kk))
+         call self%stage(k)%add_fast(lhs=self%stage(k), rhs=self%buffer)
+      endif
+    enddo
+  enddo
+  ! computing new time step
+  U = U * 0._R_P
+  do s=1, self%steps
+    if (self%Q(s) /= 0._R_P) then
+      call self%buffer%multiply_fast(lhs=self%previous(s), rhs=self%Q(s))
+      call U%add_fast(lhs=U, rhs=self%buffer)
+    endif
+  enddo
+  do s=1, self%steps - 1
+    if (self%Bhat(s) /= 0._R_P) then
+       self%buffer = self%previous(s)
+       call self%buffer%t_fast(t=self%t(s))
+       call self%buffer%multiply_fast(lhs=self%buffer, rhs=Dt * self%Bhat(s))
+       call U%add_fast(lhs=U, rhs=self%buffer)
+    endif
+  enddo
+  do k=1, self%stages
+    if (self%B(k) /= 0._R_P) U = U + (self%stage(k)%t(t=t) * (Dt * self%B(k)))
+    if (self%B(k) /= 0._R_P) then
+       self%buffer = self%stage(k)
+       call self%buffer%t_fast(t=t)
+       call self%buffer%multiply_fast(lhs=self%buffer, rhs=Dt * self%B(k))
+       call U%add_fast(lhs=U, rhs=self%buffer)
+    endif
+  enddo
+  if (self%autoupdate) call self%update_previous(U=U, previous=self%previous, Dt=Dt, t=t, previous_t=self%t)
+  endsubroutine integrate_fast
 
   elemental function is_supported(self, scheme)
   !< Return .true. if the integrator class support the given scheme.
@@ -175,22 +250,6 @@ contains
   enddo
   endfunction is_supported
 
-  elemental function stages_number(self)
-  !< Return number of stages used.
-  class(integrator_ms_runge_kutta_ssp), intent(in) :: self          !< Integrator.
-  integer(I_P)                                     :: stages_number !< Number of stages used.
-
-  stages_number = self%stages
-  endfunction stages_number
-
-  elemental function steps_number(self)
-  !< Return number of steps used.
-  class(integrator_ms_runge_kutta_ssp), intent(in) :: self         !< Integrator.
-  integer(I_P)                                     :: steps_number !< Number of steps used.
-
-  steps_number = self%steps
-  endfunction steps_number
-
   pure function supported_schemes(self) result(schemes)
   !< Return the list of supported schemes.
   class(integrator_ms_runge_kutta_ssp), intent(in) :: self       !< Integrator.
@@ -205,21 +264,22 @@ contains
   !< Destroy the integrator.
   class(integrator_ms_runge_kutta_ssp), intent(inout) :: self !< Integrator.
 
-  call self%destroy_abstract
-  self%steps = 0
-  self%stages = 0
+  call self%destroy_multistage_multistep
   if (allocated(self%A   )) deallocate(self%A   )
   if (allocated(self%Ahat)) deallocate(self%Ahat)
   if (allocated(self%B   )) deallocate(self%B   )
   if (allocated(self%Bhat)) deallocate(self%Bhat)
   if (allocated(self%D   )) deallocate(self%D   )
-  if (allocated(self%T   )) deallocate(self%T   )
+  if (allocated(self%Q   )) deallocate(self%Q   )
   endsubroutine destroy
 
-  subroutine initialize(self, scheme, stop_on_fail)
+  subroutine initialize(self, scheme, iterations, autoupdate, U, stop_on_fail)
   !< Create the actual MS-RK-SSP integrator: initialize the *A,Ahat,B,Bhat,D,T* coefficients.
   class(integrator_ms_runge_kutta_ssp), intent(inout)        :: self         !< Integrator.
   character(*),                         intent(in)           :: scheme       !< Selected scheme.
+  integer(I_P),                         intent(in), optional :: iterations   !< Implicit iterations.
+  logical,                              intent(in), optional :: autoupdate   !< Enable cyclic autoupdate of previous time steps.
+  class(integrand_object),              intent(in), optional :: U            !< Integrand molding prototype.
   logical,                              intent(in), optional :: stop_on_fail !< Stop execution if initialization fail.
 
   if (self%is_supported(scheme=scheme)) then
@@ -246,9 +306,9 @@ contains
       self%D(2, 1) = 1._R_P / 3._R_P
       self%D(2, 2) = 2._R_P / 3._R_P
 
-      allocate(self%T(1:self%steps)) ; self%T = 0._R_P
-      self%T(1) = 0.607695154586736_R_P
-      self%T(2) = 0.392304845413264_R_P
+      allocate(self%Q(1:self%steps)) ; self%Q = 0._R_P
+      self%Q(1) = 0.607695154586736_R_P
+      self%Q(2) = 0.392304845413264_R_P
 
     case('ms_runge_kutta_ssp_steps_3_stages_2_order_3')
       self%steps = 3
@@ -272,10 +332,10 @@ contains
       self%D(2, 2) = 1.80945758995975e-24_R_P
       self%D(2, 3) = 0.813566151883148_R_P
 
-      allocate(self%T(1:self%steps)) ; self%T = 0._R_P
-      self%T(1) = 0.312198313277933_R_P
-      self%T(2) = 2.58493941422821e-24_R_P
-      self%T(3) = 0.687801686722067_R_P
+      allocate(self%Q(1:self%steps)) ; self%Q = 0._R_P
+      self%Q(1) = 0.312198313277933_R_P
+      self%Q(2) = 2.58493941422821e-24_R_P
+      self%Q(3) = 0.687801686722067_R_P
 
     case('ms_runge_kutta_ssp_steps_4_stages_5_order_8')
       self%steps = 4
@@ -344,143 +404,21 @@ contains
       self%D(4, 4) = 0.0749075156298171_R_P
       self%D(5, 4) = 0.353491551483958_R_P
 
-      allocate(self%T(1:self%steps)) ; self%T = 0._R_P
-      self%T(1) = 0.0273988434707855_R_P
-      self%T(2) = 0.286296288278021_R_P
-      self%T(3) = 0.484893800452111_R_P
-      self%T(4) = 0.201411067799082_R_P
+      allocate(self%Q(1:self%steps)) ; self%Q = 0._R_P
+      self%Q(1) = 0.0273988434707855_R_P
+      self%Q(2) = 0.286296288278021_R_P
+      self%Q(3) = 0.484893800452111_R_P
+      self%Q(4) = 0.201411067799082_R_P
     endselect
+    self%autoupdate = .true. ; if (present(autoupdate)) self%autoupdate = autoupdate
+    self%iterations = 1 ; if (present(iterations)) self%iterations = iterations
+    self%registers_stages = self%stages
+    self%registers_steps = self%steps
+    if (present(U)) call self%allocate_integrand_members(U=U)
   else
     call self%trigger_error(error=ERROR_UNSUPPORTED_SCHEME,                                   &
                             error_message='"'//trim(adjustl(scheme))//'" unsupported scheme', &
                             is_severe=stop_on_fail)
   endif
   endsubroutine initialize
-
-  subroutine integrate(self, U, previous, stage, Dt, t, autoupdate)
-  !< Integrate field with LMM-SSP class scheme.
-  class(integrator_ms_runge_kutta_ssp), intent(in)           :: self         !< Integrator.
-  class(integrand_object),              intent(inout)        :: U            !< Field to be integrated.
-  class(integrand_object),              intent(inout)        :: previous(1:) !< Previous time steps solutions of integrand.
-  class(integrand_object),              intent(inout)        :: stage(1:)    !< Runge-Kutta stages [1:stages].
-  real(R_P),                            intent(in)           :: Dt           !< Time steps.
-  real(R_P),                            intent(in)           :: t(:)         !< Times.
-  logical,                              intent(in), optional :: autoupdate   !< Perform cyclic autoupdate of previous steps.
-  logical                                                    :: autoupdate_  !< Perform cyclic autoupdate of previous steps,
-                                                                             !< local variable.
-  integer(I_P)                                               :: k, kk        !< Stages counters.
-  integer(I_P)                                               :: s            !< Steps counter.
-
-  autoupdate_ = .true. ; if (present(autoupdate)) autoupdate_ = autoupdate
-  ! computing stages
-  stage(1) = U
-  do k=2, self%stages
-    stage(k) = U * 0._R_P
-    do s=1, self%steps
-      if (self%D(k, s) /= 0._R_P) stage(k) = stage(k) + (previous(s) * self%D(k, s))
-    enddo
-    do s=1, self%steps - 1
-      if (self%Ahat(k, s) /= 0._R_P) stage(k) = stage(k) + (previous(s)%t(t=t(s)) * (Dt * self%Ahat(k, s)))
-    enddo
-    do kk=1, k - 1
-      if (self%A(k, kk) /= 0._R_P) stage(k) = stage(k) + (stage(kk)%t(t=t(self%steps)) * (Dt * self%A(k, kk)))
-    enddo
-  enddo
-  ! computing new time step
-  U = U * 0._R_P
-  do s=1, self%steps
-    if (self%T(s) /= 0._R_P) U = U + (previous(s) * self%T(s))
-  enddo
-  do s=1, self%steps - 1
-    if (self%Bhat(s) /= 0._R_P) U = U + (previous(s)%t(t=t(s)) * (Dt * self%Bhat(s)))
-  enddo
-  do k=1, self%stages
-    if (self%B(k) /= 0._R_P) U = U + (stage(k)%t(t=t(self%steps)) * (Dt * self%B(k)))
-  enddo
-  if (autoupdate_) call self%update_previous(U=U, previous=previous)
-  endsubroutine integrate
-
-  subroutine integrate_fast(self, U, previous, stage, buffer, Dt, t, autoupdate)
-  !< Integrate field with LMM-SSP class scheme, fast mode.
-  class(integrator_ms_runge_kutta_ssp), intent(in)           :: self         !< Integrator.
-  class(integrand_object),              intent(inout)        :: U            !< Field to be integrated.
-  class(integrand_object),              intent(inout)        :: previous(1:) !< Previous time steps solutions of integrand.
-  class(integrand_object),              intent(inout)        :: stage(1:)    !< Runge-Kutta stages [1:stages].
-  class(integrand_object),              intent(inout)        :: buffer       !< Temporary buffer for doing fast operation.
-  real(R_P),                            intent(in)           :: Dt           !< Time steps.
-  real(R_P),                            intent(in)           :: t(:)         !< Times.
-  logical,                              intent(in), optional :: autoupdate   !< Perform cyclic autoupdate of previous steps.
-  logical                                                    :: autoupdate_  !< Perform cyclic autoupdate of previous steps,
-                                                                             !< local variable.
-  integer(I_P)                                               :: k, kk        !< Stages counters.
-  integer(I_P)                                               :: s            !< Steps counter.
-
-  autoupdate_ = .true. ; if (present(autoupdate)) autoupdate_ = autoupdate
-  ! computing stages
-  stage(1) = U
-  do k=2, self%stages
-    call stage(k)%multiply_fast(lhs=U, rhs=0._R_P)
-    do s=1, self%steps
-      if (self%D(k, s) /= 0._R_P) then
-         call buffer%multiply_fast(lhs=previous(s), rhs=self%D(k, s))
-         call stage(k)%add_fast(lhs=stage(k), rhs=buffer)
-      endif
-    enddo
-    do s=1, self%steps - 1
-      if (self%Ahat(k, s) /= 0._R_P) then
-         buffer = previous(s)
-         call buffer%t_fast(t=t(s))
-         call buffer%multiply_fast(lhs=buffer, rhs=Dt * self%Ahat(k, s))
-         call stage(k)%add_fast(lhs=stage(k), rhs=buffer)
-      endif
-    enddo
-    do kk=1, k - 1
-      if (self%A(k, kk) /= 0._R_P) then
-         buffer = stage(kk)
-         call buffer%t_fast(t=t(self%steps))
-         call buffer%multiply_fast(lhs=buffer, rhs=Dt * self%A(k, kk))
-         call stage(k)%add_fast(lhs=stage(k), rhs=buffer)
-      endif
-    enddo
-  enddo
-  ! computing new time step
-  U = U * 0._R_P
-  do s=1, self%steps
-    if (self%T(s) /= 0._R_P) then
-      call buffer%multiply_fast(lhs=previous(s), rhs=self%T(s))
-      call U%add_fast(lhs=U, rhs=buffer)
-    endif
-  enddo
-  do s=1, self%steps - 1
-    if (self%Bhat(s) /= 0._R_P) then
-       buffer = previous(s)
-       call buffer%t_fast(t=t(s))
-       call buffer%multiply_fast(lhs=buffer, rhs=Dt * self%Bhat(s))
-       call U%add_fast(lhs=U, rhs=buffer)
-    endif
-  enddo
-  do k=1, self%stages
-    if (self%B(k) /= 0._R_P) U = U + (stage(k)%t(t=t(self%steps)) * (Dt * self%B(k)))
-    if (self%B(k) /= 0._R_P) then
-       buffer = stage(k)
-       call buffer%t_fast(t=t(self%steps))
-       call buffer%multiply_fast(lhs=buffer, rhs=Dt * self%B(k))
-       call U%add_fast(lhs=U, rhs=buffer)
-    endif
-  enddo
-  if (autoupdate_) call self%update_previous(U=U, previous=previous)
-  endsubroutine integrate_fast
-
-  subroutine update_previous(self, U, previous)
-  !< Cyclic update previous time steps.
-  class(integrator_ms_runge_kutta_ssp), intent(in)    :: self         !< Integrator.
-  class(integrand_object),              intent(in)    :: U            !< Field to be integrated.
-  class(integrand_object),              intent(inout) :: previous(1:) !< Previous time steps solutions of integrand field.
-  integer(I_P)                                        :: s            !< Steps counter.
-
-  do s=1, self%steps - 1
-    previous(s) = previous(s + 1)
-  enddo
-  previous(self%steps) = U
-  endsubroutine update_previous
 endmodule foodie_integrator_ms_runge_kutta_ssp

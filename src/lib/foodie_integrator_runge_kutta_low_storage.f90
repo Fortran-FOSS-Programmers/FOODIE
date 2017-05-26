@@ -451,7 +451,6 @@ contains
       self%A(14) = -7.1151571693922548_R_P ; self%B(14) = 5.5059777270269628_R_P ; self%C(14) = 0.8734213127600976_R_P
     endselect
     self%registers = 2
-    self%registers = self%stages
     if (present(U)) call self%allocate_integrand_members(U=U)
   else
     call self%trigger_error(error=ERROR_UNSUPPORTED_SCHEME,                                   &
