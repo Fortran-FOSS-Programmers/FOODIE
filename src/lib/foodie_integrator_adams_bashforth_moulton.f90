@@ -191,14 +191,22 @@ contains
   class(integrand_object),                   intent(inout) :: U    !< Field to be integrated.
   real(R_P),                                 intent(in)    :: Dt   !< Time steps.
   real(R_P),                                 intent(in)    :: t    !< Times.
+  integer(I_P)                                             :: s    !< Step counter.
 
-  ! self%predictor%t = self%t(1:self%steps)
-  ! self%predictor%Dt = self%Dt(1:self%steps)
-  ! self%corrector%t = self%t(1:self%steps)
-  ! self%corrector%Dt = self%Dt(1:self%steps)
-  ! call self%predictor%integrate_ub(U=U, previous=previous, Dt=Dt, t=t)
-  ! call self%corrector%integrate_ub(U=U, previous=previous(2:), Dt=Dt, t=t)
-  ! if (self%autoupdate) call self%update_previous(U=U, previous=previous(1:self%steps), Dt=Dt, t=t, previous_t=self%t(1:self%steps))
+  do s=1, self%steps
+     self%predictor%previous(s) = self%previous(s)
+  enddo
+  self%predictor%t(:) = self%t(1:self%steps)
+  self%predictor%Dt(:) = self%Dt(1:self%steps)
+  do s=1, self%steps - 1
+     self%corrector%previous(s) = self%previous(s+1)
+  enddo
+  self%corrector%t(:) = self%t(2:self%steps)
+  self%corrector%Dt(:) = self%Dt(2:self%steps)
+  call self%predictor%integrate(U=U, Dt=Dt, t=t)
+  call self%corrector%integrate(U=U, Dt=Dt, t=t)
+  if (self%autoupdate) &
+     call self%update_previous(U=U, previous=self%previous(1:self%steps), Dt=Dt, t=t, previous_t=self%t(1:self%steps))
   endsubroutine integrate
 
   subroutine integrate_fast(self, U, Dt, t)
@@ -207,14 +215,22 @@ contains
   class(integrand_object),                   intent(inout) :: U    !< Field to be integrated.
   real(R_P),                                 intent(in)    :: Dt   !< Time steps.
   real(R_P),                                 intent(in)    :: t    !< Times.
+  integer(I_P)                                             :: s    !< Step counter.
 
-  ! self%predictor%t = self%t
-  ! self%predictor%Dt = self%Dt
-  ! self%corrector%t = self%t
-  ! self%corrector%Dt = self%Dt
-  ! call self%predictor%integrate_ub_fast(U=U, previous=previous, Dt=Dt, t=t)
-  ! call self%corrector%integrate_ub_fast(U=U, previous=previous(2:), Dt=Dt, t=t)
-  ! if (self%autoupdate) call self%update_previous(U=U, previous=previous(1:self%steps), Dt=Dt, t=t, previous_t=self%t(1:self%steps))
+  do s=1, self%steps
+     self%predictor%previous(s) = self%previous(s)
+  enddo
+  self%predictor%t(:) = self%t(1:self%steps)
+  self%predictor%Dt(:) = self%Dt(1:self%steps)
+  do s=1, self%steps - 1
+     self%corrector%previous(s) = self%previous(s+1)
+  enddo
+  self%corrector%t(:) = self%t(2:self%steps)
+  self%corrector%Dt(:) = self%Dt(2:self%steps)
+  call self%predictor%integrate_fast(U=U, Dt=Dt, t=t)
+  call self%corrector%integrate_fast(U=U, Dt=Dt, t=t)
+  if (self%autoupdate) &
+     call self%update_previous(U=U, previous=self%previous(1:self%steps), Dt=Dt, t=t, previous_t=self%t(1:self%steps))
   endsubroutine integrate_fast
 
   elemental function is_supported(self, scheme)
@@ -271,8 +287,8 @@ contains
     schemes_am = self%corrector%supported_schemes()
     self%autoupdate = .true. ; if (present(autoupdate)) self%autoupdate = autoupdate
     self%iterations = 1 ; if (present(iterations)) self%iterations = iterations
-    call self%predictor%initialize(scheme=schemes_ab(scheme_number_), autoupdate=.false.)
-    call self%corrector%initialize(scheme=schemes_am(scheme_number_), iterations=self%iterations, autoupdate=.false.)
+    call self%predictor%initialize(scheme=schemes_ab(scheme_number_), U=U, autoupdate=.false.)
+    call self%corrector%initialize(scheme=schemes_am(scheme_number_), U=U, iterations=self%iterations, autoupdate=.false.)
     self%steps = self%predictor%steps_number()
     self%registers = self%steps + 1
     if (present(U)) call self%allocate_integrand_members(U=U)
