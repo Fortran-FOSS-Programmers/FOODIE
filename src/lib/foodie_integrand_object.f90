@@ -16,7 +16,8 @@ type, abstract :: integrand_object
 #endif
   contains
     ! public deferred procedures that concrete integrand-field must implement
-    procedure(time_derivative), pass(self), deferred, public :: t !< Time derivative, residuals.
+    procedure(integrand_dimension_interface), pass(self), deferred, public :: integrand_dimension !< Return integrand dimension.
+    procedure(time_derivative),               pass(self), deferred, public :: t                   !< Time derivative, residuals.
     ! operators
     procedure(local_error_operator), pass(lhs), deferred, public :: local_error !< `||integrand - integrand||` operator.
     generic, public :: operator(.lterror.) => local_error !< Estimate local truncation error.
@@ -62,7 +63,14 @@ type, abstract :: integrand_object
 endtype integrand_object
 
 abstract interface
-  !< Abstract type bound procedures necessary for implementing a concrete extension of [[integrand_object]].
+   !< Abstract type bound procedures necessary for implementing a concrete extension of [[integrand_object]].
+
+   pure function integrand_dimension_interface(self) result(integrand_dimension)
+   !< Return integrand dimension.
+   import :: integrand_object, I_P
+   class(integrand_object), intent(in) :: self                !< Integrand.
+   integer(I_P)                        :: integrand_dimension !< Integrand dimension.
+   endfunction integrand_dimension_interface
 
   function time_derivative(self, t) result(dState_dt)
   !< Time derivative function of integrand class, i.e. the residuals function.
