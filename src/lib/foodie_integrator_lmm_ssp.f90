@@ -62,8 +62,6 @@ type, extends(integrator_multistep_object) :: integrator_lmm_ssp
     procedure, pass(lhs)  :: integr_assign_integr !< Operator `=`.
     procedure, pass(self) :: integrate            !< Integrate integrand field.
     procedure, pass(self) :: integrate_fast       !< Integrate integrand field, fast mode.
-    procedure, pass(self) :: integrate_ub         !< Integrate integrand field, unbuffered.
-    procedure, pass(self) :: integrate_ub_fast    !< Integrate integrand field, fast mode, unbuffered.
     procedure, pass(self) :: is_supported         !< Return .true. if the integrator class support the given scheme.
     procedure, pass(self) :: supported_schemes    !< Return the list of supported schemes.
     ! public methods
@@ -124,69 +122,43 @@ contains
 
   subroutine integrate(self, U, Dt, t)
   !< Integrate field with LMM-SSP class scheme.
-   !<
-   !< @note This method uses integrand previous-steps-buffer stored inside integrator.
   class(integrator_lmm_ssp), intent(inout) :: self !< Integrator.
   class(integrand_object),   intent(inout) :: U    !< Field to be integrated.
   real(R_P),                 intent(in)    :: Dt   !< Time step.
   real(R_P),                 intent(in)    :: t    !< Time.
+  integer(I_P)                             :: s    !< Steps counter.
 
-  call self%integrate_ub(U=U, previous=self%previous, Dt=Dt, t=t)
+  U = U * 0._R_P
+  do s=1, self%steps
+    if (self%a(s) /= 0._R_P) U = U + (self%previous(s) * self%a(s))
+    if (self%b(s) /= 0._R_P) U = U + (self%previous(s)%t(t=self%t(s)) * (Dt * self%b(s)))
+  enddo
+  if (self%autoupdate) call self%update_previous(U=U, previous=self%previous, Dt=Dt, t=t, previous_t=self%t)
   endsubroutine integrate
 
   subroutine integrate_fast(self, U, Dt, t)
   !< Integrate field with LMM-SSP class scheme, fast mode.
-   !<
-   !< @note This method uses integrand previous-steps-buffer stored inside integrator.
   class(integrator_lmm_ssp), intent(inout) :: self !< Integrator.
   class(integrand_object),   intent(inout) :: U    !< Field to be integrated.
   real(R_P),                 intent(in)    :: Dt   !< Time step.
   real(R_P),                 intent(in)    :: t    !< Time.
-
-  call self%integrate_ub_fast(U=U, previous=self%previous, Dt=Dt, t=t)
-  endsubroutine integrate_fast
-
-  subroutine integrate_ub(self, U, previous, Dt, t)
-  !< Integrate field with LMM-SSP class scheme, unbuffered.
-  class(integrator_lmm_ssp), intent(inout) :: self         !< Integrator.
-  class(integrand_object),   intent(inout) :: U            !< Field to be integrated.
-  class(integrand_object),   intent(inout) :: previous(1:) !< Integrand.
-  real(R_P),                 intent(in)    :: Dt           !< Time step.
-  real(R_P),                 intent(in)    :: t            !< Time.
-  integer(I_P)                             :: s            !< Steps counter.
-
-  U = U * 0._R_P
-  do s=1, self%steps
-    if (self%a(s) /= 0._R_P) U = U + (previous(s) * self%a(s))
-    if (self%b(s) /= 0._R_P) U = U + (previous(s)%t(t=self%t(s)) * (Dt * self%b(s)))
-  enddo
-  if (self%autoupdate) call self%update_previous(U=U, previous=previous, Dt=Dt, t=t, previous_t=self%t)
-  endsubroutine integrate_ub
-
-  subroutine integrate_ub_fast(self, U, previous, Dt, t)
-  !< Integrate field with LMM-SSP class scheme, unbuffered, fast mode.
-  class(integrator_lmm_ssp), intent(inout) :: self         !< Integrator.
-  class(integrand_object),   intent(inout) :: U            !< Field to be integrated.
-  class(integrand_object),   intent(inout) :: previous(1:) !< Integrand.
-  real(R_P),                 intent(in)    :: Dt           !< Time step.
-  real(R_P),                 intent(in)    :: t            !< Time.
-  integer(I_P)                             :: s            !< Steps counter.
+  integer(I_P)                             :: s    !< Steps counter.
 
   call U%multiply_fast(lhs=U, rhs=0._R_P)
   do s=1, self%steps
     if (self%a(s) /= 0._R_P) then
-       call self%buffer%multiply_fast(lhs=previous(s), rhs=self%a(s))
+       call self%buffer%multiply_fast(lhs=self%previous(s), rhs=self%a(s))
        call U%add_fast(lhs=U, rhs=self%buffer)
     endif
     if (self%b(s) /= 0._R_P) then
-       self%buffer = previous(s)
+       self%buffer = self%previous(s)
        call self%buffer%t_fast(t=self%t(s))
        call self%buffer%multiply_fast(lhs=self%buffer, rhs=Dt * self%b(s))
        call U%add_fast(lhs=U, rhs=self%buffer)
     endif
   enddo
-  if (self%autoupdate) call self%update_previous(U=U, previous=previous, Dt=Dt, t=t, previous_t=self%t)
-  endsubroutine integrate_ub_fast
+  if (self%autoupdate) call self%update_previous(U=U, previous=self%previous, Dt=Dt, t=t, previous_t=self%t)
+  endsubroutine integrate_fast
 
   elemental function is_supported(self, scheme)
   !< Return .true. if the integrator class support the given scheme.

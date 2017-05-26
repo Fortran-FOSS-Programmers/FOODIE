@@ -72,8 +72,6 @@ type, extends(integrator_multistep_object) :: integrator_leapfrog
     procedure, pass(lhs)  :: integr_assign_integr !< Operator `=`.
     procedure, pass(self) :: integrate            !< Integrate integrand field.
     procedure, pass(self) :: integrate_fast       !< Integrate integrand field, fast mode.
-    procedure, pass(self) :: integrate_ub         !< Integrate integrand field, unbuffered.
-    procedure, pass(self) :: integrate_ub_fast    !< Integrate integrand field, fast mode, unbuffered.
     procedure, pass(self) :: is_supported         !< Return .true. if the integrator class support the given scheme.
     procedure, pass(self) :: supported_schemes    !< Return the list of supported schemes.
     ! public methods
@@ -133,71 +131,45 @@ contains
 
   subroutine integrate(self, U, Dt, t)
   !< Integrate field with leapfrog class scheme.
-  !<
-  !< @note This method uses integrand previous-steps-buffer stored inside integrator.
   class(integrator_leapfrog), intent(inout) :: self !< Integrator.
   class(integrand_object),    intent(inout) :: U    !< Field to be integrated.
   real(R_P),                  intent(in)    :: Dt   !< Time step.
   real(R_P),                  intent(in)    :: t    !< Time.
 
-  call self%integrate_ub(U=U, previous=self%previous, Dt=Dt, t=t)
+  U = self%previous(1) + (self%previous(2)%t(t=t) * (Dt * 2._R_P))
+  if (self%is_filtered) then
+    self%filter = (self%previous(1) - (self%previous(2) * 2._R_P) + U) * self%nu * 0.5_R_P
+    self%previous(2) = self%previous(2) + (self%filter * self%alpha)
+    U = U + (self%filter * (self%alpha - 1._R_P))
+  endif
+  if (self%autoupdate) call self%update_previous(U=U, previous=self%previous)
   endsubroutine integrate
 
   subroutine integrate_fast(self, U, Dt, t)
   !< Integrate field with leapfrog class scheme, fast mode.
-   !<
-   !< @note This method uses integrand previous-steps-buffer stored inside integrator.
   class(integrator_leapfrog), intent(inout) :: self !< Integrator.
   class(integrand_object),    intent(inout) :: U    !< Field to be integrated.
   real(R_P),                  intent(in)    :: Dt   !< Time step.
   real(R_P),                  intent(in)    :: t    !< Time.
 
-  call self%integrate_ub_fast(U=U, previous=self%previous, Dt=Dt, t=t)
-  endsubroutine integrate_fast
-
-  subroutine integrate_ub(self, U, previous, Dt, t)
-  !< Integrate field with leapfrog class scheme, unbuffered.
-  class(integrator_leapfrog), intent(inout) :: self         !< Integrator.
-  class(integrand_object),    intent(inout) :: U            !< Field to be integrated.
-  class(integrand_object),    intent(inout) :: previous(1:) !< Previous time steps solutions of integrand field.
-  real(R_P),                  intent(in)    :: Dt           !< Time step.
-  real(R_P),                  intent(in)    :: t            !< Time.
-
-  U = previous(1) + (previous(2)%t(t=t) * (Dt * 2._R_P))
-  if (self%is_filtered) then
-    self%filter = (previous(1) - (previous(2) * 2._R_P) + U) * self%nu * 0.5_R_P
-    previous(2) = previous(2) + (self%filter * self%alpha)
-    U = U + (self%filter * (self%alpha - 1._R_P))
-  endif
-  if (self%autoupdate) call self%update_previous(U=U, previous=previous)
-  endsubroutine integrate_ub
-
-  subroutine integrate_ub_fast(self, U, previous, Dt, t)
-  !< Integrate field with leapfrog class scheme, unbuffered, fast mode.
-  class(integrator_leapfrog), intent(inout) :: self         !< Integrator.
-  class(integrand_object),    intent(inout) :: U            !< Field to be integrated.
-  class(integrand_object),    intent(inout) :: previous(1:) !< Previous time steps solutions of integrand field.
-  real(R_P),                  intent(in)    :: Dt           !< Time step.
-  real(R_P),                  intent(in)    :: t            !< Time.
-
-  self%buffer = previous(2)
+  self%buffer = self%previous(2)
   call self%buffer%t_fast(t=t)
   call self%buffer%multiply_fast(lhs=self%buffer, rhs=Dt * 2._R_P)
-  call U%add_fast(lhs=previous(1), rhs=self%buffer)
+  call U%add_fast(lhs=self%previous(1), rhs=self%buffer)
   if (self%is_filtered) then
-    call self%buffer%multiply_fast(lhs=previous(2), rhs=2._R_P)
-    call self%buffer%subtract_fast(lhs=previous(1), rhs=self%buffer)
+    call self%buffer%multiply_fast(lhs=self%previous(2), rhs=2._R_P)
+    call self%buffer%subtract_fast(lhs=self%previous(1), rhs=self%buffer)
     call self%buffer%add_fast(lhs=self%buffer, rhs=U)
     call self%filter%multiply_fast(lhs=self%buffer, rhs=self%nu * 0.5_R_P)
 
     call self%buffer%multiply_fast(lhs=self%filter, rhs=self%alpha)
-    call previous(2)%add_fast(lhs=previous(2), rhs=self%buffer)
+    call self%previous(2)%add_fast(lhs=self%previous(2), rhs=self%buffer)
 
     call self%buffer%multiply_fast(lhs=self%filter, rhs=self%alpha - 1._R_P)
     call U%add_fast(lhs=U, rhs=self%buffer)
   endif
-  if (self%autoupdate) call self%update_previous(U=U, previous=previous)
-  endsubroutine integrate_ub_fast
+  if (self%autoupdate) call self%update_previous(U=U, previous=self%previous)
+  endsubroutine integrate_fast
 
   elemental function is_supported(self, scheme)
   !< Return .true. if the integrator class support the given scheme.

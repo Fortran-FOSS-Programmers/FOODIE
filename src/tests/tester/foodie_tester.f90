@@ -326,7 +326,12 @@ contains
    !    enddo
    endselect
 
-   if (save_results) call integrand%export_tecplot(t=time, scheme=scheme)
+   select type(integrand)
+   type is(integrand_ladvection)
+      if (save_results .and. mod(step, save_frequency)==0) call integrand%export_tecplot(t=time, scheme=scheme)
+   type is(integrand_oscillation)
+      if (save_results .and. mod(step, save_frequency)==0) call integrand%export_tecplot(t=time)
+   endselect
    if (save_results) call integrand%export_tecplot(close_file=.true.)
    contains
       subroutine integrand_export_tecplot
