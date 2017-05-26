@@ -74,6 +74,9 @@ use foodie_integrator_leapfrog, only : integrator_leapfrog
 use foodie_integrator_lmm_ssp, only : integrator_lmm_ssp
 use foodie_integrator_lmm_ssp_vss, only : integrator_lmm_ssp_vss
 use foodie_integrator_ms_runge_kutta_ssp, only : integrator_ms_runge_kutta_ssp
+use foodie_integrator_multistage_object, only : integrator_multistage_object
+use foodie_integrator_multistage_multistep_object, only : integrator_multistage_multistep_object
+use foodie_integrator_multistep_object, only : integrator_multistep_object
 use foodie_integrator_runge_kutta_emd, only : integrator_runge_kutta_emd
 use foodie_integrator_runge_kutta_low_storage, only : integrator_runge_kutta_ls
 use foodie_integrator_runge_kutta_lssp, only : integrator_runge_kutta_lssp
@@ -82,11 +85,20 @@ use penf, only : I_P, R_P
 
 implicit none
 private
+! helper procedures
 public :: foodie_integrator_class_names
 public :: foodie_integrator_factory
 public :: foodie_integrator_schemes
+public :: is_available
+public :: is_class_available
+public :: is_scheme_available
+! abstract objects
 public :: integrand_object
 public :: integrator_object
+public :: integrator_multistage_object
+public :: integrator_multistage_multistep_object
+public :: integrator_multistep_object
+! concrete objects
 public :: integrator_adams_bashforth
 public :: integrator_adams_bashforth_moulton
 public :: integrator_adams_moulton
@@ -100,9 +112,6 @@ public :: integrator_runge_kutta_emd
 public :: integrator_runge_kutta_ls
 public :: integrator_runge_kutta_lssp
 public :: integrator_runge_kutta_ssp
-public :: is_available
-public :: is_class_available
-public :: is_scheme_available
 
 contains
   pure function foodie_integrator_class_names() result(names)
@@ -137,7 +146,7 @@ contains
   names = [names, int_runge_kutta_ssp         % class_name()]
   endfunction foodie_integrator_class_names
 
-  subroutine foodie_integrator_factory(scheme, integrator, stages, tolerance, nu, alpha)
+  subroutine foodie_integrator_factory(scheme, integrator, stages, tolerance, nu, alpha, iterations, autoupdate, U)
   !< Return a concrete instance of [[integrator_object]] given a scheme selection.
   !<
   !< This is the FOODIE integrators factory.
@@ -145,10 +154,13 @@ contains
   !< @note If an error occurs the error status of [[integrator_object]] is updated.
   character(*),                          intent(in)  :: scheme                      !< Selected integrator given.
   class(integrator_object), allocatable, intent(out) :: integrator                  !< The FOODIE integrator.
-  integer(I_P), optional,                intent(in)  :: stages                      !< Stages of multi-stage methods.
-  real(R_P),    optional,                intent(in)  :: tolerance                   !< Tolerance on the local truncation error.
-  real(R_P),    optional,                intent(in)  :: nu                          !< Williams-Robert-Asselin filter coefficient.
-  real(R_P),    optional,                intent(in)  :: alpha                       !< Robert-Asselin filter coefficient.
+  integer(I_P),            optional,     intent(in)  :: stages                      !< Stages of multi-stage methods.
+  real(R_P),               optional,     intent(in)  :: tolerance                   !< Tolerance on the local truncation error.
+  real(R_P),               optional,     intent(in)  :: nu                          !< Williams-Robert-Asselin filter coefficient.
+  real(R_P),               optional,     intent(in)  :: alpha                       !< Robert-Asselin filter coefficient.
+  integer(I_P),            optional,     intent(in)  :: iterations                  !< Implicit iterations.
+  logical,                 optional,     intent(in)  :: autoupdate                  !< Enable cyclic autoupdate for multistep.
+  class(integrand_object), optional,     intent(in)  :: U                           !< Integrand molding prototype.
   type(integrator_adams_bashforth)                   :: int_adams_bashforth         !< Integrator Adams Bashforth.
   type(integrator_adams_bashforth_moulton)           :: int_adams_bashforth_moulton !< Integrator Adams Bashforth Moulton.
   type(integrator_adams_moulton)                     :: int_adams_moulton           !< Integrator Adams Moulton.
@@ -167,75 +179,79 @@ contains
     allocate(integrator_adams_bashforth_moulton :: integrator)
     select type(integrator)
     type is(integrator_adams_bashforth_moulton)
-      call integrator%initialize(scheme=scheme)
+      call integrator%initialize(scheme=scheme, iterations=iterations, autoupdate=autoupdate, U=U)
     endselect
   elseif (index(trim(adjustl(scheme)), trim(int_adams_bashforth%class_name())) > 0) then
     allocate(integrator_adams_bashforth :: integrator)
     select type(integrator)
     type is(integrator_adams_bashforth)
-      call integrator%initialize(scheme=scheme)
+      call integrator%initialize(scheme=scheme, autoupdate=autoupdate, U=U)
     endselect
   elseif (index(trim(adjustl(scheme)), trim(int_adams_moulton%class_name())) > 0) then
     allocate(integrator_adams_moulton :: integrator)
     select type(integrator)
     type is(integrator_adams_moulton)
-      call integrator%initialize(scheme=scheme)
+      call integrator%initialize(scheme=scheme, iterations=iterations, autoupdate=autoupdate, U=U)
     endselect
   elseif (index(trim(adjustl(scheme)), trim(int_back_df%class_name())) > 0) then
     allocate(integrator_back_df :: integrator)
     select type(integrator)
     type is(integrator_back_df)
-      call integrator%initialize(scheme=scheme)
+      call integrator%initialize(scheme=scheme, iterations=iterations, autoupdate=autoupdate, U=U)
     endselect
   elseif (index(trim(adjustl(scheme)), trim(int_euler_explicit%class_name())) > 0) then
     allocate(integrator_euler_explicit :: integrator)
+    select type(integrator)
+    type is(integrator_euler_explicit)
+      call integrator%initialize(scheme=scheme, U=U)
+    endselect
   elseif (index(trim(adjustl(scheme)), trim(int_leapfrog%class_name())) > 0) then
     allocate(integrator_leapfrog :: integrator)
     select type(integrator)
     type is(integrator_leapfrog)
-      call integrator%initialize(scheme=scheme, nu=nu, alpha=alpha)
+      call integrator%initialize(scheme=scheme, nu=nu, alpha=alpha, autoupdate=autoupdate, U=U)
     endselect
   elseif (index(trim(adjustl(scheme)), trim(int_lmm_ssp_vss%class_name())) > 0) then
     allocate(integrator_lmm_ssp_vss :: integrator)
     select type(integrator)
     type is(integrator_lmm_ssp_vss)
-      call integrator%initialize(scheme=scheme)
+      call integrator%initialize(scheme=scheme, autoupdate=autoupdate, U=U)
     endselect
   elseif (index(trim(adjustl(scheme)), trim(int_lmm_ssp%class_name())) > 0) then
     allocate(integrator_lmm_ssp :: integrator)
     select type(integrator)
     type is(integrator_lmm_ssp)
-      call integrator%initialize(scheme=scheme)
+      call integrator%initialize(scheme=scheme, autoupdate=autoupdate, U=U)
     endselect
   elseif (index(trim(adjustl(scheme)), trim(int_ms_runge_kutta_ssp%class_name())) > 0) then
     allocate(integrator_ms_runge_kutta_ssp :: integrator)
     select type(integrator)
     type is(integrator_ms_runge_kutta_ssp)
-      call integrator%initialize(scheme=scheme)
+      call integrator%initialize(scheme=scheme, iterations=iterations, autoupdate=autoupdate, U=U)
     endselect
   elseif (index(trim(adjustl(scheme)), trim(int_runge_kutta_emd%class_name())) > 0) then
     allocate(integrator_runge_kutta_emd :: integrator)
     select type(integrator)
     type is(integrator_runge_kutta_emd)
-      call integrator%initialize(scheme=scheme, tolerance=tolerance)
+      call integrator%initialize(scheme=scheme, tolerance=tolerance, U=U)
     endselect
   elseif (index(trim(adjustl(scheme)), trim(int_runge_kutta_lssp%class_name())) > 0) then
     allocate(integrator_runge_kutta_lssp :: integrator)
     select type(integrator)
     type is(integrator_runge_kutta_lssp)
-      call integrator%initialize(scheme=scheme, stages=stages)
+      call integrator%initialize(scheme=scheme, stages=stages, U=U)
     endselect
   elseif (index(trim(adjustl(scheme)), trim(int_runge_kutta_ls%class_name())) > 0) then
     allocate(integrator_runge_kutta_ls :: integrator)
     select type(integrator)
     type is(integrator_runge_kutta_ls)
-      call integrator%initialize(scheme=scheme)
+      call integrator%initialize(scheme=scheme, U=U)
     endselect
   elseif (index(trim(adjustl(scheme)), trim(int_runge_kutta_ssp%class_name())) > 0) then
     allocate(integrator_runge_kutta_ssp :: integrator)
     select type(integrator)
     type is(integrator_runge_kutta_ssp)
-      call integrator%initialize(scheme=scheme)
+      call integrator%initialize(scheme=scheme, U=U)
     endselect
   else
     write(stderr, '(A)')'error: "'//trim(adjustl(scheme))//'" scheme is unknown!'

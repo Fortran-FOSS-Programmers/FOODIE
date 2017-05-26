@@ -3,95 +3,101 @@
 module foodie_test_integrand_oscillation
 !< Define [[integrand_oscillation]], the Oscillation test field that is a concrete extension of the abstract integrand type.
 
+use flap, only : command_line_interface
 use foodie, only : integrand_object
-use penf, only : R_P, I_P
+use foodie_test_integrand_tester_object, only : integrand_tester_object
+use penf, only : FR_P, R_P, I_P, str
 
 implicit none
 private
 public :: integrand_oscillation
 
-type, extends(integrand_object) :: integrand_oscillation
-  !< The oscillation equations field.
-  !<
-  !< It is a FOODIE integrand class concrete extension.
-  !<
-  !<### Oscillation ODEs system
-  !<The (inertial) Oscillation equations system is a non linear system of pure ODEs and it can be written as:
-  !<
-  !<$$\begin{matrix}
-  !< U_t = R(U)  \\
-  !< U = \begin{bmatrix}
-  !< v_1 \\
-  !< v_2
-  !< \end{bmatrix}\;\;\;
-  !< R(U) = \begin{bmatrix}
-  !< -f v_2 \\
-  !< f v_1
-  !< \end{bmatrix}
-  !<\end{matrix}$$
-  !<
-  !<The frequency *f* is constant and it is here selected as *f=10^-4*.
-  !<
-  !<In the space *v1-v2* the path of the oscillation must be a circle, but for the frequency selected some ODE solvers are not
-  !<stable leading to a wrong path, see [1].
-  !<
-  !<#### Bibliography
-  !<
-  !<[1] *Numerical Methods for Fluid Dynamics With Applications to Geophysics*, Dale R. Durran, Springer, 2010.
-  !<
-  !<#### State variables organization
-  !< State variables are organized as an array (rank 1) of reals of *n=2* elements.
-  private
-  real(R_P) :: f=0._R_P                 !< Oscillation frequency (Hz).
-  real(R_P) :: U(1:2)=[0._R_P, 0._R_P]  !< Integrand (state) variables.
-  real(R_P) :: U0(1:2)=[0._R_P, 0._R_P] !< Initial state.
-  contains
-     ! auxiliary methods
-     procedure, pass(self), public :: initialize     !< Initialize integrand.
-     procedure, pass(self), public :: exact_solution !< Return exact solution.
-     procedure, pass(self), public :: output         !< Extract integrand state field.
-     ! public deferred methods
-     procedure, pass(self), public :: integrand_dimension !< Return integrand dimension.
-     procedure, pass(self), public :: t => dU_dt          !< Time derivative, residuals.
-     ! operators
-     procedure, pass(lhs), public :: local_error !<`||integrand_oscillation - integrand_oscillation||` operator.
-     ! +
-     procedure, pass(lhs), public :: integrand_add_integrand !< `+` operator.
-     procedure, pass(lhs), public :: integrand_add_real      !< `+ real` operator.
-     procedure, pass(rhs), public :: real_add_integrand      !< `real +` operator.
-     ! *
-     procedure, pass(lhs), public :: integrand_multiply_integrand   !< `*` operator.
-     procedure, pass(lhs), public :: integrand_multiply_real        !< `* real` operator.
-     procedure, pass(rhs), public :: real_multiply_integrand        !< `real *` operator.
-     procedure, pass(lhs), public :: integrand_multiply_real_scalar !< `* real_scalar` operator.
-     procedure, pass(rhs), public :: real_scalar_multiply_integrand !< `real_scalar *` operator.
-     ! -
-     procedure, pass(lhs), public :: integrand_sub_integrand !< `-` operator.
-     procedure, pass(lhs), public :: integrand_sub_real      !< `- real` operator.
-     procedure, pass(rhs), public :: real_sub_integrand      !< `real -` operator.
-     ! =
-     procedure, pass(lhs), public :: assign_integrand !< `=` operator.
-     procedure, pass(lhs), public :: assign_real      !< `= real` operator.
-     ! override fast operators
-     procedure, pass(self), public :: t_fast                              !< Time derivative, residuals, fast mode.
-     procedure, pass(opr),  public :: integrand_add_integrand_fast        !< `+` fast operator.
-     procedure, pass(opr),  public :: integrand_multiply_integrand_fast   !< `*` fast operator.
-     procedure, pass(opr),  public :: integrand_multiply_real_scalar_fast !< `* real_scalar` fast operator.
-     procedure, pass(opr),  public :: integrand_subtract_integrand_fast   !< `-` fast operator.
+type, extends(integrand_tester_object) :: integrand_oscillation
+   !< The oscillation equations field.
+   !<
+   !< It is a FOODIE integrand class concrete extension.
+   !<
+   !<### Oscillation ODEs system
+   !<The (inertial) Oscillation equations system is a non linear system of pure ODEs and it can be written as:
+   !<
+   !<$$\begin{matrix}
+   !< U_t = R(U)  \\
+   !< U = \begin{bmatrix}
+   !< v_1 \\
+   !< v_2
+   !< \end{bmatrix}\;\;\;
+   !< R(U) = \begin{bmatrix}
+   !< -f v_2 \\
+   !< f v_1
+   !< \end{bmatrix}
+   !<\end{matrix}$$
+   !<
+   !<The frequency *f* is constant and it is here selected as *f=10^-4*.
+   !<
+   !<In the space *v1-v2* the path of the oscillation must be a circle, but for the frequency selected some ODE solvers are not
+   !<stable leading to a wrong path, see [1].
+   !<
+   !<#### Bibliography
+   !<
+   !<[1] *Numerical Methods for Fluid Dynamics With Applications to Geophysics*, Dale R. Durran, Springer, 2010.
+   !<
+   !<#### State variables organization
+   !< State variables are organized as an array (rank 1) of reals of *n=2* elements.
+   private
+   real(R_P) :: f=0._R_P                 !< Oscillation frequency (Hz).
+   real(R_P) :: U0(1:2)=[0._R_P, 0._R_P] !< Initial state.
+   real(R_P) :: U(1:2)=[0._R_P, 0._R_P]  !< Integrand (state) variables.
+   contains
+      ! auxiliary methods
+      procedure, pass(self), public :: amplitude_phase !< Return amplitude and phase of the oscillation.
+      procedure, pass(self), public :: exact_solution  !< Return exact solution.
+      procedure, pass(self), public :: initialize      !< Initialize integrand.
+      procedure, pass(self), public :: output          !< Extract integrand state field.
+      ! integrand_tester_object deferred methods
+      procedure, pass(self), public :: description    !< Return an informative description of the test.
+      procedure, pass(self), public :: export_tecplot !< Export integrand to Tecplot file.
+      procedure, pass(self), public :: parse_cli      !< Initialize from command line interface.
+      procedure, nopass,     public :: set_cli        !< Set command line interface.
+      ! integrand_object deferred methods
+      procedure, pass(self), public :: integrand_dimension !< Return integrand dimension.
+      procedure, pass(self), public :: t => dU_dt          !< Time derivative, residuals.
+      ! operators
+      procedure, pass(lhs), public :: local_error !<`||integrand_oscillation - integrand_oscillation||` operator.
+      ! +
+      procedure, pass(lhs), public :: integrand_add_integrand !< `+` operator.
+      procedure, pass(lhs), public :: integrand_add_real      !< `+ real` operator.
+      procedure, pass(rhs), public :: real_add_integrand      !< `real +` operator.
+      ! *
+      procedure, pass(lhs), public :: integrand_multiply_integrand   !< `*` operator.
+      procedure, pass(lhs), public :: integrand_multiply_real        !< `* real` operator.
+      procedure, pass(rhs), public :: real_multiply_integrand        !< `real *` operator.
+      procedure, pass(lhs), public :: integrand_multiply_real_scalar !< `* real_scalar` operator.
+      procedure, pass(rhs), public :: real_scalar_multiply_integrand !< `real_scalar *` operator.
+      ! -
+      procedure, pass(lhs), public :: integrand_sub_integrand !< `-` operator.
+      procedure, pass(lhs), public :: integrand_sub_real      !< `- real` operator.
+      procedure, pass(rhs), public :: real_sub_integrand      !< `real -` operator.
+      ! =
+      procedure, pass(lhs), public :: assign_integrand !< `=` operator.
+      procedure, pass(lhs), public :: assign_real      !< `= real` operator.
+      ! override fast operators
+      procedure, pass(self), public :: t_fast                              !< Time derivative, residuals, fast mode.
+      procedure, pass(opr),  public :: integrand_add_integrand_fast        !< `+` fast operator.
+      procedure, pass(opr),  public :: integrand_multiply_integrand_fast   !< `*` fast operator.
+      procedure, pass(opr),  public :: integrand_multiply_real_scalar_fast !< `* real_scalar` fast operator.
+      procedure, pass(opr),  public :: integrand_subtract_integrand_fast   !< `-` fast operator.
 endtype integrand_oscillation
 
 contains
    ! auxiliary methods
-   pure subroutine initialize(self, U0, frequency)
-   !< Initialize integrand.
-   class(integrand_oscillation), intent(inout) :: self      !< Integrand.
-   real(R_P),                    intent(in)    :: U0(1:2)   !< Initial state.
-   real(R_P),                    intent(in)    :: frequency !< Frequency of oscillation.
+   function amplitude_phase(self) result(ap)
+   !< Compute amplitude and phase of the oscillation.
+   class(integrand_oscillation), intent(in) :: self    !< Advection field.
+   real(R_P)                                :: ap(1:2) !< Amplitude and phase.
 
-   self%U = U0
-   self%f = frequency
-   self%U0 = U0
-   endsubroutine initialize
+   ap(1) = sqrt(self%U(1)**2 + self%U(2)**2)
+   ap(2) = atan(-self%U(1) / self%U(2))
+   endfunction amplitude_phase
 
    pure function exact_solution(self, t) result(exact)
    !< Return exact solution.
@@ -103,6 +109,17 @@ contains
    exact(2) = self%U0(1) * sin(self%f * t) + self%U0(2) * cos(self%f * t)
    endfunction exact_solution
 
+   pure subroutine initialize(self, U0, frequency)
+   !< Initialize integrand.
+   class(integrand_oscillation), intent(inout) :: self      !< Integrand.
+   real(R_P),                    intent(in)    :: U0(1:2)   !< Initial state.
+   real(R_P),                    intent(in)    :: frequency !< Frequency of oscillation.
+
+   self%U = U0
+   self%f = frequency
+   self%U0 = U0
+   endsubroutine initialize
+
    pure function output(self) result(state)
    !< Extract integrand state field.
    class(integrand_oscillation), intent(in) :: self       !< Integrand.
@@ -111,11 +128,73 @@ contains
    state = self%U
    endfunction output
 
-   ! deferred methods
+   ! integrand_tester_object deferred methods
+   pure function description(self, prefix) result(desc)
+   !< Return informative integrator description.
+   class(integrand_oscillation), intent(in)           :: self    !< Integrator.
+   character(*),                 intent(in), optional :: prefix  !< Prefixing string.
+   character(len=:), allocatable                      :: desc    !< Description.
+   character(len=:), allocatable                      :: prefix_ !< Prefixing string, local variable.
+
+   prefix_ = '' ; if (present(prefix)) prefix_ = prefix
+   desc = prefix//'oscillation'
+   endfunction description
+
+   subroutine export_tecplot(self, file_name, t, scheme, close_file)
+   !< Export integrand to Tecplot file.
+   class(integrand_oscillation), intent(in)           :: self            !< Advection field.
+   character(*),                 intent(in), optional :: file_name       !< File name.
+   real(R_P),                    intent(in), optional :: t               !< Time.
+   character(*),                 intent(in), optional :: scheme          !< Scheme used to integrate integrand.
+   logical,                      intent(in), optional :: close_file      !< Flag for closing file.
+   logical, save                                      :: is_open=.false. !< Flag for checking if file is open.
+   integer(I_P), save                                 :: file_unit       !< File unit.
+   integer(I_P)                                       :: i               !< Counter.
+
+   if (present(close_file)) then
+      if (close_file .and. is_open) then
+         close(unit=file_unit)
+         is_open = .false.
+      endif
+   else
+      if (present(file_name)) then
+         if (is_open) close(unit=file_unit)
+         open(newunit=file_unit, file=trim(adjustl(file_name)))
+         is_open = .true.
+         write(unit=file_unit, fmt='(A)') 'VARIABLES="t" "x" "y" "amplitude" "phase"'
+      endif
+      if (present(t) .and. present(scheme) .and. is_open) then
+         write(unit=file_unit, fmt='(A)') 'ZONE T="'//trim(adjustl(scheme))//'"'
+         write(unit=file_unit, fmt='(5('//FR_P//',1X))') t, self%U, self%amplitude_phase()
+      elseif (present(t) .and. is_open) then
+         write(unit=file_unit, fmt='(5('//FR_P//',1X))') t, self%U, self%amplitude_phase()
+      endif
+   endif
+   endsubroutine export_tecplot
+
+   subroutine parse_cli(self, cli)
+   !< Initialize from command line interface.
+   class(integrand_oscillation), intent(inout) :: self !< Advection field.
+   type(command_line_interface), intent(inout) :: cli  !< Command line interface handler.
+
+   call cli%get(switch='-f', val=self%f, error=cli%error) ; if (cli%error/=0) stop
+   call cli%get(switch='-U0', val=self%U0, error=cli%error) ; if (cli%error/=0) stop
+   self%U = self%U0
+   endsubroutine parse_cli
+
+   subroutine set_cli(cli)
+   !< Set command line interface.
+   type(command_line_interface), intent(inout) :: cli !< Command line interface handler.
+
+   call cli%add(switch='--frequency', switch_ab='-f', help='frequency', required=.false., def='1e-4', act='store')
+   call cli%add(switch='--U0', switch_ab='-U0', nargs='2', help='initial state', required=.false., def='0.0 1.0', act='store')
+   endsubroutine set_cli
+
+   ! integrand_object deferred methods
    pure function integrand_dimension(self)
    !< return integrand dimension.
    class(integrand_oscillation), intent(in) :: self                !< integrand.
-   integer(i_p)                             :: integrand_dimension !< integrand dimension.
+   integer(I_P)                             :: integrand_dimension !< integrand dimension.
 
    integrand_dimension = size(self%U, dim=1)
    endfunction integrand_dimension
@@ -270,9 +349,9 @@ contains
 
    select type(rhs)
    class is(integrand_oscillation)
-      lhs%U = rhs%U
       lhs%f = rhs%f
       lhs%U0 = rhs%U0
+      lhs%U = rhs%U
    endselect
    endsubroutine assign_integrand
 
