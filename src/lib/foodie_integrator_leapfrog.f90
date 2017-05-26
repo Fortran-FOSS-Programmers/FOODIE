@@ -67,7 +67,6 @@ type, extends(integrator_multistep_object) :: integrator_leapfrog
   contains
     ! deferred methods
     procedure, pass(self) :: class_name           !< Return the class name of schemes.
-    procedure, pass(self) :: description          !< Return pretty-printed object description.
     procedure, pass(self) :: has_fast_mode        !< Return .true. if the integrator class has *fast mode* integrate.
     procedure, pass(lhs)  :: integr_assign_integr !< Operator `=`.
     procedure, pass(self) :: integrate            !< Integrate integrand field.
@@ -90,17 +89,6 @@ contains
 
   class_name = trim(adjustl(class_name_))
   endfunction class_name
-
-  pure function description(self, prefix) result(desc)
-  !< Return a pretty-formatted object description.
-  class(integrator_leapfrog), intent(in)           :: self    !< Integrator.
-  character(*),               intent(in), optional :: prefix  !< Prefixing string.
-  character(len=:), allocatable                    :: desc    !< Description.
-  character(len=:), allocatable                    :: prefix_ !< Prefixing string, local variable.
-
-  prefix_ = '' ; if (present(prefix)) prefix_ = prefix
-  desc = desc//prefix_//'Explicit leapfrog multi-step 2nd order scheme'
-  endfunction description
 
   elemental function has_fast_mode(self)
   !< Return .true. if the integrator class has *fast mode* integrate.
@@ -219,21 +207,22 @@ contains
   logical,                    intent(in), optional :: stop_on_fail !< Stop execution if initialization fail.
 
   if (self%is_supported(scheme=scheme)) then
-    call self%destroy
-    select case(trim(adjustl(scheme)))
-    case('leapfrog_raw')
-       self%nu = 0.01_R_P ; if (present(nu)) self%nu = nu
-       self%alpha = 0.53_R_P ; if (present(alpha)) self%alpha = alpha
-       self%is_filtered = .true.
-    endselect
-    self%autoupdate = .true. ; if (present(autoupdate)) self%autoupdate = autoupdate
-    self%steps = 2
-    self%registers = self%steps
-    if (present(U)) call self%allocate_integrand_members(U=U)
+     call self%destroy
+     self%description_ = trim(adjustl(scheme))
+     select case(trim(adjustl(scheme)))
+     case('leapfrog_raw')
+        self%nu = 0.01_R_P ; if (present(nu)) self%nu = nu
+        self%alpha = 0.53_R_P ; if (present(alpha)) self%alpha = alpha
+        self%is_filtered = .true.
+     endselect
+     self%autoupdate = .true. ; if (present(autoupdate)) self%autoupdate = autoupdate
+     self%steps = 2
+     self%registers = self%steps
+     if (present(U)) call self%allocate_integrand_members(U=U)
   else
-    call self%trigger_error(error=ERROR_UNSUPPORTED_SCHEME,                                   &
-                            error_message='"'//trim(adjustl(scheme))//'" unsupported scheme', &
-                            is_severe=stop_on_fail)
+     call self%trigger_error(error=ERROR_UNSUPPORTED_SCHEME,                                   &
+                             error_message='"'//trim(adjustl(scheme))//'" unsupported scheme', &
+                             is_severe=stop_on_fail)
   endif
   endsubroutine initialize
 

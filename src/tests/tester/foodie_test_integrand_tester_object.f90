@@ -16,14 +16,22 @@ type, abstract, extends(integrand_object) :: integrand_tester_object
    !<
    !< This abstract provided some auxiliary methods useful for the tester machinery.
    contains
-      ! auxiliary methods
-      procedure(export_tecplot_interface), pass(self), deferred :: export_tecplot  !< Export integrand to Tecplot file.
-      procedure(parse_cli_interface),      pass(self), deferred :: parse_cli       !< Initialize from command line interface.
-      procedure(set_cli_interface),        nopass,     deferred :: set_cli         !< Set command line interface.
+      procedure(description_interface),    pass(self), deferred :: description    !< Return an informative description of the test.
+      procedure(export_tecplot_interface), pass(self), deferred :: export_tecplot !< Export integrand to Tecplot file.
+      procedure(parse_cli_interface),      pass(self), deferred :: parse_cli      !< Initialize from command line interface.
+      procedure(set_cli_interface),        nopass,     deferred :: set_cli        !< Set command line interface.
 endtype integrand_tester_object
 
 abstract interface
    !< Abstract interfaces of [[integrand_tester_object]] class.
+   pure function description_interface(self, prefix) result(desc)
+   !< Return informative integrator description.
+   import :: integrand_tester_object
+   class(integrand_tester_object), intent(in)           :: self   !< Integrand.
+   character(*),                   intent(in), optional :: prefix !< Prefixing string.
+   character(len=:), allocatable                        :: desc   !< Description.
+   endfunction description_interface
+
    subroutine export_tecplot_interface(self, file_name, t, scheme, close_file)
    !< Export integrand to Tecplot file.
    import :: integrand_tester_object, R_P
@@ -48,4 +56,3 @@ abstract interface
    endsubroutine set_cli_interface
 endinterface
 endmodule foodie_test_integrand_tester_object
-

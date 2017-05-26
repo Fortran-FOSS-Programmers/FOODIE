@@ -181,7 +181,6 @@ type, extends(integrator_multistage_object) :: integrator_runge_kutta_ls
   contains
     ! deferred methods
     procedure, pass(self) :: class_name           !< Return the class name of schemes.
-    procedure, pass(self) :: description          !< Return pretty-printed object description.
     procedure, pass(self) :: has_fast_mode        !< Return .true. if the integrator class has *fast mode* integrate.
     procedure, pass(lhs)  :: integr_assign_integr !< Operator `=`.
     procedure, pass(self) :: integrate            !< Integrate integrand field.
@@ -203,25 +202,6 @@ contains
 
   class_name = trim(adjustl(class_name_))
   endfunction class_name
-
-  pure function description(self, prefix) result(desc)
-  !< Return a pretty-formatted object description.
-  class(integrator_runge_kutta_ls), intent(in)           :: self             !< Integrator.
-  character(*),                     intent(in), optional :: prefix           !< Prefixing string.
-  character(len=:), allocatable                          :: desc             !< Description.
-  character(len=:), allocatable                          :: prefix_          !< Prefixing string, local variable.
-  character(len=1), parameter                            :: NL=new_line('a') !< New line character.
-  integer(I_P)                                           :: s                !< Counter.
-
-  prefix_ = '' ; if (present(prefix)) prefix_ = prefix
-  desc = ''
-  desc = desc//prefix_//'Low storage (2-registers) Runge-Kutta multi-stage schemes class'//NL
-  desc = desc//prefix_//'  Supported schemes:'//NL
-  do s=lbound(supported_schemes_, dim=1), ubound(supported_schemes_, dim=1) - 1
-    desc = desc//prefix_//'    + '//supported_schemes_(s)//NL
-  enddo
-  desc = desc//prefix_//'    + '//supported_schemes_(ubound(supported_schemes_, dim=1))
-  endfunction description
 
   elemental function has_fast_mode(self)
   !< Return .true. if the integrator class has *fast mode* integrate.
@@ -336,6 +316,7 @@ contains
 
   if (self%is_supported(scheme=scheme)) then
     call self%destroy
+    self%description_ = trim(adjustl(scheme))
     select case(trim(adjustl(scheme)))
     case('runge_kutta_ls_stages_1_order_1')
       self%stages = 1

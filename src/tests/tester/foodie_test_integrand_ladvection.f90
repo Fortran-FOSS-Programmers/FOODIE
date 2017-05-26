@@ -9,7 +9,7 @@ use, intrinsic :: iso_fortran_env, only : stderr=>error_unit
 use flap, only : command_line_interface
 use foodie, only : integrand_object
 use foodie_test_integrand_tester_object, only : integrand_tester_object
-use penf, only : FR_P, I_P, R_P, str
+use penf, only : FR_P, I_P, R_P, str, strz
 use wenoof, only : interpolator_object, wenoof_create
 
 implicit none
@@ -62,6 +62,7 @@ type, extends(integrand_tester_object) :: integrand_ladvection
       procedure, pass(self), public :: exact_solution   !< Return exact solution.
       procedure, pass(self), public :: output           !< Extract integrand state field.
       ! integrand_tester_object deferred methods
+      procedure, pass(self), public :: description    !< Return an informative description of the test.
       procedure, pass(self), public :: export_tecplot !< Export integrand to Tecplot file.
       procedure, pass(self), public :: parse_cli      !< Initialize from command line interface.
       procedure, nopass,     public :: set_cli        !< Set command line interface.
@@ -142,6 +143,17 @@ contains
    endfunction output
 
    ! integrand_tester_object deferred methods
+   pure function description(self, prefix) result(desc)
+   !< Return informative integrator description.
+   class(integrand_ladvection), intent(in)           :: self    !< Integrator.
+   character(*),                intent(in), optional :: prefix  !< Prefixing string.
+   character(len=:), allocatable                     :: desc    !< Description.
+   character(len=:), allocatable                     :: prefix_ !< Prefixing string, local variable.
+
+   prefix_ = '' ; if (present(prefix)) prefix_ = prefix
+   desc = prefix//'linear_advection-Ni_'//trim(strz(self%Ni, 10))
+   endfunction description
+
    subroutine export_tecplot(self, file_name, t, scheme, close_file)
    !< Export integrand to Tecplot file.
    class(integrand_ladvection), intent(in)           :: self            !< Advection field.

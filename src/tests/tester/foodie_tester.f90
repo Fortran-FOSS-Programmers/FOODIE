@@ -72,7 +72,6 @@ contains
    !< Execute test(s).
    class(test_object), intent(inout) :: self                  !< Test.
    character(99), allocatable        :: integrator_schemes(:) !< Name of FOODIE integrator schemes.
-   character(len=:), allocatable     :: output_file_name      !< File name of output results file.
    integer(I_P)                      :: s                     !< Counter.
    integer(I_P)                      :: t                     !< Counter.
 
@@ -88,28 +87,15 @@ contains
    endif
    do s=1, size(integrator_schemes, dim=1)
       do t=1, size(self%Dt)
-         select type(integrand=>self%integrand_0)
-         type is(integrand_ladvection)
-            output_file_name = trim(adjustl(self%output))//'-'//&
-                               trim(adjustl(self%test))//'-'//&
-                               trim(adjustl(integrator_schemes(s)))//'-'//&
-                               trim(strz(integrand%Ni, 10))//'-steps_'//&
-                               trim(strz(int(self%final_time/self%Dt(t)), 10))//'.dat'
-         type is(integrand_oscillation)
-            output_file_name = trim(adjustl(self%output))//'-'//&
-                               trim(adjustl(self%test))//'-'//&
-                               trim(adjustl(integrator_schemes(s)))//'-steps_'//&
-                               trim(strz(int(self%final_time/self%Dt(t)), 10))//'.dat'
-         endselect
-         call integrate(scheme=trim(integrator_schemes(s)),  &
-                        integrand_0=self%integrand_0,        &
-                        Dt=self%Dt(t),                       &
-                        final_time=self%final_time,          &
-                        iterations=self%implicit_iterations, &
-                        stages=self%stages,                  &
-                        is_fast=self%is_fast,                &
-                        save_results=self%save_results,      &
-                        output_file_name=output_file_name,   &
+         call integrate(scheme=trim(integrator_schemes(s)),          &
+                        integrand_0=self%integrand_0,                &
+                        Dt=self%Dt(t),                               &
+                        final_time=self%final_time,                  &
+                        iterations=self%implicit_iterations,         &
+                        stages=self%stages,                          &
+                        is_fast=self%is_fast,                        &
+                        save_results=self%save_results,              &
+                        output_base_name=trim(adjustl(self%output)), &
                         save_frequency=self%save_frequency)
       enddo
    enddo
@@ -241,7 +227,7 @@ contains
    endif
    endsubroutine check_scheme_has_fast_mode
 
-   subroutine integrate(scheme, integrand_0, Dt, final_time, iterations, stages, is_fast, save_results, output_file_name, &
+   subroutine integrate(scheme, integrand_0, Dt, final_time, iterations, stages, is_fast, save_results, output_base_name, &
                         save_frequency)
    !< Integrate integrand by means of the given scheme.
    character(*),                   intent(in)  :: scheme           !< Selected scheme.
@@ -252,7 +238,7 @@ contains
    integer(I_P),                   intent(in)  :: stages           !< Number of stages.
    logical,                        intent(in)  :: is_fast          !< Activate fast mode integration.
    logical,                        intent(in)  :: save_results     !< Save results.
-   character(*),                   intent(in)  :: output_file_name !< File name of output results file.
+   character(*),                   intent(in)  :: output_base_name !< Base name of output results file.
    integer(I_P),                   intent(in)  :: save_frequency   !< Save frequency.
    class(integrator_object), allocatable       :: integrator       !< The integrator.
    type(integrator_runge_kutta_ssp)            :: integrator_start !< The (auto) start integrator.
@@ -270,7 +256,11 @@ contains
 
    step = 0
    time = 0._R_P
-   if (save_results) call integrand%export_tecplot(file_name=output_file_name, t=time, scheme=scheme)
+   if (save_results) call integrand%export_tecplot(file_name=output_base_name//                                     &
+                                                             integrand%description(prefix='-')//                    &
+                                                             integrator%description(prefix='-')//                   &
+                                                             '-steps_'//trim(strz(int(final_time/Dt), 10))//'.dat', &
+                                                             t=time, scheme=scheme)
 
    select type(integrator)
    class is(integrator_multistage_object)

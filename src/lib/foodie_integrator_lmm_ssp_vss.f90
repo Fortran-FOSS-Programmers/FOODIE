@@ -67,7 +67,6 @@ type, extends(integrator_multistep_object) :: integrator_lmm_ssp_vss
   contains
     ! deferred methods
     procedure, pass(self) :: class_name           !< Return the class name of schemes.
-    procedure, pass(self) :: description          !< Return pretty-printed object description.
     procedure, pass(self) :: has_fast_mode        !< Return .true. if the integrator class has *fast mode* integrate.
     procedure, pass(lhs)  :: integr_assign_integr !< Operator `=`.
     procedure, pass(self) :: integrate            !< Integrate integrand field.
@@ -114,25 +113,6 @@ contains
 
   class_name = trim(adjustl(class_name_))
   endfunction class_name
-
-  pure function description(self, prefix) result(desc)
-  !< Return a pretty-formatted object description.
-  class(integrator_lmm_ssp_vss), intent(in)           :: self             !< Integrator.
-  character(*),                  intent(in), optional :: prefix           !< Prefixing string.
-  character(len=:), allocatable                       :: desc             !< Description.
-  character(len=:), allocatable                       :: prefix_          !< Prefixing string, local variable.
-  character(len=1), parameter                         :: NL=new_line('a') !< New line character.
-  integer(I_P)                                        :: s                !< Counter.
-
-  prefix_ = '' ; if (present(prefix)) prefix_ = prefix
-  desc = ''
-  desc = desc//prefix_//'Strong Stability preserving Linear-Multistep-Methods Variable Stepsize class'//NL
-  desc = desc//prefix_//'  Supported schemes:'//NL
-  do s=lbound(supported_schemes_, dim=1), ubound(supported_schemes_, dim=1) - 1
-    desc = desc//prefix_//'    + '//supported_schemes_(s)//NL
-  enddo
-  desc = desc//prefix_//'    + '//supported_schemes_(ubound(supported_schemes_, dim=1))
-  endfunction description
 
   elemental function has_fast_mode(self)
   !< Return .true. if the integrator class has *fast mode* integrate.
@@ -220,36 +200,37 @@ contains
   logical,                       intent(in), optional :: stop_on_fail !< Stop execution if initialization fail.
 
   if (self%is_supported(scheme=scheme)) then
-    call self%destroy
-    select case(trim(adjustl(scheme)))
-    case('lmm_ssp_vss_steps_2_order_2')
-      self%steps = 2
-      self%integrate_ => integrate_order_2
-      self%integrate_fast_ => integrate_order_2_fast
-    case('lmm_ssp_vss_steps_3_order_2')
-      self%steps = 3
-      self%integrate_ => integrate_order_2
-      self%integrate_fast_ => integrate_order_2_fast
-    case('lmm_ssp_vss_steps_3_order_3')
-      self%steps = 3
-      self%integrate_ => integrate_order_3
-      self%integrate_fast_ => integrate_order_3_fast
-    case('lmm_ssp_vss_steps_4_order_3')
-      self%steps = 4
-      self%integrate_ => integrate_order_3
-      self%integrate_fast_ => integrate_order_3_fast
-    case('lmm_ssp_vss_steps_5_order_3')
-      self%steps = 5
-      self%integrate_ => integrate_order_3
-      self%integrate_fast_ => integrate_order_3_fast
-    endselect
-    self%autoupdate = .true. ; if (present(autoupdate)) self%autoupdate = autoupdate
-    self%registers = self%steps
-    if (present(U)) call self%allocate_integrand_members(U=U)
+     call self%destroy
+     self%description_ = trim(adjustl(scheme))
+     select case(trim(adjustl(scheme)))
+     case('lmm_ssp_vss_steps_2_order_2')
+       self%steps = 2
+       self%integrate_ => integrate_order_2
+       self%integrate_fast_ => integrate_order_2_fast
+     case('lmm_ssp_vss_steps_3_order_2')
+       self%steps = 3
+       self%integrate_ => integrate_order_2
+       self%integrate_fast_ => integrate_order_2_fast
+     case('lmm_ssp_vss_steps_3_order_3')
+       self%steps = 3
+       self%integrate_ => integrate_order_3
+       self%integrate_fast_ => integrate_order_3_fast
+     case('lmm_ssp_vss_steps_4_order_3')
+       self%steps = 4
+       self%integrate_ => integrate_order_3
+       self%integrate_fast_ => integrate_order_3_fast
+     case('lmm_ssp_vss_steps_5_order_3')
+       self%steps = 5
+       self%integrate_ => integrate_order_3
+       self%integrate_fast_ => integrate_order_3_fast
+     endselect
+     self%autoupdate = .true. ; if (present(autoupdate)) self%autoupdate = autoupdate
+     self%registers = self%steps
+     if (present(U)) call self%allocate_integrand_members(U=U)
   else
-    call self%trigger_error(error=ERROR_UNSUPPORTED_SCHEME,                                   &
-                            error_message='"'//trim(adjustl(scheme))//'" unsupported scheme', &
-                            is_severe=stop_on_fail)
+     call self%trigger_error(error=ERROR_UNSUPPORTED_SCHEME,                                   &
+                             error_message='"'//trim(adjustl(scheme))//'" unsupported scheme', &
+                             is_severe=stop_on_fail)
   endif
   endsubroutine initialize
 

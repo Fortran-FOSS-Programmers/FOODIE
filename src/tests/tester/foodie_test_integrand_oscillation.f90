@@ -54,6 +54,7 @@ type, extends(integrand_tester_object) :: integrand_oscillation
       procedure, pass(self), public :: initialize      !< Initialize integrand.
       procedure, pass(self), public :: output          !< Extract integrand state field.
       ! integrand_tester_object deferred methods
+      procedure, pass(self), public :: description    !< Return an informative description of the test.
       procedure, pass(self), public :: export_tecplot !< Export integrand to Tecplot file.
       procedure, pass(self), public :: parse_cli      !< Initialize from command line interface.
       procedure, nopass,     public :: set_cli        !< Set command line interface.
@@ -128,6 +129,17 @@ contains
    endfunction output
 
    ! integrand_tester_object deferred methods
+   pure function description(self, prefix) result(desc)
+   !< Return informative integrator description.
+   class(integrand_oscillation), intent(in)           :: self    !< Integrator.
+   character(*),                 intent(in), optional :: prefix  !< Prefixing string.
+   character(len=:), allocatable                      :: desc    !< Description.
+   character(len=:), allocatable                      :: prefix_ !< Prefixing string, local variable.
+
+   prefix_ = '' ; if (present(prefix)) prefix_ = prefix
+   desc = prefix//'oscillation'
+   endfunction description
+
    subroutine export_tecplot(self, file_name, t, scheme, close_file)
    !< Export integrand to Tecplot file.
    class(integrand_oscillation), intent(in)           :: self            !< Advection field.
