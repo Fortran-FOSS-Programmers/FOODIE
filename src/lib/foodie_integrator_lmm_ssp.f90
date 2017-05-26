@@ -28,7 +28,7 @@ module foodie_integrator_lmm_ssp
 
 use foodie_error_codes, only : ERROR_UNSUPPORTED_SCHEME
 use foodie_integrand_object, only : integrand_object
-use foodie_integrator_multistep_explicit_object, only : integrator_multistep_explicit_object
+use foodie_integrator_multistep_object, only : integrator_multistep_object
 use foodie_integrator_object, only : integrator_object
 use penf, only : I_P, R_P
 
@@ -43,7 +43,7 @@ character(len=99), parameter :: supported_schemes_(1:3)=[trim(class_name_)//'_st
 
 logical, parameter :: has_fast_mode_=.true.  !< Flag to check if integrator provides *fast mode* integrate.
 
-type, extends(integrator_multistep_explicit_object) :: integrator_lmm_ssp
+type, extends(integrator_multistep_object) :: integrator_lmm_ssp
   !< FOODIE integrator: provide an explicit class of Linear Multi-step Methods (LLM) with Strong Stability Preserving property,
   !< from 2nd to 3rd order accurate.
   !<

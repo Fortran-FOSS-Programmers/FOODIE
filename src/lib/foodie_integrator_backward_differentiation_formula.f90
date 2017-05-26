@@ -35,7 +35,7 @@ module foodie_integrator_backward_differentiation_formula
 
 use foodie_error_codes, only : ERROR_UNSUPPORTED_SCHEME
 use foodie_integrand_object, only : integrand_object
-use foodie_integrator_multistep_implicit_object, only : integrator_multistep_implicit_object
+use foodie_integrator_multistep_object, only : integrator_multistep_object
 use foodie_integrator_object, only : integrator_object
 use penf, only : I_P, R_P
 
@@ -53,7 +53,7 @@ character(len=99), parameter :: supported_schemes_(1:6)=[trim(class_name_)//'_1'
 
 logical, parameter :: has_fast_mode_=.true.  !< Flag to check if integrator provides *fast mode* integrate.
 
-type, extends(integrator_multistep_implicit_object) :: integrator_back_df
+type, extends(integrator_multistep_object) :: integrator_back_df
   !< FOODIE integrator: provide an implicit class of Backward-Differentiation-Formula multi-step schemes, from 1st to 6th order
   !< accurate.
   !<

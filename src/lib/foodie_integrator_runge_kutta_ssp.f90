@@ -102,7 +102,7 @@ module foodie_integrator_runge_kutta_ssp
 
 use foodie_error_codes, only : ERROR_UNSUPPORTED_SCHEME
 use foodie_integrand_object, only : integrand_object
-use foodie_integrator_multistage_explicit_object, only : integrator_multistage_explicit_object
+use foodie_integrator_multistage_object, only : integrator_multistage_object
 use foodie_integrator_object, only : integrator_object
 use penf, only : I_P, R_P
 
@@ -118,7 +118,7 @@ character(len=99), parameter :: supported_schemes_(1:4)=[trim(class_name_)//'_st
 
 logical, parameter :: has_fast_mode_=.true. !< Flag to check if integrator provides *fast mode* integrate.
 
-type, extends(integrator_multistage_explicit_object) :: integrator_runge_kutta_ssp
+type, extends(integrator_multistage_object) :: integrator_runge_kutta_ssp
   !< FOODIE integrator: provide an explicit class of SSP Runge-Kutta schemes, from 1st to 4th order accurate.
   !<
   !< @note The integrator must be created or initialized (initialize the RK coefficients) before used.

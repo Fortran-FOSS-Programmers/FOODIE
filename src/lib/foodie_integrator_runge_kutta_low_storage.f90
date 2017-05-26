@@ -149,7 +149,7 @@ module foodie_integrator_runge_kutta_low_storage
 
 use foodie_error_codes, only : ERROR_UNSUPPORTED_SCHEME
 use foodie_integrand_object, only : integrand_object
-use foodie_integrator_multistage_explicit_object, only : integrator_multistage_explicit_object
+use foodie_integrator_multistage_object, only : integrator_multistage_object
 use foodie_integrator_object, only : integrator_object
 use penf, only : I_P, I8P, R_P
 
@@ -170,7 +170,7 @@ integer(I_P), parameter :: registers=2 !< Registers used (2N schemes).
 
 logical, parameter :: has_fast_mode_=.true. !< Flag to check if integrator provides *fast mode* integrate.
 
-type, extends(integrator_multistage_explicit_object) :: integrator_runge_kutta_ls
+type, extends(integrator_multistage_object) :: integrator_runge_kutta_ls
   !< FOODIE integrator: provide an explicit class of low storage Runge-Kutta schemes, from 1st to 4th order accurate.
   !<
   !< @note The integrator must be created or initialized (initialize the RK coefficients) before used.

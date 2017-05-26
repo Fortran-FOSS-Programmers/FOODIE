@@ -16,7 +16,7 @@ module foodie_integrator_euler_explicit
 
 use foodie_error_codes, only : ERROR_UNSUPPORTED_SCHEME
 use foodie_integrand_object, only : integrand_object
-use foodie_integrator_multistage_explicit_object, only : integrator_multistage_explicit_object
+use foodie_integrator_multistage_object, only : integrator_multistage_object
 use foodie_integrator_object, only : integrator_object
 use penf, only : I_P, R_P
 
@@ -29,7 +29,7 @@ character(len=99), parameter :: supported_schemes_(1:1)=[trim(class_name_)] !< L
 
 logical, parameter :: has_fast_mode_=.true. !< Flag to check if integrator provides *fast mode* integrate.
 
-type, extends(integrator_multistage_explicit_object) :: integrator_euler_explicit
+type, extends(integrator_multistage_object) :: integrator_euler_explicit
   !< FOODIE integrator: provide explicit Euler scheme, it being 1st order accurate.
   contains
     ! deferred methods

@@ -80,7 +80,7 @@ use foodie_error_codes, only : ERROR_UNSUPPORTED_SCHEME
 use foodie_integrand_object, only : integrand_object
 use foodie_integrator_adams_bashforth, only : integrator_adams_bashforth
 use foodie_integrator_adams_moulton, only : integrator_adams_moulton
-use foodie_integrator_multistep_implicit_object, only : integrator_multistep_implicit_object
+use foodie_integrator_multistep_object, only : integrator_multistep_object
 use foodie_integrator_object, only : integrator_object
 use penf, only : I_P, R_P
 
@@ -108,7 +108,7 @@ character(len=99), parameter :: supported_schemes_(1:16)=[trim(class_name_)//'_1
 
 logical, parameter :: has_fast_mode_=.true.  !< Flag to check if integrator provides *fast mode* integrate.
 
-type, extends(integrator_multistep_implicit_object) :: integrator_adams_bashforth_moulton
+type, extends(integrator_multistep_object) :: integrator_adams_bashforth_moulton
   !< FOODIE integrator: provide an explicit class of Adams-Bashforth-Moulton multi-step schemes, from 1st to 4rd order accurate.
   !<
   !< @note The integrator must be created or initialized (predictor and corrector schemes selection) before used.

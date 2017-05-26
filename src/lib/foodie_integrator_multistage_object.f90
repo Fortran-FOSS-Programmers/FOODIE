@@ -1,7 +1,7 @@
-!< Define the abstract type [[integrator_multistage_explicit_object]] of FOODIE ODE integrators.
+!< Define the abstract type [[integrator_multistage_object]] of FOODIE ODE integrators.
 
-module foodie_integrator_multistage_explicit_object
-!< Define the abstract type [[integrator_multistage_explicit_object]] of FOODIE ODE integrators.
+module foodie_integrator_multistage_object
+!< Define the abstract type [[integrator_multistage_object]] of FOODIE ODE integrators.
 
 use, intrinsic :: iso_fortran_env, only : stderr=>error_unit
 use foodie_integrand_object, only : integrand_object
@@ -10,9 +10,9 @@ use penf, only : I_P, R_P
 
 implicit none
 private
-public :: integrator_multistage_explicit_object
+public :: integrator_multistage_object
 
-type, extends(integrator_object), abstract :: integrator_multistage_explicit_object
+type, extends(integrator_object), abstract :: integrator_multistage_object
    !< Abstract type of FOODIE ODE integrators of the multistage family.
    integer(I_P)                         :: registers !< Number of registers used for stages.
    integer(I_P)                         :: stages    !< Number of stages.
@@ -29,30 +29,30 @@ type, extends(integrator_object), abstract :: integrator_multistage_explicit_obj
       procedure, pass(self) :: steps_number  !< Return number of steps used.
       ! public methods
       procedure, pass(self) :: allocate_integrand_members !< Allocate integrand members.
-      procedure, pass(lhs)  :: assign_multistage          !< Assign members of [[integrator_multistage_explicit_object]] and parents.
+      procedure, pass(lhs)  :: assign_multistage          !< Assign members of [[integrator_multistage_object]] and parents.
       procedure, pass(self) :: destroy_multistage         !< Destroy the integrator.
-endtype integrator_multistage_explicit_object
+endtype integrator_multistage_object
 
 abstract interface
-   !< Abstract interfaces of deferred methods of [[integrator_multistage_explicit_object]].
+   !< Abstract interfaces of deferred methods of [[integrator_multistage_object]].
    subroutine integrate_interface(self, U, Dt, t, new_Dt)
    !< Integrate integrand field.
-   import :: integrand_object, integrator_multistage_explicit_object, R_P
-   class(integrator_multistage_explicit_object), intent(inout)         :: self   !< Integrator.
-   class(integrand_object),                      intent(inout)         :: U      !< Integrand.
-   real(R_P),                                    intent(in)            :: Dt     !< Time step.
-   real(R_P),                                    intent(in)            :: t      !< Time.
-   real(R_P),                                    intent(out), optional :: new_Dt !< New adapted time step.
+   import :: integrand_object, integrator_multistage_object, R_P
+   class(integrator_multistage_object), intent(inout)         :: self   !< Integrator.
+   class(integrand_object),             intent(inout)         :: U      !< Integrand.
+   real(R_P),                           intent(in)            :: Dt     !< Time step.
+   real(R_P),                           intent(in)            :: t      !< Time.
+   real(R_P),                           intent(out), optional :: new_Dt !< New adapted time step.
    endsubroutine integrate_interface
 
    subroutine integrate_fast_interface(self, U, Dt, t, new_Dt)
    !< Integrate integrand field, fast mode.
-   import :: integrand_object, integrator_multistage_explicit_object, R_P
-   class(integrator_multistage_explicit_object), intent(inout)         :: self   !< Integrator.
-   class(integrand_object),                      intent(inout)         :: U      !< Field to be integrated.
-   real(R_P),                                    intent(in)            :: Dt     !< Time step.
-   real(R_P),                                    intent(in)            :: t      !< Time.
-   real(R_P),                                    intent(out), optional :: new_Dt !< New adapted time step.
+   import :: integrand_object, integrator_multistage_object, R_P
+   class(integrator_multistage_object), intent(inout)         :: self   !< Integrator.
+   class(integrand_object),             intent(inout)         :: U      !< Field to be integrated.
+   real(R_P),                           intent(in)            :: Dt     !< Time step.
+   real(R_P),                           intent(in)            :: t      !< Time.
+   real(R_P),                           intent(out), optional :: new_Dt !< New adapted time step.
    endsubroutine integrate_fast_interface
 endinterface
 
@@ -60,32 +60,32 @@ contains
    ! deferred methods
    elemental function is_multistage(self)
    !< Return .true. for multistage integrator.
-   class(integrator_multistage_explicit_object), intent(in) :: self          !< Integrator.
-   logical                                                  :: is_multistage !< Inquire result.
+   class(integrator_multistage_object), intent(in) :: self          !< Integrator.
+   logical                                         :: is_multistage !< Inquire result.
 
    is_multistage = .true.
    endfunction is_multistage
 
    elemental function is_multistep(self)
    !< Return .true. for multistage integrator.
-   class(integrator_multistage_explicit_object), intent(in) :: self         !< Integrator.
-   logical                                                  :: is_multistep !< Inquire result.
+   class(integrator_multistage_object), intent(in) :: self         !< Integrator.
+   logical                                         :: is_multistep !< Inquire result.
 
    is_multistep = .false.
    endfunction is_multistep
 
    elemental function stages_number(self)
    !< Return number of stages used.
-   class(integrator_multistage_explicit_object), intent(in) :: self          !< Integrator.
-   integer(I_P)                                             :: stages_number !< Number of stages used.
+   class(integrator_multistage_object), intent(in) :: self          !< Integrator.
+   integer(I_P)                                    :: stages_number !< Number of stages used.
 
    stages_number = self%stages
    endfunction stages_number
 
    elemental function steps_number(self)
    !< Return number of steps used.
-   class(integrator_multistage_explicit_object), intent(in) :: self         !< Integrator.
-   integer(I_P)                                             :: steps_number !< Number of steps used.
+   class(integrator_multistage_object), intent(in) :: self         !< Integrator.
+   integer(I_P)                                    :: steps_number !< Number of steps used.
 
    steps_number = 0
    endfunction steps_number
@@ -95,9 +95,9 @@ contains
    !< Allocate members of interpolator being of [[integrand_object]] class.
    !<
    !< @note It is assumed that the integrator has been properly initialized before calling this method.
-   class(integrator_multistage_explicit_object), intent(inout) :: self !< Integrator.
-   class(integrand_object),                      intent(in)    :: U    !< Integrand.
-   integer(I_P)                                                :: s    !< Counter.
+   class(integrator_multistage_object), intent(inout) :: self !< Integrator.
+   class(integrand_object),             intent(in)    :: U    !< Integrand.
+   integer(I_P)                                       :: s    !< Counter.
 
    if (self%is_multistage() .and. self%registers > 0) then
       if (allocated(self%stage)) deallocate(self%stage)
@@ -114,14 +114,14 @@ contains
    endsubroutine allocate_integrand_members
 
    pure subroutine assign_multistage(lhs, rhs)
-   !< Assign members of [[integrator_multistage_explicit_object]] and parents.
-   class(integrator_multistage_explicit_object), intent(inout) :: lhs !< Left hand side.
-   class(integrator_object),                     intent(in)    :: rhs !< Right hand side.
-   integer(I_P)                                                :: s   !< Counter.
+   !< Assign members of [[integrator_multistage_object]] and parents.
+   class(integrator_multistage_object), intent(inout) :: lhs !< Left hand side.
+   class(integrator_object),            intent(in)    :: rhs !< Right hand side.
+   integer(I_P)                                       :: s   !< Counter.
 
    call lhs%assign_abstract(rhs=rhs)
    select type(rhs)
-   class is (integrator_multistage_explicit_object)
+   class is (integrator_multistage_object)
      lhs%registers = rhs%registers
      lhs%stages = rhs%stages
      if (allocated(lhs%stage)) deallocate(lhs%stage)
@@ -141,7 +141,7 @@ contains
 
    elemental subroutine destroy_multistage(self)
    !< Destroy the integrator.
-   class(integrator_multistage_explicit_object), intent(inout) :: self !< Integrator.
+   class(integrator_multistage_object), intent(inout) :: self !< Integrator.
 
    call self%destroy_abstract
    self%registers = 0
@@ -149,4 +149,4 @@ contains
    if (allocated(self%stage)) deallocate(self%stage)
    if (allocated(self%buffer)) deallocate(self%buffer)
    endsubroutine destroy_multistage
-endmodule foodie_integrator_multistage_explicit_object
+endmodule foodie_integrator_multistage_object
