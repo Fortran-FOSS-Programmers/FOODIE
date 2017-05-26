@@ -5,13 +5,14 @@ module foodie_test_integrand_oscillation
 
 use flap, only : command_line_interface
 use foodie, only : integrand_object
+use foodie_test_integrand_tester_object, only : integrand_tester_object
 use penf, only : FR_P, R_P, I_P, str
 
 implicit none
 private
 public :: integrand_oscillation
 
-type, extends(integrand_object) :: integrand_oscillation
+type, extends(integrand_tester_object) :: integrand_oscillation
    !< The oscillation equations field.
    !<
    !< It is a FOODIE integrand class concrete extension.
@@ -50,12 +51,13 @@ type, extends(integrand_object) :: integrand_oscillation
       ! auxiliary methods
       procedure, pass(self), public :: amplitude_phase !< Return amplitude and phase of the oscillation.
       procedure, pass(self), public :: exact_solution  !< Return exact solution.
-      procedure, pass(self), public :: export_tecplot  !< Export integrand to Tecplot file.
       procedure, pass(self), public :: initialize      !< Initialize integrand.
       procedure, pass(self), public :: output          !< Extract integrand state field.
-      procedure, pass(self), public :: parse_cli       !< Initialize from command line interface.
-      procedure, nopass,     public :: set_cli         !< Set command line interface.
-      ! public deferred methods
+      ! integrand_tester_object deferred methods
+      procedure, pass(self), public :: export_tecplot !< Export integrand to Tecplot file.
+      procedure, pass(self), public :: parse_cli      !< Initialize from command line interface.
+      procedure, nopass,     public :: set_cli        !< Set command line interface.
+      ! integrand_object deferred methods
       procedure, pass(self), public :: integrand_dimension !< Return integrand dimension.
       procedure, pass(self), public :: t => dU_dt          !< Time derivative, residuals.
       ! operators
@@ -106,6 +108,26 @@ contains
    exact(2) = self%U0(1) * sin(self%f * t) + self%U0(2) * cos(self%f * t)
    endfunction exact_solution
 
+   pure subroutine initialize(self, U0, frequency)
+   !< Initialize integrand.
+   class(integrand_oscillation), intent(inout) :: self      !< Integrand.
+   real(R_P),                    intent(in)    :: U0(1:2)   !< Initial state.
+   real(R_P),                    intent(in)    :: frequency !< Frequency of oscillation.
+
+   self%U = U0
+   self%f = frequency
+   self%U0 = U0
+   endsubroutine initialize
+
+   pure function output(self) result(state)
+   !< Extract integrand state field.
+   class(integrand_oscillation), intent(in) :: self       !< Integrand.
+   real(R_P)                                :: state(1:2) !< State.
+
+   state = self%U
+   endfunction output
+
+   ! integrand_tester_object deferred methods
    subroutine export_tecplot(self, file_name, t, scheme, close_file)
    !< Export integrand to Tecplot file.
    class(integrand_oscillation), intent(in)           :: self            !< Advection field.
@@ -138,30 +160,10 @@ contains
    endif
    endsubroutine export_tecplot
 
-   pure subroutine initialize(self, U0, frequency)
-   !< Initialize integrand.
-   class(integrand_oscillation), intent(inout) :: self      !< Integrand.
-   real(R_P),                    intent(in)    :: U0(1:2)   !< Initial state.
-   real(R_P),                    intent(in)    :: frequency !< Frequency of oscillation.
-
-   self%U = U0
-   self%f = frequency
-   self%U0 = U0
-   endsubroutine initialize
-
-   pure function output(self) result(state)
-   !< Extract integrand state field.
-   class(integrand_oscillation), intent(in) :: self       !< Integrand.
-   real(R_P)                                :: state(1:2) !< State.
-
-   state = self%U
-   endfunction output
-
    subroutine parse_cli(self, cli)
    !< Initialize from command line interface.
-   class(integrand_oscillation), intent(inout) :: self          !< Advection field.
-   type(command_line_interface), intent(inout) :: cli           !< Command line interface handler.
-   character(99)                               :: initial_state !< Initial state.
+   class(integrand_oscillation), intent(inout) :: self !< Advection field.
+   type(command_line_interface), intent(inout) :: cli  !< Command line interface handler.
 
    call cli%get(switch='-f', val=self%f, error=cli%error) ; if (cli%error/=0) stop
    call cli%get(switch='-U0', val=self%U0, error=cli%error) ; if (cli%error/=0) stop
@@ -176,7 +178,7 @@ contains
    call cli%add(switch='--U0', switch_ab='-U0', nargs='2', help='initial state', required=.false., def='0.0 1.0', act='store')
    endsubroutine set_cli
 
-   ! deferred methods
+   ! integrand_object deferred methods
    pure function integrand_dimension(self)
    !< return integrand dimension.
    class(integrand_oscillation), intent(in) :: self                !< integrand.

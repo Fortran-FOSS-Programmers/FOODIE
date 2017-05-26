@@ -8,6 +8,7 @@ module foodie_test_integrand_ladvection
 use, intrinsic :: iso_fortran_env, only : stderr=>error_unit
 use flap, only : command_line_interface
 use foodie, only : integrand_object
+use foodie_test_integrand_tester_object, only : integrand_tester_object
 use penf, only : FR_P, I_P, R_P, str
 use wenoof, only : interpolator_object, wenoof_create
 
@@ -15,7 +16,7 @@ implicit none
 private
 public :: integrand_ladvection
 
-type, extends(integrand_object) :: integrand_ladvection
+type, extends(integrand_tester_object) :: integrand_ladvection
    !< 1D linear advection field.
    !<
    !< It is a FOODIE integrand class concrete extension.
@@ -56,15 +57,15 @@ type, extends(integrand_object) :: integrand_ladvection
    class(interpolator_object), allocatable :: interpolator    !< WENO interpolator.
    contains
       ! auxiliary methods
-      procedure, pass(self), public :: destroy                       !< Destroy field.
-      procedure, pass(self), public :: dt => compute_dt              !< Compute the current time step, by means of CFL condition.
-      procedure, pass(self), public :: exact_solution                !< Return exact solution.
-      procedure, pass(self), public :: export_tecplot                !< Export integrand to Tecplot file.
-      procedure, pass(self), public :: output                        !< Extract integrand state field.
-      procedure, pass(self), public :: parse_cli                     !< Initialize from command line interface.
-      procedure, nopass,     public :: set_cli                       !< Set command line interface.
-      procedure, pass(self), public :: set_square_wave_initial_state !< Set initial state as a square wave.
-      ! public deferred methods
+      procedure, pass(self), public :: destroy          !< Destroy field.
+      procedure, pass(self), public :: dt => compute_dt !< Compute the current time step, by means of CFL condition.
+      procedure, pass(self), public :: exact_solution   !< Return exact solution.
+      procedure, pass(self), public :: output           !< Extract integrand state field.
+      ! integrand_tester_object deferred methods
+      procedure, pass(self), public :: export_tecplot !< Export integrand to Tecplot file.
+      procedure, pass(self), public :: parse_cli      !< Initialize from command line interface.
+      procedure, nopass,     public :: set_cli        !< Set command line interface.
+      ! integrand_object deferred methods
       procedure, pass(self), public :: integrand_dimension !< Return integrand dimension.
       procedure, pass(self), public :: t => dU_dt          !< Time derivative, residuals.
       ! operators
@@ -93,8 +94,9 @@ type, extends(integrand_object) :: integrand_ladvection
       ! procedure, pass(opr),  public :: integrand_multiply_real_scalar_fast !< `* real_scalar` fast operator.
       ! procedure, pass(opr),  public :: integrand_subtract_integrand_fast   !< `-` fast operator.
       ! private methods
-      procedure, pass(self), private :: impose_boundary_conditions !< Impose boundary conditions.
-      procedure, pass(self), private :: reconstruct_interfaces     !< Reconstruct interface states.
+      procedure, pass(self), private :: impose_boundary_conditions    !< Impose boundary conditions.
+      procedure, pass(self), private :: reconstruct_interfaces        !< Reconstruct interface states.
+      procedure, pass(self), private :: set_square_wave_initial_state !< Set initial state as a square wave.
 endtype integrand_ladvection
 
 contains
@@ -131,6 +133,15 @@ contains
 
    endfunction exact_solution
 
+   pure function output(self) result(state)
+   !< Output the advection field state.
+   class(integrand_ladvection), intent(in) :: self     !< Advection field.
+   real(R_P), allocatable                  :: state(:) !< Advection state
+
+   state = self%u(1:self%Ni)
+   endfunction output
+
+   ! integrand_tester_object deferred methods
    subroutine export_tecplot(self, file_name, t, scheme, close_file)
    !< Export integrand to Tecplot file.
    class(integrand_ladvection), intent(in)           :: self            !< Advection field.
@@ -162,14 +173,6 @@ contains
       endif
    endif
    endsubroutine export_tecplot
-
-   pure function output(self) result(state)
-   !< Output the advection field state.
-   class(integrand_ladvection), intent(in) :: self     !< Advection field.
-   real(R_P), allocatable                  :: state(:) !< Advection state
-
-   state = self%u(1:self%Ni)
-   endfunction output
 
    subroutine parse_cli(self, cli)
    !< Initialize from command line interface.
@@ -218,7 +221,7 @@ contains
                 def='square_wave', choices='square_wave')
    endsubroutine set_cli
 
-   ! ADT integrand deferred methods
+   ! integrand_object deferred methods
    function dU_dt(self, t) result(dState_dt)
    !< Time derivative of advection field, the residuals function.
    class(integrand_ladvection), intent(in)           :: self                         !< Advection field.

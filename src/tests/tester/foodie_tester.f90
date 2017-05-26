@@ -28,6 +28,7 @@ use foodie, only : foodie_integrator_class_names,      &
                    is_available, is_class_available
 use foodie_test_integrand_ladvection, only : integrand_ladvection
 use foodie_test_integrand_oscillation, only : integrand_oscillation
+use foodie_test_integrand_tester_object, only : integrand_tester_object
 use penf, only : I_P, R_P, FR_P, str, strz
 
 implicit none
@@ -41,22 +42,22 @@ type :: test_object
    !<
    !< Test has only 1 public method `execute`: it executes test(s) accordingly to cli options.
    private
-   type(command_line_interface)         :: cli                 !< Command line interface handler.
-   integer(I_P)                         :: error               !< Error handler.
-   character(99)                        :: test                !< Test executed.
-   character(99)                        :: scheme              !< Scheme used.
-   real(R_P), allocatable               :: Dt(:)               !< Time step(s) exercised.
-   logical                              :: is_fast             !< Flag for activating fast schemes.
-   integer(I_P)                         :: implicit_iterations !< Number of iterations (implicit solvers).
-   integer(I_P)                         :: stages              !< Number of stages.
-   real(R_P)                            :: final_time          !< Final integration time.
-   logical                              :: save_results        !< Flag for activating results saving.
-   character(99)                        :: output              !< Output files basename.
-   integer(I_P)                         :: save_frequency      !< Save frequency.
-   logical                              :: verbose             !< Flag for activating verbose output.
-   type(integrand_ladvection)           :: ladvection_0        !< Initial conditions for linear advection test.
-   type(integrand_oscillation)          :: oscillation_0       !< Initial conditions for oscillation test.
-   class(integrand_object), allocatable :: integrand_0         !< Initial conditions.
+   type(command_line_interface)                :: cli                 !< Command line interface handler.
+   integer(I_P)                                :: error               !< Error handler.
+   character(99)                               :: test                !< Test executed.
+   character(99)                               :: scheme              !< Scheme used.
+   real(R_P), allocatable                      :: Dt(:)               !< Time step(s) exercised.
+   logical                                     :: is_fast             !< Flag for activating fast schemes.
+   integer(I_P)                                :: implicit_iterations !< Number of iterations (implicit solvers).
+   integer(I_P)                                :: stages              !< Number of stages.
+   real(R_P)                                   :: final_time          !< Final integration time.
+   logical                                     :: save_results        !< Flag for activating results saving.
+   character(99)                               :: output              !< Output files basename.
+   integer(I_P)                                :: save_frequency      !< Save frequency.
+   logical                                     :: verbose             !< Flag for activating verbose output.
+   type(integrand_ladvection)                  :: ladvection_0        !< Initial conditions for linear advection test.
+   type(integrand_oscillation)                 :: oscillation_0       !< Initial conditions for oscillation test.
+   class(integrand_tester_object), allocatable :: integrand_0         !< Initial conditions.
    contains
       ! public methods
       procedure, pass(self) :: execute !< Execute selected test(s).
@@ -242,21 +243,21 @@ contains
    subroutine integrate(scheme, integrand_0, Dt, final_time, iterations, stages, is_fast, save_results, output_file_name, &
                         save_frequency)
    !< Integrate integrand by means of the given scheme.
-   character(*),            intent(in)   :: scheme           !< Selected scheme.
-   class(integrand_object), intent(in)   :: integrand_0      !< Initial conditions.
-   real(R_P),               intent(in)   :: Dt               !< Time step.
-   real(R_P),               intent(in)   :: final_time       !< Final integration time.
-   integer(I_P),            intent(in)   :: iterations       !< Number of fixed point iterations.
-   integer(I_P),            intent(in)   :: stages           !< Number of stages.
-   logical,                 intent(in)   :: is_fast          !< Activate fast mode integration.
-   logical,                 intent(in)   :: save_results     !< Save results.
-   character(*),            intent(in)   :: output_file_name !< File name of output results file.
-   integer(I_P),            intent(in)   :: save_frequency   !< Save frequency.
-   class(integrator_object), allocatable :: integrator       !< The integrator.
-   type(integrator_runge_kutta_ssp)      :: integrator_start !< The (auto) start integrator.
-   class(integrand_object), allocatable  :: integrand        !< Integrand.
-   real(R_P)                             :: time             !< Time.
-   integer(I_P)                          :: step             !< Time steps counter.
+   character(*),                   intent(in)  :: scheme           !< Selected scheme.
+   class(integrand_tester_object), intent(in)  :: integrand_0      !< Initial conditions.
+   real(R_P),                      intent(in)  :: Dt               !< Time step.
+   real(R_P),                      intent(in)  :: final_time       !< Final integration time.
+   integer(I_P),                   intent(in)  :: iterations       !< Number of fixed point iterations.
+   integer(I_P),                   intent(in)  :: stages           !< Number of stages.
+   logical,                        intent(in)  :: is_fast          !< Activate fast mode integration.
+   logical,                        intent(in)  :: save_results     !< Save results.
+   character(*),                   intent(in)  :: output_file_name !< File name of output results file.
+   integer(I_P),                   intent(in)  :: save_frequency   !< Save frequency.
+   class(integrator_object), allocatable       :: integrator       !< The integrator.
+   type(integrator_runge_kutta_ssp)            :: integrator_start !< The (auto) start integrator.
+   class(integrand_tester_object), allocatable :: integrand        !< Integrand.
+   real(R_P)                                   :: time             !< Time.
+   integer(I_P)                                :: step             !< Time steps counter.
 
    allocate(integrand, mold=integrand_0) ; integrand = integrand_0
 
@@ -268,12 +269,7 @@ contains
 
    step = 0
    time = 0._R_P
-   select type(integrand)
-   type is(integrand_ladvection)
-      if (save_results) call integrand%export_tecplot(file_name=output_file_name, t=time, scheme=scheme)
-   type is(integrand_oscillation)
-      if (save_results) call integrand%export_tecplot(file_name=output_file_name, t=time, scheme=scheme)
-   endselect
+   if (save_results) call integrand%export_tecplot(file_name=output_file_name, t=time, scheme=scheme)
 
    select type(integrator)
    class is(integrator_multistage_object)
@@ -330,14 +326,8 @@ contains
    !    enddo
    endselect
 
-   select type(integrand)
-   type is(integrand_ladvection)
-      if (save_results) call integrand%export_tecplot(t=time, scheme=scheme)
-      if (save_results) call integrand%export_tecplot(close_file=.true.)
-   type is(integrand_oscillation)
-      if (save_results) call integrand%export_tecplot(t=time)
-      if (save_results) call integrand%export_tecplot(close_file=.true.)
-   endselect
+   if (save_results) call integrand%export_tecplot(t=time, scheme=scheme)
+   if (save_results) call integrand%export_tecplot(close_file=.true.)
    contains
       subroutine integrand_export_tecplot
       !< Export current integrand solution to tecplot file.
