@@ -255,10 +255,8 @@ contains
    class(integrator_object), allocatable :: integrator       !< The integrator.
    type(integrator_runge_kutta_ssp)      :: integrator_start !< The (auto) start integrator.
    class(integrand_object), allocatable  :: integrand        !< Integrand.
-   real(R_P), allocatable                :: time(:)          !< Time.
-   real(R_P), allocatable                :: Dts(:)           !< Time steps.
+   real(R_P)                             :: time             !< Time.
    integer(I_P)                          :: step             !< Time steps counter.
-   integer(I_P)                          :: step_offset      !< Time steps counter offset for slicing previous data array.
 
    allocate(integrand, mold=integrand_0) ; integrand = integrand_0
 
@@ -266,27 +264,15 @@ contains
                                   tolerance=1e2_R_P, iterations=iterations, autoupdate=.true., U=integrand_0)
    if (is_fast) call check_scheme_has_fast_mode(scheme=trim(adjustl(scheme)), integrator=integrator)
 
-   if (integrator%is_multistep()) then
-      call integrator_start%initialize(scheme='runge_kutta_ssp_stages_5_order_4', U=integrand_0)
-      if (integrator%steps_number()==0) then
-         step_offset = 1                         ! for 0 step-(a convention)-solver offset is 1
-      else
-         step_offset = integrator%steps_number() ! for >0 step-solver offset is steps
-      endif
-      allocate(Dts(1:step_offset))
-      Dts = Dt
-   else
-      step_offset = 1 ! for 0 step-(a convention)-solver offset is 1
-   endif
-   allocate(time(0:step_offset))
+   if (integrator%is_multistep()) call integrator_start%initialize(scheme='runge_kutta_ssp_stages_5_order_4', U=integrand_0)
 
    step = 0
    time = 0._R_P
    select type(integrand)
    type is(integrand_ladvection)
-      if (save_results) call integrand%export_tecplot(file_name=output_file_name, t=time(0), scheme=scheme)
+      if (save_results) call integrand%export_tecplot(file_name=output_file_name, t=time, scheme=scheme)
    type is(integrand_oscillation)
-      if (save_results) call integrand%export_tecplot(file_name=output_file_name, t=time(0), scheme=scheme)
+      if (save_results) call integrand%export_tecplot(file_name=output_file_name, t=time, scheme=scheme)
    endselect
 
    select type(integrator)
@@ -294,12 +280,12 @@ contains
       do
          step = step + 1
          if (is_fast) then
-            call integrator%integrate_fast(U=integrand, Dt=Dt, t=time(step_offset))
+            call integrator%integrate_fast(U=integrand, Dt=Dt, t=time)
          else
-            call integrator%integrate(U=integrand, Dt=Dt, t=time(step_offset))
+            call integrator%integrate(U=integrand, Dt=Dt, t=time)
          endif
-         call update_previous_times
-         if ((time(step_offset) >= final_time)) exit
+         time = time + Dt
+         if ((time >= final_time)) exit
          call integrand_export_tecplot
       enddo
 
@@ -307,20 +293,20 @@ contains
       do
          step = step + 1
          if (integrator%steps_number() >= step) then
-            call integrator_start%integrate(U=integrand, Dt=Dt, t=time(step))
+            call integrator_start%integrate(U=integrand, Dt=Dt, t=time)
             integrator%previous(step) = integrand
-            time(step) = time(step-1) + Dt
+            time = time + Dt
             integrator%Dt(step) = Dt
-            integrator%t(step) = time(step)
+            integrator%t(step) = time
          else
             if (is_fast) then
-               call integrator%integrate_fast(U=integrand, Dt=Dt, t=time(step_offset))
+               call integrator%integrate_fast(U=integrand, Dt=Dt, t=time)
             else
-               call integrator%integrate(U=integrand, Dt=Dt, t=time(step_offset))
+               call integrator%integrate(U=integrand, Dt=Dt, t=time)
             endif
-            call update_previous_times
+            time = time + Dt
          endif
-         if ((time(step_offset) >= final_time)) exit
+         if ((time >= final_time)) exit
          call integrand_export_tecplot
       enddo
 
@@ -328,28 +314,28 @@ contains
    !    do
    !       step = step + 1
    !       if (integrator%steps_number() >= step) then
-   !          call integrator_start%integrate(U=integrand, Dt=Dt, t=time(step))
+   !          call integrator_start%integrate(U=integrand, Dt=Dt, t=time)
    !          previous(step) = integrand
-   !          time(step) = time(step-1) + Dt
+   !          time = time + Dt
    !       else
    !          if (is_fast) then
    !             call integrator%integrate_fast(U=integrand, previous=previous, stage=stage, buffer=buffer, Dt=Dt,t=time)
    !          else
    !             call integrator%integrate(U=integrand, previous=previous, stage=stage, Dt=Dt, t=time)
    !          endif
-   !          call update_previous_times
+   !          time = time + Dt
    !       endif
-   !       if ((time(step) >= final_time)) exit
+   !       if ((time >= final_time)) exit
    !       call integrand_export_tecplot
    !    enddo
    endselect
 
    select type(integrand)
    type is(integrand_ladvection)
-      if (save_results) call integrand%export_tecplot(t=time(step_offset), scheme=scheme)
+      if (save_results) call integrand%export_tecplot(t=time, scheme=scheme)
       if (save_results) call integrand%export_tecplot(close_file=.true.)
    type is(integrand_oscillation)
-      if (save_results) call integrand%export_tecplot(t=time(step_offset))
+      if (save_results) call integrand%export_tecplot(t=time)
       if (save_results) call integrand%export_tecplot(close_file=.true.)
    endselect
    contains
@@ -358,24 +344,11 @@ contains
 
       select type(integrand)
       type is(integrand_ladvection)
-         if (save_results .and. mod(step, save_frequency)==0) call integrand%export_tecplot(t=time(step_offset), scheme=scheme)
+         if (save_results .and. mod(step, save_frequency)==0) call integrand%export_tecplot(t=time, scheme=scheme)
       type is(integrand_oscillation)
-         if (save_results .and. mod(step, save_frequency)==0) call integrand%export_tecplot(t=time(step_offset))
+         if (save_results .and. mod(step, save_frequency)==0) call integrand%export_tecplot(t=time)
       endselect
       endsubroutine integrand_export_tecplot
-
-      subroutine update_previous_times
-      !< Update previous times.
-      real(R_P)    :: temporary !< Temporary buffer.
-      integer(I_P) :: p         !< Counter.
-
-      temporary = time(step_offset)
-      time(step_offset) = time(step_offset) + Dt
-      do p=0, step_offset - 2
-        time(p) = time(p + 1)
-      enddo
-      time(step_offset-1) = temporary
-      endsubroutine update_previous_times
    endsubroutine integrate
 endmodule foodie_test_object
 
