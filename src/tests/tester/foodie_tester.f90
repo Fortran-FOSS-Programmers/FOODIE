@@ -102,10 +102,10 @@ contains
                         output_base_name=trim(adjustl(self%output)), &
                         save_frequency=self%save_frequency,          &
                         error=error(:,t))
-         print*, 'Dt = ', self%Dt(t), ', error = ', error(:,t)
+         print*, 'Dt = ', self%Dt(t), ', error (max) = ', maxval(error(:,t))
          if (t > 1) then
             order(:, t-1) = observed_order(error=error(:, t-1:t), Dt=self%Dt(t-1:t))
-            print '(A,'//trim(str(size(order, dim=1), no_sign=.true.))//'F6.2)', ' Observed order =', order(:,t-1)
+            print '(A,F6.2)', ' Observed order (min) =', minval(order(:,t-1))
          endif
       enddo
    enddo
