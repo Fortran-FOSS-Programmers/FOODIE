@@ -50,11 +50,11 @@ type, extends(integrand_tester_object) :: integrand_oscillation
    contains
       ! auxiliary methods
       procedure, pass(self), public :: amplitude_phase !< Return amplitude and phase of the oscillation.
-      procedure, pass(self), public :: exact_solution  !< Return exact solution.
       procedure, pass(self), public :: initialize      !< Initialize integrand.
       procedure, pass(self), public :: output          !< Extract integrand state field.
       ! integrand_tester_object deferred methods
       procedure, pass(self), public :: description    !< Return an informative description of the test.
+      procedure, pass(self), public :: exact_solution !< Return exact solution.
       procedure, pass(self), public :: export_tecplot !< Export integrand to Tecplot file.
       procedure, pass(self), public :: parse_cli      !< Initialize from command line interface.
       procedure, nopass,     public :: set_cli        !< Set command line interface.
@@ -99,16 +99,6 @@ contains
    ap(2) = atan(-self%U(1) / self%U(2))
    endfunction amplitude_phase
 
-   pure function exact_solution(self, t) result(exact)
-   !< Return exact solution.
-   class(integrand_oscillation), intent(in) :: self       !< Integrand.
-   real(R_P),                    intent(in) :: t          !< Time.
-   real(R_P)                                :: exact(1:2) !< Exact solution.
-
-   exact(1) = self%U0(1) * cos(self%f * t) - self%U0(2) * sin(self%f * t)
-   exact(2) = self%U0(1) * sin(self%f * t) + self%U0(2) * cos(self%f * t)
-   endfunction exact_solution
-
    pure subroutine initialize(self, U0, frequency)
    !< Initialize integrand.
    class(integrand_oscillation), intent(inout) :: self      !< Integrand.
@@ -139,6 +129,17 @@ contains
    prefix_ = '' ; if (present(prefix)) prefix_ = prefix
    desc = prefix//'oscillation'
    endfunction description
+
+   pure function exact_solution(self, t, U0) result(exact)
+   !< Return exact solution.
+   class(integrand_oscillation), intent(in)           :: self     !< Integrand.
+   real(R_P),                    intent(in)           :: t        !< Time.
+   class(integrand_object),      intent(in), optional :: U0       !< Initial conditions.
+   real(R_P), allocatable                             :: exact(:) !< Exact solution.
+
+   exact = [self%U0(1) * cos(self%f * t) - self%U0(2) * sin(self%f * t), &
+            self%U0(1) * sin(self%f * t) + self%U0(2) * cos(self%f * t)]
+   endfunction exact_solution
 
    subroutine export_tecplot(self, file_name, t, scheme, close_file)
    !< Export integrand to Tecplot file.

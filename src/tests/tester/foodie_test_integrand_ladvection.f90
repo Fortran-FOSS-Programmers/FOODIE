@@ -59,10 +59,10 @@ type, extends(integrand_tester_object) :: integrand_ladvection
       ! auxiliary methods
       procedure, pass(self), public :: destroy          !< Destroy field.
       procedure, pass(self), public :: dt => compute_dt !< Compute the current time step, by means of CFL condition.
-      procedure, pass(self), public :: exact_solution   !< Return exact solution.
       procedure, pass(self), public :: output           !< Extract integrand state field.
       ! integrand_tester_object deferred methods
       procedure, pass(self), public :: description    !< Return an informative description of the test.
+      procedure, pass(self), public :: exact_solution !< Return exact solution.
       procedure, pass(self), public :: export_tecplot !< Export integrand to Tecplot file.
       procedure, pass(self), public :: parse_cli      !< Initialize from command line interface.
       procedure, nopass,     public :: set_cli        !< Set command line interface.
@@ -125,15 +125,6 @@ contains
    endassociate
    endfunction compute_dt
 
-   pure function exact_solution(self, u0, t) result(exact)
-   !< Return exact solution.
-   class(integrand_ladvection), intent(in) :: self     !< Integrand.
-   real(R_P),                   intent(in) :: u0(1:)   !< Initial state
-   real(R_P),                   intent(in) :: t        !< Time.
-   real(R_P), allocatable                  :: exact(:) !< Exact solution.
-
-   endfunction exact_solution
-
    pure function output(self) result(state)
    !< Output the advection field state.
    class(integrand_ladvection), intent(in) :: self     !< Advection field.
@@ -153,6 +144,15 @@ contains
    prefix_ = '' ; if (present(prefix)) prefix_ = prefix
    desc = prefix//'linear_advection-Ni_'//trim(strz(self%Ni, 10))
    endfunction description
+
+   pure function exact_solution(self, t, U0) result(exact)
+   !< Return exact solution.
+   class(integrand_ladvection), intent(in)           :: self     !< Integrand.
+   real(R_P),                   intent(in)           :: t        !< Time.
+   class(integrand_object),     intent(in), optional :: U0       !< Initial conditions.
+   real(R_P), allocatable                            :: exact(:) !< Exact solution.
+
+   endfunction exact_solution
 
    subroutine export_tecplot(self, file_name, t, scheme, close_file)
    !< Export integrand to Tecplot file.

@@ -17,6 +17,7 @@ type, abstract, extends(integrand_object) :: integrand_tester_object
    !< This abstract provided some auxiliary methods useful for the tester machinery.
    contains
       procedure(description_interface),    pass(self), deferred :: description    !< Return an informative description of the test.
+      procedure(exact_solution_interface), pass(self), deferred :: exact_solution !< Return exact solution.
       procedure(export_tecplot_interface), pass(self), deferred :: export_tecplot !< Export integrand to Tecplot file.
       procedure(parse_cli_interface),      pass(self), deferred :: parse_cli      !< Initialize from command line interface.
       procedure(set_cli_interface),        nopass,     deferred :: set_cli        !< Set command line interface.
@@ -31,6 +32,15 @@ abstract interface
    character(*),                   intent(in), optional :: prefix !< Prefixing string.
    character(len=:), allocatable                        :: desc   !< Description.
    endfunction description_interface
+
+   pure function exact_solution_interface(self, t, U0) result(exact)
+   !< Return exact solution.
+   import :: integrand_object, integrand_tester_object, R_P
+   class(integrand_tester_object), intent(in)           :: self     !< Integrand.
+   real(R_P),                      intent(in)           :: t        !< Time.
+   class(integrand_object),        intent(in), optional :: U0       !< Initial conditions.
+   real(R_P), allocatable                               :: exact(:) !< Exact solution.
+   endfunction exact_solution_interface
 
    subroutine export_tecplot_interface(self, file_name, t, scheme, close_file)
    !< Export integrand to Tecplot file.
