@@ -152,6 +152,14 @@ contains
    class(integrand_object),     intent(in), optional :: U0       !< Initial conditions.
    real(R_P), allocatable                            :: exact(:) !< Exact solution.
 
+   if (present(U0)) then
+      select type(U0)
+      type is(integrand_ladvection)
+         exact = U0%u(1:self%Ni)
+      endselect
+   else
+      exact = self%u(1:self%Ni) * 0._R_P
+   endif
    endfunction exact_solution
 
    subroutine export_tecplot(self, file_name, t, scheme, close_file)

@@ -248,7 +248,7 @@ contains
       allocate(self%alpha(1:self%stages)) ; self%alpha = 0._R_P
       call self%initialize_order_s
     endselect
-    self%description_ = trim(adjustl(scheme))//'_stages_'//trim(str(self%stages))
+    self%description_ = trim(adjustl(scheme))//'_stages_'//trim(str(self%stages, no_sign=.true.))
     self%registers = self%stages
     if (present(U)) call self%allocate_integrand_members(U=U)
   else

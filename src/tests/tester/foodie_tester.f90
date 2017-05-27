@@ -349,6 +349,7 @@ contains
 
       select type(integrand)
       type is(integrand_ladvection)
+         error = abs(integrand%output() - integrand%exact_solution(t=time))
       type is(integrand_oscillation)
          error = abs(integrand%output() - integrand%exact_solution(t=time))
       endselect
