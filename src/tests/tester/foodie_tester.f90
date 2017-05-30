@@ -86,11 +86,12 @@ contains
    else
       integrator_schemes = foodie_integrator_schemes()
    endif
-   allocate(error(1:self%integrand_0%integrand_dimension(), 1:size(self%Dt, dim=1)))
-   if (size(self%Dt, dim=1) > 1) allocate(order(1:self%integrand_0%integrand_dimension(), 1:size(error, dim=2)-1))
+   allocate(error(1:size(self%integrand_0%error(t=0._R_P), dim=1), 1:size(self%Dt, dim=1)))
+   if (size(self%Dt, dim=1) > 1) allocate(order(1:size(error, dim=1), 1:size(error, dim=2)-1))
    do s=1, size(integrator_schemes, dim=1)
       print '(A)', trim(integrator_schemes(s))
       do t=1, size(self%Dt)
+         call self%integrand_0%initialize(Dt=self%Dt(t))
          call integrate(scheme=trim(integrator_schemes(s)),          &
                         integrand_0=self%integrand_0,                &
                         Dt=self%Dt(t),                               &
@@ -102,10 +103,10 @@ contains
                         output_base_name=trim(adjustl(self%output)), &
                         save_frequency=self%save_frequency,          &
                         error=error(:,t))
-         print*, 'Dt = ', self%Dt(t), ', error (max) = ', maxval(error(:,t))
+         print*, 'Dt = ', self%Dt(t), ', error = ', error(:,t)
          if (t > 1) then
             order(:, t-1) = observed_order(error=error(:, t-1:t), Dt=self%Dt(t-1:t))
-            print '(A,F6.2)', ' Observed order (min) =', minval(order(:,t-1))
+            print '(A,'//trim(str(size(order, dim=1), no_sign=.true.))//'F6.2)', ' Observed order =', order(:,t-1)
          endif
       enddo
    enddo
@@ -209,15 +210,15 @@ contains
       is_dt_valid = .true.
       do t=1, size(self%Dt)
          is_dt_valid = ((self%final_time - int(self%final_time/self%Dt(t), I_P)*self%Dt(t))==0)
-         if (is_dt_valid) then
-            select type(integrand=>self%integrand_0)
-            type is(integrand_ladvection)
-               is_dt_valid = is_dt_valid .and. self%Dt(t) <= integrand%Dt(final_time=self%final_time)
-               if (.not.is_dt_valid) then
-                  write(stderr, '(A)') 'error: Dt violates CFL condition, Dt_max = '//str(integrand%Dt(final_time=self%final_time))
-               endif
-            endselect
-         endif
+         ! if (is_dt_valid) then
+         !    select type(integrand=>self%integrand_0)
+         !    type is(integrand_ladvection)
+         !       is_dt_valid = is_dt_valid .and. self%Dt(t) <= integrand%Dt(final_time=self%final_time)
+         !       if (.not.is_dt_valid) then
+         !          write(stderr, '(A)') 'error: Dt violates CFL condition, Dt_max = '//str(integrand%Dt(final_time=self%final_time))
+         !       endif
+         !    endselect
+         ! endif
          if (.not.is_dt_valid) exit
       enddo
       endfunction is_dt_valid
@@ -249,6 +250,7 @@ contains
    character(*),                   intent(in)   :: output_base_name !< Base name of output results file.
    integer(I_P),                   intent(in)   :: save_frequency   !< Save frequency.
    real(R_P),                      intent(out)  :: error(:)         !< Error of integrand integration.
+   real(R_P), allocatable                       :: error_(:)        !< Error of integrand integration.
    class(integrand_tester_object) , allocatable :: integrand        !< Integrand.
    class(integrator_object), allocatable        :: integrator       !< The integrator.
    type(integrator_runge_kutta_ssp)             :: integrator_start !< The (auto) start integrator.
@@ -330,7 +332,8 @@ contains
 
    call integrand_close_tecplot
 
-   call integrand_compute_error
+   error_ = integrand%error(t=time, U0=integrand_0)
+   error(:) = error_(:)
    contains
       subroutine integrand_close_tecplot
       !< Close current integrand tecplot file.
@@ -343,17 +346,6 @@ contains
       endselect
       if (save_results) call integrand%export_tecplot(close_file=.true.)
       endsubroutine integrand_close_tecplot
-
-      subroutine integrand_compute_error
-      !< Close current integrand tecplot file.
-
-      select type(integrand)
-      type is(integrand_ladvection)
-         error = abs(integrand%output() - integrand%exact_solution(t=time))
-      type is(integrand_oscillation)
-         error = abs(integrand%output() - integrand%exact_solution(t=time))
-      endselect
-      endsubroutine integrand_compute_error
 
       subroutine integrand_export_tecplot
       !< Export current integrand solution to tecplot file.

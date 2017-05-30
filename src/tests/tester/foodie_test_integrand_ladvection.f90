@@ -55,15 +55,19 @@ type, extends(integrand_tester_object) :: integrand_ladvection
    real(R_P)                               :: a=0._R_P        !< Advection coefficient.
    real(R_P), allocatable                  :: u(:)            !< Integrand (state) variable.
    class(interpolator_object), allocatable :: interpolator    !< WENO interpolator.
+   character(99)                           :: initial_state   !< Initial state.
    contains
       ! auxiliary methods
       procedure, pass(self), public :: destroy          !< Destroy field.
-      procedure, pass(self), public :: dt => compute_dt !< Compute the current time step, by means of CFL condition.
+      procedure, pass(self), public :: dt => compute_dt !< Compute the current time step by means of CFL condition.
+      procedure, pass(self), public ::       compute_dx !< Compute the space step by means of CFL condition.
       procedure, pass(self), public :: output           !< Extract integrand state field.
       ! integrand_tester_object deferred methods
       procedure, pass(self), public :: description    !< Return an informative description of the test.
+      procedure, pass(self), public :: error          !< Return error.
       procedure, pass(self), public :: exact_solution !< Return exact solution.
       procedure, pass(self), public :: export_tecplot !< Export integrand to Tecplot file.
+      procedure, pass(self), public :: initialize     !< Initialize integrand.
       procedure, pass(self), public :: parse_cli      !< Initialize from command line interface.
       procedure, nopass,     public :: set_cli        !< Set command line interface.
       ! integrand_object deferred methods
@@ -117,13 +121,24 @@ contains
    real(R_P),                   intent(in), optional :: t          !< Time.
    real(R_P)                                         :: Dt         !< Time step.
 
-   associate(a=>self%a, Ni=>self%Ni, Dx=>self%Dx, CFL=>self%CFL)
+   associate(a=>self%a, Dx=>self%Dx, CFL=>self%CFL)
       Dt = Dx * CFL / abs(a)
       if (present(t)) then
          if ((t + Dt) > final_time) Dt = final_time - t
       endif
    endassociate
    endfunction compute_dt
+
+   pure function compute_dx(self, Dt) result(Dx)
+   !< Compute the space step step by means of CFL condition.
+   class(integrand_ladvection), intent(in) :: self       !< Advection field.
+   real(R_P),                   intent(in) :: Dt         !< Time step.
+   real(R_P)                               :: Dx         !< Space step.
+
+   associate(a=>self%a, CFL=>self%CFL)
+      Dx = Dt / CFL * abs(a)
+   endassociate
+   endfunction compute_dx
 
    pure function output(self) result(state)
    !< Output the advection field state.
@@ -144,6 +159,28 @@ contains
    prefix_ = '' ; if (present(prefix)) prefix_ = prefix
    desc = prefix//'linear_advection-Ni_'//trim(strz(self%Ni, 10))
    endfunction description
+
+   pure function error(self, t, U0)
+   !< Return error.
+   class(integrand_ladvection), intent(in)           :: self     !< Integrand.
+   real(R_P),                   intent(in)           :: t        !< Time.
+   class(integrand_object),     intent(in), optional :: U0       !< Initial conditions.
+   real(R_P), allocatable                            :: error(:) !< Error.
+   integer(I_P)                                      :: i        !< Counter.
+
+   allocate(error(1:1))
+   error = 0._R_P
+   if (present(U0)) then
+      select type(U0)
+      type is(integrand_ladvection)
+         do i=1, self%Ni
+            ! error = error + (U0%u(i) - self%u(i)) ** 2
+            error = max(error, abs(U0%u(i) - self%u(i)))
+         enddo
+      endselect
+      ! error = sqrt(error)
+   endif
+   endfunction error
 
    pure function exact_solution(self, t, U0) result(exact)
    !< Return exact solution.
@@ -194,11 +231,24 @@ contains
    endif
    endsubroutine export_tecplot
 
+   subroutine initialize(self, Dt)
+   !< Initialize integrand.
+   class(integrand_ladvection), intent(inout) :: self !< Integrand.
+   real(R_P),                   intent(in)    :: Dt   !< Time step.
+
+   self%Dx = self%compute_dx(Dt=Dt)
+   self%Ni = nint(self%length / self%Dx)
+
+   select case(trim(adjustl(self%initial_state)))
+   case('square_wave')
+      call self%set_square_wave_initial_state
+   endselect
+   endsubroutine initialize
+
    subroutine parse_cli(self, cli)
    !< Initialize from command line interface.
-   class(integrand_ladvection),  intent(inout) :: self          !< Advection field.
-   type(command_line_interface), intent(inout) :: cli           !< Command line interface handler.
-   character(99)                               :: initial_state !< Initial state.
+   class(integrand_ladvection),  intent(inout) :: self !< Advection field.
+   type(command_line_interface), intent(inout) :: cli  !< Command line interface handler.
 
    call self%destroy
 
@@ -209,15 +259,10 @@ contains
    call cli%get(switch='-a', val=self%a, error=cli%error) ; if (cli%error/=0) stop
    call cli%get(switch='--length', val=self%length, error=cli%error) ; if (cli%error/=0) stop
    call cli%get(switch='--Ni', val=self%Ni, error=cli%error) ; if (cli%error/=0) stop
-   call cli%get(switch='-is', val=initial_state, error=cli%error) ; if (cli%error/=0) stop
+   call cli%get(switch='-is', val=self%initial_state, error=cli%error) ; if (cli%error/=0) stop
 
    self%Ng = (self%weno_order + 1) / 2
    self%Dx = self%length / self%Ni
-
-   select case(trim(adjustl(initial_state)))
-   case('square_wave')
-      call self%set_square_wave_initial_state
-   endselect
 
    if (self%weno_order>1) call wenoof_create(interpolator_type=trim(adjustl(self%w_scheme)), &
                                              S=self%Ng,                                      &
@@ -433,6 +478,7 @@ contains
       lhs%CFL        = rhs%CFL
       lhs%Ni         = rhs%Ni
       lhs%Ng         = rhs%Ng
+      lhs%length     = rhs%length
       lhs%Dx         = rhs%Dx
       lhs%a          = rhs%a
       if (allocated(rhs%u)) then
@@ -447,6 +493,7 @@ contains
       else
          if (allocated(lhs%interpolator)) deallocate(lhs%interpolator)
       endif
+      lhs%initial_state = rhs%initial_state
    endselect
    endsubroutine assign_integrand
 
