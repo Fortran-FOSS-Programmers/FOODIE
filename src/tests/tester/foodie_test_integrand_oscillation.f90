@@ -50,12 +50,13 @@ type, extends(integrand_tester_object) :: integrand_oscillation
    contains
       ! auxiliary methods
       procedure, pass(self), public :: amplitude_phase !< Return amplitude and phase of the oscillation.
-      procedure, pass(self), public :: exact_solution  !< Return exact solution.
-      procedure, pass(self), public :: initialize      !< Initialize integrand.
       procedure, pass(self), public :: output          !< Extract integrand state field.
       ! integrand_tester_object deferred methods
       procedure, pass(self), public :: description    !< Return an informative description of the test.
+      procedure, pass(self), public :: error          !< Return error.
+      procedure, pass(self), public :: exact_solution !< Return exact solution.
       procedure, pass(self), public :: export_tecplot !< Export integrand to Tecplot file.
+      procedure, pass(self), public :: initialize     !< Initialize field.
       procedure, pass(self), public :: parse_cli      !< Initialize from command line interface.
       procedure, nopass,     public :: set_cli        !< Set command line interface.
       ! integrand_object deferred methods
@@ -99,27 +100,6 @@ contains
    ap(2) = atan(-self%U(1) / self%U(2))
    endfunction amplitude_phase
 
-   pure function exact_solution(self, t) result(exact)
-   !< Return exact solution.
-   class(integrand_oscillation), intent(in) :: self       !< Integrand.
-   real(R_P),                    intent(in) :: t          !< Time.
-   real(R_P)                                :: exact(1:2) !< Exact solution.
-
-   exact(1) = self%U0(1) * cos(self%f * t) - self%U0(2) * sin(self%f * t)
-   exact(2) = self%U0(1) * sin(self%f * t) + self%U0(2) * cos(self%f * t)
-   endfunction exact_solution
-
-   pure subroutine initialize(self, U0, frequency)
-   !< Initialize integrand.
-   class(integrand_oscillation), intent(inout) :: self      !< Integrand.
-   real(R_P),                    intent(in)    :: U0(1:2)   !< Initial state.
-   real(R_P),                    intent(in)    :: frequency !< Frequency of oscillation.
-
-   self%U = U0
-   self%f = frequency
-   self%U0 = U0
-   endsubroutine initialize
-
    pure function output(self) result(state)
    !< Extract integrand state field.
    class(integrand_oscillation), intent(in) :: self       !< Integrand.
@@ -139,6 +119,28 @@ contains
    prefix_ = '' ; if (present(prefix)) prefix_ = prefix
    desc = prefix//'oscillation'
    endfunction description
+
+   pure function error(self, t, U0)
+   !< Return error.
+   class(integrand_oscillation), intent(in)           :: self     !< Integrand.
+   real(R_P),                    intent(in)           :: t        !< Time.
+   class(integrand_object),      intent(in), optional :: U0       !< Initial conditions.
+   real(R_P), allocatable                             :: error(:) !< Error.
+
+   allocate(error(1:2))
+   error = abs(self%U - self%exact_solution(t=t))
+   endfunction error
+
+   pure function exact_solution(self, t, U0) result(exact)
+   !< Return exact solution.
+   class(integrand_oscillation), intent(in)           :: self     !< Integrand.
+   real(R_P),                    intent(in)           :: t        !< Time.
+   class(integrand_object),      intent(in), optional :: U0       !< Initial conditions.
+   real(R_P), allocatable                             :: exact(:) !< Exact solution.
+
+   exact = [self%U0(1) * cos(self%f * t) - self%U0(2) * sin(self%f * t), &
+            self%U0(1) * sin(self%f * t) + self%U0(2) * cos(self%f * t)]
+   endfunction exact_solution
 
    subroutine export_tecplot(self, file_name, t, scheme, close_file)
    !< Export integrand to Tecplot file.
@@ -171,6 +173,14 @@ contains
       endif
    endif
    endsubroutine export_tecplot
+
+   pure subroutine initialize(self, Dt)
+   !< Initialize integrand.
+   !<
+   !< Intentionally empty, all is done in `parse_cli` method.
+   class(integrand_oscillation), intent(inout) :: self !< Integrand.
+   real(R_P),                    intent(in)    :: Dt   !< Time step.
+   endsubroutine initialize
 
    subroutine parse_cli(self, cli)
    !< Initialize from command line interface.

@@ -55,7 +55,6 @@ type :: test_object
    logical                                     :: save_results        !< Flag for activating results saving.
    character(99)                               :: output              !< Output files basename.
    integer(I_P)                                :: save_frequency      !< Save frequency.
-   logical                                     :: verbose             !< Flag for activating verbose output.
    type(integrand_ladvection)                  :: ladvection_0        !< Initial conditions for linear advection test.
    type(integrand_oscillation)                 :: oscillation_0       !< Initial conditions for oscillation test.
    class(integrand_tester_object), allocatable :: integrand_0         !< Initial conditions.
@@ -72,6 +71,8 @@ contains
    !< Execute test(s).
    class(test_object), intent(inout) :: self                  !< Test.
    character(99), allocatable        :: integrator_schemes(:) !< Name of FOODIE integrator schemes.
+   real(R_P), allocatable            :: error(:,:)            !< Error of integrand integration.
+   real(R_P), allocatable            :: order(:,:)            !< Observed order of accuravy.
    integer(I_P)                      :: s                     !< Counter.
    integer(I_P)                      :: t                     !< Counter.
 
@@ -85,8 +86,12 @@ contains
    else
       integrator_schemes = foodie_integrator_schemes()
    endif
+   allocate(error(1:size(self%integrand_0%error(t=0._R_P), dim=1), 1:size(self%Dt, dim=1)))
+   if (size(self%Dt, dim=1) > 1) allocate(order(1:size(error, dim=1), 1:size(error, dim=2)-1))
    do s=1, size(integrator_schemes, dim=1)
+      print '(A)', trim(integrator_schemes(s))
       do t=1, size(self%Dt)
+         call self%integrand_0%initialize(Dt=self%Dt(t))
          call integrate(scheme=trim(integrator_schemes(s)),          &
                         integrand_0=self%integrand_0,                &
                         Dt=self%Dt(t),                               &
@@ -96,7 +101,13 @@ contains
                         is_fast=self%is_fast,                        &
                         save_results=self%save_results,              &
                         output_base_name=trim(adjustl(self%output)), &
-                        save_frequency=self%save_frequency)
+                        save_frequency=self%save_frequency,          &
+                        error=error(:,t))
+         print*, 'Dt = ', self%Dt(t), ', error = ', error(:,t)
+         if (t > 1) then
+            order(:, t-1) = observed_order(error=error(:, t-1:t), Dt=self%Dt(t-1:t))
+            print '(A,'//trim(str(size(order, dim=1), no_sign=.true.))//'F6.2)', ' Observed order =', order(:,t-1)
+         endif
       enddo
    enddo
    endsubroutine execute
@@ -130,7 +141,6 @@ contains
          call cli%add(switch='--save_results', switch_ab='-r',help='save result', required=.false., act='store_true', def='.false.')
          call cli%add(switch='--output', help='output file basename', required=.false., act='store', def='foodie_test')
          call cli%add(switch='--save_frequency', help='save frequency', required=.false., act='store', def='1')
-         call cli%add(switch='--verbose', help='Verbose output', required=.false., act='store_true', def='.false.')
       endassociate
       call self%ladvection_0%set_cli(cli=self%cli)
       call self%oscillation_0%set_cli(cli=self%cli)
@@ -154,7 +164,6 @@ contains
       call self%cli%get(switch='-r', val=self%save_results, error=self%error) ; if (self%error/=0) stop
       call self%cli%get(switch='--output', val=self%output, error=self%error) ; if (self%error/=0) stop
       call self%cli%get(switch='--save_frequency', val=self%save_frequency, error=self%error) ; if (self%error/=0) stop
-      call self%cli%get(switch='--verbose', val=self%verbose, error=self%error) ; if (self%error/=0) stop
       call self%ladvection_0%parse_cli(cli=self%cli)
       call self%oscillation_0%parse_cli(cli=self%cli)
 
@@ -201,15 +210,15 @@ contains
       is_dt_valid = .true.
       do t=1, size(self%Dt)
          is_dt_valid = ((self%final_time - int(self%final_time/self%Dt(t), I_P)*self%Dt(t))==0)
-         if (is_dt_valid) then
-            select type(integrand=>self%integrand_0)
-            type is(integrand_ladvection)
-               is_dt_valid = is_dt_valid .and. self%Dt(t) <= integrand%Dt(final_time=self%final_time)
-               if (.not.is_dt_valid) then
-                  write(stderr, '(A)') 'error: Dt violates CFL condition, Dt_max = '//str(integrand%Dt(final_time=self%final_time))
-               endif
-            endselect
-         endif
+         ! if (is_dt_valid) then
+         !    select type(integrand=>self%integrand_0)
+         !    type is(integrand_ladvection)
+         !       is_dt_valid = is_dt_valid .and. self%Dt(t) <= integrand%Dt(final_time=self%final_time)
+         !       if (.not.is_dt_valid) then
+         !          write(stderr, '(A)') 'error: Dt violates CFL condition, Dt_max = '//str(integrand%Dt(final_time=self%final_time))
+         !       endif
+         !    endselect
+         ! endif
          if (.not.is_dt_valid) exit
       enddo
       endfunction is_dt_valid
@@ -228,23 +237,25 @@ contains
    endsubroutine check_scheme_has_fast_mode
 
    subroutine integrate(scheme, integrand_0, Dt, final_time, iterations, stages, is_fast, save_results, output_base_name, &
-                        save_frequency)
+                        save_frequency, error)
    !< Integrate integrand by means of the given scheme.
-   character(*),                   intent(in)  :: scheme           !< Selected scheme.
-   class(integrand_tester_object), intent(in)  :: integrand_0      !< Initial conditions.
-   real(R_P),                      intent(in)  :: Dt               !< Time step.
-   real(R_P),                      intent(in)  :: final_time       !< Final integration time.
-   integer(I_P),                   intent(in)  :: iterations       !< Number of fixed point iterations.
-   integer(I_P),                   intent(in)  :: stages           !< Number of stages.
-   logical,                        intent(in)  :: is_fast          !< Activate fast mode integration.
-   logical,                        intent(in)  :: save_results     !< Save results.
-   character(*),                   intent(in)  :: output_base_name !< Base name of output results file.
-   integer(I_P),                   intent(in)  :: save_frequency   !< Save frequency.
-   class(integrator_object), allocatable       :: integrator       !< The integrator.
-   type(integrator_runge_kutta_ssp)            :: integrator_start !< The (auto) start integrator.
-   class(integrand_tester_object), allocatable :: integrand        !< Integrand.
-   real(R_P)                                   :: time             !< Time.
-   integer(I_P)                                :: step             !< Time steps counter.
+   character(*),                   intent(in)   :: scheme           !< Selected scheme.
+   class(integrand_tester_object), intent(in)   :: integrand_0      !< Initial conditions.
+   real(R_P),                      intent(in)   :: Dt               !< Time step.
+   real(R_P),                      intent(in)   :: final_time       !< Final integration time.
+   integer(I_P),                   intent(in)   :: iterations       !< Number of fixed point iterations.
+   integer(I_P),                   intent(in)   :: stages           !< Number of stages.
+   logical,                        intent(in)   :: is_fast          !< Activate fast mode integration.
+   logical,                        intent(in)   :: save_results     !< Save results.
+   character(*),                   intent(in)   :: output_base_name !< Base name of output results file.
+   integer(I_P),                   intent(in)   :: save_frequency   !< Save frequency.
+   real(R_P),                      intent(out)  :: error(:)         !< Error of integrand integration.
+   real(R_P), allocatable                       :: error_(:)        !< Error of integrand integration.
+   class(integrand_tester_object) , allocatable :: integrand        !< Integrand.
+   class(integrator_object), allocatable        :: integrator       !< The integrator.
+   type(integrator_runge_kutta_ssp)             :: integrator_start !< The (auto) start integrator.
+   real(R_P)                                    :: time             !< Time.
+   integer(I_P)                                 :: step             !< Time steps counter.
 
    allocate(integrand, mold=integrand_0) ; integrand = integrand_0
 
@@ -319,14 +330,23 @@ contains
       enddo
    endselect
 
-   select type(integrand)
-   type is(integrand_ladvection)
-      if (save_results .and. mod(step, save_frequency)==0) call integrand%export_tecplot(t=time, scheme=scheme)
-   type is(integrand_oscillation)
-      if (save_results .and. mod(step, save_frequency)==0) call integrand%export_tecplot(t=time)
-   endselect
-   if (save_results) call integrand%export_tecplot(close_file=.true.)
+   call integrand_close_tecplot
+
+   error_ = integrand%error(t=time, U0=integrand_0)
+   error(:) = error_(:)
    contains
+      subroutine integrand_close_tecplot
+      !< Close current integrand tecplot file.
+
+      select type(integrand)
+      type is(integrand_ladvection)
+         if (save_results .and. mod(step, save_frequency)==0) call integrand%export_tecplot(t=time, scheme=scheme)
+      type is(integrand_oscillation)
+         if (save_results .and. mod(step, save_frequency)==0) call integrand%export_tecplot(t=time)
+      endselect
+      if (save_results) call integrand%export_tecplot(close_file=.true.)
+      endsubroutine integrand_close_tecplot
+
       subroutine integrand_export_tecplot
       !< Export current integrand solution to tecplot file.
 
@@ -338,6 +358,18 @@ contains
       endselect
       endsubroutine integrand_export_tecplot
    endsubroutine integrate
+
+   pure function observed_order(error, Dt)
+   !< Estimate the order of accuracy using 2 subsequent refined numerical solutions.
+   real(R_P), intent(in) :: error(1:, 1:)                        !< Computed errors.
+   real(R_P), intent(in) :: Dt(1:)                               !< Time steps used.
+   real(R_P)             :: observed_order(1:size(error, dim=1)) !< Estimation of the order of accuracy.
+   integer(I_P)          :: v                                    !< Variables counter.
+
+   do v=1, size(error, dim=1)
+     observed_order(v) = log(error(v, 1) / error(v, 2)) / log(Dt(1) / Dt(2))
+   enddo
+   endfunction observed_order
 endmodule foodie_test_object
 
 program foodie_tester
