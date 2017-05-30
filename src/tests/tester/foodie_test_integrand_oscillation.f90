@@ -111,7 +111,7 @@ contains
    ! integrand_tester_object deferred methods
    pure function description(self, prefix) result(desc)
    !< Return informative integrator description.
-   class(integrand_oscillation), intent(in)           :: self    !< Integrator.
+   class(integrand_oscillation), intent(in)           :: self    !< Integrand.
    character(*),                 intent(in), optional :: prefix  !< Prefixing string.
    character(len=:), allocatable                      :: desc    !< Description.
    character(len=:), allocatable                      :: prefix_ !< Prefixing string, local variable.
@@ -120,10 +120,11 @@ contains
    desc = prefix//'oscillation'
    endfunction description
 
-   pure function error(self, t, U0)
+   pure function error(self, t, t0, U0)
    !< Return error.
    class(integrand_oscillation), intent(in)           :: self     !< Integrand.
    real(R_P),                    intent(in)           :: t        !< Time.
+   real(R_P),                    intent(in), optional :: t0       !< Initial time.
    class(integrand_object),      intent(in), optional :: U0       !< Initial conditions.
    real(R_P), allocatable                             :: error(:) !< Error.
 
@@ -131,10 +132,11 @@ contains
    error = abs(self%U - self%exact_solution(t=t))
    endfunction error
 
-   pure function exact_solution(self, t, U0) result(exact)
+   pure function exact_solution(self, t, t0, U0) result(exact)
    !< Return exact solution.
    class(integrand_oscillation), intent(in)           :: self     !< Integrand.
    real(R_P),                    intent(in)           :: t        !< Time.
+   real(R_P),                    intent(in), optional :: t0       !< Initial time.
    class(integrand_object),      intent(in), optional :: U0       !< Initial conditions.
    real(R_P), allocatable                             :: exact(:) !< Exact solution.
 
@@ -151,7 +153,6 @@ contains
    logical,                      intent(in), optional :: close_file      !< Flag for closing file.
    logical, save                                      :: is_open=.false. !< Flag for checking if file is open.
    integer(I_P), save                                 :: file_unit       !< File unit.
-   integer(I_P)                                       :: i               !< Counter.
 
    if (present(close_file)) then
       if (close_file .and. is_open) then
@@ -187,8 +188,8 @@ contains
    class(integrand_oscillation), intent(inout) :: self !< Advection field.
    type(command_line_interface), intent(inout) :: cli  !< Command line interface handler.
 
-   call cli%get(switch='-f', val=self%f, error=cli%error) ; if (cli%error/=0) stop
-   call cli%get(switch='-U0', val=self%U0, error=cli%error) ; if (cli%error/=0) stop
+   call cli%get(group='oscillation', switch='-f', val=self%f, error=cli%error) ; if (cli%error/=0) stop
+   call cli%get(group='oscillation', switch='-U0', val=self%U0, error=cli%error) ; if (cli%error/=0) stop
    self%U = self%U0
    endsubroutine parse_cli
 
@@ -196,8 +197,11 @@ contains
    !< Set command line interface.
    type(command_line_interface), intent(inout) :: cli !< Command line interface handler.
 
-   call cli%add(switch='--frequency', switch_ab='-f', help='frequency', required=.false., def='1e-4', act='store')
-   call cli%add(switch='--U0', switch_ab='-U0', nargs='2', help='initial state', required=.false., def='0.0 1.0', act='store')
+   call cli%add_group(description='oscillation test settings', group='oscillation')
+   call cli%add(group='oscillation', switch='--frequency', switch_ab='-f', help='frequency', required=.false., def='1e-4', &
+                act='store')
+   call cli%add(group='oscillation', switch='--U0', switch_ab='-U0', nargs='2', help='initial state', required=.false., &
+                def='0.0 1.0', act='store')
    endsubroutine set_cli
 
    ! integrand_object deferred methods

@@ -151,7 +151,7 @@ contains
    ! integrand_tester_object deferred methods
    pure function description(self, prefix) result(desc)
    !< Return informative integrator description.
-   class(integrand_ladvection), intent(in)           :: self    !< Integrator.
+   class(integrand_ladvection), intent(in)           :: self    !< Integrand.
    character(*),                intent(in), optional :: prefix  !< Prefixing string.
    character(len=:), allocatable                     :: desc    !< Description.
    character(len=:), allocatable                     :: prefix_ !< Prefixing string, local variable.
@@ -160,10 +160,11 @@ contains
    desc = prefix//'linear_advection-Ni_'//trim(strz(self%Ni, 10))
    endfunction description
 
-   pure function error(self, t, U0)
+   pure function error(self, t, t0, U0)
    !< Return error.
    class(integrand_ladvection), intent(in)           :: self     !< Integrand.
    real(R_P),                   intent(in)           :: t        !< Time.
+   real(R_P),                   intent(in), optional :: t0       !< Initial time.
    class(integrand_object),     intent(in), optional :: U0       !< Initial conditions.
    real(R_P), allocatable                            :: error(:) !< Error.
    integer(I_P)                                      :: i        !< Counter.
@@ -182,10 +183,11 @@ contains
    endif
    endfunction error
 
-   pure function exact_solution(self, t, U0) result(exact)
+   pure function exact_solution(self, t, t0, U0) result(exact)
    !< Return exact solution.
    class(integrand_ladvection), intent(in)           :: self     !< Integrand.
    real(R_P),                   intent(in)           :: t        !< Time.
+   real(R_P),                   intent(in), optional :: t0       !< Initial time.
    class(integrand_object),     intent(in), optional :: U0       !< Initial conditions.
    real(R_P), allocatable                            :: exact(:) !< Exact solution.
 
@@ -252,14 +254,14 @@ contains
 
    call self%destroy
 
-   call cli%get(switch='--cfl', val=self%CFL, error=cli%error) ; if (cli%error/=0) stop
-   call cli%get(switch='--w-scheme', val=self%w_scheme, error=cli%error) ; if (cli%error/=0) stop
-   call cli%get(switch='--weno-order', val=self%weno_order, error=cli%error) ; if (cli%error/=0) stop
-   call cli%get(switch='--weno-eps', val=self%weno_eps, error=cli%error) ; if (cli%error/=0) stop
-   call cli%get(switch='-a', val=self%a, error=cli%error) ; if (cli%error/=0) stop
-   call cli%get(switch='--length', val=self%length, error=cli%error) ; if (cli%error/=0) stop
-   call cli%get(switch='--Ni', val=self%Ni, error=cli%error) ; if (cli%error/=0) stop
-   call cli%get(switch='-is', val=self%initial_state, error=cli%error) ; if (cli%error/=0) stop
+   call cli%get(group='linear_advection', switch='--cfl', val=self%CFL, error=cli%error) ; if (cli%error/=0) stop
+   call cli%get(group='linear_advection', switch='--w-scheme', val=self%w_scheme, error=cli%error) ; if (cli%error/=0) stop
+   call cli%get(group='linear_advection', switch='--weno-order', val=self%weno_order, error=cli%error) ; if (cli%error/=0) stop
+   call cli%get(group='linear_advection', switch='--weno-eps', val=self%weno_eps, error=cli%error) ; if (cli%error/=0) stop
+   call cli%get(group='linear_advection', switch='-a', val=self%a, error=cli%error) ; if (cli%error/=0) stop
+   call cli%get(group='linear_advection', switch='--length', val=self%length, error=cli%error) ; if (cli%error/=0) stop
+   call cli%get(group='linear_advection', switch='--Ni', val=self%Ni, error=cli%error) ; if (cli%error/=0) stop
+   call cli%get(group='linear_advection', switch='-is', val=self%initial_state, error=cli%error) ; if (cli%error/=0) stop
 
    self%Ng = (self%weno_order + 1) / 2
    self%Dx = self%length / self%Ni
@@ -274,16 +276,19 @@ contains
    !< Set command line interface.
    type(command_line_interface), intent(inout) :: cli !< Command line interface handler.
 
-   call cli%add(switch='--w-scheme', help='WENO scheme', required=.false., act='store', def='reconstructor-JS', &
-     choices='reconstructor-JS,reconstructor-M-JS,reconstructor-M-Z,reconstructor-Z')
-   call cli%add(switch='--weno-order', help='WENO order', required=.false., act='store', def='1')
-   call cli%add(switch='--weno-eps', help='WENO epsilon parameter', required=.false., act='store', def='0.000001')
-   call cli%add(switch='--cfl', help='CFL value', required=.false., act='store', def='0.8')
-   call cli%add(switch='-a', help='advection coefficient', required=.false., act='store', def='1.0')
-   call cli%add(switch='--length', help='domain lenth', required=.false., act='store', def='1.0')
-   call cli%add(switch='--Ni', help='number finite volumes used', required=.false., act='store', def='100')
-   call cli%add(switch='--initial_state', switch_ab='-is', help='initial state', required=.false., act='store', &
-                def='square_wave', choices='square_wave')
+   call cli%add_group(description='linear advection test settings', group='linear_advection')
+   call cli%add(group='linear_advection', switch='--w-scheme', help='WENO scheme', required=.false., act='store', &
+                def='reconstructor-JS', choices='reconstructor-JS,reconstructor-M-JS,reconstructor-M-Z,reconstructor-Z')
+   call cli%add(group='linear_advection', switch='--weno-order', help='WENO order', required=.false., act='store', def='1')
+   call cli%add(group='linear_advection', switch='--weno-eps', help='WENO epsilon parameter', required=.false., act='store', &
+                def='0.000001')
+   call cli%add(group='linear_advection', switch='--cfl', help='CFL value', required=.false., act='store', def='0.8')
+   call cli%add(group='linear_advection', switch='-a', help='advection coefficient', required=.false., act='store', def='1.0')
+   call cli%add(group='linear_advection', switch='--length', help='domain lenth', required=.false., act='store', def='1.0')
+   call cli%add(group='linear_advection', switch='--Ni', help='number finite volumes used', required=.false., act='store', &
+                def='100')
+   call cli%add(group='linear_advection', switch='--initial_state', switch_ab='-is', help='initial state', required=.false., &
+                act='store', def='square_wave', choices='square_wave')
    endsubroutine set_cli
 
    ! integrand_object deferred methods

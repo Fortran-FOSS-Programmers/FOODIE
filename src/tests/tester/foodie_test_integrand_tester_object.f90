@@ -35,20 +35,22 @@ abstract interface
    character(len=:), allocatable                        :: desc   !< Description.
    endfunction description_interface
 
-   pure function error_interface(self, t, U0) result(error)
+   pure function error_interface(self, t, t0, U0) result(error)
    !< Return error.
    import :: integrand_object, integrand_tester_object, R_P
    class(integrand_tester_object), intent(in)           :: self     !< Integrand.
    real(R_P),                      intent(in)           :: t        !< Time.
+   real(R_P),                      intent(in), optional :: t0       !< Initial time.
    class(integrand_object),        intent(in), optional :: U0       !< Initial conditions.
    real(R_P), allocatable                               :: error(:) !< Error.
    endfunction error_interface
 
-   pure function exact_solution_interface(self, t, U0) result(exact)
+   pure function exact_solution_interface(self, t, t0, U0) result(exact)
    !< Return exact solution.
    import :: integrand_object, integrand_tester_object, R_P
    class(integrand_tester_object), intent(in)           :: self     !< Integrand.
    real(R_P),                      intent(in)           :: t        !< Time.
+   real(R_P),                      intent(in), optional :: t0       !< Initial time.
    class(integrand_object),        intent(in), optional :: U0       !< Initial conditions.
    real(R_P), allocatable                               :: exact(:) !< Exact solution.
    endfunction exact_solution_interface
