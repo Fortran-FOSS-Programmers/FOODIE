@@ -101,6 +101,7 @@ type, extends(integrand_tester_object) :: integrand_ladvection
       ! private methods
       procedure, pass(self), private :: impose_boundary_conditions    !< Impose boundary conditions.
       procedure, pass(self), private :: reconstruct_interfaces        !< Reconstruct interface states.
+      procedure, pass(self), private :: set_sin_wave_initial_state    !< Set initial state as a sin wave.
       procedure, pass(self), private :: set_square_wave_initial_state !< Set initial state as a square wave.
 endtype integrand_ladvection
 
@@ -151,19 +152,20 @@ contains
    ! integrand_tester_object deferred methods
    pure function description(self, prefix) result(desc)
    !< Return informative integrator description.
-   class(integrand_ladvection), intent(in)           :: self    !< Integrator.
+   class(integrand_ladvection), intent(in)           :: self    !< Integrand.
    character(*),                intent(in), optional :: prefix  !< Prefixing string.
    character(len=:), allocatable                     :: desc    !< Description.
    character(len=:), allocatable                     :: prefix_ !< Prefixing string, local variable.
 
    prefix_ = '' ; if (present(prefix)) prefix_ = prefix
-   desc = prefix//'linear_advection-Ni_'//trim(strz(self%Ni, 10))
+   desc = prefix//'linear_advection-'//trim(self%initial_state)//'-Ni_'//trim(strz(self%Ni, 10))
    endfunction description
 
-   pure function error(self, t, U0)
+   pure function error(self, t, t0, U0)
    !< Return error.
    class(integrand_ladvection), intent(in)           :: self     !< Integrand.
    real(R_P),                   intent(in)           :: t        !< Time.
+   real(R_P),                   intent(in), optional :: t0       !< Initial time.
    class(integrand_object),     intent(in), optional :: U0       !< Initial conditions.
    real(R_P), allocatable                            :: error(:) !< Error.
    integer(I_P)                                      :: i        !< Counter.
@@ -174,41 +176,54 @@ contains
       select type(U0)
       type is(integrand_ladvection)
          do i=1, self%Ni
-            ! error = error + (U0%u(i) - self%u(i)) ** 2
-            error = max(error, abs(U0%u(i) - self%u(i)))
+            error = error + (U0%u(i) - self%u(i)) ** 2
          enddo
       endselect
-      ! error = sqrt(error)
+      error = self%Dx * sqrt(error)
    endif
    endfunction error
 
-   pure function exact_solution(self, t, U0) result(exact)
+   pure function exact_solution(self, t, t0, U0) result(exact)
    !< Return exact solution.
    class(integrand_ladvection), intent(in)           :: self     !< Integrand.
    real(R_P),                   intent(in)           :: t        !< Time.
+   real(R_P),                   intent(in), optional :: t0       !< Initial time.
    class(integrand_object),     intent(in), optional :: U0       !< Initial conditions.
    real(R_P), allocatable                            :: exact(:) !< Exact solution.
+   integer(I_P)                                      :: offset   !< Cells offset.
+   integer(I_P)                                      :: i        !< Counter.
 
+   allocate(exact(1:self%Ni))
    if (present(U0)) then
       select type(U0)
       type is(integrand_ladvection)
-         exact = U0%u(1:self%Ni)
+         offset = nint(mod(self%a * t, self%length) / self%Dx)
+         do i=1, self%Ni - offset
+            exact(i + offset) = U0%u(i)
+         enddo
+         do i=self%Ni - offset + 1, self%Ni
+            exact(i - self%Ni + offset) = U0%u(i)
+         enddo
       endselect
    else
       exact = self%u(1:self%Ni) * 0._R_P
    endif
    endfunction exact_solution
 
-   subroutine export_tecplot(self, file_name, t, scheme, close_file)
+   subroutine export_tecplot(self, file_name, t, scheme, close_file, with_exact_solution, U0)
    !< Export integrand to Tecplot file.
-   class(integrand_ladvection), intent(in)           :: self            !< Advection field.
-   character(*),                intent(in), optional :: file_name       !< File name.
-   real(R_P),                   intent(in), optional :: t               !< Time.
-   character(*),                intent(in), optional :: scheme          !< Scheme used to integrate integrand.
-   logical,                     intent(in), optional :: close_file      !< Flag for closing file.
-   logical, save                                     :: is_open=.false. !< Flag for checking if file is open.
-   integer(I_P), save                                :: file_unit       !< File unit.
-   integer(I_P)                                      :: i               !< Counter.
+   class(integrand_ladvection), intent(in)           :: self                 !< Advection field.
+   character(*),                intent(in), optional :: file_name            !< File name.
+   real(R_P),                   intent(in), optional :: t                    !< Time.
+   character(*),                intent(in), optional :: scheme               !< Scheme used to integrate integrand.
+   logical,                     intent(in), optional :: close_file           !< Flag for closing file.
+   logical,                     intent(in), optional :: with_exact_solution  !< Flag for export also exact solution.
+   class(integrand_object),     intent(in), optional :: U0                   !< Initial conditions.
+   logical                                           :: with_exact_solution_ !< Flag for export also exact solution, local variable.
+   logical, save                                     :: is_open=.false.      !< Flag for checking if file is open.
+   integer(I_P), save                                :: file_unit            !< File unit.
+   real(R_P), allocatable                            :: exact_solution(:)    !< Exact solution.
+   integer(I_P)                                      :: i                    !< Counter.
 
    if (present(close_file)) then
       if (close_file .and. is_open) then
@@ -216,6 +231,7 @@ contains
          is_open = .false.
       endif
    else
+      with_exact_solution_ = .false. ; if (present(with_exact_solution)) with_exact_solution_ = with_exact_solution
       if (present(file_name)) then
          if (is_open) close(unit=file_unit)
          open(newunit=file_unit, file=trim(adjustl(file_name)))
@@ -227,6 +243,13 @@ contains
          do i=1, self%Ni
             write(unit=file_unit, fmt='(2('//FR_P//',1X))') self%Dx * i - 0.5_R_P * self%Dx, self%u(i)
          enddo
+         if (with_exact_solution_) then
+            exact_solution = self%exact_solution(t=t, U0=U0)
+            write(unit=file_unit, fmt='(A)') 'ZONE T="'//str(t)//' exact solution"'
+            do i=1, self%Ni
+               write(unit=file_unit, fmt='(2('//FR_P//',1X))') self%Dx * i - 0.5_R_P * self%Dx, exact_solution(i)
+            enddo
+         endif
       endif
    endif
    endsubroutine export_tecplot
@@ -240,6 +263,8 @@ contains
    self%Ni = nint(self%length / self%Dx)
 
    select case(trim(adjustl(self%initial_state)))
+   case('sin_wave')
+      call self%set_sin_wave_initial_state
    case('square_wave')
       call self%set_square_wave_initial_state
    endselect
@@ -252,14 +277,14 @@ contains
 
    call self%destroy
 
-   call cli%get(switch='--cfl', val=self%CFL, error=cli%error) ; if (cli%error/=0) stop
-   call cli%get(switch='--w-scheme', val=self%w_scheme, error=cli%error) ; if (cli%error/=0) stop
-   call cli%get(switch='--weno-order', val=self%weno_order, error=cli%error) ; if (cli%error/=0) stop
-   call cli%get(switch='--weno-eps', val=self%weno_eps, error=cli%error) ; if (cli%error/=0) stop
-   call cli%get(switch='-a', val=self%a, error=cli%error) ; if (cli%error/=0) stop
-   call cli%get(switch='--length', val=self%length, error=cli%error) ; if (cli%error/=0) stop
-   call cli%get(switch='--Ni', val=self%Ni, error=cli%error) ; if (cli%error/=0) stop
-   call cli%get(switch='-is', val=self%initial_state, error=cli%error) ; if (cli%error/=0) stop
+   call cli%get(group='linear_advection', switch='--cfl', val=self%CFL, error=cli%error) ; if (cli%error/=0) stop
+   call cli%get(group='linear_advection', switch='--w-scheme', val=self%w_scheme, error=cli%error) ; if (cli%error/=0) stop
+   call cli%get(group='linear_advection', switch='--weno-order', val=self%weno_order, error=cli%error) ; if (cli%error/=0) stop
+   call cli%get(group='linear_advection', switch='--weno-eps', val=self%weno_eps, error=cli%error) ; if (cli%error/=0) stop
+   call cli%get(group='linear_advection', switch='-a', val=self%a, error=cli%error) ; if (cli%error/=0) stop
+   call cli%get(group='linear_advection', switch='--length', val=self%length, error=cli%error) ; if (cli%error/=0) stop
+   call cli%get(group='linear_advection', switch='--Ni', val=self%Ni, error=cli%error) ; if (cli%error/=0) stop
+   call cli%get(group='linear_advection', switch='-is', val=self%initial_state, error=cli%error) ; if (cli%error/=0) stop
 
    self%Ng = (self%weno_order + 1) / 2
    self%Dx = self%length / self%Ni
@@ -274,16 +299,19 @@ contains
    !< Set command line interface.
    type(command_line_interface), intent(inout) :: cli !< Command line interface handler.
 
-   call cli%add(switch='--w-scheme', help='WENO scheme', required=.false., act='store', def='reconstructor-JS', &
-     choices='reconstructor-JS,reconstructor-M-JS,reconstructor-M-Z,reconstructor-Z')
-   call cli%add(switch='--weno-order', help='WENO order', required=.false., act='store', def='1')
-   call cli%add(switch='--weno-eps', help='WENO epsilon parameter', required=.false., act='store', def='0.000001')
-   call cli%add(switch='--cfl', help='CFL value', required=.false., act='store', def='0.8')
-   call cli%add(switch='-a', help='advection coefficient', required=.false., act='store', def='1.0')
-   call cli%add(switch='--length', help='domain lenth', required=.false., act='store', def='1.0')
-   call cli%add(switch='--Ni', help='number finite volumes used', required=.false., act='store', def='100')
-   call cli%add(switch='--initial_state', switch_ab='-is', help='initial state', required=.false., act='store', &
-                def='square_wave', choices='square_wave')
+   call cli%add_group(description='linear advection test settings', group='linear_advection')
+   call cli%add(group='linear_advection', switch='--w-scheme', help='WENO scheme', required=.false., act='store', &
+                def='reconstructor-JS', choices='reconstructor-JS,reconstructor-M-JS,reconstructor-M-Z,reconstructor-Z')
+   call cli%add(group='linear_advection', switch='--weno-order', help='WENO order', required=.false., act='store', def='1')
+   call cli%add(group='linear_advection', switch='--weno-eps', help='WENO epsilon parameter', required=.false., act='store', &
+                def='0.000001')
+   call cli%add(group='linear_advection', switch='--cfl', help='CFL value', required=.false., act='store', def='0.8')
+   call cli%add(group='linear_advection', switch='-a', help='advection coefficient', required=.false., act='store', def='1.0')
+   call cli%add(group='linear_advection', switch='--length', help='domain lenth', required=.false., act='store', def='1.0')
+   call cli%add(group='linear_advection', switch='--Ni', help='number finite volumes used', required=.false., act='store', &
+                def='100')
+   call cli%add(group='linear_advection', switch='--initial_state', switch_ab='-is', help='initial state', required=.false., &
+                act='store', def='sin_wave', choices='sin_wave,square_wave')
    endsubroutine set_cli
 
    ! integrand_object deferred methods
@@ -305,7 +333,7 @@ contains
    do i=0, self%Ni
       call solve_riemann_problem(state_left=ur(2, i), state_right=ur(1, i+1), flux=f(i))
    enddo
-   allocate(dState_dt(1-self%Ng:self%Ni+self%Ng))
+   allocate(dState_dt(1:self%Ni))
    do i=1, self%Ni
        dState_dt(i) = (f(i - 1) - f(i)) / self%Dx
    enddo
@@ -556,20 +584,34 @@ contains
 
    subroutine set_square_wave_initial_state(self)
    !< Set initial state as a square wave.
-   class(integrand_ladvection), intent(inout) :: self         !< Advection field.
-   real(R_P)                                  :: x(1:self%ni) !< Cell center x-abscissa values.
-   integer(I_P)                               :: i            !< Space counter.
+   class(integrand_ladvection), intent(inout) :: self !< Advection field.
+   real(R_P)                                  :: x    !< Cell center x-abscissa values.
+   integer(I_P)                               :: i    !< Space counter.
 
-   if (allocated(self%u)) deallocate(self%u) ; allocate(self%u(1-self%Ng:self%Ni+self%Ng))
+   if (allocated(self%u)) deallocate(self%u) ; allocate(self%u(1:self%Ni))
    do i=1, self%Ni
-      x(i) = self%Dx * i - 0.5_R_P * self%Dx
-      if     (x(i) < 0.25_R_P) then
+      x = self%Dx * i - 0.5_R_P * self%Dx
+      if     (x < 0.25_R_P) then
          self%u(i) = 0._R_P
-      elseif (0.25_R_P <= x(i) .and. x(i) < 0.75_R_P) then
+      elseif (0.25_R_P <= x .and. x < 0.75_R_P) then
          self%u(i) = 1._R_P
       else
          self%u(i) = 0._R_P
       endif
    enddo
    endsubroutine set_square_wave_initial_state
+
+   subroutine set_sin_wave_initial_state(self)
+   !< Set initial state as a sin wave.
+   class(integrand_ladvection), intent(inout) :: self                   !< Advection field.
+   real(R_P)                                  :: x                      !< Cell center x-abscissa values.
+   real(R_P), parameter                       :: pi=4._R_P*atan(1._R_P) !< Pi greek.
+   integer(I_P)                               :: i                      !< Space counter.
+
+   if (allocated(self%u)) deallocate(self%u) ; allocate(self%u(1:self%Ni))
+   do i=1, self%Ni
+      x = self%Dx * i - 0.5_R_P * self%Dx
+      self%u(i) = sin(x * 2 * pi)
+   enddo
+   endsubroutine set_sin_wave_initial_state
 endmodule foodie_test_integrand_ladvection

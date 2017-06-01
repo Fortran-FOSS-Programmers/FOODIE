@@ -5,14 +5,16 @@ module foodie_test_integrand_lcce
 !< Define [[integrand_lcce]], the linear constant coefficients equation test field that is a concrete extension of the
 !< abstract integrand type.
 
+use flap, only : command_line_interface
 use foodie, only : integrand_object
-use penf, only : I_P, R_P
+use foodie_test_integrand_tester_object, only : integrand_tester_object
+use penf, only : FR_P, R_P, I_P, str
 
 implicit none
 private
 public :: integrand_lcce
 
-type, extends(integrand_object) :: integrand_lcce
+type, extends(integrand_tester_object) :: integrand_lcce
    !< The linear constant coefficient equation field.
    !<
    !< It is a FOODIE integrand class concrete extension.
@@ -47,10 +49,16 @@ type, extends(integrand_object) :: integrand_lcce
    real(R_P) :: U0=0._R_P !< Integrand initial state.
    contains
       ! auxiliary methods
-      procedure, pass(self), public :: exact_solution !< Return exact solution.
-      procedure, pass(self), public :: initialize     !< Initialize integrand.
       procedure, pass(self), public :: output         !< Extract integrand state field.
-      ! public deferred methods
+      ! integrand_tester_object deferred methods
+      procedure, pass(self), public :: description    !< Return an informative description of the test.
+      procedure, pass(self), public :: error          !< Return error.
+      procedure, pass(self), public :: exact_solution !< Return exact solution.
+      procedure, pass(self), public :: export_tecplot !< Export integrand to Tecplot file.
+      procedure, pass(self), public :: initialize     !< Initialize field.
+      procedure, pass(self), public :: parse_cli      !< Initialize from command line interface.
+      procedure, nopass,     public :: set_cli        !< Set command line interface.
+      ! integrand_object deferred methods
       procedure, pass(self), public :: integrand_dimension !< Return integrand dimension.
       procedure, pass(self), public :: t => dU_dt          !< Time derivative, residuals.
       ! operators
@@ -82,30 +90,6 @@ endtype integrand_lcce
 
 contains
    ! auxiliary methods
-   pure function exact_solution(self, t, t0) result(exact)
-   !< Return exact solution.
-   class(integrand_lcce), intent(in)           :: self  !< Integrand.
-   real(R_P),             intent(in)           :: t     !< Time.
-   real(R_P),             intent(in), optional :: t0    !< Initial time.
-   real(R_P)                                   :: exact !< Exact solution.
-   real(R_P)                                   :: t0_   !< Initial time, local variable.
-
-   t0_ = 0._R_P ; if (present(t0)) t0_ = t0
-   exact = (self%U0 + self%b / self%a) * exp(self%a * (t - t0_)) - self%b / self%a
-   endfunction exact_solution
-
-   pure subroutine initialize(self, a, b, U0)
-   !< Initialize integrand.
-   class(integrand_lcce), intent(inout) :: self !< Integrand.
-   real(R_P),             intent(in)    :: a, b !< Equation coefficients.
-   real(R_P),             intent(in)    :: U0   !< Initial state of the integrand.
-
-   self%a = a
-   self%b = b
-   self%U = U0
-   self%U0 = U0
-   endsubroutine initialize
-
    pure function output(self) result(state)
    !< Extract integrand state field.
    class(integrand_lcce), intent(in) :: self  !< Integrand.
@@ -114,7 +98,121 @@ contains
    state = self%U
    endfunction output
 
-   ! deferred methods
+   ! integrand_tester_object deferred methods
+   pure function description(self, prefix) result(desc)
+   !< Return informative integrator description.
+   class(integrand_lcce), intent(in)           :: self    !< Integrand.
+   character(*),          intent(in), optional :: prefix  !< Prefixing string.
+   character(len=:), allocatable               :: desc    !< Description.
+   character(len=:), allocatable               :: prefix_ !< Prefixing string, local variable.
+
+   prefix_ = '' ; if (present(prefix)) prefix_ = prefix
+   desc = prefix//'linear_constant_coefficients_eq'
+   endfunction description
+
+   pure function error(self, t, t0, U0)
+   !< Return error.
+   class(integrand_lcce),   intent(in)           :: self     !< Integrand.
+   real(R_P),               intent(in)           :: t        !< Time.
+   real(R_P),               intent(in), optional :: t0       !< Initial time.
+   class(integrand_object), intent(in), optional :: U0       !< Initial conditions.
+   real(R_P), allocatable                        :: error(:) !< Error.
+
+   allocate(error(1:1))
+   error = abs([self%U] - self%exact_solution(t=t, t0=t0))
+   endfunction error
+
+   pure function exact_solution(self, t, t0, U0) result(exact)
+   !< Return exact solution.
+   class(integrand_lcce),   intent(in)           :: self     !< Integrand.
+   real(R_P),               intent(in)           :: t        !< Time.
+   real(R_P),               intent(in), optional :: t0       !< Initial time.
+   class(integrand_object), intent(in), optional :: U0       !< Initial conditions.
+   real(R_P), allocatable                        :: exact(:) !< Exact solution.
+   real(R_P)                                     :: t0_      !< Initial time, local variable.
+
+   allocate(exact(1:1))
+   t0_ = 0._R_P ; if (present(t0)) t0_ = t0
+   exact(1) = (self%U0 + self%b / self%a) * exp(self%a * (t - t0_)) - self%b / self%a
+   endfunction exact_solution
+
+   subroutine export_tecplot(self, file_name, t, scheme, close_file, with_exact_solution, U0)
+   !< Export integrand to Tecplot file.
+   class(integrand_lcce),   intent(in)           :: self                 !< Advection field.
+   character(*),            intent(in), optional :: file_name            !< File name.
+   real(R_P),               intent(in), optional :: t                    !< Time.
+   character(*),            intent(in), optional :: scheme               !< Scheme used to integrate integrand.
+   logical,                 intent(in), optional :: close_file           !< Flag for closing file.
+   logical,                 intent(in), optional :: with_exact_solution  !< Flag for export also exact solution.
+   class(integrand_object), intent(in), optional :: U0                   !< Initial conditions.
+   logical                                       :: with_exact_solution_ !< Flag for export also exact solution, local variable.
+   logical, save                                 :: is_open=.false.      !< Flag for checking if file is open.
+   integer(I_P), save                            :: file_unit            !< File unit.
+
+   if (present(close_file)) then
+      if (close_file .and. is_open) then
+         close(unit=file_unit)
+         is_open = .false.
+      endif
+   else
+      with_exact_solution_ = .false. ; if (present(with_exact_solution)) with_exact_solution_ = with_exact_solution
+      if (present(file_name)) then
+         if (is_open) close(unit=file_unit)
+         open(newunit=file_unit, file=trim(adjustl(file_name)))
+         is_open = .true.
+         if (with_exact_solution_) then
+            write(unit=file_unit, fmt='(A)') 'VARIABLES="t" "x" "x_exact"'
+         else
+            write(unit=file_unit, fmt='(A)') 'VARIABLES="t" "x"'
+         endif
+      endif
+      if (present(t) .and. present(scheme) .and. is_open) then
+         write(unit=file_unit, fmt='(A)') 'ZONE T="'//trim(adjustl(scheme))//'"'
+         if (with_exact_solution_) then
+            write(unit=file_unit, fmt='(3('//FR_P//',1X))') t, self%U, self%exact_solution(t=t)
+         else
+            write(unit=file_unit, fmt='(2('//FR_P//',1X))') t, self%U
+         endif
+      elseif (present(t) .and. is_open) then
+         if (with_exact_solution_) then
+            write(unit=file_unit, fmt='(3('//FR_P//',1X))') t, self%U, self%exact_solution(t=t)
+         else
+            write(unit=file_unit, fmt='(2('//FR_P//',1X))') t, self%U
+         endif
+      endif
+   endif
+   endsubroutine export_tecplot
+
+   pure subroutine initialize(self, Dt)
+   !< Initialize integrand.
+   !<
+   !< Intentionally empty, all is done in `parse_cli` method.
+   class(integrand_lcce), intent(inout) :: self !< Integrand.
+   real(R_P),             intent(in)    :: Dt   !< Time step.
+   endsubroutine initialize
+
+   subroutine parse_cli(self, cli)
+   !< Initialize from command line interface.
+   class(integrand_lcce),        intent(inout) :: self !< Advection field.
+   type(command_line_interface), intent(inout) :: cli  !< Command line interface handler.
+
+   call cli%get(group='lcce', switch='-a', val=self%a, error=cli%error) ; if (cli%error/=0) stop
+   call cli%get(group='lcce', switch='-b', val=self%b, error=cli%error) ; if (cli%error/=0) stop
+   call cli%get(group='lcce', switch='-U0', val=self%U0, error=cli%error) ; if (cli%error/=0) stop
+   self%U = self%U0
+   endsubroutine parse_cli
+
+   subroutine set_cli(cli)
+   !< Set command line interface.
+   type(command_line_interface), intent(inout) :: cli !< Command line interface handler.
+
+   call cli%add_group(description='linear constant coefficient equation test settings', group='lcce')
+   call cli%add(group='lcce', switch='-a', help='"a" coeff of "a * x + b" equation', required=.false., def='-1.0', act='store')
+   call cli%add(group='lcce', switch='-b', help='"b" coeff of "a * x + b" equation', required=.false., def='0.0', act='store')
+   call cli%add(group='lcce', switch='-U0', help='initial state', required=.false., def='1.0', act='store')
+   endsubroutine set_cli
+
+      ! integrand_object deferred methods
    pure function integrand_dimension(self)
    !< return integrand dimension.
    class(integrand_lcce), intent(in) :: self                !< integrand.

@@ -35,32 +35,36 @@ abstract interface
    character(len=:), allocatable                        :: desc   !< Description.
    endfunction description_interface
 
-   pure function error_interface(self, t, U0) result(error)
+   pure function error_interface(self, t, t0, U0) result(error)
    !< Return error.
    import :: integrand_object, integrand_tester_object, R_P
    class(integrand_tester_object), intent(in)           :: self     !< Integrand.
    real(R_P),                      intent(in)           :: t        !< Time.
+   real(R_P),                      intent(in), optional :: t0       !< Initial time.
    class(integrand_object),        intent(in), optional :: U0       !< Initial conditions.
    real(R_P), allocatable                               :: error(:) !< Error.
    endfunction error_interface
 
-   pure function exact_solution_interface(self, t, U0) result(exact)
+   pure function exact_solution_interface(self, t, t0, U0) result(exact)
    !< Return exact solution.
    import :: integrand_object, integrand_tester_object, R_P
    class(integrand_tester_object), intent(in)           :: self     !< Integrand.
    real(R_P),                      intent(in)           :: t        !< Time.
+   real(R_P),                      intent(in), optional :: t0       !< Initial time.
    class(integrand_object),        intent(in), optional :: U0       !< Initial conditions.
    real(R_P), allocatable                               :: exact(:) !< Exact solution.
    endfunction exact_solution_interface
 
-   subroutine export_tecplot_interface(self, file_name, t, scheme, close_file)
+   subroutine export_tecplot_interface(self, file_name, t, scheme, close_file, with_exact_solution, U0)
    !< Export integrand to Tecplot file.
-   import :: integrand_tester_object, R_P
-   class(integrand_tester_object), intent(in)           :: self       !< Integrand.
-   character(*),                   intent(in), optional :: file_name  !< File name.
-   real(R_P),                      intent(in), optional :: t          !< Time.
-   character(*),                   intent(in), optional :: scheme     !< Scheme used to integrate integrand.
-   logical,                        intent(in), optional :: close_file !< Flag for closing file.
+   import :: integrand_object, integrand_tester_object, R_P
+   class(integrand_tester_object), intent(in)           :: self                !< Integrand.
+   character(*),                   intent(in), optional :: file_name           !< File name.
+   real(R_P),                      intent(in), optional :: t                   !< Time.
+   character(*),                   intent(in), optional :: scheme              !< Scheme used to integrate integrand.
+   logical,                        intent(in), optional :: close_file          !< Flag for closing file.
+   logical,                        intent(in), optional :: with_exact_solution !< Flag for export also exact solution.
+   class(integrand_object),        intent(in), optional :: U0                  !< Initial conditions.
    endsubroutine export_tecplot_interface
 
    subroutine initialize_interface(self, Dt)

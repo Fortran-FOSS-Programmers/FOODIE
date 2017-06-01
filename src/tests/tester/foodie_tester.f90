@@ -28,6 +28,7 @@ use foodie, only : foodie_integrator_class_names,          &
                    integrator_runge_kutta_ssp,             &
                    is_available, is_class_available
 use foodie_test_integrand_ladvection, only : integrand_ladvection
+use foodie_test_integrand_lcce, only : integrand_lcce
 use foodie_test_integrand_oscillation, only : integrand_oscillation
 use foodie_test_integrand_tester_object, only : integrand_tester_object
 use penf, only : I_P, R_P, FR_P, str, strz
@@ -45,7 +46,6 @@ type :: test_object
    private
    type(command_line_interface)                :: cli                 !< Command line interface handler.
    integer(I_P)                                :: error               !< Error handler.
-   character(99)                               :: test                !< Test executed.
    character(99)                               :: scheme              !< Scheme used.
    real(R_P), allocatable                      :: Dt(:)               !< Time step(s) exercised.
    logical                                     :: is_fast             !< Flag for activating fast schemes.
@@ -55,6 +55,7 @@ type :: test_object
    logical                                     :: save_results        !< Flag for activating results saving.
    character(99)                               :: output              !< Output files basename.
    integer(I_P)                                :: save_frequency      !< Save frequency.
+   type(integrand_lcce)                        :: lcce_0              !< Initial conditions for linear constant coefficients eq.
    type(integrand_ladvection)                  :: ladvection_0        !< Initial conditions for linear advection test.
    type(integrand_oscillation)                 :: oscillation_0       !< Initial conditions for oscillation test.
    class(integrand_tester_object), allocatable :: integrand_0         !< Initial conditions.
@@ -88,6 +89,7 @@ contains
    endif
    allocate(error(1:size(self%integrand_0%error(t=0._R_P), dim=1), 1:size(self%Dt, dim=1)))
    if (size(self%Dt, dim=1) > 1) allocate(order(1:size(error, dim=1), 1:size(error, dim=2)-1))
+   print '(A)', self%integrand_0%description()
    do s=1, size(integrator_schemes, dim=1)
       print '(A)', trim(integrator_schemes(s))
       do t=1, size(self%Dt)
@@ -128,20 +130,28 @@ contains
                        authors     = 'Fortran-FOSS-Programmers',                                &
                        license     = 'GNU GPLv3',                                               &
                        description = 'Tester factory of FOODIE integrators',                    &
-                       examples    = ["foodie_tester --scheme euler_explicit --save_results  ", &
-                                      "foodie_tester --scheme all -r                         "])
-         call cli%add(switch='--test', switch_ab='-t', help='test executed', required=.false., def='oscillation', &
-                      act='store', choices='linear_advection,oscillation')
-         call cli%add(switch='--scheme', switch_ab='-s', help='integrator scheme used', required=.false., def='all', act='store')
-         call cli%add(switch='--time_step', switch_ab='-Dt', nargs='+', help='time step', required=.false., def='1e2', act='store')
-         call cli%add(switch='--fast', help='activate fast solvers', required=.false., act='store_true', def='.false.')
-         call cli%add(switch='--iterations', help='iterations number for implicit schemes', required=.false., act='store', def='5')
-         call cli%add(switch='--stages', help='stages number', required=.false., def='2', act='store')
-         call cli%add(switch='--final_time', switch_ab='-ft', help='integration time', required=.false., def='1e6', act='store')
-         call cli%add(switch='--save_results', switch_ab='-r',help='save result', required=.false., act='store_true', def='.false.')
-         call cli%add(switch='--output', help='output file basename', required=.false., act='store', def='foodie_test')
-         call cli%add(switch='--save_frequency', help='save frequency', required=.false., act='store', def='1')
+                       examples    = ["foodie_tester test --scheme euler_explicit --save_results  ", &
+                                      "foodie_tester test --scheme all -r                         "])
+         call cli%add_group(description='general test settings', group='test')
+         call cli%add(group='test', switch='--scheme', switch_ab='-s', help='integrator scheme used', required=.false., def='all', &
+                      act='store')
+         call cli%add(group='test', switch='--time_step', switch_ab='-Dt', nargs='+', help='time step', required=.false., &
+                      def='1e2', act='store')
+         call cli%add(group='test', switch='--fast', help='activate fast solvers', required=.false., act='store_true', &
+                      def='.false.')
+         call cli%add(group='test', switch='--iterations', help='iterations number for implicit schemes', required=.false., &
+                      act='store', def='5')
+         call cli%add(group='test', switch='--stages', help='stages number', required=.false., def='2', act='store')
+         call cli%add(group='test', switch='--final_time', switch_ab='-ft', help='integration time', required=.false., def='1e6', &
+                      act='store')
+         call cli%add(group='test', switch='--save_results', switch_ab='-r',help='save result', required=.false., &
+                      act='store_true', def='.false.')
+         call cli%add(group='test', switch='--output', help='output file basename', required=.false., act='store', &
+                      def='foodie_test')
+         call cli%add(group='test', switch='--save_frequency', help='save frequency', required=.false., act='store', &
+                      def='1')
       endassociate
+      call self%lcce_0%set_cli(cli=self%cli)
       call self%ladvection_0%set_cli(cli=self%cli)
       call self%oscillation_0%set_cli(cli=self%cli)
       endsubroutine set_cli
@@ -154,27 +164,32 @@ contains
       integer(I_P)               :: i                         !< Counter.
 
       call self%cli%parse(error=self%error)
-      call self%cli%get(switch='-t', val=self%test, error=self%error) ; if (self%error/=0) stop
-      call self%cli%get(switch='-s', val=self%scheme, error=self%error) ; if (self%error/=0) stop
-      call self%cli%get_varying(switch='-Dt', val=self%Dt, error=self%error) ; if (self%error/=0) stop
-      call self%cli%get(switch='--fast', val=self%is_fast, error=self%error) ; if (self%error/=0) stop
-      call self%cli%get(switch='--iterations', val=self%implicit_iterations, error=self%error) ; if (self%error/=0) stop
-      call self%cli%get(switch='--stages', val=self%stages, error=self%error) ; if (self%error/=0) stop
-      call self%cli%get(switch='-ft', val=self%final_time, error=self%error) ; if (self%error/=0) stop
-      call self%cli%get(switch='-r', val=self%save_results, error=self%error) ; if (self%error/=0) stop
-      call self%cli%get(switch='--output', val=self%output, error=self%error) ; if (self%error/=0) stop
-      call self%cli%get(switch='--save_frequency', val=self%save_frequency, error=self%error) ; if (self%error/=0) stop
+      call self%cli%get(group='test', switch='-s', val=self%scheme, error=self%error) ; if (self%error/=0) stop
+      call self%cli%get_varying(group='test', switch='-Dt', val=self%Dt, error=self%error) ; if (self%error/=0) stop
+      call self%cli%get(group='test', switch='--fast', val=self%is_fast, error=self%error) ; if (self%error/=0) stop
+      call self%cli%get(group='test', switch='--iterations',val=self%implicit_iterations,error=self%error) ; if (self%error/=0) stop
+      call self%cli%get(group='test', switch='--stages', val=self%stages, error=self%error) ; if (self%error/=0) stop
+      call self%cli%get(group='test', switch='-ft', val=self%final_time, error=self%error) ; if (self%error/=0) stop
+      call self%cli%get(group='test', switch='-r', val=self%save_results, error=self%error) ; if (self%error/=0) stop
+      call self%cli%get(group='test', switch='--output', val=self%output, error=self%error) ; if (self%error/=0) stop
+      call self%cli%get(group='test', switch='--save_frequency',val=self%save_frequency,error=self%error) ; if (self%error/=0) stop
+      call self%lcce_0%parse_cli(cli=self%cli)
       call self%ladvection_0%parse_cli(cli=self%cli)
       call self%oscillation_0%parse_cli(cli=self%cli)
 
-      select case(trim(adjustl(self%test)))
-      case('linear_advection')
+      if     (self%cli%run_command('lcce')) then
+         allocate(integrand_lcce :: self%integrand_0)
+         self%integrand_0 = self%lcce_0
+      elseif (self%cli%run_command('linear_advection')) then
          allocate(integrand_ladvection :: self%integrand_0)
          self%integrand_0 = self%ladvection_0
-      case('oscillation')
+      elseif (self%cli%run_command('oscillation')) then
          allocate(integrand_oscillation :: self%integrand_0)
          self%integrand_0 = self%oscillation_0
-      endselect
+      else
+         allocate(integrand_oscillation :: self%integrand_0)
+         self%integrand_0 = self%oscillation_0
+      endif
 
       if (.not.is_dt_valid()) then
          write(stderr, '(A)') 'error: the final integration time must be an exact multiple of the time step used'
@@ -253,7 +268,6 @@ contains
    real(R_P), allocatable                       :: error_(:)        !< Error of integrand integration.
    class(integrand_tester_object) , allocatable :: integrand        !< Integrand.
    class(integrator_object), allocatable        :: integrator       !< The integrator.
-   type(integrator_runge_kutta_ssp)             :: integrator_start !< The (auto) start integrator.
    real(R_P)                                    :: time             !< Time.
    integer(I_P)                                 :: step             !< Time steps counter.
 
@@ -263,15 +277,16 @@ contains
                                   tolerance=1e2_R_P, iterations=iterations, autoupdate=.true., U=integrand_0)
    if (is_fast) call check_scheme_has_fast_mode(scheme=trim(adjustl(scheme)), integrator=integrator)
 
-   if (integrator%is_multistep()) call integrator_start%initialize(scheme='runge_kutta_ssp_stages_5_order_4', U=integrand_0)
-
    step = 0
    time = 0._R_P
    if (save_results) call integrand%export_tecplot(file_name=output_base_name//                                     &
                                                              integrand%description(prefix='-')//                    &
                                                              integrator%description(prefix='-')//                   &
                                                              '-steps_'//trim(strz(int(final_time/Dt), 10))//'.dat', &
-                                                             t=time, scheme=scheme)
+                                                    t=time,                                                         &
+                                                    scheme=scheme,                                                  &
+                                                    with_exact_solution=.true.,                                     &
+                                                    U0=integrand_0)
 
    select type(integrator)
    class is(integrator_multistage_object)
@@ -291,11 +306,11 @@ contains
       do
          step = step + 1
          if (integrator%steps_number() >= step) then
-            call integrator_start%integrate(U=integrand, Dt=Dt, t=time)
-            integrator%previous(step) = integrand
             time = time + Dt
             integrator%Dt(step) = Dt
             integrator%t(step) = time
+            integrator%previous(step) = integrand%exact_solution(t=time, U0=integrand_0)
+            integrand = integrator%previous(step)
          else
             if (is_fast) then
                call integrator%integrate_fast(U=integrand, Dt=Dt, t=time)
@@ -312,11 +327,11 @@ contains
       do
          step = step + 1
          if (integrator%steps_number() >= step) then
-            call integrator_start%integrate(U=integrand, Dt=Dt, t=time)
-            integrator%previous(step) = integrand
             time = time + Dt
             integrator%Dt(step) = Dt
             integrator%t(step) = time
+            integrator%previous(step) = integrand%exact_solution(t=time, U0=integrand_0)
+            integrand = integrator%previous(step)
          else
             if (is_fast) then
                call integrator%integrate_fast(U=integrand, Dt=Dt,t=time)
@@ -351,10 +366,12 @@ contains
       !< Export current integrand solution to tecplot file.
 
       select type(integrand)
+      type is(integrand_lcce)
+         if (save_results .and. mod(step, save_frequency)==0) call integrand%export_tecplot(t=time, with_exact_solution=.true.)
       type is(integrand_ladvection)
          if (save_results .and. mod(step, save_frequency)==0) call integrand%export_tecplot(t=time, scheme=scheme)
       type is(integrand_oscillation)
-         if (save_results .and. mod(step, save_frequency)==0) call integrand%export_tecplot(t=time)
+         if (save_results .and. mod(step, save_frequency)==0) call integrand%export_tecplot(t=time, with_exact_solution=.true.)
       endselect
       endsubroutine integrand_export_tecplot
    endsubroutine integrate
