@@ -55,14 +55,16 @@ abstract interface
    real(R_P), allocatable                               :: exact(:) !< Exact solution.
    endfunction exact_solution_interface
 
-   subroutine export_tecplot_interface(self, file_name, t, scheme, close_file)
+   subroutine export_tecplot_interface(self, file_name, t, scheme, close_file, with_exact_solution, U0)
    !< Export integrand to Tecplot file.
-   import :: integrand_tester_object, R_P
-   class(integrand_tester_object), intent(in)           :: self       !< Integrand.
-   character(*),                   intent(in), optional :: file_name  !< File name.
-   real(R_P),                      intent(in), optional :: t          !< Time.
-   character(*),                   intent(in), optional :: scheme     !< Scheme used to integrate integrand.
-   logical,                        intent(in), optional :: close_file !< Flag for closing file.
+   import :: integrand_object, integrand_tester_object, R_P
+   class(integrand_tester_object), intent(in)           :: self                !< Integrand.
+   character(*),                   intent(in), optional :: file_name           !< File name.
+   real(R_P),                      intent(in), optional :: t                   !< Time.
+   character(*),                   intent(in), optional :: scheme              !< Scheme used to integrate integrand.
+   logical,                        intent(in), optional :: close_file          !< Flag for closing file.
+   logical,                        intent(in), optional :: with_exact_solution !< Flag for export also exact solution.
+   class(integrand_object),        intent(in), optional :: U0                  !< Initial conditions.
    endsubroutine export_tecplot_interface
 
    subroutine initialize_interface(self, Dt)

@@ -144,15 +144,18 @@ contains
             self%U0(1) * sin(self%f * t) + self%U0(2) * cos(self%f * t)]
    endfunction exact_solution
 
-   subroutine export_tecplot(self, file_name, t, scheme, close_file)
+   subroutine export_tecplot(self, file_name, t, scheme, close_file, with_exact_solution, U0)
    !< Export integrand to Tecplot file.
-   class(integrand_oscillation), intent(in)           :: self            !< Advection field.
-   character(*),                 intent(in), optional :: file_name       !< File name.
-   real(R_P),                    intent(in), optional :: t               !< Time.
-   character(*),                 intent(in), optional :: scheme          !< Scheme used to integrate integrand.
-   logical,                      intent(in), optional :: close_file      !< Flag for closing file.
-   logical, save                                      :: is_open=.false. !< Flag for checking if file is open.
-   integer(I_P), save                                 :: file_unit       !< File unit.
+   class(integrand_oscillation), intent(in)           :: self                 !< Advection field.
+   character(*),                 intent(in), optional :: file_name            !< File name.
+   real(R_P),                    intent(in), optional :: t                    !< Time.
+   character(*),                 intent(in), optional :: scheme               !< Scheme used to integrate integrand.
+   logical,                      intent(in), optional :: close_file           !< Flag for closing file.
+   logical,                      intent(in), optional :: with_exact_solution  !< Flag for export also exact solution.
+   class(integrand_object),      intent(in), optional :: U0                   !< Initial conditions.
+   logical                                            :: with_exact_solution_ !< Flag for export also exact solution, local variable.
+   logical, save                                      :: is_open=.false.      !< Flag for checking if file is open.
+   integer(I_P), save                                 :: file_unit            !< File unit.
 
    if (present(close_file)) then
       if (close_file .and. is_open) then
@@ -160,17 +163,30 @@ contains
          is_open = .false.
       endif
    else
+      with_exact_solution_ = .false. ; if (present(with_exact_solution)) with_exact_solution_ = with_exact_solution
       if (present(file_name)) then
          if (is_open) close(unit=file_unit)
          open(newunit=file_unit, file=trim(adjustl(file_name)))
          is_open = .true.
-         write(unit=file_unit, fmt='(A)') 'VARIABLES="t" "x" "y" "amplitude" "phase"'
+         if (with_exact_solution_) then
+            write(unit=file_unit, fmt='(A)') 'VARIABLES="t" "x" "y" "amplitude" "phase" "x_e" "y_e"'
+         else
+            write(unit=file_unit, fmt='(A)') 'VARIABLES="t" "x" "y" "amplitude" "phase"'
+         endif
       endif
       if (present(t) .and. present(scheme) .and. is_open) then
          write(unit=file_unit, fmt='(A)') 'ZONE T="'//trim(adjustl(scheme))//'"'
-         write(unit=file_unit, fmt='(5('//FR_P//',1X))') t, self%U, self%amplitude_phase()
+         if (with_exact_solution_) then
+            write(unit=file_unit, fmt='(7('//FR_P//',1X))') t, self%U, self%amplitude_phase(), self%exact_solution(t=t)
+         else
+            write(unit=file_unit, fmt='(5('//FR_P//',1X))') t, self%U, self%amplitude_phase()
+         endif
       elseif (present(t) .and. is_open) then
-         write(unit=file_unit, fmt='(5('//FR_P//',1X))') t, self%U, self%amplitude_phase()
+         if (with_exact_solution_) then
+            write(unit=file_unit, fmt='(7('//FR_P//',1X))') t, self%U, self%amplitude_phase(), self%exact_solution(t=t)
+         else
+            write(unit=file_unit, fmt='(5('//FR_P//',1X))') t, self%U, self%amplitude_phase()
+         endif
       endif
    endif
    endsubroutine export_tecplot

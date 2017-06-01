@@ -268,7 +268,6 @@ contains
    real(R_P), allocatable                       :: error_(:)        !< Error of integrand integration.
    class(integrand_tester_object) , allocatable :: integrand        !< Integrand.
    class(integrator_object), allocatable        :: integrator       !< The integrator.
-   type(integrator_runge_kutta_ssp)             :: integrator_start !< The (auto) start integrator.
    real(R_P)                                    :: time             !< Time.
    integer(I_P)                                 :: step             !< Time steps counter.
 
@@ -278,15 +277,16 @@ contains
                                   tolerance=1e2_R_P, iterations=iterations, autoupdate=.true., U=integrand_0)
    if (is_fast) call check_scheme_has_fast_mode(scheme=trim(adjustl(scheme)), integrator=integrator)
 
-   if (integrator%is_multistep()) call integrator_start%initialize(scheme='runge_kutta_ssp_stages_5_order_4', U=integrand_0)
-
    step = 0
    time = 0._R_P
    if (save_results) call integrand%export_tecplot(file_name=output_base_name//                                     &
                                                              integrand%description(prefix='-')//                    &
                                                              integrator%description(prefix='-')//                   &
                                                              '-steps_'//trim(strz(int(final_time/Dt), 10))//'.dat', &
-                                                             t=time, scheme=scheme)
+                                                    t=time,                                                         &
+                                                    scheme=scheme,                                                  &
+                                                    with_exact_solution=.true.,                                     &
+                                                    U0=integrand_0)
 
    select type(integrator)
    class is(integrator_multistage_object)
@@ -306,11 +306,11 @@ contains
       do
          step = step + 1
          if (integrator%steps_number() >= step) then
-            call integrator_start%integrate(U=integrand, Dt=Dt, t=time)
-            integrator%previous(step) = integrand
             time = time + Dt
             integrator%Dt(step) = Dt
             integrator%t(step) = time
+            integrator%previous(step) = integrand%exact_solution(t=time, U0=integrand_0)
+            integrand = integrator%previous(step)
          else
             if (is_fast) then
                call integrator%integrate_fast(U=integrand, Dt=Dt, t=time)
@@ -327,11 +327,11 @@ contains
       do
          step = step + 1
          if (integrator%steps_number() >= step) then
-            call integrator_start%integrate(U=integrand, Dt=Dt, t=time)
-            integrator%previous(step) = integrand
             time = time + Dt
             integrator%Dt(step) = Dt
             integrator%t(step) = time
+            integrator%previous(step) = integrand%exact_solution(t=time, U0=integrand_0)
+            integrand = integrator%previous(step)
          else
             if (is_fast) then
                call integrator%integrate_fast(U=integrand, Dt=Dt,t=time)
@@ -366,10 +366,12 @@ contains
       !< Export current integrand solution to tecplot file.
 
       select type(integrand)
+      type is(integrand_lcce)
+         if (save_results .and. mod(step, save_frequency)==0) call integrand%export_tecplot(t=time, with_exact_solution=.true.)
       type is(integrand_ladvection)
          if (save_results .and. mod(step, save_frequency)==0) call integrand%export_tecplot(t=time, scheme=scheme)
       type is(integrand_oscillation)
-         if (save_results .and. mod(step, save_frequency)==0) call integrand%export_tecplot(t=time)
+         if (save_results .and. mod(step, save_frequency)==0) call integrand%export_tecplot(t=time, with_exact_solution=.true.)
       endselect
       endsubroutine integrand_export_tecplot
    endsubroutine integrate

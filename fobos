@@ -219,16 +219,20 @@ rule = tar --xform="s%^%FOODIE/%" -czf FOODIE.tar.gz *
 [rule-makecoverage]
 help   = Rule for performing coverage analysis
 rule_1 = FoBiS.py build -f src/tests/tester/fobos -mode gnu-coverage
-rule_2 = ./build/tests/tester/foodie_tester
-rule_3 = rm -f build/tests/tester/obj/penf* build/tests/tester/obj/face* build/tests/tester/obj/flap* build/tests/tester/obj/wenoof*
-rule_4 = gcov -o build/tests/tester/obj/ src/lib/foodie*
-rule_5 = rm -f *.gcov
+rule_2 = ./build/tests/tester/foodie_tester lcce test -ft 2 -Dt 1e-1 1e-2
+rule_3 = ./build/tests/tester/foodie_tester linear_advection -is sin_wave --weno-order 3 test -s runge_kutta_ls -ft 1 -Dt 8e-3 2e-3
+rule_4 = ./build/tests/tester/foodie_tester oscillation test -ft 1e4 -Dt 1e1 0.5e1
+rule_5 = rm -f build/tests/tester/obj/penf* build/tests/tester/obj/face* build/tests/tester/obj/flap* build/tests/tester/obj/penf* build/tests/tester/obj/wenoof*
+rule_6 = gcov -o build/tests/tester/obj/ src/lib/foodie*
+rule_7 = rm -f *.gcov
 
 [rule-coverage-analysis]
 help   = Rule for performing coverage analysis and saving reports in markdown
 rule_1 = FoBiS.py build -f src/tests/tester/fobos -mode gnu-coverage
-rule_2 = ./build/tests/tester/foodie_tester
-rule_3 = rm -f build/tests/tester/obj/penf* build/tests/tester/obj/face* build/tests/tester/obj/flap* build/tests/tester/obj/wenoof*
-rule_4 = gcov -o build/tests/tester/obj/ src/lib/foodie*
-rule_5 = FoBiS.py rule -gcov_analyzer wiki/ Coverage-Analysis
-rule_6 = rm -f *.gcov
+rule_2 = ./build/tests/tester/foodie_tester lcce test -ft 2 -Dt 1e-1 1e-2
+rule_3 = ./build/tests/tester/foodie_tester linear_advection -is sin_wave --weno-order 3 test -s runge_kutta_ls -ft 1 -Dt 8e-3 2e-3
+rule_4 = ./build/tests/tester/foodie_tester oscillation test -ft 1e4 -Dt 1e1 0.5e1
+rule_5 = rm -f build/tests/tester/obj/penf* build/tests/tester/obj/face* build/tests/tester/obj/flap* build/tests/tester/obj/penf* build/tests/tester/obj/wenoof*
+rule_6 = gcov -o build/tests/tester/obj/ src/lib/foodie*
+rule_7 = FoBiS.py rule -gcov_analyzer wiki/ Coverage-Analysis
+rule_8 = rm -f *.gcov
