@@ -136,18 +136,18 @@
      <li><i class="fa fa-list-ol"></i>
        <a data-toggle="tooltip"
 	  data-placement="bottom" data-html="true"
-	  title=" 1.9% of total for abstract interfaces.">15 statements</a>
+	  title=" 1.2% of total for abstract interfaces.">18 statements</a>
      </li> 
      
      
-    <li><i class="fa fa-code"></i><a href="../src/oscillation.f90"> Source File</a></li>
+    <li><i class="fa fa-code"></i><a href="../src/foodie_integrator_multistage_object.f90"> Source File</a></li>
      
   </ul>
   <ol class="breadcrumb in-well text-right">
   
-     <li><a href='../sourcefile/oscillation.f90.html'>oscillation.f90</a></li>
+     <li><a href='../sourcefile/foodie_integrator_multistage_object.f90.html'>foodie_integrator_multistage_object.f90</a></li>
   
-     <li><a href='../module/oscillation_test_t.html'>oscillation_test_t</a></li>
+     <li><a href='../module/foodie_integrator_multistage_object.html'>foodie_integrator_multistage_object</a></li>
   
      <li class="active">integrate_interface</li>
   </ol>
@@ -205,9 +205,21 @@
       
       <a class="list-group-item" href="../interface/class_name_interface.html">class_name_interface</a>
       
+      <a class="list-group-item" href="../interface/description_interface%7E2.html">description_interface</a>
+      
       <a class="list-group-item" href="../interface/description_interface.html">description_interface</a>
       
+      <a class="list-group-item" href="../interface/error_interface.html">error_interface</a>
+      
+      <a class="list-group-item" href="../interface/exact_solution_interface.html">exact_solution_interface</a>
+      
+      <a class="list-group-item" href="../interface/export_tecplot_interface.html">export_tecplot_interface</a>
+      
       <a class="list-group-item" href="../interface/has_fast_mode_interface.html">has_fast_mode_interface</a>
+      
+      <a class="list-group-item" href="../interface/initialize_interface.html">initialize_interface</a>
+      
+      <a class="list-group-item" href="../interface/integrand_dimension_interface.html">integrand_dimension_interface</a>
       
       <a class="list-group-item" href="../interface/integrand_op_real.html">integrand_op_real</a>
       
@@ -217,19 +229,37 @@
       
       <a class="list-group-item" href="../interface/integrate_fast_interface%7E2.html">integrate_fast_interface</a>
       
+      <a class="list-group-item" href="../interface/integrate_fast_interface%7E3.html">integrate_fast_interface</a>
+      
+      <a class="list-group-item" href="../interface/integrate_fast_interface%7E4.html">integrate_fast_interface</a>
+      
+      <a class="list-group-item" href="../interface/integrate_fast_interface%7E5.html">integrate_fast_interface</a>
+      
       <a class="list-group-item" href="../interface/integrate_interface.html">integrate_interface</a>
       
       <a class="list-group-item" href="../interface/integrate_interface%7E2.html">integrate_interface</a>
       
       <a class="list-group-item" href="../interface/integrate_interface%7E3.html">integrate_interface</a>
       
+      <a class="list-group-item" href="../interface/integrate_interface%7E4.html">integrate_interface</a>
+      
+      <a class="list-group-item" href="../interface/integrate_interface%7E5.html">integrate_interface</a>
+      
+      <a class="list-group-item" href="../interface/is_multistagestep_interface.html">is_multistagestep_interface</a>
+      
       <a class="list-group-item" href="../interface/is_supported_interface.html">is_supported_interface</a>
       
       <a class="list-group-item" href="../interface/local_error_operator.html">local_error_operator</a>
       
+      <a class="list-group-item" href="../interface/parse_cli_interface.html">parse_cli_interface</a>
+      
       <a class="list-group-item" href="../interface/real_op_integrand.html">real_op_integrand</a>
       
       <a class="list-group-item" href="../interface/real_scalar_op_integrand.html">real_scalar_op_integrand</a>
+      
+      <a class="list-group-item" href="../interface/set_cli_interface.html">set_cli_interface</a>
+      
+      <a class="list-group-item" href="../interface/stagesteps_number_interface.html">stagesteps_number_interface</a>
       
       <a class="list-group-item" href="../interface/supported_schemes_interface.html">supported_schemes_interface</a>
       
@@ -250,11 +280,11 @@
 	
     
     <h2>abstract interface</h2>
-    <p>Interface for integrate procedures.</p>
+    <p>Abstract interfaces of deferred methods of <a href="../type/integrator_multistage_object.html">integrator_multistage_object</a>.</p>
     
     
     <h2>
-private subroutine integrate_interface(scheme, frequency, final_time, solution, error, last_step, iterations, Dt, tolerance, stages)
+private subroutine integrate_interface(self, U, Dt, t, new_Dt)
     
     
 	 
@@ -283,114 +313,39 @@ private subroutine integrate_interface(scheme, frequency, final_time, solution, 
   
 <tr>
   
-  <td><span class="anchor" id="variable-scheme%7E3"></span>character(len=*),</td>
+  <td><span class="anchor" id="variable-self%7E8"></span>class(<a href='../type/integrator_multistage_object.html'>integrator_multistage_object</a>),</td>
+  <td>intent(inout)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>self</strong></td><td><p>Integrator.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-u%7E15"></span>class(<a href='../type/integrand_object.html'>integrand_object</a>),</td>
+  <td>intent(inout)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>U</strong></td><td><p>Integrand.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-dt%7E11"></span>real(kind=R_P),</td>
   <td>intent(in)</td>
   <td></td>
-  
-  <td></td><td>::</td>
-  <td><strong>scheme</strong></td><td><p>Selected scheme.</p></td>
-  
-</tr>
-
-  
-  
-  
-  
-<tr>
-  
-  <td><span class="anchor" id="variable-frequency%7E2"></span>real(kind=R_P),</td>
-  <td>intent(in)</td>
-  <td></td>
-  
-  <td></td><td>::</td>
-  <td><strong>frequency</strong></td><td><p>Oscillation frequency.</p></td>
-  
-</tr>
-
-  
-  
-  
-  
-<tr>
-  
-  <td><span class="anchor" id="variable-final_time%7E2"></span>real(kind=R_P),</td>
-  <td>intent(in)</td>
-  <td></td>
-  
-  <td></td><td>::</td>
-  <td><strong>final_time</strong></td><td><p>Final integration time.</p></td>
-  
-</tr>
-
-  
-  
-  
-  
-<tr>
-  
-  <td><span class="anchor" id="variable-solution"></span>real(kind=R_P),</td>
-  <td>intent(out),</td>
-  <td></td>
-  
-  <td>allocatable</td><td>::</td>
-  <td><strong>solution</strong>(:,:)</td><td><p>Solution at each time step, X-Y.</p></td>
-  
-</tr>
-
-  
-  
-  
-  
-<tr>
-  
-  <td><span class="anchor" id="variable-error%7E4"></span>real(kind=R_P),</td>
-  <td>intent(out)</td>
-  <td></td>
-  
-  <td></td><td>::</td>
-  <td><strong>error</strong>(1:)</td><td><p>Error (norm L2) with respect the exact solution.</p></td>
-  
-</tr>
-
-  
-  
-  
-  
-<tr>
-  
-  <td><span class="anchor" id="variable-last_step"></span>integer(kind=I_P),</td>
-  <td>intent(out)</td>
-  <td></td>
-  
-  <td></td><td>::</td>
-  <td><strong>last_step</strong></td><td><p>Last time step computed.</p></td>
-  
-</tr>
-
-  
-  
-  
-  
-<tr>
-  
-  <td><span class="anchor" id="variable-iterations"></span>integer(kind=I_P),</td>
-  <td>intent(in),</td>
-  <td>optional</td>
-  
-  <td></td><td>::</td>
-  <td><strong>iterations</strong></td><td><p>Number of fixed point iterations.</p></td>
-  
-</tr>
-
-  
-  
-  
-  
-<tr>
-  
-  <td><span class="anchor" id="variable-dt%7E6"></span>real(kind=R_P),</td>
-  <td>intent(in),</td>
-  <td>optional</td>
   
   <td></td><td>::</td>
   <td><strong>Dt</strong></td><td><p>Time step.</p></td>
@@ -403,12 +358,12 @@ private subroutine integrate_interface(scheme, frequency, final_time, solution, 
   
 <tr>
   
-  <td><span class="anchor" id="variable-tolerance%7E3"></span>real(kind=R_P),</td>
-  <td>intent(in),</td>
-  <td>optional</td>
+  <td><span class="anchor" id="variable-t%7E20"></span>real(kind=R_P),</td>
+  <td>intent(in)</td>
+  <td></td>
   
   <td></td><td>::</td>
-  <td><strong>tolerance</strong></td><td><p>Local error tolerance.</p></td>
+  <td><strong>t</strong></td><td><p>Time.</p></td>
   
 </tr>
 
@@ -418,12 +373,12 @@ private subroutine integrate_interface(scheme, frequency, final_time, solution, 
   
 <tr>
   
-  <td><span class="anchor" id="variable-stages%7E9"></span>integer(kind=I_P),</td>
-  <td>intent(in),</td>
+  <td><span class="anchor" id="variable-new_dt%7E3"></span>real(kind=R_P),</td>
+  <td>intent(out),</td>
   <td>optional</td>
   
   <td></td><td>::</td>
-  <td><strong>stages</strong></td><td><p>Number of stages.</p></td>
+  <td><strong>new_Dt</strong></td><td><p>New adapted time step.</p></td>
   
 </tr>
 
@@ -432,6 +387,9 @@ private subroutine integrate_interface(scheme, frequency, final_time, solution, 
 
     
     
+    
+    <h3>Description</h3>
+    <p>Integrate integrand field.</p>
     
     <br>
 
@@ -455,9 +413,21 @@ private subroutine integrate_interface(scheme, frequency, final_time, solution, 
       
       <a class="list-group-item" href="../interface/class_name_interface.html">class_name_interface</a>
       
+      <a class="list-group-item" href="../interface/description_interface%7E2.html">description_interface</a>
+      
       <a class="list-group-item" href="../interface/description_interface.html">description_interface</a>
       
+      <a class="list-group-item" href="../interface/error_interface.html">error_interface</a>
+      
+      <a class="list-group-item" href="../interface/exact_solution_interface.html">exact_solution_interface</a>
+      
+      <a class="list-group-item" href="../interface/export_tecplot_interface.html">export_tecplot_interface</a>
+      
       <a class="list-group-item" href="../interface/has_fast_mode_interface.html">has_fast_mode_interface</a>
+      
+      <a class="list-group-item" href="../interface/initialize_interface.html">initialize_interface</a>
+      
+      <a class="list-group-item" href="../interface/integrand_dimension_interface.html">integrand_dimension_interface</a>
       
       <a class="list-group-item" href="../interface/integrand_op_real.html">integrand_op_real</a>
       
@@ -467,19 +437,37 @@ private subroutine integrate_interface(scheme, frequency, final_time, solution, 
       
       <a class="list-group-item" href="../interface/integrate_fast_interface%7E2.html">integrate_fast_interface</a>
       
+      <a class="list-group-item" href="../interface/integrate_fast_interface%7E3.html">integrate_fast_interface</a>
+      
+      <a class="list-group-item" href="../interface/integrate_fast_interface%7E4.html">integrate_fast_interface</a>
+      
+      <a class="list-group-item" href="../interface/integrate_fast_interface%7E5.html">integrate_fast_interface</a>
+      
       <a class="list-group-item" href="../interface/integrate_interface.html">integrate_interface</a>
       
       <a class="list-group-item" href="../interface/integrate_interface%7E2.html">integrate_interface</a>
       
       <a class="list-group-item" href="../interface/integrate_interface%7E3.html">integrate_interface</a>
       
+      <a class="list-group-item" href="../interface/integrate_interface%7E4.html">integrate_interface</a>
+      
+      <a class="list-group-item" href="../interface/integrate_interface%7E5.html">integrate_interface</a>
+      
+      <a class="list-group-item" href="../interface/is_multistagestep_interface.html">is_multistagestep_interface</a>
+      
       <a class="list-group-item" href="../interface/is_supported_interface.html">is_supported_interface</a>
       
       <a class="list-group-item" href="../interface/local_error_operator.html">local_error_operator</a>
       
+      <a class="list-group-item" href="../interface/parse_cli_interface.html">parse_cli_interface</a>
+      
       <a class="list-group-item" href="../interface/real_op_integrand.html">real_op_integrand</a>
       
       <a class="list-group-item" href="../interface/real_scalar_op_integrand.html">real_scalar_op_integrand</a>
+      
+      <a class="list-group-item" href="../interface/set_cli_interface.html">set_cli_interface</a>
+      
+      <a class="list-group-item" href="../interface/stagesteps_number_interface.html">stagesteps_number_interface</a>
       
       <a class="list-group-item" href="../interface/supported_schemes_interface.html">supported_schemes_interface</a>
       
@@ -504,7 +492,7 @@ private subroutine integrate_interface(scheme, frequency, final_time, solution, 
           <p class="text-right">
             Documentation generated by 
             <a href="https://github.com/cmacmackin/ford">FORD</a>
-             on 2017-05-08 17:15  
+             on 2017-06-06 10:04  
           </p>
         </div>
         <div class="col-xs-12 col-md-4 col-md-pull-4"><p class="text-center"> FOODIE was developed by Fortran-FOSS-Programmers Group</p></div>

@@ -16,7 +16,8 @@ type, abstract :: integrand_object
 #endif
   contains
     ! public deferred procedures that concrete integrand-field must implement
-    procedure(time_derivative), pass(self), deferred, public :: t !< Time derivative, residuals.
+    procedure(integrand_dimension_interface), pass(self), deferred, public :: integrand_dimension !< Return integrand dimension.
+    procedure(time_derivative),               pass(self), deferred, public :: t                   !< Time derivative, residuals.
     ! operators
     procedure(local_error_operator), pass(lhs), deferred, public :: local_error !< `||integrand - integrand||` operator.
     generic, public :: operator(.lterror.) => local_error !< Estimate local truncation error.
@@ -52,17 +53,24 @@ type, abstract :: integrand_object
     ! public methods for fast operational mode, must be overridden
     procedure, pass(self), public :: t_fast !< Time derivative, residuals, fast mode.
     procedure, pass(opr), public :: integrand_add_integrand_fast !< `+` fast operator.
-    generic, public :: add_fast => integrand_add_integrand_fast !< Overloading `add` method.
+    generic, public :: add_fast => integrand_add_integrand_fast !< Overloading `add_fast` method.
     procedure, pass(opr), public :: integrand_multiply_integrand_fast   !< `*` fast operator.
     procedure, pass(opr), public :: integrand_multiply_real_scalar_fast !< `* real_scalar` fast operator.
     generic, public :: multiply_fast => integrand_multiply_integrand_fast, &
-                                        integrand_multiply_real_scalar_fast !< Overloading `multiply` method.
+                                        integrand_multiply_real_scalar_fast !< Overloading `multiply_fast` method.
     procedure, pass(opr), public :: integrand_subtract_integrand_fast !< `-` fast operator.
-    generic, public :: subtract_fast => integrand_multiply_integrand_fast !< Overloading `subtract` method.
+    generic, public :: subtract_fast => integrand_subtract_integrand_fast !< Overloading `subtract_fast` method.
 endtype integrand_object
 
 abstract interface
-  !< Abstract type bound procedures necessary for implementing a concrete extension of [[integrand_object]].
+   !< Abstract type bound procedures necessary for implementing a concrete extension of [[integrand_object]].
+
+   pure function integrand_dimension_interface(self) result(integrand_dimension)
+   !< Return integrand dimension.
+   import :: integrand_object, I_P
+   class(integrand_object), intent(in) :: self                !< Integrand.
+   integer(I_P)                        :: integrand_dimension !< Integrand dimension.
+   endfunction integrand_dimension_interface
 
   function time_derivative(self, t) result(dState_dt)
   !< Time derivative function of integrand class, i.e. the residuals function.

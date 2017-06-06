@@ -1,0 +1,4290 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+	 
+	 <meta name="description" content="Fortran Object oriented Ordinary Differential Equations integration library">
+    
+    <meta name="author" content="Fortran-FOSS-Programmers Group" >
+    <link rel="icon" href="../favicon.png">
+
+    <title>foodie_test_integrand_lcce &ndash; FOODIE</title>
+
+    <link href="../css/bootstrap.min.css" rel="stylesheet">
+    <link href="../css/pygments.css" rel="stylesheet">
+    <link href="../css/font-awesome.min.css" rel="stylesheet">
+    <link href="../css/local.css" rel="stylesheet">
+    
+
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+    
+    <script src="../js/jquery-2.1.3.min.js"></script>
+    <script src="../js/svg-pan-zoom.min.js"></script>
+
+    
+    <script src="../tipuesearch/tipuesearch_content.js"></script>
+    <link  href="../tipuesearch/tipuesearch.css" rel="stylesheet">
+    <script src="../tipuesearch/tipuesearch_set.js"></script>
+    <script src="../tipuesearch/tipuesearch.js"></script>
+    
+
+  </head>
+
+  <body>
+
+    <!-- Fixed navbar -->
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="../index.html">FOODIE </a>
+        </div>
+        <div id="navbar" class="navbar-collapse collapse">
+          <ul class="nav navbar-nav">
+				
+            <li class="dropdown hidden-xs visible-sm visible-md hidden-lg">
+              <a href="#" class="dropdown-toggle"
+              data-toggle="dropdown" role="button"
+              aria-haspopup="true"
+		 aria-expanded="false">Contents <span class="caret"></span></a>
+	      <ul class="dropdown-menu">
+              
+            <li><a href="../lists/files.html">Source Files</a></li>
+				
+				
+            <li><a href="../lists/modules.html">Modules</a></li>
+				
+            
+                                
+            <li><a href="../lists/procedures.html">Procedures</a></li>
+				
+				
+            <li><a href="../lists/absint.html">Abstract Interfaces</a></li>
+								
+            <li><a href="../lists/types.html">Derived Types</a></li>
+				
+				
+            <li><a href="../lists/programs.html">Programs</a></li>
+				
+            </ul>
+            </li>
+
+<li class="visible-xs hidden-sm visible-lg"><a href="../lists/files.html">Source Files</a></li>
+
+
+<li class="visible-xs hidden-sm visible-lg"><a href="../lists/modules.html">Modules</a></li>
+
+
+
+<li class="visible-xs hidden-sm visible-lg"><a href="../lists/procedures.html">Procedures</a></li>
+
+
+<li class="visible-xs hidden-sm visible-lg"><a href="../lists/absint.html">Abstract Interfaces</a></li>
+                             
+<li class="visible-xs hidden-sm visible-lg"><a href="../lists/types.html">Derived Types</a></li>
+
+
+<li class="visible-xs hidden-sm visible-lg"><a href="../lists/programs.html">Programs</a></li>
+
+          </ul>
+        
+        <form action="../search.html" class="navbar-form navbar-right" role="search">
+        <div class="form-group">
+          <input type="text" class="form-control" placeholder="Search" name="q" id="tipue_search_input" autocomplete="off" required>
+        </div>
+<!--
+        <button type="submit" class="btn btn-default">Submit</button>
+-->
+        </form>
+        
+        </div><!--/.nav-collapse -->
+      </div>
+    </nav>
+
+    <div class="container">
+    
+  
+  <div class="row">
+    <h1>foodie_test_integrand_lcce 
+    <small>Module</small>
+    
+    </h1>
+    
+<div class="row">
+  <div class="col-lg-12">
+<div class="well well-sm">
+  <ul class="list-inline" style="margin-bottom:0px;display:inline">
+     
+     
+     
+     
+    
+    
+     <li><i class="fa fa-list-ol"></i>
+       <a data-toggle="tooltip"
+	  data-placement="bottom" data-html="true"
+	  title=" 3.0% of total for modules and submodules.">316 statements</a>
+     </li> 
+     
+     
+    <li><i class="fa fa-code"></i><a href="../src/foodie_test_integrand_lcce.f90"> Source File</a></li>
+     
+  </ul>
+  <ol class="breadcrumb in-well text-right">
+  
+     <li><a href='../sourcefile/foodie_test_integrand_lcce.f90.html'>foodie_test_integrand_lcce.f90</a></li>
+  
+     <li class="active">foodie_test_integrand_lcce</li>
+  </ol>
+</div>
+</div>
+</div>
+<script>
+  $(function () {
+  $('[data-toggle="tooltip"]').tooltip()
+  })
+</script>
+
+  </div>
+  
+  <div class="row">
+    <div class="col-md-3 hidden-xs hidden-sm visible-md visible-lg">
+    
+<div id="sidebar">
+  
+
+
+
+
+
+
+
+
+
+
+
+<div class="panel panel-primary">
+  <div class="panel-heading text-left"><h3 class="panel-title"><a data-toggle="collapse" href="#types-0">Derived Types</a></h3></div>
+  <div id="types-0" class="panel-collapse collapse">
+    <div class="list-group">
+      
+      <a class="list-group-item" href="../module/foodie_test_integrand_lcce.html#type-integrand_lcce">integrand_lcce</a>
+      
+    </div>
+  </div>
+</div>
+
+
+<div class="panel panel-primary">
+  <div class="panel-heading text-left"><h3 class="panel-title"><a data-toggle="collapse" href="#funcs-0">Functions</a></h3></div>
+  <div id="funcs-0" class="panel-collapse collapse">
+    <div class="list-group">
+      
+      <a class="list-group-item" href="../module/foodie_test_integrand_lcce.html#proc-du_dt%7E2">dU_dt</a>
+      
+      <a class="list-group-item" href="../module/foodie_test_integrand_lcce.html#proc-description%7E3">description</a>
+      
+      <a class="list-group-item" href="../module/foodie_test_integrand_lcce.html#proc-error%7E2">error</a>
+      
+      <a class="list-group-item" href="../module/foodie_test_integrand_lcce.html#proc-exact_solution%7E2">exact_solution</a>
+      
+      <a class="list-group-item" href="../module/foodie_test_integrand_lcce.html#proc-integrand_add_integrand%7E2">integrand_add_integrand</a>
+      
+      <a class="list-group-item" href="../module/foodie_test_integrand_lcce.html#proc-integrand_add_real%7E2">integrand_add_real</a>
+      
+      <a class="list-group-item" href="../module/foodie_test_integrand_lcce.html#proc-integrand_dimension%7E2">integrand_dimension</a>
+      
+      <a class="list-group-item" href="../module/foodie_test_integrand_lcce.html#proc-integrand_multiply_integrand%7E2">integrand_multiply_integrand</a>
+      
+      <a class="list-group-item" href="../module/foodie_test_integrand_lcce.html#proc-integrand_multiply_real%7E2">integrand_multiply_real</a>
+      
+      <a class="list-group-item" href="../module/foodie_test_integrand_lcce.html#proc-integrand_multiply_real_scalar%7E2">integrand_multiply_real_scalar</a>
+      
+      <a class="list-group-item" href="../module/foodie_test_integrand_lcce.html#proc-integrand_sub_integrand%7E2">integrand_sub_integrand</a>
+      
+      <a class="list-group-item" href="../module/foodie_test_integrand_lcce.html#proc-integrand_sub_real%7E2">integrand_sub_real</a>
+      
+      <a class="list-group-item" href="../module/foodie_test_integrand_lcce.html#proc-local_error%7E2">local_error</a>
+      
+      <a class="list-group-item" href="../module/foodie_test_integrand_lcce.html#proc-output%7E9">output</a>
+      
+      <a class="list-group-item" href="../module/foodie_test_integrand_lcce.html#proc-real_add_integrand%7E2">real_add_integrand</a>
+      
+      <a class="list-group-item" href="../module/foodie_test_integrand_lcce.html#proc-real_multiply_integrand%7E2">real_multiply_integrand</a>
+      
+      <a class="list-group-item" href="../module/foodie_test_integrand_lcce.html#proc-real_scalar_multiply_integrand%7E2">real_scalar_multiply_integrand</a>
+      
+      <a class="list-group-item" href="../module/foodie_test_integrand_lcce.html#proc-real_sub_integrand%7E2">real_sub_integrand</a>
+      
+    </div>
+  </div>
+</div>
+
+
+<div class="panel panel-primary">
+  <div class="panel-heading text-left"><h3 class="panel-title"><a data-toggle="collapse" href="#subs-0">Subroutines</a></h3></div>
+  <div class="list-group">
+    <div id="subs-0" class="panel-collapse collapse">
+      
+      <a class="list-group-item" href="../module/foodie_test_integrand_lcce.html#proc-assign_integrand%7E2">assign_integrand</a>
+      
+      <a class="list-group-item" href="../module/foodie_test_integrand_lcce.html#proc-assign_real%7E2">assign_real</a>
+      
+      <a class="list-group-item" href="../module/foodie_test_integrand_lcce.html#proc-export_tecplot%7E2">export_tecplot</a>
+      
+      <a class="list-group-item" href="../module/foodie_test_integrand_lcce.html#proc-initialize%7E17">initialize</a>
+      
+      <a class="list-group-item" href="../module/foodie_test_integrand_lcce.html#proc-integrand_add_integrand_fast%7E2">integrand_add_integrand_fast</a>
+      
+      <a class="list-group-item" href="../module/foodie_test_integrand_lcce.html#proc-integrand_multiply_integrand_fast%7E2">integrand_multiply_integrand_fast</a>
+      
+      <a class="list-group-item" href="../module/foodie_test_integrand_lcce.html#proc-integrand_multiply_real_scalar_fast%7E2">integrand_multiply_real_scalar_fast</a>
+      
+      <a class="list-group-item" href="../module/foodie_test_integrand_lcce.html#proc-integrand_subtract_integrand_fast%7E2">integrand_subtract_integrand_fast</a>
+      
+      <a class="list-group-item" href="../module/foodie_test_integrand_lcce.html#proc-parse_cli%7E2">parse_cli</a>
+      
+      <a class="list-group-item" href="../module/foodie_test_integrand_lcce.html#proc-set_cli%7E2">set_cli</a>
+      
+      <a class="list-group-item" href="../module/foodie_test_integrand_lcce.html#proc-t_fast%7E2">t_fast</a>
+      
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
+
+
+
+  <hr>
+  
+
+<div class="panel panel-default">
+  <div class="panel-heading text-left"><h3 class="panel-title"><a data-toggle="collapse" href="#allmods-0">All Modules</a></h3></div>
+  <div id="allmods-0" class="panel-collapse collapse">
+    <div class="list-group">
+      
+      <a class="list-group-item" href="../module/foodie.html">foodie</a>
+      
+      <a class="list-group-item" href="../module/foodie_error_codes.html">foodie_error_codes</a>
+      
+      <a class="list-group-item" href="../module/foodie_integrand_object.html">foodie_integrand_object</a>
+      
+      <a class="list-group-item" href="../module/foodie_integrator_adams_bashforth.html">foodie_integrator_adams_bashforth</a>
+      
+      <a class="list-group-item" href="../module/foodie_integrator_adams_bashforth_moulton.html">foodie_integrator_adams_bashforth_moulton</a>
+      
+      <a class="list-group-item" href="../module/foodie_integrator_adams_moulton.html">foodie_integrator_adams_moulton</a>
+      
+      <a class="list-group-item" href="../module/foodie_integrator_backward_differentiation_formula.html">foodie_integrator_backward_differentiation_formula</a>
+      
+      <a class="list-group-item" href="../module/foodie_integrator_euler_explicit.html">foodie_integrator_euler_explicit</a>
+      
+      <a class="list-group-item" href="../module/foodie_integrator_leapfrog.html">foodie_integrator_leapfrog</a>
+      
+      <a class="list-group-item" href="../module/foodie_integrator_lmm_ssp.html">foodie_integrator_lmm_ssp</a>
+      
+      <a class="list-group-item" href="../module/foodie_integrator_lmm_ssp_vss.html">foodie_integrator_lmm_ssp_vss</a>
+      
+      <a class="list-group-item" href="../module/foodie_integrator_ms_runge_kutta_ssp.html">foodie_integrator_ms_runge_kutta_ssp</a>
+      
+      <a class="list-group-item" href="../module/foodie_integrator_multistage_multistep_object.html">foodie_integrator_multistage_multistep_object</a>
+      
+      <a class="list-group-item" href="../module/foodie_integrator_multistage_object.html">foodie_integrator_multistage_object</a>
+      
+      <a class="list-group-item" href="../module/foodie_integrator_multistep_object.html">foodie_integrator_multistep_object</a>
+      
+      <a class="list-group-item" href="../module/foodie_integrator_object.html">foodie_integrator_object</a>
+      
+      <a class="list-group-item" href="../module/foodie_integrator_runge_kutta_emd.html">foodie_integrator_runge_kutta_emd</a>
+      
+      <a class="list-group-item" href="../module/foodie_integrator_runge_kutta_low_storage.html">foodie_integrator_runge_kutta_low_storage</a>
+      
+      <a class="list-group-item" href="../module/foodie_integrator_runge_kutta_lssp.html">foodie_integrator_runge_kutta_lssp</a>
+      
+      <a class="list-group-item" href="../module/foodie_integrator_runge_kutta_ssp.html">foodie_integrator_runge_kutta_ssp</a>
+      
+      <a class="list-group-item" href="../module/foodie_test_integrand_ladvection.html">foodie_test_integrand_ladvection</a>
+      
+      <a class="list-group-item" href="../module/foodie_test_integrand_lcce.html">foodie_test_integrand_lcce</a>
+      
+      <a class="list-group-item" href="../module/foodie_test_integrand_oscillation.html">foodie_test_integrand_oscillation</a>
+      
+      <a class="list-group-item" href="../module/foodie_test_integrand_tester_object.html">foodie_test_integrand_tester_object</a>
+      
+      <a class="list-group-item" href="../module/foodie_test_lcce_test.html">foodie_test_lcce_test</a>
+      
+      <a class="list-group-item" href="../module/foodie_test_object.html">foodie_test_object</a>
+      
+      <a class="list-group-item" href="../module/foodie_test_oscillation_test.html">foodie_test_oscillation_test</a>
+      
+      <a class="list-group-item" href="../module/foodie_utils.html">foodie_utils</a>
+      
+      <a class="list-group-item" href="../module/type_burgers.html">type_burgers</a>
+      
+      <a class="list-group-item" href="../module/type_euler_1d.html">type_euler_1D</a>
+      
+      <a class="list-group-item" href="../module/type_euler_1d_caf.html">type_euler_1D_caf</a>
+      
+      <a class="list-group-item" href="../module/type_euler_1d_caf_no_foodie.html">type_euler_1D_caf_no_foodie</a>
+      
+      <a class="list-group-item" href="../module/type_euler_1d_openmp.html">type_euler_1D_openmp</a>
+      
+      <a class="list-group-item" href="../module/type_euler_1d_openmp_no_foodie.html">type_euler_1D_openmp_no_foodie</a>
+      
+      <a class="list-group-item" href="../module/type_lorenz.html">type_lorenz</a>
+      
+    </div>
+  </div>
+</div>
+
+
+</div>  
+
+    </div>
+    
+    <div class="col-md-9" id='text'>
+      
+    
+  
+    <ul class="list-inline">
+      <li><h4>Uses:</h4></li>
+      
+      <li>flap</li>
+      
+      <li><a href='../module/foodie.html'>foodie</a></li>
+      
+      <li><a href='../module/foodie_test_integrand_tester_object.html'>foodie_test_integrand_tester_object</a></li>
+      
+      <li>penf</li>
+      
+    </ul>
+    
+                <div class="depgraph"><?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.26.3 (20100126.1600)
+ -->
+<!-- Title: module~~foodie_test_integrand_lcce~~UsesGraph Pages: 1 -->
+<svg id="modulefoodie_test_integrand_lcceUsesGraph" width="641pt" height="559pt"
+ viewBox="0.00 0.00 641.00 558.69" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="module~~foodie_test_integrand_lcce~~UsesGraph" class="graph" transform="scale(0.407243 0.407243) rotate(0) translate(4 1367.87)">
+<title>module~~foodie_test_integrand_lcce~~UsesGraph</title>
+<polygon fill="white" stroke="white" points="-4,5 -4,-1367.87 1571,-1367.87 1571,5 -4,5"/>
+<!-- module~foodie_test_integrand_lcce -->
+<g id="node1" class="node"><title>module~foodie_test_integrand_lcce</title>
+<polygon fill="none" stroke="black" points="1565,-1318.47 1425,-1318.47 1425,-1292.47 1565,-1292.47 1565,-1318.47"/>
+<text text-anchor="middle" x="1495" y="-1303.02" font-family="Helvetica,sans-Serif" font-size="10.50">foodie_test_integrand_lcce</text>
+</g>
+<!-- module~foodie_test_integrand_tester_object -->
+<g id="node2" class="node"><title>module~foodie_test_integrand_tester_object</title>
+<a xlink:href="../module/foodie_test_integrand_tester_object.html" xlink:title="foodie_test_integrand_tester_object">
+<polygon fill="#337ab7" stroke="#337ab7" points="1388,-1318.47 1204,-1318.47 1204,-1292.47 1388,-1292.47 1388,-1318.47"/>
+<text text-anchor="middle" x="1296" y="-1303.02" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">foodie_test_integrand_tester_object</text>
+</a>
+</g>
+<!-- module~foodie_test_integrand_tester_object&#45;&gt;module~foodie_test_integrand_lcce -->
+<g id="edge216" class="edge"><title>module~foodie_test_integrand_tester_object&#45;&gt;module~foodie_test_integrand_lcce</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M1388.22,-1305.47C1396.82,-1305.47 1405.49,-1305.47 1413.98,-1305.47"/>
+<polygon fill="#000000" stroke="#000000" points="1414.23,-1308.97 1424.23,-1305.47 1414.23,-1301.97 1414.23,-1308.97"/>
+</g>
+<!-- penf -->
+<g id="node3" class="node"><title>penf</title>
+<polygon fill="#337ab7" stroke="#337ab7" points="71,-812.474 17,-812.474 17,-786.474 71,-786.474 71,-812.474"/>
+<text text-anchor="middle" x="44" y="-797.024" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">penf</text>
+</g>
+<!-- penf&#45;&gt;module~foodie_test_integrand_lcce -->
+<g id="edge218" class="edge"><title>penf&#45;&gt;module~foodie_test_integrand_lcce</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M45.2478,-786.331C52.686,-711.462 94.0744,-340.49 188,-293.474"/>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M188,-293.474C278.651,-248.098 217.412,-161.233 288,-88.4743 328.56,-46.667 349.323,-47.5589 404,-27.4743"/>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M404,-27.4743C521.988,15.8662 560.316,-43.5517 685,-59.4743"/>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M685,-59.4743C954.368,-93.8737 1069.07,89.6733 1296,-59.4743"/>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M1296,-59.4743C1396.55,-139.261 1479.79,-1117.34 1493.13,-1282.01"/>
+<polygon fill="#000000" stroke="#000000" points="1489.68,-1282.75 1493.97,-1292.44 1496.66,-1282.19 1489.68,-1282.75"/>
+</g>
+<!-- penf&#45;&gt;module~foodie_test_integrand_tester_object -->
+<g id="edge2" class="edge"><title>penf&#45;&gt;module~foodie_test_integrand_tester_object</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M49.4218,-812.814C58.8154,-836.49 78.0618,-887.595 88,-932.474 102.899,-999.755 78.5053,-1188.72 124,-1240.47 208.343,-1336.43 276.246,-1305.47 404,-1305.47 404,-1305.47 404,-1305.47 964,-1305.47 1040.87,-1305.47 1127.75,-1305.47 1193.35,-1305.47"/>
+<polygon fill="#000000" stroke="#000000" points="1193.69,-1308.97 1203.69,-1305.47 1193.69,-1301.97 1193.69,-1308.97"/>
+</g>
+<!-- module~foodie -->
+<g id="node5" class="node"><title>module~foodie</title>
+<a xlink:href="../module/foodie.html" xlink:title="foodie">
+<polygon fill="#337ab7" stroke="#337ab7" points="1168,-151.474 1114,-151.474 1114,-125.474 1168,-125.474 1168,-151.474"/>
+<text text-anchor="middle" x="1141" y="-136.024" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">foodie</text>
+</a>
+</g>
+<!-- penf&#45;&gt;module~foodie -->
+<g id="edge176" class="edge"><title>penf&#45;&gt;module~foodie</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M188,-1226.47C272.109,-1276.21 315.325,-1226.43 404,-1267.47"/>
+</g>
+<!-- module~foodie_integrator_adams_bashforth -->
+<g id="node9" class="node"><title>module~foodie_integrator_adams_bashforth</title>
+<a xlink:href="../module/foodie_integrator_adams_bashforth.html" xlink:title="foodie_integrator_adams_bashforth">
+<polygon fill="#337ab7" stroke="#337ab7" points="776,-663.474 594,-663.474 594,-637.474 776,-637.474 776,-663.474"/>
+<text text-anchor="middle" x="685" y="-648.024" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">foodie_integrator_adams_bashforth</text>
+</a>
+</g>
+<!-- penf&#45;&gt;module~foodie_integrator_adams_bashforth -->
+<g id="edge12" class="edge"><title>penf&#45;&gt;module~foodie_integrator_adams_bashforth</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M188,-293.474C322.722,-216.058 171.341,-525.84 288,-628.474 327.223,-662.982 352.014,-642.304 404,-647.474"/>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M404,-647.474C463.177,-653.36 529.708,-654.321 583.172,-653.712"/>
+<polygon fill="#000000" stroke="#000000" points="583.389,-657.21 593.341,-653.576 583.295,-650.21 583.389,-657.21"/>
+</g>
+<!-- module~foodie_integrator_runge_kutta_ssp -->
+<g id="node10" class="node"><title>module~foodie_integrator_runge_kutta_ssp</title>
+<a xlink:href="../module/foodie_integrator_runge_kutta_ssp.html" xlink:title="foodie_integrator_runge_kutta_ssp">
+<polygon fill="#337ab7" stroke="#337ab7" points="774,-833.474 596,-833.474 596,-807.474 774,-807.474 774,-833.474"/>
+<text text-anchor="middle" x="685" y="-818.024" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">foodie_integrator_runge_kutta_ssp</text>
+</a>
+</g>
+<!-- penf&#45;&gt;module~foodie_integrator_runge_kutta_ssp -->
+<g id="edge18" class="edge"><title>penf&#45;&gt;module~foodie_integrator_runge_kutta_ssp</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M188,-916.474C243.914,-940.084 231.514,-987.268 288,-1009.47 383.962,-1047.2 437.414,-1071.21 520,-1009.47 565.28,-975.625 520.043,-931.099 556,-887.474 575.371,-863.973 605.145,-847.74 631.21,-837.146"/>
+<polygon fill="#000000" stroke="#000000" points="632.563,-840.375 640.619,-833.494 630.03,-833.849 632.563,-840.375"/>
+</g>
+<!-- module~foodie_integrator_runge_kutta_emd -->
+<g id="node11" class="node"><title>module~foodie_integrator_runge_kutta_emd</title>
+<a xlink:href="../module/foodie_integrator_runge_kutta_emd.html" xlink:title="foodie_integrator_runge_kutta_emd">
+<polygon fill="#337ab7" stroke="#337ab7" points="777,-789.474 593,-789.474 593,-763.474 777,-763.474 777,-789.474"/>
+<text text-anchor="middle" x="685" y="-774.024" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">foodie_integrator_runge_kutta_emd</text>
+</a>
+</g>
+<!-- penf&#45;&gt;module~foodie_integrator_runge_kutta_emd -->
+<g id="edge28" class="edge"><title>penf&#45;&gt;module~foodie_integrator_runge_kutta_emd</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M55.1013,-812.499C77.374,-837.616 130.339,-892.386 188,-916.474"/>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M188,-916.474C205.819,-923.919 501.845,-820.056 520,-813.474 536.295,-807.566 539.351,-803.295 556,-798.474 564.734,-795.945 573.89,-793.669 583.123,-791.629"/>
+<polygon fill="#000000" stroke="#000000" points="584.097,-795.001 593.156,-789.507 582.648,-788.152 584.097,-795.001"/>
+</g>
+<!-- module~foodie_integrator_adams_bashforth_moulton -->
+<g id="node12" class="node"><title>module~foodie_integrator_adams_bashforth_moulton</title>
+<a xlink:href="../module/foodie_integrator_adams_bashforth_moulton.html" xlink:title="foodie_integrator_adams_bashforth_moulton">
+<polygon fill="#337ab7" stroke="#337ab7" points="1077,-151.474 851,-151.474 851,-125.474 1077,-125.474 1077,-151.474"/>
+<text text-anchor="middle" x="964" y="-136.024" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">foodie_integrator_adams_bashforth_moulton</text>
+</a>
+</g>
+<!-- penf&#45;&gt;module~foodie_integrator_adams_bashforth_moulton -->
+<g id="edge48" class="edge"><title>penf&#45;&gt;module~foodie_integrator_adams_bashforth_moulton</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M685,-59.4743C742.485,-66.8154 761.669,-53.576 814,-78.4743 833.6,-87.7996 830.821,-101.312 850,-111.474 858.051,-115.74 866.775,-119.34 875.69,-122.376"/>
+<polygon fill="#000000" stroke="#000000" points="874.826,-125.774 885.416,-125.454 876.938,-119.1 874.826,-125.774"/>
+</g>
+<!-- module~foodie_integrator_lmm_ssp -->
+<g id="node13" class="node"><title>module~foodie_integrator_lmm_ssp</title>
+<a xlink:href="../module/foodie_integrator_lmm_ssp.html" xlink:title="foodie_integrator_lmm_ssp">
+<polygon fill="#337ab7" stroke="#337ab7" points="756,-991.474 614,-991.474 614,-965.474 756,-965.474 756,-991.474"/>
+<text text-anchor="middle" x="685" y="-976.024" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">foodie_integrator_lmm_ssp</text>
+</a>
+</g>
+<!-- penf&#45;&gt;module~foodie_integrator_lmm_ssp -->
+<g id="edge56" class="edge"><title>penf&#45;&gt;module~foodie_integrator_lmm_ssp</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M188,-1226.47C227.171,-1249.64 243.307,-1213.04 288,-1204.47 339.308,-1194.64 353.654,-1199.42 404,-1185.47"/>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M404,-1185.47C520.782,-1153.12 626.595,-1044.99 667.304,-999.218"/>
+<polygon fill="#000000" stroke="#000000" points="669.956,-1001.5 673.921,-991.678 664.694,-996.885 669.956,-1001.5"/>
+</g>
+<!-- module~foodie_integrator_runge_kutta_lssp -->
+<g id="node15" class="node"><title>module~foodie_integrator_runge_kutta_lssp</title>
+<a xlink:href="../module/foodie_integrator_runge_kutta_lssp.html" xlink:title="foodie_integrator_runge_kutta_lssp">
+<polygon fill="#337ab7" stroke="#337ab7" points="775,-581.474 595,-581.474 595,-555.474 775,-555.474 775,-581.474"/>
+<text text-anchor="middle" x="685" y="-566.024" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">foodie_integrator_runge_kutta_lssp</text>
+</a>
+</g>
+<!-- penf&#45;&gt;module~foodie_integrator_runge_kutta_lssp -->
+<g id="edge62" class="edge"><title>penf&#45;&gt;module~foodie_integrator_runge_kutta_lssp</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M188,-293.474C239.844,-263.683 236.542,-353.022 288,-383.474 381.99,-439.097 430.513,-401.865 520,-464.474 540.703,-478.959 536.043,-492.979 556,-508.474 579.96,-527.078 610.619,-541.64 636.036,-551.758"/>
+<polygon fill="#000000" stroke="#000000" points="634.906,-555.073 645.496,-555.417 637.432,-548.545 634.906,-555.073"/>
+</g>
+<!-- module~foodie_error_codes -->
+<g id="node16" class="node"><title>module~foodie_error_codes</title>
+<a xlink:href="../module/foodie_error_codes.html" xlink:title="foodie_error_codes">
+<polygon fill="#337ab7" stroke="#337ab7" points="457,-619.474 351,-619.474 351,-593.474 457,-593.474 457,-619.474"/>
+<text text-anchor="middle" x="404" y="-604.024" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">foodie_error_codes</text>
+</a>
+</g>
+<!-- penf&#45;&gt;module~foodie_error_codes -->
+<g id="edge72" class="edge"><title>penf&#45;&gt;module~foodie_error_codes</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M188,-293.474C304.753,-226.383 187.797,-489.519 288,-579.474 302.477,-592.471 321.982,-599.561 340.864,-603.331"/>
+<polygon fill="#000000" stroke="#000000" points="340.504,-606.821 350.951,-605.057 341.685,-599.921 340.504,-606.821"/>
+</g>
+<!-- module~foodie_integrator_multistage_object -->
+<g id="node17" class="node"><title>module~foodie_integrator_multistage_object</title>
+<a xlink:href="../module/foodie_integrator_multistage_object.html" xlink:title="foodie_integrator_multistage_object">
+<polygon fill="#337ab7" stroke="#337ab7" points="495,-929.474 313,-929.474 313,-903.474 495,-903.474 495,-929.474"/>
+<text text-anchor="middle" x="404" y="-914.024" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">foodie_integrator_multistage_object</text>
+</a>
+</g>
+<!-- penf&#45;&gt;module~foodie_integrator_multistage_object -->
+<g id="edge76" class="edge"><title>penf&#45;&gt;module~foodie_integrator_multistage_object</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M188,-916.474C208.515,-925.137 256.486,-925.761 302.021,-923.942"/>
+<polygon fill="#000000" stroke="#000000" points="302.462,-927.426 312.298,-923.49 302.154,-920.433 302.462,-927.426"/>
+</g>
+<!-- module~foodie_integrator_backward_differentiation_formula -->
+<g id="node18" class="node"><title>module~foodie_integrator_backward_differentiation_formula</title>
+<a xlink:href="../module/foodie_integrator_backward_differentiation_formula.html" xlink:title="foodie_integrator_backward_differentiation_formula">
+<polygon fill="#337ab7" stroke="#337ab7" points="814,-499.474 556,-499.474 556,-473.474 814,-473.474 814,-499.474"/>
+<text text-anchor="middle" x="685" y="-484.024" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">foodie_integrator_backward_differentiation_formula</text>
+</a>
+</g>
+<!-- penf&#45;&gt;module~foodie_integrator_backward_differentiation_formula -->
+<g id="edge86" class="edge"><title>penf&#45;&gt;module~foodie_integrator_backward_differentiation_formula</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M188,-293.474C253.246,-256.38 460.664,-309.515 520,-355.474 549.866,-378.608 528.746,-406.313 556,-432.474 573.931,-449.687 598.151,-461.768 620.762,-470.07"/>
+<polygon fill="#000000" stroke="#000000" points="619.736,-473.419 630.331,-473.401 622.037,-466.808 619.736,-473.419"/>
+</g>
+<!-- module~foodie_integrator_adams_moulton -->
+<g id="node19" class="node"><title>module~foodie_integrator_adams_moulton</title>
+<a xlink:href="../module/foodie_integrator_adams_moulton.html" xlink:title="foodie_integrator_adams_moulton">
+<polygon fill="#337ab7" stroke="#337ab7" points="773,-195.474 597,-195.474 597,-169.474 773,-169.474 773,-195.474"/>
+<text text-anchor="middle" x="685" y="-180.024" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">foodie_integrator_adams_moulton</text>
+</a>
+</g>
+<!-- penf&#45;&gt;module~foodie_integrator_adams_moulton -->
+<g id="edge96" class="edge"><title>penf&#45;&gt;module~foodie_integrator_adams_moulton</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M188,-293.474C315.032,-224.845 482.248,-198.605 586.681,-188.601"/>
+<polygon fill="#000000" stroke="#000000" points="587.266,-192.062 596.901,-187.654 586.621,-185.091 587.266,-192.062"/>
+</g>
+<!-- module~foodie_integrator_runge_kutta_low_storage -->
+<g id="node20" class="node"><title>module~foodie_integrator_runge_kutta_low_storage</title>
+<a xlink:href="../module/foodie_integrator_runge_kutta_low_storage.html" xlink:title="foodie_integrator_runge_kutta_low_storage">
+<polygon fill="#337ab7" stroke="#337ab7" points="795,-423.474 575,-423.474 575,-397.474 795,-397.474 795,-423.474"/>
+<text text-anchor="middle" x="685" y="-408.024" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">foodie_integrator_runge_kutta_low_storage</text>
+</a>
+</g>
+<!-- penf&#45;&gt;module~foodie_integrator_runge_kutta_low_storage -->
+<g id="edge102" class="edge"><title>penf&#45;&gt;module~foodie_integrator_runge_kutta_low_storage</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M188,-293.474C259.452,-253.511 497.413,-263.391 520,-279.474 559.844,-307.846 519.289,-351.151 556,-383.474 559.924,-386.93 564.176,-389.983 568.665,-392.679"/>
+<polygon fill="#000000" stroke="#000000" points="567.098,-395.81 577.567,-397.435 570.396,-389.636 567.098,-395.81"/>
+</g>
+<!-- module~foodie_integrator_lmm_ssp_vss -->
+<g id="node21" class="node"><title>module~foodie_integrator_lmm_ssp_vss</title>
+<a xlink:href="../module/foodie_integrator_lmm_ssp_vss.html" xlink:title="foodie_integrator_lmm_ssp_vss">
+<polygon fill="#337ab7" stroke="#337ab7" points="767,-113.474 603,-113.474 603,-87.4743 767,-87.4743 767,-113.474"/>
+<text text-anchor="middle" x="685" y="-98.0243" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">foodie_integrator_lmm_ssp_vss</text>
+</a>
+</g>
+<!-- penf&#45;&gt;module~foodie_integrator_lmm_ssp_vss -->
+<g id="edge116" class="edge"><title>penf&#45;&gt;module~foodie_integrator_lmm_ssp_vss</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M404,-27.4743C470.253,-3.13759 487.615,-56.0056 556,-73.4743 572.494,-77.6875 590.296,-81.7322 607.253,-85.3506"/>
+<polygon fill="#000000" stroke="#000000" points="606.616,-88.7932 617.123,-87.4298 608.059,-81.9436 606.616,-88.7932"/>
+</g>
+<!-- module~foodie_integrand_object -->
+<g id="node22" class="node"><title>module~foodie_integrand_object</title>
+<a xlink:href="../module/foodie_integrand_object.html" xlink:title="foodie_integrand_object">
+<polygon fill="#337ab7" stroke="#337ab7" points="251,-739.474 125,-739.474 125,-713.474 251,-713.474 251,-739.474"/>
+<text text-anchor="middle" x="188" y="-724.024" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">foodie_integrand_object</text>
+</a>
+</g>
+<!-- penf&#45;&gt;module~foodie_integrand_object -->
+<g id="edge122" class="edge"><title>penf&#45;&gt;module~foodie_integrand_object</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M69.7443,-786.423C92.9442,-774.662 127.255,-757.268 152.952,-744.242"/>
+<polygon fill="#000000" stroke="#000000" points="154.656,-747.302 161.993,-739.658 151.491,-741.058 154.656,-747.302"/>
+</g>
+<!-- module~foodie_integrator_multistep_object -->
+<g id="node23" class="node"><title>module~foodie_integrator_multistep_object</title>
+<a xlink:href="../module/foodie_integrator_multistep_object.html" xlink:title="foodie_integrator_multistep_object">
+<polygon fill="#337ab7" stroke="#337ab7" points="492,-499.474 316,-499.474 316,-473.474 492,-473.474 492,-499.474"/>
+<text text-anchor="middle" x="404" y="-484.024" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">foodie_integrator_multistep_object</text>
+</a>
+</g>
+<!-- penf&#45;&gt;module~foodie_integrator_multistep_object -->
+<g id="edge126" class="edge"><title>penf&#45;&gt;module~foodie_integrator_multistep_object</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M188,-293.474C250.593,-257.506 233.214,-374.463 288,-421.474 310.89,-441.116 340.631,-457.64 364.268,-469.112"/>
+<polygon fill="#000000" stroke="#000000" points="362.792,-472.286 373.327,-473.409 365.792,-465.961 362.792,-472.286"/>
+</g>
+<!-- module~foodie_integrator_ms_runge_kutta_ssp -->
+<g id="node24" class="node"><title>module~foodie_integrator_ms_runge_kutta_ssp</title>
+<a xlink:href="../module/foodie_integrator_ms_runge_kutta_ssp.html" xlink:title="foodie_integrator_ms_runge_kutta_ssp">
+<polygon fill="#337ab7" stroke="#337ab7" points="784,-1198.47 586,-1198.47 586,-1172.47 784,-1172.47 784,-1198.47"/>
+<text text-anchor="middle" x="685" y="-1183.02" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">foodie_integrator_ms_runge_kutta_ssp</text>
+</a>
+</g>
+<!-- penf&#45;&gt;module~foodie_integrator_ms_runge_kutta_ssp -->
+<g id="edge136" class="edge"><title>penf&#45;&gt;module~foodie_integrator_ms_runge_kutta_ssp</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M404,-1185.47C459.099,-1170.21 522.642,-1168.92 575.349,-1172.01"/>
+<polygon fill="#000000" stroke="#000000" points="575.195,-1175.51 585.4,-1172.66 575.646,-1168.52 575.195,-1175.51"/>
+</g>
+<!-- module~foodie_integrator_leapfrog -->
+<g id="node25" class="node"><title>module~foodie_integrator_leapfrog</title>
+<a xlink:href="../module/foodie_integrator_leapfrog.html" xlink:title="foodie_integrator_leapfrog">
+<polygon fill="#337ab7" stroke="#337ab7" points="754,-707.474 616,-707.474 616,-681.474 754,-681.474 754,-707.474"/>
+<text text-anchor="middle" x="685" y="-692.024" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">foodie_integrator_leapfrog</text>
+</a>
+</g>
+<!-- penf&#45;&gt;module~foodie_integrator_leapfrog -->
+<g id="edge146" class="edge"><title>penf&#45;&gt;module~foodie_integrator_leapfrog</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M50.3682,-786.268C61.6885,-764.509 87.5948,-721.808 124,-704.474 206.771,-665.065 471.093,-678.201 605.255,-687.919"/>
+<polygon fill="#000000" stroke="#000000" points="605.24,-691.427 615.47,-688.67 605.754,-684.446 605.24,-691.427"/>
+</g>
+<!-- module~foodie_integrator_multistage_multistep_object -->
+<g id="node26" class="node"><title>module~foodie_integrator_multistage_multistep_object</title>
+<a xlink:href="../module/foodie_integrator_multistage_multistep_object.html" xlink:title="foodie_integrator_multistage_multistep_object">
+<polygon fill="#337ab7" stroke="#337ab7" points="520,-1239.47 288,-1239.47 288,-1213.47 520,-1213.47 520,-1239.47"/>
+<text text-anchor="middle" x="404" y="-1224.02" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">foodie_integrator_multistage_multistep_object</text>
+</a>
+</g>
+<!-- penf&#45;&gt;module~foodie_integrator_multistage_multistep_object -->
+<g id="edge154" class="edge"><title>penf&#45;&gt;module~foodie_integrator_multistage_multistep_object</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M188,-1226.47C203.927,-1235.89 239.67,-1238.05 277.587,-1237.14"/>
+<polygon fill="#000000" stroke="#000000" points="277.903,-1240.64 287.791,-1236.83 277.688,-1233.64 277.903,-1240.64"/>
+</g>
+<!-- module~foodie_integrator_object -->
+<g id="node27" class="node"><title>module~foodie_integrator_object</title>
+<a xlink:href="../module/foodie_integrator_object.html" xlink:title="foodie_integrator_object">
+<polygon fill="#337ab7" stroke="#337ab7" points="252,-812.474 124,-812.474 124,-786.474 252,-786.474 252,-812.474"/>
+<text text-anchor="middle" x="188" y="-797.024" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">foodie_integrator_object</text>
+</a>
+</g>
+<!-- penf&#45;&gt;module~foodie_integrator_object -->
+<g id="edge162" class="edge"><title>penf&#45;&gt;module~foodie_integrator_object</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M71.0853,-799.474C83.3824,-799.474 98.5898,-799.474 113.923,-799.474"/>
+<polygon fill="#000000" stroke="#000000" points="113.988,-802.974 123.988,-799.474 113.988,-795.974 113.988,-802.974"/>
+</g>
+<!-- module~foodie_integrator_euler_explicit -->
+<g id="node28" class="node"><title>module~foodie_integrator_euler_explicit</title>
+<a xlink:href="../module/foodie_integrator_euler_explicit.html" xlink:title="foodie_integrator_euler_explicit">
+<polygon fill="#337ab7" stroke="#337ab7" points="766,-922.474 604,-922.474 604,-896.474 766,-896.474 766,-922.474"/>
+<text text-anchor="middle" x="685" y="-907.024" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">foodie_integrator_euler_explicit</text>
+</a>
+</g>
+<!-- penf&#45;&gt;module~foodie_integrator_euler_explicit -->
+<g id="edge164" class="edge"><title>penf&#45;&gt;module~foodie_integrator_euler_explicit</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M48.3871,-812.674C72.2649,-884.494 185.59,-1225.05 188,-1226.47"/>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M188,-1226.47C240.244,-1257.37 238.602,-1168.74 288,-1133.47 335.577,-1099.51 346.03,-1079.01 404,-1071.47"/>
+</g>
+<!-- flap -->
+<g id="node4" class="node"><title>flap</title>
+<polygon fill="#337ab7" stroke="#337ab7" points="1168,-1359.47 1114,-1359.47 1114,-1333.47 1168,-1333.47 1168,-1359.47"/>
+<text text-anchor="middle" x="1141" y="-1344.02" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">flap</text>
+</g>
+<!-- flap&#45;&gt;module~foodie_test_integrand_lcce -->
+<g id="edge220" class="edge"><title>flap&#45;&gt;module~foodie_test_integrand_lcce</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M1168.17,-1345.5C1213.78,-1343.63 1308.57,-1338.65 1388,-1327.47 1401.09,-1325.63 1414.99,-1323.16 1428.29,-1320.54"/>
+<polygon fill="#000000" stroke="#000000" points="1429.2,-1323.93 1438.31,-1318.52 1427.82,-1317.07 1429.2,-1323.93"/>
+</g>
+<!-- flap&#45;&gt;module~foodie_test_integrand_tester_object -->
+<g id="edge4" class="edge"><title>flap&#45;&gt;module~foodie_test_integrand_tester_object</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M1168.35,-1339.24C1187.29,-1334.23 1213.22,-1327.37 1236.77,-1321.14"/>
+<polygon fill="#000000" stroke="#000000" points="1237.92,-1324.46 1246.69,-1318.52 1236.13,-1317.69 1237.92,-1324.46"/>
+</g>
+<!-- module~foodie&#45;&gt;module~foodie_test_integrand_lcce -->
+<g id="edge222" class="edge"><title>module~foodie&#45;&gt;module~foodie_test_integrand_lcce</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M1151.59,-125.388C1177.32,-95.2059 1244.76,-25.7992 1296,-59.4743"/>
+</g>
+<!-- module~foodie&#45;&gt;module~foodie_test_integrand_tester_object -->
+<g id="edge6" class="edge"><title>module~foodie&#45;&gt;module~foodie_test_integrand_tester_object</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M1142.74,-151.58C1158.25,-268.354 1272.65,-1129.63 1292.93,-1282.36"/>
+<polygon fill="#000000" stroke="#000000" points="1289.49,-1283.02 1294.27,-1292.47 1296.43,-1282.09 1289.49,-1283.02"/>
+</g>
+<!-- module~foodie_integrator_adams_bashforth&#45;&gt;module~foodie -->
+<g id="edge174" class="edge"><title>module~foodie_integrator_adams_bashforth&#45;&gt;module~foodie</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M776.507,-663.405C789.206,-665.975 802.002,-668.982 814,-672.474 883.426,-692.684 908.456,-781.771 964,-735.474"/>
+</g>
+<!-- module~foodie_integrator_adams_bashforth&#45;&gt;module~foodie_integrator_adams_bashforth_moulton -->
+<g id="edge38" class="edge"><title>module~foodie_integrator_adams_bashforth&#45;&gt;module~foodie_integrator_adams_bashforth_moulton</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M776.563,-644.018C790.326,-639.638 803.426,-633.102 814,-623.474 885.403,-558.462 944.471,-249.396 960.005,-161.714"/>
+<polygon fill="#000000" stroke="#000000" points="963.478,-162.169 961.757,-151.715 956.583,-160.961 963.478,-162.169"/>
+</g>
+<!-- module~foodie_integrator_runge_kutta_ssp&#45;&gt;module~foodie -->
+<g id="edge178" class="edge"><title>module~foodie_integrator_runge_kutta_ssp&#45;&gt;module~foodie</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M774.62,-811.352C834,-801.265 910.518,-780.052 964,-735.474"/>
+</g>
+<!-- module~foodie_integrator_runge_kutta_emd&#45;&gt;module~foodie -->
+<g id="edge180" class="edge"><title>module~foodie_integrator_runge_kutta_emd&#45;&gt;module~foodie</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M777.068,-785.983C836.754,-787.077 912.666,-778.261 964,-735.474"/>
+</g>
+<!-- module~foodie_integrator_adams_bashforth_moulton&#45;&gt;module~foodie -->
+<g id="edge182" class="edge"><title>module~foodie_integrator_adams_bashforth_moulton&#45;&gt;module~foodie</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M1077.6,-138.474C1086.87,-138.474 1095.74,-138.474 1103.75,-138.474"/>
+<polygon fill="#000000" stroke="#000000" points="1103.75,-141.974 1113.75,-138.474 1103.75,-134.974 1103.75,-141.974"/>
+</g>
+<!-- module~foodie_integrator_lmm_ssp&#45;&gt;module~foodie -->
+<g id="edge184" class="edge"><title>module~foodie_integrator_lmm_ssp&#45;&gt;module~foodie</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M741.75,-965.394C765.591,-958.052 792.676,-947.136 814,-931.474 902.41,-866.54 879.738,-805.708 964,-735.474"/>
+</g>
+<!-- iso_fortran_env -->
+<g id="node14" class="node"><title>iso_fortran_env</title>
+<a xlink:href="https://gcc.gnu.org/onlinedocs/gfortran/ISO_005fFORTRAN_005fENV.html" xlink:title="iso_fortran_env">
+<polygon fill="#337ab7" stroke="#337ab7" points="87,-967.474 1,-967.474 1,-941.474 87,-941.474 87,-967.474"/>
+<text text-anchor="middle" x="44" y="-952.024" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">iso_fortran_env</text>
+</a>
+</g>
+<!-- iso_fortran_env&#45;&gt;module~foodie -->
+<g id="edge186" class="edge"><title>iso_fortran_env&#45;&gt;module~foodie</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M44.8496,-967.512C49.0068,-1026.95 69.267,-1271.44 124,-1319.47 217.879,-1401.86 279.099,-1343.47 404,-1343.47 404,-1343.47 404,-1343.47 685,-1343.47 999.693,-1343.47 1063.19,-800.65 1078,-749.474 1110.93,-635.675 1134.16,-259.157 1139.72,-161.68"/>
+<polygon fill="#000000" stroke="#000000" points="1143.21,-161.866 1140.28,-151.685 1136.22,-161.472 1143.21,-161.866"/>
+</g>
+<!-- iso_fortran_env&#45;&gt;module~foodie_integrator_multistage_object -->
+<g id="edge74" class="edge"><title>iso_fortran_env&#45;&gt;module~foodie_integrator_multistage_object</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M87.7832,-949.853C140.649,-944.272 231.266,-934.707 301.98,-927.243"/>
+<polygon fill="#000000" stroke="#000000" points="302.684,-930.688 312.262,-926.158 301.95,-923.727 302.684,-930.688"/>
+</g>
+<!-- iso_fortran_env&#45;&gt;module~foodie_integrator_multistep_object -->
+<g id="edge124" class="edge"><title>iso_fortran_env&#45;&gt;module~foodie_integrator_multistep_object</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M48.4636,-941.29C56.5171,-917.435 73.9474,-865.496 88,-821.474 104.545,-769.645 96.5618,-751.455 124,-704.474 177.431,-612.988 200.028,-590.514 288,-531.474 305.957,-519.423 327.611,-509.915 347.323,-502.805"/>
+<polygon fill="#000000" stroke="#000000" points="348.521,-506.094 356.819,-499.506 346.224,-499.481 348.521,-506.094"/>
+</g>
+<!-- iso_fortran_env&#45;&gt;module~foodie_integrator_multistage_multistep_object -->
+<g id="edge152" class="edge"><title>iso_fortran_env&#45;&gt;module~foodie_integrator_multistage_multistep_object</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M45.6206,-967.817C52.2102,-1019.62 78.817,-1206.2 124,-1240.47 154.738,-1263.79 254.795,-1252.86 326.523,-1241.16"/>
+<polygon fill="#000000" stroke="#000000" points="327.157,-1244.6 336.446,-1239.5 326.006,-1237.69 327.157,-1244.6"/>
+</g>
+<!-- iso_fortran_env&#45;&gt;module~foodie_integrator_object -->
+<g id="edge160" class="edge"><title>iso_fortran_env&#45;&gt;module~foodie_integrator_object</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M56.2774,-941.259C81.3576,-914.263 138.637,-852.608 168.726,-820.221"/>
+<polygon fill="#000000" stroke="#000000" points="171.512,-822.365 175.754,-812.656 166.383,-817.6 171.512,-822.365"/>
+</g>
+<!-- module~foodie_integrator_runge_kutta_lssp&#45;&gt;module~foodie -->
+<g id="edge188" class="edge"><title>module~foodie_integrator_runge_kutta_lssp&#45;&gt;module~foodie</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M775.655,-580.881C788.931,-584.552 802.119,-589.309 814,-595.474 894.945,-637.474 893.95,-793.862 964,-735.474"/>
+</g>
+<!-- module~foodie_error_codes&#45;&gt;module~foodie -->
+<g id="edge190" class="edge"><title>module~foodie_error_codes&#45;&gt;module~foodie</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M685,-609.474C740.828,-593.931 760.245,-606.821 814,-628.474 889.959,-659.071 901.102,-787.913 964,-735.474"/>
+</g>
+<!-- module~foodie_error_codes&#45;&gt;module~foodie_integrator_adams_bashforth -->
+<g id="edge14" class="edge"><title>module~foodie_error_codes&#45;&gt;module~foodie_integrator_adams_bashforth</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M457.184,-614.802C495.127,-620.743 547.144,-628.888 591.896,-635.896"/>
+<polygon fill="#000000" stroke="#000000" points="591.494,-639.375 601.915,-637.465 592.577,-632.46 591.494,-639.375"/>
+</g>
+<!-- module~foodie_error_codes&#45;&gt;module~foodie_integrator_runge_kutta_ssp -->
+<g id="edge22" class="edge"><title>module~foodie_error_codes&#45;&gt;module~foodie_integrator_runge_kutta_ssp</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M423.764,-619.623C449.102,-637.363 492.981,-671.186 520,-709.474 544.602,-744.337 522.759,-771.722 556,-798.474 564.673,-805.454 574.751,-810.568 585.38,-814.274"/>
+<polygon fill="#000000" stroke="#000000" points="584.685,-817.722 595.271,-817.296 586.73,-811.027 584.685,-817.722"/>
+</g>
+<!-- module~foodie_error_codes&#45;&gt;module~foodie_integrator_runge_kutta_emd -->
+<g id="edge32" class="edge"><title>module~foodie_error_codes&#45;&gt;module~foodie_integrator_runge_kutta_emd</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M420.16,-619.769C447.187,-641.63 503.752,-685.798 556,-716.474 584.047,-732.942 617.371,-748.343 643.123,-759.418"/>
+<polygon fill="#000000" stroke="#000000" points="642.023,-762.753 652.595,-763.444 644.761,-756.311 642.023,-762.753"/>
+</g>
+<!-- module~foodie_error_codes&#45;&gt;module~foodie_integrator_adams_bashforth_moulton -->
+<g id="edge42" class="edge"><title>module~foodie_error_codes&#45;&gt;module~foodie_integrator_adams_bashforth_moulton</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M457.187,-615.71C514.562,-623.69 608.038,-630.902 685,-609.474"/>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M685,-609.474C740.828,-593.931 769.613,-627.733 814,-590.474 883.01,-532.547 943.237,-245.641 959.617,-161.627"/>
+<polygon fill="#000000" stroke="#000000" points="963.058,-162.267 961.515,-151.785 956.184,-160.941 963.058,-162.267"/>
+</g>
+<!-- module~foodie_error_codes&#45;&gt;module~foodie_integrator_lmm_ssp -->
+<g id="edge58" class="edge"><title>module~foodie_error_codes&#45;&gt;module~foodie_integrator_lmm_ssp</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M426.534,-619.652C453.508,-636.719 497.81,-669.119 520,-709.474 568.16,-797.063 492.291,-854.453 556,-931.474 568.42,-946.489 586.062,-956.707 604.325,-963.661"/>
+<polygon fill="#000000" stroke="#000000" points="603.313,-967.015 613.908,-967.008 605.621,-960.407 603.313,-967.015"/>
+</g>
+<!-- module~foodie_error_codes&#45;&gt;module~foodie_integrator_runge_kutta_lssp -->
+<g id="edge66" class="edge"><title>module~foodie_error_codes&#45;&gt;module~foodie_integrator_runge_kutta_lssp</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M457.184,-599.282C493.054,-594.431 541.504,-587.879 584.501,-582.065"/>
+<polygon fill="#000000" stroke="#000000" points="585,-585.529 594.441,-580.721 584.062,-578.593 585,-585.529"/>
+</g>
+<!-- module~foodie_error_codes&#45;&gt;module~foodie_integrator_backward_differentiation_formula -->
+<g id="edge88" class="edge"><title>module~foodie_error_codes&#45;&gt;module~foodie_integrator_backward_differentiation_formula</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M457.129,-600.003C477.612,-596.025 500.705,-589.651 520,-579.474 539.199,-569.349 537.948,-558.526 556,-546.474 582.23,-528.963 614.387,-513.993 640.033,-503.386"/>
+<polygon fill="#000000" stroke="#000000" points="641.566,-506.541 649.517,-499.539 638.935,-500.055 641.566,-506.541"/>
+</g>
+<!-- module~foodie_error_codes&#45;&gt;module~foodie_integrator_adams_moulton -->
+<g id="edge98" class="edge"><title>module~foodie_error_codes&#45;&gt;module~foodie_integrator_adams_moulton</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M457.228,-606.605C479.592,-603.822 504.061,-596.559 520,-579.474 588.786,-505.746 516.73,-448.346 556,-355.474 582.118,-293.705 634.783,-233.733 664.099,-203.246"/>
+<polygon fill="#000000" stroke="#000000" points="666.886,-205.402 671.364,-195.799 661.876,-200.514 666.886,-205.402"/>
+</g>
+<!-- module~foodie_error_codes&#45;&gt;module~foodie_integrator_runge_kutta_low_storage -->
+<g id="edge106" class="edge"><title>module~foodie_error_codes&#45;&gt;module~foodie_integrator_runge_kutta_low_storage</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M457.295,-605.326C479.133,-602.236 503.176,-595.086 520,-579.474 559.258,-543.044 519.932,-504.065 556,-464.474 571.881,-447.042 594.28,-435.065 615.966,-426.912"/>
+<polygon fill="#000000" stroke="#000000" points="617.258,-430.167 625.523,-423.538 614.928,-423.567 617.258,-430.167"/>
+</g>
+<!-- module~foodie_error_codes&#45;&gt;module~foodie_integrator_lmm_ssp_vss -->
+<g id="edge118" class="edge"><title>module~foodie_error_codes&#45;&gt;module~foodie_integrator_lmm_ssp_vss</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M457.231,-607.213C479.874,-604.593 504.565,-597.29 520,-579.474 581.193,-508.841 502.419,-237.043 556,-160.474 570.5,-139.753 594.038,-126.009 617.064,-116.976"/>
+<polygon fill="#000000" stroke="#000000" points="618.345,-120.234 626.528,-113.504 615.934,-113.662 618.345,-120.234"/>
+</g>
+<!-- module~foodie_error_codes&#45;&gt;module~foodie_integrator_ms_runge_kutta_ssp -->
+<g id="edge138" class="edge"><title>module~foodie_error_codes&#45;&gt;module~foodie_integrator_ms_runge_kutta_ssp</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M426.787,-619.516C454.015,-636.446 498.575,-668.708 520,-709.474 580.628,-824.832 509.361,-878.786 556,-1000.47 581.578,-1067.21 636.263,-1132.83 665.544,-1165"/>
+<polygon fill="#000000" stroke="#000000" points="663.054,-1167.46 672.408,-1172.44 668.198,-1162.71 663.054,-1167.46"/>
+</g>
+<!-- module~foodie_error_codes&#45;&gt;module~foodie_integrator_leapfrog -->
+<g id="edge148" class="edge"><title>module~foodie_error_codes&#45;&gt;module~foodie_integrator_leapfrog</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M428.85,-619.488C458.388,-634.428 509.538,-658.646 556,-672.474 571.688,-677.144 588.764,-680.927 605.203,-683.954"/>
+<polygon fill="#000000" stroke="#000000" points="604.882,-687.451 615.338,-685.742 606.098,-680.558 604.882,-687.451"/>
+</g>
+<!-- module~foodie_error_codes&#45;&gt;module~foodie_integrator_euler_explicit -->
+<g id="edge168" class="edge"><title>module~foodie_error_codes&#45;&gt;module~foodie_integrator_euler_explicit</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M425.394,-619.745C451.629,-637.134 495.609,-670.092 520,-709.474 552.244,-761.536 517.587,-794.782 556,-842.474 574.963,-866.018 604.425,-882.198 630.408,-892.751"/>
+<polygon fill="#000000" stroke="#000000" points="629.208,-896.039 639.797,-896.387 631.736,-889.512 629.208,-896.039"/>
+</g>
+<!-- module~foodie_integrator_multistage_object&#45;&gt;module~foodie -->
+<g id="edge192" class="edge"><title>module~foodie_integrator_multistage_object&#45;&gt;module~foodie</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M470.924,-903.469C497.403,-898.385 528.119,-892.565 556,-887.474 670.505,-866.567 706.617,-887.389 814,-842.474 889.548,-810.875 901.102,-787.913 964,-735.474"/>
+</g>
+<!-- module~foodie_integrator_multistage_object&#45;&gt;module~foodie_integrator_runge_kutta_ssp -->
+<g id="edge24" class="edge"><title>module~foodie_integrator_multistage_object&#45;&gt;module~foodie_integrator_runge_kutta_ssp</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M488.863,-903.391C499.774,-899.817 510.454,-895.267 520,-889.474 541.018,-876.72 534.84,-859.993 556,-847.474 565.197,-842.033 575.332,-837.678 585.756,-834.195"/>
+<polygon fill="#000000" stroke="#000000" points="586.861,-837.517 595.392,-831.235 584.805,-830.826 586.861,-837.517"/>
+</g>
+<!-- module~foodie_integrator_multistage_object&#45;&gt;module~foodie_integrator_runge_kutta_emd -->
+<g id="edge34" class="edge"><title>module~foodie_integrator_multistage_object&#45;&gt;module~foodie_integrator_runge_kutta_emd</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M495.566,-904.313C504.435,-900.534 512.795,-895.684 520,-889.474 552.945,-861.078 522.221,-825.874 556,-798.474 564.09,-791.913 573.419,-786.995 583.285,-783.344"/>
+<polygon fill="#000000" stroke="#000000" points="584.46,-786.643 592.885,-780.219 582.293,-779.987 584.46,-786.643"/>
+</g>
+<!-- module~foodie_integrator_multistage_object&#45;&gt;module~foodie_integrator_runge_kutta_lssp -->
+<g id="edge68" class="edge"><title>module~foodie_integrator_multistage_object&#45;&gt;module~foodie_integrator_runge_kutta_lssp</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M414.647,-903.421C437.315,-875.002 490.663,-804.671 520,-737.474 546.051,-677.805 509.006,-640.536 556,-595.474 564.239,-587.574 574.166,-581.728 584.809,-577.434"/>
+<polygon fill="#000000" stroke="#000000" points="586.075,-580.699 594.323,-574.049 583.728,-574.104 586.075,-580.699"/>
+</g>
+<!-- module~foodie_integrator_multistage_object&#45;&gt;module~foodie_integrator_runge_kutta_low_storage -->
+<g id="edge108" class="edge"><title>module~foodie_integrator_multistage_object&#45;&gt;module~foodie_integrator_runge_kutta_low_storage</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M415.625,-903.241C439.681,-875.026 494.776,-805.926 520,-737.474 562.316,-622.639 481.669,-561.699 556,-464.474 569.366,-446.991 589.44,-435.119 609.796,-427.075"/>
+<polygon fill="#000000" stroke="#000000" points="611.277,-430.261 619.463,-423.535 608.869,-423.688 611.277,-430.261"/>
+</g>
+<!-- module~foodie_integrator_multistage_object&#45;&gt;module~foodie_integrator_euler_explicit -->
+<g id="edge170" class="edge"><title>module~foodie_integrator_multistage_object&#45;&gt;module~foodie_integrator_euler_explicit</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M495.621,-914.192C527.126,-913.407 562.377,-912.529 593.845,-911.745"/>
+<polygon fill="#000000" stroke="#000000" points="594.009,-915.242 603.919,-911.494 593.835,-908.244 594.009,-915.242"/>
+</g>
+<!-- module~foodie_integrator_backward_differentiation_formula&#45;&gt;module~foodie -->
+<g id="edge194" class="edge"><title>module~foodie_integrator_backward_differentiation_formula&#45;&gt;module~foodie</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M786.024,-499.565C795.924,-503.176 805.453,-507.733 814,-513.474 912.85,-579.868 872.53,-811.716 964,-735.474"/>
+</g>
+<!-- module~foodie_integrator_adams_moulton&#45;&gt;module~foodie -->
+<g id="edge196" class="edge"><title>module~foodie_integrator_adams_moulton&#45;&gt;module~foodie</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M708.893,-169.317C756.225,-144.594 865.829,-93.9777 964,-97.4743"/>
+</g>
+<!-- module~foodie_integrator_adams_moulton&#45;&gt;module~foodie_integrator_adams_bashforth_moulton -->
+<g id="edge44" class="edge"><title>module~foodie_integrator_adams_moulton&#45;&gt;module~foodie_integrator_adams_bashforth_moulton</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M767.577,-169.451C800.05,-164.33 837.491,-158.426 870.918,-153.154"/>
+<polygon fill="#000000" stroke="#000000" points="871.82,-156.555 881.153,-151.54 870.73,-149.64 871.82,-156.555"/>
+</g>
+<!-- module~foodie_integrator_runge_kutta_low_storage&#45;&gt;module~foodie -->
+<g id="edge198" class="edge"><title>module~foodie_integrator_runge_kutta_low_storage&#45;&gt;module~foodie</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M737.171,-423.536C762.606,-431.946 792.306,-445.027 814,-464.474 916.505,-556.366 858.253,-823.616 964,-735.474"/>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M964,-735.474C1056.65,-658.252 1122.26,-262.091 1137.58,-161.647"/>
+<polygon fill="#000000" stroke="#000000" points="1141.06,-162.04 1139.09,-151.63 1134.14,-160.997 1141.06,-162.04"/>
+</g>
+<!-- module~foodie_integrator_lmm_ssp_vss&#45;&gt;module~foodie -->
+<g id="edge200" class="edge"><title>module~foodie_integrator_lmm_ssp_vss&#45;&gt;module~foodie</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M767.124,-97.593C822.713,-96.1336 897.8,-95.1164 964,-97.4743"/>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M964,-97.4743C1015.33,-99.3027 1028.24,-103.738 1078,-116.474 1086.55,-118.663 1095.59,-121.497 1104.07,-124.399"/>
+<polygon fill="#000000" stroke="#000000" points="1103.12,-127.773 1113.71,-127.802 1105.45,-121.172 1103.12,-127.773"/>
+</g>
+<!-- module~foodie_integrand_object&#45;&gt;module~foodie -->
+<g id="edge202" class="edge"><title>module~foodie_integrand_object&#45;&gt;module~foodie</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M404,-723.474C466.221,-722.101 916.216,-775.35 964,-735.474"/>
+</g>
+<!-- module~foodie_integrand_object&#45;&gt;module~foodie_integrator_adams_bashforth -->
+<g id="edge16" class="edge"><title>module~foodie_integrand_object&#45;&gt;module~foodie_integrator_adams_bashforth</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M206.308,-713.469C242.619,-689.129 326.917,-639.808 404,-647.474"/>
+</g>
+<!-- module~foodie_integrand_object&#45;&gt;module~foodie_integrator_runge_kutta_ssp -->
+<g id="edge26" class="edge"><title>module~foodie_integrand_object&#45;&gt;module~foodie_integrator_runge_kutta_ssp</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M205.544,-739.601C218.654,-749.612 236.849,-763.939 252,-777.474 268.875,-792.549 267.172,-804.631 288,-813.474 393.225,-858.15 528.715,-847.883 611.105,-835.108"/>
+<polygon fill="#000000" stroke="#000000" points="611.811,-838.539 621.131,-833.5 610.702,-831.628 611.811,-838.539"/>
+</g>
+<!-- module~foodie_integrand_object&#45;&gt;module~foodie_integrator_runge_kutta_emd -->
+<g id="edge36" class="edge"><title>module~foodie_integrand_object&#45;&gt;module~foodie_integrator_runge_kutta_emd</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M211.745,-739.481C250.615,-759.611 330.837,-796.336 404,-799.474"/>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M404,-799.474C464.299,-802.061 531.701,-796.82 585.374,-790.692"/>
+<polygon fill="#000000" stroke="#000000" points="586.05,-794.137 595.575,-789.498 585.236,-787.184 586.05,-794.137"/>
+</g>
+<!-- module~foodie_integrand_object&#45;&gt;module~foodie_integrator_adams_bashforth_moulton -->
+<g id="edge46" class="edge"><title>module~foodie_integrand_object&#45;&gt;module~foodie_integrator_adams_bashforth_moulton</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M188.92,-713.397C194.096,-643.451 221.746,-313.989 288,-241.474 360.169,-162.486 665.845,-143.666 840.423,-139.444"/>
+<polygon fill="#000000" stroke="#000000" points="840.522,-142.943 850.439,-139.215 840.361,-135.945 840.522,-142.943"/>
+</g>
+<!-- module~foodie_integrand_object&#45;&gt;module~foodie_integrator_lmm_ssp -->
+<g id="edge60" class="edge"><title>module~foodie_integrand_object&#45;&gt;module~foodie_integrator_lmm_ssp</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M404,-995.474C479.396,-1023.55 574.019,-1008.49 631.966,-994.16"/>
+<polygon fill="#000000" stroke="#000000" points="633.173,-997.464 641.995,-991.596 631.439,-990.682 633.173,-997.464"/>
+</g>
+<!-- module~foodie_integrand_object&#45;&gt;module~foodie_integrator_runge_kutta_lssp -->
+<g id="edge70" class="edge"><title>module~foodie_integrand_object&#45;&gt;module~foodie_integrator_runge_kutta_lssp</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M190.819,-713.195C198.894,-678.924 225.653,-587.655 288,-551.474 338.548,-522.14 496.085,-539.082 596.851,-553.894"/>
+<polygon fill="#000000" stroke="#000000" points="596.618,-557.398 607.025,-555.411 597.651,-550.474 596.618,-557.398"/>
+</g>
+<!-- module~foodie_integrand_object&#45;&gt;module~foodie_integrator_multistage_object -->
+<g id="edge78" class="edge"><title>module~foodie_integrand_object&#45;&gt;module~foodie_integrator_multistage_object</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M209.041,-739.646C222.613,-748.943 239.92,-762.394 252,-777.474 274.866,-806.02 262.898,-824.874 288,-851.474 307.774,-872.429 335.837,-888.401 359.409,-899.268"/>
+<polygon fill="#000000" stroke="#000000" points="358.302,-902.606 368.862,-903.469 361.145,-896.209 358.302,-902.606"/>
+</g>
+<!-- module~foodie_integrand_object&#45;&gt;module~foodie_integrator_backward_differentiation_formula -->
+<g id="edge90" class="edge"><title>module~foodie_integrand_object&#45;&gt;module~foodie_integrator_backward_differentiation_formula</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M190.989,-713.198C202.317,-664.177 244.193,-494.643 288,-464.474 397.906,-388.784 568.214,-439.956 645.022,-469.551"/>
+<polygon fill="#000000" stroke="#000000" points="644.201,-472.989 654.788,-473.394 646.764,-466.475 644.201,-472.989"/>
+</g>
+<!-- module~foodie_integrand_object&#45;&gt;module~foodie_integrator_adams_moulton -->
+<g id="edge100" class="edge"><title>module~foodie_integrand_object&#45;&gt;module~foodie_integrator_adams_moulton</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M189.742,-713.135C198.218,-649.887 236.839,-380.576 288,-315.474 323.865,-269.837 360.03,-293.366 404,-255.474"/>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M404,-255.474C454.442,-212.005 527.654,-193.96 586.703,-186.675"/>
+<polygon fill="#000000" stroke="#000000" points="587.266,-190.134 596.801,-185.516 586.468,-183.179 587.266,-190.134"/>
+</g>
+<!-- module~foodie_integrand_object&#45;&gt;module~foodie_integrator_runge_kutta_low_storage -->
+<g id="edge110" class="edge"><title>module~foodie_integrand_object&#45;&gt;module~foodie_integrator_runge_kutta_low_storage</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M189.47,-713.074C196.467,-651.998 228.56,-401.014 288,-355.474 369.85,-292.765 422.47,-322.011 520,-355.474 539.173,-362.053 537.607,-374.957 556,-383.474 565.617,-387.928 575.978,-391.654 586.497,-394.77"/>
+<polygon fill="#000000" stroke="#000000" points="585.614,-398.157 596.186,-397.463 587.489,-391.413 585.614,-398.157"/>
+</g>
+<!-- module~foodie_integrand_object&#45;&gt;module~foodie_integrator_lmm_ssp_vss -->
+<g id="edge120" class="edge"><title>module~foodie_integrand_object&#45;&gt;module~foodie_integrator_lmm_ssp_vss</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M189.959,-713.368C202.96,-626.577 276.615,-137.8 288,-127.474 331.085,-88.3987 489.262,-89.0474 592.478,-94.0675"/>
+<polygon fill="#000000" stroke="#000000" points="592.436,-97.5698 602.6,-94.5823 592.791,-90.5788 592.436,-97.5698"/>
+</g>
+<!-- module~foodie_integrand_object&#45;&gt;module~foodie_integrator_multistep_object -->
+<g id="edge128" class="edge"><title>module~foodie_integrand_object&#45;&gt;module~foodie_integrator_multistep_object</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M193.794,-713.323C213.826,-667.961 279.405,-520.428 288,-513.474 293.454,-509.061 299.5,-505.344 305.885,-502.215"/>
+<polygon fill="#000000" stroke="#000000" points="307.688,-505.247 315.454,-498.04 304.888,-498.831 307.688,-505.247"/>
+</g>
+<!-- module~foodie_integrand_object&#45;&gt;module~foodie_integrator_ms_runge_kutta_ssp -->
+<g id="edge140" class="edge"><title>module~foodie_integrand_object&#45;&gt;module~foodie_integrator_ms_runge_kutta_ssp</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M212.731,-739.643C226.666,-748.43 243.029,-761.329 252,-777.474 318.939,-897.947 210.391,-971.582 288,-1085.47 320.918,-1133.78 355.644,-1114.63 404,-1147.47"/>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M404,-1147.47C418.39,-1157.25 502.559,-1167.82 575.062,-1175.32"/>
+<polygon fill="#000000" stroke="#000000" points="574.902,-1178.82 585.207,-1176.36 575.615,-1171.86 574.902,-1178.82"/>
+</g>
+<!-- module~foodie_integrand_object&#45;&gt;module~foodie_integrator_leapfrog -->
+<g id="edge150" class="edge"><title>module~foodie_integrand_object&#45;&gt;module~foodie_integrator_leapfrog</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M251.802,-725.862C294.809,-725.382 352.82,-724.604 404,-723.474"/>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M404,-723.474C472.084,-721.972 548.982,-713.567 605.102,-706.19"/>
+<polygon fill="#000000" stroke="#000000" points="605.882,-709.617 615.332,-704.826 604.957,-702.678 605.882,-709.617"/>
+</g>
+<!-- module~foodie_integrand_object&#45;&gt;module~foodie_integrator_multistage_multistep_object -->
+<g id="edge156" class="edge"><title>module~foodie_integrand_object&#45;&gt;module~foodie_integrator_multistage_multistep_object</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M212.915,-739.543C226.915,-748.294 243.283,-761.191 252,-777.474 296.422,-860.45 226.393,-1128.32 288,-1199.47 290.588,-1202.46 293.438,-1205.16 296.494,-1207.58"/>
+<polygon fill="#000000" stroke="#000000" points="294.796,-1210.66 305.032,-1213.39 298.735,-1204.87 294.796,-1210.66"/>
+</g>
+<!-- module~foodie_integrand_object&#45;&gt;module~foodie_integrator_euler_explicit -->
+<g id="edge172" class="edge"><title>module~foodie_integrand_object&#45;&gt;module~foodie_integrator_euler_explicit</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M211.5,-739.588C225.35,-748.512 242.054,-761.575 252,-777.474 290.884,-839.637 242.639,-880.867 288,-938.474 323.538,-983.606 350.168,-975.427 404,-995.474"/>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M404,-995.474C469.359,-1019.81 490.73,-981.053 556,-956.474 583.471,-946.13 614.365,-934.861 639.031,-925.951"/>
+<polygon fill="#000000" stroke="#000000" points="640.283,-929.221 648.502,-922.536 637.908,-922.636 640.283,-929.221"/>
+</g>
+<!-- module~foodie_integrator_multistep_object&#45;&gt;module~foodie -->
+<g id="edge204" class="edge"><title>module~foodie_integrator_multistep_object&#45;&gt;module~foodie</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M492.727,-499.357C613.024,-516.838 813.128,-545.972 814,-546.474 906.925,-600.004 881.623,-804.136 964,-735.474"/>
+</g>
+<!-- module~foodie_integrator_multistep_object&#45;&gt;module~foodie_integrator_adams_bashforth -->
+<g id="edge8" class="edge"><title>module~foodie_integrator_multistep_object&#45;&gt;module~foodie_integrator_adams_bashforth</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M439.061,-499.553C464.157,-510.351 497.373,-527.755 520,-551.474 544.695,-577.361 527.665,-601.631 556,-623.474 564.308,-629.879 573.778,-634.856 583.727,-638.71"/>
+<polygon fill="#000000" stroke="#000000" points="582.796,-642.092 593.391,-642.072 585.096,-635.481 582.796,-642.092"/>
+</g>
+<!-- module~foodie_integrator_multistep_object&#45;&gt;module~foodie_integrator_adams_bashforth_moulton -->
+<g id="edge40" class="edge"><title>module~foodie_integrator_multistep_object&#45;&gt;module~foodie_integrator_adams_bashforth_moulton</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M419.196,-473.455C445.267,-451.899 501.038,-409.128 556,-388.474 610.248,-368.089 632.777,-394.598 685,-369.474"/>
+</g>
+<!-- module~foodie_integrator_multistep_object&#45;&gt;module~foodie_integrator_lmm_ssp -->
+<g id="edge52" class="edge"><title>module~foodie_integrator_multistep_object&#45;&gt;module~foodie_integrator_lmm_ssp</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M447.577,-499.479C473.049,-509.456 503.371,-525.94 520,-551.474 566.29,-622.553 504.133,-864.358 556,-931.474 568.039,-947.053 585.74,-957.472 604.195,-964.439"/>
+<polygon fill="#000000" stroke="#000000" points="603.293,-967.83 613.888,-967.776 605.572,-961.211 603.293,-967.83"/>
+</g>
+<!-- module~foodie_integrator_multistep_object&#45;&gt;module~foodie_integrator_backward_differentiation_formula -->
+<g id="edge82" class="edge"><title>module~foodie_integrator_multistep_object&#45;&gt;module~foodie_integrator_backward_differentiation_formula</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M492.524,-486.474C509.491,-486.474 527.636,-486.474 545.752,-486.474"/>
+<polygon fill="#000000" stroke="#000000" points="545.806,-489.974 555.806,-486.474 545.806,-482.974 545.806,-489.974"/>
+</g>
+<!-- module~foodie_integrator_multistep_object&#45;&gt;module~foodie_integrator_adams_moulton -->
+<g id="edge92" class="edge"><title>module~foodie_integrator_multistep_object&#45;&gt;module~foodie_integrator_adams_moulton</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M420.488,-473.237C443.666,-454.324 486.765,-418.023 520,-383.474 579.112,-322.026 640.807,-241.848 669.103,-204.019"/>
+<polygon fill="#000000" stroke="#000000" points="672.081,-205.88 675.246,-195.769 666.466,-201.7 672.081,-205.88"/>
+</g>
+<!-- module~foodie_integrator_multistep_object&#45;&gt;module~foodie_integrator_lmm_ssp_vss -->
+<g id="edge112" class="edge"><title>module~foodie_integrator_multistep_object&#45;&gt;module~foodie_integrator_lmm_ssp_vss</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M426.539,-473.299C453.517,-456.235 497.825,-423.838 520,-383.474 568.34,-295.484 495.423,-240.533 556,-160.474 571.588,-139.874 595.971,-126.091 619.361,-116.994"/>
+<polygon fill="#000000" stroke="#000000" points="620.753,-120.212 628.946,-113.495 618.352,-113.636 620.753,-120.212"/>
+</g>
+<!-- module~foodie_integrator_multistep_object&#45;&gt;module~foodie_integrator_leapfrog -->
+<g id="edge142" class="edge"><title>module~foodie_integrator_multistep_object&#45;&gt;module~foodie_integrator_leapfrog</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M443.088,-499.542C468.414,-509.897 500.246,-526.776 520,-551.474 555.044,-595.291 514.014,-635.256 556,-672.474 569.628,-684.554 587.368,-691.226 605.31,-694.693"/>
+<polygon fill="#000000" stroke="#000000" points="604.844,-698.163 615.274,-696.303 605.96,-691.252 604.844,-698.163"/>
+</g>
+<!-- module~foodie_integrator_ms_runge_kutta_ssp&#45;&gt;module~foodie -->
+<g id="edge206" class="edge"><title>module~foodie_integrator_ms_runge_kutta_ssp&#45;&gt;module~foodie</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M694.827,-1172.3C717.008,-1142.38 772.27,-1066.74 814,-1000.47 886.117,-885.953 860.04,-822.126 964,-735.474"/>
+</g>
+<!-- module~foodie_integrator_leapfrog&#45;&gt;module~foodie -->
+<g id="edge208" class="edge"><title>module~foodie_integrator_leapfrog&#45;&gt;module~foodie</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M754.542,-707.312C834.533,-721.69 955.973,-742.165 964,-735.474"/>
+</g>
+<!-- module~foodie_integrator_multistage_multistep_object&#45;&gt;module~foodie -->
+<g id="edge210" class="edge"><title>module~foodie_integrator_multistage_multistep_object&#45;&gt;module~foodie</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M465.922,-1239.54C542.824,-1255.14 666.23,-1277.91 685,-1267.47"/>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M685,-1267.47C740.262,-1236.75 772.231,-1254.95 814,-1207.47 959.401,-1042.22 795,-876.507 964,-735.474"/>
+</g>
+<!-- module~foodie_integrator_multistage_multistep_object&#45;&gt;module~foodie_integrator_ms_runge_kutta_ssp -->
+<g id="edge132" class="edge"><title>module~foodie_integrator_multistage_multistep_object&#45;&gt;module~foodie_integrator_ms_runge_kutta_ssp</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M493.296,-1213.45C522.606,-1209.17 555.36,-1204.39 585.385,-1200.01"/>
+<polygon fill="#000000" stroke="#000000" points="586.064,-1203.45 595.454,-1198.54 585.053,-1196.52 586.064,-1203.45"/>
+</g>
+<!-- module~foodie_integrator_object&#45;&gt;module~foodie -->
+<g id="edge212" class="edge"><title>module~foodie_integrator_object&#45;&gt;module~foodie</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M199.075,-812.775C213.957,-831.477 239.931,-867.219 252,-902.474 277.037,-975.612 234.965,-1192.23 288,-1248.47 323.841,-1286.48 356.59,-1245.53 404,-1267.47"/>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M404,-1267.47C460.668,-1293.71 630.425,-1297.82 685,-1267.47"/>
+</g>
+<!-- module~foodie_integrator_object&#45;&gt;module~foodie_integrator_adams_bashforth -->
+<g id="edge10" class="edge"><title>module~foodie_integrator_object&#45;&gt;module~foodie_integrator_adams_bashforth</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M205.982,-786.314C219.151,-776.402 237.226,-762.213 252,-748.474 269.274,-732.411 269.338,-723.902 288,-709.474 334.249,-673.72 345.829,-641.689 404,-647.474"/>
+</g>
+<!-- module~foodie_integrator_object&#45;&gt;module~foodie_integrator_runge_kutta_ssp -->
+<g id="edge20" class="edge"><title>module~foodie_integrator_object&#45;&gt;module~foodie_integrator_runge_kutta_ssp</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M195.362,-812.638C213.536,-844.59 261.015,-924.645 288,-938.474 379.763,-985.5 428.449,-985.912 520,-938.474 544.634,-925.71 535.097,-905.718 556,-887.474 580.723,-865.896 613.612,-848.953 639.994,-837.503"/>
+<polygon fill="#000000" stroke="#000000" points="641.54,-840.649 649.391,-833.535 638.817,-834.2 641.54,-840.649"/>
+</g>
+<!-- module~foodie_integrator_object&#45;&gt;module~foodie_integrator_runge_kutta_emd -->
+<g id="edge30" class="edge"><title>module~foodie_integrator_object&#45;&gt;module~foodie_integrator_runge_kutta_emd</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M252.301,-798.034C295.27,-797.425 353.047,-797.289 404,-799.474"/>
+</g>
+<!-- module~foodie_integrator_object&#45;&gt;module~foodie_integrator_adams_bashforth_moulton -->
+<g id="edge50" class="edge"><title>module~foodie_integrator_object&#45;&gt;module~foodie_integrator_adams_bashforth_moulton</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M212.674,-786.273C226.588,-777.475 242.951,-764.575 252,-748.474 314.337,-637.559 226.406,-575.804 288,-464.474 320.26,-406.165 346.045,-402.368 404,-369.474"/>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M404,-369.474C512.614,-307.828 572.458,-423.617 685,-369.474"/>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M685,-369.474C798.332,-314.951 904.864,-204.637 946.054,-158.977"/>
+<polygon fill="#000000" stroke="#000000" points="948.702,-161.268 952.754,-151.478 943.482,-156.604 948.702,-161.268"/>
+</g>
+<!-- module~foodie_integrator_object&#45;&gt;module~foodie_integrator_lmm_ssp -->
+<g id="edge54" class="edge"><title>module~foodie_integrator_object&#45;&gt;module~foodie_integrator_lmm_ssp</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M198.38,-812.622C212.692,-831.43 238.271,-867.606 252,-902.474 282.37,-979.603 223.979,-1032.82 288,-1085.47 367.637,-1150.97 421.126,-1114.73 520,-1085.47 577.457,-1068.48 633.681,-1024.5 663.359,-998.518"/>
+<polygon fill="#000000" stroke="#000000" points="665.867,-1000.97 671.005,-991.706 661.21,-995.745 665.867,-1000.97"/>
+</g>
+<!-- module~foodie_integrator_object&#45;&gt;module~foodie_integrator_runge_kutta_lssp -->
+<g id="edge64" class="edge"><title>module~foodie_integrator_object&#45;&gt;module~foodie_integrator_runge_kutta_lssp</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M404,-565.474C434.461,-549.62 516.392,-552.109 583.975,-557.562"/>
+<polygon fill="#000000" stroke="#000000" points="584.004,-561.077 594.261,-558.423 584.588,-554.101 584.004,-561.077"/>
+</g>
+<!-- module~foodie_integrator_object&#45;&gt;module~foodie_integrator_multistage_object -->
+<g id="edge80" class="edge"><title>module~foodie_integrator_object&#45;&gt;module~foodie_integrator_multistage_object</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M212.358,-812.668C251.191,-833.703 327.196,-874.872 370.917,-898.554"/>
+<polygon fill="#000000" stroke="#000000" points="369.271,-901.643 379.731,-903.329 372.605,-895.488 369.271,-901.643"/>
+</g>
+<!-- module~foodie_integrator_object&#45;&gt;module~foodie_integrator_backward_differentiation_formula -->
+<g id="edge84" class="edge"><title>module~foodie_integrator_object&#45;&gt;module~foodie_integrator_backward_differentiation_formula</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M211.522,-786.374C225.38,-777.455 242.086,-764.393 252,-748.474 291.451,-685.131 233.834,-635.805 288,-584.474 325.92,-548.539 357.659,-589.594 404,-565.474"/>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M404,-565.474C464.64,-533.912 539.399,-513.677 596.559,-501.595"/>
+<polygon fill="#000000" stroke="#000000" points="597.574,-504.96 606.658,-499.507 596.156,-498.105 597.574,-504.96"/>
+</g>
+<!-- module~foodie_integrator_object&#45;&gt;module~foodie_integrator_adams_moulton -->
+<g id="edge94" class="edge"><title>module~foodie_integrator_object&#45;&gt;module~foodie_integrator_adams_moulton</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M212.878,-786.386C226.865,-777.628 243.232,-764.73 252,-748.474 335.266,-594.101 207.73,-511.427 288,-355.474 319.151,-294.952 352.437,-299.91 404,-255.474"/>
+</g>
+<!-- module~foodie_integrator_object&#45;&gt;module~foodie_integrator_runge_kutta_low_storage -->
+<g id="edge104" class="edge"><title>module~foodie_integrator_object&#45;&gt;module~foodie_integrator_runge_kutta_low_storage</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M404,-369.474C421.901,-359.314 536.03,-379.858 613.219,-395.37"/>
+<polygon fill="#000000" stroke="#000000" points="612.885,-398.873 623.381,-397.426 614.273,-392.012 612.885,-398.873"/>
+</g>
+<!-- module~foodie_integrator_object&#45;&gt;module~foodie_integrator_lmm_ssp_vss -->
+<g id="edge114" class="edge"><title>module~foodie_integrator_object&#45;&gt;module~foodie_integrator_lmm_ssp_vss</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M212.999,-786.45C227.029,-777.715 243.399,-764.819 252,-748.474 304.601,-648.52 219.625,-331.378 288,-241.474 328.225,-188.584 511.344,-139.742 614.251,-115.846"/>
+<polygon fill="#000000" stroke="#000000" points="615.297,-119.197 624.256,-113.543 613.726,-112.375 615.297,-119.197"/>
+</g>
+<!-- module~foodie_integrator_object&#45;&gt;module~foodie_integrator_multistep_object -->
+<g id="edge130" class="edge"><title>module~foodie_integrator_object&#45;&gt;module~foodie_integrator_multistep_object</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M212.038,-786.293C225.907,-777.424 242.441,-764.444 252,-748.474 297.712,-672.104 236.256,-623.893 288,-551.474 303.806,-529.353 329.62,-513.828 352.888,-503.513"/>
+<polygon fill="#000000" stroke="#000000" points="354.467,-506.646 362.328,-499.542 351.753,-500.193 354.467,-506.646"/>
+</g>
+<!-- module~foodie_integrator_object&#45;&gt;module~foodie_integrator_ms_runge_kutta_ssp -->
+<g id="edge134" class="edge"><title>module~foodie_integrator_object&#45;&gt;module~foodie_integrator_ms_runge_kutta_ssp</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M198.522,-812.568C213.002,-831.311 238.779,-867.41 252,-902.474 286.336,-993.54 221.982,-1046.96 288,-1118.47 324.048,-1157.52 360.041,-1117.61 404,-1147.47"/>
+</g>
+<!-- module~foodie_integrator_object&#45;&gt;module~foodie_integrator_leapfrog -->
+<g id="edge144" class="edge"><title>module~foodie_integrator_object&#45;&gt;module~foodie_integrator_leapfrog</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M252.229,-788.859C319.305,-777.451 427.439,-758.151 520,-737.474 556.367,-729.351 596.863,-718.819 628.635,-710.213"/>
+<polygon fill="#000000" stroke="#000000" points="629.899,-713.496 638.628,-707.491 628.059,-706.742 629.899,-713.496"/>
+</g>
+<!-- module~foodie_integrator_object&#45;&gt;module~foodie_integrator_multistage_multistep_object -->
+<g id="edge158" class="edge"><title>module~foodie_integrator_object&#45;&gt;module~foodie_integrator_multistage_multistep_object</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M198.74,-812.488C213.48,-831.137 239.563,-867.124 252,-902.474 274.065,-965.189 243.597,-1149.99 288,-1199.47 290.757,-1202.55 293.789,-1205.3 297.036,-1207.78"/>
+<polygon fill="#000000" stroke="#000000" points="295.241,-1210.78 305.519,-1213.35 299.086,-1204.93 295.241,-1210.78"/>
+</g>
+<!-- module~foodie_integrator_object&#45;&gt;module~foodie_integrator_euler_explicit -->
+<g id="edge166" class="edge"><title>module~foodie_integrator_object&#45;&gt;module~foodie_integrator_euler_explicit</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M197.528,-812.571C211.049,-831.609 235.94,-868.383 252,-902.474 273.384,-947.865 255.59,-971.171 288,-1009.47 325.76,-1054.1 346.03,-1079.01 404,-1071.47"/>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M404,-1071.47C456.208,-1064.69 479.701,-1081.35 520,-1047.47 553.293,-1019.49 524.828,-986.806 556,-956.474 570.249,-942.61 588.907,-932.79 607.588,-925.852"/>
+<polygon fill="#000000" stroke="#000000" points="608.735,-929.159 617.037,-922.576 606.442,-922.545 608.735,-929.159"/>
+</g>
+<!-- module~foodie_integrator_euler_explicit&#45;&gt;module~foodie -->
+<g id="edge214" class="edge"><title>module~foodie_integrator_euler_explicit&#45;&gt;module~foodie</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M759.728,-896.423C778.162,-891.438 797.373,-884.651 814,-875.474 893.839,-831.409 893.95,-793.862 964,-735.474"/>
+</g>
+</g>
+</svg>
+</div>
+                <script>var panmodulefoodie_test_integrand_lcceUsesGraph = svgPanZoom('#modulefoodie_test_integrand_lcceUsesGraph', {
+                    zoomEnabled: true,
+                    controlIconsEnabled: true,
+                    fit: true,
+                    center: true,});
+                    </script>
+                <div><a type="button" class="graph-help" data-toggle="modal" href="#graph-help-text">Help</a></div>
+                <div class="modal fade" id="graph-help-text" tabindex="-1" role="dialog">
+                  <div class="modal-dialog modal-lg" role="document">
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title" id="-graph-help-label">Graph Key</h4>
+                      </div>
+                      <div class="modal-body">
+                        
+    <p>Nodes of different colours represent the following: </p>
+    <?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.26.3 (20100126.1600)
+ -->
+<!-- Title: Graph Key Pages: 1 -->
+<svg width="486pt" height="34pt"
+ viewBox="0.00 0.00 486.00 34.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="graph1" class="graph" transform="scale(1 1) rotate(0) translate(4 30)">
+<title>Graph Key</title>
+<polygon fill="white" stroke="white" points="-4,5 -4,-30 483,-30 483,5 -4,5"/>
+<!-- Module -->
+<g id="node1" class="node"><title>Module</title>
+<polygon fill="#337ab7" stroke="#337ab7" points="54,-26 2.13163e-14,-26 0,-1.24345e-14 54,-3.55271e-15 54,-26"/>
+<text text-anchor="middle" x="27" y="-10.55" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Module</text>
+</g>
+<!-- Submodule -->
+<g id="node2" class="node"><title>Submodule</title>
+<polygon fill="#5bc0de" stroke="#5bc0de" points="138,-26 72,-26 72,-1.24345e-14 138,-3.55271e-15 138,-26"/>
+<text text-anchor="middle" x="105" y="-10.55" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Submodule</text>
+</g>
+<!-- Subroutine -->
+<g id="node3" class="node"><title>Subroutine</title>
+<polygon fill="#d9534f" stroke="#d9534f" points="220,-26 156,-26 156,-1.24345e-14 220,-3.55271e-15 220,-26"/>
+<text text-anchor="middle" x="188" y="-10.55" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Subroutine</text>
+</g>
+<!-- Function -->
+<g id="node4" class="node"><title>Function</title>
+<polygon fill="#d94e8f" stroke="#d94e8f" points="292,-26 238,-26 238,-1.24345e-14 292,-3.55271e-15 292,-26"/>
+<text text-anchor="middle" x="265" y="-10.55" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Function</text>
+</g>
+<!-- Program -->
+<g id="node5" class="node"><title>Program</title>
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="364,-26 310,-26 310,-1.24345e-14 364,-3.55271e-15 364,-26"/>
+<text text-anchor="middle" x="337" y="-10.55" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Program</text>
+</g>
+<!-- This Page&#39;s Entity -->
+<g id="node6" class="node"><title>This Page&#39;s Entity</title>
+<polygon fill="none" stroke="black" points="478,-26 382,-26 382,-1.24345e-14 478,-3.55271e-15 478,-26"/>
+<text text-anchor="middle" x="430" y="-10.55" font-family="Helvetica,sans-Serif" font-size="10.50">This Page&#39;s Entity</text>
+</g>
+</g>
+</svg>
+
+    
+    <p>Solid arrows point from a parent (sub)module to the submodule which is
+    descended from it. Dashed arrows point from a module being used to the
+    module or program unit using it.
+    </p>
+    
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                
+    
+
+    
+    <p>Define <a href="../type/integrand_lcce.html">integrand_lcce</a>, the linear constant coefficients equation test field that is a concrete extension of the
+ abstract integrand type.</p>
+    
+    
+    <h3>Used By</h3>
+    
+                <div class="depgraph"><?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.26.3 (20100126.1600)
+ -->
+<!-- Title: module~~foodie_test_integrand_lcce~~UsedByGraph Pages: 1 -->
+<svg id="modulefoodie_test_integrand_lcceUsedByGraph" width="426pt" height="78pt"
+ viewBox="0.00 0.00 426.00 78.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="module~~foodie_test_integrand_lcce~~UsedByGraph" class="graph" transform="scale(1 1) rotate(0) translate(4 74)">
+<title>module~~foodie_test_integrand_lcce~~UsedByGraph</title>
+<polygon fill="white" stroke="white" points="-4,5 -4,-74 423,-74 423,5 -4,5"/>
+<!-- module~foodie_test_integrand_lcce -->
+<g id="node1" class="node"><title>module~foodie_test_integrand_lcce</title>
+<polygon fill="none" stroke="black" points="141,-48 1,-48 1,-22 141,-22 141,-48"/>
+<text text-anchor="middle" x="71" y="-32.55" font-family="Helvetica,sans-Serif" font-size="10.50">foodie_test_integrand_lcce</text>
+</g>
+<!-- module~foodie_test_object -->
+<g id="node2" class="node"><title>module~foodie_test_object</title>
+<a xlink:href="../module/foodie_test_object.html" xlink:title="foodie_test_object">
+<polygon fill="#337ab7" stroke="#337ab7" points="285,-70 185,-70 185,-44 285,-44 285,-70"/>
+<text text-anchor="middle" x="235" y="-54.55" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">foodie_test_object</text>
+</a>
+</g>
+<!-- module~foodie_test_integrand_lcce&#45;&gt;module~foodie_test_object -->
+<g id="edge6" class="edge"><title>module~foodie_test_integrand_lcce&#45;&gt;module~foodie_test_object</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M141.503,-44.4577C152.555,-45.9403 163.892,-47.4612 174.689,-48.9095"/>
+<polygon fill="#000000" stroke="#000000" points="174.471,-52.4115 184.848,-50.2722 175.402,-45.4737 174.471,-52.4115"/>
+</g>
+<!-- module~foodie_test_lcce_test -->
+<g id="node3" class="node"><title>module~foodie_test_lcce_test</title>
+<a xlink:href="../module/foodie_test_lcce_test.html" xlink:title="foodie_test_lcce_test">
+<polygon fill="#337ab7" stroke="#337ab7" points="291,-26 179,-26 179,-1.24345e-14 291,-3.55271e-15 291,-26"/>
+<text text-anchor="middle" x="235" y="-10.55" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">foodie_test_lcce_test</text>
+</a>
+</g>
+<!-- module~foodie_test_integrand_lcce&#45;&gt;module~foodie_test_lcce_test -->
+<g id="edge8" class="edge"><title>module~foodie_test_integrand_lcce&#45;&gt;module~foodie_test_lcce_test</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M141.503,-25.5423C150.363,-24.3537 159.406,-23.1406 168.208,-21.96"/>
+<polygon fill="#000000" stroke="#000000" points="168.957,-25.3909 178.403,-20.5923 168.026,-18.453 168.957,-25.3909"/>
+</g>
+<!-- program~foodie_tester -->
+<g id="node4" class="node"><title>program~foodie_tester</title>
+<a xlink:href="../program/foodie_tester.html" xlink:title="foodie_tester">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="410,-70 336,-70 336,-44 410,-44 410,-70"/>
+<text text-anchor="middle" x="373" y="-54.55" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">foodie_tester</text>
+</a>
+</g>
+<!-- module~foodie_test_object&#45;&gt;program~foodie_tester -->
+<g id="edge2" class="edge"><title>module~foodie_test_object&#45;&gt;program~foodie_tester</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M285.212,-57C298.225,-57 312.203,-57 325.095,-57"/>
+<polygon fill="#000000" stroke="#000000" points="325.161,-60.5001 335.161,-57 325.161,-53.5001 325.161,-60.5001"/>
+</g>
+<!-- program~foodie_test_lcce -->
+<g id="node6" class="node"><title>program~foodie_test_lcce</title>
+<a xlink:href="../program/foodie_test_lcce.html" xlink:title="foodie_test_lcce">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="418,-26 328,-26 328,-1.24345e-14 418,-3.55271e-15 418,-26"/>
+<text text-anchor="middle" x="373" y="-10.55" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">foodie_test_lcce</text>
+</a>
+</g>
+<!-- module~foodie_test_lcce_test&#45;&gt;program~foodie_test_lcce -->
+<g id="edge4" class="edge"><title>module~foodie_test_lcce_test&#45;&gt;program~foodie_test_lcce</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M291.528,-13C300.101,-13 308.939,-13 317.49,-13"/>
+<polygon fill="#000000" stroke="#000000" points="317.741,-16.5001 327.74,-13 317.74,-9.5001 317.741,-16.5001"/>
+</g>
+</g>
+</svg>
+</div>
+                <div><a type="button" class="graph-help" data-toggle="modal" href="#graph-help-text">Help</a></div>
+                <div class="modal fade" id="graph-help-text" tabindex="-1" role="dialog">
+                  <div class="modal-dialog modal-lg" role="document">
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title" id="-graph-help-label">Graph Key</h4>
+                      </div>
+                      <div class="modal-body">
+                        
+    <p>Nodes of different colours represent the following: </p>
+    <?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.26.3 (20100126.1600)
+ -->
+<!-- Title: Graph Key Pages: 1 -->
+<svg width="486pt" height="34pt"
+ viewBox="0.00 0.00 486.00 34.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="graph1" class="graph" transform="scale(1 1) rotate(0) translate(4 30)">
+<title>Graph Key</title>
+<polygon fill="white" stroke="white" points="-4,5 -4,-30 483,-30 483,5 -4,5"/>
+<!-- Module -->
+<g id="node1" class="node"><title>Module</title>
+<polygon fill="#337ab7" stroke="#337ab7" points="54,-26 2.13163e-14,-26 0,-1.24345e-14 54,-3.55271e-15 54,-26"/>
+<text text-anchor="middle" x="27" y="-10.55" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Module</text>
+</g>
+<!-- Submodule -->
+<g id="node2" class="node"><title>Submodule</title>
+<polygon fill="#5bc0de" stroke="#5bc0de" points="138,-26 72,-26 72,-1.24345e-14 138,-3.55271e-15 138,-26"/>
+<text text-anchor="middle" x="105" y="-10.55" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Submodule</text>
+</g>
+<!-- Subroutine -->
+<g id="node3" class="node"><title>Subroutine</title>
+<polygon fill="#d9534f" stroke="#d9534f" points="220,-26 156,-26 156,-1.24345e-14 220,-3.55271e-15 220,-26"/>
+<text text-anchor="middle" x="188" y="-10.55" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Subroutine</text>
+</g>
+<!-- Function -->
+<g id="node4" class="node"><title>Function</title>
+<polygon fill="#d94e8f" stroke="#d94e8f" points="292,-26 238,-26 238,-1.24345e-14 292,-3.55271e-15 292,-26"/>
+<text text-anchor="middle" x="265" y="-10.55" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Function</text>
+</g>
+<!-- Program -->
+<g id="node5" class="node"><title>Program</title>
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="364,-26 310,-26 310,-1.24345e-14 364,-3.55271e-15 364,-26"/>
+<text text-anchor="middle" x="337" y="-10.55" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Program</text>
+</g>
+<!-- This Page&#39;s Entity -->
+<g id="node6" class="node"><title>This Page&#39;s Entity</title>
+<polygon fill="none" stroke="black" points="478,-26 382,-26 382,-1.24345e-14 478,-3.55271e-15 478,-26"/>
+<text text-anchor="middle" x="430" y="-10.55" font-family="Helvetica,sans-Serif" font-size="10.50">This Page&#39;s Entity</text>
+</g>
+</g>
+</svg>
+
+    
+    <p>Solid arrows point from a parent (sub)module to the submodule which is
+    descended from it. Dashed arrows point from a module being used to the
+    module or program unit using it.
+    </p>
+    
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                
+    <br>
+    
+
+    <section class="visible-xs visible-sm hidden-md">
+      
+
+
+
+
+
+
+
+
+
+
+
+<div class="panel panel-primary">
+  <div class="panel-heading text-left"><h3 class="panel-title"><a data-toggle="collapse" href="#types-1">Derived Types</a></h3></div>
+  <div id="types-1" class="panel-collapse collapse">
+    <div class="list-group">
+      
+      <a class="list-group-item" href="../module/foodie_test_integrand_lcce.html#type-integrand_lcce">integrand_lcce</a>
+      
+    </div>
+  </div>
+</div>
+
+
+<div class="panel panel-primary">
+  <div class="panel-heading text-left"><h3 class="panel-title"><a data-toggle="collapse" href="#funcs-1">Functions</a></h3></div>
+  <div id="funcs-1" class="panel-collapse collapse">
+    <div class="list-group">
+      
+      <a class="list-group-item" href="../module/foodie_test_integrand_lcce.html#proc-du_dt%7E2">dU_dt</a>
+      
+      <a class="list-group-item" href="../module/foodie_test_integrand_lcce.html#proc-description%7E3">description</a>
+      
+      <a class="list-group-item" href="../module/foodie_test_integrand_lcce.html#proc-error%7E2">error</a>
+      
+      <a class="list-group-item" href="../module/foodie_test_integrand_lcce.html#proc-exact_solution%7E2">exact_solution</a>
+      
+      <a class="list-group-item" href="../module/foodie_test_integrand_lcce.html#proc-integrand_add_integrand%7E2">integrand_add_integrand</a>
+      
+      <a class="list-group-item" href="../module/foodie_test_integrand_lcce.html#proc-integrand_add_real%7E2">integrand_add_real</a>
+      
+      <a class="list-group-item" href="../module/foodie_test_integrand_lcce.html#proc-integrand_dimension%7E2">integrand_dimension</a>
+      
+      <a class="list-group-item" href="../module/foodie_test_integrand_lcce.html#proc-integrand_multiply_integrand%7E2">integrand_multiply_integrand</a>
+      
+      <a class="list-group-item" href="../module/foodie_test_integrand_lcce.html#proc-integrand_multiply_real%7E2">integrand_multiply_real</a>
+      
+      <a class="list-group-item" href="../module/foodie_test_integrand_lcce.html#proc-integrand_multiply_real_scalar%7E2">integrand_multiply_real_scalar</a>
+      
+      <a class="list-group-item" href="../module/foodie_test_integrand_lcce.html#proc-integrand_sub_integrand%7E2">integrand_sub_integrand</a>
+      
+      <a class="list-group-item" href="../module/foodie_test_integrand_lcce.html#proc-integrand_sub_real%7E2">integrand_sub_real</a>
+      
+      <a class="list-group-item" href="../module/foodie_test_integrand_lcce.html#proc-local_error%7E2">local_error</a>
+      
+      <a class="list-group-item" href="../module/foodie_test_integrand_lcce.html#proc-output%7E9">output</a>
+      
+      <a class="list-group-item" href="../module/foodie_test_integrand_lcce.html#proc-real_add_integrand%7E2">real_add_integrand</a>
+      
+      <a class="list-group-item" href="../module/foodie_test_integrand_lcce.html#proc-real_multiply_integrand%7E2">real_multiply_integrand</a>
+      
+      <a class="list-group-item" href="../module/foodie_test_integrand_lcce.html#proc-real_scalar_multiply_integrand%7E2">real_scalar_multiply_integrand</a>
+      
+      <a class="list-group-item" href="../module/foodie_test_integrand_lcce.html#proc-real_sub_integrand%7E2">real_sub_integrand</a>
+      
+    </div>
+  </div>
+</div>
+
+
+<div class="panel panel-primary">
+  <div class="panel-heading text-left"><h3 class="panel-title"><a data-toggle="collapse" href="#subs-1">Subroutines</a></h3></div>
+  <div class="list-group">
+    <div id="subs-1" class="panel-collapse collapse">
+      
+      <a class="list-group-item" href="../module/foodie_test_integrand_lcce.html#proc-assign_integrand%7E2">assign_integrand</a>
+      
+      <a class="list-group-item" href="../module/foodie_test_integrand_lcce.html#proc-assign_real%7E2">assign_real</a>
+      
+      <a class="list-group-item" href="../module/foodie_test_integrand_lcce.html#proc-export_tecplot%7E2">export_tecplot</a>
+      
+      <a class="list-group-item" href="../module/foodie_test_integrand_lcce.html#proc-initialize%7E17">initialize</a>
+      
+      <a class="list-group-item" href="../module/foodie_test_integrand_lcce.html#proc-integrand_add_integrand_fast%7E2">integrand_add_integrand_fast</a>
+      
+      <a class="list-group-item" href="../module/foodie_test_integrand_lcce.html#proc-integrand_multiply_integrand_fast%7E2">integrand_multiply_integrand_fast</a>
+      
+      <a class="list-group-item" href="../module/foodie_test_integrand_lcce.html#proc-integrand_multiply_real_scalar_fast%7E2">integrand_multiply_real_scalar_fast</a>
+      
+      <a class="list-group-item" href="../module/foodie_test_integrand_lcce.html#proc-integrand_subtract_integrand_fast%7E2">integrand_subtract_integrand_fast</a>
+      
+      <a class="list-group-item" href="../module/foodie_test_integrand_lcce.html#proc-parse_cli%7E2">parse_cli</a>
+      
+      <a class="list-group-item" href="../module/foodie_test_integrand_lcce.html#proc-set_cli%7E2">set_cli</a>
+      
+      <a class="list-group-item" href="../module/foodie_test_integrand_lcce.html#proc-t_fast%7E2">t_fast</a>
+      
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
+
+
+
+    </section>
+    <br class="visible-xs visible-sm hidden-md">
+
+    
+
+    
+    
+    
+    
+    
+
+    
+    
+    
+    <section>
+     <h2>Derived Types</h2>
+	 
+	   
+<div class="panel panel-default">
+  <div class="panel-heading codesum"><span class="anchor" id="type-integrand_lcce"></span><h3>type, public, extends(<a href='../type/integrand_tester_object.html'>integrand_tester_object</a>) :: <a href='../type/integrand_lcce.html'>integrand_lcce</a>
+    
+  </h3></div>
+  <div class="panel-body">
+    
+    
+    <p>The linear constant coefficient equation field.</p>
+    
+     
+     <h4>Components</h4>
+    
+<table class="table table-striped varlist">
+<thead><tr><th>Type</th><th>Visibility</th>
+
+<th>Attributes</th><th></th><th>Name</th><th></th><th>Initial</th><th></th></thead>
+
+
+
+<tbody>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-u%7E8"></span>real(kind=R_P),</td>
+  
+  <td>private</td>
+  <td></td><td>::</td>
+  <td><strong>U</strong></td><td> =</td><td>0._R_P</td><td><p>Integrand (state) variable.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-u0%7E3"></span>real(kind=R_P),</td>
+  
+  <td>private</td>
+  <td></td><td>::</td>
+  <td><strong>U0</strong></td><td> =</td><td>0._R_P</td><td><p>Integrand initial state.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-a%7E5"></span>real(kind=R_P),</td>
+  
+  <td>private</td>
+  <td></td><td>::</td>
+  <td><strong>a</strong></td><td> =</td><td>0._R_P</td><td><p><em>a</em> constant.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-b%7E6"></span>real(kind=R_P),</td>
+  
+  <td>private</td>
+  <td></td><td>::</td>
+  <td><strong>b</strong></td><td> =</td><td>0._R_P</td><td><p><em>b</em> constant.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-dummy_to_allow_extensions"></span>class(*),</td>
+  
+  <td>public,</td>
+  <td>allocatable</td><td>::</td>
+  <td><strong>dummy_to_allow_extensions</strong>[:]</td><td></td><td></td><td><p>Dummy member to allow concrete extensions with coarray members.</p></td>
+  
+</tr>
+
+</tbody>
+</table>
+
+     
+     
+          
+     
+     <h4>Type-Bound Procedures</h4>
+      <table class="table table-striped varlist">
+      <tbody>
+      
+       <tr><td>generic, public :: <strong><a href='../type/integrand_lcce.html#boundprocedure-add_fast%7E3'>add_fast</a></strong>  => integrand_add_integrand_fast </td>
+       <td><p>Overloading <code>add_fast</code> method.</p></td></tr>
+      
+       <tr><td>procedure, public, pass(lhs) :: <strong><a href='../type/integrand_lcce.html#boundprocedure-assign_integrand%7E11'>assign_integrand</a></strong>  </td>
+       <td><p><code>=</code> operator.</p></td></tr>
+      
+       <tr><td>procedure, public, pass(lhs) :: <strong><a href='../type/integrand_lcce.html#boundprocedure-assign_real%7E9'>assign_real</a></strong>  </td>
+       <td><p><code>= real</code> operator.</p></td></tr>
+      
+       <tr><td>generic, public :: <strong><a href='../type/integrand_lcce.html#boundprocedure-assignment%28%3D%29%7E22'>assignment(=)</a></strong>  => assign_integrand, assign_real </td>
+       <td><p>Overloading <code>=</code> assignament.</p></td></tr>
+      
+       <tr><td>procedure, public, pass(self) :: <strong><a href='../type/integrand_lcce.html#boundprocedure-description%7E3'>description</a></strong>  </td>
+       <td><p>Return an informative description of the test.</p></td></tr>
+      
+       <tr><td>procedure, public, pass(self) :: <strong><a href='../type/integrand_lcce.html#boundprocedure-error%7E5'>error</a></strong>  </td>
+       <td><p>Return error.</p></td></tr>
+      
+       <tr><td>procedure, public, pass(self) :: <strong><a href='../type/integrand_lcce.html#boundprocedure-exact_solution%7E4'>exact_solution</a></strong>  </td>
+       <td><p>Return exact solution.</p></td></tr>
+      
+       <tr><td>procedure, public, pass(self) :: <strong><a href='../type/integrand_lcce.html#boundprocedure-export_tecplot%7E2'>export_tecplot</a></strong>  </td>
+       <td><p>Export integrand to Tecplot file.</p></td></tr>
+      
+       <tr><td>procedure, public, pass(self) :: <strong><a href='../type/integrand_lcce.html#boundprocedure-initialize%7E17'>initialize</a></strong>  </td>
+       <td><p>Initialize field.</p></td></tr>
+      
+       <tr><td>procedure, public, pass(lhs) :: <strong><a href='../type/integrand_lcce.html#boundprocedure-integrand_add_integrand%7E4'>integrand_add_integrand</a></strong>  </td>
+       <td><p><code>+</code> operator.</p></td></tr>
+      
+       <tr><td>procedure, public, pass(opr) :: <strong><a href='../type/integrand_lcce.html#boundprocedure-integrand_add_integrand_fast%7E3'>integrand_add_integrand_fast</a></strong>  </td>
+       <td><p><code>+</code> fast operator.</p></td></tr>
+      
+       <tr><td>procedure, public, pass(lhs) :: <strong><a href='../type/integrand_lcce.html#boundprocedure-integrand_add_real%7E4'>integrand_add_real</a></strong>  </td>
+       <td><p><code>+ real</code> operator.</p></td></tr>
+      
+       <tr><td>procedure, public, pass(self) :: <strong><a href='../type/integrand_lcce.html#boundprocedure-integrand_dimension%7E3'>integrand_dimension</a></strong>  </td>
+       <td><p>Return integrand dimension.</p></td></tr>
+      
+       <tr><td>procedure, public, pass(lhs) :: <strong><a href='../type/integrand_lcce.html#boundprocedure-integrand_multiply_integrand%7E9'>integrand_multiply_integrand</a></strong>  </td>
+       <td><p><code>*</code> operator.</p></td></tr>
+      
+       <tr><td>procedure, public, pass(opr) :: <strong><a href='../type/integrand_lcce.html#boundprocedure-integrand_multiply_integrand_fast%7E3'>integrand_multiply_integrand_fast</a></strong>  </td>
+       <td><p><code>*</code> fast operator.</p></td></tr>
+      
+       <tr><td>procedure, public, pass(lhs) :: <strong><a href='../type/integrand_lcce.html#boundprocedure-integrand_multiply_real%7E9'>integrand_multiply_real</a></strong>  </td>
+       <td><p><code>* real</code> operator.</p></td></tr>
+      
+       <tr><td>procedure, public, pass(lhs) :: <strong><a href='../type/integrand_lcce.html#boundprocedure-integrand_multiply_real_scalar%7E4'>integrand_multiply_real_scalar</a></strong>  </td>
+       <td><p><code>* real_scalar</code> operator.</p></td></tr>
+      
+       <tr><td>procedure, public, pass(opr) :: <strong><a href='../type/integrand_lcce.html#boundprocedure-integrand_multiply_real_scalar_fast%7E3'>integrand_multiply_real_scalar_fast</a></strong>  </td>
+       <td><p><code>* real_scalar</code> fast operator.</p></td></tr>
+      
+       <tr><td>procedure, public, pass(lhs) :: <strong><a href='../type/integrand_lcce.html#boundprocedure-integrand_sub_integrand%7E4'>integrand_sub_integrand</a></strong>  </td>
+       <td><p><code>-</code> operator.</p></td></tr>
+      
+       <tr><td>procedure, public, pass(lhs) :: <strong><a href='../type/integrand_lcce.html#boundprocedure-integrand_sub_real%7E4'>integrand_sub_real</a></strong>  </td>
+       <td><p><code>- real</code> operator.</p></td></tr>
+      
+       <tr><td>procedure, public, pass(opr) :: <strong><a href='../type/integrand_lcce.html#boundprocedure-integrand_subtract_integrand_fast%7E3'>integrand_subtract_integrand_fast</a></strong>  </td>
+       <td><p><code>-</code> fast operator.</p></td></tr>
+      
+       <tr><td>procedure, public, pass(lhs) :: <strong><a href='../type/integrand_lcce.html#boundprocedure-local_error%7E9'>local_error</a></strong>  </td>
+       <td><p><code>||integrand_lcce - integrand_lcce||</code> operator.</p></td></tr>
+      
+       <tr><td>generic, public :: <strong><a href='../type/integrand_lcce.html#boundprocedure-multiply_fast%7E3'>multiply_fast</a></strong>  => integrand_multiply_integrand_fast, integrand_multiply_real_scalar_fast </td>
+       <td><p>Overloading <code>multiply_fast</code> method.</p></td></tr>
+      
+       <tr><td>generic, public :: <strong><a href='../type/integrand_lcce.html#boundprocedure-operator%28%2A%29%7E3'>operator(*)</a></strong>  => integrand_multiply_integrand, integrand_multiply_real, real_multiply_integrand, integrand_multiply_real_scalar, real_scalar_multiply_integrand </td>
+       <td><p>Overloading <code>*</code> operator.</p></td></tr>
+      
+       <tr><td>generic, public :: <strong><a href='../type/integrand_lcce.html#boundprocedure-operator%28%2B%29%7E3'>operator(+)</a></strong>  => integrand_add_integrand, integrand_add_real, real_add_integrand </td>
+       <td><p>Overloading <code>+</code> operator.</p></td></tr>
+      
+       <tr><td>generic, public :: <strong><a href='../type/integrand_lcce.html#boundprocedure-operator%28-%29%7E3'>operator(-)</a></strong>  => integrand_sub_integrand, integrand_sub_real, real_sub_integrand </td>
+       <td><p>Overloading <code>-</code> operator.</p></td></tr>
+      
+       <tr><td>generic, public :: <strong><a href='../type/integrand_lcce.html#boundprocedure-operator%28.lterror.%29%7E3'>operator(.lterror.)</a></strong>  => local_error </td>
+       <td><p>Estimate local truncation error.</p></td></tr>
+      
+       <tr><td>procedure, public, pass(self) :: <strong><a href='../type/integrand_lcce.html#boundprocedure-output%7E11'>output</a></strong>  </td>
+       <td><p>Extract integrand state field.</p></td></tr>
+      
+       <tr><td>procedure, public, pass(self) :: <strong><a href='../type/integrand_lcce.html#boundprocedure-parse_cli%7E2'>parse_cli</a></strong>  </td>
+       <td><p>Initialize from command line interface.</p></td></tr>
+      
+       <tr><td>procedure, public, pass(rhs) :: <strong><a href='../type/integrand_lcce.html#boundprocedure-real_add_integrand%7E4'>real_add_integrand</a></strong>  </td>
+       <td><p><code>real +</code> operator.</p></td></tr>
+      
+       <tr><td>procedure, public, pass(rhs) :: <strong><a href='../type/integrand_lcce.html#boundprocedure-real_multiply_integrand%7E9'>real_multiply_integrand</a></strong>  </td>
+       <td><p><code>real *</code> operator.</p></td></tr>
+      
+       <tr><td>procedure, public, pass(rhs) :: <strong><a href='../type/integrand_lcce.html#boundprocedure-real_scalar_multiply_integrand%7E4'>real_scalar_multiply_integrand</a></strong>  </td>
+       <td><p><code>real_scalar *</code> operator.</p></td></tr>
+      
+       <tr><td>procedure, public, pass(rhs) :: <strong><a href='../type/integrand_lcce.html#boundprocedure-real_sub_integrand%7E4'>real_sub_integrand</a></strong>  </td>
+       <td><p><code>real -</code> operator.</p></td></tr>
+      
+       <tr><td>procedure, public, nopass :: <strong><a href='../type/integrand_lcce.html#boundprocedure-set_cli%7E2'>set_cli</a></strong>  </td>
+       <td><p>Set command line interface.</p></td></tr>
+      
+       <tr><td>generic, public :: <strong><a href='../type/integrand_lcce.html#boundprocedure-subtract_fast%7E3'>subtract_fast</a></strong>  => integrand_subtract_integrand_fast </td>
+       <td><p>Overloading <code>subtract_fast</code> method.</p></td></tr>
+      
+       <tr><td>procedure, public, pass(self) :: <strong><a href='../type/integrand_lcce.html#boundprocedure-t%7E12'>t</a></strong>  => dU_dt </td>
+       <td><p>Time derivative, residuals.</p></td></tr>
+      
+       <tr><td>procedure, public, pass(self) :: <strong><a href='../type/integrand_lcce.html#boundprocedure-t_fast%7E2'>t_fast</a></strong>  </td>
+       <td><p>Time derivative, residuals, fast mode.</p></td></tr>
+      
+       </tbody>
+       </table>
+     
+  </div>
+</div>
+
+     
+    </section>
+	<br>
+    
+    
+     
+    <section>
+    <h2>Functions</h2>
+    
+    
+  <div class="panel panel-default">
+  <div class="panel-heading codesum"><span class="anchor" id="proc-du_dt%7E2"></span><h3>
+private pure function <a href='../proc/du_dt%7E2.html'>dU_dt</a>(self, t) result(dState_dt)
+    
+    
+	 
+</h3></div>
+  <div class="panel-body">
+       
+    
+
+
+
+
+
+
+
+<p>Time derivative of field.</p>
+    
+    <h4>Arguments</h4>
+    
+      
+      
+<table class="table table-striped varlist">
+<thead><tr><th>Type</th>
+<th>Intent</th><th>Optional</th>
+<th>Attributes</th><th></th><th>Name</th><th></th></thead>
+
+
+
+<tbody>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>class(<a href='../type/integrand_lcce.html'>integrand_lcce</a>),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>self</strong></td><td><p>Integrand.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>real(kind=R_P),</td>
+  <td>intent(in),</td>
+  <td>optional</td>
+  
+  <td></td><td>::</td>
+  <td><strong>t</strong></td><td><p>Time.</p></td>
+  
+</tr>
+
+</tbody>
+</table>
+
+      
+    
+    
+
+  
+  
+  
+  
+     <h4>Return Value <small>real(kind=R_P),
+  allocatable, (:)</small></h4>
+  <p>Integrand time derivative.</p>
+    
+
+  </div>
+  </div>
+
+    
+    
+  <div class="panel panel-default">
+  <div class="panel-heading codesum"><span class="anchor" id="proc-description%7E3"></span><h3>
+private pure function <a href='../proc/description%7E3.html'>description</a>(self, prefix) result(desc)
+    
+    
+	 
+</h3></div>
+  <div class="panel-body">
+       
+    
+
+
+
+
+
+
+
+<p>Return informative integrator description.</p>
+    
+    <h4>Arguments</h4>
+    
+      
+      
+<table class="table table-striped varlist">
+<thead><tr><th>Type</th>
+<th>Intent</th><th>Optional</th>
+<th>Attributes</th><th></th><th>Name</th><th></th></thead>
+
+
+
+<tbody>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>class(<a href='../type/integrand_lcce.html'>integrand_lcce</a>),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>self</strong></td><td><p>Integrand.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>character(len=*),</td>
+  <td>intent(in),</td>
+  <td>optional</td>
+  
+  <td></td><td>::</td>
+  <td><strong>prefix</strong></td><td><p>Prefixing string.</p></td>
+  
+</tr>
+
+</tbody>
+</table>
+
+      
+    
+    
+
+  
+  
+  
+  
+     <h4>Return Value <small>character(len=:),
+  allocatable</small></h4>
+  <p>Description.</p>
+    
+
+  </div>
+  </div>
+
+    
+    
+  <div class="panel panel-default">
+  <div class="panel-heading codesum"><span class="anchor" id="proc-error%7E2"></span><h3>
+private pure function <a href='../proc/error%7E2.html'>error</a>(self, t, t0, U0)
+    
+    
+	 
+</h3></div>
+  <div class="panel-body">
+       
+    
+
+
+
+
+
+
+
+<p>Return error.</p>
+    
+    <h4>Arguments</h4>
+    
+      
+      
+<table class="table table-striped varlist">
+<thead><tr><th>Type</th>
+<th>Intent</th><th>Optional</th>
+<th>Attributes</th><th></th><th>Name</th><th></th></thead>
+
+
+
+<tbody>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>class(<a href='../type/integrand_lcce.html'>integrand_lcce</a>),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>self</strong></td><td><p>Integrand.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>real(kind=R_P),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>t</strong></td><td><p>Time.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>real(kind=R_P),</td>
+  <td>intent(in),</td>
+  <td>optional</td>
+  
+  <td></td><td>::</td>
+  <td><strong>t0</strong></td><td><p>Initial time.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>class(<a href='../type/integrand_object.html'>integrand_object</a>),</td>
+  <td>intent(in),</td>
+  <td>optional</td>
+  
+  <td></td><td>::</td>
+  <td><strong>U0</strong></td><td><p>Initial conditions.</p></td>
+  
+</tr>
+
+</tbody>
+</table>
+
+      
+    
+    
+
+  
+  
+  
+  
+     <h4>Return Value <small>real(kind=R_P),
+  allocatable, (:)</small></h4>
+  <p>Error.</p>
+    
+
+  </div>
+  </div>
+
+    
+    
+  <div class="panel panel-default">
+  <div class="panel-heading codesum"><span class="anchor" id="proc-exact_solution%7E2"></span><h3>
+private pure function <a href='../proc/exact_solution%7E2.html'>exact_solution</a>(self, t, t0, U0) result(exact)
+    
+    
+	 
+</h3></div>
+  <div class="panel-body">
+       
+    
+
+
+
+
+
+
+
+<p>Return exact solution.</p>
+    
+    <h4>Arguments</h4>
+    
+      
+      
+<table class="table table-striped varlist">
+<thead><tr><th>Type</th>
+<th>Intent</th><th>Optional</th>
+<th>Attributes</th><th></th><th>Name</th><th></th></thead>
+
+
+
+<tbody>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>class(<a href='../type/integrand_lcce.html'>integrand_lcce</a>),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>self</strong></td><td><p>Integrand.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>real(kind=R_P),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>t</strong></td><td><p>Time.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>real(kind=R_P),</td>
+  <td>intent(in),</td>
+  <td>optional</td>
+  
+  <td></td><td>::</td>
+  <td><strong>t0</strong></td><td><p>Initial time.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>class(<a href='../type/integrand_object.html'>integrand_object</a>),</td>
+  <td>intent(in),</td>
+  <td>optional</td>
+  
+  <td></td><td>::</td>
+  <td><strong>U0</strong></td><td><p>Initial conditions.</p></td>
+  
+</tr>
+
+</tbody>
+</table>
+
+      
+    
+    
+
+  
+  
+  
+  
+     <h4>Return Value <small>real(kind=R_P),
+  allocatable, (:)</small></h4>
+  <p>Exact solution.</p>
+    
+
+  </div>
+  </div>
+
+    
+    
+  <div class="panel panel-default">
+  <div class="panel-heading codesum"><span class="anchor" id="proc-integrand_add_integrand%7E2"></span><h3>
+private pure function <a href='../proc/integrand_add_integrand%7E2.html'>integrand_add_integrand</a>(lhs, rhs) result(opr)
+    
+    
+	 
+</h3></div>
+  <div class="panel-body">
+       
+    
+
+
+
+
+
+
+
+<p><code>+</code> operator.</p>
+    
+    <h4>Arguments</h4>
+    
+      
+      
+<table class="table table-striped varlist">
+<thead><tr><th>Type</th>
+<th>Intent</th><th>Optional</th>
+<th>Attributes</th><th></th><th>Name</th><th></th></thead>
+
+
+
+<tbody>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>class(<a href='../type/integrand_lcce.html'>integrand_lcce</a>),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>lhs</strong></td><td><p>Left hand side.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>class(<a href='../type/integrand_object.html'>integrand_object</a>),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>rhs</strong></td><td><p>Right hand side.</p></td>
+  
+</tr>
+
+</tbody>
+</table>
+
+      
+    
+    
+
+  
+  
+  
+  
+     <h4>Return Value <small>real(kind=R_P),
+  allocatable, (:)</small></h4>
+  <p>Operator result.</p>
+    
+
+  </div>
+  </div>
+
+    
+    
+  <div class="panel panel-default">
+  <div class="panel-heading codesum"><span class="anchor" id="proc-integrand_add_real%7E2"></span><h3>
+private pure function <a href='../proc/integrand_add_real%7E2.html'>integrand_add_real</a>(lhs, rhs) result(opr)
+    
+    
+	 
+</h3></div>
+  <div class="panel-body">
+       
+    
+
+
+
+
+
+
+
+<p><code>+ real</code> operator.</p>
+    
+    <h4>Arguments</h4>
+    
+      
+      
+<table class="table table-striped varlist">
+<thead><tr><th>Type</th>
+<th>Intent</th><th>Optional</th>
+<th>Attributes</th><th></th><th>Name</th><th></th></thead>
+
+
+
+<tbody>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>class(<a href='../type/integrand_lcce.html'>integrand_lcce</a>),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>lhs</strong></td><td><p>Left hand side.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>real(kind=R_P),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>rhs</strong>(1:)</td><td><p>Right hand side.</p></td>
+  
+</tr>
+
+</tbody>
+</table>
+
+      
+    
+    
+
+  
+  
+  
+  
+     <h4>Return Value <small>real(kind=R_P),
+  allocatable, (:)</small></h4>
+  <p>Operator result.</p>
+    
+
+  </div>
+  </div>
+
+    
+    
+  <div class="panel panel-default">
+  <div class="panel-heading codesum"><span class="anchor" id="proc-integrand_dimension%7E2"></span><h3>
+private pure function <a href='../proc/integrand_dimension%7E2.html'>integrand_dimension</a>(self)
+    
+    
+	 
+</h3></div>
+  <div class="panel-body">
+       
+    
+
+
+
+
+
+
+
+<p>return integrand dimension.</p>
+    
+    <h4>Arguments</h4>
+    
+      
+      
+<table class="table table-striped varlist">
+<thead><tr><th>Type</th>
+<th>Intent</th><th>Optional</th>
+<th>Attributes</th><th></th><th>Name</th><th></th></thead>
+
+
+
+<tbody>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>class(<a href='../type/integrand_lcce.html'>integrand_lcce</a>),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>self</strong></td><td><p>integrand.</p></td>
+  
+</tr>
+
+</tbody>
+</table>
+
+      
+    
+    
+
+  
+  
+  
+  
+     <h4>Return Value <small>integer(kind=I_P)
+  </small></h4>
+  <p>integrand dimension.</p>
+    
+
+  </div>
+  </div>
+
+    
+    
+  <div class="panel panel-default">
+  <div class="panel-heading codesum"><span class="anchor" id="proc-integrand_multiply_integrand%7E2"></span><h3>
+private pure function <a href='../proc/integrand_multiply_integrand%7E2.html'>integrand_multiply_integrand</a>(lhs, rhs) result(opr)
+    
+    
+	 
+</h3></div>
+  <div class="panel-body">
+       
+    
+
+
+
+
+
+
+
+<p><code>*</code> operator.</p>
+    
+    <h4>Arguments</h4>
+    
+      
+      
+<table class="table table-striped varlist">
+<thead><tr><th>Type</th>
+<th>Intent</th><th>Optional</th>
+<th>Attributes</th><th></th><th>Name</th><th></th></thead>
+
+
+
+<tbody>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>class(<a href='../type/integrand_lcce.html'>integrand_lcce</a>),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>lhs</strong></td><td><p>Left hand side.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>class(<a href='../type/integrand_object.html'>integrand_object</a>),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>rhs</strong></td><td><p>Right hand side.</p></td>
+  
+</tr>
+
+</tbody>
+</table>
+
+      
+    
+    
+
+  
+  
+  
+  
+     <h4>Return Value <small>real(kind=R_P),
+  allocatable, (:)</small></h4>
+  <p>Operator result.</p>
+    
+
+  </div>
+  </div>
+
+    
+    
+  <div class="panel panel-default">
+  <div class="panel-heading codesum"><span class="anchor" id="proc-integrand_multiply_real%7E2"></span><h3>
+private pure function <a href='../proc/integrand_multiply_real%7E2.html'>integrand_multiply_real</a>(lhs, rhs) result(opr)
+    
+    
+	 
+</h3></div>
+  <div class="panel-body">
+       
+    
+
+
+
+
+
+
+
+<p><code>* real_scalar</code> operator.</p>
+    
+    <h4>Arguments</h4>
+    
+      
+      
+<table class="table table-striped varlist">
+<thead><tr><th>Type</th>
+<th>Intent</th><th>Optional</th>
+<th>Attributes</th><th></th><th>Name</th><th></th></thead>
+
+
+
+<tbody>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>class(<a href='../type/integrand_lcce.html'>integrand_lcce</a>),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>lhs</strong></td><td><p>Left hand side.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>real(kind=R_P),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>rhs</strong>(1:)</td><td><p>Right hand side.</p></td>
+  
+</tr>
+
+</tbody>
+</table>
+
+      
+    
+    
+
+  
+  
+  
+  
+     <h4>Return Value <small>real(kind=R_P),
+  allocatable, (:)</small></h4>
+  <p>Operator result.</p>
+    
+
+  </div>
+  </div>
+
+    
+    
+  <div class="panel panel-default">
+  <div class="panel-heading codesum"><span class="anchor" id="proc-integrand_multiply_real_scalar%7E2"></span><h3>
+private pure function <a href='../proc/integrand_multiply_real_scalar%7E2.html'>integrand_multiply_real_scalar</a>(lhs, rhs) result(opr)
+    
+    
+	 
+</h3></div>
+  <div class="panel-body">
+       
+    
+
+
+
+
+
+
+
+<p><code>* real_scalar</code> operator.</p>
+    
+    <h4>Arguments</h4>
+    
+      
+      
+<table class="table table-striped varlist">
+<thead><tr><th>Type</th>
+<th>Intent</th><th>Optional</th>
+<th>Attributes</th><th></th><th>Name</th><th></th></thead>
+
+
+
+<tbody>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>class(<a href='../type/integrand_lcce.html'>integrand_lcce</a>),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>lhs</strong></td><td><p>Left hand side.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>real(kind=R_P),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>rhs</strong></td><td><p>Right hand side.</p></td>
+  
+</tr>
+
+</tbody>
+</table>
+
+      
+    
+    
+
+  
+  
+  
+  
+     <h4>Return Value <small>real(kind=R_P),
+  allocatable, (:)</small></h4>
+  <p>Operator result.</p>
+    
+
+  </div>
+  </div>
+
+    
+    
+  <div class="panel panel-default">
+  <div class="panel-heading codesum"><span class="anchor" id="proc-integrand_sub_integrand%7E2"></span><h3>
+private pure function <a href='../proc/integrand_sub_integrand%7E2.html'>integrand_sub_integrand</a>(lhs, rhs) result(opr)
+    
+    
+	 
+</h3></div>
+  <div class="panel-body">
+       
+    
+
+
+
+
+
+
+
+<p><code>-</code> operator.</p>
+    
+    <h4>Arguments</h4>
+    
+      
+      
+<table class="table table-striped varlist">
+<thead><tr><th>Type</th>
+<th>Intent</th><th>Optional</th>
+<th>Attributes</th><th></th><th>Name</th><th></th></thead>
+
+
+
+<tbody>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>class(<a href='../type/integrand_lcce.html'>integrand_lcce</a>),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>lhs</strong></td><td><p>Left hand side.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>class(<a href='../type/integrand_object.html'>integrand_object</a>),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>rhs</strong></td><td><p>Right hand side.</p></td>
+  
+</tr>
+
+</tbody>
+</table>
+
+      
+    
+    
+
+  
+  
+  
+  
+     <h4>Return Value <small>real(kind=R_P),
+  allocatable, (:)</small></h4>
+  <p>Operator result.</p>
+    
+
+  </div>
+  </div>
+
+    
+    
+  <div class="panel panel-default">
+  <div class="panel-heading codesum"><span class="anchor" id="proc-integrand_sub_real%7E2"></span><h3>
+private pure function <a href='../proc/integrand_sub_real%7E2.html'>integrand_sub_real</a>(lhs, rhs) result(opr)
+    
+    
+	 
+</h3></div>
+  <div class="panel-body">
+       
+    
+
+
+
+
+
+
+
+<p><code>- real</code> operator.</p>
+    
+    <h4>Arguments</h4>
+    
+      
+      
+<table class="table table-striped varlist">
+<thead><tr><th>Type</th>
+<th>Intent</th><th>Optional</th>
+<th>Attributes</th><th></th><th>Name</th><th></th></thead>
+
+
+
+<tbody>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>class(<a href='../type/integrand_lcce.html'>integrand_lcce</a>),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>lhs</strong></td><td><p>Left hand side.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>real(kind=R_P),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>rhs</strong>(1:)</td><td><p>Right hand side.</p></td>
+  
+</tr>
+
+</tbody>
+</table>
+
+      
+    
+    
+
+  
+  
+  
+  
+     <h4>Return Value <small>real(kind=R_P),
+  allocatable, (:)</small></h4>
+  <p>Operator result.</p>
+    
+
+  </div>
+  </div>
+
+    
+    
+  <div class="panel panel-default">
+  <div class="panel-heading codesum"><span class="anchor" id="proc-local_error%7E2"></span><h3>
+private pure function <a href='../proc/local_error%7E2.html'>local_error</a>(lhs, rhs) result(error)
+    
+    
+	 
+</h3></div>
+  <div class="panel-body">
+       
+    
+
+
+
+
+
+
+
+<p>Estimate local truncation error between 2 oscillation approximations.</p>
+    
+    <h4>Arguments</h4>
+    
+      
+      
+<table class="table table-striped varlist">
+<thead><tr><th>Type</th>
+<th>Intent</th><th>Optional</th>
+<th>Attributes</th><th></th><th>Name</th><th></th></thead>
+
+
+
+<tbody>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>class(<a href='../type/integrand_lcce.html'>integrand_lcce</a>),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>lhs</strong></td><td><p>Left hand side.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>class(<a href='../type/integrand_object.html'>integrand_object</a>),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>rhs</strong></td><td><p>Right hand side.</p></td>
+  
+</tr>
+
+</tbody>
+</table>
+
+      
+    
+    
+
+  
+  
+  
+  
+     <h4>Return Value <small>real(kind=R_P)
+  </small></h4>
+  <p>Error estimation.</p>
+    
+
+  </div>
+  </div>
+
+    
+    
+  <div class="panel panel-default">
+  <div class="panel-heading codesum"><span class="anchor" id="proc-output%7E9"></span><h3>
+private pure function <a href='../proc/output%7E9.html'>output</a>(self) result(state)
+    
+    
+	 
+</h3></div>
+  <div class="panel-body">
+       
+    
+
+
+
+
+
+
+
+<p>Extract integrand state field.</p>
+    
+    <h4>Arguments</h4>
+    
+      
+      
+<table class="table table-striped varlist">
+<thead><tr><th>Type</th>
+<th>Intent</th><th>Optional</th>
+<th>Attributes</th><th></th><th>Name</th><th></th></thead>
+
+
+
+<tbody>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>class(<a href='../type/integrand_lcce.html'>integrand_lcce</a>),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>self</strong></td><td><p>Integrand.</p></td>
+  
+</tr>
+
+</tbody>
+</table>
+
+      
+    
+    
+
+  
+  
+  
+  
+     <h4>Return Value <small>real(kind=R_P)
+  </small></h4>
+  <p>State.</p>
+    
+
+  </div>
+  </div>
+
+    
+    
+  <div class="panel panel-default">
+  <div class="panel-heading codesum"><span class="anchor" id="proc-real_add_integrand%7E2"></span><h3>
+private pure function <a href='../proc/real_add_integrand%7E2.html'>real_add_integrand</a>(lhs, rhs) result(opr)
+    
+    
+	 
+</h3></div>
+  <div class="panel-body">
+       
+    
+
+
+
+
+
+
+
+<p><code>real +</code> operator.</p>
+    
+    <h4>Arguments</h4>
+    
+      
+      
+<table class="table table-striped varlist">
+<thead><tr><th>Type</th>
+<th>Intent</th><th>Optional</th>
+<th>Attributes</th><th></th><th>Name</th><th></th></thead>
+
+
+
+<tbody>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>real(kind=R_P),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>lhs</strong>(1:)</td><td><p>Left hand side.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>class(<a href='../type/integrand_lcce.html'>integrand_lcce</a>),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>rhs</strong></td><td><p>Left hand side.</p></td>
+  
+</tr>
+
+</tbody>
+</table>
+
+      
+    
+    
+
+  
+  
+  
+  
+     <h4>Return Value <small>real(kind=R_P),
+  allocatable, (:)</small></h4>
+  <p>Operator result.</p>
+    
+
+  </div>
+  </div>
+
+    
+    
+  <div class="panel panel-default">
+  <div class="panel-heading codesum"><span class="anchor" id="proc-real_multiply_integrand%7E2"></span><h3>
+private pure function <a href='../proc/real_multiply_integrand%7E2.html'>real_multiply_integrand</a>(lhs, rhs) result(opr)
+    
+    
+	 
+</h3></div>
+  <div class="panel-body">
+       
+    
+
+
+
+
+
+
+
+<p><code>real_scalar *</code> operator.</p>
+    
+    <h4>Arguments</h4>
+    
+      
+      
+<table class="table table-striped varlist">
+<thead><tr><th>Type</th>
+<th>Intent</th><th>Optional</th>
+<th>Attributes</th><th></th><th>Name</th><th></th></thead>
+
+
+
+<tbody>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>real(kind=R_P),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>lhs</strong>(1:)</td><td><p>Left hand side.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>class(<a href='../type/integrand_lcce.html'>integrand_lcce</a>),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>rhs</strong></td><td><p>Right hand side.</p></td>
+  
+</tr>
+
+</tbody>
+</table>
+
+      
+    
+    
+
+  
+  
+  
+  
+     <h4>Return Value <small>real(kind=R_P),
+  allocatable, (:)</small></h4>
+  <p>Operator result.</p>
+    
+
+  </div>
+  </div>
+
+    
+    
+  <div class="panel panel-default">
+  <div class="panel-heading codesum"><span class="anchor" id="proc-real_scalar_multiply_integrand%7E2"></span><h3>
+private pure function <a href='../proc/real_scalar_multiply_integrand%7E2.html'>real_scalar_multiply_integrand</a>(lhs, rhs) result(opr)
+    
+    
+	 
+</h3></div>
+  <div class="panel-body">
+       
+    
+
+
+
+
+
+
+
+<p><code>real_scalar *</code> operator.</p>
+    
+    <h4>Arguments</h4>
+    
+      
+      
+<table class="table table-striped varlist">
+<thead><tr><th>Type</th>
+<th>Intent</th><th>Optional</th>
+<th>Attributes</th><th></th><th>Name</th><th></th></thead>
+
+
+
+<tbody>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>real(kind=R_P),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>lhs</strong></td><td><p>Left hand side.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>class(<a href='../type/integrand_lcce.html'>integrand_lcce</a>),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>rhs</strong></td><td><p>Right hand side.</p></td>
+  
+</tr>
+
+</tbody>
+</table>
+
+      
+    
+    
+
+  
+  
+  
+  
+     <h4>Return Value <small>real(kind=R_P),
+  allocatable, (:)</small></h4>
+  <p>Operator result.</p>
+    
+
+  </div>
+  </div>
+
+    
+    
+  <div class="panel panel-default">
+  <div class="panel-heading codesum"><span class="anchor" id="proc-real_sub_integrand%7E2"></span><h3>
+private pure function <a href='../proc/real_sub_integrand%7E2.html'>real_sub_integrand</a>(lhs, rhs) result(opr)
+    
+    
+	 
+</h3></div>
+  <div class="panel-body">
+       
+    
+
+
+
+
+
+
+
+<p><code>real -</code> operator.</p>
+    
+    <h4>Arguments</h4>
+    
+      
+      
+<table class="table table-striped varlist">
+<thead><tr><th>Type</th>
+<th>Intent</th><th>Optional</th>
+<th>Attributes</th><th></th><th>Name</th><th></th></thead>
+
+
+
+<tbody>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>real(kind=R_P),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>lhs</strong>(1:)</td><td><p>Left hand side.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>class(<a href='../type/integrand_lcce.html'>integrand_lcce</a>),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>rhs</strong></td><td><p>Left hand side.</p></td>
+  
+</tr>
+
+</tbody>
+</table>
+
+      
+    
+    
+
+  
+  
+  
+  
+     <h4>Return Value <small>real(kind=R_P),
+  allocatable, (:)</small></h4>
+  <p>Operator result.</p>
+    
+
+  </div>
+  </div>
+
+    
+    </section>
+    <br>
+    
+
+    
+    <section>
+    <h2>Subroutines</h2>
+    
+    
+  <div class="panel panel-default">
+  <div class="panel-heading codesum"><span class="anchor" id="proc-assign_integrand%7E2"></span><h3>
+private pure subroutine <a href='../proc/assign_integrand%7E2.html'>assign_integrand</a>(lhs, rhs)
+    
+    
+	 
+</h3></div>
+  <div class="panel-body">
+       
+    
+
+
+
+
+
+
+
+<p><code>=</code> operator.</p>
+    
+    <h4>Arguments</h4>
+    
+      
+      
+<table class="table table-striped varlist">
+<thead><tr><th>Type</th>
+<th>Intent</th><th>Optional</th>
+<th>Attributes</th><th></th><th>Name</th><th></th></thead>
+
+
+
+<tbody>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>class(<a href='../type/integrand_lcce.html'>integrand_lcce</a>),</td>
+  <td>intent(inout)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>lhs</strong></td><td><p>Left hand side.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>class(<a href='../type/integrand_object.html'>integrand_object</a>),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>rhs</strong></td><td><p>Right hand side.</p></td>
+  
+</tr>
+
+</tbody>
+</table>
+
+      
+    
+    
+
+  </div>
+  </div>
+
+    
+    
+  <div class="panel panel-default">
+  <div class="panel-heading codesum"><span class="anchor" id="proc-assign_real%7E2"></span><h3>
+private pure subroutine <a href='../proc/assign_real%7E2.html'>assign_real</a>(lhs, rhs)
+    
+    
+	 
+</h3></div>
+  <div class="panel-body">
+       
+    
+
+
+
+
+
+
+
+<p><code>= real</code> operator.</p>
+    
+    <h4>Arguments</h4>
+    
+      
+      
+<table class="table table-striped varlist">
+<thead><tr><th>Type</th>
+<th>Intent</th><th>Optional</th>
+<th>Attributes</th><th></th><th>Name</th><th></th></thead>
+
+
+
+<tbody>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>class(<a href='../type/integrand_lcce.html'>integrand_lcce</a>),</td>
+  <td>intent(inout)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>lhs</strong></td><td><p>Left hand side.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>real(kind=R_P),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>rhs</strong>(1:)</td><td><p>Right hand side.</p></td>
+  
+</tr>
+
+</tbody>
+</table>
+
+      
+    
+    
+
+  </div>
+  </div>
+
+    
+    
+  <div class="panel panel-default">
+  <div class="panel-heading codesum"><span class="anchor" id="proc-export_tecplot%7E2"></span><h3>
+private subroutine <a href='../proc/export_tecplot%7E2.html'>export_tecplot</a>(self, file_name, t, scheme, close_file, with_exact_solution, U0)
+    
+    
+	 
+</h3></div>
+  <div class="panel-body">
+       
+    
+
+
+
+
+
+
+
+<p>Export integrand to Tecplot file.</p>
+    
+    <h4>Arguments</h4>
+    
+      
+      
+<table class="table table-striped varlist">
+<thead><tr><th>Type</th>
+<th>Intent</th><th>Optional</th>
+<th>Attributes</th><th></th><th>Name</th><th></th></thead>
+
+
+
+<tbody>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>class(<a href='../type/integrand_lcce.html'>integrand_lcce</a>),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>self</strong></td><td><p>Advection field.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>character(len=*),</td>
+  <td>intent(in),</td>
+  <td>optional</td>
+  
+  <td></td><td>::</td>
+  <td><strong>file_name</strong></td><td><p>File name.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>real(kind=R_P),</td>
+  <td>intent(in),</td>
+  <td>optional</td>
+  
+  <td></td><td>::</td>
+  <td><strong>t</strong></td><td><p>Time.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>character(len=*),</td>
+  <td>intent(in),</td>
+  <td>optional</td>
+  
+  <td></td><td>::</td>
+  <td><strong>scheme</strong></td><td><p>Scheme used to integrate integrand.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>logical,</td>
+  <td>intent(in),</td>
+  <td>optional</td>
+  
+  <td></td><td>::</td>
+  <td><strong>close_file</strong></td><td><p>Flag for closing file.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>logical,</td>
+  <td>intent(in),</td>
+  <td>optional</td>
+  
+  <td></td><td>::</td>
+  <td><strong>with_exact_solution</strong></td><td><p>Flag for export also exact solution.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>class(<a href='../type/integrand_object.html'>integrand_object</a>),</td>
+  <td>intent(in),</td>
+  <td>optional</td>
+  
+  <td></td><td>::</td>
+  <td><strong>U0</strong></td><td><p>Initial conditions.</p></td>
+  
+</tr>
+
+</tbody>
+</table>
+
+      
+    
+    
+
+  </div>
+  </div>
+
+    
+    
+  <div class="panel panel-default">
+  <div class="panel-heading codesum"><span class="anchor" id="proc-initialize%7E17"></span><h3>
+private pure subroutine <a href='../proc/initialize%7E17.html'>initialize</a>(self, Dt)
+    
+    
+	 
+</h3></div>
+  <div class="panel-body">
+       
+    
+
+
+
+
+
+
+
+<p>Initialize integrand.</p>
+    
+    <h4>Arguments</h4>
+    
+      
+      
+<table class="table table-striped varlist">
+<thead><tr><th>Type</th>
+<th>Intent</th><th>Optional</th>
+<th>Attributes</th><th></th><th>Name</th><th></th></thead>
+
+
+
+<tbody>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>class(<a href='../type/integrand_lcce.html'>integrand_lcce</a>),</td>
+  <td>intent(inout)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>self</strong></td><td><p>Integrand.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>real(kind=R_P),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>Dt</strong></td><td><p>Time step.</p></td>
+  
+</tr>
+
+</tbody>
+</table>
+
+      
+    
+    
+
+  </div>
+  </div>
+
+    
+    
+  <div class="panel panel-default">
+  <div class="panel-heading codesum"><span class="anchor" id="proc-integrand_add_integrand_fast%7E2"></span><h3>
+private pure subroutine <a href='../proc/integrand_add_integrand_fast%7E2.html'>integrand_add_integrand_fast</a>(opr, lhs, rhs)
+    
+    
+	 
+</h3></div>
+  <div class="panel-body">
+       
+    
+
+
+
+
+
+
+
+<p><code>+</code> fast operator.</p>
+    
+    <h4>Arguments</h4>
+    
+      
+      
+<table class="table table-striped varlist">
+<thead><tr><th>Type</th>
+<th>Intent</th><th>Optional</th>
+<th>Attributes</th><th></th><th>Name</th><th></th></thead>
+
+
+
+<tbody>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>class(<a href='../type/integrand_lcce.html'>integrand_lcce</a>),</td>
+  <td>intent(inout)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>opr</strong></td><td><p>Operator result.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>class(<a href='../type/integrand_object.html'>integrand_object</a>),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>lhs</strong></td><td><p>Left hand side.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>class(<a href='../type/integrand_object.html'>integrand_object</a>),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>rhs</strong></td><td><p>Right hand side.</p></td>
+  
+</tr>
+
+</tbody>
+</table>
+
+      
+    
+    
+
+  </div>
+  </div>
+
+    
+    
+  <div class="panel panel-default">
+  <div class="panel-heading codesum"><span class="anchor" id="proc-integrand_multiply_integrand_fast%7E2"></span><h3>
+private pure subroutine <a href='../proc/integrand_multiply_integrand_fast%7E2.html'>integrand_multiply_integrand_fast</a>(opr, lhs, rhs)
+    
+    
+	 
+</h3></div>
+  <div class="panel-body">
+       
+    
+
+
+
+
+
+
+
+<p><code>*</code> fast operator.</p>
+    
+    <h4>Arguments</h4>
+    
+      
+      
+<table class="table table-striped varlist">
+<thead><tr><th>Type</th>
+<th>Intent</th><th>Optional</th>
+<th>Attributes</th><th></th><th>Name</th><th></th></thead>
+
+
+
+<tbody>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>class(<a href='../type/integrand_lcce.html'>integrand_lcce</a>),</td>
+  <td>intent(inout)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>opr</strong></td><td><p>Operator result.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>class(<a href='../type/integrand_object.html'>integrand_object</a>),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>lhs</strong></td><td><p>Left hand side.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>class(<a href='../type/integrand_object.html'>integrand_object</a>),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>rhs</strong></td><td><p>Right hand side.</p></td>
+  
+</tr>
+
+</tbody>
+</table>
+
+      
+    
+    
+
+  </div>
+  </div>
+
+    
+    
+  <div class="panel panel-default">
+  <div class="panel-heading codesum"><span class="anchor" id="proc-integrand_multiply_real_scalar_fast%7E2"></span><h3>
+private pure subroutine <a href='../proc/integrand_multiply_real_scalar_fast%7E2.html'>integrand_multiply_real_scalar_fast</a>(opr, lhs, rhs)
+    
+    
+	 
+</h3></div>
+  <div class="panel-body">
+       
+    
+
+
+
+
+
+
+
+<p><code>* real_scalar</code> fast operator.</p>
+    
+    <h4>Arguments</h4>
+    
+      
+      
+<table class="table table-striped varlist">
+<thead><tr><th>Type</th>
+<th>Intent</th><th>Optional</th>
+<th>Attributes</th><th></th><th>Name</th><th></th></thead>
+
+
+
+<tbody>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>class(<a href='../type/integrand_lcce.html'>integrand_lcce</a>),</td>
+  <td>intent(inout)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>opr</strong></td><td><p>Operator result.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>class(<a href='../type/integrand_object.html'>integrand_object</a>),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>lhs</strong></td><td><p>Left hand side.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>real(kind=R_P),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>rhs</strong></td><td><p>Right hand side.</p></td>
+  
+</tr>
+
+</tbody>
+</table>
+
+      
+    
+    
+
+  </div>
+  </div>
+
+    
+    
+  <div class="panel panel-default">
+  <div class="panel-heading codesum"><span class="anchor" id="proc-integrand_subtract_integrand_fast%7E2"></span><h3>
+private pure subroutine <a href='../proc/integrand_subtract_integrand_fast%7E2.html'>integrand_subtract_integrand_fast</a>(opr, lhs, rhs)
+    
+    
+	 
+</h3></div>
+  <div class="panel-body">
+       
+    
+
+
+
+
+
+
+
+<p><code>-</code> fast operator.</p>
+    
+    <h4>Arguments</h4>
+    
+      
+      
+<table class="table table-striped varlist">
+<thead><tr><th>Type</th>
+<th>Intent</th><th>Optional</th>
+<th>Attributes</th><th></th><th>Name</th><th></th></thead>
+
+
+
+<tbody>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>class(<a href='../type/integrand_lcce.html'>integrand_lcce</a>),</td>
+  <td>intent(inout)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>opr</strong></td><td><p>Operator result.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>class(<a href='../type/integrand_object.html'>integrand_object</a>),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>lhs</strong></td><td><p>Left hand side.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>class(<a href='../type/integrand_object.html'>integrand_object</a>),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>rhs</strong></td><td><p>Right hand side.</p></td>
+  
+</tr>
+
+</tbody>
+</table>
+
+      
+    
+    
+
+  </div>
+  </div>
+
+    
+    
+  <div class="panel panel-default">
+  <div class="panel-heading codesum"><span class="anchor" id="proc-parse_cli%7E2"></span><h3>
+private subroutine <a href='../proc/parse_cli%7E2.html'>parse_cli</a>(self, cli)
+    
+    
+	 
+</h3></div>
+  <div class="panel-body">
+       
+    
+
+
+
+
+
+
+
+<p>Initialize from command line interface.</p>
+    
+    <h4>Arguments</h4>
+    
+      
+      
+<table class="table table-striped varlist">
+<thead><tr><th>Type</th>
+<th>Intent</th><th>Optional</th>
+<th>Attributes</th><th></th><th>Name</th><th></th></thead>
+
+
+
+<tbody>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>class(<a href='../type/integrand_lcce.html'>integrand_lcce</a>),</td>
+  <td>intent(inout)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>self</strong></td><td><p>Advection field.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>type(command_line_interface),</td>
+  <td>intent(inout)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>cli</strong></td><td><p>Command line interface handler.</p></td>
+  
+</tr>
+
+</tbody>
+</table>
+
+      
+    
+    
+
+  </div>
+  </div>
+
+    
+    
+  <div class="panel panel-default">
+  <div class="panel-heading codesum"><span class="anchor" id="proc-set_cli%7E2"></span><h3>
+private subroutine <a href='../proc/set_cli%7E2.html'>set_cli</a>(cli)
+    
+    
+	 
+</h3></div>
+  <div class="panel-body">
+       
+    
+
+
+
+
+
+
+
+<p>Set command line interface.</p>
+    
+    <h4>Arguments</h4>
+    
+      
+      
+<table class="table table-striped varlist">
+<thead><tr><th>Type</th>
+<th>Intent</th><th>Optional</th>
+<th>Attributes</th><th></th><th>Name</th><th></th></thead>
+
+
+
+<tbody>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>type(command_line_interface),</td>
+  <td>intent(inout)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>cli</strong></td><td><p>Command line interface handler.</p></td>
+  
+</tr>
+
+</tbody>
+</table>
+
+      
+    
+    
+
+  </div>
+  </div>
+
+    
+    
+  <div class="panel panel-default">
+  <div class="panel-heading codesum"><span class="anchor" id="proc-t_fast%7E2"></span><h3>
+private subroutine <a href='../proc/t_fast%7E2.html'>t_fast</a>(self, t)
+    
+    
+	 
+</h3></div>
+  <div class="panel-body">
+       
+    
+
+
+
+
+
+
+
+<p>Time derivative function of integrand class, i.e. the residuals function. Fast mode acting directly on self.</p>
+    
+    <h4>Arguments</h4>
+    
+      
+      
+<table class="table table-striped varlist">
+<thead><tr><th>Type</th>
+<th>Intent</th><th>Optional</th>
+<th>Attributes</th><th></th><th>Name</th><th></th></thead>
+
+
+
+<tbody>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>class(<a href='../type/integrand_lcce.html'>integrand_lcce</a>),</td>
+  <td>intent(inout)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>self</strong></td><td><p>Integrand.</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>real(kind=R_P),</td>
+  <td>intent(in),</td>
+  <td>optional</td>
+  
+  <td></td><td>::</td>
+  <td><strong>t</strong></td><td><p>Time.</p></td>
+  
+</tr>
+
+</tbody>
+</table>
+
+      
+    
+    
+
+  </div>
+  </div>
+
+    
+    </section>    
+    <br>
+    
+    
+    
+    </div>
+  </div>
+
+  <section class="visible-xs visible-sm hidden-md">
+    <hr>
+    
+
+<div class="panel panel-default">
+  <div class="panel-heading text-left"><h3 class="panel-title"><a data-toggle="collapse" href="#allmods-1">All Modules</a></h3></div>
+  <div id="allmods-1" class="panel-collapse collapse">
+    <div class="list-group">
+      
+      <a class="list-group-item" href="../module/foodie.html">foodie</a>
+      
+      <a class="list-group-item" href="../module/foodie_error_codes.html">foodie_error_codes</a>
+      
+      <a class="list-group-item" href="../module/foodie_integrand_object.html">foodie_integrand_object</a>
+      
+      <a class="list-group-item" href="../module/foodie_integrator_adams_bashforth.html">foodie_integrator_adams_bashforth</a>
+      
+      <a class="list-group-item" href="../module/foodie_integrator_adams_bashforth_moulton.html">foodie_integrator_adams_bashforth_moulton</a>
+      
+      <a class="list-group-item" href="../module/foodie_integrator_adams_moulton.html">foodie_integrator_adams_moulton</a>
+      
+      <a class="list-group-item" href="../module/foodie_integrator_backward_differentiation_formula.html">foodie_integrator_backward_differentiation_formula</a>
+      
+      <a class="list-group-item" href="../module/foodie_integrator_euler_explicit.html">foodie_integrator_euler_explicit</a>
+      
+      <a class="list-group-item" href="../module/foodie_integrator_leapfrog.html">foodie_integrator_leapfrog</a>
+      
+      <a class="list-group-item" href="../module/foodie_integrator_lmm_ssp.html">foodie_integrator_lmm_ssp</a>
+      
+      <a class="list-group-item" href="../module/foodie_integrator_lmm_ssp_vss.html">foodie_integrator_lmm_ssp_vss</a>
+      
+      <a class="list-group-item" href="../module/foodie_integrator_ms_runge_kutta_ssp.html">foodie_integrator_ms_runge_kutta_ssp</a>
+      
+      <a class="list-group-item" href="../module/foodie_integrator_multistage_multistep_object.html">foodie_integrator_multistage_multistep_object</a>
+      
+      <a class="list-group-item" href="../module/foodie_integrator_multistage_object.html">foodie_integrator_multistage_object</a>
+      
+      <a class="list-group-item" href="../module/foodie_integrator_multistep_object.html">foodie_integrator_multistep_object</a>
+      
+      <a class="list-group-item" href="../module/foodie_integrator_object.html">foodie_integrator_object</a>
+      
+      <a class="list-group-item" href="../module/foodie_integrator_runge_kutta_emd.html">foodie_integrator_runge_kutta_emd</a>
+      
+      <a class="list-group-item" href="../module/foodie_integrator_runge_kutta_low_storage.html">foodie_integrator_runge_kutta_low_storage</a>
+      
+      <a class="list-group-item" href="../module/foodie_integrator_runge_kutta_lssp.html">foodie_integrator_runge_kutta_lssp</a>
+      
+      <a class="list-group-item" href="../module/foodie_integrator_runge_kutta_ssp.html">foodie_integrator_runge_kutta_ssp</a>
+      
+      <a class="list-group-item" href="../module/foodie_test_integrand_ladvection.html">foodie_test_integrand_ladvection</a>
+      
+      <a class="list-group-item" href="../module/foodie_test_integrand_lcce.html">foodie_test_integrand_lcce</a>
+      
+      <a class="list-group-item" href="../module/foodie_test_integrand_oscillation.html">foodie_test_integrand_oscillation</a>
+      
+      <a class="list-group-item" href="../module/foodie_test_integrand_tester_object.html">foodie_test_integrand_tester_object</a>
+      
+      <a class="list-group-item" href="../module/foodie_test_lcce_test.html">foodie_test_lcce_test</a>
+      
+      <a class="list-group-item" href="../module/foodie_test_object.html">foodie_test_object</a>
+      
+      <a class="list-group-item" href="../module/foodie_test_oscillation_test.html">foodie_test_oscillation_test</a>
+      
+      <a class="list-group-item" href="../module/foodie_utils.html">foodie_utils</a>
+      
+      <a class="list-group-item" href="../module/type_burgers.html">type_burgers</a>
+      
+      <a class="list-group-item" href="../module/type_euler_1d.html">type_euler_1D</a>
+      
+      <a class="list-group-item" href="../module/type_euler_1d_caf.html">type_euler_1D_caf</a>
+      
+      <a class="list-group-item" href="../module/type_euler_1d_caf_no_foodie.html">type_euler_1D_caf_no_foodie</a>
+      
+      <a class="list-group-item" href="../module/type_euler_1d_openmp.html">type_euler_1D_openmp</a>
+      
+      <a class="list-group-item" href="../module/type_euler_1d_openmp_no_foodie.html">type_euler_1D_openmp_no_foodie</a>
+      
+      <a class="list-group-item" href="../module/type_lorenz.html">type_lorenz</a>
+      
+    </div>
+  </div>
+</div>
+
+
+  </section>
+  
+    <hr>    
+    </div> <!-- /container -->
+    <footer>
+      <div class="container">
+      <div class="row">
+        <div class="col-xs-6 col-md-4"><p>&copy; 2017 </p></div>
+        <div class="col-xs-6 col-md-4 col-md-push-4">
+          <p class="text-right">
+            Documentation generated by 
+            <a href="https://github.com/cmacmackin/ford">FORD</a>
+             on 2017-06-06 10:04  
+          </p>
+        </div>
+        <div class="col-xs-12 col-md-4 col-md-pull-4"><p class="text-center"> FOODIE was developed by Fortran-FOSS-Programmers Group</p></div>
+      </div>
+      <br>
+      </div> <!-- /container -->    
+    </footer>
+
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+<!--
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+-->
+    <script src="../js/bootstrap.min.js"></script>
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+    <script src="../js/ie10-viewport-bug-workaround.js"></script>
+
+    <!-- MathJax JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        TeX: { extensions: ['AMSmath.js','AMSsymbols.js','noErrors.js','noUndefined.js'], equationNumbers: { autoNumber: 'AMS' } },
+        jax: ['input/TeX','input/MathML','output/HTML-CSS'],
+        extensions: ['tex2jax.js','mml2jax.js','MathMenu.js','MathZoom.js'],
+        'HTML-CSS': { 
+           styles: { '.MathJax_Display, .MathJax .mo, .MathJax .mi, .MathJax .mn': {color: '#000000 ! important'} }
+        }
+      });
+    </script>
+    <script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+  </body>
+</html>

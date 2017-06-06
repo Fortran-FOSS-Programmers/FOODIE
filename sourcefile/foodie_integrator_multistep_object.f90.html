@@ -1,0 +1,1279 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+	 
+	 <meta name="description" content="Fortran Object oriented Ordinary Differential Equations integration library">
+    
+    <meta name="author" content="Fortran-FOSS-Programmers Group" >
+    <link rel="icon" href="../favicon.png">
+
+    <title>foodie_integrator_multistep_object.f90 &ndash; FOODIE</title>
+
+    <link href="../css/bootstrap.min.css" rel="stylesheet">
+    <link href="../css/pygments.css" rel="stylesheet">
+    <link href="../css/font-awesome.min.css" rel="stylesheet">
+    <link href="../css/local.css" rel="stylesheet">
+    
+
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+    
+    <script src="../js/jquery-2.1.3.min.js"></script>
+    <script src="../js/svg-pan-zoom.min.js"></script>
+
+    
+    <script src="../tipuesearch/tipuesearch_content.js"></script>
+    <link  href="../tipuesearch/tipuesearch.css" rel="stylesheet">
+    <script src="../tipuesearch/tipuesearch_set.js"></script>
+    <script src="../tipuesearch/tipuesearch.js"></script>
+    
+
+  </head>
+
+  <body>
+
+    <!-- Fixed navbar -->
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="../index.html">FOODIE </a>
+        </div>
+        <div id="navbar" class="navbar-collapse collapse">
+          <ul class="nav navbar-nav">
+				
+            <li class="dropdown hidden-xs visible-sm visible-md hidden-lg">
+              <a href="#" class="dropdown-toggle"
+              data-toggle="dropdown" role="button"
+              aria-haspopup="true"
+		 aria-expanded="false">Contents <span class="caret"></span></a>
+	      <ul class="dropdown-menu">
+              
+            <li><a href="../lists/files.html">Source Files</a></li>
+				
+				
+            <li><a href="../lists/modules.html">Modules</a></li>
+				
+            
+                                
+            <li><a href="../lists/procedures.html">Procedures</a></li>
+				
+				
+            <li><a href="../lists/absint.html">Abstract Interfaces</a></li>
+								
+            <li><a href="../lists/types.html">Derived Types</a></li>
+				
+				
+            <li><a href="../lists/programs.html">Programs</a></li>
+				
+            </ul>
+            </li>
+
+<li class="visible-xs hidden-sm visible-lg"><a href="../lists/files.html">Source Files</a></li>
+
+
+<li class="visible-xs hidden-sm visible-lg"><a href="../lists/modules.html">Modules</a></li>
+
+
+
+<li class="visible-xs hidden-sm visible-lg"><a href="../lists/procedures.html">Procedures</a></li>
+
+
+<li class="visible-xs hidden-sm visible-lg"><a href="../lists/absint.html">Abstract Interfaces</a></li>
+                             
+<li class="visible-xs hidden-sm visible-lg"><a href="../lists/types.html">Derived Types</a></li>
+
+
+<li class="visible-xs hidden-sm visible-lg"><a href="../lists/programs.html">Programs</a></li>
+
+          </ul>
+        
+        <form action="../search.html" class="navbar-form navbar-right" role="search">
+        <div class="form-group">
+          <input type="text" class="form-control" placeholder="Search" name="q" id="tipue_search_input" autocomplete="off" required>
+        </div>
+<!--
+        <button type="submit" class="btn btn-default">Submit</button>
+-->
+        </form>
+        
+        </div><!--/.nav-collapse -->
+      </div>
+    </nav>
+
+    <div class="container">
+    
+  
+  <div class="row">
+    <h1>foodie_integrator_multistep_object.f90
+    <small>Source File</small>
+    
+    </h1>
+    
+<div class="row">
+  <div class="col-lg-12">
+<div class="well well-sm">
+  <ul class="list-inline" style="margin-bottom:0px;display:inline">
+     
+     
+     
+     
+    
+    
+     <li><i class="fa fa-list-ol"></i>
+       <a data-toggle="tooltip"
+	  data-placement="bottom" data-html="true"
+	  title=" 1.2% of total for source files.">150 statements</a>
+     </li> 
+     
+     
+    <li><i class="fa fa-code"></i><a href="../src/foodie_integrator_multistep_object.f90"> Source File</a></li>
+     
+  </ul>
+  <ol class="breadcrumb in-well text-right">
+  
+     <li class="active">foodie_integrator_multistep_object.f90</li>
+  </ol>
+</div>
+</div>
+</div>
+<script>
+  $(function () {
+  $('[data-toggle="tooltip"]').tooltip()
+  })
+</script>
+
+  </div>
+  <div class="row">
+    <div class="col-md-3 hidden-xs hidden-sm visible-md visible-lg">
+    
+<div id="sidebar">
+  
+
+
+
+
+
+
+<div class="panel panel-primary">
+  <div class="panel-heading text-left"><h3 class="panel-title"><a data-toggle="collapse" href="#mods-0">Modules</a></h3></div>
+  <div id="mods-0" class="panel-collapse collapse">
+    <div class="list-group">
+      
+      <a class="list-group-item" href="../module/foodie_integrator_multistep_object.html">foodie_integrator_multistep_object</a>
+      
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="panel panel-primary">
+  <div class="panel-heading text-left"><h3 class="panel-title">Source Code</h3></div>
+  <div class="list-group">
+    <a class="list-group-item" href="../sourcefile/foodie_integrator_multistep_object.f90.html#src">foodie_integrator_multistep_object.f90</a>
+  </div>
+</div>
+
+
+  <hr>
+  
+
+<div class="panel panel-default">
+  <div class="panel-heading text-left"><h3 class="panel-title"><a data-toggle="collapse" href="#allfiles-0">All Source Files</a></h3></div>
+  <div id="allfiles-0" class="panel-collapse collapse">
+    <div class="list-group">
+      
+      <a class="list-group-item" href="../sourcefile/burgers.f90.html">burgers.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/euler-1d-caf.f90.html">euler-1D-caf.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/euler-1d-caf_no_foodie.f90.html">euler-1D-caf_no_foodie.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/euler-1d-openmp.f90.html">euler-1D-openmp.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/euler-1d-openmp_no_foodie.f90.html">euler-1D-openmp_no_foodie.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/euler-1d.f90.html">euler-1D.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/foodie.f90.html">foodie.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/foodie_error_codes.f90.html">foodie_error_codes.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/foodie_integrand_object.f90.html">foodie_integrand_object.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/foodie_integrator_adams_bashforth.f90.html">foodie_integrator_adams_bashforth.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/foodie_integrator_adams_bashforth_moulton.f90.html">foodie_integrator_adams_bashforth_moulton.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/foodie_integrator_adams_moulton.f90.html">foodie_integrator_adams_moulton.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/foodie_integrator_backward_differentiation_formula.f90.html">foodie_integrator_backward_differentiation_formula.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/foodie_integrator_euler_explicit.f90.html">foodie_integrator_euler_explicit.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/foodie_integrator_leapfrog.f90.html">foodie_integrator_leapfrog.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/foodie_integrator_lmm_ssp.f90.html">foodie_integrator_lmm_ssp.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/foodie_integrator_lmm_ssp_vss.f90.html">foodie_integrator_lmm_ssp_vss.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/foodie_integrator_ms_runge_kutta_ssp.f90.html">foodie_integrator_ms_runge_kutta_ssp.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/foodie_integrator_multistage_multistep_object.f90.html">foodie_integrator_multistage_multistep_object.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/foodie_integrator_multistage_object.f90.html">foodie_integrator_multistage_object.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/foodie_integrator_multistep_object.f90.html">foodie_integrator_multistep_object.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/foodie_integrator_object.f90.html">foodie_integrator_object.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/foodie_integrator_runge_kutta_embedded.f90.html">foodie_integrator_runge_kutta_embedded.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/foodie_integrator_runge_kutta_low_storage.f90.html">foodie_integrator_runge_kutta_low_storage.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/foodie_integrator_runge_kutta_lssp.f90.html">foodie_integrator_runge_kutta_lssp.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/foodie_integrator_runge_kutta_ssp.f90.html">foodie_integrator_runge_kutta_ssp.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/foodie_test_integrand_ladvection.f90.html">foodie_test_integrand_ladvection.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/foodie_test_integrand_lcce.f90.html">foodie_test_integrand_lcce.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/foodie_test_integrand_oscillation.f90.html">foodie_test_integrand_oscillation.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/foodie_test_integrand_tester_object.f90.html">foodie_test_integrand_tester_object.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/foodie_test_lcce.f90.html">foodie_test_lcce.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/foodie_test_oscillation.f90.html">foodie_test_oscillation.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/foodie_tester.f90.html">foodie_tester.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/foodie_utils.f90.html">foodie_utils.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/lorenz.f90.html">lorenz.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/type_burgers.f90.html">type_burgers.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/type_euler-1d-caf.f90.html">type_euler-1D-caf.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/type_euler-1d-caf_no_foodie.f90.html">type_euler-1D-caf_no_foodie.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/type_euler-1d-openmp.f90.html">type_euler-1D-openmp.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/type_euler-1d-openmp_no_foodie.f90.html">type_euler-1D-openmp_no_foodie.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/type_euler-1d.f90.html">type_euler-1D.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/type_lorenz.f90.html">type_lorenz.f90</a>
+      
+    </div>
+  </div>
+</div>
+
+
+</div>  
+
+    </div>
+    <div class="col-md-9" id='text'>
+    <p>Define the abstract type <a href="../type/integrator_multistep_object.html">integrator_multistep_object</a> of FOODIE ODE integrators.</p>
+    
+    <h3>This File Depends On</h3>
+    
+                <div class="depgraph"><?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.26.3 (20100126.1600)
+ -->
+<!-- Title: sourcefile~~foodie_integrator_multistep_object.f90~~EfferentGraph Pages: 1 -->
+<svg id="sourcefilefoodie_integrator_multistep_objectf90EfferentGraph" width="386pt" height="78pt"
+ viewBox="0.00 0.00 386.00 78.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="sourcefile~~foodie_integrator_multistep_object.f90~~EfferentGraph" class="graph" transform="scale(1 1) rotate(0) translate(4 74)">
+<title>sourcefile~~foodie_integrator_multistep_object.f90~~EfferentGraph</title>
+<polygon fill="white" stroke="white" points="-4,5 -4,-74 383,-74 383,5 -4,5"/>
+<!-- sourcefile~foodie_integrator_multistep_object.f90 -->
+<g id="node1" class="node"><title>sourcefile~foodie_integrator_multistep_object.f90</title>
+<polygon fill="none" stroke="black" points="377,-48 183,-48 183,-22 377,-22 377,-48"/>
+<text text-anchor="middle" x="280" y="-32.55" font-family="Helvetica,sans-Serif" font-size="10.50">foodie_integrator_multistep_object.f90</text>
+</g>
+<!-- sourcefile~foodie_integrand_object.f90 -->
+<g id="node2" class="node"><title>sourcefile~foodie_integrand_object.f90</title>
+<a xlink:href="../sourcefile/foodie_integrand_object.f90.html" xlink:title="foodie_integrand_object.f90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="145,-70 1,-70 1,-44 145,-44 145,-70"/>
+<text text-anchor="middle" x="73" y="-54.55" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">foodie_integrand_object.f90</text>
+</a>
+</g>
+<!-- sourcefile~foodie_integrand_object.f90&#45;&gt;sourcefile~foodie_integrator_multistep_object.f90 -->
+<g id="edge2" class="edge"><title>sourcefile~foodie_integrand_object.f90&#45;&gt;sourcefile~foodie_integrator_multistep_object.f90</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M145.689,-49.2746C154.323,-48.357 163.271,-47.406 172.261,-46.4505"/>
+<polygon fill="#000000" stroke="#000000" points="172.842,-49.9086 182.416,-45.3713 172.102,-42.9478 172.842,-49.9086"/>
+</g>
+<!-- sourcefile~foodie_integrator_object.f90 -->
+<g id="node3" class="node"><title>sourcefile~foodie_integrator_object.f90</title>
+<a xlink:href="../sourcefile/foodie_integrator_object.f90.html" xlink:title="foodie_integrator_object.f90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="146,-26 7.10543e-14,-26 0,-1.24345e-14 146,-3.55271e-15 146,-26"/>
+<text text-anchor="middle" x="73" y="-10.55" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">foodie_integrator_object.f90</text>
+</a>
+</g>
+<!-- sourcefile~foodie_integrator_object.f90&#45;&gt;sourcefile~foodie_integrator_multistep_object.f90 -->
+<g id="edge4" class="edge"><title>sourcefile~foodie_integrator_object.f90&#45;&gt;sourcefile~foodie_integrator_multistep_object.f90</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M146.272,-20.7873C154.631,-21.6758 163.279,-22.5948 171.969,-23.5185"/>
+<polygon fill="#000000" stroke="#000000" points="171.862,-27.0267 182.176,-24.6032 172.602,-20.0659 171.862,-27.0267"/>
+</g>
+</g>
+</svg>
+</div>
+                <div><a type="button" class="graph-help" data-toggle="modal" href="#graph-help-text">Help</a></div>
+                <div class="modal fade" id="graph-help-text" tabindex="-1" role="dialog">
+                  <div class="modal-dialog modal-lg" role="document">
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title" id="-graph-help-label">Graph Key</h4>
+                      </div>
+                      <div class="modal-body">
+                        
+    <p>Nodes of different colours represent the following: </p>
+    <?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.26.3 (20100126.1600)
+ -->
+<!-- Title: Graph Key Pages: 1 -->
+<svg width="188pt" height="34pt"
+ viewBox="0.00 0.00 188.00 34.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="graph1" class="graph" transform="scale(1 1) rotate(0) translate(4 30)">
+<title>Graph Key</title>
+<polygon fill="white" stroke="white" points="-4,5 -4,-30 185,-30 185,5 -4,5"/>
+<!-- Source File -->
+<g id="node1" class="node"><title>Source File</title>
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="66,-26 2.84217e-14,-26 0,-1.24345e-14 66,-3.55271e-15 66,-26"/>
+<text text-anchor="middle" x="33" y="-10.55" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Source File</text>
+</g>
+<!-- This Page&#39;s Entity -->
+<g id="node2" class="node"><title>This Page&#39;s Entity</title>
+<polygon fill="none" stroke="black" points="180,-26 84,-26 84,-1.24345e-14 180,-3.55271e-15 180,-26"/>
+<text text-anchor="middle" x="132" y="-10.55" font-family="Helvetica,sans-Serif" font-size="10.50">This Page&#39;s Entity</text>
+</g>
+</g>
+</svg>
+
+    
+    <p>Solid arrows point from a file to a file which depends upon it. A file 
+    is dependent upon another if the latter must be compiled before the former
+    can be.
+    </p>
+    
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                
+    
+      
+      <h3>Files Dependent On This One</h3>
+      
+                <div class="depgraph"><?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.26.3 (20100126.1600)
+ -->
+<!-- Title: sourcefile~~foodie_integrator_multistep_object.f90~~AfferentGraph Pages: 1 -->
+<svg id="sourcefilefoodie_integrator_multistep_objectf90AfferentGraph" width="641pt" height="264pt"
+ viewBox="0.00 0.00 641.00 263.70" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="sourcefile~~foodie_integrator_multistep_object.f90~~AfferentGraph" class="graph" transform="scale(0.431941 0.431941) rotate(0) translate(4 606.496)">
+<title>sourcefile~~foodie_integrator_multistep_object.f90~~AfferentGraph</title>
+<polygon fill="white" stroke="white" points="-4,5 -4,-606.496 1481,-606.496 1481,5 -4,5"/>
+<!-- sourcefile~foodie_integrator_multistep_object.f90 -->
+<g id="node1" class="node"><title>sourcefile~foodie_integrator_multistep_object.f90</title>
+<polygon fill="none" stroke="black" points="195,-297.014 1,-297.014 1,-271.014 195,-271.014 195,-297.014"/>
+<text text-anchor="middle" x="98" y="-281.564" font-family="Helvetica,sans-Serif" font-size="10.50">foodie_integrator_multistep_object.f90</text>
+</g>
+<!-- sourcefile~foodie_integrator_adams_bashforth.f90 -->
+<g id="node2" class="node"><title>sourcefile~foodie_integrator_adams_bashforth.f90</title>
+<a xlink:href="../sourcefile/foodie_integrator_adams_bashforth.f90.html" xlink:title="foodie_integrator_adams_bashforth.f90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="433,-359.014 233,-359.014 233,-333.014 433,-333.014 433,-359.014"/>
+<text text-anchor="middle" x="333" y="-343.564" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">foodie_integrator_adams_bashforth.f90</text>
+</a>
+</g>
+<!-- sourcefile~foodie_integrator_multistep_object.f90&#45;&gt;sourcefile~foodie_integrator_adams_bashforth.f90 -->
+<g id="edge82" class="edge"><title>sourcefile~foodie_integrator_multistep_object.f90&#45;&gt;sourcefile~foodie_integrator_adams_bashforth.f90</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M147.55,-297.087C184.264,-306.773 234.462,-320.017 273.374,-330.283"/>
+<polygon fill="#000000" stroke="#000000" points="272.955,-333.792 283.517,-332.959 274.741,-327.024 272.955,-333.792"/>
+</g>
+<!-- sourcefile~foodie_integrator_adams_bashforth_moulton.f90 -->
+<g id="node3" class="node"><title>sourcefile~foodie_integrator_adams_bashforth_moulton.f90</title>
+<a xlink:href="../sourcefile/foodie_integrator_adams_bashforth_moulton.f90.html" xlink:title="foodie_integrator_adams_bashforth_moulton.f90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="730,-359.014 486,-359.014 486,-333.014 730,-333.014 730,-359.014"/>
+<text text-anchor="middle" x="608" y="-343.564" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">foodie_integrator_adams_bashforth_moulton.f90</text>
+</a>
+</g>
+<!-- sourcefile~foodie_integrator_multistep_object.f90&#45;&gt;sourcefile~foodie_integrator_adams_bashforth_moulton.f90 -->
+<g id="edge84" class="edge"><title>sourcefile~foodie_integrator_multistep_object.f90&#45;&gt;sourcefile~foodie_integrator_adams_bashforth_moulton.f90</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M195.796,-295.466C262.846,-303.365 353.827,-314.174 434,-324.014 453.998,-326.469 475.284,-329.125 495.855,-331.713"/>
+<polygon fill="#000000" stroke="#000000" points="495.528,-335.2 505.887,-332.977 496.404,-328.255 495.528,-335.2"/>
+</g>
+<!-- sourcefile~foodie_integrator_backward_differentiation_formula.f90 -->
+<g id="node4" class="node"><title>sourcefile~foodie_integrator_backward_differentiation_formula.f90</title>
+<a xlink:href="../sourcefile/foodie_integrator_backward_differentiation_formula.f90.html" xlink:title="foodie_integrator_backward_differentiation_formula.f90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="746,-277.014 470,-277.014 470,-251.014 746,-251.014 746,-277.014"/>
+<text text-anchor="middle" x="608" y="-261.564" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">foodie_integrator_backward_differentiation_formula.f90</text>
+</a>
+</g>
+<!-- sourcefile~foodie_integrator_multistep_object.f90&#45;&gt;sourcefile~foodie_integrator_backward_differentiation_formula.f90 -->
+<g id="edge86" class="edge"><title>sourcefile~foodie_integrator_multistep_object.f90&#45;&gt;sourcefile~foodie_integrator_backward_differentiation_formula.f90</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M333,-222.014C337.655,-221.393 438.24,-237.043 516.424,-249.414"/>
+<polygon fill="#000000" stroke="#000000" points="515.9,-252.874 526.324,-250.981 516.995,-245.96 515.9,-252.874"/>
+</g>
+<!-- sourcefile~foodie_integrator_adams_moulton.f90 -->
+<g id="node5" class="node"><title>sourcefile~foodie_integrator_adams_moulton.f90</title>
+<a xlink:href="../sourcefile/foodie_integrator_adams_moulton.f90.html" xlink:title="foodie_integrator_adams_moulton.f90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="430,-277.014 236,-277.014 236,-251.014 430,-251.014 430,-277.014"/>
+<text text-anchor="middle" x="333" y="-261.564" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">foodie_integrator_adams_moulton.f90</text>
+</a>
+</g>
+<!-- sourcefile~foodie_integrator_multistep_object.f90&#45;&gt;sourcefile~foodie_integrator_adams_moulton.f90 -->
+<g id="edge88" class="edge"><title>sourcefile~foodie_integrator_multistep_object.f90&#45;&gt;sourcefile~foodie_integrator_adams_moulton.f90</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M195.62,-275.706C205.55,-274.861 215.676,-273.999 225.702,-273.146"/>
+<polygon fill="#000000" stroke="#000000" points="226.017,-276.632 235.684,-272.297 225.424,-269.657 226.017,-276.632"/>
+</g>
+<!-- sourcefile~foodie.f90 -->
+<g id="node6" class="node"><title>sourcefile~foodie.f90</title>
+<a xlink:href="../sourcefile/foodie.f90.html" xlink:title="foodie.f90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="842,-277.014 782,-277.014 782,-251.014 842,-251.014 842,-277.014"/>
+<text text-anchor="middle" x="812" y="-261.564" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">foodie.f90</text>
+</a>
+</g>
+<!-- sourcefile~foodie_integrator_multistep_object.f90&#45;&gt;sourcefile~foodie.f90 -->
+<g id="edge90" class="edge"><title>sourcefile~foodie_integrator_multistep_object.f90&#45;&gt;sourcefile~foodie.f90</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M113.169,-297.249C136.717,-316.877 184.338,-352.998 232,-368.014 391.591,-418.295 445.239,-425.826 608,-387.014"/>
+</g>
+<!-- sourcefile~foodie_integrator_leapfrog.f90 -->
+<g id="node7" class="node"><title>sourcefile~foodie_integrator_leapfrog.f90</title>
+<a xlink:href="../sourcefile/foodie_integrator_leapfrog.f90.html" xlink:title="foodie_integrator_leapfrog.f90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="686,-233.014 530,-233.014 530,-207.014 686,-207.014 686,-233.014"/>
+<text text-anchor="middle" x="608" y="-217.564" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">foodie_integrator_leapfrog.f90</text>
+</a>
+</g>
+<!-- sourcefile~foodie_integrator_multistep_object.f90&#45;&gt;sourcefile~foodie_integrator_leapfrog.f90 -->
+<g id="edge92" class="edge"><title>sourcefile~foodie_integrator_multistep_object.f90&#45;&gt;sourcefile~foodie_integrator_leapfrog.f90</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M333,-222.014C394.799,-213.771 465.105,-213.417 519.16,-215.048"/>
+<polygon fill="#000000" stroke="#000000" points="519.292,-218.555 529.402,-215.387 519.523,-211.558 519.292,-218.555"/>
+</g>
+<!-- sourcefile~foodie_integrator_lmm_ssp.f90 -->
+<g id="node8" class="node"><title>sourcefile~foodie_integrator_lmm_ssp.f90</title>
+<a xlink:href="../sourcefile/foodie_integrator_lmm_ssp.f90.html" xlink:title="foodie_integrator_lmm_ssp.f90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="688,-189.014 528,-189.014 528,-163.014 688,-163.014 688,-189.014"/>
+<text text-anchor="middle" x="608" y="-173.564" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">foodie_integrator_lmm_ssp.f90</text>
+</a>
+</g>
+<!-- sourcefile~foodie_integrator_multistep_object.f90&#45;&gt;sourcefile~foodie_integrator_lmm_ssp.f90 -->
+<g id="edge94" class="edge"><title>sourcefile~foodie_integrator_multistep_object.f90&#45;&gt;sourcefile~foodie_integrator_lmm_ssp.f90</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M135.807,-270.96C162.479,-262.048 199.162,-250.386 232,-242.014 276.342,-230.71 287.641,-228.065 333,-222.014"/>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M333,-222.014C394.273,-213.841 409.031,-208.214 470,-198.014 485.31,-195.453 501.588,-192.798 517.394,-190.255"/>
+<polygon fill="#000000" stroke="#000000" points="518.377,-193.643 527.697,-188.603 517.269,-186.731 518.377,-193.643"/>
+</g>
+<!-- sourcefile~foodie_integrator_lmm_ssp_vss.f90 -->
+<g id="node9" class="node"><title>sourcefile~foodie_integrator_lmm_ssp_vss.f90</title>
+<a xlink:href="../sourcefile/foodie_integrator_lmm_ssp_vss.f90.html" xlink:title="foodie_integrator_lmm_ssp_vss.f90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="424,-171.014 242,-171.014 242,-145.014 424,-145.014 424,-171.014"/>
+<text text-anchor="middle" x="333" y="-155.564" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">foodie_integrator_lmm_ssp_vss.f90</text>
+</a>
+</g>
+<!-- sourcefile~foodie_integrator_multistep_object.f90&#45;&gt;sourcefile~foodie_integrator_lmm_ssp_vss.f90 -->
+<g id="edge96" class="edge"><title>sourcefile~foodie_integrator_multistep_object.f90&#45;&gt;sourcefile~foodie_integrator_lmm_ssp_vss.f90</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M120.075,-270.988C146.464,-255.534 192.073,-229.199 232,-208.014 253.092,-196.824 277.025,-184.941 296.299,-175.568"/>
+<polygon fill="#000000" stroke="#000000" points="297.879,-178.692 305.353,-171.182 294.827,-172.392 297.879,-178.692"/>
+</g>
+<!-- sourcefile~foodie_integrator_adams_bashforth.f90&#45;&gt;sourcefile~foodie_integrator_adams_bashforth_moulton.f90 -->
+<g id="edge4" class="edge"><title>sourcefile~foodie_integrator_adams_bashforth.f90&#45;&gt;sourcefile~foodie_integrator_adams_bashforth_moulton.f90</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M433.838,-346.014C447.284,-346.014 461.233,-346.014 475.12,-346.014"/>
+<polygon fill="#000000" stroke="#000000" points="475.213,-349.514 485.213,-346.014 475.213,-342.514 475.213,-349.514"/>
+</g>
+<!-- sourcefile~foodie_integrator_adams_bashforth.f90&#45;&gt;sourcefile~foodie.f90 -->
+<g id="edge2" class="edge"><title>sourcefile~foodie_integrator_adams_bashforth.f90&#45;&gt;sourcefile~foodie.f90</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M387.582,-359.07C455.432,-374.442 567.267,-396.727 608,-387.014"/>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M608,-387.014C668.223,-372.654 693.912,-401.48 746,-368.014 775.753,-348.899 794.608,-311.08 804.229,-286.7"/>
+<polygon fill="#000000" stroke="#000000" points="807.569,-287.76 807.791,-277.167 801.012,-285.309 807.569,-287.76"/>
+</g>
+<!-- sourcefile~foodie_integrator_adams_bashforth_moulton.f90&#45;&gt;sourcefile~foodie.f90 -->
+<g id="edge6" class="edge"><title>sourcefile~foodie_integrator_adams_bashforth_moulton.f90&#45;&gt;sourcefile~foodie.f90</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M706.838,-332.981C720.348,-329.399 733.765,-324.834 746,-319.014 763.679,-310.606 780.578,-296.362 792.851,-284.477"/>
+<polygon fill="#000000" stroke="#000000" points="795.63,-286.646 800.209,-277.092 790.671,-281.705 795.63,-286.646"/>
+</g>
+<!-- sourcefile~foodie_integrator_backward_differentiation_formula.f90&#45;&gt;sourcefile~foodie.f90 -->
+<g id="edge8" class="edge"><title>sourcefile~foodie_integrator_backward_differentiation_formula.f90&#45;&gt;sourcefile~foodie.f90</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M746.049,-264.014C755.168,-264.014 763.846,-264.014 771.734,-264.014"/>
+<polygon fill="#000000" stroke="#000000" points="771.969,-267.514 781.968,-264.014 771.968,-260.514 771.969,-267.514"/>
+</g>
+<!-- sourcefile~foodie_integrator_adams_moulton.f90&#45;&gt;sourcefile~foodie_integrator_adams_bashforth_moulton.f90 -->
+<g id="edge12" class="edge"><title>sourcefile~foodie_integrator_adams_moulton.f90&#45;&gt;sourcefile~foodie_integrator_adams_bashforth_moulton.f90</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M397.189,-277.03C409.733,-280.715 422.54,-285.321 434,-291.014 452.153,-300.034 451.551,-310.617 470,-319.014 479.782,-323.466 490.28,-327.186 500.96,-330.293"/>
+<polygon fill="#000000" stroke="#000000" points="500.234,-333.723 510.803,-332.977 502.076,-326.969 500.234,-333.723"/>
+</g>
+<!-- sourcefile~foodie_integrator_adams_moulton.f90&#45;&gt;sourcefile~foodie.f90 -->
+<g id="edge10" class="edge"><title>sourcefile~foodie_integrator_adams_moulton.f90&#45;&gt;sourcefile~foodie.f90</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M400.335,-277.014C422.44,-280.695 447.188,-284.194 470,-286.014 592.278,-295.77 624.917,-305.663 746,-286.014 754.655,-284.61 763.708,-282.233 772.238,-279.548"/>
+<polygon fill="#000000" stroke="#000000" points="773.585,-282.788 781.956,-276.294 771.362,-276.15 773.585,-282.788"/>
+</g>
+<!-- sourcefile~foodie_test_oscillation.f90 -->
+<g id="node16" class="node"><title>sourcefile~foodie_test_oscillation.f90</title>
+<a xlink:href="../sourcefile/foodie_test_oscillation.f90.html" xlink:title="foodie_test_oscillation.f90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="1476,-587.014 1340,-587.014 1340,-561.014 1476,-561.014 1476,-587.014"/>
+<text text-anchor="middle" x="1408" y="-571.564" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">foodie_test_oscillation.f90</text>
+</a>
+</g>
+<!-- sourcefile~foodie.f90&#45;&gt;sourcefile~foodie_test_oscillation.f90 -->
+<g id="edge42" class="edge"><title>sourcefile~foodie.f90&#45;&gt;sourcefile~foodie_test_oscillation.f90</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M979,-554.014C1091.97,-619.319 1250.97,-604.684 1340.27,-588.886"/>
+<polygon fill="#000000" stroke="#000000" points="1341.07,-592.298 1350.28,-587.059 1339.81,-585.412 1341.07,-592.298"/>
+</g>
+<!-- sourcefile~lorenz.f90 -->
+<g id="node17" class="node"><title>sourcefile~lorenz.f90</title>
+<a xlink:href="../sourcefile/lorenz.f90.html" xlink:title="lorenz.f90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="1240,-359.014 1180,-359.014 1180,-333.014 1240,-333.014 1240,-359.014"/>
+<text text-anchor="middle" x="1210" y="-343.564" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">lorenz.f90</text>
+</a>
+</g>
+<!-- sourcefile~foodie.f90&#45;&gt;sourcefile~lorenz.f90 -->
+<g id="edge44" class="edge"><title>sourcefile~foodie.f90&#45;&gt;sourcefile~lorenz.f90</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M821.179,-277.203C832.547,-292.311 853.445,-316.352 878,-327.014 975.568,-369.381 1104.66,-360.606 1169.37,-352.359"/>
+<polygon fill="#000000" stroke="#000000" points="1170.11,-355.791 1179.56,-350.995 1169.18,-348.852 1170.11,-355.791"/>
+</g>
+<!-- sourcefile~foodie_tester.f90 -->
+<g id="node18" class="node"><title>sourcefile~foodie_tester.f90</title>
+<a xlink:href="../sourcefile/foodie_tester.f90.html" xlink:title="foodie_tester.f90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="1454,-505.014 1362,-505.014 1362,-479.014 1454,-479.014 1454,-505.014"/>
+<text text-anchor="middle" x="1408" y="-489.564" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">foodie_tester.f90</text>
+</a>
+</g>
+<!-- sourcefile~foodie.f90&#45;&gt;sourcefile~foodie_tester.f90 -->
+<g id="edge46" class="edge"><title>sourcefile~foodie.f90&#45;&gt;sourcefile~foodie_tester.f90</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M812.48,-277.202C814.487,-314.948 824.84,-425.106 878,-494.014 909.893,-535.354 933.797,-527.883 979,-554.014"/>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M979,-554.014C990.284,-560.538 1196.98,-513.703 1210,-513.014"/>
+</g>
+<!-- sourcefile~euler&#45;1d&#45;openmp.f90 -->
+<g id="node19" class="node"><title>sourcefile~euler&#45;1d&#45;openmp.f90</title>
+<a xlink:href="../sourcefile/euler-1d-openmp.f90.html" xlink:title="euler&#45;1D&#45;openmp.f90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="1267,-296.014 1153,-296.014 1153,-270.014 1267,-270.014 1267,-296.014"/>
+<text text-anchor="middle" x="1210" y="-280.564" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">euler&#45;1D&#45;openmp.f90</text>
+</a>
+</g>
+<!-- sourcefile~foodie.f90&#45;&gt;sourcefile~euler&#45;1d&#45;openmp.f90 -->
+<g id="edge48" class="edge"><title>sourcefile~foodie.f90&#45;&gt;sourcefile~euler&#45;1d&#45;openmp.f90</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M842.241,-265.458C905.845,-268.494 1054.8,-275.605 1142.38,-279.786"/>
+<polygon fill="#000000" stroke="#000000" points="1142.33,-283.288 1152.48,-280.269 1142.66,-276.296 1142.33,-283.288"/>
+</g>
+<!-- sourcefile~foodie_test_integrand_oscillation.f90 -->
+<g id="node20" class="node"><title>sourcefile~foodie_test_integrand_oscillation.f90</title>
+<a xlink:href="../sourcefile/foodie_test_integrand_oscillation.f90.html" xlink:title="foodie_test_integrand_oscillation.f90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="1303,-567.014 1117,-567.014 1117,-541.014 1303,-541.014 1303,-567.014"/>
+<text text-anchor="middle" x="1210" y="-551.564" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">foodie_test_integrand_oscillation.f90</text>
+</a>
+</g>
+<!-- sourcefile~foodie.f90&#45;&gt;sourcefile~foodie_test_integrand_oscillation.f90 -->
+<g id="edge50" class="edge"><title>sourcefile~foodie.f90&#45;&gt;sourcefile~foodie_test_integrand_oscillation.f90</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M979,-554.014C1031.78,-584.528 1103.34,-578.801 1152.76,-569.115"/>
+<polygon fill="#000000" stroke="#000000" points="1153.56,-572.523 1162.64,-567.067 1152.14,-565.668 1153.56,-572.523"/>
+</g>
+<!-- sourcefile~foodie_test_integrand_lcce.f90 -->
+<g id="node21" class="node"><title>sourcefile~foodie_test_integrand_lcce.f90</title>
+<a xlink:href="../sourcefile/foodie_test_integrand_lcce.f90.html" xlink:title="foodie_test_integrand_lcce.f90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="1289,-441.014 1131,-441.014 1131,-415.014 1289,-415.014 1289,-441.014"/>
+<text text-anchor="middle" x="1210" y="-425.564" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">foodie_test_integrand_lcce.f90</text>
+</a>
+</g>
+<!-- sourcefile~foodie.f90&#45;&gt;sourcefile~foodie_test_integrand_lcce.f90 -->
+<g id="edge52" class="edge"><title>sourcefile~foodie.f90&#45;&gt;sourcefile~foodie_test_integrand_lcce.f90</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M979,-428.014C1027.72,-448.059 1087.26,-447.533 1133.69,-442.269"/>
+<polygon fill="#000000" stroke="#000000" points="1134.2,-445.734 1143.69,-441.04 1133.34,-438.786 1134.2,-445.734"/>
+</g>
+<!-- sourcefile~euler&#45;1d&#45;caf.f90 -->
+<g id="node22" class="node"><title>sourcefile~euler&#45;1d&#45;caf.f90</title>
+<a xlink:href="../sourcefile/euler-1d-caf.f90.html" xlink:title="euler&#45;1D&#45;caf.f90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="1255,-215.014 1165,-215.014 1165,-189.014 1255,-189.014 1255,-215.014"/>
+<text text-anchor="middle" x="1210" y="-199.564" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">euler&#45;1D&#45;caf.f90</text>
+</a>
+</g>
+<!-- sourcefile~foodie.f90&#45;&gt;sourcefile~euler&#45;1d&#45;caf.f90 -->
+<g id="edge54" class="edge"><title>sourcefile~foodie.f90&#45;&gt;sourcefile~euler&#45;1d&#45;caf.f90</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M820.878,-250.853C832.1,-235.525 853.003,-211.03 878,-201.014 969.478,-164.363 1086.85,-177.114 1154.73,-189.627"/>
+<polygon fill="#000000" stroke="#000000" points="1154.3,-193.109 1164.78,-191.546 1155.61,-186.233 1154.3,-193.109"/>
+</g>
+<!-- sourcefile~burgers.f90 -->
+<g id="node23" class="node"><title>sourcefile~burgers.f90</title>
+<a xlink:href="../sourcefile/burgers.f90.html" xlink:title="burgers.f90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="1243,-124.014 1177,-124.014 1177,-98.0143 1243,-98.0143 1243,-124.014"/>
+<text text-anchor="middle" x="1210" y="-108.564" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">burgers.f90</text>
+</a>
+</g>
+<!-- sourcefile~foodie.f90&#45;&gt;sourcefile~burgers.f90 -->
+<g id="edge56" class="edge"><title>sourcefile~foodie.f90&#45;&gt;sourcefile~burgers.f90</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M813.467,-250.612C817.525,-220.856 831.847,-149.508 878,-119.014 924.095,-88.5589 1087.24,-99.2189 1166.35,-106.503"/>
+<polygon fill="#000000" stroke="#000000" points="1166.19,-110.004 1176.47,-107.46 1166.85,-103.035 1166.19,-110.004"/>
+</g>
+<!-- sourcefile~foodie_test_lcce.f90 -->
+<g id="node24" class="node"><title>sourcefile~foodie_test_lcce.f90</title>
+<a xlink:href="../sourcefile/foodie_test_lcce.f90.html" xlink:title="foodie_test_lcce.f90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="1462,-420.014 1354,-420.014 1354,-394.014 1462,-394.014 1462,-420.014"/>
+<text text-anchor="middle" x="1408" y="-404.564" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">foodie_test_lcce.f90</text>
+</a>
+</g>
+<!-- sourcefile~foodie.f90&#45;&gt;sourcefile~foodie_test_lcce.f90 -->
+<g id="edge58" class="edge"><title>sourcefile~foodie.f90&#45;&gt;sourcefile~foodie_test_lcce.f90</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M813.916,-277.329C818.828,-306.276 834.681,-375.06 878,-409.014 913.949,-437.192 936.759,-410.635 979,-428.014"/>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M979,-428.014C1036.03,-451.479 1054.53,-410.919 1116,-406.014 1199.29,-399.369 1220.45,-405.613 1304,-406.014 1316.75,-406.076 1330.38,-406.179 1343.44,-406.297"/>
+<polygon fill="#000000" stroke="#000000" points="1343.72,-409.8 1353.75,-406.394 1343.79,-402.8 1343.72,-409.8"/>
+</g>
+<!-- sourcefile~foodie_test_integrand_ladvection.f90 -->
+<g id="node25" class="node"><title>sourcefile~foodie_test_integrand_ladvection.f90</title>
+<a xlink:href="../sourcefile/foodie_test_integrand_ladvection.f90.html" xlink:title="foodie_test_integrand_ladvection.f90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="1304,-485.014 1116,-485.014 1116,-459.014 1304,-459.014 1304,-485.014"/>
+<text text-anchor="middle" x="1210" y="-469.564" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">foodie_test_integrand_ladvection.f90</text>
+</a>
+</g>
+<!-- sourcefile~foodie.f90&#45;&gt;sourcefile~foodie_test_integrand_ladvection.f90 -->
+<g id="edge60" class="edge"><title>sourcefile~foodie.f90&#45;&gt;sourcefile~foodie_test_integrand_ladvection.f90</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M979,-428.014C992.568,-433.597 1063.73,-446.783 1123.53,-457.274"/>
+<polygon fill="#000000" stroke="#000000" points="1122.95,-460.725 1133.4,-458.999 1124.15,-453.829 1122.95,-460.725"/>
+</g>
+<!-- sourcefile~foodie_test_integrand_tester_object.f90 -->
+<g id="node26" class="node"><title>sourcefile~foodie_test_integrand_tester_object.f90</title>
+<a xlink:href="../sourcefile/foodie_test_integrand_tester_object.f90.html" xlink:title="foodie_test_integrand_tester_object.f90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="1080,-485.014 878,-485.014 878,-459.014 1080,-459.014 1080,-485.014"/>
+<text text-anchor="middle" x="979" y="-469.564" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">foodie_test_integrand_tester_object.f90</text>
+</a>
+</g>
+<!-- sourcefile~foodie.f90&#45;&gt;sourcefile~foodie_test_integrand_tester_object.f90 -->
+<g id="edge62" class="edge"><title>sourcefile~foodie.f90&#45;&gt;sourcefile~foodie_test_integrand_tester_object.f90</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M812.986,-277.377C816.145,-310.32 828.907,-396.074 878,-442.014 883.326,-446.998 889.443,-451.157 895.976,-454.627"/>
+<polygon fill="#000000" stroke="#000000" points="894.57,-457.834 905.106,-458.945 897.562,-451.506 894.57,-457.834"/>
+</g>
+<!-- sourcefile~type_lorenz.f90 -->
+<g id="node27" class="node"><title>sourcefile~type_lorenz.f90</title>
+<a xlink:href="../sourcefile/type_lorenz.f90.html" xlink:title="type_lorenz.f90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="1022,-400.014 936,-400.014 936,-374.014 1022,-374.014 1022,-400.014"/>
+<text text-anchor="middle" x="979" y="-384.564" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">type_lorenz.f90</text>
+</a>
+</g>
+<!-- sourcefile~foodie.f90&#45;&gt;sourcefile~type_lorenz.f90 -->
+<g id="edge64" class="edge"><title>sourcefile~foodie.f90&#45;&gt;sourcefile~type_lorenz.f90</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M817.361,-277.091C826.579,-297.908 847.436,-338.43 878,-360.014 891.997,-369.899 909.406,-376.165 925.807,-380.137"/>
+<polygon fill="#000000" stroke="#000000" points="925.333,-383.616 935.849,-382.326 926.824,-376.776 925.333,-383.616"/>
+</g>
+<!-- sourcefile~type_burgers.f90 -->
+<g id="node28" class="node"><title>sourcefile~type_burgers.f90</title>
+<a xlink:href="../sourcefile/type_burgers.f90.html" xlink:title="type_burgers.f90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="1026,-154.014 932,-154.014 932,-128.014 1026,-128.014 1026,-154.014"/>
+<text text-anchor="middle" x="979" y="-138.564" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">type_burgers.f90</text>
+</a>
+</g>
+<!-- sourcefile~foodie.f90&#45;&gt;sourcefile~type_burgers.f90 -->
+<g id="edge66" class="edge"><title>sourcefile~foodie.f90&#45;&gt;sourcefile~type_burgers.f90</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M817.361,-250.938C826.579,-230.121 847.436,-189.598 878,-168.014 890.892,-158.91 906.678,-152.876 921.906,-148.876"/>
+<polygon fill="#000000" stroke="#000000" points="922.874,-152.244 931.795,-146.53 921.258,-145.433 922.874,-152.244"/>
+</g>
+<!-- sourcefile~type_euler&#45;1d&#45;caf.f90 -->
+<g id="node29" class="node"><title>sourcefile~type_euler&#45;1d&#45;caf.f90</title>
+<a xlink:href="../sourcefile/type_euler-1d-caf.f90.html" xlink:title="type_euler&#45;1D&#45;caf.f90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="1037,-236.014 921,-236.014 921,-210.014 1037,-210.014 1037,-236.014"/>
+<text text-anchor="middle" x="979" y="-220.564" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">type_euler&#45;1D&#45;caf.f90</text>
+</a>
+</g>
+<!-- sourcefile~foodie.f90&#45;&gt;sourcefile~type_euler&#45;1d&#45;caf.f90 -->
+<g id="edge68" class="edge"><title>sourcefile~foodie.f90&#45;&gt;sourcefile~type_euler&#45;1d&#45;caf.f90</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M842.242,-256.59C862.821,-251.537 890.807,-244.667 916.102,-238.456"/>
+<polygon fill="#000000" stroke="#000000" points="917.133,-241.807 926.01,-236.024 915.463,-235.009 917.133,-241.807"/>
+</g>
+<!-- sourcefile~type_euler&#45;1d.f90 -->
+<g id="node30" class="node"><title>sourcefile~type_euler&#45;1d.f90</title>
+<a xlink:href="../sourcefile/type_euler-1d.f90.html" xlink:title="type_euler&#45;1D.f90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="1028,-72.0143 930,-72.0143 930,-46.0143 1028,-46.0143 1028,-72.0143"/>
+<text text-anchor="middle" x="979" y="-56.5643" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">type_euler&#45;1D.f90</text>
+</a>
+</g>
+<!-- sourcefile~foodie.f90&#45;&gt;sourcefile~type_euler&#45;1d.f90 -->
+<g id="edge70" class="edge"><title>sourcefile~foodie.f90&#45;&gt;sourcefile~type_euler&#45;1d.f90</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M812.909,-250.568C815.89,-217.433 828.279,-131.275 878,-86.0143 889.561,-75.4905 904.776,-68.9918 919.877,-65.001"/>
+<polygon fill="#000000" stroke="#000000" points="920.788,-68.3829 929.745,-62.7236 919.214,-61.5622 920.788,-68.3829"/>
+</g>
+<!-- sourcefile~type_euler&#45;1d&#45;openmp.f90 -->
+<g id="node31" class="node"><title>sourcefile~type_euler&#45;1d&#45;openmp.f90</title>
+<a xlink:href="../sourcefile/type_euler-1d-openmp.f90.html" xlink:title="type_euler&#45;1D&#45;openmp.f90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="1049,-318.014 909,-318.014 909,-292.014 1049,-292.014 1049,-318.014"/>
+<text text-anchor="middle" x="979" y="-302.564" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">type_euler&#45;1D&#45;openmp.f90</text>
+</a>
+</g>
+<!-- sourcefile~foodie.f90&#45;&gt;sourcefile~type_euler&#45;1d&#45;openmp.f90 -->
+<g id="edge72" class="edge"><title>sourcefile~foodie.f90&#45;&gt;sourcefile~type_euler&#45;1d&#45;openmp.f90</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M842.242,-271.439C862.821,-276.491 890.807,-283.362 916.102,-289.572"/>
+<polygon fill="#000000" stroke="#000000" points="915.463,-293.019 926.01,-292.005 917.133,-286.221 915.463,-293.019"/>
+</g>
+<!-- sourcefile~euler&#45;1d.f90 -->
+<g id="node32" class="node"><title>sourcefile~euler&#45;1d.f90</title>
+<a xlink:href="../sourcefile/euler-1d.f90.html" xlink:title="euler&#45;1D.f90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="1246,-61.0143 1174,-61.0143 1174,-35.0143 1246,-35.0143 1246,-61.0143"/>
+<text text-anchor="middle" x="1210" y="-45.5643" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">euler&#45;1D.f90</text>
+</a>
+</g>
+<!-- sourcefile~foodie.f90&#45;&gt;sourcefile~euler&#45;1d.f90 -->
+<g id="edge74" class="edge"><title>sourcefile~foodie.f90&#45;&gt;sourcefile~euler&#45;1d.f90</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M813.777,-250.761C820.041,-206.272 842.633,-63.5627 878,-37.0143 963.722,27.3336 1099.97,-7.55143 1168.19,-31.498"/>
+<polygon fill="#000000" stroke="#000000" points="1167.16,-34.8448 1177.75,-34.9386 1169.53,-28.2585 1167.16,-34.8448"/>
+</g>
+<!-- sourcefile~foodie_integrator_leapfrog.f90&#45;&gt;sourcefile~foodie.f90 -->
+<g id="edge76" class="edge"><title>sourcefile~foodie_integrator_leapfrog.f90&#45;&gt;sourcefile~foodie.f90</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M686.536,-230.254C706.087,-233.428 726.912,-237.345 746,-242.014 754.517,-244.098 763.511,-246.769 772.026,-249.526"/>
+<polygon fill="#000000" stroke="#000000" points="771.152,-252.924 781.745,-252.773 773.37,-246.285 771.152,-252.924"/>
+</g>
+<!-- sourcefile~foodie_integrator_lmm_ssp.f90&#45;&gt;sourcefile~foodie.f90 -->
+<g id="edge78" class="edge"><title>sourcefile~foodie_integrator_lmm_ssp.f90&#45;&gt;sourcefile~foodie.f90</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M688.034,-180.159C707.752,-183.468 728.279,-188.974 746,-198.014 766.513,-208.479 784.59,-227.664 796.614,-242.662"/>
+<polygon fill="#000000" stroke="#000000" points="794.093,-245.125 802.967,-250.912 799.639,-240.854 794.093,-245.125"/>
+</g>
+<!-- sourcefile~foodie_integrator_lmm_ssp_vss.f90&#45;&gt;sourcefile~foodie.f90 -->
+<g id="edge80" class="edge"><title>sourcefile~foodie_integrator_lmm_ssp_vss.f90&#45;&gt;sourcefile~foodie.f90</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M374.15,-144.932C452.438,-122.633 625.729,-85.918 746,-154.014 778.849,-172.613 797.133,-214.806 805.738,-241.196"/>
+<polygon fill="#000000" stroke="#000000" points="802.396,-242.236 808.664,-250.777 809.09,-240.191 802.396,-242.236"/>
+</g>
+<!-- sourcefile~foodie_test_integrand_oscillation.f90&#45;&gt;sourcefile~foodie_test_oscillation.f90 -->
+<g id="edge14" class="edge"><title>sourcefile~foodie_test_integrand_oscillation.f90&#45;&gt;sourcefile~foodie_test_oscillation.f90</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M1303.78,-563.487C1312.55,-564.373 1321.37,-565.263 1329.96,-566.132"/>
+<polygon fill="#000000" stroke="#000000" points="1329.64,-569.617 1339.94,-567.14 1330.34,-562.652 1329.64,-569.617"/>
+</g>
+<!-- sourcefile~foodie_test_integrand_oscillation.f90&#45;&gt;sourcefile~foodie_tester.f90 -->
+<g id="edge16" class="edge"><title>sourcefile~foodie_test_integrand_oscillation.f90&#45;&gt;sourcefile~foodie_tester.f90</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M1256.98,-540.968C1272.04,-536.666 1288.76,-531.764 1304,-527.014 1322.72,-521.179 1343.2,-514.377 1361,-508.33"/>
+<polygon fill="#000000" stroke="#000000" points="1362.25,-511.601 1370.58,-505.059 1359.99,-504.977 1362.25,-511.601"/>
+</g>
+<!-- sourcefile~foodie_test_integrand_lcce.f90&#45;&gt;sourcefile~foodie_tester.f90 -->
+<g id="edge20" class="edge"><title>sourcefile~foodie_test_integrand_lcce.f90&#45;&gt;sourcefile~foodie_tester.f90</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M1271.81,-441.047C1282.61,-443.732 1293.69,-446.749 1304,-450.014 1326.07,-457.009 1350.08,-466.567 1369.46,-474.798"/>
+<polygon fill="#000000" stroke="#000000" points="1368.29,-478.103 1378.86,-478.838 1371.05,-471.673 1368.29,-478.103"/>
+</g>
+<!-- sourcefile~foodie_test_integrand_lcce.f90&#45;&gt;sourcefile~foodie_test_lcce.f90 -->
+<g id="edge18" class="edge"><title>sourcefile~foodie_test_integrand_lcce.f90&#45;&gt;sourcefile~foodie_test_lcce.f90</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M1289.68,-419.564C1307.73,-417.649 1326.68,-415.639 1343.99,-413.803"/>
+<polygon fill="#000000" stroke="#000000" points="1344.4,-417.28 1353.97,-412.744 1343.66,-410.319 1344.4,-417.28"/>
+</g>
+<!-- sourcefile~foodie_test_integrand_ladvection.f90&#45;&gt;sourcefile~foodie_tester.f90 -->
+<g id="edge22" class="edge"><title>sourcefile~foodie_test_integrand_ladvection.f90&#45;&gt;sourcefile~foodie_tester.f90</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M1304.07,-481.516C1320.29,-483.154 1336.68,-484.81 1351.5,-486.307"/>
+<polygon fill="#000000" stroke="#000000" points="1351.19,-489.793 1361.49,-487.316 1351.89,-482.829 1351.19,-489.793"/>
+</g>
+<!-- sourcefile~foodie_test_integrand_tester_object.f90&#45;&gt;sourcefile~foodie_tester.f90 -->
+<g id="edge26" class="edge"><title>sourcefile~foodie_test_integrand_tester_object.f90&#45;&gt;sourcefile~foodie_tester.f90</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M1019.96,-485.098C1065.86,-498.396 1142.68,-516.574 1210,-513.014"/>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M1210,-513.014C1257.79,-510.487 1311.8,-504.551 1351.33,-499.633"/>
+<polygon fill="#000000" stroke="#000000" points="1351.82,-503.098 1361.3,-498.375 1350.94,-496.153 1351.82,-503.098"/>
+</g>
+<!-- sourcefile~foodie_test_integrand_tester_object.f90&#45;&gt;sourcefile~foodie_test_integrand_oscillation.f90 -->
+<g id="edge30" class="edge"><title>sourcefile~foodie_test_integrand_tester_object.f90&#45;&gt;sourcefile~foodie_test_integrand_oscillation.f90</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M1008.87,-485.032C1036.4,-496.785 1078.55,-514.155 1116,-527.014 1127.29,-530.891 1139.47,-534.675 1151.2,-538.125"/>
+<polygon fill="#000000" stroke="#000000" points="1150.34,-541.519 1160.92,-540.939 1152.28,-534.795 1150.34,-541.519"/>
+</g>
+<!-- sourcefile~foodie_test_integrand_tester_object.f90&#45;&gt;sourcefile~foodie_test_integrand_lcce.f90 -->
+<g id="edge24" class="edge"><title>sourcefile~foodie_test_integrand_tester_object.f90&#45;&gt;sourcefile~foodie_test_integrand_lcce.f90</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M1047.37,-458.991C1073.79,-453.959 1104.19,-448.169 1131.5,-442.967"/>
+<polygon fill="#000000" stroke="#000000" points="1132.24,-446.389 1141.41,-441.08 1130.93,-439.513 1132.24,-446.389"/>
+</g>
+<!-- sourcefile~foodie_test_integrand_tester_object.f90&#45;&gt;sourcefile~foodie_test_integrand_ladvection.f90 -->
+<g id="edge28" class="edge"><title>sourcefile~foodie_test_integrand_tester_object.f90&#45;&gt;sourcefile~foodie_test_integrand_ladvection.f90</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M1080.32,-472.014C1088.68,-472.014 1097.14,-472.014 1105.52,-472.014"/>
+<polygon fill="#000000" stroke="#000000" points="1105.7,-475.514 1115.7,-472.014 1105.7,-468.514 1105.7,-475.514"/>
+</g>
+<!-- sourcefile~type_lorenz.f90&#45;&gt;sourcefile~lorenz.f90 -->
+<g id="edge32" class="edge"><title>sourcefile~type_lorenz.f90&#45;&gt;sourcefile~lorenz.f90</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M1022.18,-379.351C1064.55,-371.83 1128.66,-360.451 1169.93,-353.126"/>
+<polygon fill="#000000" stroke="#000000" points="1170.67,-356.55 1179.9,-351.356 1169.45,-349.657 1170.67,-356.55"/>
+</g>
+<!-- sourcefile~type_burgers.f90&#45;&gt;sourcefile~burgers.f90 -->
+<g id="edge34" class="edge"><title>sourcefile~type_burgers.f90&#45;&gt;sourcefile~burgers.f90</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M1026.02,-134.907C1067.16,-129.565 1126.44,-121.866 1166.5,-116.664"/>
+<polygon fill="#000000" stroke="#000000" points="1167.03,-120.124 1176.5,-115.365 1166.13,-113.182 1167.03,-120.124"/>
+</g>
+<!-- sourcefile~type_euler&#45;1d&#45;caf.f90&#45;&gt;sourcefile~euler&#45;1d&#45;caf.f90 -->
+<g id="edge36" class="edge"><title>sourcefile~type_euler&#45;1d&#45;caf.f90&#45;&gt;sourcefile~euler&#45;1d&#45;caf.f90</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M1037.29,-217.715C1073.3,-214.442 1119.23,-210.266 1154.67,-207.044"/>
+<polygon fill="#000000" stroke="#000000" points="1155.2,-210.511 1164.84,-206.119 1154.57,-203.539 1155.2,-210.511"/>
+</g>
+<!-- sourcefile~type_euler&#45;1d.f90&#45;&gt;sourcefile~euler&#45;1d.f90 -->
+<g id="edge38" class="edge"><title>sourcefile~type_euler&#45;1d.f90&#45;&gt;sourcefile~euler&#45;1d.f90</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M1028.27,-56.6681C1068.29,-54.7624 1124.33,-52.0939 1163.56,-50.2256"/>
+<polygon fill="#000000" stroke="#000000" points="1163.83,-53.7168 1173.66,-49.745 1163.5,-46.7247 1163.83,-53.7168"/>
+</g>
+<!-- sourcefile~type_euler&#45;1d&#45;openmp.f90&#45;&gt;sourcefile~euler&#45;1d&#45;openmp.f90 -->
+<g id="edge40" class="edge"><title>sourcefile~type_euler&#45;1d&#45;openmp.f90&#45;&gt;sourcefile~euler&#45;1d&#45;openmp.f90</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M1049.56,-298.294C1079,-295.491 1113.04,-292.248 1142.18,-289.473"/>
+<polygon fill="#000000" stroke="#000000" points="1142.64,-292.945 1152.27,-288.513 1141.98,-285.977 1142.64,-292.945"/>
+</g>
+</g>
+</svg>
+</div>
+                <script>var pansourcefilefoodie_integrator_multistep_objectf90AfferentGraph = svgPanZoom('#sourcefilefoodie_integrator_multistep_objectf90AfferentGraph', {
+                    zoomEnabled: true,
+                    controlIconsEnabled: true,
+                    fit: true,
+                    center: true,});
+                    </script>
+                <div><a type="button" class="graph-help" data-toggle="modal" href="#graph-help-text">Help</a></div>
+                <div class="modal fade" id="graph-help-text" tabindex="-1" role="dialog">
+                  <div class="modal-dialog modal-lg" role="document">
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title" id="-graph-help-label">Graph Key</h4>
+                      </div>
+                      <div class="modal-body">
+                        
+    <p>Nodes of different colours represent the following: </p>
+    <?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.26.3 (20100126.1600)
+ -->
+<!-- Title: Graph Key Pages: 1 -->
+<svg width="188pt" height="34pt"
+ viewBox="0.00 0.00 188.00 34.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="graph1" class="graph" transform="scale(1 1) rotate(0) translate(4 30)">
+<title>Graph Key</title>
+<polygon fill="white" stroke="white" points="-4,5 -4,-30 185,-30 185,5 -4,5"/>
+<!-- Source File -->
+<g id="node1" class="node"><title>Source File</title>
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="66,-26 2.84217e-14,-26 0,-1.24345e-14 66,-3.55271e-15 66,-26"/>
+<text text-anchor="middle" x="33" y="-10.55" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Source File</text>
+</g>
+<!-- This Page&#39;s Entity -->
+<g id="node2" class="node"><title>This Page&#39;s Entity</title>
+<polygon fill="none" stroke="black" points="180,-26 84,-26 84,-1.24345e-14 180,-3.55271e-15 180,-26"/>
+<text text-anchor="middle" x="132" y="-10.55" font-family="Helvetica,sans-Serif" font-size="10.50">This Page&#39;s Entity</text>
+</g>
+</g>
+</svg>
+
+    
+    <p>Solid arrows point from a file to a file which depends upon it. A file 
+    is dependent upon another if the latter must be compiled before the former
+    can be.
+    </p>
+    
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                
+      
+      <br>
+
+    <section class="visible-xs visible-sm hidden-md">
+      
+
+
+
+
+
+
+<div class="panel panel-primary">
+  <div class="panel-heading text-left"><h3 class="panel-title"><a data-toggle="collapse" href="#mods-1">Modules</a></h3></div>
+  <div id="mods-1" class="panel-collapse collapse">
+    <div class="list-group">
+      
+      <a class="list-group-item" href="../module/foodie_integrator_multistep_object.html">foodie_integrator_multistep_object</a>
+      
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="panel panel-primary">
+  <div class="panel-heading text-left"><h3 class="panel-title">Source Code</h3></div>
+  <div class="list-group">
+    <a class="list-group-item" href="../sourcefile/foodie_integrator_multistep_object.f90.html#src">foodie_integrator_multistep_object.f90</a>
+  </div>
+</div>
+
+
+    </section>
+    <br class="visible-xs visible-sm hidden-md">
+
+    <section>
+      <h2><span class="anchor" id="src"></span>Source Code</h2>
+    <div class="hl"><pre><span></span><a name="ln-1"></a><span class="c">!&lt; Define the abstract type [[integrator_multistep_object]] of FOODIE ODE integrators.</span>
+<a name="ln-2"></a>
+<a name="ln-3"></a><span class="k">module </span><span class="n">foodie_integrator_multistep_object</span>
+<a name="ln-4"></a><span class="c">!&lt; Define the abstract type [[integrator_multistep_object]] of FOODIE ODE integrators.</span>
+<a name="ln-5"></a>
+<a name="ln-6"></a><span class="k">use</span><span class="p">,</span> <span class="k">intrinsic</span> <span class="kd">::</span> <span class="n">iso_fortran_env</span><span class="p">,</span> <span class="n">only</span> <span class="p">:</span> <span class="n">stderr</span><span class="o">=&gt;</span><span class="n">error_unit</span>
+<a name="ln-7"></a><span class="k">use </span><span class="n">foodie_integrand_object</span><span class="p">,</span> <span class="n">only</span> <span class="p">:</span> <span class="n">integrand_object</span>
+<a name="ln-8"></a><span class="k">use </span><span class="n">foodie_integrator_object</span><span class="p">,</span> <span class="n">only</span> <span class="p">:</span> <span class="n">integrator_object</span>
+<a name="ln-9"></a><span class="k">use </span><span class="n">penf</span><span class="p">,</span> <span class="n">only</span> <span class="p">:</span> <span class="n">I_P</span><span class="p">,</span> <span class="n">R_P</span>
+<a name="ln-10"></a>
+<a name="ln-11"></a><span class="k">implicit none</span>
+<a name="ln-12"></a><span class="k">private</span>
+<a name="ln-13"></a><span class="k">public</span> <span class="kd">::</span> <span class="n">integrator_multistep_object</span>
+<a name="ln-14"></a>
+<a name="ln-15"></a><span class="k">type</span><span class="p">,</span> <span class="k">extends</span><span class="p">(</span><span class="n">integrator_object</span><span class="p">),</span> <span class="k">abstract</span> <span class="kd">::</span> <span class="n">integrator_multistep_object</span>
+<a name="ln-16"></a>   <span class="c">!&lt; Abstract type of FOODIE ODE integrators of the multistep-implicit family.</span>
+<a name="ln-17"></a>   <span class="kt">integer</span><span class="p">(</span><span class="n">I_P</span><span class="p">)</span>                         <span class="kd">::</span> <span class="n">registers</span>   <span class="c">!&lt; Number of registers used for steps.</span>
+<a name="ln-18"></a>   <span class="kt">integer</span><span class="p">(</span><span class="n">I_P</span><span class="p">)</span>                         <span class="kd">::</span> <span class="n">steps</span>       <span class="c">!&lt; Number of time steps.</span>
+<a name="ln-19"></a>   <span class="kt">logical</span>                              <span class="kd">::</span> <span class="n">autoupdate</span>  <span class="c">!&lt; Perform cyclic autoupdate of previous time steps buffers.</span>
+<a name="ln-20"></a>   <span class="kt">integer</span><span class="p">(</span><span class="n">I_P</span><span class="p">)</span>                         <span class="kd">::</span> <span class="n">iterations</span>  <span class="c">!&lt; Implicit iterations.</span>
+<a name="ln-21"></a>   <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">),</span>               <span class="k">allocatable</span> <span class="kd">::</span> <span class="n">Dt</span><span class="p">(:)</span>       <span class="c">!&lt; Previous time steps.</span>
+<a name="ln-22"></a>   <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">),</span>               <span class="k">allocatable</span> <span class="kd">::</span> <span class="n">t</span><span class="p">(:)</span>        <span class="c">!&lt; Previous times.</span>
+<a name="ln-23"></a>   <span class="k">class</span><span class="p">(</span><span class="n">integrand_object</span><span class="p">),</span> <span class="k">allocatable</span> <span class="kd">::</span> <span class="n">previous</span><span class="p">(:)</span> <span class="c">!&lt; Previous steps.</span>
+<a name="ln-24"></a>   <span class="k">class</span><span class="p">(</span><span class="n">integrand_object</span><span class="p">),</span> <span class="k">allocatable</span> <span class="kd">::</span> <span class="n">buffer</span>      <span class="c">!&lt; Buffer used for fast integration.</span>
+<a name="ln-25"></a>   <span class="k">contains</span>
+<a name="ln-26"></a>      <span class="c">! deferred methods</span>
+<a name="ln-27"></a>      <span class="k">procedure</span><span class="p">(</span><span class="n">integrate_interface</span><span class="p">),</span>         <span class="k">pass</span><span class="p">(</span><span class="n">self</span><span class="p">),</span> <span class="k">deferred</span> <span class="kd">::</span> <span class="n">integrate</span>      <span class="c">!&lt; Integrate integrand field.</span>
+<a name="ln-28"></a>      <span class="k">procedure</span><span class="p">(</span><span class="n">integrate_fast_interface</span><span class="p">),</span>    <span class="k">pass</span><span class="p">(</span><span class="n">self</span><span class="p">),</span> <span class="k">deferred</span> <span class="kd">::</span> <span class="n">integrate_fast</span> <span class="c">!&lt; Integrate integrand field, fast mode.</span>
+<a name="ln-29"></a>      <span class="c">! implemented deferred methods of parent</span>
+<a name="ln-30"></a>      <span class="k">procedure</span><span class="p">,</span> <span class="k">pass</span><span class="p">(</span><span class="n">self</span><span class="p">)</span> <span class="kd">::</span> <span class="n">is_multistage</span> <span class="c">!&lt; Return .true. for multistage integrator.</span>
+<a name="ln-31"></a>      <span class="k">procedure</span><span class="p">,</span> <span class="k">pass</span><span class="p">(</span><span class="n">self</span><span class="p">)</span> <span class="kd">::</span> <span class="n">is_multistep</span>  <span class="c">!&lt; Return .true. for multistep integrator.</span>
+<a name="ln-32"></a>      <span class="k">procedure</span><span class="p">,</span> <span class="k">pass</span><span class="p">(</span><span class="n">self</span><span class="p">)</span> <span class="kd">::</span> <span class="n">stages_number</span> <span class="c">!&lt; Return number of stages used.</span>
+<a name="ln-33"></a>      <span class="k">procedure</span><span class="p">,</span> <span class="k">pass</span><span class="p">(</span><span class="n">self</span><span class="p">)</span> <span class="kd">::</span> <span class="n">steps_number</span>  <span class="c">!&lt; Return number of steps used.</span>
+<a name="ln-34"></a>      <span class="c">! public methods</span>
+<a name="ln-35"></a>      <span class="k">procedure</span><span class="p">,</span> <span class="k">pass</span><span class="p">(</span><span class="n">self</span><span class="p">)</span> <span class="kd">::</span> <span class="n">allocate_integrand_members</span> <span class="c">!&lt; Allocate integrand members.</span>
+<a name="ln-36"></a>      <span class="k">procedure</span><span class="p">,</span> <span class="k">pass</span><span class="p">(</span><span class="n">lhs</span><span class="p">)</span>  <span class="kd">::</span> <span class="n">assign_multistep</span>           <span class="c">!&lt; Assign members of [[integrator_multistep_object]] and parents.</span>
+<a name="ln-37"></a>      <span class="k">procedure</span><span class="p">,</span> <span class="k">pass</span><span class="p">(</span><span class="n">self</span><span class="p">)</span> <span class="kd">::</span> <span class="n">destroy_multistep</span>          <span class="c">!&lt; Destroy the integrator.</span>
+<a name="ln-38"></a>      <span class="k">procedure</span><span class="p">,</span> <span class="k">nopass</span>     <span class="kd">::</span> <span class="n">update_previous</span>            <span class="c">!&lt; Cyclic update previous time steps.</span>
+<a name="ln-39"></a><span class="n">endtype</span> <span class="n">integrator_multistep_object</span>
+<a name="ln-40"></a>
+<a name="ln-41"></a><span class="k">abstract interface</span>
+<a name="ln-42"></a>   <span class="c">!&lt; Abstract interfaces of deferred methods of [[integrator_multistep_object]].</span>
+<a name="ln-43"></a>   <span class="k">subroutine </span><span class="n">integrate_interface</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">U</span><span class="p">,</span> <span class="n">Dt</span><span class="p">,</span> <span class="n">t</span><span class="p">)</span>
+<a name="ln-44"></a>   <span class="c">!&lt; Integrate integrand field.</span>
+<a name="ln-45"></a>   <span class="k">import</span> <span class="kd">::</span> <span class="n">integrand_object</span><span class="p">,</span> <span class="n">integrator_multistep_object</span><span class="p">,</span> <span class="n">R_P</span>
+<a name="ln-46"></a>   <span class="k">class</span><span class="p">(</span><span class="n">integrator_multistep_object</span><span class="p">),</span> <span class="k">intent</span><span class="p">(</span><span class="n">inout</span><span class="p">)</span> <span class="kd">::</span> <span class="n">self</span> <span class="c">!&lt; Integrator.</span>
+<a name="ln-47"></a>   <span class="k">class</span><span class="p">(</span><span class="n">integrand_object</span><span class="p">),</span>            <span class="k">intent</span><span class="p">(</span><span class="n">inout</span><span class="p">)</span> <span class="kd">::</span> <span class="n">U</span>    <span class="c">!&lt; Integrand.</span>
+<a name="ln-48"></a>   <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">),</span>                          <span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span>    <span class="kd">::</span> <span class="n">Dt</span>   <span class="c">!&lt; Time steps.</span>
+<a name="ln-49"></a>   <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">),</span>                          <span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span>    <span class="kd">::</span> <span class="n">t</span>    <span class="c">!&lt; Times.</span>
+<a name="ln-50"></a>   <span class="n">endsubroutine</span> <span class="n">integrate_interface</span>
+<a name="ln-51"></a>
+<a name="ln-52"></a>   <span class="k">subroutine </span><span class="n">integrate_fast_interface</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">U</span><span class="p">,</span> <span class="n">Dt</span><span class="p">,</span> <span class="n">t</span><span class="p">)</span>
+<a name="ln-53"></a>   <span class="c">!&lt; Integrate integrand field, fast mode.</span>
+<a name="ln-54"></a>   <span class="k">import</span> <span class="kd">::</span> <span class="n">integrand_object</span><span class="p">,</span> <span class="n">integrator_multistep_object</span><span class="p">,</span> <span class="n">R_P</span>
+<a name="ln-55"></a>   <span class="k">class</span><span class="p">(</span><span class="n">integrator_multistep_object</span><span class="p">),</span> <span class="k">intent</span><span class="p">(</span><span class="n">inout</span><span class="p">)</span> <span class="kd">::</span> <span class="n">self</span> <span class="c">!&lt; Integrator.</span>
+<a name="ln-56"></a>   <span class="k">class</span><span class="p">(</span><span class="n">integrand_object</span><span class="p">),</span>            <span class="k">intent</span><span class="p">(</span><span class="n">inout</span><span class="p">)</span> <span class="kd">::</span> <span class="n">U</span>    <span class="c">!&lt; Field to be integrated.</span>
+<a name="ln-57"></a>   <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">),</span>                          <span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span>    <span class="kd">::</span> <span class="n">Dt</span>   <span class="c">!&lt; Time steps.</span>
+<a name="ln-58"></a>   <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">),</span>                          <span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span>    <span class="kd">::</span> <span class="n">t</span>    <span class="c">!&lt; Times.</span>
+<a name="ln-59"></a>   <span class="n">endsubroutine</span> <span class="n">integrate_fast_interface</span>
+<a name="ln-60"></a><span class="n">endinterface</span>
+<a name="ln-61"></a>
+<a name="ln-62"></a><span class="k">contains</span>
+<a name="ln-63"></a>   <span class="c">! deferred methods</span>
+<a name="ln-64"></a>   <span class="k">elemental function </span><span class="n">is_multistage</span><span class="p">(</span><span class="n">self</span><span class="p">)</span>
+<a name="ln-65"></a>   <span class="c">!&lt; Return .true. for multistage integrator.</span>
+<a name="ln-66"></a>   <span class="k">class</span><span class="p">(</span><span class="n">integrator_multistep_object</span><span class="p">),</span> <span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span> <span class="kd">::</span> <span class="n">self</span>          <span class="c">!&lt; Integrator.</span>
+<a name="ln-67"></a>   <span class="kt">logical</span>                                        <span class="kd">::</span> <span class="n">is_multistage</span> <span class="c">!&lt; Inquire result.</span>
+<a name="ln-68"></a>
+<a name="ln-69"></a>   <span class="n">is_multistage</span> <span class="o">=</span> <span class="p">.</span><span class="n">false</span><span class="p">.</span>
+<a name="ln-70"></a>   <span class="n">endfunction</span> <span class="n">is_multistage</span>
+<a name="ln-71"></a>
+<a name="ln-72"></a>   <span class="k">elemental function </span><span class="n">is_multistep</span><span class="p">(</span><span class="n">self</span><span class="p">)</span>
+<a name="ln-73"></a>   <span class="c">!&lt; Return .true. for multistage integrator.</span>
+<a name="ln-74"></a>   <span class="k">class</span><span class="p">(</span><span class="n">integrator_multistep_object</span><span class="p">),</span> <span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span> <span class="kd">::</span> <span class="n">self</span>         <span class="c">!&lt; Integrator.</span>
+<a name="ln-75"></a>   <span class="kt">logical</span>                                        <span class="kd">::</span> <span class="n">is_multistep</span> <span class="c">!&lt; Inquire result.</span>
+<a name="ln-76"></a>
+<a name="ln-77"></a>   <span class="n">is_multistep</span> <span class="o">=</span> <span class="p">.</span><span class="n">true</span><span class="p">.</span>
+<a name="ln-78"></a>   <span class="n">endfunction</span> <span class="n">is_multistep</span>
+<a name="ln-79"></a>
+<a name="ln-80"></a>   <span class="k">elemental function </span><span class="n">stages_number</span><span class="p">(</span><span class="n">self</span><span class="p">)</span>
+<a name="ln-81"></a>   <span class="c">!&lt; Return number of stages used.</span>
+<a name="ln-82"></a>   <span class="k">class</span><span class="p">(</span><span class="n">integrator_multistep_object</span><span class="p">),</span> <span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span> <span class="kd">::</span> <span class="n">self</span>          <span class="c">!&lt; Integrator.</span>
+<a name="ln-83"></a>   <span class="kt">integer</span><span class="p">(</span><span class="n">I_P</span><span class="p">)</span>                                   <span class="kd">::</span> <span class="n">stages_number</span> <span class="c">!&lt; Number of stages used.</span>
+<a name="ln-84"></a>
+<a name="ln-85"></a>   <span class="n">stages_number</span> <span class="o">=</span> <span class="mi">0</span>
+<a name="ln-86"></a>   <span class="n">endfunction</span> <span class="n">stages_number</span>
+<a name="ln-87"></a>
+<a name="ln-88"></a>   <span class="k">elemental function </span><span class="n">steps_number</span><span class="p">(</span><span class="n">self</span><span class="p">)</span>
+<a name="ln-89"></a>   <span class="c">!&lt; Return number of steps used.</span>
+<a name="ln-90"></a>   <span class="k">class</span><span class="p">(</span><span class="n">integrator_multistep_object</span><span class="p">),</span> <span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span> <span class="kd">::</span> <span class="n">self</span>         <span class="c">!&lt; Integrator.</span>
+<a name="ln-91"></a>   <span class="kt">integer</span><span class="p">(</span><span class="n">I_P</span><span class="p">)</span>                                   <span class="kd">::</span> <span class="n">steps_number</span> <span class="c">!&lt; Number of steps used.</span>
+<a name="ln-92"></a>
+<a name="ln-93"></a>   <span class="n">steps_number</span> <span class="o">=</span> <span class="n">self</span><span class="p">%</span><span class="n">steps</span>
+<a name="ln-94"></a>   <span class="n">endfunction</span> <span class="n">steps_number</span>
+<a name="ln-95"></a>
+<a name="ln-96"></a>   <span class="c">! public methods</span>
+<a name="ln-97"></a>   <span class="k">pure subroutine </span><span class="n">allocate_integrand_members</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">U</span><span class="p">)</span>
+<a name="ln-98"></a>   <span class="c">!&lt; Allocate members of interpolator being of [[integrand_object]] class.</span>
+<a name="ln-99"></a>   <span class="c">!&lt;</span>
+<a name="ln-100"></a>   <span class="c">!&lt; @note It is assumed that the integrator has been properly initialized before calling this method.</span>
+<a name="ln-101"></a>   <span class="k">class</span><span class="p">(</span><span class="n">integrator_multistep_object</span><span class="p">),</span> <span class="k">intent</span><span class="p">(</span><span class="n">inout</span><span class="p">)</span> <span class="kd">::</span> <span class="n">self</span> <span class="c">!&lt; Integrator.</span>
+<a name="ln-102"></a>   <span class="k">class</span><span class="p">(</span><span class="n">integrand_object</span><span class="p">),</span>            <span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span>    <span class="kd">::</span> <span class="n">U</span>    <span class="c">!&lt; Integrand.</span>
+<a name="ln-103"></a>   <span class="kt">integer</span><span class="p">(</span><span class="n">I_P</span><span class="p">)</span>                                      <span class="kd">::</span> <span class="n">s</span>    <span class="c">!&lt; Counter.</span>
+<a name="ln-104"></a>
+<a name="ln-105"></a>   <span class="k">if</span> <span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">is_multistep</span><span class="p">()</span> <span class="p">.</span><span class="nb">and</span><span class="p">.</span> <span class="n">self</span><span class="p">%</span><span class="n">registers</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span> <span class="k">then</span>
+<a name="ln-106"></a><span class="k">      if</span> <span class="p">(</span><span class="nb">allocated</span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">Dt</span><span class="p">))</span> <span class="k">deallocate</span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">Dt</span><span class="p">)</span>
+<a name="ln-107"></a>      <span class="k">allocate</span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">Dt</span><span class="p">(</span><span class="mi">1</span><span class="p">:</span><span class="n">self</span><span class="p">%</span><span class="n">registers</span><span class="p">))</span> <span class="p">;</span> <span class="n">self</span><span class="p">%</span><span class="n">Dt</span> <span class="o">=</span> <span class="mf">0._R_P</span>
+<a name="ln-108"></a>      <span class="k">if</span> <span class="p">(</span><span class="nb">allocated</span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">t</span><span class="p">))</span> <span class="k">deallocate</span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">t</span><span class="p">)</span>
+<a name="ln-109"></a>      <span class="k">allocate</span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">t</span><span class="p">(</span><span class="mi">1</span><span class="p">:</span><span class="n">self</span><span class="p">%</span><span class="n">registers</span><span class="p">))</span> <span class="p">;</span> <span class="n">self</span><span class="p">%</span><span class="n">t</span> <span class="o">=</span> <span class="mf">0._R_P</span>
+<a name="ln-110"></a>      <span class="k">if</span> <span class="p">(</span><span class="nb">allocated</span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">previous</span><span class="p">))</span> <span class="k">deallocate</span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">previous</span><span class="p">)</span>
+<a name="ln-111"></a>      <span class="k">allocate</span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">previous</span><span class="p">(</span><span class="mi">1</span><span class="p">:</span><span class="n">self</span><span class="p">%</span><span class="n">registers</span><span class="p">),</span> <span class="n">mold</span><span class="o">=</span><span class="n">U</span><span class="p">)</span>
+<a name="ln-112"></a>      <span class="k">do </span><span class="n">s</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">self</span><span class="p">%</span><span class="n">registers</span>
+<a name="ln-113"></a>         <span class="n">self</span><span class="p">%</span><span class="n">previous</span><span class="p">(</span><span class="n">s</span><span class="p">)</span> <span class="o">=</span> <span class="n">U</span>
+<a name="ln-114"></a>      <span class="n">enddo</span>
+<a name="ln-115"></a>   <span class="n">endif</span>
+<a name="ln-116"></a>   <span class="k">if</span> <span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">has_fast_mode</span><span class="p">())</span> <span class="k">then</span>
+<a name="ln-117"></a><span class="k">      if</span> <span class="p">(</span><span class="nb">allocated</span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">buffer</span><span class="p">))</span> <span class="k">deallocate</span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">buffer</span><span class="p">)</span>
+<a name="ln-118"></a>      <span class="k">allocate</span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">buffer</span><span class="p">,</span> <span class="n">mold</span><span class="o">=</span><span class="n">U</span><span class="p">)</span>
+<a name="ln-119"></a>      <span class="n">self</span><span class="p">%</span><span class="n">buffer</span> <span class="o">=</span> <span class="n">U</span>
+<a name="ln-120"></a>   <span class="n">endif</span>
+<a name="ln-121"></a>   <span class="n">endsubroutine</span> <span class="n">allocate_integrand_members</span>
+<a name="ln-122"></a>
+<a name="ln-123"></a>   <span class="k">pure subroutine </span><span class="n">assign_multistep</span><span class="p">(</span><span class="n">lhs</span><span class="p">,</span> <span class="n">rhs</span><span class="p">)</span>
+<a name="ln-124"></a>   <span class="c">!&lt; Assign members of [[integrator_multistep_object]] and parents.</span>
+<a name="ln-125"></a>   <span class="k">class</span><span class="p">(</span><span class="n">integrator_multistep_object</span><span class="p">),</span> <span class="k">intent</span><span class="p">(</span><span class="n">inout</span><span class="p">)</span> <span class="kd">::</span> <span class="n">lhs</span> <span class="c">!&lt; Left hand side.</span>
+<a name="ln-126"></a>   <span class="k">class</span><span class="p">(</span><span class="n">integrator_object</span><span class="p">),</span>           <span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span>    <span class="kd">::</span> <span class="n">rhs</span> <span class="c">!&lt; Right hand side.</span>
+<a name="ln-127"></a>   <span class="kt">integer</span><span class="p">(</span><span class="n">I_P</span><span class="p">)</span>                                      <span class="kd">::</span> <span class="n">s</span>   <span class="c">!&lt; Counter.</span>
+<a name="ln-128"></a>
+<a name="ln-129"></a>   <span class="k">call </span><span class="n">lhs</span><span class="p">%</span><span class="n">assign_abstract</span><span class="p">(</span><span class="n">rhs</span><span class="o">=</span><span class="n">rhs</span><span class="p">)</span>
+<a name="ln-130"></a>   <span class="k">select type</span><span class="p">(</span><span class="n">rhs</span><span class="p">)</span>
+<a name="ln-131"></a>   <span class="k">class is</span> <span class="p">(</span><span class="n">integrator_multistep_object</span><span class="p">)</span>
+<a name="ln-132"></a>     <span class="n">lhs</span><span class="p">%</span><span class="n">registers</span> <span class="o">=</span> <span class="n">rhs</span><span class="p">%</span><span class="n">registers</span>
+<a name="ln-133"></a>     <span class="n">lhs</span><span class="p">%</span><span class="n">steps</span> <span class="o">=</span> <span class="n">rhs</span><span class="p">%</span><span class="n">steps</span>
+<a name="ln-134"></a>     <span class="n">lhs</span><span class="p">%</span><span class="n">autoupdate</span> <span class="o">=</span> <span class="n">rhs</span><span class="p">%</span><span class="n">autoupdate</span>
+<a name="ln-135"></a>     <span class="n">lhs</span><span class="p">%</span><span class="n">iterations</span> <span class="o">=</span> <span class="n">rhs</span><span class="p">%</span><span class="n">iterations</span>
+<a name="ln-136"></a>     <span class="k">if</span> <span class="p">(</span><span class="nb">allocated</span><span class="p">(</span><span class="n">lhs</span><span class="p">%</span><span class="n">Dt</span><span class="p">))</span> <span class="k">deallocate</span><span class="p">(</span><span class="n">lhs</span><span class="p">%</span><span class="n">Dt</span><span class="p">)</span>
+<a name="ln-137"></a>     <span class="k">if</span> <span class="p">(</span><span class="nb">allocated</span><span class="p">(</span><span class="n">rhs</span><span class="p">%</span><span class="n">Dt</span><span class="p">))</span> <span class="n">lhs</span><span class="p">%</span><span class="n">Dt</span> <span class="o">=</span> <span class="n">rhs</span><span class="p">%</span><span class="n">Dt</span>
+<a name="ln-138"></a>     <span class="k">if</span> <span class="p">(</span><span class="nb">allocated</span><span class="p">(</span><span class="n">lhs</span><span class="p">%</span><span class="n">t</span><span class="p">))</span> <span class="k">deallocate</span><span class="p">(</span><span class="n">lhs</span><span class="p">%</span><span class="n">t</span><span class="p">)</span>
+<a name="ln-139"></a>     <span class="k">if</span> <span class="p">(</span><span class="nb">allocated</span><span class="p">(</span><span class="n">rhs</span><span class="p">%</span><span class="n">t</span><span class="p">))</span> <span class="n">lhs</span><span class="p">%</span><span class="n">t</span> <span class="o">=</span> <span class="n">rhs</span><span class="p">%</span><span class="n">t</span>
+<a name="ln-140"></a>     <span class="k">if</span> <span class="p">(</span><span class="nb">allocated</span><span class="p">(</span><span class="n">lhs</span><span class="p">%</span><span class="n">previous</span><span class="p">))</span> <span class="k">deallocate</span><span class="p">(</span><span class="n">lhs</span><span class="p">%</span><span class="n">previous</span><span class="p">)</span>
+<a name="ln-141"></a>     <span class="k">if</span> <span class="p">(</span><span class="nb">allocated</span><span class="p">(</span><span class="n">rhs</span><span class="p">%</span><span class="n">previous</span><span class="p">))</span> <span class="k">then</span>
+<a name="ln-142"></a><span class="k">        allocate</span><span class="p">(</span><span class="n">lhs</span><span class="p">%</span><span class="n">previous</span><span class="p">(</span><span class="mi">1</span><span class="p">:</span><span class="n">lhs</span><span class="p">%</span><span class="n">registers</span><span class="p">),</span> <span class="n">mold</span><span class="o">=</span><span class="n">rhs</span><span class="p">%</span><span class="n">previous</span><span class="p">)</span>
+<a name="ln-143"></a>        <span class="k">do </span><span class="n">s</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">lhs</span><span class="p">%</span><span class="n">registers</span>
+<a name="ln-144"></a>           <span class="n">lhs</span><span class="p">%</span><span class="n">previous</span><span class="p">(</span><span class="n">s</span><span class="p">)</span> <span class="o">=</span> <span class="n">rhs</span><span class="p">%</span><span class="n">previous</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
+<a name="ln-145"></a>        <span class="n">enddo</span>
+<a name="ln-146"></a>     <span class="n">endif</span>
+<a name="ln-147"></a>     <span class="k">if</span> <span class="p">(</span><span class="nb">allocated</span><span class="p">(</span><span class="n">lhs</span><span class="p">%</span><span class="n">buffer</span><span class="p">))</span> <span class="k">deallocate</span><span class="p">(</span><span class="n">lhs</span><span class="p">%</span><span class="n">buffer</span><span class="p">)</span>
+<a name="ln-148"></a>     <span class="k">if</span> <span class="p">(</span><span class="nb">allocated</span><span class="p">(</span><span class="n">rhs</span><span class="p">%</span><span class="n">buffer</span><span class="p">))</span> <span class="k">then</span>
+<a name="ln-149"></a><span class="k">        allocate</span><span class="p">(</span><span class="n">lhs</span><span class="p">%</span><span class="n">buffer</span><span class="p">,</span> <span class="n">mold</span><span class="o">=</span><span class="n">rhs</span><span class="p">%</span><span class="n">buffer</span><span class="p">)</span>
+<a name="ln-150"></a>        <span class="n">lhs</span><span class="p">%</span><span class="n">buffer</span> <span class="o">=</span> <span class="n">rhs</span><span class="p">%</span><span class="n">buffer</span>
+<a name="ln-151"></a>     <span class="n">endif</span>
+<a name="ln-152"></a>   <span class="n">endselect</span>
+<a name="ln-153"></a>   <span class="n">endsubroutine</span> <span class="n">assign_multistep</span>
+<a name="ln-154"></a>
+<a name="ln-155"></a>   <span class="k">elemental subroutine </span><span class="n">destroy_multistep</span><span class="p">(</span><span class="n">self</span><span class="p">)</span>
+<a name="ln-156"></a>   <span class="c">!&lt; Destroy the integrator.</span>
+<a name="ln-157"></a>   <span class="k">class</span><span class="p">(</span><span class="n">integrator_multistep_object</span><span class="p">),</span> <span class="k">intent</span><span class="p">(</span><span class="n">inout</span><span class="p">)</span> <span class="kd">::</span> <span class="n">self</span> <span class="c">!&lt; Integrator.</span>
+<a name="ln-158"></a>
+<a name="ln-159"></a>   <span class="k">call </span><span class="n">self</span><span class="p">%</span><span class="n">destroy_abstract</span>
+<a name="ln-160"></a>   <span class="n">self</span><span class="p">%</span><span class="n">registers</span> <span class="o">=</span> <span class="mi">0</span>
+<a name="ln-161"></a>   <span class="n">self</span><span class="p">%</span><span class="n">steps</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>
+<a name="ln-162"></a>   <span class="n">self</span><span class="p">%</span><span class="n">autoupdate</span> <span class="o">=</span> <span class="p">.</span><span class="n">false</span><span class="p">.</span>
+<a name="ln-163"></a>   <span class="n">self</span><span class="p">%</span><span class="n">iterations</span> <span class="o">=</span> <span class="mi">0</span>
+<a name="ln-164"></a>   <span class="k">if</span> <span class="p">(</span><span class="nb">allocated</span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">Dt</span><span class="p">))</span> <span class="k">deallocate</span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">Dt</span><span class="p">)</span>
+<a name="ln-165"></a>   <span class="k">if</span> <span class="p">(</span><span class="nb">allocated</span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">t</span><span class="p">))</span> <span class="k">deallocate</span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">t</span><span class="p">)</span>
+<a name="ln-166"></a>   <span class="k">if</span> <span class="p">(</span><span class="nb">allocated</span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">previous</span><span class="p">))</span> <span class="k">deallocate</span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">previous</span><span class="p">)</span>
+<a name="ln-167"></a>   <span class="k">if</span> <span class="p">(</span><span class="nb">allocated</span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">buffer</span><span class="p">))</span> <span class="k">deallocate</span><span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">buffer</span><span class="p">)</span>
+<a name="ln-168"></a>   <span class="n">endsubroutine</span> <span class="n">destroy_multistep</span>
+<a name="ln-169"></a>
+<a name="ln-170"></a>   <span class="k">subroutine </span><span class="n">update_previous</span><span class="p">(</span><span class="n">U</span><span class="p">,</span> <span class="n">previous</span><span class="p">,</span> <span class="n">Dt</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="n">previous_Dt</span><span class="p">,</span> <span class="n">previous_t</span><span class="p">)</span>
+<a name="ln-171"></a>   <span class="c">!&lt; Cyclic update previous time steps.</span>
+<a name="ln-172"></a>   <span class="k">class</span><span class="p">(</span><span class="n">integrand_object</span><span class="p">),</span> <span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span>              <span class="kd">::</span> <span class="n">U</span>               <span class="c">!&lt; Field to be integrated.</span>
+<a name="ln-173"></a>   <span class="k">class</span><span class="p">(</span><span class="n">integrand_object</span><span class="p">),</span> <span class="k">intent</span><span class="p">(</span><span class="n">inout</span><span class="p">)</span>           <span class="kd">::</span> <span class="n">previous</span><span class="p">(</span><span class="mi">1</span><span class="p">:)</span>    <span class="c">!&lt; Previous time steps solutions of integrand.</span>
+<a name="ln-174"></a>   <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">),</span>               <span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">),</span>    <span class="k">optional</span> <span class="kd">::</span> <span class="n">Dt</span>              <span class="c">!&lt; Time step.</span>
+<a name="ln-175"></a>   <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">),</span>               <span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">),</span>    <span class="k">optional</span> <span class="kd">::</span> <span class="n">t</span>               <span class="c">!&lt; Time.</span>
+<a name="ln-176"></a>   <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">),</span>               <span class="k">intent</span><span class="p">(</span><span class="n">inout</span><span class="p">),</span> <span class="k">optional</span> <span class="kd">::</span> <span class="n">previous_Dt</span><span class="p">(</span><span class="mi">1</span><span class="p">:)</span> <span class="c">!&lt; Time step.</span>
+<a name="ln-177"></a>   <span class="kt">real</span><span class="p">(</span><span class="n">R_P</span><span class="p">),</span>               <span class="k">intent</span><span class="p">(</span><span class="n">inout</span><span class="p">),</span> <span class="k">optional</span> <span class="kd">::</span> <span class="n">previous_t</span><span class="p">(</span><span class="mi">1</span><span class="p">:)</span>  <span class="c">!&lt; Time.</span>
+<a name="ln-178"></a>   <span class="kt">integer</span><span class="p">(</span><span class="n">I_P</span><span class="p">)</span>                                     <span class="kd">::</span> <span class="n">last_step</span>       <span class="c">!&lt; Last step.</span>
+<a name="ln-179"></a>   <span class="kt">integer</span><span class="p">(</span><span class="n">I_P</span><span class="p">)</span>                                     <span class="kd">::</span> <span class="n">s</span>               <span class="c">!&lt; Steps counter.</span>
+<a name="ln-180"></a>
+<a name="ln-181"></a>   <span class="n">last_step</span> <span class="o">=</span> <span class="n">size</span><span class="p">(</span><span class="n">previous</span><span class="p">,</span> <span class="nb">dim</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<a name="ln-182"></a>   <span class="k">do </span><span class="n">s</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">last_step</span> <span class="o">-</span> <span class="mi">1</span>
+<a name="ln-183"></a>     <span class="n">previous</span><span class="p">(</span><span class="n">s</span><span class="p">)</span> <span class="o">=</span> <span class="n">previous</span><span class="p">(</span><span class="n">s</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+<a name="ln-184"></a>     <span class="k">if</span> <span class="p">(</span><span class="nb">present</span><span class="p">(</span><span class="n">previous_Dt</span><span class="p">))</span> <span class="n">previous_Dt</span><span class="p">(</span><span class="n">s</span><span class="p">)</span> <span class="o">=</span> <span class="n">previous_Dt</span><span class="p">(</span><span class="n">s</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+<a name="ln-185"></a>     <span class="k">if</span> <span class="p">(</span><span class="nb">present</span><span class="p">(</span><span class="n">previous_t</span><span class="p">))</span> <span class="n">previous_t</span><span class="p">(</span><span class="n">s</span><span class="p">)</span> <span class="o">=</span> <span class="n">previous_t</span><span class="p">(</span><span class="n">s</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+<a name="ln-186"></a>   <span class="n">enddo</span>
+<a name="ln-187"></a>   <span class="n">previous</span><span class="p">(</span><span class="n">last_step</span><span class="p">)</span> <span class="o">=</span> <span class="n">U</span>
+<a name="ln-188"></a>   <span class="k">if</span> <span class="p">(</span><span class="nb">present</span><span class="p">(</span><span class="n">previous_Dt</span><span class="p">))</span> <span class="n">previous_Dt</span><span class="p">(</span><span class="n">last_step</span><span class="p">)</span> <span class="o">=</span> <span class="n">Dt</span>
+<a name="ln-189"></a>   <span class="k">if</span> <span class="p">(</span><span class="nb">present</span><span class="p">(</span><span class="n">previous_t</span><span class="p">))</span> <span class="n">previous_t</span><span class="p">(</span><span class="n">last_step</span><span class="p">)</span> <span class="o">=</span> <span class="n">t</span> <span class="o">+</span> <span class="n">Dt</span>
+<a name="ln-190"></a>   <span class="n">endsubroutine</span> <span class="n">update_previous</span>
+<a name="ln-191"></a><span class="n">endmodule</span> <span class="n">foodie_integrator_multistep_object</span>
+</pre></div>
+
+    </section>
+    </div>
+  </div>
+
+  <section class="visible-xs visible-sm hidden-md">
+    <hr>
+    
+
+<div class="panel panel-default">
+  <div class="panel-heading text-left"><h3 class="panel-title"><a data-toggle="collapse" href="#allfiles-1">All Source Files</a></h3></div>
+  <div id="allfiles-1" class="panel-collapse collapse">
+    <div class="list-group">
+      
+      <a class="list-group-item" href="../sourcefile/burgers.f90.html">burgers.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/euler-1d-caf.f90.html">euler-1D-caf.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/euler-1d-caf_no_foodie.f90.html">euler-1D-caf_no_foodie.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/euler-1d-openmp.f90.html">euler-1D-openmp.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/euler-1d-openmp_no_foodie.f90.html">euler-1D-openmp_no_foodie.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/euler-1d.f90.html">euler-1D.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/foodie.f90.html">foodie.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/foodie_error_codes.f90.html">foodie_error_codes.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/foodie_integrand_object.f90.html">foodie_integrand_object.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/foodie_integrator_adams_bashforth.f90.html">foodie_integrator_adams_bashforth.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/foodie_integrator_adams_bashforth_moulton.f90.html">foodie_integrator_adams_bashforth_moulton.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/foodie_integrator_adams_moulton.f90.html">foodie_integrator_adams_moulton.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/foodie_integrator_backward_differentiation_formula.f90.html">foodie_integrator_backward_differentiation_formula.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/foodie_integrator_euler_explicit.f90.html">foodie_integrator_euler_explicit.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/foodie_integrator_leapfrog.f90.html">foodie_integrator_leapfrog.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/foodie_integrator_lmm_ssp.f90.html">foodie_integrator_lmm_ssp.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/foodie_integrator_lmm_ssp_vss.f90.html">foodie_integrator_lmm_ssp_vss.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/foodie_integrator_ms_runge_kutta_ssp.f90.html">foodie_integrator_ms_runge_kutta_ssp.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/foodie_integrator_multistage_multistep_object.f90.html">foodie_integrator_multistage_multistep_object.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/foodie_integrator_multistage_object.f90.html">foodie_integrator_multistage_object.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/foodie_integrator_multistep_object.f90.html">foodie_integrator_multistep_object.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/foodie_integrator_object.f90.html">foodie_integrator_object.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/foodie_integrator_runge_kutta_embedded.f90.html">foodie_integrator_runge_kutta_embedded.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/foodie_integrator_runge_kutta_low_storage.f90.html">foodie_integrator_runge_kutta_low_storage.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/foodie_integrator_runge_kutta_lssp.f90.html">foodie_integrator_runge_kutta_lssp.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/foodie_integrator_runge_kutta_ssp.f90.html">foodie_integrator_runge_kutta_ssp.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/foodie_test_integrand_ladvection.f90.html">foodie_test_integrand_ladvection.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/foodie_test_integrand_lcce.f90.html">foodie_test_integrand_lcce.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/foodie_test_integrand_oscillation.f90.html">foodie_test_integrand_oscillation.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/foodie_test_integrand_tester_object.f90.html">foodie_test_integrand_tester_object.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/foodie_test_lcce.f90.html">foodie_test_lcce.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/foodie_test_oscillation.f90.html">foodie_test_oscillation.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/foodie_tester.f90.html">foodie_tester.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/foodie_utils.f90.html">foodie_utils.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/lorenz.f90.html">lorenz.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/type_burgers.f90.html">type_burgers.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/type_euler-1d-caf.f90.html">type_euler-1D-caf.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/type_euler-1d-caf_no_foodie.f90.html">type_euler-1D-caf_no_foodie.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/type_euler-1d-openmp.f90.html">type_euler-1D-openmp.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/type_euler-1d-openmp_no_foodie.f90.html">type_euler-1D-openmp_no_foodie.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/type_euler-1d.f90.html">type_euler-1D.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/type_lorenz.f90.html">type_lorenz.f90</a>
+      
+    </div>
+  </div>
+</div>
+
+
+  </section>
+  
+    <hr>    
+    </div> <!-- /container -->
+    <footer>
+      <div class="container">
+      <div class="row">
+        <div class="col-xs-6 col-md-4"><p>&copy; 2017 </p></div>
+        <div class="col-xs-6 col-md-4 col-md-push-4">
+          <p class="text-right">
+            Documentation generated by 
+            <a href="https://github.com/cmacmackin/ford">FORD</a>
+             on 2017-06-06 10:04  
+          </p>
+        </div>
+        <div class="col-xs-12 col-md-4 col-md-pull-4"><p class="text-center"> FOODIE was developed by Fortran-FOSS-Programmers Group</p></div>
+      </div>
+      <br>
+      </div> <!-- /container -->    
+    </footer>
+
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+<!--
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+-->
+    <script src="../js/bootstrap.min.js"></script>
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+    <script src="../js/ie10-viewport-bug-workaround.js"></script>
+
+    <!-- MathJax JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        TeX: { extensions: ['AMSmath.js','AMSsymbols.js','noErrors.js','noUndefined.js'], equationNumbers: { autoNumber: 'AMS' } },
+        jax: ['input/TeX','input/MathML','output/HTML-CSS'],
+        extensions: ['tex2jax.js','mml2jax.js','MathMenu.js','MathZoom.js'],
+        'HTML-CSS': { 
+           styles: { '.MathJax_Display, .MathJax .mo, .MathJax .mi, .MathJax .mn': {color: '#000000 ! important'} }
+        }
+      });
+    </script>
+    <script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+  </body>
+</html>
