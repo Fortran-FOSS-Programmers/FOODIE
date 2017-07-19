@@ -94,7 +94,7 @@ contains
    endfunction steps_number
 
    ! public methods
-   pure subroutine allocate_integrand_members(self, U)
+   subroutine allocate_integrand_members(self, U)
    !< Allocate members of interpolator being of [[integrand_object]] class.
    !<
    !< @note It is assumed that the integrator has been properly initialized before calling this method.
@@ -120,7 +120,7 @@ contains
    endif
    endsubroutine allocate_integrand_members
 
-   pure subroutine assign_multistep(lhs, rhs)
+   subroutine assign_multistep(lhs, rhs)
    !< Assign members of [[integrator_multistep_object]] and parents.
    class(integrator_multistep_object), intent(inout) :: lhs !< Left hand side.
    class(integrator_object),           intent(in)    :: rhs !< Right hand side.

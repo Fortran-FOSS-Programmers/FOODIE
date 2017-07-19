@@ -331,7 +331,7 @@ contains
   has_fast_mode = has_fast_mode_
   endfunction has_fast_mode
 
-  pure subroutine integr_assign_integr(lhs, rhs)
+  subroutine integr_assign_integr(lhs, rhs)
   !< Operator `=`.
   class(integrator_runge_kutta_emd), intent(inout) :: lhs !< Left hand side.
   class(integrator_object),          intent(in)    :: rhs !< Right hand side.
@@ -739,7 +739,7 @@ contains
   endsubroutine initialize
 
    ! overridden public methods
-   pure subroutine allocate_integrand_members(self, U)
+   subroutine allocate_integrand_members(self, U)
    !< Allocate members of interpolator being of [[integrand_object]] class.
    !<
    !< @note It is assumed that the integrator has been properly initialized before calling this method.

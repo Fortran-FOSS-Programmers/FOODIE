@@ -129,7 +129,7 @@ abstract interface
   real(R_P), allocatable              :: operator_result(:) !< Operator result.
   endfunction symmetric_operator
 
-  pure subroutine assignment_integrand(lhs, rhs)
+  subroutine assignment_integrand(lhs, rhs)
   !< Symmetric assignment integrand = integrand.
   import :: integrand_object
   class(integrand_object), intent(inout) :: lhs !< Left hand side.

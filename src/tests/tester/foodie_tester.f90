@@ -179,16 +179,28 @@ contains
 
       if     (self%cli%run_command('lcce')) then
          allocate(integrand_lcce :: self%integrand_0)
-         self%integrand_0 = self%lcce_0
+         select type(integrand_0=>self%integrand_0)
+         type is(integrand_lcce)
+            integrand_0 = self%lcce_0
+         endselect
       elseif (self%cli%run_command('linear_advection')) then
          allocate(integrand_ladvection :: self%integrand_0)
-         self%integrand_0 = self%ladvection_0
+         select type(integrand_0=>self%integrand_0)
+         type is(integrand_ladvection)
+            integrand_0 = self%ladvection_0
+         endselect
       elseif (self%cli%run_command('oscillation')) then
          allocate(integrand_oscillation :: self%integrand_0)
-         self%integrand_0 = self%oscillation_0
+         select type(integrand_0=>self%integrand_0)
+         type is(integrand_oscillation)
+            integrand_0 = self%oscillation_0
+         endselect
       else
          allocate(integrand_oscillation :: self%integrand_0)
-         self%integrand_0 = self%oscillation_0
+         select type(integrand_0=>self%integrand_0)
+         type is(integrand_oscillation)
+            integrand_0 = self%oscillation_0
+         endselect
       endif
 
       if (.not.is_dt_valid()) then
