@@ -510,12 +510,15 @@ contains
       lhs%Dx         = rhs%Dx
       lhs%a          = rhs%a
       if (allocated(rhs%u)) then
-         lhs%u(:) = rhs%u(:)
+         lhs%u = rhs%u
       else
          if (allocated(lhs%u)) deallocate(lhs%u)
       endif
       if (allocated(rhs%interpolator)) then
-         if (allocated(lhs%interpolator)) deallocate(lhs%interpolator)
+         if (allocated(lhs%interpolator)) then
+            call lhs%interpolator%destroy
+            deallocate(lhs%interpolator)
+         endif
          allocate(lhs%interpolator, mold=rhs%interpolator)
          lhs%interpolator = rhs%interpolator
       else
