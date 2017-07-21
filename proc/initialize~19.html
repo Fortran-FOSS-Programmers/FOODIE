@@ -134,7 +134,7 @@
      <li><i class="fa fa-list-ol"></i>
        <a data-toggle="tooltip"
 	  data-placement="bottom" data-html="true"
-	  title=" 1.0% of total for procedures.">97 statements</a>
+	  title=" 1.1% of total for procedures.">109 statements</a>
      </li> 
      
      
@@ -1271,7 +1271,7 @@ private subroutine initialize(self)
          <span class="k">call </span><span class="n">cli</span><span class="p">%</span><span class="n">add</span><span class="p">(</span><span class="n">group</span><span class="o">=</span><span class="s1">&#39;test&#39;</span><span class="p">,</span> <span class="n">switch</span><span class="o">=</span><span class="s1">&#39;--iterations&#39;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s1">&#39;iterations number for implicit schemes&#39;</span><span class="p">,</span> <span class="n">required</span><span class="o">=</span><span class="p">.</span><span class="n">false</span><span class="p">.,</span> <span class="p">&amp;</span>
                       <span class="n">act</span><span class="o">=</span><span class="s1">&#39;store&#39;</span><span class="p">,</span> <span class="n">def</span><span class="o">=</span><span class="s1">&#39;5&#39;</span><span class="p">)</span>
          <span class="k">call </span><span class="n">cli</span><span class="p">%</span><span class="n">add</span><span class="p">(</span><span class="n">group</span><span class="o">=</span><span class="s1">&#39;test&#39;</span><span class="p">,</span> <span class="n">switch</span><span class="o">=</span><span class="s1">&#39;--stages&#39;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s1">&#39;stages number&#39;</span><span class="p">,</span> <span class="n">required</span><span class="o">=</span><span class="p">.</span><span class="n">false</span><span class="p">.,</span> <span class="n">def</span><span class="o">=</span><span class="s1">&#39;2&#39;</span><span class="p">,</span> <span class="n">act</span><span class="o">=</span><span class="s1">&#39;store&#39;</span><span class="p">)</span>
-         <span class="k">call </span><span class="n">cli</span><span class="p">%</span><span class="n">add</span><span class="p">(</span><span class="n">group</span><span class="o">=</span><span class="s1">&#39;test&#39;</span><span class="p">,</span> <span class="n">switch</span><span class="o">=</span><span class="s1">&#39;--final_time&#39;</span><span class="p">,</span> <span class="n">switch_ab</span><span class="o">=</span><span class="s1">&#39;-ft&#39;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s1">&#39;integration time&#39;</span><span class="p">,</span> <span class="n">required</span><span class="o">=</span><span class="p">.</span><span class="n">false</span><span class="p">.,</span> <span class="n">def</span><span class="o">=</span><span class="s1">&#39;1e6&#39;</span><span class="p">,</span> <span class="p">&amp;</span>
+         <span class="k">call </span><span class="n">cli</span><span class="p">%</span><span class="n">add</span><span class="p">(</span><span class="n">group</span><span class="o">=</span><span class="s1">&#39;test&#39;</span><span class="p">,</span> <span class="n">switch</span><span class="o">=</span><span class="s1">&#39;--final_time&#39;</span><span class="p">,</span> <span class="n">switch_ab</span><span class="o">=</span><span class="s1">&#39;-ft&#39;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s1">&#39;integration time&#39;</span><span class="p">,</span> <span class="n">required</span><span class="o">=</span><span class="p">.</span><span class="n">false</span><span class="p">.,</span> <span class="n">def</span><span class="o">=</span><span class="s1">&#39;1&#39;</span><span class="p">,</span> <span class="p">&amp;</span>
                       <span class="n">act</span><span class="o">=</span><span class="s1">&#39;store&#39;</span><span class="p">)</span>
          <span class="k">call </span><span class="n">cli</span><span class="p">%</span><span class="n">add</span><span class="p">(</span><span class="n">group</span><span class="o">=</span><span class="s1">&#39;test&#39;</span><span class="p">,</span> <span class="n">switch</span><span class="o">=</span><span class="s1">&#39;--save_results&#39;</span><span class="p">,</span> <span class="n">switch_ab</span><span class="o">=</span><span class="s1">&#39;-r&#39;</span><span class="p">,</span><span class="n">help</span><span class="o">=</span><span class="s1">&#39;save result&#39;</span><span class="p">,</span> <span class="n">required</span><span class="o">=</span><span class="p">.</span><span class="n">false</span><span class="p">.,</span> <span class="p">&amp;</span>
                       <span class="n">act</span><span class="o">=</span><span class="s1">&#39;store_true&#39;</span><span class="p">,</span> <span class="n">def</span><span class="o">=</span><span class="s1">&#39;.false.&#39;</span><span class="p">)</span>
@@ -1308,16 +1308,28 @@ private subroutine initialize(self)
 
       <span class="k">if</span>     <span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">cli</span><span class="p">%</span><span class="n">run_command</span><span class="p">(</span><span class="s1">&#39;lcce&#39;</span><span class="p">))</span> <span class="k">then</span>
 <span class="k">         allocate</span><span class="p">(</span><span class="n">integrand_lcce</span> <span class="kd">::</span> <span class="n">self</span><span class="p">%</span><span class="n">integrand_0</span><span class="p">)</span>
-         <span class="n">self</span><span class="p">%</span><span class="n">integrand_0</span> <span class="o">=</span> <span class="n">self</span><span class="p">%</span><span class="n">lcce_0</span>
+         <span class="k">select type</span><span class="p">(</span><span class="n">integrand_0</span><span class="o">=&gt;</span><span class="n">self</span><span class="p">%</span><span class="n">integrand_0</span><span class="p">)</span>
+         <span class="k">type is</span><span class="p">(</span><span class="n">integrand_lcce</span><span class="p">)</span>
+            <span class="n">integrand_0</span> <span class="o">=</span> <span class="n">self</span><span class="p">%</span><span class="n">lcce_0</span>
+         <span class="n">endselect</span>
       <span class="n">elseif</span> <span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">cli</span><span class="p">%</span><span class="n">run_command</span><span class="p">(</span><span class="s1">&#39;linear_advection&#39;</span><span class="p">))</span> <span class="k">then</span>
 <span class="k">         allocate</span><span class="p">(</span><span class="n">integrand_ladvection</span> <span class="kd">::</span> <span class="n">self</span><span class="p">%</span><span class="n">integrand_0</span><span class="p">)</span>
-         <span class="n">self</span><span class="p">%</span><span class="n">integrand_0</span> <span class="o">=</span> <span class="n">self</span><span class="p">%</span><span class="n">ladvection_0</span>
+         <span class="k">select type</span><span class="p">(</span><span class="n">integrand_0</span><span class="o">=&gt;</span><span class="n">self</span><span class="p">%</span><span class="n">integrand_0</span><span class="p">)</span>
+         <span class="k">type is</span><span class="p">(</span><span class="n">integrand_ladvection</span><span class="p">)</span>
+            <span class="n">integrand_0</span> <span class="o">=</span> <span class="n">self</span><span class="p">%</span><span class="n">ladvection_0</span>
+         <span class="n">endselect</span>
       <span class="n">elseif</span> <span class="p">(</span><span class="n">self</span><span class="p">%</span><span class="n">cli</span><span class="p">%</span><span class="n">run_command</span><span class="p">(</span><span class="s1">&#39;oscillation&#39;</span><span class="p">))</span> <span class="k">then</span>
 <span class="k">         allocate</span><span class="p">(</span><span class="n">integrand_oscillation</span> <span class="kd">::</span> <span class="n">self</span><span class="p">%</span><span class="n">integrand_0</span><span class="p">)</span>
-         <span class="n">self</span><span class="p">%</span><span class="n">integrand_0</span> <span class="o">=</span> <span class="n">self</span><span class="p">%</span><span class="n">oscillation_0</span>
+         <span class="k">select type</span><span class="p">(</span><span class="n">integrand_0</span><span class="o">=&gt;</span><span class="n">self</span><span class="p">%</span><span class="n">integrand_0</span><span class="p">)</span>
+         <span class="k">type is</span><span class="p">(</span><span class="n">integrand_oscillation</span><span class="p">)</span>
+            <span class="n">integrand_0</span> <span class="o">=</span> <span class="n">self</span><span class="p">%</span><span class="n">oscillation_0</span>
+         <span class="n">endselect</span>
       <span class="k">else</span>
 <span class="k">         allocate</span><span class="p">(</span><span class="n">integrand_oscillation</span> <span class="kd">::</span> <span class="n">self</span><span class="p">%</span><span class="n">integrand_0</span><span class="p">)</span>
-         <span class="n">self</span><span class="p">%</span><span class="n">integrand_0</span> <span class="o">=</span> <span class="n">self</span><span class="p">%</span><span class="n">oscillation_0</span>
+         <span class="k">select type</span><span class="p">(</span><span class="n">integrand_0</span><span class="o">=&gt;</span><span class="n">self</span><span class="p">%</span><span class="n">integrand_0</span><span class="p">)</span>
+         <span class="k">type is</span><span class="p">(</span><span class="n">integrand_oscillation</span><span class="p">)</span>
+            <span class="n">integrand_0</span> <span class="o">=</span> <span class="n">self</span><span class="p">%</span><span class="n">oscillation_0</span>
+         <span class="n">endselect</span>
       <span class="n">endif</span>
 
       <span class="k">if</span> <span class="p">(.</span><span class="nb">not</span><span class="p">.</span><span class="n">is_dt_valid</span><span class="p">())</span> <span class="k">then</span>
@@ -2332,7 +2344,7 @@ private subroutine initialize(self)
           <p class="text-right">
             Documentation generated by 
             <a href="https://github.com/cmacmackin/ford">FORD</a>
-             on 2017-07-13 08:06  
+             on 2017-07-21 08:07  
           </p>
         </div>
         <div class="col-xs-12 col-md-4 col-md-pull-4"><p class="text-center"> FOODIE was developed by Fortran-FOSS-Programmers Group</p></div>

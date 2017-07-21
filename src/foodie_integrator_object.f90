@@ -55,7 +55,7 @@ abstract interface
   character(len=:), allocatable                  :: desc   !< Description.
   endfunction description_interface
 
-  pure subroutine assignment_interface(lhs, rhs)
+  subroutine assignment_interface(lhs, rhs)
   !< Operator `=`.
   import :: integrator_object
   class(integrator_object), intent(inout) :: lhs !< Left hand side.
@@ -101,7 +101,7 @@ endinterface
 
 contains
   ! public methods
-  pure subroutine assign_abstract(lhs, rhs)
+  subroutine assign_abstract(lhs, rhs)
   !< Assign ony members of abstract [[integrator_object]] type.
   class(integrator_object), intent(inout) :: lhs !< Left hand side.
   class(integrator_object), intent(in)    :: rhs !< Right hand side.

@@ -107,7 +107,7 @@ endtype integrand_ladvection
 
 contains
    ! auxiliary methods
-   pure subroutine destroy(self)
+   subroutine destroy(self)
    !< Destroy field.
    class(integrand_ladvection), intent(inout) :: self  !< Advection field.
    type(integrand_ladvection)                 :: fresh !< Fresh field to reset self.
@@ -326,7 +326,7 @@ contains
    integer(I_P)                                      :: i                            !< Counter.
 
    do i=1, self%Ni
-      U(i) = self%U(i)
+      u(i) = self%u(i)
    enddo
    call self%impose_boundary_conditions(u=u)
    call self%reconstruct_interfaces(conservative=u, r_conservative=ur)
@@ -493,7 +493,7 @@ contains
    endfunction real_sub_integrand
 
    ! =
-   pure subroutine assign_integrand(lhs, rhs)
+   subroutine assign_integrand(lhs, rhs)
    !< `=` operator.
    class(integrand_ladvection), intent(inout) :: lhs !< Left hand side.
    class(integrand_object),     intent(in)    :: rhs !< Right hand side.
@@ -515,7 +515,10 @@ contains
          if (allocated(lhs%u)) deallocate(lhs%u)
       endif
       if (allocated(rhs%interpolator)) then
-         if (allocated(lhs%interpolator)) deallocate(lhs%interpolator)
+         if (allocated(lhs%interpolator)) then
+            call lhs%interpolator%destroy
+            deallocate(lhs%interpolator)
+         endif
          allocate(lhs%interpolator, mold=rhs%interpolator)
          lhs%interpolator = rhs%interpolator
       else
@@ -554,7 +557,6 @@ contains
    class(integrand_ladvection), intent(in)    :: self                         !< Advection field.
    real(R_P),                   intent(in)    :: conservative(1-self%Ng:)     !< Conservative variables.
    real(R_P),                   intent(inout) :: r_conservative(1:, 0:)       !< Reconstructed conservative vars.
-   real(R_P), allocatable                     :: U(:)                         !< Serialized conservative variables.
    real(R_P)                                  :: C(1:2, 1-self%Ng:-1+self%Ng) !< Stencils.
    real(R_P)                                  :: CR(1:2)                      !< Reconstrcuted intrafaces.
    integer(I_P)                               :: i                            !< Counter.

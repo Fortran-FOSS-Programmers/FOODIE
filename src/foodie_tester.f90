@@ -89,11 +89,11 @@ contains
    endif
    allocate(error(1:size(self%integrand_0%error(t=0._R_P), dim=1), 1:size(self%Dt, dim=1)))
    if (size(self%Dt, dim=1) > 1) allocate(order(1:size(error, dim=1), 1:size(error, dim=2)-1))
-   print '(A)', self%integrand_0%description()
    do s=1, size(integrator_schemes, dim=1)
       print '(A)', trim(integrator_schemes(s))
       do t=1, size(self%Dt)
          call self%integrand_0%initialize(Dt=self%Dt(t))
+         print '(A)', self%integrand_0%description()
          call integrate(scheme=trim(integrator_schemes(s)),          &
                         integrand_0=self%integrand_0,                &
                         Dt=self%Dt(t),                               &
@@ -142,7 +142,7 @@ contains
          call cli%add(group='test', switch='--iterations', help='iterations number for implicit schemes', required=.false., &
                       act='store', def='5')
          call cli%add(group='test', switch='--stages', help='stages number', required=.false., def='2', act='store')
-         call cli%add(group='test', switch='--final_time', switch_ab='-ft', help='integration time', required=.false., def='1e6', &
+         call cli%add(group='test', switch='--final_time', switch_ab='-ft', help='integration time', required=.false., def='1', &
                       act='store')
          call cli%add(group='test', switch='--save_results', switch_ab='-r',help='save result', required=.false., &
                       act='store_true', def='.false.')
@@ -179,16 +179,28 @@ contains
 
       if     (self%cli%run_command('lcce')) then
          allocate(integrand_lcce :: self%integrand_0)
-         self%integrand_0 = self%lcce_0
+         select type(integrand_0=>self%integrand_0)
+         type is(integrand_lcce)
+            integrand_0 = self%lcce_0
+         endselect
       elseif (self%cli%run_command('linear_advection')) then
          allocate(integrand_ladvection :: self%integrand_0)
-         self%integrand_0 = self%ladvection_0
+         select type(integrand_0=>self%integrand_0)
+         type is(integrand_ladvection)
+            integrand_0 = self%ladvection_0
+         endselect
       elseif (self%cli%run_command('oscillation')) then
          allocate(integrand_oscillation :: self%integrand_0)
-         self%integrand_0 = self%oscillation_0
+         select type(integrand_0=>self%integrand_0)
+         type is(integrand_oscillation)
+            integrand_0 = self%oscillation_0
+         endselect
       else
          allocate(integrand_oscillation :: self%integrand_0)
-         self%integrand_0 = self%oscillation_0
+         select type(integrand_0=>self%integrand_0)
+         type is(integrand_oscillation)
+            integrand_0 = self%oscillation_0
+         endselect
       endif
 
       if (.not.is_dt_valid()) then
