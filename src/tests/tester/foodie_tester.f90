@@ -142,7 +142,7 @@ contains
          call cli%add(group='test', switch='--iterations', help='iterations number for implicit schemes', required=.false., &
                       act='store', def='5')
          call cli%add(group='test', switch='--stages', help='stages number', required=.false., def='2', act='store')
-         call cli%add(group='test', switch='--final_time', switch_ab='-ft', help='integration time', required=.false., def='1e6', &
+         call cli%add(group='test', switch='--final_time', switch_ab='-ft', help='integration time', required=.false., def='1', &
                       act='store')
          call cli%add(group='test', switch='--save_results', switch_ab='-r',help='save result', required=.false., &
                       act='store_true', def='.false.')
