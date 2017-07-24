@@ -89,11 +89,11 @@ contains
    endif
    allocate(error(1:size(self%integrand_0%error(t=0._R_P), dim=1), 1:size(self%Dt, dim=1)))
    if (size(self%Dt, dim=1) > 1) allocate(order(1:size(error, dim=1), 1:size(error, dim=2)-1))
-   print '(A)', self%integrand_0%description()
    do s=1, size(integrator_schemes, dim=1)
       print '(A)', trim(integrator_schemes(s))
       do t=1, size(self%Dt)
          call self%integrand_0%initialize(Dt=self%Dt(t))
+         print '(A)', self%integrand_0%description()
          call integrate(scheme=trim(integrator_schemes(s)),          &
                         integrand_0=self%integrand_0,                &
                         Dt=self%Dt(t),                               &

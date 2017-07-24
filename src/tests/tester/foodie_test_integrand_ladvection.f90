@@ -515,7 +515,10 @@ contains
          if (allocated(lhs%u)) deallocate(lhs%u)
       endif
       if (allocated(rhs%interpolator)) then
-         if (allocated(lhs%interpolator)) deallocate(lhs%interpolator)
+         if (allocated(lhs%interpolator)) then
+            call lhs%interpolator%destroy
+            deallocate(lhs%interpolator)
+         endif
          allocate(lhs%interpolator, mold=rhs%interpolator)
          lhs%interpolator = rhs%interpolator
       else
