@@ -38,7 +38,7 @@ type, extends(integrand_tester_object) :: integrand_ladvection
    !<                 |                   |
    !<                 v                   v
    !<     |-------|-------|-.....-|-------|-------|-------|-------|-.....-|-------|-------|-------|-.....-|-------|-------|
-   !<     | 1-Ng  | 2-Ng  | ..... |  -1   |   0   |   1   |  2    | ..... |  Ni   | Ni+1  | Ni+1  | ..... |Ni+Ng-1| Ni+Ng |
+   !<     | 1-Ng  | 2-Ng  | ..... |  -1   |   0   |   1   |  2    | ..... |  Ni   | Ni+1  | Ni+2  | ..... |Ni+Ng-1| Ni+Ng |
    !<     |-------|-------|-.....-|-------|-------|-------|-------|-.....-|-------|-------|-------|-.....-|-------|-------|
    !<    0-Ng                             -1      0       1       2      Ni-1     Ni                                    Ni+Ng
    !<```
@@ -510,7 +510,7 @@ contains
       lhs%Dx         = rhs%Dx
       lhs%a          = rhs%a
       if (allocated(rhs%u)) then
-         lhs%u(:) = rhs%u(:)
+         lhs%u = rhs%u
       else
          if (allocated(lhs%u)) deallocate(lhs%u)
       endif
