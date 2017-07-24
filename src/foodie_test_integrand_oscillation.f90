@@ -254,7 +254,11 @@ contains
    class is(integrand_oscillation)
       error = 0._R_P
       do i=1, size(lhs%U, dim=1)
-         error = error + (lhs%U(i) - rhs%U(i)) ** 2 / lhs%U(i) ** 2
+         if (lhs%U(i) /= 0._R_P) then
+            error = error + (lhs%U(i) - rhs%U(i)) ** 2 / lhs%U(i) ** 2
+         elseif (rhs%U(i) /= 0._R_P) then
+            error = error + (lhs%U(i) - rhs%U(i)) ** 2 / rhs%U(i) ** 2
+         endif
       enddo
       error = sqrt(error)
    endselect
