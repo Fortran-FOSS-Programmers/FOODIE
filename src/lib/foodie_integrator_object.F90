@@ -1,3 +1,4 @@
+#include "preprocessor_macros.h"
 !< Define the abstract type [[integrator_object]] of FOODIE ODE integrators.
 
 module foodie_integrator_object
@@ -47,7 +48,7 @@ abstract interface
   character(len=99)                    :: class_name !< Class name.
   endfunction class_name_interface
 
-  pure function description_interface(self, prefix) result(desc)
+  _PURE_ function description_interface(self, prefix) result(desc)
   !< Return a pretty-formatted object description.
   import :: integrator_object
   class(integrator_object), intent(in)           :: self   !< Integrator.
@@ -55,7 +56,7 @@ abstract interface
   character(len=:), allocatable                  :: desc   !< Description.
   endfunction description_interface
 
-  subroutine assignment_interface(lhs, rhs)
+  _PURE_ subroutine assignment_interface(lhs, rhs)
   !< Operator `=`.
   import :: integrator_object
   class(integrator_object), intent(inout) :: lhs !< Left hand side.
@@ -101,7 +102,7 @@ endinterface
 
 contains
   ! public methods
-  subroutine assign_abstract(lhs, rhs)
+  pure subroutine assign_abstract(lhs, rhs)
   !< Assign ony members of abstract [[integrator_object]] type.
   class(integrator_object), intent(inout) :: lhs !< Left hand side.
   class(integrator_object), intent(in)    :: rhs !< Right hand side.

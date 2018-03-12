@@ -86,7 +86,7 @@ contains
   has_fast_mode = has_fast_mode_
   endfunction has_fast_mode
 
-  subroutine integr_assign_integr(lhs, rhs)
+  pure subroutine integr_assign_integr(lhs, rhs)
   !< Operator `=`.
   class(integrator_lmm_ssp), intent(inout) :: lhs !< Left hand side.
   class(integrator_object),  intent(in)    :: rhs !< Right hand side.

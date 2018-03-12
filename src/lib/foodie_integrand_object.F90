@@ -1,3 +1,4 @@
+#include "preprocessor_macros.h"
 !< Define the abstract type *integrand* for building FOODIE ODE integrators.
 
 module foodie_integrand_object
@@ -16,6 +17,7 @@ type, abstract :: integrand_object
 #endif
   contains
     ! public deferred procedures that concrete integrand-field must implement
+    procedure(description_interface),         pass(self), deferred, public :: description         !< Return integrand description.
     procedure(integrand_dimension_interface), pass(self), deferred, public :: integrand_dimension !< Return integrand dimension.
     procedure(time_derivative),               pass(self), deferred, public :: t                   !< Time derivative, residuals.
     ! operators
@@ -65,7 +67,15 @@ endtype integrand_object
 abstract interface
    !< Abstract type bound procedures necessary for implementing a concrete extension of [[integrand_object]].
 
-   pure function integrand_dimension_interface(self) result(integrand_dimension)
+   _PURE_ function description_interface(self, prefix) result(desc)
+   !< Return integrand descritpion.
+   import :: integrand_object, I_P
+   class(integrand_object),  intent(in)           :: self   !< Integrand.
+   character(*),             intent(in), optional :: prefix !< Prefixing string.
+   character(len=:), allocatable                  :: desc   !< Description.
+   endfunction description_interface
+
+   _PURE_ function integrand_dimension_interface(self) result(integrand_dimension)
    !< Return integrand dimension.
    import :: integrand_object, I_P
    class(integrand_object), intent(in) :: self                !< Integrand.
@@ -89,7 +99,7 @@ abstract interface
   real(R_P)                           :: error !< Error estimation.
   endfunction local_error_operator
 
-  pure function integrand_op_real(lhs, rhs) result(operator_result)
+  _PURE_ function integrand_op_real(lhs, rhs) result(operator_result)
   !< Asymmetric type operator `integrand.op.real`.
   import :: integrand_object, R_P
   class(integrand_object), intent(in) :: lhs                !< Left hand side.
@@ -97,7 +107,7 @@ abstract interface
   real(R_P), allocatable              :: operator_result(:) !< Operator result.
   endfunction integrand_op_real
 
-  pure function real_op_integrand(lhs, rhs) result(operator_result)
+  _PURE_ function real_op_integrand(lhs, rhs) result(operator_result)
   !< Asymmetric type operator `real.op.integrand`.
   import :: integrand_object, R_P
   class(integrand_object), intent(in) :: rhs                !< Right hand side.
@@ -105,7 +115,7 @@ abstract interface
   real(R_P), allocatable              :: operator_result(:) !< Operator result.
   endfunction real_op_integrand
 
-  pure function integrand_op_real_scalar(lhs, rhs) result(operator_result)
+  _PURE_ function integrand_op_real_scalar(lhs, rhs) result(operator_result)
   !< Asymmetric type operator `integrand.op.real`.
   import :: integrand_object, R_P
   class(integrand_object), intent(in) :: lhs                !< Left hand side.
@@ -113,7 +123,7 @@ abstract interface
   real(R_P), allocatable              :: operator_result(:) !< Operator result.
   endfunction integrand_op_real_scalar
 
-  pure function real_scalar_op_integrand(lhs, rhs) result(operator_result)
+  _PURE_ function real_scalar_op_integrand(lhs, rhs) result(operator_result)
   !< Asymmetric type operator `real.op.integrand`.
   import :: integrand_object, R_P
   real(R_P),               intent(in) :: lhs                !< Left hand side.
@@ -121,7 +131,7 @@ abstract interface
   real(R_P), allocatable              :: operator_result(:) !< Operator result.
   endfunction real_scalar_op_integrand
 
-  pure function symmetric_operator(lhs, rhs) result(operator_result)
+  _PURE_ function symmetric_operator(lhs, rhs) result(operator_result)
   !< Symmetric type operator integrand.op.integrand.
   import :: integrand_object, R_P
   class(integrand_object), intent(in) :: lhs                !< Left hand side.
@@ -129,14 +139,14 @@ abstract interface
   real(R_P), allocatable              :: operator_result(:) !< Operator result.
   endfunction symmetric_operator
 
-  subroutine assignment_integrand(lhs, rhs)
+  _PURE_ subroutine assignment_integrand(lhs, rhs)
   !< Symmetric assignment integrand = integrand.
   import :: integrand_object
   class(integrand_object), intent(inout) :: lhs !< Left hand side.
   class(integrand_object), intent(in)    :: rhs !< Right hand side.
   endsubroutine assignment_integrand
 
-  pure subroutine assignment_real(lhs, rhs)
+  _PURE_ subroutine assignment_real(lhs, rhs)
   !< Symmetric assignment integrand = integrand.
   import :: integrand_object, R_P
   class(integrand_object), intent(inout) :: lhs     !< Left hand side.
@@ -156,7 +166,7 @@ contains
    endsubroutine t_fast
 
    ! +
-   pure subroutine integrand_add_integrand_fast(opr, lhs, rhs)
+   _PURE_ subroutine integrand_add_integrand_fast(opr, lhs, rhs)
    !< `+` fast operator.
    !<
    !< @note This procedure must be overridden, it does not implement anything.
@@ -166,7 +176,7 @@ contains
    endsubroutine integrand_add_integrand_fast
 
    ! *
-   pure subroutine integrand_multiply_integrand_fast(opr, lhs, rhs)
+   _PURE_ subroutine integrand_multiply_integrand_fast(opr, lhs, rhs)
    !< `*` fast operator.
    !<
    !< @note This procedure must be overridden, it does not implement anything.
@@ -175,7 +185,7 @@ contains
    class(integrand_object), intent(in)    :: rhs !< Right hand side.
    endsubroutine integrand_multiply_integrand_fast
 
-   pure subroutine integrand_multiply_real_scalar_fast(opr, lhs, rhs)
+   _PURE_ subroutine integrand_multiply_real_scalar_fast(opr, lhs, rhs)
    !< `* real_scalar` fast operator.
    !<
    !< @note This procedure must be overridden, it does not implement anything.
@@ -185,7 +195,7 @@ contains
    endsubroutine integrand_multiply_real_scalar_fast
 
    ! -
-   pure subroutine integrand_subtract_integrand_fast(opr, lhs, rhs)
+   _PURE_ subroutine integrand_subtract_integrand_fast(opr, lhs, rhs)
    !< `-` fast operator.
    !<
    !< @note This procedure must be overridden, it does not implement anything.

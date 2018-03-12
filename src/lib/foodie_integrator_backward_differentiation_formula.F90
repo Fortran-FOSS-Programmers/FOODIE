@@ -1,3 +1,4 @@
+#include "preprocessor_macros.h"
 !< FOODIE integrator: provide an implicit class of Backward Differentiation Formula schemes, from 1st to 6th order accurate.
 
 module foodie_integrator_backward_differentiation_formula
@@ -96,7 +97,7 @@ contains
   has_fast_mode = has_fast_mode_
   endfunction has_fast_mode
 
-  subroutine integr_assign_integr(lhs, rhs)
+  _PURE_ subroutine integr_assign_integr(lhs, rhs)
   !< Operator `=`.
   class(integrator_back_df), intent(inout) :: lhs !< Left hand side.
   class(integrator_object),  intent(in)    :: rhs !< Right hand side.

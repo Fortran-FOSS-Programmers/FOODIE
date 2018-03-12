@@ -1,3 +1,4 @@
+#include "preprocessor_macros.h"
 !< FOODIE integrator: provide a predictor-corrector class of Adams-Bashforth-Moutlon multi-step schemes, from 1st to 4rd order
 !< accurate.
 
@@ -151,7 +152,7 @@ contains
   has_fast_mode = has_fast_mode_
   endfunction has_fast_mode
 
-  subroutine integr_assign_integr(lhs, rhs)
+  _PURE_ subroutine integr_assign_integr(lhs, rhs)
   !< Operator `=`.
   class(integrator_adams_bashforth_moulton), intent(inout) :: lhs !< Left hand side.
   class(integrator_object),                  intent(in)    :: rhs !< Right hand side.

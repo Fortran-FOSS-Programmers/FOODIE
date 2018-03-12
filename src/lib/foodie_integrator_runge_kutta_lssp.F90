@@ -1,3 +1,4 @@
+#include "preprocessor_macros.h"
 !< FOODIE integrator: provide an explicit class of Linear SSP Runge-Kutta schemes, from 1st to s-th order accurate.
 
 module foodie_integrator_runge_kutta_lssp
@@ -144,7 +145,7 @@ contains
   has_fast_mode = has_fast_mode_
   endfunction has_fast_mode
 
-  subroutine integr_assign_integr(lhs, rhs)
+  _PURE_ subroutine integr_assign_integr(lhs, rhs)
   !< Operator `=`.
   class(integrator_runge_kutta_lssp), intent(inout) :: lhs !< Left hand side.
   class(integrator_object),           intent(in)    :: rhs !< Right hand side.

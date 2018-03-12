@@ -1,3 +1,4 @@
+#include "preprocessor_macros.h"
 !< Define the abstract type [[integrator_multistage_object]] of FOODIE ODE integrators.
 
 module foodie_integrator_multistage_object
@@ -113,7 +114,7 @@ contains
    endif
    endsubroutine allocate_integrand_members
 
-   subroutine assign_multistage(lhs, rhs)
+   _PURE_ subroutine assign_multistage(lhs, rhs)
    !< Assign members of [[integrator_multistage_object]] and parents.
    class(integrator_multistage_object), intent(inout) :: lhs !< Left hand side.
    class(integrator_object),            intent(in)    :: rhs !< Right hand side.
