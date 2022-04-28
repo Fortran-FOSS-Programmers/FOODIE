@@ -31,7 +31,7 @@
 
 ## What is FOODIE?
 
-Modern Fortran standards (2003+) have introduced support for Object-Oriented Programming (OOP). Exploiting new features like Abstract Data Type (ADT) is now possible to develop a KISS library providing an awesome environment for the numerical integration of Differential-equations such as Ordinary and Partial Differential Eqautions (ODE, PDE). FOODIE is tailored to the systems arising from the semi-discretization of PDEs, but it is not limited to them.
+Modern Fortran standards (2003+) have introduced support for Object-Oriented Programming (OOP). Exploiting new features like Abstract Data Type (ADT) is now possible to develop a KISS library providing an awesome environment for the numerical integration of Differential-equations such as Ordinary and Partial Differential Equations (ODE, PDE). FOODIE is tailored to the systems arising from the semi-discretization of PDEs, but it is not limited to them.
 
 The FOODIE environment allows the (numerical) solution of general, non linear differential equations system of the form:
 
