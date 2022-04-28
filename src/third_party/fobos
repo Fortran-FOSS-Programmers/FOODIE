@@ -1,6 +1,8 @@
 [modes]
-modes = flap-static-gnu flap-static-gnu-debug
+modes = face-static-gnu face-static-gnu-debug
+        flap-static-gnu flap-static-gnu-debug
         flap-static-intel flap-static-intel-debug
+        penf-static-gnu penf-static-gnu-debug
         pyplot-fortran-static-gnu pyplot-fortran-static-gnu-debug
         pyplot-fortran-static-intel pyplot-fortran-static-intel-debug
         wenoof-static-gnu wenoof-static-gnu-debug
@@ -14,6 +16,21 @@ $DEBUG_INT   = -O0 -debug all -check all -warn all -extend-source 132 -traceback
 $OPTIMIZE    = -O2
 
 # main modes
+# FACE
+[face-static-gnu]
+template  = template-static-gnu
+src       = ./FACE/src/
+build_dir = ./lib/face/
+target    = face.F90
+output    = libface.a
+
+[face-static-gnu-debug]
+template  = template-static-gnu-debug
+src       = ./FACE/src/
+build_dir = ./lib/face/
+target    = face.F90
+output    = libface.a
+
 # FLAP
 [flap-static-gnu]
 template  = template-static-gnu
@@ -42,6 +59,21 @@ src       = ./FLAP/src/
 build_dir = ./lib/flap/
 target    = flap.f90
 output    = libflap.a
+
+# PENF
+[penf-static-gnu]
+template  = template-static-gnu
+src       = ./PENF/src/
+build_dir = ./lib/penf/
+target    = penf.F90
+output    = libpenf.a
+
+[penf-static-gnu-debug]
+template  = template-static-gnu-debug
+src       = ./PENF/src/
+build_dir = ./lib/penf/
+target    = penf.F90
+output    = libpenf.a
 
 # pyplot-fortran
 [pyplot-fortran-static-gnu]

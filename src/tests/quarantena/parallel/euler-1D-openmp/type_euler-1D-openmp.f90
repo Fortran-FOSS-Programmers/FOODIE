@@ -1,23 +1,16 @@
 !< Define Euler 1D (OpenMP enabled) field that is a concrete extension of the abstract integrand type.
 module type_euler_1D_openmp
-!-----------------------------------------------------------------------------------------------------------------------------------
 !< Define Euler 1D (OpenMP enabled) field that is a concrete extension of the abstract integrand type.
-!-----------------------------------------------------------------------------------------------------------------------------------
 
-!-----------------------------------------------------------------------------------------------------------------------------------
-use IR_Precision, only : R_P, I_P
-use foodie, only : integrand
+use penf, only : R_P, I_P
+use foodie, only : integrand_object
 use wenoof, only : weno_factory, weno_constructor_upwind, weno_interpolator, weno_interpolator_upwind
-!-----------------------------------------------------------------------------------------------------------------------------------
 
-!-----------------------------------------------------------------------------------------------------------------------------------
 implicit none
 private
 public :: euler_1D_openmp
-!-----------------------------------------------------------------------------------------------------------------------------------
 
-!-----------------------------------------------------------------------------------------------------------------------------------
-type, extends(integrand) :: euler_1D_openmp
+type, extends(integrand_object) :: euler_1D_openmp
   !< Euler 1D (OpenMP enabled) PDEs system field.
   !<
   !< It is a FOODIE integrand class concrete extension.
@@ -146,15 +139,27 @@ type, extends(integrand) :: euler_1D_openmp
     procedure, pass(self), public :: output           !< Extract Euler field.
     procedure, pass(self), public :: dt => compute_dt !< Compute the current time step, by means of CFL condition.
     ! ADT integrand deferred methods
-    procedure, pass(self), public :: t => dEuler_dt                                       !< Time derivative, residuals function.
-    procedure, pass(lhs),  public :: local_error => euler_local_error                     !<||euler-euler||.
-    procedure, pass(lhs),  public :: integrand_multiply_integrand => euler_multiply_euler !< Euler * Euler operator.
-    procedure, pass(lhs),  public :: integrand_multiply_real => euler_multiply_real       !< Euler * real operator.
-    procedure, pass(rhs),  public :: real_multiply_integrand => real_multiply_euler       !< Real * Euler operator.
-    procedure, pass(lhs),  public :: add => add_euler                                     !< Euler + Euler operator.
-    procedure, pass(lhs),  public :: sub => sub_euler                                     !< Euler - Euler.
-    procedure, pass(lhs),  public :: assign_integrand => euler_assign_euler               !< Euler = Euler.
-    procedure, pass(lhs),  public :: assign_real => euler_assign_real                     !< Euler = real.
+    procedure, pass(self), public :: t => dEuler_dt                         !< Time derivative, residuals function.
+    procedure, pass(self), public :: description                            !< Return an informative description of the test.
+    procedure, pass(self), public :: integrand_dimension => euler_dimension !< Return integrand dimension.
+    procedure, pass(lhs),  public :: local_error => euler_local_error       !<||euler-euler||.
+    ! * operator
+    procedure, pass(lhs), public :: integrand_multiply_integrand => euler_multiply_euler         !< Euler * Euler operator.
+    procedure, pass(lhs), public :: integrand_multiply_real => euler_multiply_real               !< Euler * real operator.
+    procedure, pass(rhs), public :: real_multiply_integrand => real_multiply_euler               !< Real * Euler operator.
+    procedure, pass(lhs), public :: integrand_multiply_real_scalar => euler_multiply_real_scalar !< Euler * real operator.
+    procedure, pass(rhs), public :: real_scalar_multiply_integrand => real_scalar_multiply_euler !< Real * Euler operator.
+    ! + operator
+    procedure, pass(lhs), public :: integrand_add_integrand => euler_add_euler !< `+` operator.
+    procedure, pass(lhs), public :: integrand_add_real      => euler_add_real  !< `+ real` operator.
+    procedure, pass(rhs), public :: real_add_integrand      => real_add_euler  !< `real +` operator.
+    ! - operator
+    procedure, pass(lhs), public :: integrand_sub_integrand => euler_sub_euler !< Euler - Euler.
+    procedure, pass(lhs), public :: integrand_sub_real      => euler_sub_real  !< `- real` operator.
+    procedure, pass(rhs), public :: real_sub_integrand      => real_sub_euler  !< `real -` operator.
+    ! = operator
+    procedure, pass(lhs),  public :: assign_integrand => euler_assign_euler !< Euler = Euler.
+    procedure, pass(lhs),  public :: assign_real      => euler_assign_real  !< Euler = real.
     ! private methods
     procedure, pass(self), private :: primitive2conservative        !< Convert primitive variables to conservative ones.
     procedure, pass(self), private :: conservative2primitive        !< Convert conservative variables to primitive ones.
@@ -162,13 +167,10 @@ type, extends(integrand) :: euler_1D_openmp
     procedure, pass(self), private :: reconstruct_interfaces_states !< Reconstruct interfaces states.
     procedure, pass(self), private :: riemann_solver                !< Solve the Riemann Problem at cell interfaces.
 endtype euler_1D_openmp
-!-----------------------------------------------------------------------------------------------------------------------------------
 contains
   ! auxiliary methods
   subroutine init(self, Ni, Ns, Dx, BC_L, BC_R, initial_state, cp0, cv0, ord)
-  !---------------------------------------------------------------------------------------------------------------------------------
   !< Init field.
-  !---------------------------------------------------------------------------------------------------------------------------------
   class(euler_1D_openmp), intent(INOUT) :: self               !< Euler field.
   integer(I_P),           intent(IN)    :: Ni                 !< Space dimension.
   integer(I_P),           intent(IN)    :: Ns                 !< Number of initial species.
@@ -182,9 +184,7 @@ contains
   type(weno_factory)                    :: factory            !< WENO factory.
   class(weno_interpolator), allocatable :: weno               !< WENO interpolator.
   integer(I_P)                          :: i                  !< Space counter.
-  !---------------------------------------------------------------------------------------------------------------------------------
 
-  !---------------------------------------------------------------------------------------------------------------------------------
   self%ord = 1 ; if (present(ord)) self%ord = ord
   self%Ng = (self%ord + 1) / 2
   if (self%ord>1) then
@@ -205,7 +205,6 @@ contains
     self%U(:, i) = self%primitive2conservative(initial_state(:, i))
   enddo
   return
-  !---------------------------------------------------------------------------------------------------------------------------------
   endsubroutine init
 
   pure subroutine destroy(self)
@@ -288,7 +287,7 @@ contains
   !---------------------------------------------------------------------------------------------------------------------------------
   class(euler_1D_openmp), intent(IN) :: self      !< Euler field.
   real(R_P),    optional, intent(IN) :: t         !< Time.
-  class(integrand), allocatable      :: dState_dt !< Euler field time derivative.
+  class(integrand_object), allocatable      :: dState_dt !< Euler field time derivative.
   real(R_P), allocatable             :: F(:,:)    !< Fluxes of conservative variables.
   real(R_P), allocatable             :: P(:,:)    !< Primitive variables.
   real(R_P), allocatable             :: PR(:,:,:) !< Left (1) and right (2) (reconstructed) interface values of primitive variables.
@@ -357,6 +356,25 @@ contains
   !---------------------------------------------------------------------------------------------------------------------------------
   endfunction dEuler_dt
 
+   pure function description(self, prefix) result(desc)
+   !< Return informative integrator description.
+   class(euler_1D_openmp),  intent(in)           :: self    !< Integrand.
+   character(*),            intent(in), optional :: prefix  !< Prefixing string.
+   character(len=:), allocatable                 :: desc    !< Description.
+   character(len=:), allocatable                 :: prefix_ !< Prefixing string, local variable.
+
+   prefix_ = '' ; if (present(prefix)) prefix_ = prefix
+   desc = prefix//'Euler 1D OpenMP'
+   endfunction description
+
+   pure function euler_dimension(self)
+   !< return integrand dimension.
+   class(euler_1D_openmp),  intent(in) :: self            !< Integrand.
+   integer(I_P)                        :: euler_dimension !< integrand dimension.
+
+   euler_dimension = size(self%U, dim=1) * size(self%U, dim=2)
+   endfunction euler_dimension
+
   function euler_local_error(lhs, rhs) result(error)
   !---------------------------------------------------------------------------------------------------------------------------------
   !< Estimate local truncation error between 2 euler approximations.
@@ -366,7 +384,7 @@ contains
   !< $$ error = \sqrt{ \sum_i{\sum_i{ \frac{(lhs\%U_i - rhs\%U_i)^2}{lhs\%U_i^2} }} } $$
   !---------------------------------------------------------------------------------------------------------------------------------
   class(euler_1D_openmp), intent(IN) :: lhs   !< Left hand side.
-  class(integrand),       intent(IN) :: rhs   !< Right hand side.
+  class(integrand_object),       intent(IN) :: rhs   !< Right hand side.
   real(R_P)                          :: error !< Error estimation.
   integer(I_P)                       :: i     !< Space counter.
   integer(I_P)                       :: v     !< Variables counter.
@@ -392,8 +410,8 @@ contains
   !< Multiply an Euler field by another one.
   !---------------------------------------------------------------------------------------------------------------------------------
   class(euler_1D_openmp), intent(IN) :: lhs !< Left hand side.
-  class(integrand),       intent(IN) :: rhs !< Right hand side.
-  class(integrand), allocatable      :: opr !< Operator result.
+  class(integrand_object),       intent(IN) :: rhs !< Right hand side.
+  class(integrand_object), allocatable      :: opr !< Operator result.
   integer(I_P)                       :: i   !< Counter.
   !---------------------------------------------------------------------------------------------------------------------------------
 
@@ -420,16 +438,58 @@ contains
   endfunction euler_multiply_euler
 
   function euler_multiply_real(lhs, rhs) result(opr)
-  !---------------------------------------------------------------------------------------------------------------------------------
-  !< Multiply an Euler field by a real scalar.
-  !---------------------------------------------------------------------------------------------------------------------------------
-  class(euler_1D_openmp), intent(IN) :: lhs !< Left hand side.
-  real(R_P),              intent(IN) :: rhs !< Right hand side.
-  class(integrand), allocatable      :: opr !< Operator result.
-  integer(I_P)                       :: i   !< Counter.
-  !---------------------------------------------------------------------------------------------------------------------------------
+  !< Multiply an Euler field by a real.
+  class(euler_1D_openmp), intent(in)   :: lhs     !< Left hand side.
+  real(R_P),              intent(in)   :: rhs(1:) !< Right hand side.
+  class(integrand_object), allocatable :: opr     !< Operator result.
+  integer(I_P)                         :: i       !< Counter.
 
-  !---------------------------------------------------------------------------------------------------------------------------------
+  allocate(euler_1D_openmp :: opr)
+  select type(opr)
+  class is(euler_1D_openmp)
+    opr = lhs
+  endselect
+  !$OMP PARALLEL DEFAULT(NONE) PRIVATE(i) SHARED(lhs, rhs, opr)
+  select type(opr)
+  class is(euler_1D_openmp)
+    !$OMP DO
+    do i=1, lhs%Ni
+      opr%U(:, i) = lhs%U(:, i) * rhs(i)
+    enddo
+  endselect
+  !$OMP END PARALLEL
+  endfunction euler_multiply_real
+
+  function real_multiply_euler(lhs, rhs) result(opr)
+  !< Multiply a real by an Euler field.
+  real(R_P),              intent(in)   :: lhs(1:) !< Left hand side.
+  class(euler_1D_openmp), intent(in)   :: rhs     !< Right hand side.
+  class(integrand_object), allocatable :: opr     !< Operator result.
+  integer(I_P)                         :: i       !< Counter.
+
+  allocate(euler_1D_openmp :: opr)
+  select type(opr)
+  class is(euler_1D_openmp)
+    opr = rhs
+  endselect
+  !$OMP PARALLEL DEFAULT(NONE) PRIVATE(i) SHARED(lhs, rhs, opr)
+  select type(opr)
+  class is(euler_1D_openmp)
+    !$OMP DO
+    do i=1, rhs%Ni
+      opr%U(:, i) = rhs%U(:, i) * lhs(i)
+    enddo
+  endselect
+  !$OMP END PARALLEL
+  endfunction real_multiply_euler
+
+  function euler_multiply_real_scalar(lhs, rhs) result(opr)
+  !< Multiply an Euler field by a real scalar.
+  class(euler_1D_openmp), intent(in)   :: lhs !< Left hand side.
+  real(R_P),              intent(in)   :: rhs !< Right hand side.
+  class(integrand_object), allocatable :: opr !< Operator result.
+  integer(I_P)                         :: i   !< Counter.
+
   allocate(euler_1D_openmp :: opr)
   select type(opr)
   class is(euler_1D_openmp)
@@ -444,21 +504,15 @@ contains
     enddo
   endselect
   !$OMP END PARALLEL
-  return
-  !---------------------------------------------------------------------------------------------------------------------------------
-  endfunction euler_multiply_real
+  endfunction euler_multiply_real_scalar
 
-  function real_multiply_euler(lhs, rhs) result(opr)
-  !---------------------------------------------------------------------------------------------------------------------------------
+  function real_scalar_multiply_euler(lhs, rhs) result(opr)
   !< Multiply a real scalar by an Euler field.
-  !---------------------------------------------------------------------------------------------------------------------------------
-  real(R_P),              intent(IN) :: lhs !< Left hand side.
-  class(euler_1D_openmp), intent(IN) :: rhs !< Right hand side.
-  class(integrand), allocatable      :: opr !< Operator result.
-  integer(I_P)                       :: i   !< Counter.
-  !---------------------------------------------------------------------------------------------------------------------------------
+  real(R_P),              intent(in)   :: lhs !< Left hand side.
+  class(euler_1D_openmp), intent(in)   :: rhs !< Right hand side.
+  class(integrand_object), allocatable :: opr !< Operator result.
+  integer(I_P)                         :: i   !< Counter.
 
-  !---------------------------------------------------------------------------------------------------------------------------------
   allocate(euler_1D_openmp :: opr)
   select type(opr)
   class is(euler_1D_openmp)
@@ -473,53 +527,101 @@ contains
     enddo
   endselect
   !$OMP END PARALLEL
-  return
-  !---------------------------------------------------------------------------------------------------------------------------------
-  endfunction real_multiply_euler
+  endfunction real_scalar_multiply_euler
 
-  function add_euler(lhs, rhs) result(opr)
-  !---------------------------------------------------------------------------------------------------------------------------------
+  pure function euler_add_euler(lhs, rhs) result(opr)
   !< Add two Euler fields.
-  !---------------------------------------------------------------------------------------------------------------------------------
-  class(euler_1D_openmp), intent(IN) :: lhs !< Left hand side.
-  class(integrand),       intent(IN) :: rhs !< Right hand side.
-  class(integrand), allocatable      :: opr !< Operator result.
-  integer(I_P)                       :: i   !< Counter.
-  !---------------------------------------------------------------------------------------------------------------------------------
+  class(euler_1D_openmp),  intent(in)  :: lhs !< Left hand side.
+  class(integrand_object), intent(in)  :: rhs !< Right hand side.
+  class(integrand_object), allocatable :: opr !< Operator result.
+  integer(I_P)                         :: i   !< Counter.
 
-  !---------------------------------------------------------------------------------------------------------------------------------
   allocate (euler_1D_openmp :: opr)
   select type(opr)
   class is(euler_1D_openmp)
     opr = lhs
   endselect
-  !$OMP PARALLEL DEFAULT(NONE) PRIVATE(i) SHARED(lhs, rhs, opr)
   select type(opr)
   class is(euler_1D_openmp)
     select type(rhs)
     class is (euler_1D_openmp)
-      !$OMP DO
       do i=1, lhs%Ni
         opr%U(:, i) = lhs%U(:, i) + rhs%U(:, i)
       enddo
     endselect
   endselect
-  !$OMP END PARALLEL
-  return
-  !---------------------------------------------------------------------------------------------------------------------------------
-  endfunction add_euler
+  endfunction euler_add_euler
 
-  function sub_euler(lhs, rhs) result(opr)
-  !---------------------------------------------------------------------------------------------------------------------------------
+  pure function euler_add_real(lhs, rhs) result(opr)
+  !< Add Euler field to real.
+  class(euler_1D_openmp),  intent(in)  :: lhs !< Left hand side.
+  real(R_P),               intent(in)  :: rhs !< Right hand side.
+  class(integrand_object), allocatable :: opr !< Operator result.
+  integer(I_P)                         :: i   !< Counter.
+
+  allocate (euler_1D_openmp :: opr)
+  select type(opr)
+  class is(euler_1D_openmp)
+    opr = lhs
+  endselect
+  select type(opr)
+  class is(euler_1D_openmp)
+    do i=1, lhs%Ni
+      opr%U(:, i) = lhs%U(:, i) + rhs
+    enddo
+  endselect
+  endfunction euler_add_real
+
+  pure function real_add_euler(lhs, rhs) result(opr)
+  !< Add Euler field to real.
+  real(R_P),               intent(in)  :: lhs !< Left hand side.
+  class(euler_1D_openmp),  intent(in)  :: rhs !< Right hand side.
+  class(integrand_object), allocatable :: opr !< Operator result.
+  integer(I_P)                         :: i   !< Counter.
+
+  allocate (euler_1D_openmp :: opr)
+  select type(opr)
+  class is(euler_1D_openmp)
+    opr = rhs
+  endselect
+  select type(opr)
+  class is(euler_1D_openmp)
+    do i=1, rhs%Ni
+      opr%U(:, i) = lhs + rhs%U(:, i)
+    enddo
+  endselect
+  endfunction real_add_euler
+
+  function euler_sub_euler(lhs, rhs) result(opr)
   !< Subtract two Euler fields.
-  !---------------------------------------------------------------------------------------------------------------------------------
-  class(euler_1D_openmp), intent(IN) :: lhs !< Left hand side.
-  class(integrand),       intent(IN) :: rhs !< Right hand side.
-  class(integrand), allocatable      :: opr !< Operator result.
-  integer(I_P)                       :: i   !< Counter.
-  !---------------------------------------------------------------------------------------------------------------------------------
+  class(euler_1D_openmp),  intent(in)  :: lhs !< Left hand side.
+  class(integrand_object), intent(in)  :: rhs !< Right hand side.
+  class(integrand_object), allocatable :: opr !< Operator result.
+  integer(I_P)                         :: i   !< Counter.
 
-  !---------------------------------------------------------------------------------------------------------------------------------
+  allocate (euler_1D_openmp :: opr)
+  select type(opr)
+  class is(euler_1D_openmp)
+    opr = lhs
+  endselect
+  select type(opr)
+  class is(euler_1D_openmp)
+    select type(rhs)
+    class is (euler_1D_openmp)
+      do i=1, lhs%Ni
+        opr%U(:, i) = lhs%U(:, i) - rhs%U(:, i)
+      enddo
+    endselect
+  endselect
+  endfunction euler_sub_euler
+
+  function euler_sub_real(lhs, rhs) result(opr)
+  !< Sub Euler field to real.
+  class(euler_1D_openmp),  intent(in)  :: lhs !< Left hand side.
+  real(R_P),               intent(in)  :: rhs !< Right hand side.
+  class(integrand_object), allocatable :: opr !< Operator result.
+  integer(I_P)                         :: i   !< Counter.
+
   allocate (euler_1D_openmp :: opr)
   select type(opr)
   class is(euler_1D_openmp)
@@ -528,29 +630,42 @@ contains
   !$OMP PARALLEL DEFAULT(NONE) PRIVATE(i) SHARED(lhs, rhs, opr)
   select type(opr)
   class is(euler_1D_openmp)
-    select type(rhs)
-    class is (euler_1D_openmp)
-      !$OMP DO
-      do i=1, lhs%Ni
-        opr%U(:, i) = lhs%U(:, i) - rhs%U(:, i)
-      enddo
-    endselect
+    !$OMP DO
+    do i=1, lhs%Ni
+      opr%U(:, i) = lhs%U(:, i) - rhs
+    enddo
   endselect
   !$OMP END PARALLEL
-  return
-  !---------------------------------------------------------------------------------------------------------------------------------
-  endfunction sub_euler
+  endfunction euler_sub_real
 
-  subroutine euler_assign_euler(lhs, rhs)
-  !---------------------------------------------------------------------------------------------------------------------------------
+  function real_sub_euler(lhs, rhs) result(opr)
+  !< Sub Euler field to real.
+  real(R_P),               intent(in)  :: lhs !< Left hand side.
+  class(euler_1D_openmp),  intent(in)  :: rhs !< Right hand side.
+  class(integrand_object), allocatable :: opr !< Operator result.
+  integer(I_P)                         :: i   !< Counter.
+
+  allocate (euler_1D_openmp :: opr)
+  select type(opr)
+  class is(euler_1D_openmp)
+    opr = rhs
+  endselect
+  !$OMP PARALLEL DEFAULT(NONE) PRIVATE(i) SHARED(lhs, rhs, opr)
+  select type(opr)
+  class is(euler_1D_openmp)
+    !$OMP DO
+    do i=1, rhs%Ni
+      opr%U(:, i) = lhs - rhs%U(:, i)
+    enddo
+  endselect
+  !$OMP END PARALLEL
+  endfunction real_sub_euler
+
+  pure subroutine euler_assign_euler(lhs, rhs)
   !< Assign one Euler field to another.
-  !---------------------------------------------------------------------------------------------------------------------------------
-  class(euler_1D_openmp), intent(INOUT) :: lhs !< Left hand side.
-  class(integrand),       intent(IN)    :: rhs !< Right hand side.
-  integer(I_P)                          :: i   !< Counter.
-  !---------------------------------------------------------------------------------------------------------------------------------
+  class(euler_1D_openmp),  intent(inout) :: lhs !< Left hand side.
+  class(integrand_object), intent(in)    :: rhs !< Right hand side.
 
-  !---------------------------------------------------------------------------------------------------------------------------------
   select type(rhs)
   class is(euler_1D_openmp)
                              lhs%ord  = rhs%ord
@@ -562,46 +677,28 @@ contains
                              lhs%Dx   = rhs%Dx
                              lhs%weno = rhs%weno
     if (allocated(rhs%U)) then
-      if (allocated(lhs%U)) deallocate(lhs%U) ; allocate(lhs%U(1:lhs%Nc, 1:lhs%Ni))
+      if (allocated(lhs%U)) deallocate(lhs%U)
+      allocate(lhs%U(1:lhs%Nc, 1:lhs%Ni))
+      lhs%U = rhs%U
     endif
     if (allocated(rhs%cp0))  lhs%cp0  = rhs%cp0
     if (allocated(rhs%cv0))  lhs%cv0  = rhs%cv0
     if (allocated(rhs%BC_L)) lhs%BC_L = rhs%BC_L
     if (allocated(rhs%BC_R)) lhs%BC_R = rhs%BC_R
   endselect
-  !$OMP PARALLEL DEFAULT(NONE) PRIVATE(i) SHARED(lhs, rhs)
-  select type(rhs)
-  class is(euler_1D_openmp)
-    if (allocated(rhs%U)) then
-      !$OMP DO
-      do i=1, lhs%Ni
-        lhs%U(:, i) = rhs%U(:, i)
-      enddo
-    endif
-  endselect
-  !$OMP END PARALLEL
-  return
-  !---------------------------------------------------------------------------------------------------------------------------------
   endsubroutine euler_assign_euler
 
-  subroutine euler_assign_real(lhs, rhs)
-  !---------------------------------------------------------------------------------------------------------------------------------
+  pure subroutine euler_assign_real(lhs, rhs)
   !< Assign one real to an Euler field.
-  !---------------------------------------------------------------------------------------------------------------------------------
-  class(euler_1D_openmp), intent(INOUT) :: lhs !< Left hand side.
-  real(R_P),              intent(IN)    :: rhs !< Right hand side.
-  integer(I_P)                          :: i   !< Counter.
-  !---------------------------------------------------------------------------------------------------------------------------------
+  class(euler_1D_openmp), intent(inout) :: lhs     !< Left hand side.
+  real(R_P),              intent(in)    :: rhs(1:) !< Right hand side.
+  integer(I_P)                          :: v       !< Counter.
 
-  !---------------------------------------------------------------------------------------------------------------------------------
   if (allocated(lhs%U)) then
-    !$OMP PARALLEL DO DEFAULT(NONE) PRIVATE(i) SHARED(lhs, rhs)
-    do i=1, lhs%Ni
-      lhs%U(:, i) = rhs
+    do v=1, size(lhs%U, dim=1)
+      lhs%U(v,1:) = rhs(1:)
     enddo
   endif
-  return
-  !---------------------------------------------------------------------------------------------------------------------------------
   endsubroutine euler_assign_real
 
   ! private methods

@@ -11,7 +11,7 @@ use foodie, only : adams_bashforth_integrator, &
                    leapfrog_integrator, &
                    ls_runge_kutta_integrator, &
                    integrator_runge_kutta_tvd
-use IR_Precision, only : R_P, I_P, FR_P, str
+use penf, only : R_P, I_P, FR_P, str
 #ifdef OPENMP
 use OMP_LIB
 #endif

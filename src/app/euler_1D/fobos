@@ -1,0 +1,42 @@
+[modes]
+modes = gnu gnu-debug
+
+[common-variables]
+$CSTATIC_GNU = -cpp -c -frealloc-lhs
+$DEBUG_GNU   = -Og -g3 -Warray-bounds -Wcharacter-truncation -Wline-truncation -Wimplicit-interface -Wimplicit-procedure -Wunderflow -Wuninitialized -fcheck=all -fmodule-private -ffree-line-length-132 -fimplicit-none -fbacktrace -fdump-core -finit-real=nan -std=f2008 -fall-intrinsics
+$OPTIMIZE    = -O2
+$EXDIRS      = src/tests/
+               PENF/src/tests/
+               FACE/src/tests/ FACE/src/third_party/
+               FLAP/src/tests/ FLAP/src/third_party/
+               WenOOF/src/tests/ WenOOF/src/third_party/
+
+# main modes
+[gnu]
+help     = Build app in release mode with GNU gfortran
+compiler = gnu
+cflags   = $CSTATIC_GNU $OPTIMIZE
+lflags   = $OPTIMIZE
+template = template-common
+
+[gnu-debug]
+help     = Build app in debug mode with GNU gfortran
+compiler = gnu
+cflags   = $CSTATIC_GNU $DEBUG_GNU
+lflags   = $DEBUG_GNU
+template = template-common
+
+# templates
+[template-common]
+cflags_heritage = True
+build_dir       = build/app/euler_1D/
+mod_dir         = mod
+obj_dir         = obj
+src             = src/
+target          = src/app/euler_1D/foodie_euler_1D.f90
+preproc         = -D_IMPURE_
+exclude_dirs    = $EXDIRS
+colors          = True
+quiet           = False
+log             = True
+jobs            = 10
