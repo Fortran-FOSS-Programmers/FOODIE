@@ -35,14 +35,16 @@ Modern Fortran standards (2003+) have introduced support for Object-Oriented Pro
 
 The FOODIE environment allows the (numerical) solution of general, non linear differential equations system of the form:
 
-![IVP](https://raw.githubusercontent.com/wiki/Fortran-FOSS-Programmers/FOODIE/images/IVP.png)
+$$U_t = R(t, U)$$
+
+$$U_0 = F$$
 
 where:
 
-+ *U_t = dU/dt*;
-+ *U* is the vector of *state* variables being a function of the time-like independent variable *t*;
-+ *R* is the (vectorial) residual function, it could be a non linear function of the solution *U* itself;
-+ *F* is the (vectorial) initial conditions function.
++ $U_t = \frac{dU}{dt}$;
++ $U$ is the vector of *state* variables being a function of the time-like independent variable $t$;
++ $R$ is the (vectorial) residual function, it could be a non linear function of the solution $U$ itself;
++ $F$ is the (vectorial) initial conditions function.
 
 The FOODIE has two main purposes:
 
