@@ -28,8 +28,11 @@ module foodie_integrator_ms_runge_kutta_ssp
 !< @note The value of \(\Delta t\) must be provided, it not being computed by the integrator.
 !<
 !< The schemes are explicit. The coefficients *a,b* define the actual scheme, that is selected accordingly to the number of
-!< **steps** used. Currently, the schemes provided have steps number in *[3, 5]*. The formal order of accuracy varies
-!< consistently in *[2nd, 3rd]* order.
+!< **steps** and **stages** used. Currently, the schemes provided are: 2 steps/2 stages and 3 steps/2 stages, 3rd order;
+!< 4 steps/5 stages, 8th order.
+!<
+!< The stages times are computed applying the stages to \(U=t\) (i.e. \(R=1\)), that any consistent scheme integrates exactly:
+!< \(t_i^n = \sum_{l=1}^{k} d_{il} t^{n-k+l} + \Delta t (\sum_{l=1}^{k-1} \hat{a}_{il} + \sum_{j=1}^{i-1} a_{ij})\).
 !<
 !<#### Bibliography
 !< [1] *Explicit Strong Stability Preserving Multistep Runge-Kutta Methods*, C. Bresten, S. Gottlieb, Z. Grant, D. Higgs,
@@ -122,7 +125,9 @@ contains
   real(R_P),                            intent(in)    :: t     !< Time.
   integer(I_P)                                        :: k, kk !< Stages counters.
   integer(I_P)                                        :: s     !< Steps counter.
+  real(R_P)                                           :: tk(1:self%stages) !< Stages times.
 
+  tk = stages_times(self=self, Dt=Dt, t=t)
   ! computing stages
   self%stage(1) = U
   do k=2, self%stages
@@ -134,7 +139,7 @@ contains
       if (self%Ahat(k, s) /= 0._R_P) self%stage(k) = self%stage(k) + (self%previous(s)%t(t=self%t(s)) * (Dt * self%Ahat(k, s)))
     enddo
     do kk=1, k - 1
-      if (self%A(k, kk) /= 0._R_P) self%stage(k) = self%stage(k) + (self%stage(kk)%t(t=t) * (Dt * self%A(k, kk)))
+      if (self%A(k, kk) /= 0._R_P) self%stage(k) = self%stage(k) + (self%stage(kk)%t(t=tk(kk)) * (Dt * self%A(k, kk)))
     enddo
   enddo
   ! computing new time step
@@ -146,7 +151,7 @@ contains
     if (self%Bhat(s) /= 0._R_P) U = U + (self%previous(s)%t(t=self%t(s)) * (Dt * self%Bhat(s)))
   enddo
   do k=1, self%stages
-    if (self%B(k) /= 0._R_P) U = U + (self%stage(k)%t(t=t) * (Dt * self%B(k)))
+    if (self%B(k) /= 0._R_P) U = U + (self%stage(k)%t(t=tk(k)) * (Dt * self%B(k)))
   enddo
   if (self%autoupdate) call self%update_previous(U=U, previous=self%previous, Dt=Dt, t=t, previous_t=self%t)
   endsubroutine integrate
@@ -159,7 +164,9 @@ contains
   real(R_P),                            intent(in)    :: t     !< Time.
   integer(I_P)                                        :: k, kk !< Stages counters.
   integer(I_P)                                        :: s     !< Steps counter.
+  real(R_P)                                           :: tk(1:self%stages) !< Stages times.
 
+  tk = stages_times(self=self, Dt=Dt, t=t)
   ! computing stages
   self%stage(1) = U
   do k=2, self%stages
@@ -181,7 +188,7 @@ contains
     do kk=1, k - 1
       if (self%A(k, kk) /= 0._R_P) then
          self%buffer = self%stage(kk)
-         call self%buffer%t_fast(t=t)
+         call self%buffer%t_fast(t=tk(kk))
          call self%buffer%multiply_fast(lhs=self%buffer, rhs=Dt * self%A(k, kk))
          call self%stage(k)%add_fast(lhs=self%stage(k), rhs=self%buffer)
       endif
@@ -204,10 +211,9 @@ contains
     endif
   enddo
   do k=1, self%stages
-    if (self%B(k) /= 0._R_P) U = U + (self%stage(k)%t(t=t) * (Dt * self%B(k)))
     if (self%B(k) /= 0._R_P) then
        self%buffer = self%stage(k)
-       call self%buffer%t_fast(t=t)
+       call self%buffer%t_fast(t=tk(k))
        call self%buffer%multiply_fast(lhs=self%buffer, rhs=Dt * self%B(k))
        call U%add_fast(lhs=U, rhs=self%buffer)
     endif
@@ -403,4 +409,31 @@ contains
                             is_severe=stop_on_fail)
   endif
   endsubroutine initialize
+
+  ! private non type bound procedures
+  pure function stages_times(self, Dt, t) result(tk)
+  !< Return the stages times.
+  !<
+  !< They are the stages applied to \(U=t\) (i.e. \(R=1\)) that is integrated exactly by any consistent scheme.
+  class(integrator_ms_runge_kutta_ssp), intent(in) :: self              !< Integrator.
+  real(R_P),                            intent(in) :: Dt                !< Time step.
+  real(R_P),                            intent(in) :: t                 !< Time.
+  real(R_P)                                        :: tk(1:self%stages) !< Stages times.
+  integer(I_P)                                     :: k, kk             !< Stages counters.
+  integer(I_P)                                     :: s                 !< Steps counter.
+
+  tk(1) = t
+  do k=2, self%stages
+    tk(k) = 0._R_P
+    do s=1, self%steps
+      tk(k) = tk(k) + self%D(k, s) * self%t(s)
+    enddo
+    do s=1, self%steps - 1
+      tk(k) = tk(k) + Dt * self%Ahat(k, s)
+    enddo
+    do kk=1, k - 1
+      tk(k) = tk(k) + Dt * self%A(k, kk)
+    enddo
+  enddo
+  endfunction stages_times
 endmodule foodie_integrator_ms_runge_kutta_ssp
