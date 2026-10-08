@@ -19,8 +19,9 @@ module foodie_integrator_adams_moulton
 !< @note The value of \(\Delta t\) must be provided, it not being computed by the integrator.
 !<
 !< The schemes are implicit. The coefficients *b* define the actual scheme, that is selected accordingly to the number of
-!< **steps** used. Currently, the schemes provided have steps number in *[0, 15]*. Note that the scheme using only 1 step reverts
-!< to Implciti Backwarad Euler. The formal order of accuracy varies consistently in *[1st, 16th]* order.
+!< **steps** used. Currently, the schemes provided have steps number in *[0, 15]*. Note that the scheme using 0 steps reverts
+!< to implicit backward Euler, \(U^n\) being stored into the (single) register of previous steps. The formal order of accuracy
+!< varies consistently in *[1st, 16th]* order.
 !<
 !<#### Bibliography
 !< [1] *Cowell Type Numerical Integration As Applied to Satellite Orbit Computation*, J. L. Maury Jr.,
@@ -137,10 +138,15 @@ contains
         U = U + (self%previous(s+1)%t(t=self%t(s+1)) * (Dt * self%b(s)))
       enddo
     endif
-    if (self%autoupdate) call self%update_previous(U=U, previous=self%previous, Dt=Dt, t=t, previous_t=self%t)
   else
-    U = U + (U%t(t=t) * (Dt * self%b(0)))
+    ! backward Euler, U^n being stored into previous(1): at least one fixed point iteration is always performed
+    allocate(delta, mold=U)
+    delta = self%previous(1)
+    do s=1, max(1, self%iterations)
+      U = delta + (U%t(t=t + Dt) * (Dt * self%b(0)))
+    enddo
   endif
+  if (self%autoupdate) call self%update_previous(U=U, previous=self%previous, Dt=Dt, t=t, previous_t=self%t)
   endsubroutine integrate
 
   subroutine integrate_fast(self, U, Dt, t)
@@ -180,13 +186,18 @@ contains
         call U%add_fast(lhs=U, rhs=self%buffer)
       enddo
     endif
-    if (self%autoupdate) call self%update_previous(U=U, previous=self%previous, Dt=Dt, t=t, previous_t=self%t)
   else
-    self%buffer = U
-    call self%buffer%t_fast(t=t)
-    call self%buffer%multiply_fast(lhs=self%buffer, rhs=Dt * self%b(0))
-    call U%add_fast(lhs=U, rhs=self%buffer)
+    ! backward Euler, U^n being stored into previous(1): at least one fixed point iteration is always performed
+    allocate(delta, mold=U)
+    delta = self%previous(1)
+    do s=1, max(1, self%iterations)
+      self%buffer = U
+      call self%buffer%t_fast(t=t + Dt)
+      call self%buffer%multiply_fast(lhs=self%buffer, rhs=Dt * self%b(0))
+      call U%add_fast(lhs=delta, rhs=self%buffer)
+    enddo
   endif
+  if (self%autoupdate) call self%update_previous(U=U, previous=self%previous, Dt=Dt, t=t, previous_t=self%t)
   endsubroutine integrate_fast
 
   elemental function is_supported(self, scheme)
@@ -407,7 +418,7 @@ contains
     endselect
      self%autoupdate = .true. ; if (present(autoupdate)) self%autoupdate = autoupdate
      self%iterations = 1 ; if (present(iterations)) self%iterations = iterations
-     self%registers = self%steps
+     self%registers = max(1, self%steps) ! backward Euler (0 steps) stores U^n
      if (present(U)) call self%allocate_integrand_members(U=U)
   else
     call self%trigger_error(error=ERROR_UNSUPPORTED_SCHEME,                                   &

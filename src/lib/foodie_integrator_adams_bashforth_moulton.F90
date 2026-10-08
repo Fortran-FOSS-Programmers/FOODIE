@@ -1,9 +1,9 @@
 #include "preprocessor_macros.h"
-!< FOODIE integrator: provide a predictor-corrector class of Adams-Bashforth-Moutlon multi-step schemes, from 1st to 4rd order
+!< FOODIE integrator: provide a predictor-corrector class of Adams-Bashforth-Moutlon multi-step schemes, from 1st to 16th order
 !< accurate.
 
 module foodie_integrator_adams_bashforth_moulton
-!< FOODIE integrator: provide a predictor-corrector class of Adams-Bashforth-Moutlon multi-step schemes, from 1st to 4rd order
+!< FOODIE integrator: provide a predictor-corrector class of Adams-Bashforth-Moutlon multi-step schemes, from 1st to 16th order
 !< accurate.
 !<
 !< Considering the following ODE system:
@@ -173,16 +173,18 @@ contains
   real(R_P),                                 intent(in)    :: Dt   !< Time steps.
   real(R_P),                                 intent(in)    :: t    !< Times.
   integer(I_P)                                             :: s    !< Step counter.
+  integer(I_P)                                             :: o    !< Offset of corrector registers into previous steps.
 
   do s=1, self%steps
      self%predictor%previous(s) = self%previous(s)
      self%predictor%t(s) = self%t(s)
      self%predictor%Dt(s) = self%Dt(s)
   enddo
-  do s=1, self%steps - 1
-     self%corrector%previous(s) = self%predictor%previous(s+1)
-     self%corrector%t(s) = self%predictor%t(s+1)
-     self%corrector%Dt(s) = self%predictor%Dt(s+1)
+  o = self%steps - max(1, self%steps - 1) ! corrector registers are the last max(1, steps-1) previous steps
+  do s=1, self%steps - o
+     self%corrector%previous(s) = self%previous(s+o)
+     self%corrector%t(s) = self%t(s+o)
+     self%corrector%Dt(s) = self%Dt(s+o)
   enddo
   call self%predictor%integrate(U=U, Dt=Dt, t=t)
   call self%corrector%integrate(U=U, Dt=Dt, t=t)
@@ -197,17 +199,19 @@ contains
   real(R_P),                                 intent(in)    :: Dt   !< Time steps.
   real(R_P),                                 intent(in)    :: t    !< Times.
   integer(I_P)                                             :: s    !< Step counter.
+  integer(I_P)                                             :: o    !< Offset of corrector registers into previous steps.
 
   do s=1, self%steps
      self%predictor%previous(s) = self%previous(s)
   enddo
   self%predictor%t(:) = self%t(1:self%steps)
   self%predictor%Dt(:) = self%Dt(1:self%steps)
-  do s=1, self%steps - 1
-     self%corrector%previous(s) = self%previous(s+1)
+  o = self%steps - max(1, self%steps - 1) ! corrector registers are the last max(1, steps-1) previous steps
+  do s=1, self%steps - o
+     self%corrector%previous(s) = self%previous(s+o)
+     self%corrector%t(s) = self%t(s+o)
+     self%corrector%Dt(s) = self%Dt(s+o)
   enddo
-  self%corrector%t(:) = self%t(2:self%steps)
-  self%corrector%Dt(:) = self%Dt(2:self%steps)
   call self%predictor%integrate_fast(U=U, Dt=Dt, t=t)
   call self%corrector%integrate_fast(U=U, Dt=Dt, t=t)
   if (self%autoupdate) &
