@@ -205,7 +205,7 @@ contains
    type(command_line_interface), intent(inout) :: cli  !< Command line interface handler.
 
    call cli%get(group='oscillation', switch='-f', val=self%f, error=cli%error) ; if (cli%error/=0) stop
-   call cli%get(group='oscillation', switch='-U0', val=self%U0, error=cli%error) ; if (cli%error/=0) stop
+   call cli%get(group='oscillation', switch='--U0', val=self%U0, error=cli%error) ; if (cli%error/=0) stop
    self%U = self%U0
    endsubroutine parse_cli
 

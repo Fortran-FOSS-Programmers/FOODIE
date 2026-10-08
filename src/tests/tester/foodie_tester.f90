@@ -30,6 +30,9 @@ use foodie, only : foodie_integrator_class_names,          &
 use foodie_test_integrand_ladvection, only : integrand_ladvection
 use foodie_test_integrand_lcce, only : integrand_lcce
 use foodie_test_integrand_oscillation, only : integrand_oscillation
+use foodie_test_integrand_polynomial, only : integrand_polynomial
+use foodie_test_integrand_riccati, only : integrand_riccati
+use foodie_test_integrate, only : exporter_object, integrate, observed_order
 use foodie_test_integrand_tester_object, only : integrand_tester_object
 use penf, only : I_P, R_P, FR_P, str, strz
 
@@ -58,6 +61,8 @@ type :: test_object
    type(integrand_lcce)                        :: lcce_0              !< Initial conditions for linear constant coefficients eq.
    type(integrand_ladvection)                  :: ladvection_0        !< Initial conditions for linear advection test.
    type(integrand_oscillation)                 :: oscillation_0       !< Initial conditions for oscillation test.
+   type(integrand_polynomial)                  :: polynomial_0        !< Initial conditions for polynomial test.
+   type(integrand_riccati)                     :: riccati_0           !< Initial conditions for Riccati test.
    class(integrand_tester_object), allocatable :: integrand_0         !< Initial conditions.
    contains
       ! public methods
@@ -65,6 +70,22 @@ type :: test_object
       ! private methods
       procedure, pass(self), private :: initialize !< Initialize test: set Command Line Interface, parse it and check its validity.
 endtype test_object
+
+type, extends(exporter_object) :: tecplot_exporter
+   !< Exporter of results into tecplot files, checking also the fast mode availability before the first step.
+   private
+   character(99)                               :: output_base_name !< Output files basename.
+   character(99)                               :: scheme           !< Scheme used.
+   real(R_P)                                   :: Dt               !< Time step.
+   real(R_P)                                   :: final_time       !< Final integration time.
+   integer(I_P)                                :: save_frequency   !< Save frequency.
+   logical                                     :: save_results     !< Flag for activating results saving.
+   logical                                     :: is_fast          !< Flag for activating fast schemes.
+   class(integrand_tester_object), allocatable :: integrand_0      !< Initial conditions.
+   contains
+      procedure, pass(self) :: export => exporter_export         !< Export the current integrand solution.
+      procedure, pass(self) :: initialize => exporter_initialize !< Initialize the exporter for a (scheme, Dt) run.
+endtype tecplot_exporter
 
 contains
    ! public methods
@@ -76,6 +97,7 @@ contains
    real(R_P), allocatable            :: order(:,:)            !< Observed order of accuravy.
    integer(I_P)                      :: s                     !< Counter.
    integer(I_P)                      :: t                     !< Counter.
+   type(tecplot_exporter)            :: exporter              !< Exporter of results into tecplot files.
 
    call self%initialize
    if (trim(adjustl(self%scheme))/='all') then
@@ -93,18 +115,17 @@ contains
       print '(A)', trim(integrator_schemes(s))
       do t=1, size(self%Dt)
          call self%integrand_0%initialize(Dt=self%Dt(t))
+         call exporter%initialize(test=self, scheme=trim(integrator_schemes(s)), Dt=self%Dt(t))
          print '(A)', self%integrand_0%description()
-         call integrate(scheme=trim(integrator_schemes(s)),          &
-                        integrand_0=self%integrand_0,                &
-                        Dt=self%Dt(t),                               &
-                        final_time=self%final_time,                  &
-                        iterations=self%implicit_iterations,         &
-                        stages=self%stages,                          &
-                        is_fast=self%is_fast,                        &
-                        save_results=self%save_results,              &
-                        output_base_name=trim(adjustl(self%output)), &
-                        save_frequency=self%save_frequency,          &
-                        error=error(:,t))
+         call integrate(scheme=trim(integrator_schemes(s)),  &
+                        integrand_0=self%integrand_0,        &
+                        Dt=self%Dt(t),                       &
+                        final_time=self%final_time,          &
+                        iterations=self%implicit_iterations, &
+                        stages=self%stages,                  &
+                        is_fast=self%is_fast,                &
+                        error=error(:,t),                    &
+                        exporter=exporter)
          print*, 'Dt = ', self%Dt(t), ', error = ', error(:,t)
          if (t > 1) then
             order(:, t-1) = observed_order(error=error(:, t-1:t), Dt=self%Dt(t-1:t))
@@ -154,6 +175,8 @@ contains
       call self%lcce_0%set_cli(cli=self%cli)
       call self%ladvection_0%set_cli(cli=self%cli)
       call self%oscillation_0%set_cli(cli=self%cli)
+      call self%polynomial_0%set_cli(cli=self%cli)
+      call self%riccati_0%set_cli(cli=self%cli)
       endsubroutine set_cli
 
       subroutine parse_cli()
@@ -173,9 +196,12 @@ contains
       call self%cli%get(group='test', switch='-r', val=self%save_results, error=self%error) ; if (self%error/=0) stop
       call self%cli%get(group='test', switch='--output', val=self%output, error=self%error) ; if (self%error/=0) stop
       call self%cli%get(group='test', switch='--save_frequency',val=self%save_frequency,error=self%error) ; if (self%error/=0) stop
-      call self%lcce_0%parse_cli(cli=self%cli)
-      call self%ladvection_0%parse_cli(cli=self%cli)
-      call self%oscillation_0%parse_cli(cli=self%cli)
+      ! parse only the options of the invoked problem: FLAP (2.5.2) errors on list options of not invoked groups
+      if (self%cli%run_command('lcce'))             call self%lcce_0%parse_cli(cli=self%cli)
+      if (self%cli%run_command('linear_advection')) call self%ladvection_0%parse_cli(cli=self%cli)
+      if (self%cli%run_command('oscillation'))      call self%oscillation_0%parse_cli(cli=self%cli)
+      if (self%cli%run_command('polynomial'))       call self%polynomial_0%parse_cli(cli=self%cli)
+      if (self%cli%run_command('riccati'))          call self%riccati_0%parse_cli(cli=self%cli)
 
       if     (self%cli%run_command('lcce')) then
          allocate(integrand_lcce :: self%integrand_0)
@@ -195,12 +221,22 @@ contains
          type is(integrand_oscillation)
             integrand_0 = self%oscillation_0
          endselect
-      else
-         allocate(integrand_oscillation :: self%integrand_0)
+      elseif (self%cli%run_command('polynomial')) then
+         allocate(integrand_polynomial :: self%integrand_0)
          select type(integrand_0=>self%integrand_0)
-         type is(integrand_oscillation)
-            integrand_0 = self%oscillation_0
+         type is(integrand_polynomial)
+            integrand_0 = self%polynomial_0
          endselect
+      elseif (self%cli%run_command('riccati')) then
+         allocate(integrand_riccati :: self%integrand_0)
+         select type(integrand_0=>self%integrand_0)
+         type is(integrand_riccati)
+            integrand_0 = self%riccati_0
+         endselect
+      else
+         write(stderr, '(A)') 'error: select the problem to integrate, one of "lcce", "linear_advection", "oscillation", '// &
+                              '"polynomial", "riccati"'
+         stop 1
       endif
 
       if (.not.is_dt_valid()) then
@@ -251,6 +287,64 @@ contains
       endfunction is_dt_valid
    endsubroutine initialize
 
+   ! tecplot_exporter methods
+   subroutine exporter_initialize(self, test, scheme, Dt)
+   !< Initialize the exporter for a (scheme, Dt) run.
+   class(tecplot_exporter), intent(inout) :: self   !< Exporter.
+   type(test_object),       intent(in)    :: test   !< Test.
+   character(*),            intent(in)    :: scheme !< Scheme used.
+   real(R_P),               intent(in)    :: Dt     !< Time step.
+
+   self%output_base_name = test%output
+   self%scheme = scheme
+   self%Dt = Dt
+   self%final_time = test%final_time
+   self%save_frequency = test%save_frequency
+   self%save_results = test%save_results
+   self%is_fast = test%is_fast
+   if (allocated(self%integrand_0)) deallocate(self%integrand_0)
+   allocate(self%integrand_0, source=test%integrand_0)
+   endsubroutine exporter_initialize
+
+   subroutine exporter_export(self, integrand, integrator, step, time, is_last)
+   !< Export current integrand solution to tecplot file, check fast mode availability before the first step.
+   class(tecplot_exporter),        intent(inout) :: self       !< Exporter.
+   class(integrand_tester_object), intent(in)    :: integrand  !< Integrand.
+   class(integrator_object),       intent(in)    :: integrator !< Integrator.
+   integer(I_P),                   intent(in)    :: step       !< Time step counter, 0 before the first step.
+   real(R_P),                      intent(in)    :: time       !< Time.
+   logical,                        intent(in)    :: is_last    !< Flag for the last export.
+
+   if (step == 0 .and. self%is_fast) call check_scheme_has_fast_mode(scheme=trim(self%scheme), integrator=integrator)
+   if (.not.self%save_results) return
+   if (step == 0) then
+      call integrand%export_tecplot(file_name=trim(adjustl(self%output_base_name))//                           &
+                                              integrand%description(prefix='-')//                              &
+                                              integrator%description(prefix='-')//                             &
+                                              '-steps_'//trim(strz(int(self%final_time/self%Dt), 10))//'.dat', &
+                                    t=time,                                                                    &
+                                    scheme=trim(self%scheme),                                                  &
+                                    with_exact_solution=.true.,                                                &
+                                    U0=self%integrand_0)
+      return
+   endif
+   if (mod(step, self%save_frequency)==0) then
+      select type(integrand)
+      type is(integrand_ladvection)
+         call integrand%export_tecplot(t=time, scheme=trim(self%scheme))
+      type is(integrand_oscillation)
+         if (is_last) then
+            call integrand%export_tecplot(t=time)
+         else
+            call integrand%export_tecplot(t=time, with_exact_solution=.true.)
+         endif
+      class default
+         if (.not.is_last) call integrand%export_tecplot(t=time, with_exact_solution=.true.)
+      endselect
+   endif
+   if (is_last) call integrand%export_tecplot(close_file=.true.)
+   endsubroutine exporter_export
+
    ! non type bound procedures
    subroutine check_scheme_has_fast_mode(scheme, integrator)
    !< Check if a scheme support fast mode integrate.
@@ -262,143 +356,6 @@ contains
       stop
    endif
    endsubroutine check_scheme_has_fast_mode
-
-   subroutine integrate(scheme, integrand_0, Dt, final_time, iterations, stages, is_fast, save_results, output_base_name, &
-                        save_frequency, error)
-   !< Integrate integrand by means of the given scheme.
-   character(*),                   intent(in)   :: scheme           !< Selected scheme.
-   class(integrand_tester_object), intent(in)   :: integrand_0      !< Initial conditions.
-   real(R_P),                      intent(in)   :: Dt               !< Time step.
-   real(R_P),                      intent(in)   :: final_time       !< Final integration time.
-   integer(I_P),                   intent(in)   :: iterations       !< Number of fixed point iterations.
-   integer(I_P),                   intent(in)   :: stages           !< Number of stages.
-   logical,                        intent(in)   :: is_fast          !< Activate fast mode integration.
-   logical,                        intent(in)   :: save_results     !< Save results.
-   character(*),                   intent(in)   :: output_base_name !< Base name of output results file.
-   integer(I_P),                   intent(in)   :: save_frequency   !< Save frequency.
-   real(R_P),                      intent(out)  :: error(:)         !< Error of integrand integration.
-   real(R_P), allocatable                       :: error_(:)        !< Error of integrand integration.
-   class(integrand_tester_object) , allocatable :: integrand        !< Integrand.
-   class(integrator_object), allocatable        :: integrator       !< The integrator.
-   real(R_P)                                    :: time             !< Time.
-   integer(I_P)                                 :: step             !< Time steps counter.
-
-   allocate(integrand, mold=integrand_0) ; integrand = integrand_0
-
-   call foodie_integrator_factory(scheme=scheme, integrator=integrator, stages=stages, &
-                                  tolerance=1e2_R_P, iterations=iterations, autoupdate=.true., U=integrand_0)
-   if (is_fast) call check_scheme_has_fast_mode(scheme=trim(adjustl(scheme)), integrator=integrator)
-
-   step = 0
-   time = 0._R_P
-   if (save_results) call integrand%export_tecplot(file_name=output_base_name//                                     &
-                                                             integrand%description(prefix='-')//                    &
-                                                             integrator%description(prefix='-')//                   &
-                                                             '-steps_'//trim(strz(int(final_time/Dt), 10))//'.dat', &
-                                                    t=time,                                                         &
-                                                    scheme=scheme,                                                  &
-                                                    with_exact_solution=.true.,                                     &
-                                                    U0=integrand_0)
-
-   select type(integrator)
-   class is(integrator_multistage_object)
-      do
-         step = step + 1
-         if (is_fast) then
-            call integrator%integrate_fast(U=integrand, Dt=Dt, t=time)
-         else
-            call integrator%integrate(U=integrand, Dt=Dt, t=time)
-         endif
-         time = time + Dt
-         if ((time >= final_time)) exit
-         call integrand_export_tecplot
-      enddo
-
-   class is(integrator_multistep_object)
-      do
-         step = step + 1
-         if (integrator%steps_number() >= step) then
-            time = time + Dt
-            integrator%Dt(step) = Dt
-            integrator%t(step) = time
-            integrator%previous(step) = integrand%exact_solution(t=time, U0=integrand_0)
-            integrand = integrator%previous(step)
-         else
-            if (is_fast) then
-               call integrator%integrate_fast(U=integrand, Dt=Dt, t=time)
-            else
-               call integrator%integrate(U=integrand, Dt=Dt, t=time)
-            endif
-            time = time + Dt
-         endif
-         if ((time >= final_time)) exit
-         call integrand_export_tecplot
-      enddo
-
-   class is(integrator_multistage_multistep_object)
-      do
-         step = step + 1
-         if (integrator%steps_number() >= step) then
-            time = time + Dt
-            integrator%Dt(step) = Dt
-            integrator%t(step) = time
-            integrator%previous(step) = integrand%exact_solution(t=time, U0=integrand_0)
-            integrand = integrator%previous(step)
-         else
-            if (is_fast) then
-               call integrator%integrate_fast(U=integrand, Dt=Dt,t=time)
-            else
-               call integrator%integrate(U=integrand, Dt=Dt, t=time)
-            endif
-            time = time + Dt
-         endif
-         if ((time >= final_time)) exit
-         call integrand_export_tecplot
-      enddo
-   endselect
-
-   call integrand_close_tecplot
-
-   error_ = integrand%error(t=time, U0=integrand_0)
-   error(:) = error_(:)
-   contains
-      subroutine integrand_close_tecplot
-      !< Close current integrand tecplot file.
-
-      select type(integrand)
-      type is(integrand_ladvection)
-         if (save_results .and. mod(step, save_frequency)==0) call integrand%export_tecplot(t=time, scheme=scheme)
-      type is(integrand_oscillation)
-         if (save_results .and. mod(step, save_frequency)==0) call integrand%export_tecplot(t=time)
-      endselect
-      if (save_results) call integrand%export_tecplot(close_file=.true.)
-      endsubroutine integrand_close_tecplot
-
-      subroutine integrand_export_tecplot
-      !< Export current integrand solution to tecplot file.
-
-      select type(integrand)
-      type is(integrand_lcce)
-         if (save_results .and. mod(step, save_frequency)==0) call integrand%export_tecplot(t=time, with_exact_solution=.true.)
-      type is(integrand_ladvection)
-         if (save_results .and. mod(step, save_frequency)==0) call integrand%export_tecplot(t=time, scheme=scheme)
-      type is(integrand_oscillation)
-         if (save_results .and. mod(step, save_frequency)==0) call integrand%export_tecplot(t=time, with_exact_solution=.true.)
-      endselect
-      endsubroutine integrand_export_tecplot
-   endsubroutine integrate
-
-   pure function observed_order(error, Dt)
-   !< Estimate the order of accuracy using 2 subsequent refined numerical solutions.
-   real(R_P), intent(in) :: error(1:, 1:)                        !< Computed errors.
-   real(R_P), intent(in) :: Dt(1:)                               !< Time steps used.
-   real(R_P)             :: observed_order(1:size(error, dim=1)) !< Estimation of the order of accuracy.
-   integer(I_P)          :: v                                    !< Variables counter.
-
-   do v=1, size(error, dim=1)
-     observed_order(v) = log(error(v, 1) / error(v, 2)) / log(Dt(1) / Dt(2))
-   enddo
-   endfunction observed_order
 endmodule foodie_test_object
 
 program foodie_tester
