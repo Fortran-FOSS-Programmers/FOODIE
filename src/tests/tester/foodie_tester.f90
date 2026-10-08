@@ -196,7 +196,7 @@ contains
       call self%cli%get(group='test', switch='-r', val=self%save_results, error=self%error) ; if (self%error/=0) stop
       call self%cli%get(group='test', switch='--output', val=self%output, error=self%error) ; if (self%error/=0) stop
       call self%cli%get(group='test', switch='--save_frequency',val=self%save_frequency,error=self%error) ; if (self%error/=0) stop
-      ! parse only the options of the invoked problem: FLAP (2.5.2) errors on list options of not invoked groups
+      ! parse only the options of the invoked problem, the other problems being not used
       if (self%cli%run_command('lcce'))             call self%lcce_0%parse_cli(cli=self%cli)
       if (self%cli%run_command('linear_advection')) call self%ladvection_0%parse_cli(cli=self%cli)
       if (self%cli%run_command('oscillation'))      call self%oscillation_0%parse_cli(cli=self%cli)
