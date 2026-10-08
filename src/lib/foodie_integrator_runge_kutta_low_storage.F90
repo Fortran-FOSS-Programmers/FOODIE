@@ -55,6 +55,8 @@ module foodie_integrator_runge_kutta_low_storage
 !<
 !<#### 6 stages, 4th order
 !< This scheme is a low storage RK(6, 4), by [3].
+!< The published (12 decimals) coefficients are reported below: the ones used in the code are refined to satisfy exactly all the
+!< 4th order conditions (the published ones violate them by ~1e-13) and reproduce the published ones once rounded.
 !<
 !< | ` Stage ` | ` A `               | ` B `              | ` C `              |
 !< |-----------|---------------------|--------------------|--------------------|
@@ -67,6 +69,8 @@ module foodie_integrator_runge_kutta_low_storage
 !<
 !<#### 7 stages, 4th order
 !< This scheme is a low storage RK(7, 4), by [3].
+!< The published (12 decimals) coefficients are reported below: the ones used in the code are refined to satisfy exactly all the
+!< 4th order conditions (the published ones violate them by ~1e-13) and reproduce the published ones once rounded.
 !<
 !< | ` Stage ` | ` A `               | ` B `              | ` C `              |
 !< |-----------|---------------------|--------------------|--------------------|
@@ -355,25 +359,55 @@ contains
       allocate(self%B(1:self%stages)) ; self%B = 0._R_P
       allocate(self%C(1:self%stages)) ; self%C = 0._R_P
 
-      self%A(1) =  0._R_P             ; self%B(1) = 0.122000000000_R_P ; self%C(1) = 0._R_P
-      self%A(2) = -0.691750960670_R_P ; self%B(2) = 0.477263056358_R_P ; self%C(2) = 0.122000000000_R_P
-      self%A(3) = -1.727127405211_R_P ; self%B(3) = 0.381941220320_R_P ; self%C(3) = 0.269115878630_R_P
-      self%A(4) = -0.694890150986_R_P ; self%B(4) = 0.447757195744_R_P ; self%C(4) = 0.447717183551_R_P
-      self%A(5) = -1.039942756197_R_P ; self%B(5) = 0.498614246822_R_P ; self%C(5) = 0.749979795490_R_P
-      self%A(6) = -1.531977447611_R_P ; self%B(6) = 0.186648570846_R_P ; self%C(6) = 0.898555413085_R_P
+      ! coefficients refined (min-norm Newton projection, 80 digits) to satisfy all 4th order conditions exactly; rounded to
+      ! 12 decimals they reproduce the published values of [3]
+      self%A(1) = 0._R_P
+      self%A(2) = -0.691750960670129380621710005102948835_R_P
+      self%A(3) = -1.72712740521097955580482282874732599_R_P
+      self%A(4) = -0.694890150986328367690385735277670688_R_P
+      self%A(5) = -1.03994275619665098271443911787421138_R_P
+      self%A(6) = -1.53197744761113997033324585478248351_R_P
+      self%B(1) = 0.122000000000000000000000000000000000_R_P
+      self%B(2) = 0.477263056357729117232129222677095734_R_P
+      self%B(3) = 0.381941220319650432858898612142976167_R_P
+      self%B(4) = 0.447757195744362611755353063823587292_R_P
+      self%B(5) = 0.498614246821663195298212316422333102_R_P
+      self%B(6) = 0.186648570846205665540822539444519653_R_P
+      self%C(1) = 0._R_P
+      self%C(2) = 0.122000000000000000000000000000000000_R_P
+      self%C(3) = 0.269115878629907900616222001303834191_R_P
+      self%C(4) = 0.447717183550632827571670668869127591_R_P
+      self%C(5) = 0.749979795490172347572343333765404360_R_P
+      self%C(6) = 0.898555413084963699833367674047240411_R_P
     case('runge_kutta_ls_stages_7_order_4')
       self%stages = 7
       allocate(self%A(1:self%stages)) ; self%A = 0._R_P
       allocate(self%B(1:self%stages)) ; self%B = 0._R_P
       allocate(self%C(1:self%stages)) ; self%C = 0._R_P
 
-      self%A(1) =  0._R_P             ; self%B(1) = 0.117322146869_R_P ; self%C(1) = 0._R_P
-      self%A(2) = -0.647900745934_R_P ; self%B(2) = 0.503270262127_R_P ; self%C(2) = 0.117322146869_R_P
-      self%A(3) = -2.704760863204_R_P ; self%B(3) = 0.233663281658_R_P ; self%C(3) = 0.294523230758_R_P
-      self%A(4) = -0.460080550118_R_P ; self%B(4) = 0.283419634625_R_P ; self%C(4) = 0.305658622131_R_P
-      self%A(5) = -0.500581787785_R_P ; self%B(5) = 0.540367414023_R_P ; self%C(5) = 0.582864148403_R_P
-      self%A(6) = -1.906532255913_R_P ; self%B(6) = 0.371499414620_R_P ; self%C(6) = 0.858664273599_R_P
-      self%A(7) = -1.450000000000_R_P ; self%B(7) = 0.136670099385_R_P ; self%C(7) = 0.868664273599_R_P
+      ! coefficients refined (min-norm Newton projection, 80 digits) to satisfy all 4th order conditions exactly; rounded to
+      ! 12 decimals they reproduce the published values of [3]
+      self%A(1) = 0._R_P
+      self%A(2) = -0.647900745934023517810188388019123048_R_P
+      self%A(3) = -2.70476086320398741600520611265299329_R_P
+      self%A(4) = -0.460080550117981102899097189547247350_R_P
+      self%A(5) = -0.500581787785235808293235053129087308_R_P
+      self%A(6) = -1.90653225591303735717740976496379421_R_P
+      self%A(7) = -1.45000000000000000000000000000000000_R_P
+      self%B(1) = 0.117322146869265279599929181687546365_R_P
+      self%B(2) = 0.503270262127331765852060010778248143_R_P
+      self%B(3) = 0.233663281658049858437220194247642509_R_P
+      self%B(4) = 0.283419634624866221138974675697912082_R_P
+      self%B(5) = 0.540367414022780771920442359368406553_R_P
+      self%B(6) = 0.371499414620238482317395112252704138_R_P
+      self%B(7) = 0.136670099385240850505093243661877713_R_P
+      self%C(1) = 0._R_P
+      self%C(2) = 0.117322146869265279599929181687546365_R_P
+      self%C(3) = 0.294523230757887248852847911519993478_R_P
+      self%C(4) = 0.305658622131192264301915030292224674_R_P
+      self%C(5) = 0.582864148403288969290371309463062210_R_P
+      self%C(6) = 0.858664273599148718465601669965566212_R_P
+      self%C(7) = 0.868664273599259796499944214720189781_R_P
     case('runge_kutta_ls_stages_12_order_4')
       self%stages = 12
       allocate(self%A(1:self%stages)) ; self%A = 0._R_P
