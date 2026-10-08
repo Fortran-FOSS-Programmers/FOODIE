@@ -1,10 +1,26 @@
+[project]
+name       = FOODIE
+version    = VERSION
+summary    = Fortran Object-Oriented Differential-equations Integration Environment
+repository = https://github.com/Fortran-FOSS-Programmers/FOODIE
+website    = https://fortran-foss-programmers.github.io/FOODIE
+email      = stefano.zaghi@gmail.com
+authors    = Stefano Zaghi
+
+[dependencies]
+deps_dir = src/third_party
+FACE     = https://github.com/szaghi/FACE
+FLAP     = https://github.com/szaghi/FLAP
+PENF     = https://github.com/szaghi/PENF
+WenOOF   = https://github.com/Fortran-FOSS-Programmers/WenOOF
+
 [modes]
-modes = foodie-static-opencoarrays-gnu foodie-static-opencoarrays-gnu-debug
+modes = tests-gnu tests-gnu-debug tests-gnu-coverage
+        tests-intel tests-intel-debug
+        tester-gnu tester-gnu-debug
         foodie-static-gnu foodie-static-gnu-debug foodie-shared-gnu foodie-shared-gnu-debug
         foodie-static-intel foodie-static-intel-debug foodie-shared-intel foodie-shared-intel-debug
-        foodie-static-gnu-coverage
-        foodie-static-gnu-pure foodie-static-gnu-debug-pure foodie-static-gnu-coverage-pure
-        foodie-static-intel-pure foodie-static-intel-debug-pure
+        foodie-static-opencoarrays-gnu foodie-static-opencoarrays-gnu-debug
 
 [common-variables]
 $CSHARED_GNU = -cpp -c -fPIC -frealloc-lhs
@@ -12,37 +28,70 @@ $CSHARED_INT = -cpp -c -fpic -assume realloc_lhs
 $LSHARED     = -shared
 $CSTATIC_GNU = -cpp -c -frealloc-lhs
 $CSTATIC_INT = -cpp -c -assume realloc_lhs
-$DEBUG_GNU   = -Og -g3 -Warray-bounds -Wcharacter-truncation -Wline-truncation -Wimplicit-interface -Wimplicit-procedure -Wunderflow -Wuninitialized -fcheck=all -fmodule-private -ffree-line-length-132 -fimplicit-none -fbacktrace -fdump-core -finit-real=nan -std=f2008 -fall-intrinsics
-$DEBUG_INT   = -O0 -debug all -check all -warn all -extend-source 132 -traceback -gen-interfaces -fp-stack-check -fstack-protector-all -ftrapuv -no-ftz -std08
+$DEBUG_GNU   = -Og -g3 -Warray-bounds -Wcharacter-truncation -Wline-truncation -Wimplicit-interface -Wimplicit-procedure -Wunderflow -Wuninitialized -fcheck=all -fmodule-private -ffree-line-length-132 -fimplicit-none -fbacktrace -fdump-core -finit-real=nan -std=f2018 -fall-intrinsics
+$DEBUG_INT   = -O0 -debug all -check all -warn all -extend-source 132 -traceback -gen-interfaces -fp-stack-check -fstack-protector-all -ftrapuv -no-ftz -std18
 $OPTIMIZE    = -O2
-$EXDIRS      = quarantena
-               FACE/src/tests FACE/src/third_party/
-               FLAP/src/tests/ FLAP/src/third_party/
-               PENF/src/tests/ PENF/src/third_party/
-               pyplot-fortran/src/tests/
-               WenOOF/src/tests/ WenOOF/src/third_party/
+$EXDIRS      = src/app/ src/tests/quarantena/ src/tests/lcce/ src/tests/oscillation/
+               FACE/src/tests/ FACE/src/third_party/
+               FLAP/src/tests/ FLAP/src/third_party/ FLAP/docs/
+               PENF/src/tests/ PENF/src/third_party/ PENF/scripts/
+               WenOOF/src/tests/ WenOOF/src/third_party/ WenOOF/quarantena/
+# the CLI tester and the linear advection integrand (WenOOF based, impure) are not part of the tests suite
+$EXTESTS     = src/tests/tester/foodie_tester.f90 src/tests/tester/foodie_test_integrand_ladvection.f90
 
-# main modes
-[foodie-static-opencoarrays-gnu]
-help     = Build FOODIE library in static release mode with OpenCoarrays-GNU gfortran
-compiler = opencoarrays-gnu
-cflags   = $CSTATIC_GNU $OPTIMIZE
-lflags   = $OPTIMIZE
-preproc  = -DCAF
-mklib    = static
-output   = libfoodie.a
-template = template-common
+# tests suite: every program found is a test, built into exe/ and run by scripts/run_tests.sh
+[tests-gnu]
+help      = Build tests suite in release mode with GNU gfortran
+template  = template-tests
+compiler  = gnu
+cflags    = $CSTATIC_GNU $OPTIMIZE
+lflags    = $OPTIMIZE
 
-[foodie-static-opencoarrays-gnu-debug]
-help     = Build FOODIE library in static release mode with OpenCoarrays-GNU gfortran
-compiler = opencoarrays-gnu
-cflags   = $CSTATIC_GNU $DEBUG_GNU
-lflags   = $DEBUG_GNU
-preproc  = -DCAF
-mklib    = static
-output   = libfoodie.a
-template = template-common
+[tests-gnu-debug]
+help      = Build tests suite in debug mode with GNU gfortran
+template  = template-tests
+compiler  = gnu
+cflags    = $CSTATIC_GNU $DEBUG_GNU
+lflags    = $DEBUG_GNU
 
+[tests-gnu-coverage]
+help      = Build tests suite in coverage mode with GNU gfortran
+template  = template-tests
+compiler  = gnu
+cflags    = $CSTATIC_GNU $DEBUG_GNU
+lflags    = $DEBUG_GNU
+coverage  = True
+
+[tests-intel]
+help      = Build tests suite in release mode with Intel Fortran
+template  = template-tests
+compiler  = intel
+cflags    = $CSTATIC_INT $OPTIMIZE
+lflags    = $OPTIMIZE
+
+[tests-intel-debug]
+help      = Build tests suite in debug mode with Intel Fortran
+template  = template-tests
+compiler  = intel
+cflags    = $CSTATIC_INT $DEBUG_INT
+lflags    = $DEBUG_INT
+
+# CLI tester (interactive exploration of schemes/problems), impure build because of the linear advection integrand
+[tester-gnu]
+help      = Build the CLI tester in release mode with GNU gfortran
+template  = template-tester
+compiler  = gnu
+cflags    = $CSTATIC_GNU $OPTIMIZE
+lflags    = $OPTIMIZE
+
+[tester-gnu-debug]
+help      = Build the CLI tester in debug mode with GNU gfortran
+template  = template-tester
+compiler  = gnu
+cflags    = $CSTATIC_GNU $DEBUG_GNU
+lflags    = $DEBUG_GNU
+
+# library
 [foodie-static-gnu]
 help     = Build FOODIE library in static release mode with GNU gfortran
 compiler = gnu
@@ -50,7 +99,7 @@ cflags   = $CSTATIC_GNU $OPTIMIZE
 lflags   = $OPTIMIZE
 mklib    = static
 output   = libfoodie.a
-template = template-common
+template = template-lib
 
 [foodie-static-gnu-debug]
 help     = Build FOODIE library in static debug mode with GNU gfortran
@@ -59,7 +108,7 @@ cflags   = $CSTATIC_GNU $DEBUG_GNU
 lflags   = $DEBUG_GNU
 mklib    = static
 output   = libfoodie.a
-template = template-common
+template = template-lib
 
 [foodie-shared-gnu]
 help     = Build FOODIE library in shared release mode with GNU gfortran
@@ -68,7 +117,7 @@ cflags   = $CSHARED_GNU $OPTIMIZE
 lflags   = $LSHARED
 mklib    = shared
 output   = libfoodie.so
-template = template-common
+template = template-lib
 
 [foodie-shared-gnu-debug]
 help     = Build FOODIE library in shared debug mode with GNU gfortran
@@ -77,7 +126,7 @@ cflags   = $CSHARED_GNU $DEBUG_GNU
 lflags   = $LSHARED $DEBUG_GNU
 mklib    = shared
 output   = libfoodie.so
-template = template-common
+template = template-lib
 
 [foodie-static-intel]
 help     = Build FOODIE library in static release mode with Intel Fortran
@@ -86,7 +135,7 @@ cflags   = $CSTATIC_INT $OPTIMIZE
 lflags   = $OPTIMIZE
 mklib    = static
 output   = libfoodie.a
-template = template-common
+template = template-lib
 
 [foodie-static-intel-debug]
 help     = Build FOODIE library in static debug mode with Intel Fortran
@@ -95,7 +144,7 @@ cflags   = $CSTATIC_INT $DEBUG_INT
 lflags   = $DEBUG_INT
 mklib    = static
 output   = libfoodie.a
-template = template-common
+template = template-lib
 
 [foodie-shared-intel]
 help     = Build FOODIE library in shared release mode with Intel Fortran
@@ -104,7 +153,7 @@ cflags   = $CSHARED_INT $OPTIMIZE
 lflags   = $LSHARED
 mklib    = shared
 output   = libfoodie.so
-template = template-common
+template = template-lib
 
 [foodie-shared-intel-debug]
 help     = Build FOODIE library in shared debug mode with Intel Fortran
@@ -113,127 +162,95 @@ cflags   = $CSHARED_INT $DEBUG_INT
 lflags   = $LSHARED $DEBUG_INT
 mklib    = shared
 output   = libfoodie.so
-template = template-common
+template = template-lib
 
-[foodie-static-gnu-coverage]
-help     = Build FOODIE library in static release coverage mode with GNU gfortran
-compiler = gnu
+[foodie-static-opencoarrays-gnu]
+help     = Build FOODIE library in static release mode with OpenCoarrays-GNU gfortran
+compiler = opencoarrays-gnu
 cflags   = $CSTATIC_GNU $OPTIMIZE
 lflags   = $OPTIMIZE
+preproc  = -DCAF
 mklib    = static
 output   = libfoodie.a
-coverage = True
-template = template-common
+template = template-lib
 
-# pure modes for testing FOODIE ADT with "pure" procedures
-[foodie-static-gnu-pure]
-help     = Build FOODIE library in static release mode with GNU gfortran
-compiler = gnu
-cflags   = $CSTATIC_GNU $OPTIMIZE
-lflags   = $OPTIMIZE
-preproc  = -DPURE
-mklib    = static
-output   = libfoodie.a
-template = template-common
-
-[foodie-static-gnu-debug-pure]
-help     = Build FOODIE library in static debug mode with GNU gfortran
-compiler = gnu
+[foodie-static-opencoarrays-gnu-debug]
+help     = Build FOODIE library in static debug mode with OpenCoarrays-GNU gfortran
+compiler = opencoarrays-gnu
 cflags   = $CSTATIC_GNU $DEBUG_GNU
 lflags   = $DEBUG_GNU
-preproc  = -DPURE
+preproc  = -DCAF
 mklib    = static
 output   = libfoodie.a
-template = template-common
-
-[foodie-static-gnu-coverage-pure]
-help     = Build FOODIE library in static release coverage mode with GNU gfortran
-compiler = gnu
-cflags   = $CSTATIC_GNU $OPTIMIZE
-lflags   = $OPTIMIZE
-preproc  = -DPURE
-mklib    = static
-output   = libfoodie.a
-coverage = True
-template = template-common
-
-[foodie-static-intel-pure]
-help     = Build FOODIE library in static release mode with Intel Fortran
-compiler = intel
-cflags   = $CSTATIC_INT $OPTIMIZE
-lflags   = $OPTIMIZE
-preproc  = -DPURE
-mklib    = static
-output   = libfoodie.a
-template = template-common
-
-[foodie-static-intel-debug-pure]
-help     = Build FOODIE library in static debug mode with Intel Fortran
-compiler = intel
-cflags   = $CSTATIC_INT $DEBUG_INT
-lflags   = $DEBUG_INT
-preproc  = -DPURE
-mklib    = static
-output   = libfoodie.a
-template = template-common
+template = template-lib
 
 # templates
 [template-common]
 cflags_heritage = True
-build_dir       = ./build/lib/
 mod_dir         = mod
 obj_dir         = obj
 src             = src/
 exclude_dirs    = $EXDIRS
-target          = foodie.f90
 colors          = True
 quiet           = False
 log             = True
 jobs            = 10
 
+[template-lib]
+template  = template-common
+build_dir = lib
+target    = foodie.f90
+
+[template-tests]
+template  = template-common
+build_dir = exe
+exclude   = $EXTESTS
+
+[template-tester]
+template  = template-common
+build_dir = build/tester
+target    = src/tests/tester/foodie_tester.f90
+preproc   = -D_IMPURE_
+
 # rules
 [rule-makedoc]
-help   = Build documentation from source files
-rule_1 = rm -rf doc/html/*
-rule_2 = ford doc/main_page.md --debug
-rule_3 = cp -r doc/html/publish/* doc/html/
-rule_4 = rm -rf doc/html/publish
+help   = Build documentation with formal + VitePress
+rule_1 = formal generate --mirror-sources --diagrams --project docs/ford.md --output docs/api
+rule_2 = cd docs && npm ci && npm run docs:build
 
 [rule-deldoc]
-help = Delete documentation
-rule = rm -rf doc/html/*
+help = Delete documentation build artifacts
+rule = rm -rf docs/.vitepress/dist/ docs/.vitepress/cache/ docs/api/
 
 [rule-delexe]
-help = Delete exes
-rule = rm -rf build/
+help = Delete exes and builds
+rule = rm -rf exe/ build/ lib/
 
 [rule-clean]
-help = Clean the project tree
-rule_1 = FoBiS.py rule -ex deldoc
-rule_2 = FoBiS.py rule -ex delexe
+help   = Clean the project tree
+rule_1 = fobis rule --ex deldoc
+rule_2 = fobis rule --ex delexe
 rule_3 = rm -f *.gcov
 
 [rule-maketar]
 help = Make tar archive of the project
 rule = tar --xform="s%^%FOODIE/%" -czf FOODIE.tar.gz *
 
-[rule-makecoverage]
-help   = Rule for performing coverage analysis
-rule_1 = FoBiS.py build -f src/tests/tester/fobos -mode gnu-coverage
-rule_2 = ./build/tests/tester/foodie_tester lcce test -ft 2 -Dt 1e-1 1e-2
-rule_3 = ./build/tests/tester/foodie_tester linear_advection -is sin_wave --weno-order 3 test -s runge_kutta_ls -ft 1 -Dt 8e-3 2e-3
-rule_4 = ./build/tests/tester/foodie_tester oscillation test -ft 1e4 -Dt 1e1 0.5e1
-rule_5 = rm -f build/tests/tester/obj/penf* build/tests/tester/obj/face* build/tests/tester/obj/flap* build/tests/tester/obj/penf* build/tests/tester/obj/wenoof*
-rule_6 = gcov -o build/tests/tester/obj/ src/lib/foodie*
-rule_7 = rm -f *.gcov
+[rule-maketests]
+help   = Build and run the tests suite, then audit the Runge-Kutta tableaus order conditions
+rule_1 = fobis build --mode tests-gnu
+rule_2 = ./scripts/run_tests.sh
+rule_3 = python3 scripts/audit_rk_tableaus.py
 
-[rule-coverage-analysis]
-help   = Rule for performing coverage analysis and saving reports in markdown
-rule_1 = FoBiS.py build -f src/tests/tester/fobos -mode gnu-coverage
-rule_2 = ./build/tests/tester/foodie_tester lcce test -ft 2 -Dt 1e-1 1e-2
-rule_3 = ./build/tests/tester/foodie_tester linear_advection -is sin_wave --weno-order 3 test -s runge_kutta_ls -ft 1 -Dt 8e-3 2e-3
-rule_4 = ./build/tests/tester/foodie_tester oscillation test -ft 1e4 -Dt 1e1 0.5e1
-rule_5 = rm -f build/tests/tester/obj/penf* build/tests/tester/obj/face* build/tests/tester/obj/flap* build/tests/tester/obj/penf* build/tests/tester/obj/wenoof*
-rule_6 = gcov -o build/tests/tester/obj/ src/lib/foodie*
-rule_7 = FoBiS.py rule -gcov_analyzer wiki/ Coverage-Analysis
-rule_8 = rm -f *.gcov
+[rule-makecoverage]
+help   = Perform coverage analysis
+rule_1 = fobis build --mode tests-gnu-coverage
+rule_2 = ./scripts/run_tests.sh
+rule_3 = rm -f exe/obj/face* exe/obj/flap* exe/obj/penf* exe/obj/wenoof*
+rule_4 = ./scripts/compute-coverage.sh
+
+[rule-makecoverage-analysis]
+help   = Perform coverage analysis and saving reports in markdown
+rule_1 = fobis rule --ex makecoverage
+rule_2 = fobis rule --gcov-analyzer docs/guide/ --gcov-analyzer coverage-analysis
+rule_3 = rm -f *.gcov parsed.xml source.xml

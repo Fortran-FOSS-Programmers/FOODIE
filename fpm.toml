@@ -1,0 +1,31 @@
+name = "FOODIE"
+version = "0.3.6"
+license = "GPL-3.0"
+author = "Stefano Zaghi"
+maintainer = "stefano.zaghi@gmail.com"
+copyright = "Copyright 2026 Stefano Zaghi"
+description = "Fortran Object-Oriented Differential-equations Integration Environment"
+homepage = "https://github.com/Fortran-FOSS-Programmers/FOODIE"
+
+[library]
+source-dir = "src/lib"
+include-dir = "src/lib"
+
+[dependencies]
+PENF = { git="https://github.com/szaghi/PENF.git" }
+
+[build]
+auto-executables = false
+auto-tests = false
+auto-examples = false
+
+[fortran]
+implicit-typing = false
+implicit-external = false
+source-form = "free"
+
+[preprocess]
+[preprocess.cpp]
+
+[install]
+library = true
