@@ -56,6 +56,12 @@ module foodie_integrator_runge_kutta_lssp
 !<  + for `j` in [2,i] do:
 !<    + `alpha(1) = 1 - alpha(j)`
 !<
+!< The stage \(U^k\) is evaluated at the time \(t^n + (k-1)\Delta t\) (*Ns* order) or \(t^n + (k-1)\Delta t/2\) (*Ns-1* order),
+!< that is the stage applied to \(U=t\).
+!<
+!< @note The formal order *Ns* (*Ns-1*) holds for linear autonomous problems; for non autonomous or nonlinear problems the
+!< schemes are (at most) 2nd order accurate.
+!<
 !< @note The value of \(\Delta t\) must be provided, it not being computed by the integrator.
 !<
 !<#### Bibliography
@@ -314,9 +320,10 @@ contains
   ! computing stages
   self%stage(1) = U
   do s=2, self%stages
-     self%stage(s) = self%stage(s-1) + (self%stage(s-1)%t(t=t) * (Dt * 0.5_R_P))
+     self%stage(s) = self%stage(s-1) + (self%stage(s-1)%t(t=t + (s - 2) * Dt * 0.5_R_P) * (Dt * 0.5_R_P))
   enddo
-  self%stage(self%stages) = self%stage(self%stages) + (self%stage(self%stages)%t(t=t) * (Dt * 0.5_R_P))
+  self%stage(self%stages) = self%stage(self%stages) + &
+                            (self%stage(self%stages)%t(t=t + (self%stages - 1) * Dt * 0.5_R_P) * (Dt * 0.5_R_P))
   ! computing new time step
   U = U * 0._R_P
   do s=1, self%stages
@@ -335,9 +342,9 @@ contains
   ! computing stages
   self%stage(1) = U
   do s=2, self%stages
-     self%stage(s) = self%stage(s-1) + (self%stage(s-1)%t(t=t) * Dt)
+     self%stage(s) = self%stage(s-1) + (self%stage(s-1)%t(t=t + (s - 2) * Dt) * Dt)
   enddo
-  self%stage(self%stages) = self%stage(self%stages) + (self%stage(self%stages)%t(t=t) * Dt)
+  self%stage(self%stages) = self%stage(self%stages) + (self%stage(self%stages)%t(t=t + (self%stages - 1) * Dt) * Dt)
   ! computing new time step
   U = U * 0._R_P
   do s=1, self%stages
@@ -357,12 +364,12 @@ contains
   self%stage(1) = U
   do s=2, self%stages
      self%buffer = self%stage(s-1)
-     call self%buffer%t_fast(t=t)
+     call self%buffer%t_fast(t=t + (s - 2) * Dt * 0.5_R_P)
      call self%buffer%multiply_fast(lhs=self%buffer, rhs=Dt * 0.5_R_P)
      call self%stage(s)%add_fast(lhs=self%stage(s-1), rhs=self%buffer)
   enddo
   self%buffer = self%stage(self%stages)
-  call self%buffer%t_fast(t=t)
+  call self%buffer%t_fast(t=t + (self%stages - 1) * Dt * 0.5_R_P)
   call self%buffer%multiply_fast(lhs=self%buffer, rhs=Dt * 0.5_R_P)
   call self%stage(self%stages)%add_fast(lhs=self%stage(self%stages), rhs=self%buffer)
   ! computing new time step
@@ -385,12 +392,12 @@ contains
   self%stage(1) = U
   do s=2, self%stages
      self%buffer = self%stage(s-1)
-     call self%buffer%t_fast(t=t)
+     call self%buffer%t_fast(t=t + (s - 2) * Dt)
      call self%buffer%multiply_fast(lhs=self%buffer, rhs=Dt)
      call self%stage(s)%add_fast(lhs=self%stage(s-1), rhs=self%buffer)
   enddo
   self%buffer = self%stage(self%stages)
-  call self%buffer%t_fast(t=t)
+  call self%buffer%t_fast(t=t + (self%stages - 1) * Dt)
   call self%buffer%multiply_fast(lhs=self%buffer, rhs=Dt)
   call self%stage(self%stages)%add_fast(lhs=self%stage(self%stages), rhs=self%buffer)
   ! computing new time step
