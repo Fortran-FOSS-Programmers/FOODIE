@@ -58,8 +58,6 @@ module foodie_integrator_runge_kutta_emd
 !<
 !< The different schemes are selected accordingly to the number of stages used. Currently the following schemes are available:
 !<
-!< @bug Presently, the 2 stages Heun-Euler seems to not work, **do not use it**.
-!<
 !<##### 2 stages, 2th order
 !< This scheme is due to Heun-Euler.
 !<```
@@ -85,7 +83,8 @@ module foodie_integrator_runge_kutta_emd
 !<```
 !<
 !<##### 7 stages, 4th order
-!< This scheme is due to Dormand and Prince, see [1].
+!< This scheme is due to Dormand and Prince, see [1]. Note that the solution is advanced with the 5th order accurate formula
+!< (local extrapolation), the 4th order one being used only for the error estimation.
 !<```
 !<  0    | 0
 !<  1/5  | 1/5
@@ -278,7 +277,8 @@ private
 public :: integrator_runge_kutta_emd
 
 character(len=99), parameter :: class_name_='runge_kutta_emd'                                      !< Name of the class of schemes.
-character(len=99), parameter :: supported_schemes_(1:4)=[trim(class_name_)//'_stages_6_order_5  ', &
+character(len=99), parameter :: supported_schemes_(1:5)=[trim(class_name_)//'_stages_2_order_2  ', &
+                                                         trim(class_name_)//'_stages_6_order_5  ', &
                                                          trim(class_name_)//'_stages_7_order_4  ', &
                                                          trim(class_name_)//'_stages_9_order_6  ', &
                                                          trim(class_name_)//'_stages_17_order_10'] !< List of supported schemes.
@@ -481,16 +481,16 @@ contains
     self%description_ = trim(adjustl(scheme))
     self%tolerance = 0.01_R_P ; if (present(tolerance)) self%tolerance = tolerance
     select case(trim(adjustl(scheme)))
-    case('runge_kutta_emd_stages_2_order_2') ! do not use, seems to not work!
+    case('runge_kutta_emd_stages_2_order_2')
       self%stages = 2
       allocate(self%beta(1:self%stages, 1:2          )) ; self%beta = 0._R_P
       allocate(self%alph(1:self%stages, 1:self%stages)) ; self%alph = 0._R_P
       allocate(self%gamm(               1:self%stages)) ; self%gamm = 0._R_P
 
-      self%pp1_inv = 1._R_P/(2._R_P + 1._R_P)
+      self%pp1_inv = 1._R_P/(1._R_P + 1._R_P)
 
-      self%beta(1, 1) =  0.5_R_P ; self%beta(1, 2) =  5._R_P
-      self%beta(2, 1) =  1._R_P  ; self%beta(2, 2) =  0._R_P
+      self%beta(1, 1) =  0.5_R_P ; self%beta(1, 2) =  1._R_P
+      self%beta(2, 1) =  0.5_R_P ; self%beta(2, 2) =  0._R_P
 
       self%alph(2, 1) = 1._R_P
 
@@ -501,7 +501,7 @@ contains
       allocate(self%alph(1:self%stages, 1:self%stages)) ; self%alph = 0._R_P
       allocate(self%gamm(               1:self%stages)) ; self%gamm = 0._R_P
 
-      self%pp1_inv = 1._R_P/(5._R_P + 1._R_P)
+      self%pp1_inv = 1._R_P/(4._R_P + 1._R_P)
 
       self%beta(1, 1) = 37._R_P/378._R_P   ; self%beta(1, 2) = 2825._R_P/27648._R_P
       self%beta(2, 1) = 0._R_P             ; self%beta(2, 2) = 0._R_P
@@ -563,7 +563,7 @@ contains
       allocate(self%alph(1:self%stages, 1:self%stages)) ; self%alph = 0._R_P
       allocate(self%gamm(               1:self%stages)) ; self%gamm = 0._R_P
 
-      self%pp1_inv = 1._R_P/(6._R_P + 1._R_P)
+      self%pp1_inv = 1._R_P/(5._R_P + 1._R_P)
 
       self%beta(1, 1) = 17572349._R_P/289262523._R_P  ; self%beta(1, 2) = 15231665._R_P/510830334._R_P
       self%beta(2, 1) = 0._R_P                        ; self%beta(2, 2) = 0._R_P
@@ -613,7 +613,7 @@ contains
       allocate(self%alph(1:self%stages, 1:self%stages)) ; self%alph = 0._R_P
       allocate(self%gamm(               1:self%stages)) ; self%gamm = 0._R_P
 
-      self%pp1_inv = 1._R_P/(10._R_P + 1._R_P)
+      self%pp1_inv = 1._R_P/(8._R_P + 1._R_P)
 
       self%beta(1 , 1) = 0.033333333333333333333_R_P; self%beta(1 , 2) = 0.033333333333333333333_R_P
       self%beta(2 , 1) = 0.025_R_P                  ; self%beta(2 , 2) = 1._R_P/36._R_P
