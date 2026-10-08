@@ -10,8 +10,8 @@
 [![License](https://img.shields.io/badge/license-MIT-red.svg)]()
 
 [![Status](https://img.shields.io/badge/status-beta-orange.svg)]()
-[![Build Status](https://travis-ci.org/Fortran-FOSS-Programmers/FOODIE.svg?branch=master)](https://travis-ci.org/Fortran-FOSS-Programmers/FOODIE)
-[![Coverage Status](https://img.shields.io/codecov/c/github/Fortran-FOSS-Programmers/FOODIE.svg)](http://codecov.io/github/Fortran-FOSS-Programmers/FOODIE?branch=master)
+[![CI](https://github.com/Fortran-FOSS-Programmers/FOODIE/actions/workflows/ci.yml/badge.svg)](https://github.com/Fortran-FOSS-Programmers/FOODIE/actions/workflows/ci.yml)
+[![coverage](https://img.shields.io/endpoint?url=https://fortran-foss-programmers.github.io/FOODIE/coverage.json)](https://github.com/Fortran-FOSS-Programmers/FOODIE/actions/workflows/ci.yml)
 [![GitHub issues](https://img.shields.io/github/issues/Fortran-FOSS-Programmers/FOODIE.svg)]()
 
 ### FOODIE, Fortran Object-Oriented Differential-equations Integration Environment
@@ -75,7 +75,7 @@ FOODIE is aimed to be a KISS-pure-Fortran library for integrating Ordinary Diffe
         + [x] [Leapfrog](http://fortran-foss-programmers.github.io/FOODIE/module/foodie_integrator_leapfrog.html), 2nd order accurate:
             + [x] unfiltered leapfrog, 2nd order accurate, mostly unstable, see [4];
             + [x] Robert-Asselin filtered leapfrog, 1st order accurate, see [4, 5, 6];
-            + [x] Robert-Asselin-Williams filtered leapfrog, 3rd order accurate, see [5, 6];
+            + [x] Robert-Asselin-Williams filtered leapfrog, 1st order accurate (fixed filter coefficient: the 3rd order accuracy of [5, 6] refers to the amplitude of oscillations);
         + [x] [Linear Multistep Methods, SSP](http://fortran-foss-programmers.github.io/FOODIE/module/foodie_integrator_lmm_ssp.html) schemes see [16]:
             + [x] 3 steps, 2nd order accurate;
             + [x] 4 steps, 3rd order accurate;
@@ -100,8 +100,8 @@ FOODIE is aimed to be a KISS-pure-Fortran library for integrating Ordinary Diffe
             + [ ] 3 steps, 20 stages, 10th order accurate;
         + [ ] Runge-Kutta schemes:
             + [+] [Linear SSP (of any order)](http://fortran-foss-programmers.github.io/FOODIE/module/foodie_integrator_runge_kutta_lssp.html) schemes, see [16]:
-                + [x] generic s-stages of order (s-1)-th;
-                + [x] generic s-stages of order s-th;
+                + [x] generic s-stages of order (s-1)-th (for linear autonomous problems, at most 2nd order otherwise);
+                + [x] generic s-stages of order s-th (for linear autonomous problems, at most 2nd order otherwise);
             + [ ] [low-storage](http://fortran-foss-programmers.github.io/FOODIE/module/foodie_integrator_runge_kutta_low_storage.html) schemes, see [1, 2, 3]:
                 + [x] 1 stage, namely the forward explicit Euler scheme, 1st order accurate;
                 + [ ] 2 stages;
@@ -123,16 +123,17 @@ FOODIE is aimed to be a KISS-pure-Fortran library for integrating Ordinary Diffe
                 + [x] Heun-Euler, 2 stages, 2nd order accurate;
                 + [ ] Runge-Kutta-Fehlberg, 5 stages, 4th order accurate;
                 + [x] Runge-Kutta-Cash-Karp, 6 stages, 5th order accurate, see [13];
-                + [x] Prince-Dormand, 7 stages, 4th order accurate, see [11];
+                + [x] Prince-Dormand, 7 stages, 5(4) pair, the solution being advanced with the 5th order formula, see [11];
                 + [x] Calvo, 9 stages, 6th order accurate, see [14];
                 + [x] Feagin, 17 stages, 10th order accurate, see [15];
     + [ ] implicit schemes:
         + [ ] Runge-Kutta schemes;
         + [x] [Adams-Moulton](http://fortran-foss-programmers.github.io/FOODIE/module/foodie_integrator_adams_moulton.html) schemes:
-            + [x] 0 step, 1st order accurate;
+            + [x] 0 step, namely the backward implicit Euler scheme, 1st order accurate;
             + [x] 1 step, 2nd accurate;
             + [x] 2 steps, 3rd accurate;
             + [x] 3 steps, 4th accurate;
+            + [x] 4 to 15 steps, 5th to 16th accurate, respectively;
         + [x] [Backward Differentiation Formula](http://fortran-foss-programmers.github.io/FOODIE/module/foodie_integrator_backward_differentiation_formula.html) schemes:
             + [x] 1 step, namely the backward implicit Euler scheme, 1st order accurate;
             + [x] 2 to 6 steps, 2nd to 6th accurate, respectively;
@@ -142,6 +143,7 @@ FOODIE is aimed to be a KISS-pure-Fortran library for integrating Ordinary Diffe
             + [x] 2 steps, AB(2)-AM(1), 2nd accurate;
             + [x] 3 steps, AB(3)-AM(2), 3rd accurate;
             + [x] 4 steps, AB(4)-AM(3), 4th accurate;
+            + [x] 5 to 16 steps, AB(N)-AM(N-1), 5th to 16th accurate, respectively;
 + [ ] efficient and *non intrusive*:
     + [ ] FOODIE environment is unaware of any eventual parallel paradigms the clients used, but it is proved to preserve high scalability on parallel architectures such as:
         + [x] OpenMP directive-based codes on shared memory multi/many cores architectures;
@@ -223,6 +225,16 @@ Go to [Top](#top)
 
 ## Documentation
 
-Besides this README file the FOODIE documentation is contained into its own [wiki](https://github.com/Fortran-FOSS-Programmers/FOODIE/wiki). Detailed documentation of the API is contained into the [GitHub Pages](http://Fortran-FOSS-Programmers.github.io/FOODIE/index.html) that can also be created locally by means of [ford tool](https://github.com/cmacmackin/ford).
+The FOODIE documentation (guide, schemes catalogue, tests suite and API reference) is published on [GitHub Pages](https://fortran-foss-programmers.github.io/FOODIE/), built with [VitePress](https://vitepress.dev) from the `docs/` directory (`fobis rule --ex makedoc`).
+
+A quick start, with [FoBiS](https://github.com/szaghi/FoBiS):
+
+```shell
+fobis fetch                            # dependencies (FACE, FLAP, PENF, WenOOF) into src/third_party
+fobis build --mode foodie-static-gnu   # libfoodie.a into lib/
+fobis rule --ex maketests              # tests suite (exe/) and audit of the Runge-Kutta tableaus
+```
+
+The library can also be built with [fpm](https://fpm.fortran-lang.org) (`fpm build`).
 
 Go to [Top](#top)
