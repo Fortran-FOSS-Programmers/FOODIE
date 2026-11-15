@@ -15,7 +15,7 @@ developed with GNU gfortran on GNU/Linux.
 Clone the repository:
 
 ```bash
-git clone https://github.com/Fortran-FOSS-Programmers/FOODIE
+git clone https://github.com/szaghi/FOODIE
 cd FOODIE
 ```
 
@@ -88,7 +88,7 @@ Declare FOODIE in the `fobos` file of your project and run `fobis fetch`:
 ```ini
 [dependencies]
 deps_dir = src/third_party
-FOODIE   = https://github.com/Fortran-FOSS-Programmers/FOODIE
+FOODIE   = https://github.com/szaghi/FOODIE
 ```
 
 ## Build with fpm
@@ -104,7 +104,7 @@ To use it from your fpm project add to its `fpm.toml`:
 
 ```toml
 [dependencies]
-FOODIE = { git = "https://github.com/Fortran-FOSS-Programmers/FOODIE" }
+FOODIE = { git = "https://github.com/szaghi/FOODIE" }
 ```
 
 ## Pure or impure integrands

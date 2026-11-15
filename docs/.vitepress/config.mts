@@ -71,7 +71,7 @@ export default withMermaid({
         items: [
           { text: 'Changelog',    link: '/guide/changelog' },
           { text: 'Contributing', link: '/guide/contributing' },
-          { text: 'GitHub',       link: 'https://github.com/Fortran-FOSS-Programmers/FOODIE' },
+          { text: 'GitHub',       link: 'https://github.com/szaghi/FOODIE' },
         ],
       },
     ],
@@ -90,7 +90,7 @@ export default withMermaid({
     },
 
     socialLinks: [
-      { icon: 'github', link: 'https://github.com/Fortran-FOSS-Programmers/FOODIE' },
+      { icon: 'github', link: 'https://github.com/szaghi/FOODIE' },
     ],
 
     search: {

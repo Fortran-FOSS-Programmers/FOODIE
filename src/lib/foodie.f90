@@ -13,7 +13,7 @@ module foodie
 !< *t*, *R* is the (vectorial) residual function and *F* is the (vectorial) initial conditions function.
 !<
 !< FOODIE is aimed to the time-like integration of the above system of ODE. To this aim, different numerical schemes are provided:
-!< see [FOODIE home page](https://github.com/Fortran-FOSS-Programmers/FOODIE) for more details about available integrators.
+!< see [FOODIE home page](https://github.com/szaghi/FOODIE) for more details about available integrators.
 !<
 !<### Usage
 !<

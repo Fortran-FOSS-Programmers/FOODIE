@@ -107,7 +107,7 @@ The coefficients of the 5 stages scheme are rational:
 The 6 and 7 stages coefficients published with 12 decimals violate the 4th order conditions by about $10^{-13}$: the
 source uses coefficients refined to satisfy them exactly, which reproduce the published ones once rounded. The
 coefficients of all the schemes are in the documentation of
-[`foodie_integrator_runge_kutta_low_storage.F90`](https://github.com/Fortran-FOSS-Programmers/FOODIE/blob/master/src/lib/foodie_integrator_runge_kutta_low_storage.F90)
+[`foodie_integrator_runge_kutta_low_storage.F90`](https://github.com/szaghi/FOODIE/blob/master/src/lib/foodie_integrator_runge_kutta_low_storage.F90)
 and in the [API](/api/).
 
 ## Embedded Runge-Kutta (adaptive)
@@ -177,7 +177,7 @@ $$
 
 The Calvo (9 stages) and Feagin (17 stages) tableaus are too large to be reported here: they are in the documentation
 of
-[`foodie_integrator_runge_kutta_embedded.F90`](https://github.com/Fortran-FOSS-Programmers/FOODIE/blob/master/src/lib/foodie_integrator_runge_kutta_embedded.F90)
+[`foodie_integrator_runge_kutta_embedded.F90`](https://github.com/szaghi/FOODIE/blob/master/src/lib/foodie_integrator_runge_kutta_embedded.F90)
 and in the [API](/api/).
 
 ## Linear SSP Runge-Kutta

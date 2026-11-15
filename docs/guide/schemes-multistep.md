@@ -181,7 +181,7 @@ $$
 | `ms_runge_kutta_ssp_steps_4_stages_5_order_8` | 4 | 5 | 8 |
 
 The coefficients are in the source,
-[`foodie_integrator_ms_runge_kutta_ssp.F90`](https://github.com/Fortran-FOSS-Programmers/FOODIE/blob/master/src/lib/foodie_integrator_ms_runge_kutta_ssp.F90).
+[`foodie_integrator_ms_runge_kutta_ssp.F90`](https://github.com/szaghi/FOODIE/blob/master/src/lib/foodie_integrator_ms_runge_kutta_ssp.F90).
 The 8th order of the last scheme is verified by the polynomial exactness test and observed on the Riccati problem, but
 it is beyond the orders the convergence test can assert in double precision (see [Testing](./testing)).
 

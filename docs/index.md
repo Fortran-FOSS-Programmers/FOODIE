@@ -20,7 +20,7 @@ hero:
       link: /api/
     - theme: alt
       text: View on GitHub
-      link: https://github.com/Fortran-FOSS-Programmers/FOODIE
+      link: https://github.com/szaghi/FOODIE
 
 features:
   - icon: 🧮

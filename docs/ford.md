@@ -1,7 +1,7 @@
 ---
 project: FOODIE
 summary: Fortran Object-Oriented Differential-equations Integration Environment
-project_url: https://fortran-foss-programmers.github.io/FOODIE
+project_url: https://szaghi.github.io/FOODIE
 author: Stefano Zaghi
 email: stefano.zaghi@gmail.com
 src_dir: ../src
@@ -9,7 +9,7 @@ exclude_dir: ../src/third_party
              ../src/tests
              ../src/app
 output_dir: ./docs/ford
-project_github: https://github.com/Fortran-FOSS-Programmers/FOODIE
+project_github: https://github.com/szaghi/FOODIE
 display: public
          private
 proc_internals: true

@@ -2,7 +2,7 @@
 
 # FOODIE
 
-[![GitHub tag](https://img.shields.io/github/tag/Fortran-FOSS-Programmers/FOODIE.svg)]() [![Join the chat at https://gitter.im/Fortran-FOSS-Programmers/FOODIE](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/Fortran-FOSS-Programmers/FOODIE?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+[![GitHub tag](https://img.shields.io/github/tag/szaghi/FOODIE.svg)]() [![Join the chat at https://gitter.im/Fortran-FOSS-Programmers/FOODIE](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/Fortran-FOSS-Programmers/FOODIE?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
 [![License](https://img.shields.io/badge/license-GNU%20GeneraL%20Public%20License%20v3,%20GPLv3-blue.svg)]()
 [![License](https://img.shields.io/badge/license-BSD2-red.svg)]()
@@ -10,9 +10,9 @@
 [![License](https://img.shields.io/badge/license-MIT-red.svg)]()
 
 [![Status](https://img.shields.io/badge/status-beta-orange.svg)]()
-[![CI](https://github.com/Fortran-FOSS-Programmers/FOODIE/actions/workflows/ci.yml/badge.svg)](https://github.com/Fortran-FOSS-Programmers/FOODIE/actions/workflows/ci.yml)
-[![coverage](https://img.shields.io/endpoint?url=https://fortran-foss-programmers.github.io/FOODIE/coverage.json)](https://github.com/Fortran-FOSS-Programmers/FOODIE/actions/workflows/ci.yml)
-[![GitHub issues](https://img.shields.io/github/issues/Fortran-FOSS-Programmers/FOODIE.svg)]()
+[![CI](https://github.com/szaghi/FOODIE/actions/workflows/ci.yml/badge.svg)](https://github.com/szaghi/FOODIE/actions/workflows/ci.yml)
+[![coverage](https://img.shields.io/endpoint?url=https://szaghi.github.io/FOODIE/coverage.json)](https://github.com/szaghi/FOODIE/actions/workflows/ci.yml)
+[![GitHub issues](https://img.shields.io/github/issues/szaghi/FOODIE.svg)]()
 
 ### FOODIE, Fortran Object-Oriented Differential-equations Integration Environment
 
@@ -35,7 +35,7 @@ Modern Fortran standards (2003+) have introduced support for Object-Oriented Pro
 
 The FOODIE environment allows the (numerical) solution of general, non linear differential equations system of the form:
 
-![IVP](https://raw.githubusercontent.com/wiki/Fortran-FOSS-Programmers/FOODIE/images/IVP.png)
+![IVP](https://raw.githubusercontent.com/wiki/szaghi/FOODIE/images/IVP.png)
 
 where:
 
@@ -68,25 +68,25 @@ FOODIE is aimed to be a KISS-pure-Fortran library for integrating Ordinary Diffe
     + [ ] easy building and porting on heterogeneous architectures;
 + [ ] comprehensive solvers set out-of-the-box:
     + [x] explicit schemes:
-        + [x] [Adams-Bashforth](http://fortran-foss-programmers.github.io/FOODIE/module/foodie_integrator_adams_bashforth.html) schemes see [7, 12]:
+        + [x] [Adams-Bashforth](http://szaghi.github.io/FOODIE/module/foodie_integrator_adams_bashforth.html) schemes see [7, 12]:
             + [x] 1 step, namely the forward explicit Euler scheme, 1st order accurate;
             + [x] 2 to 16 steps, 2nd to 16th accurate, respectively;
-        + [x] [Euler](http://fortran-foss-programmers.github.io/FOODIE/module/foodie_integrator_euler_explicit.html) (forward explicit) scheme, 1st order accurate;
-        + [x] [Leapfrog](http://fortran-foss-programmers.github.io/FOODIE/module/foodie_integrator_leapfrog.html), 2nd order accurate:
+        + [x] [Euler](http://szaghi.github.io/FOODIE/module/foodie_integrator_euler_explicit.html) (forward explicit) scheme, 1st order accurate;
+        + [x] [Leapfrog](http://szaghi.github.io/FOODIE/module/foodie_integrator_leapfrog.html), 2nd order accurate:
             + [x] unfiltered leapfrog, 2nd order accurate, mostly unstable, see [4];
             + [x] Robert-Asselin filtered leapfrog, 1st order accurate, see [4, 5, 6];
             + [x] Robert-Asselin-Williams filtered leapfrog, 1st order accurate (fixed filter coefficient: the 3rd order accuracy of [5, 6] refers to the amplitude of oscillations);
-        + [x] [Linear Multistep Methods, SSP](http://fortran-foss-programmers.github.io/FOODIE/module/foodie_integrator_lmm_ssp.html) schemes see [16]:
+        + [x] [Linear Multistep Methods, SSP](http://szaghi.github.io/FOODIE/module/foodie_integrator_lmm_ssp.html) schemes see [16]:
             + [x] 3 steps, 2nd order accurate;
             + [x] 4 steps, 3rd order accurate;
             + [x] 5 steps, 3rd order accurate;
-        + [x] [Linear Multistep Methods, SSP with Variable Step Size (VSS)](http://fortran-foss-programmers.github.io/FOODIE/module/foodie_integrator_lmm_ssp_vss.html) schemes see [17]:
+        + [x] [Linear Multistep Methods, SSP with Variable Step Size (VSS)](http://szaghi.github.io/FOODIE/module/foodie_integrator_lmm_ssp_vss.html) schemes see [17]:
             + [x] 2 steps, 2nd order accurate;
             + [x] 3 steps, 2nd order accurate;
             + [x] 3 steps, 3rd order accurate;
             + [x] 4 steps, 3rd order accurate;
             + [x] 5 steps, 3rd order accurate;
-        + [ ] [Linear Multistep Runge-Kutta Methods SSP](http://fortran-foss-programmers.github.io/FOODIE/module/foodie_integrator_ms_runge_kutta_ssp.html) schemes see [18]:
+        + [ ] [Linear Multistep Runge-Kutta Methods SSP](http://szaghi.github.io/FOODIE/module/foodie_integrator_ms_runge_kutta_ssp.html) schemes see [18]:
             + [x] 2 steps, 2 stages, 3rd order accurate;
             + [x] 3 steps, 2 stages, 3rd order accurate;
             + [ ] 4 steps, 3 stages, 5th order accurate;
@@ -99,10 +99,10 @@ FOODIE is aimed to be a KISS-pure-Fortran library for integrating Ordinary Diffe
             + [ ] 4 steps, 9 stages, 9th order accurate;
             + [ ] 3 steps, 20 stages, 10th order accurate;
         + [ ] Runge-Kutta schemes:
-            + [+] [Linear SSP (of any order)](http://fortran-foss-programmers.github.io/FOODIE/module/foodie_integrator_runge_kutta_lssp.html) schemes, see [16]:
+            + [+] [Linear SSP (of any order)](http://szaghi.github.io/FOODIE/module/foodie_integrator_runge_kutta_lssp.html) schemes, see [16]:
                 + [x] generic s-stages of order (s-1)-th (for linear autonomous problems, at most 2nd order otherwise);
                 + [x] generic s-stages of order s-th (for linear autonomous problems, at most 2nd order otherwise);
-            + [ ] [low-storage](http://fortran-foss-programmers.github.io/FOODIE/module/foodie_integrator_runge_kutta_low_storage.html) schemes, see [1, 2, 3]:
+            + [ ] [low-storage](http://szaghi.github.io/FOODIE/module/foodie_integrator_runge_kutta_low_storage.html) schemes, see [1, 2, 3]:
                 + [x] 1 stage, namely the forward explicit Euler scheme, 1st order accurate;
                 + [ ] 2 stages;
                 + [ ] 3 stages;
@@ -113,13 +113,13 @@ FOODIE is aimed to be a KISS-pure-Fortran library for integrating Ordinary Diffe
                 + [x] 12 stages, 4th order accurate, 2N registers, see [10];
                 + [x] 13 stages, 4th order accurate, 2N registers, see [10];
                 + [x] 14 stages, 4th order accurate, 2N registers, see [10];
-            + [ ] [TVD/SSP](http://fortran-foss-programmers.github.io/FOODIE/module/foodie_integrator_kutta_tvd_runge.html) schemes, see [1]:
+            + [ ] [TVD/SSP](http://szaghi.github.io/FOODIE/module/foodie_integrator_kutta_tvd_runge.html) schemes, see [1]:
                 + [x] 1 stage, namely the forward explicit Euler scheme, 1st order accurate;
                 + [x] 2 stages, 2nd order accurate;
                 + [x] 3 stages, 3rd order accurate;
                 + [ ] 4 stages;
                 + [x] 5 stages, 4th order accurate;
-            + [ ] [embedded (adaptive)](http://fortran-foss-programmers.github.io/FOODIE/module/foodie_integrator_runge_kutta_embeddedd.html) schemes:
+            + [ ] [embedded (adaptive)](http://szaghi.github.io/FOODIE/module/foodie_integrator_runge_kutta_embeddedd.html) schemes:
                 + [x] Heun-Euler, 2 stages, 2nd order accurate;
                 + [ ] Runge-Kutta-Fehlberg, 5 stages, 4th order accurate;
                 + [x] Runge-Kutta-Cash-Karp, 6 stages, 5th order accurate, see [13];
@@ -128,17 +128,17 @@ FOODIE is aimed to be a KISS-pure-Fortran library for integrating Ordinary Diffe
                 + [x] Feagin, 17 stages, 10th order accurate, see [15];
     + [ ] implicit schemes:
         + [ ] Runge-Kutta schemes;
-        + [x] [Adams-Moulton](http://fortran-foss-programmers.github.io/FOODIE/module/foodie_integrator_adams_moulton.html) schemes:
+        + [x] [Adams-Moulton](http://szaghi.github.io/FOODIE/module/foodie_integrator_adams_moulton.html) schemes:
             + [x] 0 step, namely the backward implicit Euler scheme, 1st order accurate;
             + [x] 1 step, 2nd accurate;
             + [x] 2 steps, 3rd accurate;
             + [x] 3 steps, 4th accurate;
             + [x] 4 to 15 steps, 5th to 16th accurate, respectively;
-        + [x] [Backward Differentiation Formula](http://fortran-foss-programmers.github.io/FOODIE/module/foodie_integrator_backward_differentiation_formula.html) schemes:
+        + [x] [Backward Differentiation Formula](http://szaghi.github.io/FOODIE/module/foodie_integrator_backward_differentiation_formula.html) schemes:
             + [x] 1 step, namely the backward implicit Euler scheme, 1st order accurate;
             + [x] 2 to 6 steps, 2nd to 6th accurate, respectively;
     + [ ] predictor-corrector schemes:
-        + [x] [Adams-Bashforth-Moulton](http://fortran-foss-programmers.github.io/FOODIE/module/foodie_integrator_adams_bashforth_moulton.html) schemes:
+        + [x] [Adams-Bashforth-Moulton](http://szaghi.github.io/FOODIE/module/foodie_integrator_adams_bashforth_moulton.html) schemes:
             + [x] 1 step, AB(1)-AM(0), 1st order accurate;
             + [x] 2 steps, AB(2)-AM(1), 2nd accurate;
             + [x] 3 steps, AB(3)-AM(2), 3rd accurate;
@@ -150,13 +150,13 @@ FOODIE is aimed to be a KISS-pure-Fortran library for integrating Ordinary Diffe
         + [ ] CoArray Fortran (CAF) based codes for Partitioned Global Address Space (PGAS) programming model;
         + [ ] MPI based code on distributed memory clusters;
         + [ ] GPGPU/accelerators device enabled codes;
-+ [x] [Tests-Driven](https://github.com/Fortran-FOSS-Programmers/FOODIE/wiki/Examples) Developed ([TDD](https://en.wikipedia.org/wiki/Test-driven_development)):
++ [x] [Tests-Driven](https://github.com/szaghi/FOODIE/wiki/Examples) Developed ([TDD](https://en.wikipedia.org/wiki/Test-driven_development)):
 + [x] well documented:
-    + [x] clear documentation of schemes implementations, e.g. see [Adams-Bashforth API documentation](http://fortran-foss-programmers.github.io/FOODIE/module/foodie_integrator_adams_bashforth.html);
-    + [x] complete [API](http://fortran-foss-programmers.github.io/FOODIE/index.html) reference;
-    + [x] comprehensive [wiki](https://github.com/Fortran-FOSS-Programmers/FOODIE/wiki):
-+ [x] collaborative developed on [GitHub](https://github.com/Fortran-FOSS-Programmers/FOODIE);
-+ [x] [FOSS licensed](https://github.com/Fortran-FOSS-Programmers/FOODIE/wiki/Copyrights);
+    + [x] clear documentation of schemes implementations, e.g. see [Adams-Bashforth API documentation](http://szaghi.github.io/FOODIE/module/foodie_integrator_adams_bashforth.html);
+    + [x] complete [API](http://szaghi.github.io/FOODIE/index.html) reference;
+    + [x] comprehensive [wiki](https://github.com/szaghi/FOODIE/wiki):
++ [x] collaborative developed on [GitHub](https://github.com/szaghi/FOODIE);
++ [x] [FOSS licensed](https://github.com/szaghi/FOODIE/wiki/Copyrights);
 
 Any feature request is welcome.
 
@@ -219,13 +219,13 @@ FOODIE is an open source project, it is distributed under a multi-licensing syst
 
 Anyone is interest to use, to develop or to contribute to FOODIE is welcome, feel free to select the license that best matches your soul!
 
-More details can be found on [wiki](https://github.com/Fortran-FOSS-Programmers/FOODIE/wiki/Copyrights).
+More details can be found on [wiki](https://github.com/szaghi/FOODIE/wiki/Copyrights).
 
 Go to [Top](#top)
 
 ## Documentation
 
-The FOODIE documentation (guide, schemes catalogue, tests suite and API reference) is published on [GitHub Pages](https://fortran-foss-programmers.github.io/FOODIE/), built with [VitePress](https://vitepress.dev) from the `docs/` directory (`fobis rule --ex makedoc`).
+The FOODIE documentation (guide, schemes catalogue, tests suite and API reference) is published on [GitHub Pages](https://szaghi.github.io/FOODIE/), built with [VitePress](https://vitepress.dev) from the `docs/` directory (`fobis rule --ex makedoc`).
 
 A quick start, with [FoBiS](https://github.com/szaghi/FoBiS):
 
