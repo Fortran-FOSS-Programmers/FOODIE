@@ -10,6 +10,20 @@ A Fortran 2008+ compliant compiler with a C-like preprocessor (the sources endin
 `fobos` file provides modes for GNU gfortran, Intel Fortran and OpenCoarrays-GNU. The library and the tests suite are
 developed with GNU gfortran on GNU/Linux.
 
+## One-line install
+
+```bash
+curl -fsSL https://github.com/szaghi/FOODIE/releases/latest/download/install.sh | bash
+```
+
+It installs the latest release into `~/.local` with the build system you choose among those FOODIE ships
+(`--build fobis|fpm`: a menu asks when you do not say), the compiler you name (`--fc`, `--gnu`, `--intel`), one install
+per compiler (`lib/foodie/<compiler>-<version>/`, `include/foodie/<compiler>-<version>/`), and makes it usable through
+pkg-config (`pkg-config --cflags --libs foodie`, with `PKG_CONFIG_PATH=$HOME/.local/lib/pkgconfig`). The release
+carries FOODIE's dependencies (FACE, FLAP, PENF, WenOOF). Pass options after `bash -s --`, e.g.
+`... | bash -s -- --build fpm --prefix /opt/foodie`; `--help` lists them all, `--uninstall` removes the install. The
+installer is FoBiS's ([One-line installer](https://szaghi.github.io/FoBiS/cookbook/installer)).
+
 ## Download
 
 Clone the repository:

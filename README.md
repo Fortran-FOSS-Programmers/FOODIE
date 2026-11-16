@@ -27,6 +27,7 @@
 + [Main features](#main-features)
 + [Status](#status)
 + [Copyrights](#copyrights)
++ [Install](#install)
 + [Documentation](#documentation)
 
 ## What is FOODIE?
@@ -220,6 +221,22 @@ FOODIE is an open source project, it is distributed under a multi-licensing syst
 Anyone is interest to use, to develop or to contribute to FOODIE is welcome, feel free to select the license that best matches your soul!
 
 More details can be found on [wiki](https://github.com/szaghi/FOODIE/wiki/Copyrights).
+
+Go to [Top](#top)
+
+## Install
+
+```bash
+curl -fsSL https://github.com/szaghi/FOODIE/releases/latest/download/install.sh | bash
+```
+
+It installs the latest release into `~/.local` with the build system you choose among those FOODIE ships
+(`--build fobis|fpm`: a menu asks when you do not say), the compiler you name (`--fc`, `--gnu`, `--intel`), one install
+per compiler (`lib/foodie/<compiler>-<version>/`, `include/foodie/<compiler>-<version>/`), and makes it usable through
+pkg-config (`pkg-config --cflags --libs foodie`, with `PKG_CONFIG_PATH=$HOME/.local/lib/pkgconfig`). The release
+carries FOODIE's dependencies (FACE, FLAP, PENF, WenOOF). Pass options after `bash -s --`, e.g.
+`... | bash -s -- --build fpm --prefix /opt/foodie`; `--help` lists them all, `--uninstall` removes the install. The
+installer is FoBiS's ([One-line installer](https://szaghi.github.io/FoBiS/cookbook/installer)).
 
 Go to [Top](#top)
 
